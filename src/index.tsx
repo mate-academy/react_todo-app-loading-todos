@@ -5,12 +5,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
 import { App } from './App';
-import { AuthProvider } from './components/Auth/AuthContext';
+
+import { StateProvider } from './providers/StateContext';
 
 const Root = () => (
-  <AuthProvider>
+  <StateProvider>
     <App />
-  </AuthProvider>
+  </StateProvider>
 );
 
 createRoot(document.getElementById('root') as HTMLDivElement)
