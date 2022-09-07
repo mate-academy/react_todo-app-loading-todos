@@ -1,0 +1,11 @@
+export enum ActionTypes {
+  SET_USER,
+  SET_TODOS,
+  ADD_TODO,
+  EDIT_TODO,
+  DELETE_TODO,
+  SET_ERROR,
+  SET_LOADER,
+  ON_ALL_LOADERS,
+  OFF_ALL_LOADERS,
+}
