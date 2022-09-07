@@ -1,18 +1,27 @@
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+
 import { createUser, getUserByEmail } from '../../api/users';
+
+import { ActionTypes } from '../../types/ActionTypes';
 import { User } from '../../types/User';
+import { DispatchContext } from '../../providers/StateContext';
 
-export type Props = {
-  onLogin: (user: User) => void,
-};
+export const AuthForm: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
 
-export const AuthForm: React.FC<Props> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [needToRegister, setNeedToRegister] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const onLogin = (user: User) => {
+    dispatch({
+      type: ActionTypes.SET_USER,
+      user,
+    });
+  };
 
   const saveUser = (user: User) => {
     localStorage.setItem('user', JSON.stringify(user));
