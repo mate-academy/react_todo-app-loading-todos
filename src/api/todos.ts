@@ -23,3 +23,9 @@ export const patchTodo = (
 ) => {
   return client.patch<ITodo>(`/todos/${todoId}`, data);
 };
+
+export const deleteTodo = (
+  todoId: number,
+) => {
+  return client.delete(`/todos/${todoId}`);
+};
