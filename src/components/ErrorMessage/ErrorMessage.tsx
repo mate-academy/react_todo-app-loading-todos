@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import classNames from 'classnames';
 import { DispatchContext, StateContext } from '../../providers/StateContext';
-import { ActionTypes } from '../../types/ActionTypes';
+import { EAction } from '../../types/Action.enum';
 
 export const ErrorMessage: React.FC = () => {
   const dispatch = useContext(DispatchContext);
@@ -12,7 +12,7 @@ export const ErrorMessage: React.FC = () => {
   const handleClose = () => {
     clearTimeout(timerId);
     dispatch({
-      type: ActionTypes.SET_ERROR,
+      type: EAction.SET_ERROR,
       error: {
         show: false,
       },

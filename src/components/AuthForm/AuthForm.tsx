@@ -3,8 +3,8 @@ import classNames from 'classnames';
 
 import { createUser, getUserByEmail } from '../../api/users';
 
-import { ActionTypes } from '../../types/ActionTypes';
-import { User } from '../../types/User';
+import { EAction } from '../../types/Action.enum';
+import { IUser } from '../../types/User.interface';
 import { DispatchContext } from '../../providers/StateContext';
 
 export const AuthForm: React.FC = () => {
@@ -16,14 +16,14 @@ export const AuthForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const onLogin = (user: User) => {
+  const onLogin = (user: IUser) => {
     dispatch({
-      type: ActionTypes.SET_USER,
+      type: EAction.SET_USER,
       user,
     });
   };
 
-  const saveUser = (user: User) => {
+  const saveUser = (user: IUser) => {
     localStorage.setItem('user', JSON.stringify(user));
     onLogin(user);
   };
@@ -36,7 +36,7 @@ export const AuthForm: React.FC = () => {
     }
 
     try {
-      const user = JSON.parse(userData) as User;
+      const user = JSON.parse(userData) as IUser;
 
       onLogin(user);
     } catch (error) {
