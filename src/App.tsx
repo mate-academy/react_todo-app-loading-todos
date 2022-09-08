@@ -1,7 +1,9 @@
 import {
+  FormEvent,
   useContext,
   useEffect,
   useRef,
+  useState,
 } from 'react';
 
 import classNames from 'classnames';
@@ -11,7 +13,12 @@ import { AuthForm } from './components/AuthForm/AuthForm';
 import { TodoList } from './components/TodoList/TodoList';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 
-import { getTodos, patchTodo } from './api/todos';
+import {
+  addTodo,
+  AddTodoData,
+  getTodos,
+  patchTodo,
+} from './api/todos';
 
 import { EAction } from './types/Action.enum';
 import { EFilterBy } from './types/FilterBy.enum';
@@ -19,6 +26,7 @@ import { EFilterBy } from './types/FilterBy.enum';
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const { todos, user, filterBy } = useContext(StateContext);
+  const [newTodoText, setNewTodoText] = useState('');
 
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -73,13 +81,8 @@ export const App: React.FC = () => {
       });
     });
 
-    // eslint-disable-next-line no-console
-    console.log(fetchBatch);
-
     Promise.all(fetchBatch)
       .then(dataFromServer => {
-        // eslint-disable-next-line no-console
-        console.log(dataFromServer);
         dispatch({
           type: EAction.SET_TODOS,
           todos: dataFromServer,
@@ -97,6 +100,48 @@ export const App: React.FC = () => {
       type: EAction.SET_FILTER,
       filterBy: newFilter,
     });
+  };
+
+  const handleAddTodo = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!newTodoField.current) {
+      return;
+    }
+
+    if (!newTodoField.current.value) {
+      dispatch({
+        type: EAction.SET_ERROR,
+        error: {
+          message: 'Title can\'t be empty',
+          show: true,
+        },
+      });
+    }
+
+    const dataToAdd: AddTodoData = {
+      userId: user.id,
+      title: newTodoField.current.value,
+      completed: false,
+    };
+
+    addTodo(dataToAdd)
+      .then(newTodo => {
+        dispatch({
+          type: EAction.ADD_TODO,
+          todo: newTodo,
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: EAction.SET_ERROR,
+          error: {
+            message: 'Unable to add a todo',
+            show: true,
+          },
+        });
+      })
+      .finally(() => setNewTodoText(''));
   };
 
   const countIncompleted = todos.filter(todo => !todo.completed).length;
@@ -122,12 +167,15 @@ export const App: React.FC = () => {
             />
           )}
 
-          <form>
+          <form onSubmit={handleAddTodo}>
             <input
               data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
               className="todoapp__new-todo"
+              type="text"
+              name="newTodoText"
+              ref={newTodoField}
+              value={newTodoText}
+              onChange={event => setNewTodoText(event.target.value)}
               placeholder="What needs to be done?"
             />
           </form>

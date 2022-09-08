@@ -29,9 +29,6 @@ export const TodoList: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<ITodo[]>([]);
 
   const saveTodo = useCallback((todoId: number, data: PatchTodoData) => {
-    // eslint-disable-next-line no-console
-    console.log('saveTodo data', data);
-
     dispatch({
       type: EAction.SET_LOADER,
       loader: {

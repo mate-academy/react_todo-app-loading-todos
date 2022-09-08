@@ -3,5 +3,4 @@ export interface ITodo {
   userId: number;
   title: string;
   completed: boolean;
-  processing?: boolean;
 }
