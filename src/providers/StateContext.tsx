@@ -1,61 +1,24 @@
-import React, { createContext, Dispatch, useReducer } from 'react';
+import { createContext, Dispatch, useReducer } from 'react';
 
+import { IState } from '../types/State.interface';
 import { IAction } from '../types/Action.interface';
 import { EAction } from '../types/Action.enum';
-import { IError } from '../types/Error.interface';
-import { ILoader } from '../types/Loader.interface';
-import { ITodo } from '../types/Todo.interface';
-import { IUser } from '../types/User.interface';
 import { EFilterBy } from '../types/FilterBy.enum';
-import { ITodoAnimation } from '../types/TodoAnimation.interface';
+import {
+  setUserReducer,
+  setTodosReducer,
+  addTodoReducer,
+  editTodoReducer,
+  deleteTodoReducer,
+  setFilterReducer,
+  setAnimationsReducer,
+  setErrorReducer,
+  setLoaderReducer,
+  onAllLoadersReducer,
+  offAllLoadersReducer,
+} from './reducers';
 
-type State = {
-  user: IUser | null;
-  todos: ITodo[];
-  loaders: ILoader[];
-  animations: ITodoAnimation[];
-  error: IError;
-  filterBy: EFilterBy;
-};
-
-type Reducer = (state: State, action: IAction) => State;
-
-const editTodoReducer: Reducer = (state, action) => {
-  if (!action.todo) {
-    return { ...state };
-  }
-
-  return {
-    ...state,
-    todos: state.todos
-      .map(todo => (todo.id === action.todo?.id
-        ? action.todo
-        : todo
-      )),
-  };
-};
-
-const setLoaderReducer: Reducer = (state, action) => {
-  if (!action.loader) {
-    return { ...state };
-  }
-
-  const newLoaders = [...state.loaders];
-
-  const loaderIndex = newLoaders
-    .findIndex(loader => loader.id === action.loader?.id);
-
-  if (loaderIndex !== -1) {
-    newLoaders[loaderIndex].on = action.loader?.on || false;
-  } else {
-    newLoaders.push(action.loader);
-  }
-
-  return {
-    ...state,
-    loaders: newLoaders,
-  };
-};
+type Reducer = (state: IState, action: IAction) => IState;
 
 const actionReducer: Reducer = (state, action) => {
   switch (action.type) {
@@ -64,94 +27,65 @@ const actionReducer: Reducer = (state, action) => {
         return state;
       }
 
-      return {
-        ...state,
-        user: action.user,
-      };
+      return setUserReducer(state, action.user);
     case EAction.SET_TODOS:
       if (!action.todos) {
         return state;
       }
 
-      return {
-        ...state,
-        todos: action.todos,
-      };
+      return setTodosReducer(state, action.todos);
     case EAction.ADD_TODO:
       if (!action.todo) {
         return state;
       }
 
-      return {
-        ...state,
-        todos: [...state.todos, action.todo],
-      };
+      return addTodoReducer(state, action.todo);
     case EAction.EDIT_TODO:
-      return editTodoReducer(state, action);
-    case EAction.DELETE_TODO:
-      if (!('deleteId' in action)) {
+      if (!action.todo) {
         return state;
       }
 
-      return {
-        ...state,
-        todos: state.todos
-          .filter(todo => todo.id !== action.deleteId),
-      };
+      return editTodoReducer(state, action.todo);
+    case EAction.DELETE_TODO:
+      if (!action.deleteId) {
+        return state;
+      }
+
+      return deleteTodoReducer(state, action.deleteId);
     case EAction.SET_FILTER:
       if (!action.filterBy) {
         return state;
       }
 
-      return {
-        ...state,
-        filterBy: action.filterBy,
-      };
+      return setFilterReducer(state, action.filterBy);
     case EAction.SET_ANIMATIONS:
       if (!action.animations) {
         return state;
       }
 
-      return {
-        ...state,
-        animations: action.animations,
-      };
+      return setAnimationsReducer(state, action.animations);
     case EAction.SET_ERROR:
       if (!action.error) {
         return state;
       }
 
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          ...action.error,
-        },
-      };
+      return setErrorReducer(state, action.error);
     case EAction.SET_LOADER:
-      return setLoaderReducer(state, action);
+      if (!action.loader) {
+        return state;
+      }
+
+      return setLoaderReducer(state, action.loader);
     case EAction.ON_ALL_LOADERS:
-      return {
-        ...state,
-        loaders: state.todos.map(todo => ({
-          id: todo.id,
-          on: true,
-        })),
-      };
+      return onAllLoadersReducer(state);
     case EAction.OFF_ALL_LOADERS:
-      return {
-        ...state,
-        loaders: state.todos.map(todo => ({
-          id: todo.id,
-          on: false,
-        })),
-      };
+      return offAllLoadersReducer(state);
     default:
       return state;
   }
 };
 
-const intialState: State = {
+const intialIState: IState = {
   user: null,
   todos: [],
   loaders: [],
@@ -166,20 +100,20 @@ const intialState: State = {
 export const DispatchContext = createContext<Dispatch<IAction>>(
   () => {},
 );
-export const StateContext = createContext(intialState);
+export const IStateContext = createContext(intialIState);
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const StateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(actionReducer, intialState);
+export const IStateProvider: React.FC<Props> = ({ children }) => {
+  const [state, dispatch] = useReducer(actionReducer, intialIState);
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
+      <IStateContext.Provider value={state}>
         {children}
-      </StateContext.Provider>
+      </IStateContext.Provider>
     </DispatchContext.Provider>
   );
 };
