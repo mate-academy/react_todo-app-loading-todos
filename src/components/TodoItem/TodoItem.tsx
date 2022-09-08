@@ -15,6 +15,7 @@ type Props = {
   isProcessing: boolean;
   isVisible: boolean;
   onSave: (todoId: number, data: PatchTodoData) => void;
+  onDelete: (todoId: number) => void;
 };
 
 export const TodoItem: React.FC<Props> = memo(({
@@ -22,6 +23,7 @@ export const TodoItem: React.FC<Props> = memo(({
   isProcessing,
   isVisible,
   onSave,
+  onDelete,
 }) => {
   const editField = useRef<HTMLInputElement>(null);
 
@@ -45,6 +47,19 @@ export const TodoItem: React.FC<Props> = memo(({
     }
 
     setCurrentTitle(event.currentTarget.value);
+  };
+
+  const handleKeydown = (event: React.KeyboardEvent) => {
+    if (isProcessing) {
+      return;
+    }
+
+    if (event.code !== 'Escape') {
+      return;
+    }
+
+    setCurrentTitle(todo.title);
+    setIsEditing(false);
   };
 
   const handleTitleChange = () => {
@@ -95,6 +110,7 @@ export const TodoItem: React.FC<Props> = memo(({
             defaultValue={currentTitle}
             ref={editField}
             onChange={handleChange}
+            onKeyDown={handleKeydown}
             onBlur={handleTitleChange}
           />
         </form>
@@ -111,6 +127,7 @@ export const TodoItem: React.FC<Props> = memo(({
             type="button"
             className="todo__remove"
             data-cy="TodoDeleteButton"
+            onClick={() => onDelete(todo.id)}
           >
             ×
           </button>

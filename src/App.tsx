@@ -16,6 +16,7 @@ import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import {
   addTodo,
   AddTodoData,
+  deleteTodo,
   getTodos,
   patchTodo,
 } from './api/todos';
@@ -105,11 +106,7 @@ export const App: React.FC = () => {
   const handleAddTodo = (event: FormEvent) => {
     event.preventDefault();
 
-    if (!newTodoField.current) {
-      return;
-    }
-
-    if (!newTodoField.current.value) {
+    if (!newTodoText) {
       dispatch({
         type: EAction.SET_ERROR,
         error: {
@@ -117,11 +114,13 @@ export const App: React.FC = () => {
           show: true,
         },
       });
+
+      return;
     }
 
     const dataToAdd: AddTodoData = {
       userId: user.id,
-      title: newTodoField.current.value,
+      title: newTodoText,
       completed: false,
     };
 
@@ -144,7 +143,47 @@ export const App: React.FC = () => {
       .finally(() => setNewTodoText(''));
   };
 
+  const handleClearCompleted = () => {
+    const todosToDelete = todos.filter(todo => todo.completed);
+
+    if (!todosToDelete.length) {
+      return;
+    }
+
+    const fetchBatch = todosToDelete.map(todo => {
+      dispatch({
+        type: EAction.SET_LOADER,
+        loader: {
+          id: todo.id,
+          on: true,
+        },
+      });
+
+      return deleteTodo(todo.id);
+    });
+
+    Promise.all(fetchBatch)
+      .then(() => {
+        todosToDelete.forEach(entry => {
+          dispatch({
+            type: EAction.DELETE_TODO,
+            deleteId: entry.id,
+          });
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: EAction.SET_ERROR,
+          error: {
+            message: 'Unable to delete a todo',
+            show: true,
+          },
+        });
+      });
+  };
+
   const countIncompleted = todos.filter(todo => !todo.completed).length;
+  const countCompleted = todos.length - countIncompleted;
 
   return (
     <div className="todoapp">
@@ -242,13 +281,16 @@ export const App: React.FC = () => {
                 </a>
               </nav>
 
-              <button
-                data-cy="ClearCompletedButton"
-                type="button"
-                className="todoapp__clear-completed"
-              >
-                Clear completed
-              </button>
+              {countCompleted > 0 && (
+                <button
+                  data-cy="ClearCompletedButton"
+                  type="button"
+                  className="todoapp__clear-completed"
+                  onClick={handleClearCompleted}
+                >
+                  Clear completed
+                </button>
+              )}
             </footer>
           </>
         )}

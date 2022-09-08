@@ -9,7 +9,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 import { DispatchContext, StateContext } from '../../providers/StateContext';
 
-import { patchTodo, PatchTodoData } from '../../api/todos';
+import { deleteTodo, patchTodo, PatchTodoData } from '../../api/todos';
 
 import { EAction } from '../../types/Action.enum';
 import { EFilterBy } from '../../types/FilterBy.enum';
@@ -59,6 +59,33 @@ export const TodoList: React.FC = () => {
           loader: {
             id: todoId,
             on: false,
+          },
+        });
+      });
+  }, []);
+
+  const removeTodo = useCallback((todoId: number) => {
+    dispatch({
+      type: EAction.SET_LOADER,
+      loader: {
+        id: todoId,
+        on: true,
+      },
+    });
+
+    deleteTodo(todoId)
+      .then(() => {
+        dispatch({
+          type: EAction.DELETE_TODO,
+          deleteId: todoId,
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: EAction.SET_ERROR,
+          error: {
+            message: 'Unable to delete a todo',
+            show: true,
           },
         });
       });
@@ -127,9 +154,6 @@ export const TodoList: React.FC = () => {
     }, 0);
   }, [visibleTodos]);
 
-  // eslint-disable-next-line no-console
-  console.log('TodoList re-render');
-
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => {
@@ -147,6 +171,7 @@ export const TodoList: React.FC = () => {
             isProcessing={isProcessing}
             isVisible={isVisible}
             onSave={saveTodo}
+            onDelete={removeTodo}
             key={todo.id}
           />
         );
