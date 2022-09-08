@@ -12,11 +12,13 @@ import { TodoList } from './components/TodoList/TodoList';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 
 import { getTodos, patchTodo } from './api/todos';
-import { ActionTypes } from './types/ActionTypes';
+
+import { EAction } from './types/Action.enum';
+import { EFilterBy } from './types/FilterBy.enum';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, user } = useContext(StateContext);
+  const { todos, user, filterBy } = useContext(StateContext);
 
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -28,13 +30,13 @@ export const App: React.FC = () => {
     getTodos(user.id)
       .then(dataFromServer => {
         dispatch({
-          type: ActionTypes.SET_TODOS,
+          type: EAction.SET_TODOS,
           todos: dataFromServer,
         });
       })
       .catch(() => {
         dispatch({
-          type: ActionTypes.SET_ERROR,
+          type: EAction.SET_ERROR,
           error: {
             message: 'Unable to load todos',
             show: true,
@@ -48,6 +50,10 @@ export const App: React.FC = () => {
       });
   }, [user]);
 
+  if (!user) {
+    return <AuthForm />;
+  }
+
   const handleToggleAll = (newCompletedState: boolean) => {
     const fetchBatch = todos.map(todo => {
       if (todo.completed === newCompletedState) {
@@ -55,7 +61,7 @@ export const App: React.FC = () => {
       }
 
       dispatch({
-        type: ActionTypes.SET_LOADER,
+        type: EAction.SET_LOADER,
         loader: {
           id: todo.id,
           on: true,
@@ -75,25 +81,25 @@ export const App: React.FC = () => {
         // eslint-disable-next-line no-console
         console.log(dataFromServer);
         dispatch({
-          type: ActionTypes.SET_TODOS,
+          type: EAction.SET_TODOS,
           todos: dataFromServer,
         });
       })
       .finally(() => {
         dispatch({
-          type: ActionTypes.OFF_ALL_LOADERS,
+          type: EAction.OFF_ALL_LOADERS,
         });
       });
   };
 
-  if (!user) {
-    return <AuthForm />;
-  }
+  const handleFilterClick = (newFilter: EFilterBy) => {
+    dispatch({
+      type: EAction.SET_FILTER,
+      filterBy: newFilter,
+    });
+  };
 
   const countIncompleted = todos.filter(todo => !todo.completed).length;
-
-  // eslint-disable-next-line no-console
-  console.log('App re-render', countIncompleted);
 
   return (
     <div className="todoapp">
@@ -140,7 +146,16 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkAll"
                   href="#/"
-                  className="filter__link selected"
+                  className={classNames(
+                    'filter__link',
+                    {
+                      selected: filterBy === EFilterBy.ALL,
+                    },
+                  )}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleFilterClick(EFilterBy.ALL);
+                  }}
                 >
                   All
                 </a>
@@ -148,14 +163,32 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkActive"
                   href="#/active"
-                  className="filter__link"
+                  className={classNames(
+                    'filter__link',
+                    {
+                      selected: filterBy === EFilterBy.ACTIVE,
+                    },
+                  )}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleFilterClick(EFilterBy.ACTIVE);
+                  }}
                 >
                   Active
                 </a>
                 <a
                   data-cy="FilterLinkCompleted"
                   href="#/completed"
-                  className="filter__link"
+                  className={classNames(
+                    'filter__link',
+                    {
+                      selected: filterBy === EFilterBy.COMPLETED,
+                    },
+                  )}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleFilterClick(EFilterBy.COMPLETED);
+                  }}
                 >
                   Completed
                 </a>

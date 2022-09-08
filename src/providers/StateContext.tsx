@@ -1,24 +1,28 @@
 import React, { createContext, Dispatch, useReducer } from 'react';
 
-import { Action } from '../types/Action';
-import { ActionTypes } from '../types/ActionTypes';
-import { Error } from '../types/Error';
-import { Loader } from '../types/Loader';
-import { Todo } from '../types/Todo';
-import { User } from '../types/User';
+import { IAction } from '../types/Action.interface';
+import { EAction } from '../types/Action.enum';
+import { IError } from '../types/Error.interface';
+import { ILoader } from '../types/Loader.interface';
+import { ITodo } from '../types/Todo.interface';
+import { IUser } from '../types/User.interface';
+import { EFilterBy } from '../types/FilterBy.enum';
+import { ITodoAnimation } from '../types/TodoAnimation.interface';
 
 type State = {
-  user: User | null;
-  todos: Todo[];
-  loaders: Loader[];
-  error: Error;
+  user: IUser | null;
+  todos: ITodo[];
+  loaders: ILoader[];
+  animations: ITodoAnimation[];
+  error: IError;
+  filterBy: EFilterBy;
 };
 
-type Reducer = (state: State, action: Action) => State;
+type Reducer = (state: State, action: IAction) => State;
 
 const reducer: Reducer = (state, action) => {
   switch (action.type) {
-    case ActionTypes.SET_USER:
+    case EAction.SET_USER:
       if (!action.user) {
         return state;
       }
@@ -27,7 +31,7 @@ const reducer: Reducer = (state, action) => {
         ...state,
         user: action.user,
       };
-    case ActionTypes.SET_TODOS:
+    case EAction.SET_TODOS:
       if (!action.todos) {
         return state;
       }
@@ -36,7 +40,7 @@ const reducer: Reducer = (state, action) => {
         ...state,
         todos: action.todos,
       };
-    case ActionTypes.ADD_TODO:
+    case EAction.ADD_TODO:
       if (!action.todo) {
         return state;
       }
@@ -45,7 +49,7 @@ const reducer: Reducer = (state, action) => {
         ...state,
         todos: [...state.todos, action.todo],
       };
-    case ActionTypes.EDIT_TODO:
+    case EAction.EDIT_TODO:
       if (!action.todo) {
         return state;
       }
@@ -58,7 +62,7 @@ const reducer: Reducer = (state, action) => {
             : todo
           )),
       };
-    case ActionTypes.DELETE_TODO:
+    case EAction.DELETE_TODO:
       if (!action.todo) {
         return state;
       }
@@ -68,7 +72,26 @@ const reducer: Reducer = (state, action) => {
         todos: state.todos
           .filter(todo => todo.id !== action.todo?.id),
       };
-    case ActionTypes.SET_ERROR:
+    case EAction.SET_FILTER:
+      if (!action.filterBy) {
+        return state;
+      }
+
+      return {
+        ...state,
+        filterBy: action.filterBy,
+      };
+    case EAction.SET_ANIMATIONS:
+      if (!action.animations) {
+        return state;
+      }
+
+      return {
+        ...state,
+        animations: action.animations,
+      };
+
+    case EAction.SET_ERROR:
       if (!action.error) {
         return state;
       }
@@ -80,7 +103,7 @@ const reducer: Reducer = (state, action) => {
           ...action.error,
         },
       };
-    case ActionTypes.SET_LOADER: {
+    case EAction.SET_LOADER: {
       if (!action.loader) {
         return state;
       }
@@ -102,7 +125,7 @@ const reducer: Reducer = (state, action) => {
       };
     }
 
-    case ActionTypes.ON_ALL_LOADERS:
+    case EAction.ON_ALL_LOADERS:
       return {
         ...state,
         loaders: state.todos.map(todo => ({
@@ -110,7 +133,7 @@ const reducer: Reducer = (state, action) => {
           on: true,
         })),
       };
-    case ActionTypes.OFF_ALL_LOADERS:
+    case EAction.OFF_ALL_LOADERS:
       return {
         ...state,
         loaders: state.todos.map(todo => ({
@@ -127,13 +150,15 @@ const intialState: State = {
   user: null,
   todos: [],
   loaders: [],
+  animations: [],
   error: {
     message: '',
     show: false,
   },
+  filterBy: EFilterBy.ALL,
 };
 
-export const DispatchContext = createContext<Dispatch<Action>>(
+export const DispatchContext = createContext<Dispatch<IAction>>(
   () => {},
 );
 export const StateContext = createContext(intialState);

@@ -1,22 +1,39 @@
-import { useCallback, useContext } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 
 import { DispatchContext, StateContext } from '../../providers/StateContext';
 
 import { patchTodo, PatchTodoData } from '../../api/todos';
-import { ActionTypes } from '../../types/ActionTypes';
+
+import { EAction } from '../../types/Action.enum';
+import { EFilterBy } from '../../types/FilterBy.enum';
+import { ITodo } from '../../types/Todo.interface';
+import { ETodoAnimation } from '../../types/TodoAnimation.enum';
+import { ITodoAnimation } from '../../types/TodoAnimation.interface';
 
 export const TodoList: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, loaders } = useContext(StateContext);
+  const {
+    todos,
+    loaders,
+    filterBy,
+    animations,
+  } = useContext(StateContext);
+
+  const [visibleTodos, setVisibleTodos] = useState<ITodo[]>([]);
 
   const saveTodo = useCallback((todoId: number, data: PatchTodoData) => {
     // eslint-disable-next-line no-console
     console.log('saveTodo data', data);
 
     dispatch({
-      type: ActionTypes.SET_LOADER,
+      type: EAction.SET_LOADER,
       loader: {
         id: todoId,
         on: true,
@@ -26,13 +43,13 @@ export const TodoList: React.FC = () => {
     patchTodo(todoId, data)
       .then(newTodo => {
         dispatch({
-          type: ActionTypes.EDIT_TODO,
+          type: EAction.EDIT_TODO,
           todo: newTodo,
         });
       })
       .catch(() => {
         dispatch({
-          type: ActionTypes.SET_ERROR,
+          type: EAction.SET_ERROR,
           error: {
             message: 'Unable to update a todo',
             show: true,
@@ -41,7 +58,7 @@ export const TodoList: React.FC = () => {
       })
       .finally(() => {
         dispatch({
-          type: ActionTypes.SET_LOADER,
+          type: EAction.SET_LOADER,
           loader: {
             id: todoId,
             on: false,
@@ -50,20 +67,88 @@ export const TodoList: React.FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const animateTodos: ITodoAnimation[] = [];
+    const showTodos = todos
+      .filter(todo => {
+        const isVisibleNow = visibleTodos
+          .some(vTodo => vTodo.id === todo.id);
+
+        switch (filterBy) {
+          case EFilterBy.COMPLETED:
+            animateTodos.push({
+              id: todo.id,
+              state: todo.completed && isVisibleNow
+                ? ETodoAnimation.OPEN
+                : ETodoAnimation.CLOSE,
+            });
+
+            return todo.completed;
+          case EFilterBy.ACTIVE:
+            animateTodos.push({
+              id: todo.id,
+              state: !todo.completed && isVisibleNow
+                ? ETodoAnimation.OPEN
+                : ETodoAnimation.CLOSE,
+            });
+
+            return !todo.completed;
+          case EFilterBy.ALL:
+          default:
+            animateTodos.push({
+              id: todo.id,
+              state: isVisibleNow
+                ? ETodoAnimation.OPEN
+                : ETodoAnimation.CLOSE,
+            });
+
+            return true;
+        }
+      });
+
+    dispatch({
+      type: EAction.SET_ANIMATIONS,
+      animations: animateTodos,
+    });
+
+    setTimeout(() => {
+      setVisibleTodos(showTodos);
+    }, 1000);
+  }, [todos, filterBy]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({
+        type: EAction.SET_ANIMATIONS,
+        animations: [
+          ...visibleTodos.map(todo => ({
+            id: todo.id,
+            state: ETodoAnimation.OPEN,
+          })),
+        ],
+      });
+    }, 0);
+  }, [visibleTodos]);
+
   // eslint-disable-next-line no-console
   console.log('TodoList re-render');
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
+      {visibleTodos.map(todo => {
         const isProcessing = loaders.some(
           loader => loader.id === todo.id && loader.on,
+        );
+        const isVisible = animations.some(
+          animation => animation.id === todo.id
+            && animation.state === ETodoAnimation.OPEN,
         );
 
         return (
           <TodoItem
             todo={todo}
             isProcessing={isProcessing}
+            isVisible={isVisible}
             onSave={saveTodo}
             key={todo.id}
           />
