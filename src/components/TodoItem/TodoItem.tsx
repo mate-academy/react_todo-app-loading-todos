@@ -8,17 +8,19 @@ import { TodoLoader } from '../TodoLoader/TodoLoader';
 
 import { PatchTodoData } from '../../api/todos';
 
-import { Todo } from '../../types/Todo';
+import { ITodo } from '../../types/Todo.interface';
 
 type Props = {
-  todo: Todo;
+  todo: ITodo;
   isProcessing: boolean;
+  isVisible: boolean;
   onSave: (todoId: number, data: PatchTodoData) => void;
 };
 
 export const TodoItem: React.FC<Props> = memo(({
   todo,
   isProcessing,
+  isVisible,
   onSave,
 }) => {
   const editField = useRef<HTMLInputElement>(null);
@@ -62,7 +64,7 @@ export const TodoItem: React.FC<Props> = memo(({
   };
 
   // eslint-disable-next-line no-console
-  console.log('TodoItem re-render', todo.id);
+  console.log('TodoItem re-render', todo.id, isVisible);
 
   return (
     <div
@@ -71,6 +73,7 @@ export const TodoItem: React.FC<Props> = memo(({
         'todo',
         {
           completed: todo.completed,
+          'todo--visible': isVisible,
         },
       )}
     >
