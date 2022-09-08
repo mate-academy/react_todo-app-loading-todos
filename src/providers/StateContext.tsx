@@ -85,7 +85,7 @@ const actionReducer: Reducer = (state, action) => {
   }
 };
 
-const intialIState: IState = {
+const intialState: IState = {
   user: null,
   todos: [],
   loaders: [],
@@ -100,20 +100,20 @@ const intialIState: IState = {
 export const DispatchContext = createContext<Dispatch<IAction>>(
   () => {},
 );
-export const IStateContext = createContext(intialIState);
+export const StateContext = createContext(intialState);
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const IStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(actionReducer, intialIState);
+export const StateProvider: React.FC<Props> = ({ children }) => {
+  const [state, dispatch] = useReducer(actionReducer, intialState);
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <IStateContext.Provider value={state}>
+      <StateContext.Provider value={state}>
         {children}
-      </IStateContext.Provider>
+      </StateContext.Provider>
     </DispatchContext.Provider>
   );
 };
