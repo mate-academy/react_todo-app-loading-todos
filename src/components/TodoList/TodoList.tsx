@@ -113,7 +113,7 @@ export const TodoList: React.FC = () => {
 
     setTimeout(() => {
       setVisibleTodos(showTodos);
-    }, 1000);
+    }, 500);
   }, [todos, filterBy]);
 
   useEffect(() => {

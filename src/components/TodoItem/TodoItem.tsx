@@ -63,9 +63,6 @@ export const TodoItem: React.FC<Props> = memo(({
     });
   };
 
-  // eslint-disable-next-line no-console
-  console.log('TodoItem re-render', todo.id, isVisible);
-
   return (
     <div
       data-cy="Todo"
