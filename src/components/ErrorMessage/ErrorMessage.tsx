@@ -45,11 +45,6 @@ export const ErrorMessage: React.FC = () => {
         onClick={handleClose}
       />
       {error.message}
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };
