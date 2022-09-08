@@ -1,34 +1,30 @@
 import { isEqual } from 'lodash';
 import {
-  ChangeEvent, memo, useContext, useEffect, useRef, useState,
+  ChangeEvent, memo, useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
 
 import { TodoLoader } from '../TodoLoader/TodoLoader';
 
-import { DispatchContext, StateContext } from '../../providers/StateContext';
-
-import { patchTodo, PatchTodoData } from '../../api/todos';
+import { PatchTodoData } from '../../api/todos';
 
 import { Todo } from '../../types/Todo';
-import { ActionTypes } from '../../types/ActionTypes';
 
 type Props = {
   todo: Todo;
+  isProcessing: boolean;
+  onSave: (todoId: number, data: PatchTodoData) => void;
 };
 
-export const TodoItem: React.FC<Props> = memo(({ todo }) => {
+export const TodoItem: React.FC<Props> = memo(({
+  todo,
+  isProcessing,
+  onSave,
+}) => {
   const editField = useRef<HTMLInputElement>(null);
-
-  const dispatch = useContext(DispatchContext);
-  const { loaders } = useContext(StateContext);
 
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(todo.title);
-
-  const isProcessing = loaders.some(
-    loader => loader.id === todo.id && loader.on,
-  );
 
   useEffect(() => {
     if (editField.current) {
@@ -38,39 +34,7 @@ export const TodoItem: React.FC<Props> = memo(({ todo }) => {
 
   const saveTodo = (data: PatchTodoData) => {
     setIsEditing(false);
-    dispatch({
-      type: ActionTypes.SET_LOADER,
-      loader: {
-        id: todo.id,
-        on: true,
-      },
-    });
-
-    patchTodo(todo.id, data)
-      .then(newTodo => {
-        dispatch({
-          type: ActionTypes.EDIT_TODO,
-          todo: newTodo,
-        });
-      })
-      .catch(() => {
-        dispatch({
-          type: ActionTypes.SET_ERROR,
-          error: {
-            message: 'Unable to update a todo',
-            show: true,
-          },
-        });
-      })
-      .finally(() => {
-        dispatch({
-          type: ActionTypes.SET_LOADER,
-          loader: {
-            id: todo.id,
-            on: false,
-          },
-        });
-      });
+    onSave(todo.id, data);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +61,9 @@ export const TodoItem: React.FC<Props> = memo(({ todo }) => {
     });
   };
 
+  // eslint-disable-next-line no-console
+  console.log('TodoItem re-render', todo.id);
+
   return (
     <div
       data-cy="Todo"
@@ -113,7 +80,7 @@ export const TodoItem: React.FC<Props> = memo(({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked={todo.completed}
+          checked={todo.completed}
           onChange={handleCheck}
         />
       </label>
