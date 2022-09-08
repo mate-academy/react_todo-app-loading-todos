@@ -20,7 +20,44 @@ type State = {
 
 type Reducer = (state: State, action: IAction) => State;
 
-const reducer: Reducer = (state, action) => {
+const editTodoReducer: Reducer = (state, action) => {
+  if (!action.todo) {
+    return { ...state };
+  }
+
+  return {
+    ...state,
+    todos: state.todos
+      .map(todo => (todo.id === action.todo?.id
+        ? action.todo
+        : todo
+      )),
+  };
+};
+
+const setLoaderReducer: Reducer = (state, action) => {
+  if (!action.loader) {
+    return { ...state };
+  }
+
+  const newLoaders = [...state.loaders];
+
+  const loaderIndex = newLoaders
+    .findIndex(loader => loader.id === action.loader?.id);
+
+  if (loaderIndex !== -1) {
+    newLoaders[loaderIndex].on = action.loader?.on || false;
+  } else {
+    newLoaders.push(action.loader);
+  }
+
+  return {
+    ...state,
+    loaders: newLoaders,
+  };
+};
+
+const actionReducer: Reducer = (state, action) => {
   switch (action.type) {
     case EAction.SET_USER:
       if (!action.user) {
@@ -50,18 +87,7 @@ const reducer: Reducer = (state, action) => {
         todos: [...state.todos, action.todo],
       };
     case EAction.EDIT_TODO:
-      if (!action.todo) {
-        return state;
-      }
-
-      return {
-        ...state,
-        todos: state.todos
-          .map(todo => (todo.id === action.todo?.id
-            ? action.todo
-            : todo
-          )),
-      };
+      return editTodoReducer(state, action);
     case EAction.DELETE_TODO:
       if (!action.todo) {
         return state;
@@ -90,7 +116,6 @@ const reducer: Reducer = (state, action) => {
         ...state,
         animations: action.animations,
       };
-
     case EAction.SET_ERROR:
       if (!action.error) {
         return state;
@@ -103,28 +128,8 @@ const reducer: Reducer = (state, action) => {
           ...action.error,
         },
       };
-    case EAction.SET_LOADER: {
-      if (!action.loader) {
-        return state;
-      }
-
-      const newLoaders = [...state.loaders];
-
-      const loaderIndex = newLoaders
-        .findIndex(loader => loader.id === action.loader?.id);
-
-      if (loaderIndex !== -1) {
-        newLoaders[loaderIndex].on = action.loader?.on || false;
-      } else {
-        newLoaders.push(action.loader);
-      }
-
-      return {
-        ...state,
-        loaders: newLoaders,
-      };
-    }
-
+    case EAction.SET_LOADER:
+      return setLoaderReducer(state, action);
     case EAction.ON_ALL_LOADERS:
       return {
         ...state,
@@ -168,7 +173,7 @@ type Props = {
 };
 
 export const StateProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, intialState);
+  const [state, dispatch] = useReducer(actionReducer, intialState);
 
   return (
     <DispatchContext.Provider value={dispatch}>
