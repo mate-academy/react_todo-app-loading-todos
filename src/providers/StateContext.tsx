@@ -89,14 +89,14 @@ const actionReducer: Reducer = (state, action) => {
     case EAction.EDIT_TODO:
       return editTodoReducer(state, action);
     case EAction.DELETE_TODO:
-      if (!action.todo) {
+      if (!('deleteId' in action)) {
         return state;
       }
 
       return {
         ...state,
         todos: state.todos
-          .filter(todo => todo.id !== action.todo?.id),
+          .filter(todo => todo.id !== action.deleteId),
       };
     case EAction.SET_FILTER:
       if (!action.filterBy) {

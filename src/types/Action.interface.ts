@@ -13,6 +13,7 @@ export interface IAction {
   todos?: ITodo[],
   user?: IUser,
   todo?: ITodo,
+  deleteId?: number;
   loader?: ILoader;
   animations?: ITodoAnimation[];
   error?: RequireAtLeastOne<IError, 'message' | 'show'>,
