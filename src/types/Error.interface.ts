@@ -1,4 +1,4 @@
-export interface Error {
+export interface IError {
   message: string;
   show: boolean,
 }

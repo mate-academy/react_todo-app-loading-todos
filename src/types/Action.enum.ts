@@ -1,9 +1,11 @@
-export enum ActionTypes {
+export enum EAction {
   SET_USER,
   SET_TODOS,
   ADD_TODO,
   EDIT_TODO,
   DELETE_TODO,
+  SET_FILTER,
+  SET_ANIMATIONS,
   SET_ERROR,
   SET_LOADER,
   ON_ALL_LOADERS,
