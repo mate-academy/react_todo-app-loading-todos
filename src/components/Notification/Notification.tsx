@@ -1,52 +1,42 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import React from 'react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
 
 type Props = {
-  error: string,
+  testError: string,
+  typeError: string,
+  stateError: boolean,
+  setNotification: (state: boolean) => void,
 };
 
-export const Notification: React.FC<Props> = ({ error }) => {
-  const [opener, setOpener] = useState<boolean>(true);
-  const [errorText, setErrorText] = useState<string>('');
-
-  useEffect(() => {
-    switch (error) {
-      case 'ErrorAdd':
-        setErrorText('Unable to add a todo');
-        break;
-      case 'ErrorDelete':
-        setErrorText('Unable to delete a todo');
-        break;
-      case 'ErrorUpdate':
-        setErrorText('Unable to update a todo');
-        break;
-      default:
-    }
-  }, []);
-
-  setTimeout(() => {
-    setOpener(true);
-  }, 3000);
+export const Notification: React.FC<Props> = (
+  {
+    testError, typeError, setNotification, stateError,
+  },
+) => {
+  const error = typeError === 'error';
+  const success = typeError === 'success';
 
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification',
-        'is-danger',
-        'is-light',
         'has-text-weight-normal',
-        { hidden: opener },
+        {
+          'is-danger': error,
+          'is-light': success,
+          hidden: stateError,
+        },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setOpener(true)}
+        onClick={() => setNotification(true)}
       />
-      {errorText}
+      {testError}
     </div>
   );
 };

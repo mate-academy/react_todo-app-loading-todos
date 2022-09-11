@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -15,34 +14,52 @@ import { Header } from './components/Header';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | []>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [openerNotification, setOpenerNotification] = useState<boolean>(true);
+  const [textError, setTextError] = useState<string>('');
+  const [typeError, setTypeError] = useState<string>('');
+
+  let visibleTodos = [...todos];
+
   const user = useContext(AuthContext);
   const location = useLocation();
 
   const parthName = location.pathname;
+
+  // для запуска Notification
+  const toggleError = (state: boolean, text: string, type: string) => {
+    setOpenerNotification(state);
+    setTextError(text);
+    setTypeError(type);
+    setTimeout(() => {
+      setOpenerNotification(true);
+    }, 3000);
+  };
+
+  const setNotification = (state: boolean) => {
+    setOpenerNotification(state);
+  };
 
   useEffect(() => {
     if (user) {
       getTodos(user?.id)
         .then(setTodos);
     }
+
+    toggleError(false, 'TestError', 'error');
   }, []);
 
-  useEffect(() => {
-    switch (parthName) {
-      case '/':
-        setVisibleTodos(todos);
-        break;
-      case '/active':
-        setVisibleTodos(todos.filter(todo => !todo.completed));
-        break;
-      case '/completed':
-        setVisibleTodos(todos.filter(todo => todo.completed));
-        break;
-      default:
-    }
-  }, [parthName, todos]);
+  switch (parthName) {
+    case '/':
+      visibleTodos = [...todos];
+      break;
+    case '/active':
+      visibleTodos = todos.filter(todo => !todo.completed);
+      break;
+    case '/completed':
+      visibleTodos = todos.filter(todo => todo.completed);
+      break;
+    default:
+  }
 
   return (
     <div className="todoapp">
@@ -63,7 +80,12 @@ export const App: React.FC = () => {
             : null
         }
       </div>
-      <Notification error="ErrorAdd" />
+      <Notification
+        testError={textError}
+        typeError={typeError}
+        setNotification={setNotification}
+        stateError={openerNotification}
+      />
     </div>
   );
 };
