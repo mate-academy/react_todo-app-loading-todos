@@ -1,6 +1,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -18,7 +19,8 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadError, setLoadError] = useState<boolean>(false);
-  const [filterOption, setFilterOption] = useState<boolean | null>(null);
+  const [filterOption, setFilterOption]
+    = useState<FilterOption>(FilterOption.all);
 
   useEffect(() => {
     const loadData = async () => {
@@ -42,33 +44,23 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  if (!user) {
-    return null;
-  }
-
-  const filterTodos = (option: string) => {
-    switch (option) {
+  const filterTodos = () => {
+    switch (filterOption) {
       case FilterOption.active:
-        setFilterOption(false);
-
-        break;
+        return todos.filter(todo => !todo.completed);
 
       case FilterOption.completed:
-        setFilterOption(true);
-
-        break;
+        return todos.filter(todo => todo.completed);
 
       case FilterOption.all:
-        setFilterOption(null);
-
-        break;
+        return todos;
 
       default:
-        setFilterOption(null);
-
-        break;
+        return todos;
     }
   };
+
+  const filteredTodos = useMemo(filterTodos, [todos, filterOption]);
 
   const closeError = () => {
     setLoadError(false);
@@ -91,13 +83,12 @@ export const App: React.FC = () => {
         />
 
         <TodoList
-          todos={todos}
-          filterOption={filterOption}
+          filteredTodos={filteredTodos}
         />
 
         <Footer
           todos={todos}
-          filterTodos={filterTodos}
+          filterTodos={event => setFilterOption(event)}
           filterOption={filterOption}
         />
       </div>

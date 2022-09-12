@@ -3,25 +3,17 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
-  filterOption: boolean | null;
+  filteredTodos: Todo[];
 };
 
 export const TodoList: React.FC<Props> = (
   {
-    todos,
-    filterOption,
+    filteredTodos,
   },
 ) => {
-  let visibleTodos = [...todos];
-
-  if (filterOption !== null) {
-    visibleTodos = todos.filter(todo => todo.completed === filterOption);
-  }
-
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {visibleTodos.map(todo => (
+      {filteredTodos.map(todo => (
         <div
           data-cy="Todo"
           className={classNames(

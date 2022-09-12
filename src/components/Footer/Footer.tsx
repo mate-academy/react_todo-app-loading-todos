@@ -1,10 +1,11 @@
 import classNames from 'classnames';
+import { FilterOption } from '../../types/FilterOption';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  filterTodos: (event: string) => void,
-  filterOption: boolean | null;
+  filterTodos: (event: FilterOption) => void,
+  filterOption: FilterOption;
 };
 
 export const Footer: React.FC<Props> = (
@@ -19,7 +20,7 @@ export const Footer: React.FC<Props> = (
       {todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${todos.filter(todo => todo.completed === false).length} items left`}
+            {`${todos.filter(todo => !todo.completed).length} items left`}
           </span>
 
           <nav className="filter" data-cy="Filter">
@@ -29,10 +30,10 @@ export const Footer: React.FC<Props> = (
               className={classNames(
                 'filter__link',
                 {
-                  selected: filterOption === null,
+                  selected: filterOption === FilterOption.all,
                 },
               )}
-              onClick={() => filterTodos('all')}
+              onClick={() => filterTodos(FilterOption.all)}
             >
               All
             </a>
@@ -43,10 +44,10 @@ export const Footer: React.FC<Props> = (
               className={classNames(
                 'filter__link',
                 {
-                  selected: filterOption === false,
+                  selected: filterOption === FilterOption.active,
                 },
               )}
-              onClick={() => filterTodos('active')}
+              onClick={() => filterTodos(FilterOption.active)}
             >
               Active
             </a>
@@ -56,10 +57,10 @@ export const Footer: React.FC<Props> = (
               className={classNames(
                 'filter__link',
                 {
-                  selected: filterOption,
+                  selected: filterOption === FilterOption.completed,
                 },
               )}
-              onClick={() => filterTodos('completed')}
+              onClick={() => filterTodos(FilterOption.completed)}
             >
               Completed
             </a>
