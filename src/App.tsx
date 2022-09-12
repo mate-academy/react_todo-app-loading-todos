@@ -120,7 +120,7 @@ export const App: React.FC = () => {
 
     const dataToAdd: AddTodoData = {
       userId: user.id,
-      title: newTodoText,
+      title: newTodoText.trim(),
       completed: false,
     };
 
