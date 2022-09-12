@@ -27,7 +27,7 @@ export const App: React.FC = () => {
         return todo;
 
       case FilterStatus.Active:
-        return todo.completed === false;
+        return !todo.completed;
 
       case FilterStatus.Completed:
         return todo.completed;
@@ -58,9 +58,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => setError(true));
   }, []);
-
-  // eslint-disable-next-line no-console
-  console.log(todos);
 
   return (
     <div className="todoapp">
