@@ -9,13 +9,13 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 import { DispatchContext, StateContext } from '../../providers/StateContext';
 
-import { deleteTodo, patchTodo, PatchTodoData } from '../../api/todos';
+import { deleteTodo, patchTodo, TPatchTodo } from '../../api/todos';
 
 import { EAction } from '../../types/Action.enum';
-import { EFilterBy } from '../../types/FilterBy.enum';
 import { ITodo } from '../../types/Todo.interface';
 import { ETodoAnimation } from '../../types/TodoAnimation.enum';
 import { ITodoAnimation } from '../../types/TodoAnimation.interface';
+import { filterAndAnimateTodo } from './helpers/filterAndAnimateTodo';
 
 export const TodoList: React.FC = () => {
   const dispatch = useContext(DispatchContext);
@@ -28,7 +28,7 @@ export const TodoList: React.FC = () => {
 
   const [visibleTodos, setVisibleTodos] = useState<ITodo[]>([]);
 
-  const saveTodo = useCallback((todoId: number, data: PatchTodoData) => {
+  const saveTodo = useCallback((todoId: number, data: TPatchTodo) => {
     dispatch({
       type: EAction.SET_LOADER,
       loader: {
@@ -94,41 +94,12 @@ export const TodoList: React.FC = () => {
   useEffect(() => {
     const animateTodos: ITodoAnimation[] = [];
     const showTodos = todos
-      .filter(todo => {
-        const isVisibleNow = visibleTodos
-          .some(vTodo => vTodo.id === todo.id);
-
-        switch (filterBy) {
-          case EFilterBy.COMPLETED:
-            animateTodos.push({
-              id: todo.id,
-              state: todo.completed && isVisibleNow
-                ? ETodoAnimation.OPEN
-                : ETodoAnimation.CLOSE,
-            });
-
-            return todo.completed;
-          case EFilterBy.ACTIVE:
-            animateTodos.push({
-              id: todo.id,
-              state: !todo.completed && isVisibleNow
-                ? ETodoAnimation.OPEN
-                : ETodoAnimation.CLOSE,
-            });
-
-            return !todo.completed;
-          case EFilterBy.ALL:
-          default:
-            animateTodos.push({
-              id: todo.id,
-              state: isVisibleNow
-                ? ETodoAnimation.OPEN
-                : ETodoAnimation.CLOSE,
-            });
-
-            return true;
-        }
-      });
+      .filter(todo => filterAndAnimateTodo(
+        todo,
+        filterBy,
+        animateTodos,
+        visibleTodos,
+      ));
 
     dispatch({
       type: EAction.SET_ANIMATIONS,
