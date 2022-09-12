@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import { TodoLoader } from '../TodoLoader/TodoLoader';
 
-import { PatchTodoData } from '../../api/todos';
+import { TPatchTodo } from '../../api/todos';
 
 import { ITodo } from '../../types/Todo.interface';
 
@@ -14,7 +14,7 @@ type Props = {
   todo: ITodo;
   isProcessing: boolean;
   isVisible: boolean;
-  onSave: (todoId: number, data: PatchTodoData) => void;
+  onSave: (todoId: number, data: TPatchTodo) => void;
   onDelete: (todoId: number) => void;
 };
 
@@ -36,7 +36,7 @@ export const TodoItem: React.FC<Props> = memo(({
     }
   }, [isEditing]);
 
-  const saveTodo = (data: PatchTodoData) => {
+  const saveTodo = (data: TPatchTodo) => {
     setIsEditing(false);
     onSave(todo.id, data);
   };

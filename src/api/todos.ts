@@ -3,8 +3,8 @@ import { client } from '../utils/fetchClient';
 import { ITodo } from '../types/Todo.interface';
 import { RequireAtLeastOne } from '../types/helpers';
 
-// eslint-disable-next-line max-len
-export type PatchTodoData = RequireAtLeastOne<Pick<ITodo, 'title' | 'completed'>, 'title' | 'completed'>;
+type TodoFields = 'title' | 'completed';
+export type TPatchTodo = RequireAtLeastOne<Pick<ITodo, TodoFields>, TodoFields>;
 export type AddTodoData = Pick<ITodo, 'userId' | 'title' | 'completed'>;
 
 export const getTodos = (userId: number) => {
@@ -19,7 +19,7 @@ export const addTodo = (
 
 export const patchTodo = (
   todoId: number,
-  data: PatchTodoData,
+  data: TPatchTodo,
 ) => {
   return client.patch<ITodo>(`/todos/${todoId}`, data);
 };
