@@ -4,19 +4,16 @@ import classNames from 'classnames';
 
 type Props = {
   testError: string,
-  typeError: string,
-  stateError: boolean,
+  type: 'error' | 'success' | undefined,
+  isHidden: boolean,
   setNotification: (state: boolean) => void,
 };
 
 export const Notification: React.FC<Props> = (
   {
-    testError, typeError, setNotification, stateError,
+    testError, type, setNotification, isHidden,
   },
 ) => {
-  const error = typeError === 'error';
-  const success = typeError === 'success';
-
   return (
     <div
       data-cy="ErrorNotification"
@@ -24,9 +21,9 @@ export const Notification: React.FC<Props> = (
         'notification',
         'has-text-weight-normal',
         {
-          'is-danger': error,
-          'is-light': success,
-          hidden: stateError,
+          'is-danger': type === 'error',
+          'is-light': type === 'success',
+          hidden: isHidden,
         },
       )}
     >

@@ -16,17 +16,21 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [openerNotification, setOpenerNotification] = useState<boolean>(true);
   const [textError, setTextError] = useState<string>('');
-  const [typeError, setTypeError] = useState<string>('');
+  const [typeError, setTypeError] = useState<'error' | 'success'>();
 
   let visibleTodos = [...todos];
 
   const user = useContext(AuthContext);
   const location = useLocation();
 
-  const parthName = location.pathname;
+  const { pathname } = location;
 
   // для запуска Notification
-  const toggleError = (state: boolean, text: string, type: string) => {
+  const toggleError = (
+    state: boolean,
+    text: string,
+    type: 'error' | 'success',
+  ) => {
     setOpenerNotification(state);
     setTextError(text);
     setTypeError(type);
@@ -48,7 +52,7 @@ export const App: React.FC = () => {
     toggleError(false, 'TestError', 'error');
   }, []);
 
-  switch (parthName) {
+  switch (pathname) {
     case '/':
       visibleTodos = [...todos];
       break;
@@ -82,9 +86,9 @@ export const App: React.FC = () => {
       </div>
       <Notification
         testError={textError}
-        typeError={typeError}
+        type={typeError}
         setNotification={setNotification}
-        stateError={openerNotification}
+        isHidden={openerNotification}
       />
     </div>
   );
