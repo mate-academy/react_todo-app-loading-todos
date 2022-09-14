@@ -26,9 +26,9 @@ export const App: React.FC = () => {
     const loadData = async () => {
       try {
         if (user) {
-          const loadTodos = await getTodos(user.id);
+          const loadedTodos = await getTodos(user.id);
 
-          setTodos(loadTodos);
+          setTodos(loadedTodos);
         }
       } catch {
         setLoadError(true);
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
         />
 
         <TodoList
-          filteredTodos={filteredTodos}
+          todos={filteredTodos}
         />
 
         <Footer
