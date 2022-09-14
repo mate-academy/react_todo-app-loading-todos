@@ -4,12 +4,13 @@ import { TodoStatus } from '../../../types/TodoStatus';
 
 type Props = {
   activeTodos: number;
+  completedTodos: number;
   todoFilter: TodoStatus;
   onTodoFilter: (filterStatus: TodoStatus) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  activeTodos, todoFilter, onTodoFilter,
+  activeTodos, completedTodos, todoFilter, onTodoFilter,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
@@ -57,7 +58,11 @@ export const Footer: React.FC<Props> = ({
     <button
       data-cy="ClearCompletedButton"
       type="button"
-      className="todoapp__clear-completed"
+      className={classNames(
+        'todoapp__clear-completed',
+        { 'todoapp__clear-completed--hidden': !completedTodos },
+      )}
+      disabled={!completedTodos}
     >
       Clear completed
     </button>

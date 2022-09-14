@@ -128,5 +128,9 @@
     &:active {
       text-decoration: none;
     }
+
+    &--hidden {
+      opacity: 0;
+    }
   }
 }

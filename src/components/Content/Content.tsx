@@ -9,21 +9,26 @@ type Props = {
   todos: Todo[];
   newTodo: React.RefObject<HTMLInputElement>;
   activeTodos: number;
-  isTodo: boolean;
   todoFilter: TodoStatus;
+  completedTodos: number;
   onTodoFilter: (filterStatus: TodoStatus) => void;
 };
 
 export const Content: React.FC<Props> = ({
-  todos, newTodo, activeTodos, isTodo, todoFilter, onTodoFilter,
+  todos,
+  newTodo,
+  activeTodos,
+  completedTodos,
+  todoFilter,
+  onTodoFilter,
 }) => (
   <div className="todoapp__content">
     <Header
       newTodo={newTodo}
-      isTodo={isTodo}
+      todos={todos}
     />
 
-    {isTodo && (
+    {todos.length > 0 && (
       <>
         <TodoList
           todos={todos}
@@ -31,6 +36,7 @@ export const Content: React.FC<Props> = ({
 
         <Footer
           activeTodos={activeTodos}
+          completedTodos={completedTodos}
           todoFilter={todoFilter}
           onTodoFilter={onTodoFilter}
         />

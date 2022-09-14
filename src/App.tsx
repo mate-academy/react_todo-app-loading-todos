@@ -16,10 +16,8 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodo, setIsTodo] = useState(false);
   const [todoFilter, setTodoFilter] = useState(TodoStatus.ALL);
-  const [error, setError] = useState<Error>();
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const filteredTodos = useMemo(() => (
     getFilteredTodos(todos, todoFilter)
@@ -29,25 +27,23 @@ export const App: React.FC = () => {
     getFilteredTodos(todos, TodoStatus.ACTIVE)
   ), [todos]);
 
-  useMemo(() => (
-    todos.length > 0
-      ? setIsTodo(true)
-      : setIsTodo(false)
+  const completedTodos = useMemo(() => (
+    getFilteredTodos(todos, TodoStatus.COMPLETED)
   ), [todos]);
 
   const handleTodoFilter = useCallback((filterStatus: TodoStatus) => {
     setTodoFilter(filterStatus);
   }, [todoFilter]);
 
-  const handleErrorChange = useCallback((errorStatus: boolean) => {
-    setIsError(errorStatus);
-  }, [isError]);
+  const handleError = useCallback((errorStatus: Error | null) => {
+    setError(errorStatus);
+  }, [error]);
 
   useEffect(() => {
-    const onScreenTimer = setTimeout(() => setIsError(false), 3000);
+    const onScreenTimer = setTimeout(() => setError(null), 3000);
 
     return () => clearTimeout(onScreenTimer);
-  }, [isError]);
+  }, [error]);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -58,7 +54,6 @@ export const App: React.FC = () => {
       getTodos(getUserId(user))
         .then(setTodos)
         .catch(() => {
-          setIsError(true);
           setError(Error.SERVER);
         });
     }
@@ -72,16 +67,15 @@ export const App: React.FC = () => {
         todos={filteredTodos}
         newTodo={newTodoField}
         activeTodos={activeTodos.length}
-        isTodo={isTodo}
         todoFilter={todoFilter}
         onTodoFilter={handleTodoFilter}
+        completedTodos={completedTodos.length}
       />
 
       {error && (
         <ErrorNotification
           error={error}
-          isError={isError}
-          onErrorChange={handleErrorChange}
+          onError={handleError}
         />
       )}
     </div>

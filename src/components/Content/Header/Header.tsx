@@ -1,13 +1,14 @@
 import React from 'react';
+import { Todo } from '../../../types/Todo';
 
 type Props = {
   newTodo: React.RefObject<HTMLInputElement>;
-  isTodo: boolean;
+  todos: Todo[];
 };
 
-export const Header: React.FC<Props> = ({ newTodo, isTodo }) => (
+export const Header: React.FC<Props> = ({ newTodo, todos }) => (
   <header className="todoapp__header">
-    {isTodo && (
+    {todos.length > 0 && (
       <button
         data-cy="ToggleAllButton"
         type="button"

@@ -4,13 +4,10 @@ import { Error } from '../../types/Error';
 
 type Props = {
   error: Error;
-  isError: boolean;
-  onErrorChange: (error: boolean) => void;
+  onError: (error: Error | null) => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({
-  error, isError, onErrorChange,
-}) => (
+export const ErrorNotification: React.FC<Props> = ({ error, onError }) => (
   <div
     data-cy="ErrorNotification"
     className={classNames(
@@ -18,7 +15,7 @@ export const ErrorNotification: React.FC<Props> = ({
       'is-danger',
       'is-light',
       'has-text-weight-normal',
-      { hidden: !isError },
+      { hidden: !error },
     )}
   >
     <button
@@ -26,7 +23,7 @@ export const ErrorNotification: React.FC<Props> = ({
       type="button"
       className="delete"
       aria-label="HideError"
-      onClick={() => onErrorChange(false)}
+      onClick={() => onError(null)}
     />
 
     {error}
