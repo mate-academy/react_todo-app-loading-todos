@@ -15,8 +15,11 @@ import { Header } from './components/Header';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [openerNotification, setOpenerNotification] = useState<boolean>(true);
-  const [textError, setTextError] = useState<string>('');
-  const [typeError, setTypeError] = useState<'error' | 'success'>();
+  const [textNotification, setTextNotification] = useState<string>('');
+  const [
+    typeNotification,
+    setTypeNotification,
+  ] = useState<'error' | 'success'>();
 
   let visibleTodos = [...todos];
 
@@ -32,8 +35,8 @@ export const App: React.FC = () => {
     type: 'error' | 'success',
   ) => {
     setOpenerNotification(state);
-    setTextError(text);
-    setTypeError(type);
+    setTextNotification(text);
+    setTypeNotification(type);
     setTimeout(() => {
       setOpenerNotification(true);
     }, 3000);
@@ -85,8 +88,8 @@ export const App: React.FC = () => {
         }
       </div>
       <Notification
-        testError={textError}
-        type={typeError}
+        testNotification={textNotification}
+        type={typeNotification}
         setNotification={setNotification}
         isHidden={openerNotification}
       />

@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  testError: string,
+  testNotification: string,
   type: 'error' | 'success' | undefined,
   isHidden: boolean,
   setNotification: (state: boolean) => void,
@@ -11,7 +11,7 @@ type Props = {
 
 export const Notification: React.FC<Props> = (
   {
-    testError, type, setNotification, isHidden,
+    testNotification, type, setNotification, isHidden,
   },
 ) => {
   return (
@@ -33,7 +33,7 @@ export const Notification: React.FC<Props> = (
         className="delete"
         onClick={() => setNotification(true)}
       />
-      {testError}
+      {testNotification}
     </div>
   );
 };
