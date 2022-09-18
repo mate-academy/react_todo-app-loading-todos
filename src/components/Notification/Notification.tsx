@@ -1,38 +1,26 @@
-import classNames from 'classnames';
+import { NotificationType } from '../../types/NotificationType';
+import { Error } from '../Error/Error';
 
 type Props = {
-  loadNotification: boolean;
+  notification: NotificationType;
+  errorText: string;
   closeNotification: () => void;
 };
 
 export const Notification: React.FC<Props> = (
   {
-    loadNotification,
+    notification,
+    errorText,
     closeNotification,
   },
 ) => {
   return (
     <>
-      {loadNotification && (
-        <div
-          data-cy="ErrorNotification"
-          className={classNames(
-            'notification is-danger is-light has-text-weight-normal',
-            {
-              hidden: !loadNotification,
-            },
-          )}
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            aria-label="HideErrorButton"
-            onClick={() => closeNotification()}
-          />
-
-          Unable to load a todo
-        </div>
+      {notification === NotificationType.error && (
+        <Error
+          errorText={errorText}
+          closeNotification={closeNotification}
+        />
       )}
     </>
   );

@@ -13,12 +13,15 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilterOption } from './types/FilterOption';
 import { Todo } from './types/Todo';
+import { NotificationType } from './types/NotificationType';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadNotification, setLoadNotification] = useState<boolean>(false);
+  const [notification, setNotification]
+    = useState<NotificationType>(NotificationType.null);
+  const [errorText, setErrorText] = useState<string>('');
   const [filterOption, setFilterOption]
     = useState<FilterOption>(FilterOption.all);
 
@@ -31,7 +34,8 @@ export const App: React.FC = () => {
           setTodos(loadedTodos);
         }
       } catch {
-        setLoadNotification(true);
+        setNotification(NotificationType.error);
+        setErrorText('load');
       }
     };
 
@@ -63,13 +67,12 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(filterTodos, [todos, filterOption]);
 
   const closeNotification = () => {
-    setLoadNotification(false);
+    setErrorText('');
+    setNotification(NotificationType.null);
   };
 
-  if (loadNotification) {
-    setTimeout(() => {
-      setLoadNotification(false);
-    }, 3000);
+  if (notification) {
+    setTimeout(closeNotification, 3000);
   }
 
   return (
@@ -94,7 +97,8 @@ export const App: React.FC = () => {
       </div>
 
       <Notification
-        loadNotification={loadNotification}
+        notification={notification}
+        errorText={errorText}
         closeNotification={closeNotification}
       />
     </div>
