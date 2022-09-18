@@ -67,9 +67,10 @@ export const App: React.FC = () => {
         todos={filteredTodos}
         newTodo={newTodoField}
         activeTodos={activeTodos.length}
+        completedTodos={completedTodos.length}
+        isTodos={todos.length > 0}
         todoFilter={todoFilter}
         onTodoFilter={handleTodoFilter}
-        completedTodos={completedTodos.length}
       />
 
       {error && (
