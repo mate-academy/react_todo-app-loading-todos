@@ -33,11 +33,11 @@ export const App: React.FC = () => {
 
   const handleTodoFilter = useCallback((filterStatus: TodoStatus) => {
     setTodoFilter(filterStatus);
-  }, [todoFilter]);
+  }, []);
 
   const handleError = useCallback((errorStatus: Error | null) => {
     setError(errorStatus);
-  }, [error]);
+  }, []);
 
   useEffect(() => {
     const onScreenTimer = setTimeout(() => setError(null), 3000);
