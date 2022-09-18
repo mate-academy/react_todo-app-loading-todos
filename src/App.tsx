@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { Errors } from './components/Errors/Errors';
+import { Notification } from './components/Notification/Notification';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadError, setLoadError] = useState<boolean>(false);
+  const [loadNotification, setLoadNotification] = useState<boolean>(false);
   const [filterOption, setFilterOption]
     = useState<FilterOption>(FilterOption.all);
 
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
           setTodos(loadedTodos);
         }
       } catch {
-        setLoadError(true);
+        setLoadNotification(true);
       }
     };
 
@@ -62,13 +62,13 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(filterTodos, [todos, filterOption]);
 
-  const closeError = () => {
-    setLoadError(false);
+  const closeNotification = () => {
+    setLoadNotification(false);
   };
 
-  if (loadError) {
+  if (loadNotification) {
     setTimeout(() => {
-      setLoadError(false);
+      setLoadNotification(false);
     }, 3000);
   }
 
@@ -93,9 +93,9 @@ export const App: React.FC = () => {
         />
       </div>
 
-      <Errors
-        loadError={loadError}
-        closeError={closeError}
+      <Notification
+        loadNotification={loadNotification}
+        closeNotification={closeNotification}
       />
     </div>
   );

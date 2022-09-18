@@ -1,20 +1,25 @@
 import classNames from 'classnames';
 
 type Props = {
-  loadError: boolean;
-  closeError: () => void;
+  loadNotification: boolean;
+  closeNotification: () => void;
 };
 
-export const Errors: React.FC<Props> = ({ loadError, closeError }) => {
+export const Notification: React.FC<Props> = (
+  {
+    loadNotification,
+    closeNotification,
+  },
+) => {
   return (
     <>
-      {loadError && (
+      {loadNotification && (
         <div
           data-cy="ErrorNotification"
           className={classNames(
             'notification is-danger is-light has-text-weight-normal',
             {
-              hidden: !loadError,
+              hidden: !loadNotification,
             },
           )}
         >
@@ -23,7 +28,7 @@ export const Errors: React.FC<Props> = ({ loadError, closeError }) => {
             type="button"
             className="delete"
             aria-label="HideErrorButton"
-            onClick={() => closeError()}
+            onClick={() => closeNotification()}
           />
 
           Unable to load a todo
