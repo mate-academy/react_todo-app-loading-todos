@@ -87,7 +87,7 @@ export const App: React.FC = () => {
         }
       </div>
       <Notification
-        testNotification={textNotification}
+        text={textNotification}
         type={typeNotification}
         setNotification={setNotification}
         isHidden={isNotificationOpen}
