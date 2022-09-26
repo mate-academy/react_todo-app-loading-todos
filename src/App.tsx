@@ -22,6 +22,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<Filter>(Filter.all);
   const [notification, setNotification] = useState('');
+  const [isToggleClicked, setIsToggleClicked] = useState(false);
 
   const filterList = (todosList: Todo[]) => {
     switch (filter) {
@@ -59,7 +60,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader newTodoField={newTodoField} />
+        <TodoHeader
+          newTodoField={newTodoField}
+          todos={todos}
+          setTodos={setTodos}
+          setIsToggleClicked={setIsToggleClicked}
+        />
 
         {todos.length > 0 && (
           <>
@@ -68,6 +74,7 @@ export const App: React.FC = () => {
               setTodos={setTodos}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
+              isToggleClicked={isToggleClicked}
             />
 
             <TodoFooter
