@@ -1,11 +1,30 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useRef } from 'react';
+// import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+// import { TodoContext } from './components/TodoContext';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  // const [todos, setTodos] = useContext(TodoContext);
+
+  // const loadTodos = (userId: number) => {
+  //   getTodos(userId)
+  //     .then(todosFromServer => {
+  //       setTodos(todosFromServer);
+  //     })
+  //     .catch(() => {});
+  // };
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     return;
+  //   }
+
+  //   loadTodos(user.id);
+  // }, [user]);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
