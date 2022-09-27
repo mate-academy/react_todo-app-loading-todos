@@ -5,3 +5,7 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
+
+export type TodoTitle = {
+  completed: boolean;
+};

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
@@ -11,7 +10,7 @@ import {
 import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
-import { Todo } from './types/Todo';
+import { Todo, TodoTitle } from './types/Todo';
 import { Error } from './components/Error';
 
 enum FilterType {
@@ -27,14 +26,18 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<string>(FilterType.ALL);
   const [changeAllTodos, setChangeAllTodos] = useState(true);
-  const [errorType, setError] = useState('');
+  const [errorType, setErrorType] = useState('');
+
+  const showError = (text: string) => {
+    setErrorType(text);
+    setTimeout(() => {
+      setErrorType('');
+    }, 3000);
+  };
 
   const fetchTodo = async () => {
     if (query.trim().length === 0) {
-      setError('Type something');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+      showError('Type something');
 
       return;
     }
@@ -46,10 +49,7 @@ export const App: React.FC = () => {
         return [...prevState, newTodo];
       });
     } catch (error) {
-      setError('Unable to add a todo');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+      showError('Unable to add a todo');
     }
   };
 
@@ -58,14 +58,11 @@ export const App: React.FC = () => {
       await deleteTodo(todoId);
       setTodos(prev => prev.filter((x) => x.id !== todoId));
     } catch (error) {
-      setError('Unable to delete a todo');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+      showError('Unable to delete a todo');
     }
   }, []);
 
-  const changeTodo = useCallback(async (todoId: number, object: any) => {
+  const changeTodo = useCallback(async (todoId: number, object: TodoTitle) => {
     try {
       const updetedTodo: Todo = await updateTodo(todoId, object);
 
@@ -74,10 +71,7 @@ export const App: React.FC = () => {
         : x))
       ));
     } catch (error) {
-      setError('Unable to update a todo');
-      setTimeout(() => {
-        setError('');
-      }, 3000);
+      showError('Unable to update a todo');
     }
   }, []);
 
@@ -171,7 +165,7 @@ export const App: React.FC = () => {
       </div>
 
       {errorType && (
-        <Error error={errorType} setError={setError} />
+        <Error error={errorType} setError={setErrorType} />
       )}
     </div>
   );
