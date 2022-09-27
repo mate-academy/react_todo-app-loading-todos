@@ -1,30 +1,40 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
-// import { getTodos } from './api/todos';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-// import { TodoContext } from './components/TodoContext';
+import { TodoContext } from './components/TodoContext';
+import { FilterType } from './types/FilterTypeEnum';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  // const [todos, setTodos] = useContext(TodoContext);
+  const [todos, setTodos] = useContext(TodoContext);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
 
-  // const loadTodos = (userId: number) => {
-  //   getTodos(userId)
-  //     .then(todosFromServer => {
-  //       setTodos(todosFromServer);
-  //     })
-  //     .catch(() => {});
-  // };
+  const loadTodos = (userId: number) => {
+    getTodos(userId)
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        // eslint-disable-next-line no-console
+        console.log(todosFromServer);
+      })
+      .catch(() => { });
+  };
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
 
-  //   loadTodos(user.id);
-  // }, [user]);
+    loadTodos(user.id);
+  }, [user]);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -32,6 +42,30 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
   }, []);
+
+  const visibleTodos = filterType === FilterType.All
+    ? todos
+    : todos.filter(({ completed }) => {
+      switch (filterType) {
+        case FilterType.Active:
+          return !completed;
+        case FilterType.Completed:
+          return completed;
+
+        default:
+          throw new Error();
+      }
+    });
+
+  const handleChooseFilter = useCallback(
+    (filter: FilterType) => {
+      setFilterType(filter);
+    },
+    [filterType],
+  );
+
+  // eslint-disable-next-line no-console
+  console.log(todos);
 
   return (
     <div className="todoapp">
@@ -57,7 +91,39 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <div data-cy="Todo" className="todo completed">
+          {visibleTodos.map(({ id, title }) => (
+            <div data-cy="Todo" className="todo">
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                />
+              </label>
+
+              <span
+                data-cy="TodoTitle"
+                className="todo__title"
+                key={id}
+              >
+                {title}
+              </span>
+
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDeleteButton"
+              >
+                ×
+              </button>
+
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </div>
+          ))}
+          {/* <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -178,12 +244,12 @@ export const App: React.FC = () => {
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
-          </div>
+          </div> */}
         </section>
 
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
-            4 items left
+            {`${visibleTodos.length} items left`}
           </span>
 
           <nav className="filter" data-cy="Filter">
@@ -191,6 +257,7 @@ export const App: React.FC = () => {
               data-cy="FilterLinkAll"
               href="#/"
               className="filter__link selected"
+              onClick={() => handleChooseFilter(FilterType.All)}
             >
               All
             </a>
@@ -199,6 +266,7 @@ export const App: React.FC = () => {
               data-cy="FilterLinkActive"
               href="#/active"
               className="filter__link"
+              onClick={() => handleChooseFilter(FilterType.Active)}
             >
               Active
             </a>
@@ -206,6 +274,7 @@ export const App: React.FC = () => {
               data-cy="FilterLinkCompleted"
               href="#/completed"
               className="filter__link"
+              onClick={() => handleChooseFilter(FilterType.Completed)}
             >
               Completed
             </a>
