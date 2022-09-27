@@ -3,11 +3,13 @@ import classnames from 'classnames';
 type Props = {
   error: boolean;
   handleErrorChange: (bool: boolean) => void;
+  errorText: string;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   error,
   handleErrorChange,
+  errorText,
 }) => {
   return (
     <div
@@ -25,11 +27,7 @@ export const ErrorNotification: React.FC<Props> = ({
         onClick={() => handleErrorChange(false)}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorText}
     </div>
   );
 };
