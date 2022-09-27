@@ -19,10 +19,11 @@ import {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState<Filter>(Filter.all);
   const [notification, setNotification] = useState('');
   const [isToggleClicked, setIsToggleClicked] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isClearButtonClicked, setIsClearButtonClicked] = useState(false);
 
   const filterList = (todosList: Todo[]) => {
     switch (filter) {
@@ -65,6 +66,10 @@ export const App: React.FC = () => {
           todos={todos}
           setTodos={setTodos}
           setIsToggleClicked={setIsToggleClicked}
+          isAdding={isAdding}
+          setIsAdding={setIsAdding}
+          user={user}
+          setNotification={setNotification}
         />
 
         {todos.length > 0 && (
@@ -72,22 +77,28 @@ export const App: React.FC = () => {
             <TodoList
               todos={filterList(todos)}
               setTodos={setTodos}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
               isToggleClicked={isToggleClicked}
+              isAdding={isAdding}
+              isClearButtonClicked={isClearButtonClicked}
+              setNotification={setNotification}
             />
 
             <TodoFooter
               todos={todos}
               filter={filter}
               setFilter={setFilter}
+              setIsClearButtonClicked={setIsClearButtonClicked}
+              setTodos={setTodos}
             />
           </>
         )}
       </div>
 
       {notification && (
-        <Notification notification={notification} />
+        <Notification
+          notification={notification}
+          setNotification={setNotification}
+        />
       )}
 
     </div>
