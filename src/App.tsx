@@ -42,6 +42,8 @@ export const App: React.FC = () => {
     userId = user.id;
   }
 
+  userId = 5; /* example */
+
   if (error) {
     setTimeout(() => {
       setError(false);
