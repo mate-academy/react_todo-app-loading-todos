@@ -8,12 +8,7 @@ import { TodoList } from './components/Auth/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from './components/Auth/ErrorNotification';
-
-enum SortType {
-  All,
-  Active,
-  Completed,
-}
+import { SortType } from './types/filterBy';
 
 function filterTodos(
   todos: Todo[],
@@ -40,7 +35,7 @@ export const App: React.FC = () => {
   const [sortType, setSortType] = useState<SortType>(SortType.All);
   const [completeItem, setCompleteItem] = useState<number>(0);
   const [selectedLink, setSelectedLink] = useState<string>('All');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     getTodos(5)
