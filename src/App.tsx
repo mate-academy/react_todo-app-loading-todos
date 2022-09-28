@@ -91,15 +91,19 @@ export const App: React.FC = () => {
 
           <Form newTodoField={newTodoField} />
         </header>
+        {todos.length > 0
+          && (
+            <>
+              <TodoList todos={resultTodo} />
 
-        <TodoList todos={resultTodo} />
-
-        <Footer
-          tabs={tabs}
-          selectedTabId={selectedTabId}
-          onTabSelected={onTabSelected}
-          todos={todos}
-        />
+              <Footer
+                tabs={tabs}
+                selectedTabId={selectedTabId}
+                onTabSelected={onTabSelected}
+                todos={todos}
+              />
+            </>
+          )}
 
       </div>
 
