@@ -42,6 +42,12 @@ export const App: React.FC = () => {
     userId = user.id;
   }
 
+  if (error) {
+    setTimeout(() => {
+      setError(false);
+    }, 3000);
+  }
+
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {

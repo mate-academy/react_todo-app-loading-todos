@@ -18,11 +18,7 @@ export const ErrorNotification: React.FC<Props> = ({ setError }) => {
         onClick={() => setError(false)}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      Wrong URL
     </div>
   );
 };
