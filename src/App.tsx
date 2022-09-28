@@ -14,7 +14,6 @@ import { TodoContext } from './components/TodoContext';
 import { FilterType } from './types/FilterTypeEnum';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useContext(TodoContext);
@@ -66,9 +65,6 @@ export const App: React.FC = () => {
     [filterType],
   );
 
-  // eslint-disable-next-line no-console
-  console.log(todos);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -92,12 +88,17 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={visibleTodos} />
+        <TodoList visibleTodos={visibleTodos} />
 
-        <Footer handleChooseFilter={handleChooseFilter} todos={visibleTodos} />
+        <Footer
+          handleChooseFilter={handleChooseFilter}
+          todos={visibleTodos}
+          filterType={filterType}
+        />
       </div>
 
-      <div
+      {/* I'm will created this component in next task */}
+      {/* <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
       >
@@ -112,7 +113,7 @@ export const App: React.FC = () => {
         Unable to delete a todo
         <br />
         Unable to update a todo
-      </div>
+      </div> */}
     </div>
   );
 };
