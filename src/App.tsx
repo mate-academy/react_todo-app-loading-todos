@@ -5,13 +5,14 @@ import { getTodos } from './api/todos';
 // import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Footer } from './components/Footer';
-import { Form } from './components/Form';
+import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
+import { FilterTypes } from './types/Filter';
 import { Todo } from './types/Todo';
 
 export function getFilteredTodo(
   todos: Todo[],
-  selectedTab: TabTypes,
+  selectedTab: FilterTypes,
 ) {
   const filterByType = todos.filter((todo) => {
     switch (selectedTab.id) {
@@ -29,12 +30,7 @@ export function getFilteredTodo(
   return filterByType;
 }
 
-interface TabTypes {
-  id: string,
-  title: string,
-}
-
-export const tabs: TabTypes[] = [
+export const tabs: FilterTypes[] = [
   { id: '', title: 'All' },
   { id: 'active', title: 'Active' },
   { id: 'completed', title: 'Completed' },
@@ -48,7 +44,7 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [hideError, setHideError] = useState(false);
   const [selectedTabId, setTabID] = useState(tabs[0].id);
-  const onTabSelected = (tab: TabTypes) => {
+  const onTabSelected = (tab: FilterTypes) => {
     setTabID(tab.id);
   };
 
@@ -89,7 +85,7 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <Form newTodoField={newTodoField} />
+          <NewTodoForm newTodoField={newTodoField} />
         </header>
         {todos.length > 0
           && (

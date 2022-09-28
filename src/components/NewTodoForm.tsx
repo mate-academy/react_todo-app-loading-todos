@@ -1,7 +1,7 @@
 interface Props {
   newTodoField: any;
 }
-export const Form: React.FC<Props> = ({ newTodoField }) => (
+export const NewTodoForm: React.FC<Props> = ({ newTodoField }) => (
   <form>
     <input
       data-cy="NewTodoField"
