@@ -46,8 +46,7 @@ export const Footer: React.FC<Props> = ({
             className={classNames('filter__link',
               {
                 'is-selected': tab.id === selectedTab.id,
-              },
-            )}
+              })}
             onClick={() => handelClick(tab)}
           >
             {tab.title}
