@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 
 import {
@@ -48,16 +48,25 @@ export const App: React.FC = () => {
     }
   });
 
+  const activeTodosTotal = useMemo(() => {
+    return todos.filter(({ completed }) => !completed).length;
+  }, [todos]);
+
+  const isLeftActiveTodos = activeTodosTotal === todos.length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header
+          newTodoField={newTodoField}
+          isLeftActiveTodos={isLeftActiveTodos}
+        />
         <TodoList todos={filteredTodos} />
         {!!todos.length && (
           <Footer
-            todos={todos}
+            activeTodosTotal={activeTodosTotal}
             filterValue={filterValue}
             setFilterValue={setFilterValue}
           />

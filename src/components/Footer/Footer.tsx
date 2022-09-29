@@ -1,22 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
+  activeTodosTotal: number,
   filterValue: string,
   setFilterValue: (value: string) => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  todos,
+  activeTodosTotal,
   filterValue,
   setFilterValue,
 }) => {
-  const activeTodosTotal = useMemo(() => {
-    return todos.filter(({ completed }) => !completed).length;
-  }, [todos]);
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
