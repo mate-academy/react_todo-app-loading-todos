@@ -105,9 +105,9 @@ export const App: React.FC = () => {
 
       <ErrorMessage
         error={error}
-        setHideError={(value) => setHideError(value)}
+        setHideError={setHideError}
         hideError={hideError}
-        setError={(value) => setError(value)}
+        setError={setError}
       />
     </div>
   );
