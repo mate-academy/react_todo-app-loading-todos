@@ -33,7 +33,7 @@ export const App: React.FC = () => {
         setIsErrorNotification(true);
         setErrorMessage('Unable to load todos');
       });
-  }, []);
+  }, [user]);
 
   const filteredTodos = todos.filter(({ completed }) => {
     switch (filterValue) {
