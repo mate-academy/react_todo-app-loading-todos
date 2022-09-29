@@ -1,18 +1,19 @@
-import classNames from "classnames";
-import { Todo } from "../types/Todo"
+import classNames from 'classnames';
+import { Todo } from '../types/Todo';
 
 type Props = {
   todoItem: Todo;
-}
+};
 
 export const TodoItem: React.FC<Props> = ({ todoItem }) => {
   return (
     <div
       data-cy="Todo"
       className={classNames(
-        "todo completed", {
-          "todo": !todoItem.completed
-        })}
+        'todo', {
+          'todo completed': todoItem.completed,
+        },
+      )}
 
     >
       <label className="todo__status-label">
@@ -38,5 +39,5 @@ export const TodoItem: React.FC<Props> = ({ todoItem }) => {
         <div className="loader" />
       </div>
     </div>
-  )
-}
+  );
+};
