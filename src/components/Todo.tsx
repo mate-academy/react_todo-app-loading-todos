@@ -12,7 +12,7 @@ export const TodoInfo: React.FC<Props> = ({ completed, title }) => {
       className={classNames(
         'todo',
         {
-          completed: completed === true,
+          completed,
         },
       )}
     >

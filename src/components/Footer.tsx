@@ -16,7 +16,7 @@ export const Footer: React.FC<Props> = ({
   selectedTabId,
   onTabSelected,
 }) => {
-  const notCompleted = todos.filter((todo) => todo.completed === false);
+  const notCompleted = todos.filter((todo) => !todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
