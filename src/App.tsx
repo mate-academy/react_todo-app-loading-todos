@@ -73,16 +73,19 @@ export const App: React.FC = () => {
         </header>
 
         {todos.length > 0 && (
-          <TodoList
-            todos={filteredTodos}
-          />
+          <>
+            <TodoList
+              todos={filteredTodos}
+            />
+
+            <Footer
+              todos={todos}
+              filterType={filterType}
+              handleFilterChange={setFilterType}
+            />
+          </>
         )}
 
-        <Footer
-          todos={todos}
-          filterType={filterType}
-          handleFilterChange={setFilterType}
-        />
       </div>
 
       <ErrorNotification
