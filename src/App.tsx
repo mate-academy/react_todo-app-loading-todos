@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
+  // useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { AuthContext } from './components/Auth/AuthContext';
+// import { AuthContext } from './components/Auth/AuthContext';
 // eslint-disable-next-line
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [userID] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   if (error) {
@@ -41,11 +41,17 @@ export const App: React.FC = () => {
       .catch(() => setError(true));
   }, []);
 
+  const filters = {
+    All: 'All',
+    Active: 'Active',
+    Completed: 'Completed',
+  };
+
   const filteredTodos = todos.filter(todo => {
     switch (typeOfFilter) {
-      case 'Active':
+      case filters.Active:
         return !todo.completed;
-      case 'Completed':
+      case filters.Completed:
         return todo.completed;
       default:
         return todo;
