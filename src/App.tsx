@@ -13,6 +13,7 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -41,17 +42,11 @@ export const App: React.FC = () => {
       .catch(() => setError(true));
   }, []);
 
-  const filters = {
-    All: 'All',
-    Active: 'Active',
-    Completed: 'Completed',
-  };
-
   const filteredTodos = todos.filter(todo => {
     switch (typeOfFilter) {
-      case filters.Active:
+      case FilterType.Active:
         return !todo.completed;
-      case filters.Completed:
+      case FilterType.Completed:
         return todo.completed;
       default:
         return todo;
