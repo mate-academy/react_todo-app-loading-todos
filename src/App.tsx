@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -16,8 +21,7 @@ export const App: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const getUserId = () => user ? user.id : 0;
-  const userId = getUserId();
+  const userId = user ? user.id : 0;
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -30,7 +34,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos.filter(todo => {
-    switch(filterType) {
+    switch (filterType) {
       case FilterType.All:
         return todo;
 
@@ -43,7 +47,7 @@ export const App: React.FC = () => {
       default:
         return null;
     }
-  })
+  });
 
   return (
     <div className="todoapp">
