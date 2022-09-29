@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
-import { AuthContext } from './components/Auth/AuthContext';
+// import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from
   './components/Auth/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Auth/Footer/Footer';
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`

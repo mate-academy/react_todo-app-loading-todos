@@ -18,7 +18,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               className={classNames(
                 'todo',
                 {
-                  completed: completed === true,
+                  completed,
                 },
               )}
               key={id}
