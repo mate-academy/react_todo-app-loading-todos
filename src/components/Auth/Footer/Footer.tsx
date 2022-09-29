@@ -1,23 +1,39 @@
+import classNames from 'classnames';
 import React from 'react';
-import { FilterTypes } from '../../../types/FilterBy';
+import { FilterType } from '../../../types/FilterBy';
+import { Todo } from '../../../types/Todo';
 
 type Props = {
-  filterType: (arg: FilterTypes) => void;
+  filterTypes: (arg: FilterType) => void;
+  filterType: FilterType | string,
+  todos: Todo[],
+
 };
 
-export const Footer: React.FC<Props> = ({ filterType }) => {
+export const Footer: React.FC<Props> = ({
+  filterTypes,
+  filterType,
+  todos,
+}) => {
+  const notCompleted = todos.filter(({ completed }) => !completed);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${notCompleted.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
-          onClick={() => filterType(FilterTypes.All)}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'All' },
+          )}
+          onClick={() => {
+            filterTypes(FilterType.All);
+          }}
         >
           All
         </a>
@@ -25,16 +41,22 @@ export const Footer: React.FC<Props> = ({ filterType }) => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
-          onClick={() => filterType(FilterTypes.Active)}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'Active' },
+          )}
+          onClick={() => filterTypes(FilterType.Active)}
         >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
-          onClick={() => filterType(FilterTypes.Completed)}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'Completed' },
+          )}
+          onClick={() => filterTypes(FilterType.Completed)}
         >
           Completed
         </a>

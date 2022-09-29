@@ -9,31 +9,15 @@ import { ErrorNotification } from
 import { Footer } from './components/Auth/Footer/Footer';
 import { Header } from './components/Auth/Header/Header';
 import { TodoList } from './components/Auth/TodoList/TodoList';
-import { FilterTypes } from './types/FilterBy';
+import { FilterType } from './types/FilterBy';
 import { Todo } from './types/Todo';
-
-export function getFilteredTodo(
-  todos: Todo[],
-  filterTypes: FilterTypes,
-) {
-  const filterBy = [...todos];
-
-  switch (filterTypes) {
-    case filterTypes.Active:
-      return filterBy.filter(({ completed }) => !completed);
-
-    case filterTypes.Completed:
-      return filterBy.filter(({ completed }) => completed);
-    default:
-      return filterBy;
-  }
-}
 
 export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.All);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [errorMessage, setErrorMessage] = useState<string>('');
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
 
@@ -58,14 +42,23 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const filteredTodos = getFilteredTodo(todos, filterType);
+  const getFilteredTodo = todos.filter(todo => {
+    switch (filterType) {
+      case FilterType.Active:
+        return !todo.completed;
+
+      case FilterType.Completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-
         <Header
           newTodosField={newTodoField}
         />
@@ -73,10 +66,12 @@ export const App: React.FC = () => {
           todos.length > 0 && (
             <>
               <TodoList
-                todos={filteredTodos}
+                todos={getFilteredTodo}
               />
               <Footer
-                filterType={setFilterType}
+                filterTypes={setFilterType}
+                filterType={filterType}
+                todos={todos}
               />
             </>
           )
@@ -84,7 +79,10 @@ export const App: React.FC = () => {
 
       </div>
       {errorMessage && (
-        <ErrorNotification errorMessage={errorMessage} />
+        <ErrorNotification
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
       )}
 
     </div>
