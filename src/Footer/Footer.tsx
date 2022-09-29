@@ -3,7 +3,7 @@ import { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  filterType: FilterType;
+  filterType: string;
   setfilterType: (type: FilterType) => void;
   filteredTodos: Todo[];
 };
