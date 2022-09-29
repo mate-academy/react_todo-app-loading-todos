@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -6,25 +5,48 @@ import React, {
 import {
   ErrorNotification,
 } from './components/ErrorNotification/ErrorNotification';
-
 import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
+
 import { Todo } from './types/Todo';
+import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isErrorNotification, setIsErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
 
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    getTodos(user?.id || 0)
+      .then(setTodos)
+      .catch(() => {
+        setIsErrorNotification(true);
+        setErrorMessage('Unable to load todos');
+      });
   }, []);
+
+  const filteredTodos = todos.filter(({ completed }) => {
+    switch (filterValue) {
+      case 'active':
+        return !completed;
+
+      case 'completed':
+        return completed;
+
+      default:
+        return true;
+    }
+  });
 
   return (
     <div className="todoapp">
@@ -32,13 +54,23 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
-
-        <TodoList />
-
-        <Footer />
+        <TodoList todos={filteredTodos} />
+        {!!todos.length && (
+          <Footer
+            todos={todos}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+          />
+        )}
       </div>
 
-      <ErrorNotification />
+      {isErrorNotification && (
+        <ErrorNotification
+          errorMessage={errorMessage}
+          isErrorNotification={isErrorNotification}
+          setIsErrorNotification={setIsErrorNotification}
+        />
+      )}
     </div>
   );
 };
