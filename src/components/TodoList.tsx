@@ -26,6 +26,7 @@ export const TodoList: React.FC<Props> = ({ todos, filterType }) => {
       {filteredTodos.map((todo) => {
         return (
           <div
+            key={todo.id}
             data-cy="Todo"
             className={classNames(
               { todo: todo.completed === false },
