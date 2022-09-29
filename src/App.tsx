@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(5)
       .then(todosFromServer => setTodos(todosFromServer))
-      .catch((error) => setErrorMessage(error));
+      .catch(() => setErrorMessage('Unable to update todos'));
   }, []);
 
   useEffect(() => {
