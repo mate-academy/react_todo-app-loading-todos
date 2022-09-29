@@ -9,24 +9,17 @@ export const TodoList: React.FC<TodoProps> = ({
   todos,
   updateTodoCompleted,
   setError,
-  deleteTodo,
   isLoading,
   todoTitle,
-  loadingAll,
+  selectTodo,
+  selectedTodo,
+  deleteTodo,
 }) => {
   const handleChooseTodo = (todo: Todo) => {
     if (todo.id) {
       updateTodoCompleted(todo.id, !todo.completed);
     } else {
       setError(Error.UPDATING);
-    }
-  };
-
-  const handleDeleteTodo = (todo: Todo) => {
-    if (todo.id) {
-      deleteTodo(todo.id);
-    } else {
-      setError(Error.DELETING);
     }
   };
 
@@ -44,7 +37,10 @@ export const TodoList: React.FC<TodoProps> = ({
                 type="checkbox"
                 className="todo__status"
                 checked={todo.completed}
-                onClick={() => handleChooseTodo(todo)}
+                onClick={() => {
+                  handleChooseTodo(todo);
+                  selectTodo(todo);
+                }}
               />
             </label>
 
@@ -58,7 +54,9 @@ export const TodoList: React.FC<TodoProps> = ({
               type="button"
               className="todo__remove"
               data-cy="TodoDeleteButton"
-              onClick={() => handleDeleteTodo(todo)}
+              onClick={() => {
+                deleteTodo(todo);
+              }}
             >
               ×
             </button>
@@ -67,7 +65,7 @@ export const TodoList: React.FC<TodoProps> = ({
               data-cy="TodoLoader"
               className={classNames(
                 'modal overlay',
-                { 'is-active': loadingAll },
+                { 'is-active': todo.id === selectedTodo },
               )}
             >
               <div className="modal-background has-background-white-ter" />

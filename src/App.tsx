@@ -23,7 +23,7 @@ export const App: FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const [filter, setFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingAll, setLoadingAll] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -82,6 +82,24 @@ export const App: FC = () => {
     setIsLoading(false);
   };
 
+  const handleSelectTodo = async (
+    todo: Todo,
+  ) => {
+    setSelectedTodo(todo.id);
+
+    try {
+      const newSelectedTodo = await updateTodoCompleted(
+        todo.id, !todo.completed,
+      );
+
+      setSelectedTodo(newSelectedTodo.id);
+    } catch {
+      setError(Error.UPDATING);
+    }
+
+    setSelectedTodo(null);
+  };
+
   const filteredTodos = todoList.filter(todo => {
     switch (filter) {
       case 'All':
@@ -98,6 +116,20 @@ export const App: FC = () => {
     }
   });
 
+  const handleDeleteTodo = async (todo: Todo) => {
+    setSelectedTodo(todo.id);
+
+    try {
+      if (todo.id) {
+        await deleteTodo(todo.id);
+      }
+    } catch {
+      setError(Error.DELETING);
+    }
+
+    setSelectedTodo(null);
+  };
+
   const anyCompletedTodo = todoList.some(todo => todo.completed);
 
   return (
@@ -106,7 +138,6 @@ export const App: FC = () => {
 
       <div className="todoapp__content">
         <Header
-          setLoadingAll={setLoadingAll}
           todoList={filteredTodos}
           updateTodoCompleted={updateTodoCompleted}
           setError={setError}
@@ -116,11 +147,12 @@ export const App: FC = () => {
           isLoading={isLoading}
         />
         <TodoList
-          loadingAll={loadingAll}
+          selectedTodo={selectedTodo}
+          selectTodo={handleSelectTodo}
           todos={filteredTodos}
           updateTodoCompleted={updateTodoCompleted}
           setError={setError}
-          deleteTodo={deleteTodo}
+          deleteTodo={handleDeleteTodo}
           isLoading={isLoading}
           todoTitle={todoTitle}
         />

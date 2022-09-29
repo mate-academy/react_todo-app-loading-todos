@@ -13,14 +13,11 @@ export const Header: React.FC<HeaderProps> = ({
   todoTitle,
   setTodoTitle,
   isLoading,
-  setLoadingAll,
 }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const handleChoose = async () => {
     todoList.map((todo) => {
-      setLoadingAll(true);
-
       try {
         if (todo.id) {
           updateTodoCompleted(todo.id, true);
