@@ -19,7 +19,13 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     onLogin(user);
   };
 
+  // неясно что оно делает
+  // походу пользователя что при вводе мейла вносим в локал сторедж
+  // console.log(saveUser());
+
   useEffect(() => {
+    // скорее всего в localStorage должен быть ключ user но его там нет
+    // возможно они есть на сервере и мне надо их оттуда доставть и в сторедж кидать
     const userData = localStorage.getItem('user');
 
     if (!userData) {
@@ -27,14 +33,19 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     }
 
     try {
+      // зачем надо переименововать в User если он не используется
       const user = JSON.parse(userData) as User;
 
       onLogin(user);
+      // откуда єтот error береться
     } catch (error) {
       // Need to login
     }
   }, []);
 
+  // это асинхронная функция разве нам ее в юз стейт не нужно ставить?
+  // и что она делает
+  // вносит в сторедж пользователя
   const loadUser = async () => {
     const user = await getUserByEmail(email);
 

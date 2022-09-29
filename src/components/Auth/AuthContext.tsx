@@ -15,6 +15,10 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     return <AuthForm onLogin={setUser} />;
   }
 
+  // такой же юзер как и в апп
+  // но зачем?
+  // console.log(user);
+
   return (
     <AuthContext.Provider value={user}>
       {children}
