@@ -3,7 +3,6 @@
 import React, {
   useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -14,9 +13,7 @@ import { TodoList } from './components/Auth/todos/TodoList';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -27,13 +24,15 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     addData();
   }, []);
+
+  // const addTodo = async () => {
+  //   if (user) {
+  //     await postTodo(user?.id, 'copleted');
+  //     console.log('posted');
+  //   }
+  // };
 
   console.log(todos);
 
@@ -44,12 +43,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        <TodoList />
+        <TodoList todos={todos} />
 
         <TodoFooter />
       </div>
 
-      <div
+      {/* ↓↓↓ I use this code in the following tasks ↓↓↓ */}
+
+      {/* <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
       >
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
+          onClick={() => addTodo()}
         />
 
         Unable to add a todo
@@ -64,7 +66,7 @@ export const App: React.FC = () => {
         Unable to delete a todo
         <br />
         Unable to update a todo
-      </div>
+      </div> */}
     </div>
   );
 };

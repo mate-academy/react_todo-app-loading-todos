@@ -1,7 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const TodoHeader: React.FC = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // focus the element with `ref={newTodoField}`
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button
@@ -14,7 +23,7 @@ export const TodoHeader: React.FC = () => {
         <input
           data-cy="NewTodoField"
           type="text"
-          // ref={newTodoField}
+          ref={newTodoField}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
         />
