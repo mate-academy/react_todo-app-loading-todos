@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
-  useContext,
+  // useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { AuthContext } from './components/Auth/AuthContext';
+// import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
 
   const newTodoField = useRef<HTMLInputElement>(null);
 
