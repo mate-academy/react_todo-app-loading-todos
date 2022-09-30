@@ -1,35 +1,37 @@
+import classNames from 'classnames';
 import React from 'react';
+import { Todo } from '../../../../types/Todo';
 
-export const TodoFooter: React.FC = () => {
+interface Props {
+  todos: Todo[];
+  selected: string;
+  setStatus: (status: string) => void;
+}
+
+export const TodoFooter: React.FC<Props> = ({ todos, selected, setStatus }) => {
+  const statuses = ['All', 'Active', 'Completed'];
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {todos.filter(todo => !todo.completed).length}
+        {' items left'}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className="filter__link selected"
-        >
-          All
-        </a>
+        {statuses.map(status => (
+          <a
+            data-cy="FilterLinkAll"
+            href="#/"
+            className={classNames('filter__link', {
+              selected: selected === status,
+            })}
+            onClick={() => setStatus(status)}
+          >
+            {status}
+          </a>
+        ))}
 
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className="filter__link"
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className="filter__link"
-        >
-          Completed
-        </a>
       </nav>
 
       <button

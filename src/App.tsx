@@ -16,16 +16,38 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [status, setStatus] = useState('All');
 
   const addData = async () => {
     if (user) {
-      setTodos(await getTodos(user?.id));
+      const temp = await getTodos(user?.id);
+
+      setTodos(temp);
+      setVisibleTodos(temp);
+    }
+  };
+
+  const filterByStatus = (activedStatus: string): Todo[] => {
+    switch (activedStatus) {
+      case 'Active':
+        return todos.filter(todo => !todo.completed);
+
+      case 'Completed':
+        return todos.filter(todo => todo.completed);
+
+      default:
+        return todos;
     }
   };
 
   useEffect(() => {
     addData();
   }, []);
+
+  useEffect(() => {
+    setVisibleTodos(filterByStatus(status));
+  }, [status]);
 
   // const addTodo = async () => {
   //   if (user) {
@@ -34,7 +56,7 @@ export const App: React.FC = () => {
   //   }
   // };
 
-  console.log(todos);
+  console.log(visibleTodos);
 
   return (
     <div className="todoapp">
@@ -43,9 +65,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        <TodoList todos={todos} />
+        <TodoList todos={visibleTodos} />
 
-        <TodoFooter />
+        <TodoFooter
+          todos={todos}
+          selected={status}
+          setStatus={setStatus}
+        />
       </div>
 
       {/* ↓↓↓ I use this code in the following tasks ↓↓↓ */}
