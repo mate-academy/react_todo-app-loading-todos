@@ -15,9 +15,23 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
+  const [addError, setAddError] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
+  const [updateError, setUpdateError] = useState(false);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('All');
+
+  const hasError = (isVisible?: boolean) => {
+    if (isVisible === false) {
+      setAddError(false);
+      setDeleteError(false);
+      setUpdateError(false);
+    }
+
+    return addError || deleteError || updateError;
+  };
 
   const addData = async () => {
     if (user) {
@@ -76,23 +90,24 @@ export const App: React.FC = () => {
 
       {/* ↓↓↓ I use this code in the following tasks ↓↓↓ */}
 
-      {/* <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => addTodo()}
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div> */}
+      {hasError() && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={() => hasError(false)}
+          />
+          {addError && 'Unable to add a todo'}
+          <br />
+          {deleteError && 'Unable to delete a todo'}
+          <br />
+          {updateError && 'Unable to update a todo'}
+        </div>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, selected, setStatus }) => {
       <nav className="filter" data-cy="Filter">
         {statuses.map(status => (
           <a
+            key={status}
             data-cy="FilterLinkAll"
             href="#/"
             className={classNames('filter__link', {
