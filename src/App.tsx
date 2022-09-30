@@ -25,13 +25,7 @@ export const App: React.FC = () => {
     }, 3000);
   }
 
-  let userId = 0;
-
-  if (user?.id) {
-    userId = user.id;
-  }
-
-  userId = 1;
+  let userId = 1;
 
   getTodos(userId)
     .then(setTodos)
