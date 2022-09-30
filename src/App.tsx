@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { TodoFilter } from './components/TodoFilter';
+import { FilterBy, TodoFilter } from './components/TodoFilter';
 import { TodoField } from './components/TodoField';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(FilterBy.All);
   const [loadingError, setLoadingError] = useState(false);
   const [errorClose, setErrorClosing] = useState(false);
 
@@ -23,14 +23,17 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    try {
-      getTodos(user?.id || 0)
-        .then((todoList) => {
-          setTodos(todoList);
-        });
-    } catch (error) {
-      setLoadingError(true);
-    }
+    const loadTodos = async () => {
+      try {
+        const loadedTodos = await getTodos(user?.id || 0);
+
+        setTodos(loadedTodos);
+      } catch (error) {
+        setLoadingError(true);
+      }
+    };
+
+    loadTodos();
   }, []);
 
   return (

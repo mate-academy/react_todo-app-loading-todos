@@ -1,21 +1,22 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { FilterBy } from './TodoFilter';
 
 type Props = {
   todos: Todo[];
-  filterType: string;
+  filterType: FilterBy;
 };
 
 export const TodoList: React.FC<Props> = ({ todos, filterType }) => {
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = todos.filter(({ completed }) => {
     switch (filterType) {
-      case 'Active':
-        return todo.completed === false;
+      case FilterBy.Active:
+        return completed === false;
 
-      case 'Completed':
-        return todo.completed === true;
+      case FilterBy.Completed:
+        return completed === true;
 
-      case 'All':
+      case FilterBy.All:
       default:
         return true;
     }
@@ -23,18 +24,18 @@ export const TodoList: React.FC<Props> = ({ todos, filterType }) => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map((todo) => {
+      {filteredTodos.map(({ id, completed, title }) => {
         return (
           <div
-            key={todo.id}
+            key={id}
             data-cy="Todo"
             className={classNames(
-              { todo: todo.completed === false },
-              { 'todo completed': todo.completed },
+              { todo: !completed },
+              { 'todo completed': completed === true },
             )}
           >
             <label className="todo__status-label">
-              {todo.completed && (
+              {completed && (
                 <input
                   data-cy="TodoStatus"
                   type="checkbox"
@@ -46,7 +47,7 @@ export const TodoList: React.FC<Props> = ({ todos, filterType }) => {
             </label>
 
             <span data-cy="TodoTitle" className="todo__title">
-              {todo.title}
+              {title}
             </span>
             <button
               type="button"

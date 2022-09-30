@@ -3,9 +3,15 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
-  setFilterType: (filterType: string) => void;
-  filterType: string;
+  setFilterType: (filterType: FilterBy) => void;
+  filterType: FilterBy;
 };
+
+export enum FilterBy {
+  All,
+  Active,
+  Completed,
+}
 
 export const TodoFilter: React.FC<Props> = ({
   todos, filterType, setFilterType,
@@ -14,9 +20,9 @@ export const TodoFilter: React.FC<Props> = ({
 
   const completedTodos = todos.some((todo) => todo.completed === true);
 
-  const handleAllSort = () => setFilterType('All');
-  const handleActiveSort = () => setFilterType('Active');
-  const handleCompletedSort = () => setFilterType('Completed');
+  const handleAllSort = () => setFilterType(FilterBy.All);
+  const handleActiveSort = () => setFilterType(FilterBy.Active);
+  const handleCompletedSort = () => setFilterType(FilterBy.Completed);
 
   return (
     <>
@@ -29,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'All' },
+            { selected: filterType === FilterBy.All },
           )}
           onClick={handleAllSort}
         >
@@ -41,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'Active' },
+            { selected: filterType === FilterBy.Active },
           )}
           onClick={handleActiveSort}
         >
@@ -52,7 +58,7 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'Completed' },
+            { selected: filterType === FilterBy.Completed },
           )}
           onClick={handleCompletedSort}
         >
