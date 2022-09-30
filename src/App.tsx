@@ -8,6 +8,7 @@ import { Error } from './components/Error';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
+
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -17,6 +18,7 @@ export const App: React.FC = () => {
 
   const [isError, setError] = useState(false);
   const [messageError, setMessageError] = useState('');
+
 
   const deleteCompletedTodos = () => (
     setTodos(state => (
@@ -139,7 +141,10 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkAll"
                   href="#/"
-                  className="filter__link selected"
+                  className={classNames(
+                    'filter__link',
+                    { selected: sortFilter === 'all' },
+                  )}
                   onClick={() => (
                     sortFilter !== 'all'
                       && setSortFilter('all')
@@ -151,7 +156,10 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkActive"
                   href="#/active"
-                  className="filter__link"
+                  className={classNames(
+                    'filter__link',
+                    { selected: sortFilter === 'active' },
+                  )}
                   onClick={() => (
                     sortFilter !== 'active'
                       && setSortFilter('active')
@@ -162,7 +170,10 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkCompleted"
                   href="#/completed"
-                  className="filter__link"
+                  className={classNames(
+                    'filter__link',
+                    { selected: sortFilter === 'completed' },
+                  )}
                   onClick={() => (
                     sortFilter !== 'completed'
                       && setSortFilter('completed')
