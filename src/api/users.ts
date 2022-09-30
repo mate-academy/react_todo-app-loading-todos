@@ -1,7 +1,6 @@
 import { User } from '../types/User';
 import { client } from '../utils/fetchClient';
 
-// тут тоже ставим рандомный мейл у них на сайте есть
 export const getUserByEmail = async (email: string) => {
   const users = await client.get<User[]>(`/users?email=${email}`);
 

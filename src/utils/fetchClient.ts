@@ -13,6 +13,8 @@ type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   data: any = null, // we can send any data to the server
 ): Promise<T> {
   const options: RequestInit = { method };
@@ -26,7 +28,6 @@ function request<T>(
   }
 
   // we wait for testing purpose to see loaders
-  // как мы увидем лоадер если такого компонента нет
   return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
