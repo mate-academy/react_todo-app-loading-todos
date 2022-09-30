@@ -12,9 +12,9 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { NewTodo } from './components/NewTodo';
 import { getTodos } from './api/todos';
 import { Todo, SortType } from './types/Todo';
-import { Tab } from './types/Tab';
+import { Status } from './types/Status';
 
-export const tabs:Tab[] = [
+export const statuses:Status[] = [
   { id: '1', title: SortType.ALL, link: '/' },
   { id: '2', title: SortType.ACTIVE, link: '/active' },
   { id: '3', title: SortType.COMPLETED, link: '/completed' },
@@ -23,13 +23,14 @@ export const tabs:Tab[] = [
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
-  const [selectedTabId, setSelectedTabId] = useState(tabs[0].id);
+  const [selectedStatusId, setSelectedStatusId] = useState(statuses[0].id);
   const [hasLoadingErrod, setHasLoadingErrod] = useState(false);
 
-  const selectedTab = tabs.find(tab => selectedTabId === tab.id) || tabs[0];
+  const selectedStatus = statuses
+    .find(status => selectedStatusId === status.id) || statuses[0];
 
-  const onTabSelected = (tab:Tab) => {
-    setSelectedTabId(tab.id);
+  const onStatusSelected = (status:Status) => {
+    setSelectedStatusId(status.id);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter(({ completed }) => {
-      switch (selectedTab.title) {
+      switch (selectedStatus.title) {
         case SortType.ACTIVE:
           return !completed;
 
@@ -101,9 +102,9 @@ export const App: React.FC = () => {
         />
 
         <Footer
-          tabs={tabs}
-          selectedTabId={selectedTabId}
-          onTabSelected={onTabSelected}
+          statuses={statuses}
+          selectedStatusId={selectedStatusId}
+          onStatusSelected={onStatusSelected}
           todos={todos}
         />
       </div>

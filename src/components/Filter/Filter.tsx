@@ -1,39 +1,40 @@
 import classNames from 'classnames';
-import { Tab } from '../../types/Tab';
+import { Status } from '../../types/Status';
 
 type Props = {
-  tabs: Tab[];
-  selectedTabId: string;
-  onTabSelected: (value:Tab) => void;
+  statuses: Status[];
+  selectedStatusId: string;
+  onStatusSelected: (value:Status) => void;
 };
 
 export const Filter: React.FC<Props> = ({
-  tabs,
-  selectedTabId,
-  onTabSelected,
+  statuses,
+  selectedStatusId,
+  onStatusSelected,
 }) => {
-  const selectedTab = tabs.find(tab => selectedTabId === tab.id) || tabs[0];
+  const selectedStatus = statuses
+    .find(status => selectedStatusId === status.id) || statuses[0];
 
-  const handleClick = (tab: Tab) => (
-    tab.id !== selectedTabId && onTabSelected(tab)
+  const handleClick = (status: Status) => (
+    status.id !== selectedStatusId && onStatusSelected(status)
   );
 
   return (
     <nav className="filter" data-cy="Filter">
-      {tabs.map((tab) => (
+      {statuses.map((status) => (
         <a
-          key={tab.id}
-          data-cy={`FilterLink${tab.title}`}
-          href={`#${tab.link}`}
+          key={status.id}
+          data-cy={`FilterLink${status.title}`}
+          href={`#${status.link}`}
           className={classNames(
             'filter__link',
             {
-              selected: tab.id === selectedTab.id,
+              selected: status.id === selectedStatus.id,
             },
           )}
-          onClick={() => handleClick(tab)}
+          onClick={() => handleClick(status)}
         >
-          {tab.title}
+          {status.title}
         </a>
       ))}
     </nav>

@@ -1,6 +1,6 @@
 import { SortType } from './Todo';
 
-export interface Tab {
+export interface Status {
   id: string;
   title: SortType;
   link: string;

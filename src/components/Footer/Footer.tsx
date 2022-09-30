@@ -1,18 +1,18 @@
 import { Filter } from '../Filter';
-import { Tab } from '../../types/Tab';
+import { Status } from '../../types/Status';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  tabs: Tab[];
-  selectedTabId: string;
-  onTabSelected: (value:Tab) => void;
+  statuses: Status[];
+  selectedStatusId: string;
+  onStatusSelected: (value:Status) => void;
   todos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
-  tabs,
-  selectedTabId,
-  onTabSelected,
+  statuses,
+  selectedStatusId,
+  onStatusSelected,
   todos,
 }) => {
   const activeTodos = todos.filter(({ completed }) => !completed).length;
@@ -24,9 +24,9 @@ export const Footer: React.FC<Props> = ({
         {`${activeTodos} items left`}
       </span>
       <Filter
-        tabs={tabs}
-        selectedTabId={selectedTabId}
-        onTabSelected={onTabSelected}
+        statuses={statuses}
+        selectedStatusId={selectedStatusId}
+        onStatusSelected={onStatusSelected}
       />
       <button
         data-cy="ClearCompletedButton"
