@@ -14,6 +14,7 @@ export const TodoList: React.FC<TodoProps> = ({
   selectTodo,
   selectedTodo,
   deleteTodo,
+  globalLoader,
 }) => {
   const handleChooseTodo = (todo: Todo) => {
     if (todo.id) {
@@ -65,7 +66,7 @@ export const TodoList: React.FC<TodoProps> = ({
               data-cy="TodoLoader"
               className={classNames(
                 'modal overlay',
-                { 'is-active': todo.id === selectedTodo },
+                { 'is-active': (todo.id === selectedTodo) || globalLoader },
               )}
             >
               <div className="modal-background has-background-white-ter" />

@@ -23,6 +23,7 @@ export const App: FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const [filter, setFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(false);
+  const [globalLoader, setGlobalLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
@@ -100,6 +101,26 @@ export const App: FC = () => {
     setSelectedTodo(null);
   };
 
+  const handleChooseAll = () => {
+    setGlobalLoader(true);
+
+    todoList.map(async (todo) => {
+      try {
+        await updateTodoCompleted(todo.id, true);
+
+        if (todoList.every(item => item.completed)) {
+          await updateTodoCompleted(todo.id, false);
+        }
+      } catch {
+        setError(Error.UPDATING);
+      }
+
+      setGlobalLoader(false);
+
+      return todo;
+    });
+  };
+
   const filteredTodos = todoList.filter(todo => {
     switch (filter) {
       case 'All':
@@ -130,6 +151,24 @@ export const App: FC = () => {
     setSelectedTodo(null);
   };
 
+  const handleDeleteAllTodos = () => {
+    todoList.map(async (todo) => {
+      setGlobalLoader(true);
+
+      try {
+        if (todo.completed) {
+          await deleteTodo(todo.id);
+        }
+      } catch {
+        setError(Error.DELETING);
+      }
+
+      setGlobalLoader(false);
+
+      return todo;
+    });
+  };
+
   const anyCompletedTodo = todoList.some(todo => todo.completed);
 
   return (
@@ -140,13 +179,14 @@ export const App: FC = () => {
         <Header
           todoList={filteredTodos}
           updateTodoCompleted={updateTodoCompleted}
-          setError={setError}
+          handleChooseAll={handleChooseAll}
           handleSubmit={handleSubmit}
           todoTitle={todoTitle}
           setTodoTitle={setTodoTitle}
           isLoading={isLoading}
         />
         <TodoList
+          globalLoader={globalLoader}
           selectedTodo={selectedTodo}
           selectTodo={handleSelectTodo}
           todos={filteredTodos}
@@ -160,8 +200,7 @@ export const App: FC = () => {
           todoList={filteredTodos}
           setFilter={setFilter}
           filter={filter}
-          deleteTodo={deleteTodo}
-          setError={setError}
+          deleteAllTodos={handleDeleteAllTodos}
           anyCompletedTodo={anyCompletedTodo}
         />
       </div>

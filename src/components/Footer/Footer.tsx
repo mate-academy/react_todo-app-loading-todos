@@ -1,14 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FooterProps } from './FooterProps';
-import { Error } from '../../Error';
 
 export const Footer: React.FC<FooterProps> = ({
   todoList,
   setFilter,
   filter,
-  deleteTodo,
-  setError,
+  deleteAllTodos,
   anyCompletedTodo,
 }) => {
   return (
@@ -58,17 +56,7 @@ export const Footer: React.FC<FooterProps> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={() => {
-          todoList.map((todo) => {
-            if (todo.completed) {
-              deleteTodo(todo.id);
-            } else {
-              setError(Error.DELETING);
-            }
-
-            return todo;
-          });
-        }}
+        onClick={deleteAllTodos}
         style={(!anyCompletedTodo) ? { visibility: 'hidden' } : {}}
       >
         Clear completed

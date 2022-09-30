@@ -10,4 +10,5 @@ export type TodoProps = {
   deleteTodo: (todo: Todo) => void;
   isLoading: boolean;
   todoTitle: string;
+  globalLoader: boolean;
 };
