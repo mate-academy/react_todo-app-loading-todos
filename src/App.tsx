@@ -4,45 +4,24 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
+import { Error } from './components/Error';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
-
-
-function preperTodos(todos:Todo[], sortFilter:string, user: User) {
-  return todos.filter(todo => todo.userId === user.id)
-    .filter(todo => {
-      switch (sortFilter) {
-        case 'active':
-          return !todo.completed;
-
-        case 'completed':
-          return todo.completed;
-
-        default:
-          return true;
-      }
-    });
-}
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortFilter, setSortFilter] = useState('all');
   const [visibelTodos, setVisibelTodos] = useState<Todo[]>([...todos]);
-  const [text, setTitle] = useState('');
+
+  const [isError, setError] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
   const deleteCompletedTodos = () => (
     setTodos(state => (
-      state.filter(todo => todo.completed) || []))
+      state.filter(todo => !todo.completed) || []))
   );
-
-  // eslint-disable-next-line no-console
-  console.log(user);
-  // eslint-disable-next-line no-console
-  console.log(visibelTodos);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -54,38 +33,29 @@ export const App: React.FC = () => {
       getTodos(user.id)
         .then(response => {
           setTodos(response);
+        })
+        .catch(() => {
+          setError(true);
+          setMessageError('Todos from server were not gotten');
         });
     }
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const idTodo = (todos.length > 0)
-      ? (todos.sort((todo1, todo2) => todo2.id - todo1.id)[0].id + 1)
-      : 1;
-
-    if (newTodoField !== null && user !== null) {
-      const newTodo:Todo = {
-        id: idTodo,
-        userId: user.id,
-        title: text,
-        completed: false,
-      };
-
-      todos.push(newTodo);
-      setTitle('');
-      // eslint-disable-next-line no-console
-      console.log(todos);
-    }
-  };
-
   useMemo(() => {
-    if (user !== null) {
-      setVisibelTodos(() => (
-        preperTodos(todos, sortFilter, user)
-      ));
-    }
-  }, [todos, user, sortFilter]);
+    setVisibelTodos(() => (
+      todos.filter(todo => {
+        switch (sortFilter) {
+          case 'active':
+            return !todo.completed;
+
+          case 'completed':
+            return todo.completed;
+
+          default:
+            return true;
+        }
+      })));
+  }, [todos, sortFilter]);
 
   return (
     <div className="todoapp">
@@ -99,15 +69,13 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <input
               data-cy="NewTodoField"
               type="text"
               ref={newTodoField}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={text}
-              onChange={() => setTitle(newTodoField.current?.value || '')}
             />
           </form>
         </header>
@@ -131,9 +99,7 @@ export const App: React.FC = () => {
                     <input
                       data-cy="TodoStatus"
                       type="checkbox"
-                      // value={todo.completed}
                       className="todo__status"
-                      onClick={() => !todo.completed}
                       defaultChecked
                     />
                   </label>
@@ -199,7 +165,7 @@ export const App: React.FC = () => {
                   className="filter__link"
                   onClick={() => (
                     sortFilter !== 'completed'
-                      && setSortFilter('comleted')
+                      && setSortFilter('completed')
                   )}
                 >
                   Completed
@@ -217,27 +183,15 @@ export const App: React.FC = () => {
             </footer>
           </>
 
-
         )}
 
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Error
+        isError={isError}
+        setError={setError}
+        messageError={messageError}
+      />
     </div>
   );
 };

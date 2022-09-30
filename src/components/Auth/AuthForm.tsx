@@ -14,8 +14,6 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-
-
   const saveUser = (user: User) => {
     localStorage.setItem('user', JSON.stringify(user));
     onLogin(user);
@@ -73,19 +71,6 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       setLoading(false);
     }
   };
-
-  // useMemo(() => {
-  //   getUserByEmail(email).then(response => {
-  //     if (response === null) {
-  //       createUser({ email, name });
-  //     }
-
-  //     onLogin(response);
-  //     setName(response.name);
-  //   });
-  // }, [email]);
-
-
 
   return (
     <form onSubmit={handleSubmit} className="box mt-5">
