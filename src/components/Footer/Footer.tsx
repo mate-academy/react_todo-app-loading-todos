@@ -1,22 +1,27 @@
 import { Filter } from '../Filter';
 import { Tab } from '../../types/Tab';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   tabs: Tab[];
   selectedTabId: string;
   onTabSelected: (value:Tab) => void;
+  todos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
   tabs,
   selectedTabId,
   onTabSelected,
+  todos,
 }) => {
+  const activeTodos = todos.filter(({ completed }) => !completed).length;
+
   return (
 
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${activeTodos} items left`}
       </span>
       <Filter
         tabs={tabs}

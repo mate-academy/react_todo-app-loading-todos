@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [selectedTabId, setSelectedTabId] = useState(tabs[0].id);
+  const [hasLoadingErrod, setHasLoadingErrod] = useState(false);
 
   const selectedTab = tabs.find(tab => selectedTabId === tab.id) || tabs[0];
 
@@ -37,17 +38,29 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const loadTodos = async () => {
-    const todosFromServer = await getTodos(9);
+    try {
+      const todosFromServer = await getTodos(9);
 
-    setTodos(todosFromServer);
+      setTodos(todosFromServer);
+    } catch (error) {
+      setHasLoadingErrod(true);
+    }
   };
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    loadTodos();
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    loadTodos();
+
+    const timer = setTimeout(() => {
+      setHasLoadingErrod(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+
+    // focus the element with `ref={newTodoField}`
   }, []);
 
   const filteredTodos = todos
@@ -91,10 +104,13 @@ export const App: React.FC = () => {
           tabs={tabs}
           selectedTabId={selectedTabId}
           onTabSelected={onTabSelected}
+          todos={todos}
         />
       </div>
 
-      <ErrorNotification />
+      {
+        hasLoadingErrod && <ErrorNotification />
+      }
     </div>
   );
 };
