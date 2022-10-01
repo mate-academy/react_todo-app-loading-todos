@@ -6,7 +6,8 @@ import { getTodos } from './api/todos';
 import { AddTodo } from './components/Auth/AddTodo/AddTodo';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorWindow } from './components/Auth/ErrorWindow/ErrorWindow';
-import { Footer } from './components/Auth/Footer/Footer';
+// eslint-disable-next-line
+import { FilterComponent } from './components/Auth/FilterComponent/FilterComponent';
 import { TodoList } from './components/Auth/TodoList/TodoList';
 import { TodoContext } from './context/TodoContext';
 
@@ -24,8 +25,6 @@ export const App: React.FC = () => {
   const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-
     const loadTodos = async () => {
       try {
         if (user) {
@@ -53,7 +52,7 @@ export const App: React.FC = () => {
         <TodoList />
 
         {todos.length > 0 && (
-          <Footer
+          <FilterComponent
             todos={todos}
             filterState={filterState}
             handleFilter={handleFilter}

@@ -1,14 +1,15 @@
 import classNames from 'classnames';
 import React from 'react';
+import { Filter } from '../../../context/TodoContext';
 import { Todo } from '../../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  filterState: string,
-  handleFilter: (filterStatus: string) => void,
+  filterState: Filter,
+  handleFilter: (filterStatus: Filter) => void,
 };
 
-export const Footer: React.FC<Props> = ({
+export const FilterComponent: React.FC<Props> = ({
   todos,
   filterState,
   handleFilter,
@@ -25,10 +26,10 @@ export const Footer: React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterState === 'all',
+            selected: filterState === Filter.all,
           },
         )}
-        onClick={() => handleFilter('all')}
+        onClick={() => handleFilter(Filter.all)}
       >
         All
       </a>
@@ -39,10 +40,10 @@ export const Footer: React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterState === 'active',
+            selected: filterState === Filter.active,
           },
         )}
-        onClick={() => handleFilter('active')}
+        onClick={() => handleFilter(Filter.active)}
       >
         Active
       </a>
@@ -52,10 +53,10 @@ export const Footer: React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterState === 'completed',
+            selected: filterState === Filter.completed,
           },
         )}
-        onClick={() => handleFilter('completed')}
+        onClick={() => handleFilter(Filter.completed)}
       >
         Completed
       </a>

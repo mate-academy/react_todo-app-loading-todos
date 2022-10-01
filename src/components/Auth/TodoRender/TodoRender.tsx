@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { ChangeEvent, useEffect, useRef } from 'react';
+import { TypeChange } from '../../../context/TodoContext';
 import { Todo } from '../../../types/Todo';
 
 type Props = {
   todo: Todo,
-  handleStatusChange: (todo: Todo, type: string) => void,
+  handleStatusChange: (todo: Todo, type: TypeChange) => void,
   selectedTodoId: number | null,
   setSelectedTodoId: (valut: number) => void,
   setInputValue: (value: string) => void,
@@ -45,7 +46,7 @@ export const TodoRender: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           defaultChecked
-          onClick={() => handleStatusChange(todo, 'checkbox')}
+          onClick={() => handleStatusChange(todo, TypeChange.checkbox)}
         />
       </label>
 
@@ -66,7 +67,7 @@ export const TodoRender: React.FC<Props> = ({
     <input
       value={inputValue}
       className="input is-large is-primary"
-      onBlur={() => handleStatusChange(todo, 'title')}
+      onBlur={() => handleStatusChange(todo, TypeChange.title)}
       onChange={handleChangeTitle}
       ref={newTodoField}
     />

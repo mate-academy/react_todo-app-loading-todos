@@ -3,19 +3,30 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 
+export enum Filter {
+  all,
+  active,
+  completed,
+}
+
+export enum TypeChange {
+  title,
+  checkbox,
+}
+
 interface Context {
   filtredTodos: Todo[],
   setFiltredTodos: (value: Todo[]) => void,
   inputValue: string,
   setInputValue: (value: string) => void,
-  handleStatusChange: (todo: Todo, type: string) => void,
+  handleStatusChange: (todo: Todo, type: TypeChange) => void,
   todos: Todo[],
   setTodos: (value: Todo[]) => void,
   selectedTodoId: number | null,
   setSelectedTodoId: (value: number | null) => void,
-  handleFilter: (filterStatus: string) => void,
-  filterState: string,
-  setFilterState: (value: string) => void,
+  handleFilter: (filterStatus: number) => void,
+  filterState: Filter,
+  setFilterState: (value: Filter) => void,
   handleChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void,
 }
 
@@ -30,7 +41,7 @@ export const TodoContext = createContext<Context>({
   selectedTodoId: null,
   setSelectedTodoId: () => undefined,
   handleFilter: () => undefined,
-  filterState: 'all',
+  filterState: Filter.all,
   setFilterState: () => undefined,
   handleChangeTitle: () => undefined,
 });
@@ -40,19 +51,19 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [filterState, setFilterState] = useState('all');
+  const [filterState, setFilterState] = useState(Filter.all);
 
-  const handleFilter = (filterStatus: string) => {
+  const handleFilter = (filterStatus: number) => {
     let copyOfTodos = [...todos];
 
     setFilterState(filterStatus);
 
-    if (filterStatus !== 'all') {
+    if (filterStatus !== Filter.all) {
       copyOfTodos = copyOfTodos.filter(todo => {
         switch (filterStatus) {
-          case 'active':
+          case Filter.active:
             return !todo.completed;
-          case 'completed':
+          case Filter.completed:
             return todo.completed;
           default:
             return false;
@@ -63,16 +74,16 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
     setFiltredTodos(copyOfTodos);
   };
 
-  const handleStatusChange = (todo: Todo, type: string) => {
+  const handleStatusChange = (todo: Todo, type: TypeChange) => {
     const found = todos.find(stateTodo => stateTodo.id === todo.id) as Todo;
 
     const foundIndex = todos.findIndex(stateTodo => stateTodo.id === todo.id);
 
     switch (type) {
-      case 'checkbox':
+      case TypeChange.checkbox:
         found.completed = !found.completed;
         break;
-      case 'title':
+      case TypeChange.title:
         setSelectedTodoId(null);
         found.title = inputValue;
         break;
