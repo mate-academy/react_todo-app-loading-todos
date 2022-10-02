@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
