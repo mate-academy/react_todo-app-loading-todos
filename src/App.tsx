@@ -1,13 +1,10 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-
-import { AuthContext } from './components/Auth/AuthContext';
 
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -21,8 +18,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // eslint-disable
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
