@@ -17,6 +17,10 @@ export const ErroNotification: React.FC<Props> = ({
     setTimeout(() => setErrorMessage(''), 3000);
   }
 
+  const handleError = () => {
+    setHiddenError(prev => !prev);
+  };
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -34,7 +38,7 @@ export const ErroNotification: React.FC<Props> = ({
         type="button"
         className="delete"
         aria-label="a problem"
-        onClick={() => setHiddenError(prev => !prev)}
+        onClick={handleError}
 
       />
 

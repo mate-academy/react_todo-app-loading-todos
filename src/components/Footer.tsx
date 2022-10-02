@@ -12,6 +12,14 @@ export const TodoFooter: React.FC<Props> = ({
   todos,
   setFilterBy,
 }) => {
+  const handleChangeFilterBy = (filteredBy: string) => {
+    setFilterBy(filteredBy);
+  };
+
+  const filterByParam = (param: string) => {
+    return filterBy === param;
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -24,8 +32,8 @@ export const TodoFooter: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={classNames('filter__link',
-            { selected: filterBy === 'all' })}
-          onClick={() => setFilterBy('all')}
+            { selected: filterByParam('all') })}
+          onClick={() => handleChangeFilterBy('all')}
         >
           All
         </a>
@@ -34,8 +42,8 @@ export const TodoFooter: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className={classNames('filter__link',
-            { selected: filterBy === 'active' })}
-          onClick={() => setFilterBy('active')}
+            { selected: filterByParam('active') })}
+          onClick={() => handleChangeFilterBy('active')}
         >
           Active
         </a>
@@ -43,8 +51,8 @@ export const TodoFooter: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={classNames('filter__link',
-            { selected: filterBy === 'completed' })}
-          onClick={() => setFilterBy('completed')}
+            { selected: filterByParam('completed') })}
+          onClick={() => handleChangeFilterBy('completed')}
         >
           Completed
         </a>

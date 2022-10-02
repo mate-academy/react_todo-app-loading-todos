@@ -15,7 +15,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[] | []>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFiterBy] = useState('all');
 
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
 
         setTodos(await visibleTodos);
       } catch (error) {
-        setErrorMessage(`${error}`);
+        setErrorMessage(`${error} ${user}`);
       }
     }
 
