@@ -20,7 +20,6 @@ export const App: React.FC = () => {
   const [hasLoadError, setHasLoadError] = useState(false);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
       setHasLoadError(false);
