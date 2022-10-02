@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFiterBy] = useState('all');
 
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext); // eslint-disable-line @typescript-eslint/no-unused-vars
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
