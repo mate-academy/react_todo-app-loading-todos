@@ -30,7 +30,7 @@ export const App: React.FC = () => {
 
   const loadTodos = async () => {
     try {
-      setTodos(await getTodos(10));
+      setTodos(await getTodos(user?.id || 0));
     } catch {
       setError(true);
     }
