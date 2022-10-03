@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useEffect, useRef, useState,
+  useContext,
+  useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
-// import { AuthContext } from './components/Auth/AuthContext';
+import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from
   './components/Auth/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Auth/Footer/Footer';
@@ -16,13 +17,10 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const user = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -31,7 +29,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const getTodosFromServer = async () => {
       try {
-        const receivedTodos = await getTodos(2);
+        const receivedTodos = await getTodos(user.id);
 
         setTodos(receivedTodos);
       } catch (error) {
@@ -42,17 +40,19 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const getFilteredTodo = todos.filter(todo => {
-    switch (filterType) {
-      case FilterType.Active:
-        return !todo.completed;
+  const getFilteredTodo = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterType) {
+        case FilterType.Active:
+          return !todo.completed;
 
-      case FilterType.Completed:
-        return todo.completed;
-      default:
-        return todo;
-    }
-  });
+        case FilterType.Completed:
+          return todo.completed;
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filterType]);
 
   return (
     <div className="todoapp">
