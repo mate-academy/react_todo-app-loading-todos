@@ -40,7 +40,7 @@ export const TodoInfo: React.FC<Props> = ({
       <span
         data-cy="TodoTitle"
         className="todo__title"
-        onDoubleClick={() => console.info(`double click${todo.title}`)}
+        // onDoubleClick={() => console.info(`double click${todo.title}`)}
       >
         {title}
       </span>
