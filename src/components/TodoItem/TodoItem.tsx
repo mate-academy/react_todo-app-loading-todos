@@ -23,7 +23,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        React
+        {todo.title}
       </span>
       <button
         type="button"
