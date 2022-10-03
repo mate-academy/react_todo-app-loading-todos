@@ -1,23 +1,93 @@
 import React from 'react';
 
-export const ErrorMessage: React.FC = () => {
-  return (
-    <div
-      data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
-    >
-      <button
-        aria-label="Close"
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-      />
+type Props = {
+  errorType: string;
+  setErrorType: (errorType: string) => void;
+};
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
-    </div>
+export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
+  const handleHideError = () => {
+    setErrorType('');
+  };
+
+  return (
+    <>
+
+      {errorType === 'empty' && (
+        <>
+          <div
+            data-cy="ErrorNotification"
+            className="notification is-danger is-light has-text-weight-normal"
+          >
+            <button
+              aria-label="Close"
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+              onClick={handleHideError}
+            />
+            Title can`t be empty
+            <br />
+
+          </div>
+        </>
+      )}
+      {errorType === 'delete' && (
+        <>
+          <div
+            data-cy="ErrorNotification"
+            className="notification is-danger is-light has-text-weight-normal"
+          >
+            <button
+              aria-label="Close"
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+            />
+            Unable to delete a todo
+            <br />
+
+          </div>
+        </>
+      )}
+
+      {errorType === 'add' && (
+        <>
+          <div
+            data-cy="ErrorNotification"
+            className="notification is-danger is-light has-text-weight-normal"
+          >
+            <button
+              aria-label="Close"
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+            />
+            Unable to add a todo
+            <br />
+
+          </div>
+        </>
+      )}
+
+      {errorType === 'update' && (
+        <>
+          <div
+            data-cy="ErrorNotification"
+            className="notification is-danger is-light has-text-weight-normal"
+          >
+            <button
+              aria-label="Close"
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+            />
+            Unable to update a todo
+            <br />
+
+          </div>
+        </>
+      )}
+    </>
   );
 };

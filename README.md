@@ -18,7 +18,7 @@ or find an existing one in the API.
   - use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
 - hide everything except the `NewTodoField` if there are no todos yet;
 
-## Error messages
+## Error messages []
 
 In case of any error show the notification with an appropriate message at the bottom (just remove the `hidden` class).
 
@@ -27,7 +27,7 @@ In case of any error show the notification with an appropriate message at the bo
 - also hide the notification before any next request;
 - use a wrong todos URL to test the error.
 
-## Filtering todos
+## Filtering todos [x]
 
 Filter todos by status `All` / `Active` / `Completed`:
 
@@ -57,7 +57,7 @@ and implement the ability to and nd remove todos.
 
 Add a todo with the entered title on `NewTodoField` form submit:
 
-- if the title is empty show the `Title can't be empty` notification at the bottom;
+- if the title is empty show the `Title can't be empty` notification at the bottom;   [xx]
 - disable the input until receiving the response from the API (use `isAdding` variable);
 - manually add a temp todo with `id: 0` **after** the list while waiting for the response (don't add it to the array);
 - show the loader on the added todo (see the styles of the 5th todo `Redux`);
@@ -90,7 +90,7 @@ Remove all the completed todos after `Clear completed` button click:
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
 - Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-add-and-delete/) and add it to the PR description.
 
-## IF you want to implement smooth animations
+# # IF you want to implement smooth animations
 
 <details>
   <summary>Click here to see the hint</summary>
