@@ -9,12 +9,13 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodosList } from './components/TodosList';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState(false);
   const [errorNotification, setErrorNotification] = useState('');
-  const [filterValue, setFilterValue] = useState('All');
+  const [filterType, setFilterType] = useState(FilterType.All);
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -25,14 +26,14 @@ export const App: React.FC = () => {
   }
 
   const filteredTodos = todos.filter(todo => {
-    switch (filterValue) {
-      case 'active':
+    switch (filterType) {
+      case FilterType.Active:
         return !todo.completed;
 
-      case 'completed':
+      case FilterType.Completed:
         return todo.completed;
 
-      case 'all':
+      case FilterType.All:
         return todo;
 
       default:
@@ -73,8 +74,8 @@ export const App: React.FC = () => {
         )}
         <Footer
           todos={todos}
-          filterValue={filterValue}
-          handlerFilterValue={setFilterValue}
+          filterType={filterType}
+          handlerFilterType={setFilterType}
         />
       </div>
       {error && (
