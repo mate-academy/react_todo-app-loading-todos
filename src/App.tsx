@@ -27,9 +27,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const getTodosFromServer = async () => {
+    const getTodosFromServer = async (userId: number) => {
       try {
-        const receivedTodos = await getTodos(user.id);
+        const receivedTodos = await getTodos(userId);
 
         setTodos(receivedTodos);
       } catch (error) {
@@ -37,7 +37,11 @@ export const App: React.FC = () => {
       }
     };
 
-    getTodosFromServer();
+    if (!user) {
+      return;
+    }
+
+    getTodosFromServer(user.id);
   }, []);
 
   const getFilteredTodo = useMemo(() => {
