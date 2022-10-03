@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import classNames from 'classnames';
 
-export const ErrorNotification = () => {
+type Props = {
+  errorNotification: string
+};
+
+export const ErrorNotification: React.FC<Props> = ({ errorNotification }) => {
   const [isErrorShown, setIsErrorShown] = useState(true);
 
   return (
@@ -22,11 +26,8 @@ export const ErrorNotification = () => {
         onClick={() => setIsErrorShown(false)}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorNotification}
+
     </div>
   );
 };

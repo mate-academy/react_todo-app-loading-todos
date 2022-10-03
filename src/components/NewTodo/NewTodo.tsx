@@ -1,5 +1,7 @@
+import React, { RefObject } from 'react';
+
 type Props = {
-  newTodoField: any;
+  newTodoField: RefObject<HTMLInputElement>;
 };
 
 export const NewTodo: React.FC<Props> = ({ newTodoField }) => {

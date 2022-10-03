@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import {
-  // useContext,
+  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-// import { AuthContext } from './components/Auth/AuthContext';
+import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -24,7 +23,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState(0);
   const [selectedStatusId, setSelectedStatusId] = useState(statuses[0].id);
-  const [hasLoadingErrod, setHasLoadingErrod] = useState(false);
+  const [hasLoadingErrod, setHasLoadingError] = useState(false);
+  const [errorNotification, setErrorNotification] = useState('');
+  const user = useContext(AuthContext);
+  const newTodoField = useRef<HTMLInputElement>(null);
 
   const selectedStatus = statuses
     .find(status => selectedStatusId === status.id) || statuses[0];
@@ -33,18 +35,16 @@ export const App: React.FC = () => {
     setSelectedStatusId(status.id);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const user = useContext(AuthContext);
-
-  const newTodoField = useRef<HTMLInputElement>(null);
-
   const loadTodos = async () => {
     try {
-      const todosFromServer = await getTodos(9);
+      if (user) {
+        const todosFromServer = await getTodos(user?.id);
 
-      setTodos(todosFromServer);
+        setTodos(todosFromServer);
+      }
     } catch (error) {
-      setHasLoadingErrod(true);
+      setHasLoadingError(true);
+      setErrorNotification('Unable to update a todo');
     }
   };
 
@@ -56,12 +56,10 @@ export const App: React.FC = () => {
     loadTodos();
 
     const timer = setTimeout(() => {
-      setHasLoadingErrod(false);
+      setHasLoadingError(false);
     }, 3000);
 
     return () => clearTimeout(timer);
-
-    // focus the element with `ref={newTodoField}`
   }, []);
 
   const filteredTodos = todos
@@ -88,29 +86,38 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
             type="button"
             className="todoapp__toggle-all active"
+            aria-label="ToggleButton"
           />
 
           <NewTodo
             newTodoField={newTodoField}
           />
         </header>
+        {todos.length > 0
+          && (
+            <>
+              <TodoList
+                todos={filteredTodos}
+                selectTodo={setTodoId}
+                selectedTodoId={todoId}
+              />
 
-        <TodoList
-          todos={filteredTodos}
-          selectTodo={setTodoId}
-          selectedTodoId={todoId}
-        />
-
-        <Footer
-          statuses={statuses}
-          selectedStatusId={selectedStatusId}
-          onStatusSelected={onStatusSelected}
-          todos={todos}
-        />
+              <Footer
+                statuses={statuses}
+                selectedStatusId={selectedStatusId}
+                onStatusSelected={onStatusSelected}
+                todos={todos}
+              />
+            </>
+          )}
       </div>
 
       {
-        hasLoadingErrod && <ErrorNotification />
+        hasLoadingErrod && (
+          <ErrorNotification
+            errorNotification={errorNotification}
+          />
+        )
       }
     </div>
   );
