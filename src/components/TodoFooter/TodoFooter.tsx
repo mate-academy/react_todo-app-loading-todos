@@ -1,15 +1,33 @@
-export const TodoFooter: React.FC = () => {
+import classNames from 'classnames';
+import React from 'react';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  filterTodos: Todo[],
+  filterTodo: string,
+  setFilterTodo: (parameter: string) => void,
+};
+
+export const TodoFooter: React.FC<Props> = ({
+  filterTodos,
+  filterTodo,
+  setFilterTodo,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${filterTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
+          className={classNames(
+            'filter__link',
+            { selected: filterTodo === 'all' },
+          )}
+          onClick={() => setFilterTodo('all')}
         >
           All
         </a>
@@ -17,14 +35,22 @@ export const TodoFooter: React.FC = () => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { selected: filterTodo === 'active' },
+          )}
+          onClick={() => setFilterTodo('active')}
         >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { selected: filterTodo === 'completed' },
+          )}
+          onClick={() => setFilterTodo('completed')}
         >
           Completed
         </a>

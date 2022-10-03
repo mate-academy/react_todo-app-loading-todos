@@ -1,18 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
+import React from 'react';
 
-export const TodoHeader: React.FC = () => {
-  const newTodoField = useRef<HTMLInputElement>(null);
+type Props = {
+  newTodoField: React.RefObject<HTMLInputElement>,
+};
 
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
-
+export const TodoHeader: React.FC<Props> = ({ newTodoField }) => {
   return (
     <header className="todoapp__header">
       <button

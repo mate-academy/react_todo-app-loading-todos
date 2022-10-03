@@ -1,33 +1,43 @@
-export const TodoList: React.FC = () => {
+import classNames from 'classnames';
+import React from 'react';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[];
+};
+
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <div
-        data-cy="Todo"
-        className="todo completed"
-      >
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            defaultChecked
-          />
-        </label>
+      {todos.map(todo => {
+        const { id, title, completed } = todo;
 
-        <span data-cy="TodoTitle" className="todo__title">HTML</span>
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDeleteButton"
-        >
-          ×
-        </button>
+        return (
+          <div
+            data-cy="Todo"
+            className={classNames('todo', { completed })}
+            key={id}
+          >
+            <label className="todo__status-label">
+              <input
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                defaultChecked
+              />
+            </label>
 
-        <div data-cy="TodoLoader" className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
+            <span data-cy="TodoTitle" className="todo__title">{title}</span>
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDeleteButton"
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
     </section>
   );
 };
