@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 interface Props {
   error: string,
   setHideError: (value: boolean) => void,
@@ -34,15 +33,10 @@ export const ErrorMessage: React.FC<Props> = ({
             data-cy="HideErrorButton"
             type="button"
             className="delete"
+            aria-label="delete"
             onClick={() => setHideError(true)}
           />
           {error}
-          {/*
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
         </div>
       )}
     </>

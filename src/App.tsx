@@ -1,8 +1,11 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-// import React, { useContext, useEffect, useRef, useState } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { getTodos } from './api/todos';
-// import { AuthContext } from './components/Auth/AuthContext';
+import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Footer } from './components/Footer';
 import { NewTodoForm } from './components/NewTodoForm';
@@ -37,8 +40,7 @@ export const tabs: FilterTypes[] = [
 ];
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const user = useContext(AuthContext);
+  const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
@@ -51,7 +53,6 @@ export const App: React.FC = () => {
   const selectedTab = tabs.find(tab => tab.id === selectedTabId) || tabs[0];
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -60,9 +61,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const todosFromServer = await getTodos(1);
+        if (user) {
+          const todosFromServer = await getTodos(user?.id);
 
-        setTodos(todosFromServer);
+          setTodos(todosFromServer);
+        }
       } catch (errorFromServer) {
         setError(`${errorFromServer}`);
       }
@@ -82,6 +85,7 @@ export const App: React.FC = () => {
           <button
             data-cy="ToggleAllButton"
             type="button"
+            aria-label="ToggleAllButton"
             className="todoapp__toggle-all active"
           />
 
