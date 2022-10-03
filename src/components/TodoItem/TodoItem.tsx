@@ -34,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({
     if (changeTodoInput.current) {
       changeTodoInput.current.focus();
     }
-  });
+  }, [isDoubleClicked]);
 
   const isAnyChange = cilckedTodo === todo.id || isToggleClicked
     || (isClearButtonClicked && todo.completed)

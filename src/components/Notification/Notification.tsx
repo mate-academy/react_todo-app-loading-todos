@@ -19,10 +19,10 @@ export const Notification: React.FC<Props> = ({
   return (
     <div
       data-cy="ErrorNotification"
-      className={
-        classNames('notification is-danger is-light has-text-weight-normal',
-          { 'is-hidden': isClickedHide || notification.length === 0 })
-      }
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { 'is-hidden': isClickedHide || !notification.length },
+      )}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button

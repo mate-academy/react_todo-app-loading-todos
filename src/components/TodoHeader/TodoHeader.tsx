@@ -26,7 +26,7 @@ export const TodoHeader: React.FC<Props> = ({
   isAdding,
   setNotification,
 }) => {
-  const [title, setNewTodoFieldValue] = useState('');
+  const [title, setTitle] = useState('');
 
   const handleToggler = async () => {
     todos.forEach(async todo => {
@@ -43,7 +43,7 @@ export const TodoHeader: React.FC<Props> = ({
     if (title) {
       const newTodo = {
         id: 0,
-        userId: user ? user.id : 0,
+        userId: user?.id ?? 0,
         title,
         completed: false,
       };
@@ -58,14 +58,16 @@ export const TodoHeader: React.FC<Props> = ({
         .finally(() => {
           setIsAdding(false);
           setTodos(initialTodos);
-          setNewTodoFieldValue('');
+          setTitle('');
         });
       if (user) {
         await getTodos(user.id).then(setTodos);
       }
-    } else {
-      setNotification('Title can\'t be empty');
+
+      return;
     }
+
+    setNotification('Title can\'t be empty');
   };
 
   return (
@@ -95,7 +97,7 @@ export const TodoHeader: React.FC<Props> = ({
           placeholder="What needs to be done?"
           disabled={isAdding}
           value={title}
-          onChange={(e) => setNewTodoFieldValue(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </form>
     </header>
