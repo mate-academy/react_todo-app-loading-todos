@@ -1,20 +1,29 @@
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+
 import { createUser, getUserByEmail } from '../../api/users';
-import { User } from '../../types/User';
 
-export type Props = {
-  onLogin: (user: User) => void,
-};
+import { EAction } from '../../types/Action.enum';
+import { IUser } from '../../types/User.interface';
+import { DispatchContext } from '../../providers/StateContext';
 
-export const AuthForm: React.FC<Props> = ({ onLogin }) => {
+export const AuthForm: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
+
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [needToRegister, setNeedToRegister] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const saveUser = (user: User) => {
+  const onLogin = (user: IUser) => {
+    dispatch({
+      type: EAction.SET_USER,
+      user,
+    });
+  };
+
+  const saveUser = (user: IUser) => {
     localStorage.setItem('user', JSON.stringify(user));
     onLogin(user);
   };
@@ -27,7 +36,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     }
 
     try {
-      const user = JSON.parse(userData) as User;
+      const user = JSON.parse(userData) as IUser;
 
       onLogin(user);
     } catch (error) {
