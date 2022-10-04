@@ -5,12 +5,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onStatusChange: (todoId: number) => void;
+  onDeleteTodo: (todoId: number) => void;
 };
 
 export const TodoList: React.FC<Props> = (props) => {
   const {
     todos,
     onStatusChange,
+    onDeleteTodo,
   } = props;
   const selectedTodoField = useRef<HTMLInputElement>(null);
   const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
@@ -78,6 +80,7 @@ export const TodoList: React.FC<Props> = (props) => {
                   type="button"
                   className="todo__remove"
                   data-cy="TodoDeleteButton"
+                  onClick={() => onDeleteTodo(id)}
                 >
                   ×
                 </button>

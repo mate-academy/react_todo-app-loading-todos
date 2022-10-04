@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -36,6 +37,11 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [haveError, setHaveError] = useState(false);
 
+  const activeTodosCount = useMemo(
+    () => filterTodos(todos, 'active').length,
+    [todos],
+  );
+
   const handleStatusChange = (todoId: number) => {
     const copyTodos = [...visibleTodos];
     const changedTodo = getTodoById(copyTodos, todoId);
@@ -48,6 +54,16 @@ export const App: React.FC = () => {
 
   const handleCloseError = () => {
     setHaveError(false);
+  };
+
+  const handleDeleteTodo = (todoId: number) => {
+    const copyTodos = [...visibleTodos];
+    const todoIndex = copyTodos.findIndex(todo => todo.id === todoId);
+
+    if (todoIndex !== -1) {
+      copyTodos.splice(todoIndex, 1);
+      setVisibleTodos(copyTodos);
+    }
   };
 
   useEffect(() => {
@@ -99,13 +115,17 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList todos={visibleTodos} onStatusChange={handleStatusChange} />
+          <TodoList
+            todos={visibleTodos}
+            onStatusChange={handleStatusChange}
+            onDeleteTodo={handleDeleteTodo}
+          />
         </section>
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="todosCounter">
-              4 items left
+              {`${activeTodosCount} items left`}
             </span>
 
             <Filter filterStatus={filterStatus} onFilter={setFilterStatus} />
