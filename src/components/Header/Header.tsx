@@ -1,14 +1,17 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
-import { AuthContext } from '../Auth/AuthContext';
+import React, { useEffect, useRef } from 'react';
 
-export const Header: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  query: string;
+  todos: Todo[];
+  setQuery: (value: string) => void;
+};
+
+export const Header: React.FC<Props> = ({ query, todos, setQuery }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -16,16 +19,21 @@ export const Header: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      <button
-        data-cy="ToggleAllButton"
-        type="button"
-        className="todoapp__toggle-all active"
-      />
+      {todos && (
+        <button
+          data-cy="ToggleAllButton"
+          type="button"
+          aria-label="Toggle"
+          className="todoapp__toggle-all active"
+        />
+      )}
 
       <form>
         <input
           data-cy="NewTodoField"
           type="text"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
           ref={newTodoField}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
