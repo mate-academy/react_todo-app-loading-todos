@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import classNames from 'classnames';
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -13,7 +13,10 @@ import {
   getTodos,
 } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { TodoList } from './components/Todo/TodoList';
+import { ErrorNotification } from './components/ErrorNotification';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/Todo';
 import { Todo } from './types/Todo';
 import { TodosFilter } from './types/TodosFilter_Enum';
 
@@ -30,6 +33,19 @@ export const App: React.FC = () => {
   const [alertText, setAlertText] = useState('');
   const [isAlertVisible, setAlertVisible] = useState(false);
   const [alertTimerId, setAlertTimerId] = useState<NodeJS.Timeout | null>(null);
+
+  const getVisibleTodos = () => {
+    switch (filterTodos) {
+      case TodosFilter.Active:
+        return todos.filter((todo) => !todo.completed);
+      case TodosFilter.Completed:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  };
+
+  const visibleTodos = useMemo(getVisibleTodos, [todos, filterTodos]);
 
   const clearAlert = () => {
     if (alertTimerId !== null) {
@@ -59,24 +75,16 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
-
-  useEffect(() => {
     if (user) {
-      getTodos(user.id, filterTodos)
+      getTodos(user.id)
         .then(todosFromServer => {
           setTodos(todosFromServer);
         })
         .catch(() => showAlert('Unable to get Todos'));
     }
-  }, [filterTodos,
-    update,
-  ]);
+  }, [update]);
 
-  const isInterfaceHidden = () => (todos.length === 0
+  const isInterfaceHidden = (todos.length === 0
     && filterTodos === TodosFilter.All);
 
   const handleFilterTodos = (filterValue: TodosFilter) => {
@@ -119,6 +127,21 @@ export const App: React.FC = () => {
       .catch(() => handleDeleteError());
   };
 
+  const handleToggleAllTodos = () => {
+    const toggleValue = !todos.every((todo) => todo.completed);
+
+    todos.forEach((todo, index) => {
+      clearAlert();
+      if (index === todos.length - 1) {
+        changeTodoStatus(todo.id, toggleValue)
+          .then(() => forceUpdate())
+          .catch(() => handleUpdateError());
+      } else {
+        changeTodoStatus(todo.id, toggleValue);
+      }
+    });
+  };
+
   const handleDeleteCompleted = () => {
     const completedTodos = todos.filter((todo) => todo.completed);
 
@@ -135,137 +158,44 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleToggleAllTodos = () => {
-    const toggleValue = !todos.every((todo) => todo.completed);
-
-    todos.forEach((todo, index) => {
-      clearAlert();
-      if (index === todos.length - 1) {
-        changeTodoStatus(todo.id, toggleValue)
-          .then(() => forceUpdate())
-          .catch(() => handleUpdateError());
-      } else {
-        changeTodoStatus(todo.id, toggleValue);
-      }
-    });
-  };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className={classNames(
-              'todoapp__toggle-all',
-              (todos.every((todo) => todo.completed) && todos.length !== 0)
-                ? 'active'
-                : '',
-            )}
-            onClick={handleToggleAllTodos}
-          />
 
-          <form
-            onSubmit={(event) => handleSubmit(event)}
-          >
-            <input
-              data-cy="NewTodoField"
-              name="todoTitle"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <Header
+          todos={todos}
+          newTodoField={newTodoField}
+          handleToggleAllTodos={handleToggleAllTodos}
+          handleSubmit={handleSubmit}
+          isInterfaceHidden={isInterfaceHidden}
+        />
 
         {
-          !isInterfaceHidden() && (
+          !isInterfaceHidden && (
             <>
               <TodoList
-                todos={todos}
+                todos={visibleTodos}
                 handleChangeStatus={handleChangeStatus}
                 handleDeleteTodo={handleDeleteTodo}
               />
 
-              <footer className="todoapp__footer" data-cy="Footer">
-                <span className="todo-count" data-cy="todosCounter">
-                  {`${todos.length} items left`}
-                </span>
-
-                <nav className="filter" data-cy="Filter">
-                  <a
-                    data-cy="FilterLinkAll"
-                    href="#/"
-                    className={classNames(
-                      'filter__link',
-                      {
-                        selected: filterTodos === TodosFilter.All,
-                      },
-                    )}
-                    onClick={() => handleFilterTodos(TodosFilter.All)}
-                  >
-                    All
-                  </a>
-
-                  <a
-                    data-cy="FilterLinkActive"
-                    href="#/active"
-                    className={classNames(
-                      'filter__link',
-                      {
-                        selected: filterTodos === TodosFilter.Active,
-                      },
-                    )}
-                    onClick={() => handleFilterTodos(TodosFilter.Active)}
-                  >
-                    Active
-                  </a>
-                  <a
-                    data-cy="FilterLinkCompleted"
-                    href="#/completed"
-                    className={classNames(
-                      'filter__link',
-                      {
-                        selected: filterTodos === TodosFilter.Completed,
-                      },
-                    )}
-                    onClick={() => handleFilterTodos(TodosFilter.Completed)}
-                  >
-                    Completed
-                  </a>
-                </nav>
-
-                <button
-                  data-cy="ClearCompletedButton"
-                  type="button"
-                  className="todoapp__clear-completed"
-                  onClick={() => handleDeleteCompleted()}
-                  disabled={todos.every((todo) => !todo.completed)}
-                >
-                  Clear completed
-                </button>
-              </footer>
+              <Footer
+                todos={todos}
+                filterTodos={filterTodos}
+                handleFilterTodos={handleFilterTodos}
+                handleDeleteCompleted={handleDeleteCompleted}
+              />
             </>
           )
         }
 
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-          hidden={!isAlertVisible}
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => handleClearAlert()}
-          />
-          {alertText}
-        </div>
+        <ErrorNotification
+          isAlertVisible={isAlertVisible}
+          alertText={alertText}
+          handleClearAlert={handleClearAlert}
+        />
       </div>
     </div>
   );

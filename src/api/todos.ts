@@ -1,23 +1,8 @@
 import { Todo } from '../types/Todo';
-import { TodosFilter } from '../types/TodosFilter_Enum';
 import { client } from '../utils/fetchClient';
 
-function filter(filterValue: TodosFilter) {
-  switch (filterValue) {
-    case TodosFilter.Active:
-      return '&completed=false';
-      break;
-    case TodosFilter.Completed:
-      return '&completed=true';
-      break;
-    default:
-      return '';
-      break;
-  }
-}
-
-export const getTodos = (userId: number, filterValue: TodosFilter) => {
-  const url = `/todos?userId=${userId}${filter(filterValue)}`;
+export const getTodos = (userId: number) => {
+  const url = `/todos?userId=${userId}`;
 
   return client.get<Todo[]>(url);
 };
