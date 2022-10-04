@@ -28,7 +28,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(userId || 0)
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => {
+        setErrorType('get');
+      });
   }, []);
 
   useEffect(() => {

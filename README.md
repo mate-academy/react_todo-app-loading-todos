@@ -39,10 +39,10 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://adrqq.github.io/react_todo-app-loading-todos/) and add it to the PR description.
 
 
-# React Todo App Add and Delete
+<!-- # React Todo App Add and Delete
 
 It is the second part of the React Todo App with API.
 
@@ -88,7 +88,7 @@ Remove all the completed todos after `Clear completed` button click:
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-add-and-delete/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://adrqq.github.io/react_todo-app-add-and-delete/) and add it to the PR description.
 
 # # IF you want to implement smooth animations
 
@@ -232,4 +232,4 @@ Implement the ability to rename a todo title on double click:
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-with-api/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://adrqq.github.io/react_todo-app-with-api/) and add it to the PR description. -->

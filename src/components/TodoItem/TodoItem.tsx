@@ -33,11 +33,15 @@ export const TodoItem: React.FC<Props>
       }
     }, [selectedTodo]);
 
-    const handleDeleteTodo = () => {
+    const handleDeleteTodo = async () => {
       try {
-        deleteTodo(todo.id);
-      } catch (error) {
+        await deleteTodo(todo.id);
+      } catch (errorObject) {
+        // eslint-disable-next-line no-console
+        console.log(errorObject);
         setErrorType('delete');
+
+        return;
       }
 
       setTodos((prevTodos: Todo[]) => {
@@ -47,7 +51,7 @@ export const TodoItem: React.FC<Props>
       });
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent) => {
+    const handleKeyDown = async (event: React.KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsEditing(false);
         setNewTodoTitle(todo.title);
@@ -67,7 +71,7 @@ export const TodoItem: React.FC<Props>
           setIsLoading(true);
 
           try {
-            updateTodo({ ...todo, title: newTodoTitle })
+            await updateTodo({ ...todo, title: newTodoTitle })
               .then(() => {
                 setTodos(todos.map((todoItem: Todo) => {
                   return todoItem.id === todo.id
@@ -80,15 +84,19 @@ export const TodoItem: React.FC<Props>
                 setIsLoading(false);
                 setIsEditing(false);
               });
-          } catch (error) {
-            setErrorType('update');
+          } catch (errorObject) {
+            // eslint-disable-next-line no-console
+            console.log(errorObject);
             setIsLoading(false);
+            setIsEditing(false);
+            setErrorType('update');
+            setNewTodoTitle(todo.title);
           }
         }
       }
     };
 
-    const handleBlur = () => {
+    const handleBlur = async () => {
       if (newTodoTitle === todo.title) {
         setIsEditing(false);
 
@@ -103,7 +111,7 @@ export const TodoItem: React.FC<Props>
         setIsLoading(true);
 
         try {
-          updateTodo({ ...todo, title: newTodoTitle })
+          await updateTodo({ ...todo, title: newTodoTitle })
             .then(() => {
               setTodos(todos.map((todoItem: Todo) => {
                 return todoItem.id === todo.id
@@ -116,24 +124,19 @@ export const TodoItem: React.FC<Props>
               setIsLoading(false);
               setIsEditing(false);
             });
-        } catch (error) {
-          setErrorType('update');
+        } catch (errorObject) {
+          // eslint-disable-next-line no-console
+          console.log(errorObject);
           setIsLoading(false);
+          setIsEditing(false);
+          setErrorType('update');
+          setNewTodoTitle(todo.title);
         }
       }
     };
 
-    const handleCompletedChange = () => {
+    const handleCompletedChange = async () => {
       setIsCompleted(!isCompleted);
-
-      try {
-        updateTodo({
-          ...todo,
-          completed: !isCompleted,
-        });
-      } catch (error) {
-        setErrorType('update');
-      }
 
       setTodos((prevTodos) => {
         const newTodos = [...prevTodos];
@@ -143,6 +146,26 @@ export const TodoItem: React.FC<Props>
 
         return newTodos;
       });
+
+      try {
+        await updateTodo({
+          ...todo,
+          completed: !isCompleted,
+        });
+      } catch (ErrorObject) {
+        // eslint-disable-next-line no-console
+        console.log(ErrorObject);
+        setErrorType('update');
+
+        setTodos((prevTodos) => {
+          const newTodos = [...prevTodos];
+          const todoIndex = newTodos.findIndex((t) => t.id === todo.id);
+
+          newTodos[todoIndex].completed = !todo.completed;
+
+          return newTodos;
+        });
+      }
     };
 
     const handleTodoEdit = (event: React.MouseEvent) => {
