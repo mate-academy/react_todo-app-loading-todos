@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -15,7 +14,6 @@ import { FilterType } from './types/FilterType';
 import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
@@ -44,7 +42,6 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -66,6 +63,7 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
             type="button"
             className="todoapp__toggle-all active"
+            aria-label="close"
           />
 
           <NewTodoForm newTodoField={newTodoField} />
