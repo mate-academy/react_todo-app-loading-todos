@@ -1,16 +1,26 @@
 import React from 'react';
+import classNames from 'classnames';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
+  isActiveTodo: boolean;
 };
 
-export const Header: React.FC<Props> = ({ newTodoField }) => {
+export const Header: React.FC<Props> = ({
+  newTodoField,
+  isActiveTodo,
+}) => {
   return (
     <header className="todoapp__header">
       <button
         data-cy="ToggleAllButton"
         type="button"
-        className="todoapp__toggle-all active"
+        className={classNames(
+          'todoapp__toggle-all',
+          {
+            active: isActiveTodo,
+          },
+        )}
         aria-label="close"
       />
 

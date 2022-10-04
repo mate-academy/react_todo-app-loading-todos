@@ -1,16 +1,25 @@
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 type Props = {
-  error: boolean;
-  handleErrorClose: (boolean: boolean) => void;
   errorMessage: string;
+  setErrorMessage: (string: string) => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
-  error,
-  handleErrorClose,
   errorMessage,
+  setErrorMessage,
 }) => {
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setErrorMessage(''), 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errorMessage, isError]);
+
   return (
     <div
       className={classNames(
@@ -19,7 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-light',
         'has-text-weight-normal',
         {
-          hidden: !error,
+          hidden: isError,
         },
       )}
       data-cy="ErrorNotification"
@@ -28,7 +37,9 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => handleErrorClose(false)}
+        onClick={() => {
+          setIsError(true);
+        }}
         aria-label="close"
       />
       {errorMessage}

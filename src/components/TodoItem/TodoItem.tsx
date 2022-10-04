@@ -7,10 +7,12 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, completed } = todo;
+
   return (
     <div
       className={classNames('todo', {
-        completed: todo.completed,
+        completed,
       })}
       data-cy="Todo"
     >
@@ -18,13 +20,13 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="todo__status"
-          defaultChecked={todo.completed}
+          defaultChecked={completed}
           data-cy="TodoStatus"
         />
       </label>
 
       <span className="todo__title" data-cy="TodoTitle">
-        {todo.title}
+        {title}
       </span>
       <button
         type="button"

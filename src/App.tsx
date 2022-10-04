@@ -1,5 +1,10 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef } from 'react';
+import React,
+{
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -7,25 +12,25 @@ import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/Filter';
 import { getTodos } from './api/todos';
+import { AuthContext } from './components/Auth/AuthContext';
 
 export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = React.useState<Todo[]>([]);
-  const [error, setError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
-  const [fileterType, setFileterType] = React.useState('all');
+  const [fileterType, setFileterType] = React.useState(FilterType.All);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
   }, []);
 
   useEffect(() => {
-    const getTodosFromServer = async () => {
+    const getTodosFromServer = async (userId: number) => {
       try {
-        const receivedTodos = await getTodos(2);
+        const receivedTodos = await getTodos(userId);
 
         setTodos(receivedTodos);
       } catch (errorFromServer) {
@@ -33,44 +38,52 @@ export const App: React.FC = () => {
       }
     };
 
-    getTodosFromServer();
+    if (!user) {
+      return;
+    }
+
+    getTodosFromServer(user.id);
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    switch (fileterType) {
-      case FilterType.All:
-        return todo;
-      case FilterType.Active:
-        return !todo.completed;
-      case FilterType.Completed:
-        return todo.completed;
-      default:
-        return null;
-    }
-  });
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (fileterType) {
+        case FilterType.Active:
+          return !todo.completed;
+        case FilterType.Completed:
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
+  }, [todos, fileterType]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header
+          newTodoField={newTodoField}
+          isActiveTodo={todos.some(todo => !todo.completed)}
+        />
         {todos.length > 0 && (
           <>
             <TodoList todos={filteredTodos} />
             <Footer
               filterType={fileterType}
-              handleFilterType={setFileterType}
               todos={todos}
+              handleFilterType={setFileterType}
             />
           </>
         )}
       </div>
-      <ErrorNotification
-        error={error}
-        handleErrorClose={setError}
-        errorMessage={errorMessage}
-      />
+      {errorMessage && (
+        <ErrorNotification
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
+      )}
     </div>
   );
 };
