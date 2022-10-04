@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer';
-import { NewTodoForm } from './components/NewTodoForm';
+import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Todo } from './types/Todo';
@@ -15,16 +15,16 @@ import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<boolean>(false);
+  const [errorStatus, setErrorStatus] = useState<boolean>(false);
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
   const [errorText] = useState<string>('');
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  if (error) {
+  if (errorStatus) {
     setTimeout(() => {
-      setError(false);
+      setErrorStatus(false);
     }, 3000);
   }
 
@@ -46,11 +46,19 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    if (user) {
-      getTodos(user.id)
-        .then(setTodos)
-        .catch(() => setError(true));
-    }
+    const getTodoData = async () => {
+      try {
+        if (user) {
+          const receivedTodos = await getTodos(user.id);
+
+          setTodos(receivedTodos);
+        }
+      } catch (error) {
+        setErrorStatus(true);
+      }
+    };
+
+    getTodoData();
   }, []);
 
   return (
@@ -58,16 +66,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className="todoapp__toggle-all active"
-            aria-label="close"
-          />
-
-          <NewTodoForm newTodoField={newTodoField} />
-        </header>
+        <Header newTodoField={newTodoField} />
 
         {todos.length > 0 && (
           <>
@@ -82,8 +81,8 @@ export const App: React.FC = () => {
       </div>
 
       <ErrorNotification
-        error={error}
-        setError={setError}
+        error={errorStatus}
+        setError={setErrorStatus}
         errorText={errorText}
       />
     </div>
