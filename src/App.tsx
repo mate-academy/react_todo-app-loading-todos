@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useMemo, useContext,
+  useEffect, useRef, useMemo, useContext, useState,
 } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -8,29 +8,40 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { FilterType } from './types/Filter';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = React.useState<Todo[]>([]);
-  const [error, setError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const [filterType, setFilterType] = React.useState('all');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
 
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+  }, []);
 
-    getTodos(user?.id || 0)
-      .then(setTodos)
-      .catch(() => {
-        setError(true);
-        setErrorMessage('Unable to load todos');
-      });
-  }, [user]);
+  useEffect(() => {
+    const fetchTodos = async (userId: number) => {
+      try {
+        const todosFromServer = await getTodos(userId);
 
-  const filteredTodos = todos.filter(({ completed }) => {
+        setTodos(todosFromServer);
+      } catch (error) {
+        setErrorMessage(`${error}`);
+      }
+    };
+
+    if (!user) {
+      return;
+    }
+
+    fetchTodos(user.id);
+  }, []);
+
+  const filteredTodos = useMemo(() => todos.filter(({ completed }) => {
     switch (filterType) {
       case 'active':
         return !completed;
@@ -41,7 +52,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), [todos, filterType]);
 
   const activeTodosTotal = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
@@ -70,11 +81,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {error && (
+      {errorMessage && (
         <ErrorNotification
-          error={error}
           errorMessage={errorMessage}
-          handleError={setError}
+          handleError={setErrorMessage}
         />
       )}
     </div>
