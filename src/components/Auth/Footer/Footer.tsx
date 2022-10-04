@@ -15,8 +15,9 @@ export const Footer: React.FC<Props> = ({
   filterType,
   todos,
 }) => {
-  const notCompleted = useMemo(() => todos
-    .filter(({ completed }) => !completed), [todos]);
+  const notCompleted = useMemo(() => (
+    todos.filter(({ completed }) => !completed)
+  ), [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
