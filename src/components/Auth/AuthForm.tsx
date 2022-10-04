@@ -33,6 +33,9 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     } catch (error) {
       // Need to login
     }
+
+    // eslint-disable-next-line prefer-template, no-console
+    console.info('user =' + name + email);
   }, []);
 
   const loadUser = async () => {
