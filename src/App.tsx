@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
+  // useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { AuthContext } from './components/Auth/AuthContext';
+// import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
@@ -20,15 +20,15 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
   const [error, setError] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  // const user = useContext(AuthContext);
 
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
+  // useEffect(() => {
+  //   // focus the element with `ref={newTodoField}`
+  //   if (newTodoField.current) {
+  //     newTodoField.current.focus();
+  //   }
+  // }, []);
 
   useEffect(() => {
     getTodos(5)
