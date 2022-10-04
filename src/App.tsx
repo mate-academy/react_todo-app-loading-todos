@@ -12,26 +12,7 @@ import { NewTodoForm } from './components/NewTodoForm';
 import { TodoList } from './components/TodoList';
 import { FilterTypes } from './types/Filter';
 import { Todo } from './types/Todo';
-
-export function getFilteredTodo(
-  todos: Todo[],
-  selectedTab: FilterTypes,
-) {
-  const filterByType = todos.filter((todo) => {
-    switch (selectedTab.id) {
-      case 'active':
-        return !todo.completed;
-
-      case 'completed':
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
-
-  return filterByType;
-}
+import { getFilteredTodo } from './utils/functions';
 
 export const tabs: FilterTypes[] = [
   { id: '', title: 'All' },

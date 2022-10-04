@@ -1,5 +1,7 @@
+import { RefObject } from 'react';
+
 interface Props {
-  newTodoField: any;
+  newTodoField: RefObject<HTMLInputElement>;
 }
 export const NewTodoForm: React.FC<Props> = ({ newTodoField }) => {
   return (

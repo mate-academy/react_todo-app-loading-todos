@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useEffect } from 'react';
 
 interface Props {
   error: string,
@@ -13,7 +14,13 @@ export const ErrorMessage: React.FC<Props> = ({
   hideError,
   setError,
 }) => {
-  setTimeout(() => setError(''), 3000);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setError(''), 3000);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, []);
 
   return (
     <>
