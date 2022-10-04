@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -10,20 +9,20 @@ import classNames from 'classnames';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList/TodoList';
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { ErrorNotification }
+  from './components/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
 import { FilterBy } from './types/FilterBy';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState(false);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
-  const filterTodos = todos.filter(todo => {
+  const filterTodos = useMemo(() => todos.filter(todo => {
     switch (filterBy) {
       case FilterBy.All:
         return todo;
@@ -32,36 +31,30 @@ export const App: React.FC = () => {
       case FilterBy.Completed:
         return todo.completed;
       default:
-        return 0;
+        return true;
     }
-  });
-
-  let userId = 0;
-
-  if (user?.id) {
-    userId = user.id;
-  }
-
-  userId = 5; /* example */
-
-  if (error) {
-    setTimeout(() => {
-      setError(false);
-    }, 3000);
-  }
+  }), [todos]);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
 
-    getTodos(userId)
-      .then(setTodos)
-      .catch(() => setError(true));
+    const loadTodos = async (userId: number) => {
+      try {
+        setTodos(await getTodos(userId));
+      } catch {
+        setError(true);
+      }
+    };
+
+    loadTodos(user?.id || 0);
   }, []);
 
-  const todosCompleted = todos.filter(todo => todo.completed === true);
+  const todosCompleted = useMemo(() => todos
+    .filter(({ completed }) => completed), [todos]);
+  const todosActive = useMemo(() => todos
+    .filter(({ completed }) => !completed), [todos]);
 
   return (
     <div className="todoapp">
@@ -73,6 +66,7 @@ export const App: React.FC = () => {
             <button
               data-cy="ToggleAllButton"
               type="button"
+              aria-label="label"
               className={classNames(
                 'todoapp__toggle-all',
                 {
@@ -97,18 +91,19 @@ export const App: React.FC = () => {
 
         {!!todos.length && (
           <Footer
-            todos={todos}
             filterBy={filterBy}
             setFilterBy={setFilterBy}
+            todosActive={todosActive}
+            todosCompleted={todosCompleted}
           />
         )}
       </div>
 
-      {error && (
-        <ErrorNotification
-          setError={setError}
-        />
-      )}
+      <ErrorNotification
+        setError={setError}
+        error={error}
+      />
+
     </div>
   );
 };
