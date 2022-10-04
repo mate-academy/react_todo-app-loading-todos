@@ -1,29 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 type Props = {
   errorMessage: string,
-  isErrorNotification: boolean,
-  setIsErrorNotification: (errorNotification: boolean) => void,
+  setErrorMessage: (errorMessage: string) => void,
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  isErrorNotification,
-  setIsErrorNotification,
+  setErrorMessage,
 }) => {
-  if (isErrorNotification) {
-    setTimeout(() => {
-      setIsErrorNotification(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage('');
     }, 3000);
-  }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errorMessage]);
 
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !isErrorNotification },
+        { hidden: !errorMessage },
       )}
     >
       <button
@@ -31,7 +33,7 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setIsErrorNotification(false)}
+        onClick={() => setErrorMessage('')}
       />
       {errorMessage}
     </div>

@@ -12,11 +12,11 @@ import { TodoList } from './components/TodoList/TodoList';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { FilterValues } from './types/FilterValues';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isErrorNotification, setIsErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterValue, setFilterValue] = useState('all');
 
@@ -27,26 +27,35 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    getTodos(user?.id || 0)
-      .then(setTodos)
-      .catch(() => {
-        setIsErrorNotification(true);
+    const getTodosAsync = async (userId: number) => {
+      try {
+        const receivedTodos = await getTodos(userId);
+
+        setTodos(receivedTodos);
+      } catch {
         setErrorMessage('Unable to load todos');
-      });
+      }
+    };
+
+    if (user) {
+      getTodosAsync(user.id);
+    }
   }, [user]);
 
-  const filteredTodos = todos.filter(({ completed }) => {
-    switch (filterValue) {
-      case 'active':
-        return !completed;
+  const filteredTodos = useMemo(() => {
+    return todos.filter(({ completed }) => {
+      switch (filterValue) {
+        case FilterValues.ACTIVE:
+          return !completed;
 
-      case 'completed':
-        return completed;
+        case FilterValues.COMPLETED:
+          return completed;
 
-      default:
-        return true;
-    }
-  });
+        default:
+          return true;
+      }
+    });
+  }, [todos, filterValue]);
 
   const activeTodosTotal = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
@@ -73,11 +82,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {isErrorNotification && (
+      {errorMessage && (
         <ErrorNotification
           errorMessage={errorMessage}
-          isErrorNotification={isErrorNotification}
-          setIsErrorNotification={setIsErrorNotification}
+          setErrorMessage={setErrorMessage}
         />
       )}
     </div>
