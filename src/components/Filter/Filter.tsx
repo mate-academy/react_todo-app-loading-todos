@@ -7,6 +7,24 @@ type Props = {
 };
 
 export const Filter: React.FC<Props> = ({ filterStatus, onFilter }) => {
+  const handleFilter = (newFilterStatus: FilterStatus) => {
+    if (filterStatus !== newFilterStatus) {
+      onFilter(newFilterStatus);
+    }
+  };
+
+  const handleFilterAll = () => {
+    handleFilter('all');
+  };
+
+  const handleFilterActive = () => {
+    handleFilter('active');
+  };
+
+  const handleFilterCompleted = () => {
+    handleFilter('completed');
+  };
+
   return (
     <nav className="filter" data-cy="Filter">
       <a
@@ -16,7 +34,7 @@ export const Filter: React.FC<Props> = ({ filterStatus, onFilter }) => {
           'filter__link',
           { selected: filterStatus === 'all' },
         )}
-        onClick={() => onFilter('all')}
+        onClick={handleFilterAll}
       >
         All
       </a>
@@ -28,7 +46,7 @@ export const Filter: React.FC<Props> = ({ filterStatus, onFilter }) => {
           'filter__link',
           { selected: filterStatus === 'active' },
         )}
-        onClick={() => onFilter('active')}
+        onClick={handleFilterActive}
       >
         Active
       </a>
@@ -39,7 +57,7 @@ export const Filter: React.FC<Props> = ({ filterStatus, onFilter }) => {
           'filter__link',
           { selected: filterStatus === 'completed' },
         )}
-        onClick={() => onFilter('completed')}
+        onClick={handleFilterCompleted}
       >
         Completed
       </a>

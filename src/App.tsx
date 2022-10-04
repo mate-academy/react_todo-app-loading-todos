@@ -15,10 +15,6 @@ import { TodoList } from './components/TodoList';
 import { FilterStatus } from './types/Filter';
 import { Todo } from './types/Todo';
 
-const getTodoById = (todos: Todo[], todoId: number) => {
-  return todos.find(({ id }) => id === todoId) || null;
-};
-
 const filterTodos = (todos: Todo[], filterStatus: FilterStatus) => {
   switch (filterStatus) {
     case 'all': return todos;
@@ -35,35 +31,15 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [haveError, setHaveError] = useState(false);
+  const [error, setError] = useState('');
 
   const activeTodosCount = useMemo(
     () => filterTodos(todos, 'active').length,
     [todos],
   );
 
-  const handleStatusChange = (todoId: number) => {
-    const copyTodos = [...visibleTodos];
-    const changedTodo = getTodoById(copyTodos, todoId);
-
-    if (changedTodo) {
-      changedTodo.completed = !changedTodo.completed;
-      setVisibleTodos(copyTodos);
-    }
-  };
-
   const handleCloseError = () => {
-    setHaveError(false);
-  };
-
-  const handleDeleteTodo = (todoId: number) => {
-    const copyTodos = [...visibleTodos];
-    const todoIndex = copyTodos.findIndex(todo => todo.id === todoId);
-
-    if (todoIndex !== -1) {
-      copyTodos.splice(todoIndex, 1);
-      setVisibleTodos(copyTodos);
-    }
+    setError('');
   };
 
   useEffect(() => {
@@ -72,10 +48,10 @@ export const App: React.FC = () => {
         .then(todosFromServer => {
           setTodos(todosFromServer);
         })
-        .catch(() => setHaveError(true));
+        .catch(() => setError('Unable to GET todos from server'));
     }
 
-    setTimeout(() => setHaveError(false), 3000);
+    setTimeout(() => setError(''), 3000);
   }, []);
 
   useEffect(() => {
@@ -83,7 +59,6 @@ export const App: React.FC = () => {
   }, [todos, filterStatus]);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -117,8 +92,6 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
             todos={visibleTodos}
-            onStatusChange={handleStatusChange}
-            onDeleteTodo={handleDeleteTodo}
           />
         </section>
 
@@ -148,7 +121,7 @@ export const App: React.FC = () => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: !haveError },
+          { hidden: !error },
         )}
       >
         <button
@@ -158,11 +131,7 @@ export const App: React.FC = () => {
           onClick={handleCloseError}
         />
 
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {error}
       </div>
     </div>
   );
