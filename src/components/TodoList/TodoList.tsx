@@ -3,8 +3,6 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectTodo: (id: number) => void;
-  selectedTodoId: number;
 };
 
 export const TodoList: React.FC<Props> = ({
