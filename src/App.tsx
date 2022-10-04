@@ -41,18 +41,20 @@ export const App: React.FC = () => {
     fetchTodos(user.id);
   }, []);
 
-  const filteredTodos = useMemo(() => todos.filter(({ completed }) => {
-    switch (filterType) {
-      case 'active':
-        return !completed;
+  const filteredTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      switch (filterType) {
+        case FilterType.Active:
+          return !todo.completed;
 
-      case 'completed':
-        return completed;
+        case FilterType.Completed:
+          return todo.completed;
 
-      default:
-        return true;
-    }
-  }), [todos, filterType]);
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filterType]);
 
   const activeTodosTotal = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
