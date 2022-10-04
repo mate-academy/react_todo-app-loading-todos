@@ -5,20 +5,27 @@ import { Todo } from '../../types/Todo';
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
   todos: Todo[];
+  leftTodosLength: number;
 };
 
-export const Header: React.FC<Props> = ({ newTodoField, todos }) => {
+export const Header: React.FC<Props> = ({
+  newTodoField,
+  todos,
+  leftTodosLength,
+}) => {
   return (
     <header className="todoapp__header">
-      <button
-        aria-label="toggle-all-button"
-        data-cy="ToggleAllButton"
-        type="button"
-        className={classNames(
-          'todoapp__toggle-all',
-          { active: todos.length !== 0 },
-        )}
-      />
+      {!!todos.length && (
+        <button
+          aria-label="toggle-all-button"
+          data-cy="ToggleAllButton"
+          type="button"
+          className={classNames(
+            'todoapp__toggle-all',
+            { active: leftTodosLength === 0 },
+          )}
+        />
+      )}
 
       <form>
         <input

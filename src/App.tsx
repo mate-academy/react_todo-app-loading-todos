@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
-  useEffect, useRef,
+  useEffect, useMemo, useRef,
   useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -60,17 +60,33 @@ export const App: React.FC = () => {
     );
   };
 
+  const completedTodos = useMemo(() => (
+    todos.filter(({ completed }) => completed)
+  ), [todos]);
+
+  const leftTodos = useMemo(() => (
+    todos.filter(({ completed }) => !completed)
+  ), [todos]);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} todos={todos} />
+        <Header
+          newTodoField={newTodoField}
+          todos={todos}
+          leftTodosLength={leftTodos.length}
+        />
 
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
-            <Footer filterTodos={filterTodos} visibleTodos={visibleTodos} />
+            <Footer
+              filterTodos={filterTodos}
+              completedTodosLength={completedTodos.length}
+              leftTodosLength={leftTodos.length}
+            />
           </>
         )}
       </div>

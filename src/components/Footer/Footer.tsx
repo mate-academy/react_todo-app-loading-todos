@@ -1,14 +1,18 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { GroupBy } from '../../types/GroupBy';
-import { Todo } from '../../types/Todo';
 
 type Props = {
   filterTodos: (groupBy: string) => void;
-  visibleTodos: Todo[];
+  completedTodosLength: number;
+  leftTodosLength: number;
 };
 
-export const Footer: React.FC<Props> = ({ filterTodos, visibleTodos }) => {
+export const Footer: React.FC<Props> = ({
+  filterTodos,
+  completedTodosLength,
+  leftTodosLength,
+}) => {
   const [groupBy, setGroupBy] = useState('All');
 
   useEffect(() => {
@@ -22,7 +26,7 @@ export const Footer: React.FC<Props> = ({ filterTodos, visibleTodos }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${visibleTodos.length} items left`}
+        {`${leftTodosLength} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -62,13 +66,16 @@ export const Footer: React.FC<Props> = ({ filterTodos, visibleTodos }) => {
         </a>
       </nav>
 
-      <button
-        data-cy="ClearCompletedButton"
-        type="button"
-        className="todoapp__clear-completed"
-      >
-        Clear completed
-      </button>
+      {completedTodosLength ? (
+        <button
+          data-cy="ClearCompletedButton"
+          type="button"
+          className="todoapp__clear-completed"
+        >
+          Clear completed
+        </button>
+      ) : ''}
+
     </footer>
   );
 };
