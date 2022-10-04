@@ -6,21 +6,21 @@ import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components_Todo/ErrorNotification';
 import { NewTodo } from './components_Todo/NewTodo';
-import { TodoFillter } from './components_Todo/TodoAppFooter';
+import { TodoFilter } from './components_Todo/TodoFilter';
 import { TodoList } from './components_Todo/TodoList';
+import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [statusPatch, setStatusPatch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [hasLoadError, setHasLoadError] = useState(false);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
       setHasLoadError(false);
@@ -38,10 +38,10 @@ export const App: React.FC = () => {
   const filterTodos = todos
     ? todos.filter(todo => {
       switch (statusFilter) {
-        case 'completed':
+        case FilterStatus.Completed:
 
           return todo.completed;
-        case 'active':
+        case FilterStatus.Active:
 
           return !todo.completed;
 
@@ -62,15 +62,19 @@ export const App: React.FC = () => {
           statusPatch={statusPatch}
           setStatusPatch={setStatusPatch}
         />
-        <TodoFillter
-          todos={todos}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-        />
-        <ErrorNotification
-          hasLoadError={hasLoadError}
-          setHasLoadError={setHasLoadError}
-        />
+        {todos.length !== 0 && (
+          <TodoFilter
+            todos={todos}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+          />
+        )}
+        {hasLoadError && (
+          <ErrorNotification
+            hasLoadError={hasLoadError}
+            setHasLoadError={setHasLoadError}
+          />
+        )}
       </div>
     </div>
   );
