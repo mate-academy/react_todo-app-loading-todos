@@ -82,18 +82,18 @@ export const App: React.FC = () => {
           </form>
         </header>
         <TodoList todos={visibleTodos} />
-        <Footer
-          filter={filter}
-          changeFilter={setFilter}
-          todos={todos}
-        />
+        {todos.length > 0 && (
+          <Footer filter={filter} changeFilter={setFilter} todos={todos} />
+        )}
       </div>
-      <ErrorMessage
-        error={error}
-        handleError={setError}
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      {error && (
+        <ErrorMessage
+          error={error}
+          handleError={setError}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
+      )}
     </div>
   );
 };
