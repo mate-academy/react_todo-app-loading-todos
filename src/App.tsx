@@ -17,7 +17,6 @@ import { ErrorNotification } from './components/ErrorNotification/ErrorNotificat
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  console.log(user);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
