@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
-import { FilterType } from '../types/FilterType';
+import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   todos: Todo[];
