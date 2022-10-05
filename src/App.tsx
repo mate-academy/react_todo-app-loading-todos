@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext,
+  useEffect, useRef, useState,
 } from 'react';
 import classNames from 'classnames';
-import { AuthContext } from './components/Auth/AuthContext';
+// import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/Auth/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from './components/Auth/ErrorNotification';
 import { SortType } from './types/filterBy';
+import { AuthContext } from './components/Auth/AuthContext';
 
 function filterTodos(
   todos: Todo[],
@@ -37,8 +39,14 @@ export const App: React.FC = () => {
   const [selectedLink, setSelectedLink] = useState<string>('All');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  let userId = 0;
+
+  if (user?.id) {
+    userId = user.id;
+  }
+
   useEffect(() => {
-    getTodos(5)
+    getTodos(userId)
       .then(todosFromServer => setTodos(todosFromServer))
       .catch(() => setErrorMessage('Unable to update todos'));
   }, []);
