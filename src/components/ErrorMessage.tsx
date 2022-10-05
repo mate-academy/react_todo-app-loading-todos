@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   errorMessage: string,
@@ -13,6 +13,14 @@ export const ErrorMessage: React.FC<Props> = ({
   if (errorMessage) {
     setTimeout(() => setHiddenError(true), 3000);
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => setHiddenError(true), 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div
