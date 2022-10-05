@@ -1,6 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList/TodoList';
@@ -17,25 +21,29 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState(false);
-  const [errorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  if (error) {
-    setTimeout(() => {
-      setError(false);
-    }, 3000);
-  }
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
 
-  const userId = 2;
+    const getTodosAsync = async (userId: number) => {
+      try {
+        const todosFromServer = await getTodos(userId);
 
-  if (!user) {
-    // userId = user.id;
-  }
+        setTodos(todosFromServer);
+      } catch {
+        setErrorMessage('Unable to load todos');
+      }
+    };
 
-  getTodos(userId)
-    .then(setTodos)
-    .catch(() => setError(false));
+    if (user) {
+      getTodosAsync(user.id);
+    }
+  }, []);
 
-  const visibleTodos = todos.filter((todo) => {
+  const visibleTodos = useMemo(() => todos.filter((todo) => {
     switch (filter) {
       case Filter.All:
         return todo;
@@ -49,14 +57,7 @@ export const App: React.FC = () => {
       default:
         return 0;
     }
-  });
-
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
+  }), [todos, filter]);
 
   return (
     <div className="todoapp">
@@ -91,6 +92,7 @@ export const App: React.FC = () => {
         error={error}
         handleError={setError}
         errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
     </div>
   );
