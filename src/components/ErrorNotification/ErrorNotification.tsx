@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
   setError: (err: boolean) => void;
@@ -6,11 +6,15 @@ type Props = {
 };
 
 export const ErrorNotification: React.FC<Props> = ({ setError, error }) => {
-  if (error) {
-    setTimeout(() => {
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
       setError(false);
     }, 3000);
-  }
+
+    const clear = (() => clearTimeout(timeOut));
+
+    return clear;
+  });
 
   return (
     <div

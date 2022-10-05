@@ -33,7 +33,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  }), [todos]);
+  }), [todos, filterBy]);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -51,10 +51,14 @@ export const App: React.FC = () => {
     loadTodos(user?.id || 0);
   }, []);
 
-  const todosCompleted = useMemo(() => todos
-    .filter(({ completed }) => completed), [todos]);
-  const todosActive = useMemo(() => todos
-    .filter(({ completed }) => !completed), [todos]);
+  const todosCompleted = useMemo(
+    () => filterTodos.filter(({ completed }) => completed),
+    [todos],
+  );
+  const todosActive = useMemo(
+    () => filterTodos.filter(({ completed }) => !completed),
+    [todos],
+  );
 
   return (
     <div className="todoapp">
@@ -62,7 +66,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {!!todos.length && (
+          {!!filterTodos.length && (
             <button
               data-cy="ToggleAllButton"
               type="button"
@@ -99,11 +103,14 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification
-        setError={setError}
-        error={error}
-      />
-
+      {
+        error && (
+          <ErrorNotification
+            setError={setError}
+            error={error}
+          />
+        )
+      }
     </div>
   );
 };
