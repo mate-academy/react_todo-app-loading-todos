@@ -138,14 +138,18 @@ export const TodoItem: React.FC<Props>
     const handleCompletedChange = async () => {
       setIsCompleted(!isCompleted);
 
-      setTodos((prevTodos) => {
-        const newTodos = [...prevTodos];
-        const todoIndex = newTodos.findIndex((t) => t.id === todo.id);
+      const completedStateSetter = () => {
+        setTodos((prevTodos) => {
+          const newTodos = [...prevTodos];
+          const todoIndex = newTodos.findIndex((t) => t.id === todo.id);
 
-        newTodos[todoIndex].completed = !todo.completed;
+          newTodos[todoIndex].completed = !todo.completed;
 
-        return newTodos;
-      });
+          return newTodos;
+        });
+      };
+
+      completedStateSetter();
 
       try {
         await updateTodo({
@@ -157,14 +161,7 @@ export const TodoItem: React.FC<Props>
         console.log(ErrorObject);
         setErrorType('update');
 
-        setTodos((prevTodos) => {
-          const newTodos = [...prevTodos];
-          const todoIndex = newTodos.findIndex((t) => t.id === todo.id);
-
-          newTodos[todoIndex].completed = !todo.completed;
-
-          return newTodos;
-        });
+        completedStateSetter();
       }
     };
 
