@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   sortBy: string;
   setSortBy: (object: string) => void;
-  todos: Todo[] | undefined;
+  todos: Todo[] | null;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -18,10 +18,6 @@ export const Footer: React.FC<Props> = ({
 
   const filterByParam = (param: string) => {
     return sortBy === param;
-  };
-
-  const handleTodoClear = () => {
-    setSortBy('');
   };
 
   return (
@@ -66,7 +62,6 @@ export const Footer: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={handleTodoClear}
       >
         Clear completed
       </button>

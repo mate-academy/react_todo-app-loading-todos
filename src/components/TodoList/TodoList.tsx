@@ -9,14 +9,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
 
-      {todos.map((todo) => (
+      {todos.map(({ id, title, completed }) => (
         <div
           data-cy="Todo"
           className={classNames(
             'todo',
-            { completed: todo.completed },
+            { completed },
           )}
-          key={todo.id}
+          key={id}
         >
           <label className="todo__status-label">
             <input
@@ -28,7 +28,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           </label>
 
           <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
+            {title}
           </span>
           <button
             type="button"

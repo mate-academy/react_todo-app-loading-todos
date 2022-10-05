@@ -38,9 +38,7 @@ export const Error: React.FC<Props> = ({
         className="delete"
         aria-label="a problem"
         onClick={handleError}
-
       />
-
       {errorAlert}
     </div>
   );

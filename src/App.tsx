@@ -15,7 +15,6 @@ import { Footer } from './components/Footer/Footer';
 import { Error } from './components/Errors/ErrorMessage';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -24,7 +23,6 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState('all');
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -33,9 +31,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     async function todosFromServer() {
       try {
-        const visibleTodos = getTodos(5);
+        if (user) {
+          const visibleTodos = getTodos(user.id);
 
-        setTodos(await visibleTodos);
+          setTodos(await visibleTodos);
+        }
       } catch (error) {
         setErrorMessage(`${error} ${user}`);
       }
@@ -61,8 +61,7 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      {
-        todos
+      {todos
         && (
           <div className="todoapp__content">
             <Header newTodoField={newTodoField} />
@@ -75,8 +74,7 @@ export const App: React.FC = () => {
               setSortBy={setSortBy}
             />
           </div>
-        )
-      }
+        )}
 
       {
         errorMessage
