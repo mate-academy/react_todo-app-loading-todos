@@ -22,12 +22,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
-
-  useEffect(() => {
     const getTodosFromServer = async (userId: number) => {
       try {
         const receivedTodos = await getTodos(userId);
@@ -58,6 +52,10 @@ export const App: React.FC = () => {
     });
   }, [todos, fileterType]);
 
+  const hasIsActiveTodos = useMemo(() => {
+    return todos.some(todo => !todo.completed);
+  }, [todos]);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -65,7 +63,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodoField={newTodoField}
-          isActiveTodo={todos.some(todo => !todo.completed)}
+          hasIsActiveTodos={hasIsActiveTodos}
         />
         {todos.length > 0 && (
           <>

@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
-  isActiveTodo: boolean;
+  hasIsActiveTodos: boolean;
 };
 
 export const Header: React.FC<Props> = ({
   newTodoField,
-  isActiveTodo,
+  hasIsActiveTodos,
 }) => {
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button
@@ -18,7 +24,7 @@ export const Header: React.FC<Props> = ({
         className={classNames(
           'todoapp__toggle-all',
           {
-            active: isActiveTodo,
+            active: hasIsActiveTodos,
           },
         )}
         aria-label="close"
