@@ -80,6 +80,7 @@ export const App: React.FC = () => {
           setLoading={setLoading}
           setisAdding={setisAdding}
           sortType={sortType}
+          setSortType={setSortType}
         />
         <TodoList
           todos={filtredTodos}
