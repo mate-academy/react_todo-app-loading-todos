@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { Errors } from './components/Errors';
+// import { Errors } from './components/Errors';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -77,8 +77,8 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {newTodoField === null
-      && <Errors />}
+      {/* {newTodoField === null
+      && <Errors />} */}
 
     </div>
   );
