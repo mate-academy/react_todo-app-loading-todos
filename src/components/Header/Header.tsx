@@ -23,12 +23,22 @@ export const Header: React.FC<Props>
 
     const setAllCompleted = () => {
       setErrorType('');
-      setTodos(todos.map((todo: Todo) => {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      }));
+
+      if (todos.every((todo) => todo.completed)) {
+        setTodos(todos.map((todo) => {
+          return {
+            ...todo,
+            completed: false,
+          };
+        }));
+      } else {
+        setTodos(todos.map((todo: Todo) => {
+          return {
+            ...todo,
+            completed: true,
+          };
+        }));
+      }
     };
 
     const handleNewTodoTitleChange
@@ -39,7 +49,7 @@ export const Header: React.FC<Props>
     const handleNewTodoTitleSubmit = (event: React.FormEvent) => {
       event.preventDefault();
 
-      if (newTodoTitle === '') {
+      if (newTodoTitle.trim() === '') {
         setErrorType('empty');
       } else {
         try {

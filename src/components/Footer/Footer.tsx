@@ -28,6 +28,12 @@ export const Footer: React.FC<Props> = ({
     setTodos(newTodos);
   };
 
+  const calculateActiveTodos = () => {
+    const activeTodos = todos.filter((todo) => !todo.completed);
+
+    return activeTodos.length;
+  };
+
   const handleFilterType = (typeOfFilter: string) => {
     setFilterType(typeOfFilter);
   };
@@ -35,7 +41,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} ${todos.length === 1 ? 'item' : 'items'} left`}
+        {`${calculateActiveTodos()} ${calculateActiveTodos() === 1 ? 'item' : 'items'} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -75,16 +81,14 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {todos.some(todo => todo.completed) && (
-        <button
-          data-cy="ClearCompletedButton"
-          type="button"
-          className="todoapp__clear-completed"
-          onClick={handleClearCompleted}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        data-cy="ClearCompletedButton"
+        type="button"
+        className="todoapp__clear-completed"
+        onClick={handleClearCompleted}
+      >
+        {todos.some(todo => todo.completed) && 'Clear completed'}
+      </button>
     </footer>
   );
 };
