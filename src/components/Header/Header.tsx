@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>;
   hasIsActiveTodos: boolean;
 };
 
 export const Header: React.FC<Props> = ({
-  newTodoField,
   hasIsActiveTodos,
 }) => {
+  const newTodoField = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();

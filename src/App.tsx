@@ -3,7 +3,6 @@ import React,
   useContext,
   useEffect,
   useMemo,
-  useRef,
 } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList';
@@ -15,7 +14,6 @@ import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 
 export const App: React.FC = () => {
-  const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [fileterType, setFileterType] = React.useState(FilterType.All);
@@ -62,7 +60,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          newTodoField={newTodoField}
           hasIsActiveTodos={hasIsActiveTodos}
         />
         {todos.length > 0 && (
