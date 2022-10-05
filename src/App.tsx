@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFiterBy] = useState('all');
 
-  const user = useContext(AuthContext); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -32,9 +32,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     async function todosFromServer() {
       try {
-        const visibleTodos = getTodos(5);
+        if (user) {
+          const visibleTodos = getTodos(user.id);
 
-        setTodos(await visibleTodos);
+          setTodos(await visibleTodos);
+        }
       } catch (error) {
         setErrorMessage(`${error} ${user}`);
       }
