@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { addTodo } from '../../api/todos';
 import { Props } from './HeaderPropTypes';
 
@@ -14,28 +14,30 @@ export const Header : React.FC<Props> = ({
 }) => {
   const [title, setTitle] = useState('');
 
-  const onHandlerSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const onHandlerSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault();
 
-    setIsLoading(true);
-    if (!title.trim()) {
-      setErrorMessage('title not able to be empty');
-      setIsLoading(false);
+      setIsLoading(true);
+      if (!title.trim()) {
+        setErrorMessage('title not able to be empty');
+        setIsLoading(false);
 
-      return;
-    }
+        return;
+      }
 
-    setTitle('');
-    try {
-      const newTodo = await addTodo(userId, title);
+      setTitle('');
+      try {
+        const newTodo = await addTodo(userId, title);
 
-      addInVisibleTodos(newTodo);
-    } catch {
-      setErrorMessage('add a todo');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        addInVisibleTodos(newTodo);
+      } catch {
+        setErrorMessage('add a todo');
+      } finally {
+        setIsLoading(false);
+      }
+    }, [title],
+  );
 
   return (
     <header className="todoapp__header">

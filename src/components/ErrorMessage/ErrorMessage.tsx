@@ -1,7 +1,12 @@
 import React from 'react';
 import { Props } from './ErrorMessagePropTypes';
 
-export const ErrorMasage : React.FC<Props> = ({ errorType, setErrorType }) => {
+export const ErrorMasage : React.FC<Props> = ({
+  errorType,
+  setErrorMessage,
+}) => {
+  setTimeout(() => setErrorMessage(''), 3000);
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -12,7 +17,7 @@ export const ErrorMasage : React.FC<Props> = ({ errorType, setErrorType }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onChange={() => setErrorType('')}
+        onClick={() => setErrorMessage('')}
       />
       {`Unable to ${errorType}`}
       <br />

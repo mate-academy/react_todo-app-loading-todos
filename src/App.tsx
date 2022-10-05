@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -12,9 +12,9 @@ import { Header } from './components/Header/Header';
 import { deleteTodo, getTodos, updatingTodo } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorMasage } from './components/ErrorMessage/ErrorMessage';
+import { Loader } from './components/Loader/Loader';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -25,19 +25,21 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState('All');
   const [isAllSelected, setIsAllSelected] = useState(false);
 
-  const uploadTodos = async () => {
-    setIsLoading(true);
-    try {
-      const data = await getTodos(user?.id);
+  const uploadTodos = useCallback(
+    async () => {
+      setIsLoading(true);
+      try {
+        const data = await getTodos(user?.id);
 
-      setTodos(data);
-      setVisibleTodos(data);
-    } catch (err) {
-      setErrorMessage('upload a todo');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        setTodos(data);
+        setVisibleTodos(data);
+      } catch (err) {
+        setErrorMessage('upload a todo');
+      } finally {
+        setIsLoading(false);
+      }
+    }, [user],
+  );
 
   const selectAllTodos = () => {
     const isAllSelectedNow = visibleTodos.every(todo => todo.completed);
@@ -97,10 +99,14 @@ export const App: React.FC = () => {
 
   const toggleStatus = (todoId: number, comleted: boolean) => {
     const index = visibleTodos.findIndex(todo => todo.id === todoId);
-    const todosCopy = [...visibleTodos];
 
-    todosCopy[index].completed = !comleted;
-    setVisibleTodos(todosCopy);
+    setVisibleTodos((prevVisibleTodos) => {
+      const todosCopy = [...prevVisibleTodos];
+
+      todosCopy[index].completed = !comleted;
+
+      return todosCopy;
+    });
   };
 
   const deleteInVisibleTodos = (id: number) => {
@@ -148,10 +154,7 @@ export const App: React.FC = () => {
 
         {isLoading
           ? (
-            <>
-              <div data-cy="TodoLoader" className="modal" />
-              <div className="loader" />
-            </>
+            <Loader />
           )
           : (
             <TodoList
@@ -174,7 +177,7 @@ export const App: React.FC = () => {
       && (
         <ErrorMasage
           errorType={errorMessage}
-          setErrorType={setErrorMessage}
+          setErrorMessage={setErrorMessage}
         />
       )}
     </div>

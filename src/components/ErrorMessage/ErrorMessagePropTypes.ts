@@ -1,4 +1,4 @@
 export type Props = {
   errorType: string | null,
-  setErrorType: (parm: string) => void;
+  setErrorMessage: (parm: string) => void;
 };
