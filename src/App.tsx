@@ -1,28 +1,26 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useState,
+  useContext, useEffect,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AddTodo } from './components/Auth/AddTodo/AddTodo';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorWindow } from './components/Auth/ErrorWindow/ErrorWindow';
-// eslint-disable-next-line
-import { FilterComponent } from './components/Auth/FilterComponent/FilterComponent';
+import {
+  FilterComponent,
+} from './components/Auth/FilterComponent/FilterComponent';
 import { TodoList } from './components/Auth/TodoList/TodoList';
 import { TodoContext } from './context/TodoContext';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const {
     setFiltredTodos,
-    filterState,
-    handleFilter,
     todos,
     setTodos,
+    loadError,
+    setLoadError,
+    setErrorMessage,
   } = useContext(TodoContext);
-
-  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -35,7 +33,7 @@ export const App: React.FC = () => {
         }
       } catch (_) {
         setLoadError(true);
-        setTimeout(() => setLoadError(false), 3000);
+        setErrorMessage('Unable to load todos from server');
       }
     };
 
@@ -47,20 +45,19 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <AddTodo />
+        <AddTodo
+          userId={user?.id}
+        />
 
         <TodoList />
 
         {todos.length > 0 && (
-          <FilterComponent
-            todos={todos}
-            filterState={filterState}
-            handleFilter={handleFilter}
-          />
+          <FilterComponent />
         )}
       </div>
-
-      <ErrorWindow loadError={loadError} setLoadError={setLoadError} />
+      {loadError && (
+        <ErrorWindow />
+      )}
 
     </div>
   );
