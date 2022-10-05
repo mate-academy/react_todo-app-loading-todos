@@ -38,6 +38,7 @@ export const App: React.FC = () => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
+      setErrorType('');
     }
   }, [todos]);
 

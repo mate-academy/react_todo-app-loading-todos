@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 type Props = {
   errorType: string;
@@ -6,14 +6,25 @@ type Props = {
 };
 
 export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
+  const [wait, setWait] = useState(false);
+
   const handleHideError = () => {
     setErrorType('');
   };
 
+  useEffect(() => {
+    if (errorType) {
+      setWait(true);
+      setTimeout(() => {
+        setWait(false);
+      }, 3000);
+    }
+  }, [errorType]);
+
   return (
     <>
 
-      {errorType === 'empty' && (
+      {(errorType === 'empty') && wait && (
         <>
           <div
             data-cy="ErrorNotification"
@@ -32,7 +43,7 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
           </div>
         </>
       )}
-      {errorType === 'delete' && (
+      {(errorType === 'delete') && wait && (
         <>
           <div
             data-cy="ErrorNotification"
@@ -52,7 +63,7 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
         </>
       )}
 
-      {errorType === 'add' && (
+      {(errorType === 'add') && wait && (
         <>
           <div
             data-cy="ErrorNotification"
@@ -72,7 +83,7 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
         </>
       )}
 
-      {errorType === 'update' && (
+      {(errorType === 'update') && wait && (
         <>
           <div
             data-cy="ErrorNotification"
@@ -92,7 +103,7 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
         </>
       )}
 
-      {errorType === 'get' && (
+      {(errorType === 'get') && wait && (
         <>
           <div
             data-cy="ErrorNotification"

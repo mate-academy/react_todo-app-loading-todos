@@ -22,6 +22,7 @@ export const Header: React.FC<Props>
     const [newTodoTitle, setNewTodoTitle] = useState('');
 
     const setAllCompleted = () => {
+      setErrorType('');
       setTodos(todos.map((todo: Todo) => {
         return {
           ...todo,
