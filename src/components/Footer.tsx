@@ -22,7 +22,6 @@ export const Footer: React.FC<Props> = ({
 
       <nav className="filter" data-cy="Filter">
         <a
-          // key={}
           data-cy="FilterLinkAll"
           href="#/"
           className={classnames(

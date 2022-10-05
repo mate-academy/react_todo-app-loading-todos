@@ -54,8 +54,6 @@ export const TodoList: React.FC<Props> = ({ todos, isLoading }) => {
           </>
         );
       })}
-      ;
-
     </section>
   );
 };
