@@ -57,8 +57,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {Boolean(userTodos.length)
-        && (
+        {Boolean(userTodos.length) && (
           <Footer
             sortType={sortType}
             onSortType={setSortType}
