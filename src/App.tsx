@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -13,13 +12,14 @@ import { Filter } from './types/Filter';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { Error } from './types/Error';
+import { Header } from './components/Header/Header';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(Filter.All);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -34,7 +34,7 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(Error.Loading);
       }
     };
 
@@ -64,23 +64,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className="todoapp__toggle-all active"
-          />
-
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <Header />
         <TodoList todos={visibleTodos} />
         {todos.length > 0 && (
           <Footer filter={filter} changeFilter={setFilter} todos={todos} />

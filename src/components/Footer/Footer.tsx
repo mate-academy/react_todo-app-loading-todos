@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   filter: string;
-  changeFilter: (string: string) => void;
+  changeFilter: (string: Filter) => void;
   todos: Todo[];
 };
 
@@ -14,8 +14,8 @@ export const Footer: React.FC<Props> = ({
   changeFilter,
   todos,
 }) => {
-  // eslint-disable-next-line max-len
-  const countTodos = useMemo(() => todos.filter((todo) => !todo.completed).length, [todos]);
+  const countTodos = useMemo(() => todos
+    .filter((todo) => !todo.completed).length, [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
