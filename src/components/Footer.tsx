@@ -4,19 +4,19 @@ import { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  filteredTodos: Todo[];
   filterBy: string;
   setFilterBy: (value: FilterType) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  todos,
+  filteredTodos,
   filterBy,
   setFilterBy,
 }) => {
   const activeTodos = useMemo(() => (
-    todos.filter(todo => !todo.completed)
-  ), [todos]);
+    filteredTodos.filter(todo => !todo.completed)
+  ), [filteredTodos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

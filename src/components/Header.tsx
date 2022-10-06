@@ -1,9 +1,14 @@
-interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  newTodoField: any;
-}
+import { useEffect, useRef } from 'react';
 
-export const Header: React.FC<Props> = ({ newTodoField }) => {
+export const Header = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button

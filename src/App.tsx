@@ -1,7 +1,7 @@
 import React, {
   useContext,
   useEffect,
-  useRef,
+  useMemo,
   useState,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -20,32 +20,23 @@ export const App: React.FC = () => {
   const [errorText] = useState<string>('');
 
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
-  if (errorStatus) {
-    setTimeout(() => {
-      setErrorStatus(false);
-    }, 3000);
-  }
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterBy) {
+        case FilterType.ACTIVE:
+          return !todo.completed;
 
-  const filteredTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterType.ACTIVE:
-        return !todo.completed;
+        case FilterType.COMPLETED:
+          return todo.completed;
 
-      case FilterType.COMPLETED:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filterBy]);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     const getTodoData = async () => {
       try {
         if (user) {
@@ -66,13 +57,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header />
 
         {todos.length > 0 && (
           <>
             <TodoList todos={filteredTodos} />
             <Footer
-              todos={filteredTodos}
+              filteredTodos={filteredTodos}
               filterBy={filterBy}
               setFilterBy={setFilterBy}
             />
