@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FilterStatus } from '../../types/Filter';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
   filterStatus: FilterStatus
