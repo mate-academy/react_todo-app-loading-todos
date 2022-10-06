@@ -80,16 +80,14 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
+        <TodosList todos={filteredTodos} />
 
         {TodosList.length > 0 && (
-          <>
-            <TodosList todos={filteredTodos} />
-            <Footer
-              todos={todos}
-              filterType={filterStatus}
-              handleFilterStatus={setFilterStatus}
-            />
-          </>
+          <Footer
+            todos={todos}
+            filterType={filterStatus}
+            handleFilterStatus={setFilterStatus}
+          />
         )}
       </div>
 
