@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
   error: string;
@@ -8,11 +8,13 @@ type Props = {
 };
 
 export const ErrorNotification: React.FC<Props> = ({ setError, error }) => {
-  if (error) {
-    setTimeout(() => {
-      setError('');
-    }, 3000);
-  }
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+    }
+  }, [error]);
 
   return (
     <div

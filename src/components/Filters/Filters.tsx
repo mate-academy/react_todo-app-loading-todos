@@ -10,7 +10,7 @@ type Props = {
   filterType: FilterStatus,
 };
 
-export const Footer: React.FC<Props> = ({ todos, setFilterType, filterType }) => {
+export const Filters: React.FC<Props> = ({ todos, setFilterType, filterType }) => {
   const todosLeft = todos.filter(todo => !todo.completed).length;
   const completedTodos = todos.length - todosLeft;
 

@@ -8,7 +8,7 @@ type Props = {
   setQuery: (value: string) => void;
 };
 
-export const Header: React.FC<Props> = ({ query, todos, setQuery }) => {
+export const NewTodo: React.FC<Props> = ({ query, todos, setQuery }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

@@ -4,8 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
+import { Filters } from './components/Filters/Filters';
+import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
@@ -13,7 +13,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('errorMessage');
+  const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState<FilterStatus>(FilterStatus.All);
 
@@ -36,12 +36,12 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
-        <Header query={query} setQuery={setQuery} todos={todos} />
+        <NewTodo query={query} setQuery={setQuery} todos={todos} />
 
         <TodoList todos={filterTodos} />
 
-        {todos && (
-          <Footer
+        {Boolean(todos.length) && (
+          <Filters
             todos={todos}
             setFilterType={setFilterType}
             filterType={filterType}
