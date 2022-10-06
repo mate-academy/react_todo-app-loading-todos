@@ -1,10 +1,11 @@
 import classnames from 'classnames';
+import { useMemo } from 'react';
 import { FilterType } from '../../types/FilterStatus';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   filterType: string;
-  handleFilterType: (type: string) => void;
+  handleFilterType: (type: FilterType) => void;
   todos: Todo[];
 };
 
@@ -13,7 +14,9 @@ export const Footer: React.FC<Props> = ({
   handleFilterType,
   todos,
 }) => {
-  const todosLeft = todos.filter(todo => !todo.completed).length;
+  const todosLeft = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

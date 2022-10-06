@@ -1,8 +1,9 @@
 import classnames from 'classnames';
+import { useEffect } from 'react';
 
 type Props = {
-  error: boolean;
-  handleErrorChange: (bool: boolean) => void;
+  error: boolean | null;
+  handleErrorChange: (bool: boolean | null) => void;
   errorText: string;
 };
 
@@ -11,6 +12,16 @@ export const ErrorNotification: React.FC<Props> = ({
   handleErrorChange,
   errorText,
 }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      handleErrorChange(null);
+    }, 3000);
+
+    return (() => {
+      clearTimeout(timeout);
+    });
+  }, []);
+
   return (
     <div
       data-cy="ErrorNotification"

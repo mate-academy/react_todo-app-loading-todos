@@ -11,28 +11,12 @@ import { FilterType } from './types/FilterStatus';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean | null>(null);
   const [errorText] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [todos, setTodos] = useState<Todo[]>([]);
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-
-  if (error) {
-    setTimeout(() => {
-      setError(false);
-    }, 3000);
-  }
-
-  let userId = 0;
-
-  if (user?.id) {
-    userId = user?.id;
-  }
-
-  getTodos(userId)
-    .then(setTodos)
-    .catch(() => setError(false));
 
   const filteredTodos = todos.filter(todo => {
     switch (filterType) {
@@ -51,7 +35,18 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
+    const fetchData = async () => {
+      const todosFromServer = await getTodos(user?.id || 0);
+
+      setTodos(todosFromServer);
+    };
+
+    try {
+      fetchData();
+    } catch {
+      setError(false);
+    }
+
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
