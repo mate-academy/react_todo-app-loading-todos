@@ -22,12 +22,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  if (error) {
-    setTimeout(() => {
-      setError(false);
-    }, 3000);
-  }
-
   let userId = 0;
 
   if (user?.id) {
@@ -39,7 +33,6 @@ export const App: React.FC = () => {
     .catch(() => setError(false));
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }

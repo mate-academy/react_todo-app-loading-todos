@@ -12,6 +12,12 @@ export const ErrorNotification: React.FC<Props> = ({
   setError,
   errorText,
 }) => {
+  if (error) {
+    setTimeout(() => {
+      setError(false);
+    }, 3000);
+  }
+
   return (
     <div
       data-cy="ErrorNotification"
