@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useEffect, useRef, useState, useContext,
+  useEffect, useRef, useState, useContext, useMemo,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header';
@@ -31,21 +30,13 @@ export function getFilterTodos(
 }
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext<User | null>(AuthContext);
-  const userId = user?.id ? user.id : 0;
+  const userId = user?.id || 0;
   const newTodoField = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState<FilterTypes>(FilterTypes.All);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
 
   useEffect(() => {
     const todoFromServer = async () => {
@@ -63,7 +54,9 @@ export const App: React.FC = () => {
     todoFromServer();
   }, []);
 
-  const filteredTodos = getFilterTodos(todos, filterBy);
+  const filteredTodos = useMemo(() => (
+    getFilterTodos(todos, filterBy)
+  ), [todos, filterBy]);
 
   return (
     <div className="todoapp">

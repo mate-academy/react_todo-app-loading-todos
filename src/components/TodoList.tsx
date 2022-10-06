@@ -14,44 +14,41 @@ export const TodoList: React.FC<Props> = ({ todos, isLoading }) => {
 
       {todos.map(({ title, id, completed }) => {
         return (
-          <>
-            <div
-              key={id}
-              data-cy="Todo"
-              className={classnames(
-                'todo',
-                {
-                  completed: completed === true,
-                },
-              )}
+          <div
+            key={id}
+            data-cy="Todo"
+            className={classnames(
+              'todo',
+              {
+                completed: completed === true,
+              },
+            )}
+          >
+            <label className="todo__status-label">
+              <input
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                defaultChecked
+              />
+            </label>
+
+            <span data-cy="TodoTitle" className="todo__title">
+              {title}
+            </span>
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDeleteButton"
             >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  defaultChecked
-                />
-              </label>
+              ×
+            </button>
 
-              <span data-cy="TodoTitle" className="todo__title">
-                {title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDeleteButton"
-              >
-                ×
-              </button>
+            {!isLoading && (
+              <Loader />
+            )}
 
-              {!isLoading && (
-                <Loader />
-              )}
-
-            </div>
-
-          </>
+          </div>
         );
       })}
     </section>
