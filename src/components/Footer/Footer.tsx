@@ -2,11 +2,11 @@ import cN from 'classnames';
 import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
-  onFilterStatus: (s: string) => void,
+  setFilterStatus: (status: FilterStatus) => void,
   filterStatus: string,
 };
 
-export const Footer: React.FC<Props> = ({ onFilterStatus, filterStatus }) => {
+export const Footer: React.FC<Props> = ({ setFilterStatus, filterStatus }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = ({ onFilterStatus, filterStatus }) => {
           className={cN('filter__link',
             { selected: filterStatus === FilterStatus.All })}
           onClick={() => {
-            onFilterStatus(FilterStatus.All);
+            setFilterStatus(FilterStatus.All);
           }}
         >
           All
@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = ({ onFilterStatus, filterStatus }) => {
           className={cN('filter__link',
             { selected: filterStatus === FilterStatus.Active })}
           onClick={() => {
-            onFilterStatus(FilterStatus.Active);
+            setFilterStatus(FilterStatus.Active);
           }}
         >
           Active
@@ -43,7 +43,7 @@ export const Footer: React.FC<Props> = ({ onFilterStatus, filterStatus }) => {
           className={cN('filter__link',
             { selected: filterStatus === FilterStatus.Completed })}
           onClick={() => {
-            onFilterStatus(FilterStatus.Completed);
+            setFilterStatus(FilterStatus.Completed);
           }}
         >
           Completed

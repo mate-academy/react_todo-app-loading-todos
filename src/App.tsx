@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState(false);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
 
   const handleError = () => {
     return setTimeout(() => {
@@ -41,11 +41,6 @@ export const App: React.FC = () => {
         return null;
     }
   });
-  let userId = 0;
-
-  if (user?.id) {
-    userId = user.id;
-  }
 
   if (error) {
     handleError();
@@ -57,7 +52,7 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    getTodos(userId)
+    getTodos(user?.id || 0)
       .then(setTodos)
       .catch(() => setError(true));
   }, []);
@@ -92,7 +87,7 @@ export const App: React.FC = () => {
               todos={filteredTodos}
             />
             <Footer
-              onFilterStatus={setFilterStatus}
+              setFilterStatus={setFilterStatus}
               filterStatus={filterStatus}
             />
           </>
