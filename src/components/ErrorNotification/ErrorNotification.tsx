@@ -1,34 +1,40 @@
+import classNames from 'classnames';
+import { ErrorMessage } from '../../types/ErrorMessage';
+
 type Props = {
-  setError: (value: string) => void,
-  error: string,
+  errorMessage: ErrorMessage | null,
+  isError: boolean,
+  setIsError: (value: boolean) => void,
 };
 
-export const ErrorNotification: React.FC<Props> = ({ setError, error }) => {
-  if (error) {
-    setTimeout(() => {
-      setError('');
-    }, 3000);
-  }
+export const ErrorNotification: React.FC<Props> = ({
+  errorMessage,
+  isError,
+  setIsError,
+}) => {
+  setTimeout(() => {
+    setIsError(false);
+  }, 3000);
 
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        {
+          hidden: !isError,
+        },
+      )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError('')}
         aria-label="HideErrorButton"
+        onClick={() => setIsError(false)}
       />
 
-      {error}
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
+      {errorMessage}
     </div>
   );
 };

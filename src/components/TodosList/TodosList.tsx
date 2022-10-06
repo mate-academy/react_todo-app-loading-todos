@@ -2,7 +2,7 @@ import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
-  todos: Todo[];
+  todos: Todo[],
 };
 
 export const TodosList: React.FC<Props> = ({ todos }) => {

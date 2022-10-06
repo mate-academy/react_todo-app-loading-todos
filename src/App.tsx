@@ -1,41 +1,27 @@
-import {
-  useState,
-  useContext,
-  useEffect,
-  useRef,
+import React, {
+  useContext, useEffect, useRef, useState,
 } from 'react';
+import { NewTodo } from './components/NewTodo/NewTodo';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { Header } from './components/Header/Header';
-import { Footer } from './components/Footer/Footer';
+import { TodosFilter } from './components/Footer/TodosFilter';
+import { TodosList } from './components/TodosList/TodosList';
 import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
+import { ErrorMessage } from './types/ErrorMessage';
 import { ErrorNotification } from './components/ErrorNotification';
-import { TodosList } from './components/TodosList/TodosList';
 
 export const App: React.FC = () => {
-  const newTodoField = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState('');
   const user = useContext(AuthContext);
+  const newTodoField = useRef<HTMLInputElement>(null);
+
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState<FilterStatus>(FilterStatus.All);
-  const [error, setError] = useState('errorMessage');
+  const [filterType, setFilterType] = useState(FilterStatus.All);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('');
 
-  let userId = 0;
-
-  if (user?.id) {
-    userId = user.id;
-  }
-
-  useEffect(() => {
-    getTodos(userId)
-      .then(setTodos);
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
-
-  const filterTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     switch (filterType) {
       case FilterStatus.All:
         return todo;
@@ -48,39 +34,49 @@ export const App: React.FC = () => {
     }
   });
 
+  const loadTodos = async () => {
+    try {
+      setTodos(await getTodos(user?.id || 0));
+    } catch {
+      setIsError(true);
+      setErrorMessage(ErrorMessage.LOADING);
+    }
+  };
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+
+    loadTodos();
+  }, []);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-
-        <Header
-          query={query}
-          setQuery={setQuery}
-          newTodoField={newTodoField}
+        <NewTodo
           todos={todos}
+          newTodoField={newTodoField}
+          title={title}
+          setTitle={setTitle}
         />
 
-        <TodosList todos={filterTodos} />
+        <TodosList todos={filteredTodos} />
 
-        {todos.length > 0
-          && (
-            <Footer
-              setFilterType={setFilterType}
-              filterType={filterType}
-              todos={todos}
-            />
-          )}
-
+        <TodosFilter
+          todos={todos}
+          setFilterType={setFilterType}
+          filterType={filterType}
+        />
       </div>
 
-      {error
-        && (
-          <ErrorNotification
-            setError={setError}
-            error={error}
-          />
-        )}
+      <ErrorNotification
+        errorMessage={errorMessage}
+        isError={isError}
+        setIsError={setIsError}
+      />
     </div>
   );
 };

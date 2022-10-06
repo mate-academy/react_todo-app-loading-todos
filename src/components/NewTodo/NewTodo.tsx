@@ -2,17 +2,17 @@ import { RefObject } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  query: string,
-  setQuery: (value: string) => void,
-  newTodoField: RefObject<HTMLInputElement>;
   todos: Todo[],
+  newTodoField: RefObject<HTMLInputElement>,
+  title: string,
+  setTitle: (value: string) => void,
 };
 
-export const Header: React.FC<Props> = ({
-  query,
-  setQuery,
-  newTodoField,
+export const NewTodo: React.FC<Props> = ({
   todos,
+  newTodoField,
+  title,
+  setTitle,
 }) => {
   return (
     <header className="todoapp__header">
@@ -22,7 +22,7 @@ export const Header: React.FC<Props> = ({
             data-cy="ToggleAllButton"
             type="button"
             className="todoapp__toggle-all active"
-            aria-label="toggleButton"
+            aria-label="ToggleAllButton"
           />
         )}
 
@@ -33,8 +33,8 @@ export const Header: React.FC<Props> = ({
           ref={newTodoField}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
         />
       </form>
     </header>

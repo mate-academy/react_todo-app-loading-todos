@@ -3,18 +3,18 @@ import { FilterStatus } from '../../types/FilterStatus';
 import { Todo } from '../../types/Todo';
 
 type Props = {
+  todos: Todo[],
   setFilterType: (value: FilterStatus) => void,
   filterType: FilterStatus,
-  todos: Todo[],
 };
 
-export const Footer: React.FC<Props> = ({
+export const TodosFilter: React.FC<Props> = ({
+  todos,
   setFilterType,
   filterType,
-  todos,
 }) => {
   const todosLeft = todos.filter(todo => !todo.completed).length;
-  const todosCompleted = todos.length - todosLeft;
+  const todosComleted = todos.length - todosLeft;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -26,11 +26,13 @@ export const Footer: React.FC<Props> = ({
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className={classNames('filter__link',
+          onClick={() => setFilterType(FilterStatus.All)}
+          className={classNames(
+            'filter__link',
             {
               selected: filterType === FilterStatus.All,
-            })}
-          onClick={() => setFilterType(FilterStatus.All)}
+            },
+          )}
         >
           All
         </a>
@@ -38,22 +40,26 @@ export const Footer: React.FC<Props> = ({
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className={classNames('filter__link',
+          onClick={() => setFilterType(FilterStatus.Active)}
+          className={classNames(
+            'filter__link',
             {
               selected: filterType === FilterStatus.Active,
-            })}
-          onClick={() => setFilterType(FilterStatus.Active)}
+            },
+          )}
         >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className={classNames('filter__link',
+          onClick={() => setFilterType(FilterStatus.Completed)}
+          className={classNames(
+            'filter__link',
             {
               selected: filterType === FilterStatus.Completed,
-            })}
-          onClick={() => setFilterType(FilterStatus.Completed)}
+            },
+          )}
         >
           Completed
         </a>
@@ -64,7 +70,7 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
       >
-        {todosCompleted > 0 && 'Clear completed'}
+        {(todosComleted > 0) && 'Clear completed'}
       </button>
     </footer>
   );
