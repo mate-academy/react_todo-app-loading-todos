@@ -8,7 +8,6 @@ import {
   useMemo,
   useRef,
 } from 'react';
-// import classNames from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/TodoList';
@@ -49,7 +48,6 @@ const reducer = (count: number, action: string) => {
 };
 
 export const App: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -84,7 +82,6 @@ export const App: FC = () => {
   }, [todos]);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -117,7 +114,7 @@ export const App: FC = () => {
           </form>
         </header>
 
-        <TodoList todos={visibleTodos} />
+        <TodoList visibleTodos={visibleTodos} />
         <Footer
           sortType={sortType}
           completeItem={completeItem}

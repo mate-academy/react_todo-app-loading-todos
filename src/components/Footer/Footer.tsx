@@ -24,7 +24,7 @@ export const Footer: FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={classNames(
-            'filter-item',
+            'filter__link',
             { selected: sortType === SortType.All },
           )}
           onClick={() => onSortChange(SortType.All)}

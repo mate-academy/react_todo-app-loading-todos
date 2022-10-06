@@ -3,48 +3,52 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todos: Todo[];
+  visibleTodos: Todo[];
 }
 
-export const TodoList: FC<Props> = ({ todos }) => {
+export const TodoList: FC<Props> = ({ visibleTodos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
 
-      {todos.map((todo) => (
-        <div
-          data-cy="Todo"
-          className={classNames(
-            'todo',
-            { completed: todo.completed },
-          )}
-          key={todo.id}
-        >
-          <label className="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              defaultChecked
-            />
-          </label>
+      {visibleTodos.map((todo) => {
+        const { id, title, completed } = todo;
 
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDeleteButton"
+        return (
+          <div
+            data-cy="Todo"
+            className={classNames(
+              'todo',
+              { completed },
+            )}
+            key={id}
           >
-            ×
-          </button>
+            <label className="todo__status-label">
+              <input
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                defaultChecked
+              />
+            </label>
 
-          <div data-cy="TodoLoader" className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
+            <span data-cy="TodoTitle" className="todo__title">
+              {title}
+            </span>
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDeleteButton"
+            >
+              ×
+            </button>
+
+            <div data-cy="TodoLoader" className="modal overlay">
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </section>
   );
 };
