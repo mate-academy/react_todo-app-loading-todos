@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useMemo } from 'react';
 import { Todo } from '../../types/Todo';
 import { FilterType } from '../../types/FilterType';
 
@@ -13,7 +14,9 @@ export const Footer: React.FC<Props> = ({
   filterType,
   handlerFilterType,
 }) => {
-  const todosRemoved = todos.filter(({ completed }) => !completed).length;
+  const todosRemoved = useMemo(() => {
+    return todos.filter(({ completed }) => !completed).length;
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

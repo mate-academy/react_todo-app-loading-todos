@@ -1,11 +1,13 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader/Loader';
 
 type Props = {
   todo: Todo;
+  isActive?: boolean;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo, isActive }) => {
   const { title, completed } = todo;
 
   return (
@@ -31,10 +33,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         ×
       </button>
 
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      <Loader
+        isActive={isActive}
+      />
+
     </div>
   );
 };

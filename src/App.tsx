@@ -20,10 +20,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     const loadTodos = async (userId: number) => {
       try {
         setTodos(await getTodos(userId));

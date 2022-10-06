@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useEffect } from 'react';
 
 type Props = {
   activeTodos: boolean;
@@ -8,7 +9,14 @@ type Props = {
 export const Header: React.FC<Props> = ({
   activeTodos,
   newTodoField,
+
 }) => {
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button
