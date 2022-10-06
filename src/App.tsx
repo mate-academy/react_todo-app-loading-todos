@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useContext,
   // useContext,
   useEffect,
   useRef,
@@ -14,15 +15,15 @@ import { TodoList } from './components/TodoList/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
+import { AuthContext } from './components/Auth/AuthContext';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [typeOfFilter, setTypeOfFilter] = useState('all');
   const [error, setError] = useState<boolean>(false);
-  const [userID] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const user = useContext(AuthContext);
+  const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   if (error) {
@@ -31,13 +32,15 @@ export const App: React.FC = () => {
     }, 3000);
   }
 
+  const userId = user?.id || 0;
+
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
 
-    getTodos(userID)
+    getTodos(userId)
       .then(setTodos)
       .catch(() => setError(true));
   }, []);
