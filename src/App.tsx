@@ -7,8 +7,8 @@ import React, {
 } from 'react';
 // import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList';
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import { Header } from './components/NewTodo';
+import { Footer } from './components/Filter';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
