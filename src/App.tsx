@@ -10,7 +10,7 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { getTodos } from './api/todos';
 import { FilterStatus } from './types/FilterStatus';
-import { Footer } from './components/Filter/Filter';
+import { Footer } from './components/TodoFilter/TodoFilter';
 // eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 

@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoLoader } from '../TodoLoader/TodoLoader';
 
 interface Props {
   todoItem: Todo,
@@ -39,10 +40,7 @@ export const TodoItem: React.FC<Props> = ({
         ×
       </button>
 
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      <TodoLoader />
     </div>
   );
 };
