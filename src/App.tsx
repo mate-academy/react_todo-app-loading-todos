@@ -56,11 +56,9 @@ export const App: React.FC = () => {
     });
   }, [todos, filterType]);
 
-  const activeTodosTotal = useMemo(() => {
-    return todos.filter(({ completed }) => !completed).length;
+  const isActiveTodos = useMemo(() => {
+    return todos.some(todo => !todo.completed);
   }, [todos]);
-
-  const isActiveTodos = activeTodosTotal === todos.length;
 
   return (
     <div className="todoapp">
