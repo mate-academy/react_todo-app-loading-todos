@@ -10,10 +10,6 @@ export const ErrorMessage: React.FC<Props> = ({
 }) => {
   const [hiddenError, setHiddenError] = useState(false);
 
-  if (errorMessage) {
-    setTimeout(() => setHiddenError(true), 3000);
-  }
-
   useEffect(() => {
     const timer = setTimeout(() => setHiddenError(true), 3000);
 

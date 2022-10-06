@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { TodoLoader } from './TodoLoader';
 
 type Props = {
   filterTodos: Todo[] | [],
@@ -36,13 +37,8 @@ export const TodoList: React.FC<Props> = ({ filterTodos }) => {
               ×
             </button>
 
-            <div
-              data-cy="TodoLoader"
-              className="modal overlay"
-            >
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
+            <TodoLoader />
+
           </div>
         );
       })}
