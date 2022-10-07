@@ -115,11 +115,13 @@ export const App: FC = () => {
         </header>
 
         <TodoList visibleTodos={visibleTodos} />
-        <Footer
-          sortType={sortType}
-          completeItem={completeItem}
-          onSortChange={setSortType}
-        />
+        {!!todos.length && (
+          <Footer
+            sortType={sortType}
+            completeItem={completeItem}
+            onSortChange={setSortType}
+          />
+        )}
       </div>
 
       {errorMessage && (

@@ -60,8 +60,6 @@ export const Footer: FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={() => { }}
-      // will implement later
       >
         Clear completed
       </button>
