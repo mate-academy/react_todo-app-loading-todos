@@ -8,8 +8,8 @@ import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification }
   from './components/ErrorNotification/ErrorNotification';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
+import { Footer } from './components/FilterTodos/FilterTodos';
+import { Header } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import { GroupBy } from './types/GroupBy';
 import { Todo } from './types/Todo';
