@@ -14,7 +14,7 @@ export const TodosFilter: React.FC<Props> = ({
   filterType,
 }) => {
   const todosLeft = todos.filter(todo => !todo.completed).length;
-  const todosComleted = todos.length - todosLeft;
+  const todosCompleted = todos.length - todosLeft;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -70,7 +70,7 @@ export const TodosFilter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
       >
-        {(todosComleted > 0) && 'Clear completed'}
+        {(todosCompleted > 0) && 'Clear completed'}
       </button>
     </footer>
   );
