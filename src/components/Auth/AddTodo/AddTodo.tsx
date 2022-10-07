@@ -1,5 +1,5 @@
 import {
-  ChangeEvent, FormEvent, useContext, useEffect, useRef, useState,
+  ChangeEvent, FormEvent, useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import { addTodo, updateTodo } from '../../../api/todos';
 import { TodoContext } from '../../../context/TodoContext';
@@ -9,18 +9,18 @@ import { AuthContext } from '../AuthContext';
 export const AddTodo: React.FC = () => {
   const {
     setTodos,
-    handleFilter,
-    filterState,
     todos,
     setLoadError,
     setErrorMessage,
     setToggleLoader,
+    todoField,
+    setTodoField,
+    setShowLoadingTodo,
   } = useContext(TodoContext);
 
   const user = useContext(AuthContext);
 
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todoField, setTodoField] = useState('');
   const [activeTodoField, setActiveTodoField] = useState(true);
 
   useEffect(() => {
@@ -35,9 +35,10 @@ export const AddTodo: React.FC = () => {
     }
   }, [activeTodoField]);
 
-  const addTodoToTheServer = async () => {
+  const addTodoToTheServer = useCallback(async () => {
     try {
       if (user) {
+        setShowLoadingTodo(true);
         const newTodo = {
           userId: user.id,
           title: todoField,
@@ -46,44 +47,22 @@ export const AddTodo: React.FC = () => {
 
         const newOne = await addTodo(user.id, newTodo);
 
-        const todoWhithOut0 = todos.filter(item => item.id !== 0);
-
-        setTodos([...todoWhithOut0, newOne]);
-        handleFilter(filterState, [...todoWhithOut0, newOne]);
+        setTodos((oldState) => [...oldState, newOne]);
       }
     } catch (_) {
       setLoadError(true);
       setErrorMessage(Error.add);
-      handleFilter(filterState, todos);
-      setTodos(todos);
     } finally {
       setTodoField('');
       setActiveTodoField(true);
+      setShowLoadingTodo(false);
     }
-  };
-
-  const addTodoToTheList = () => {
-    if (user) {
-      const newTodo = {
-        id: 0,
-        userId: user.id,
-        title: todoField,
-        completed: false,
-
-      };
-
-      setTodos((oldState) => {
-        return [...oldState, newTodo];
-      });
-      handleFilter(filterState, [...todos, newTodo]);
-    }
-  };
+  }, [user, todoField]);
 
   const handleNewTodo = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (todoField.trim() !== '') {
       setActiveTodoField(false);
-      addTodoToTheList();
       addTodoToTheServer();
     } else {
       setErrorMessage(Error.empty);
@@ -102,6 +81,7 @@ export const AddTodo: React.FC = () => {
         todos.map(async (item) => {
           const completeTodo = { ...item };
 
+          // changeComplete(item);
           if (todos.some(item2 => !item2.completed)) {
             completeTodo.completed = true;
           } else {
@@ -127,7 +107,6 @@ export const AddTodo: React.FC = () => {
       });
 
       setTodos(newTodo);
-      handleFilter(filterState, newTodo);
     } catch (_) {
       setLoadError(true);
       setErrorMessage(Error.update);

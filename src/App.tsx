@@ -21,7 +21,15 @@ export const App: React.FC = () => {
     loadError,
     setLoadError,
     setErrorMessage,
+    handleFilter,
+    filterState,
   } = useContext(TodoContext);
+
+  useEffect(() => {
+    if (todos) {
+      handleFilter();
+    }
+  }, [todos, filterState]);
 
   useEffect(() => {
     const loadTodos = async () => {

@@ -174,7 +174,7 @@ export const TodoRender: React.FC<Props> = ({
         className={classNames(
           'modal overlay',
           {
-            'is-active': todo.id === 0 || todo.id === todoIdLoader
+            'is-active': todo.id === todoIdLoader
             || (allCompletedLoader && todo.completed) || toggleLoader,
           },
         )}
@@ -183,5 +183,6 @@ export const TodoRender: React.FC<Props> = ({
         <div className="loader" />
       </div>
     </div>
+
   );
 };

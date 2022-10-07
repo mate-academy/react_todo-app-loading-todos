@@ -10,11 +10,11 @@ export const FilterComponent: React.FC = () => {
   const {
     todos,
     filterState,
-    handleFilter,
     setAllCompletedLoader,
     handleStatusChange,
     setErrorMessage,
     setLoadError,
+    setFilterState,
   } = useContext(TodoContext);
 
   const showClear = useMemo(() => todos.some(todo => todo.completed), [todos]);
@@ -58,7 +58,7 @@ export const FilterComponent: React.FC = () => {
               selected: filterState === Filter.all,
             },
           )}
-          onClick={() => handleFilter(Filter.all, todos)}
+          onClick={() => setFilterState(Filter.all)}
         >
           All
         </a>
@@ -72,7 +72,7 @@ export const FilterComponent: React.FC = () => {
               selected: filterState === Filter.active,
             },
           )}
-          onClick={() => handleFilter(Filter.active, todos)}
+          onClick={() => setFilterState(Filter.active)}
         >
           Active
         </a>
@@ -85,7 +85,7 @@ export const FilterComponent: React.FC = () => {
               selected: filterState === Filter.completed,
             },
           )}
-          onClick={() => handleFilter(Filter.completed, todos)}
+          onClick={() => setFilterState(Filter.completed)}
         >
           Completed
         </a>

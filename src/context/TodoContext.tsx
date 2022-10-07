@@ -21,7 +21,7 @@ interface Context {
   setTodos: Dispatch<SetStateAction<Todo[]>>,
   selectedTodoId: number | null,
   setSelectedTodoId: (value: number | null) => void,
-  handleFilter: (filterStatus: number, data: Todo[]) => void,
+  handleFilter: () => void,
   filterState: Filter,
   setFilterState: (value: Filter) => void,
   handleChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void,
@@ -35,6 +35,10 @@ interface Context {
   setTodoIdLoader: (value: number | null) => void,
   toggleLoader: boolean,
   setToggleLoader: (value: boolean) => void,
+  todoField: string,
+  setTodoField: (value: string) => void,
+  showLoadingTodo: boolean,
+  setShowLoadingTodo:(value: boolean) => void,
 }
 
 export const TodoContext = createContext<Context>({
@@ -61,6 +65,10 @@ export const TodoContext = createContext<Context>({
   setTodoIdLoader: () => undefined,
   toggleLoader: false,
   setToggleLoader: () => undefined,
+  todoField: '',
+  setTodoField: () => undefined,
+  showLoadingTodo: false,
+  setShowLoadingTodo: () => undefined,
 });
 
 export function TodoProvider({ children }: { children?: ReactNode }) {
@@ -74,11 +82,12 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
   const [allCompletedLoader, setAllCompletedLoader] = useState(false);
   const [todoIdLoader, setTodoIdLoader] = useState<null | number>(null);
   const [toggleLoader, setToggleLoader] = useState(false);
+  const [todoField, setTodoField] = useState('');
+  const [showLoadingTodo, setShowLoadingTodo] = useState(false);
 
-  const handleFilter = useCallback((filterStatus: number, data: Todo[]) => {
-    setFilterState(filterStatus);
-    const copyOfTodos = data.filter(todo => {
-      switch (filterStatus) {
+  const handleFilter = useCallback(() => {
+    const copyOfTodos = todos.filter(todo => {
+      switch (filterState) {
         case Filter.active:
           return !todo.completed;
         case Filter.completed:
@@ -134,8 +143,6 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
           throw new Error('Error type two');
       }
 
-      handleFilter(filterState, newTodos);
-
       return newTodos;
     });
   };
@@ -169,6 +176,10 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
       setTodoIdLoader,
       setToggleLoader,
       toggleLoader,
+      todoField,
+      setTodoField,
+      setShowLoadingTodo,
+      showLoadingTodo,
     }}
     >
       {children}

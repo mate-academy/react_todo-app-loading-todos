@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 import { TodoContext } from '../../../context/TodoContext';
+import { LoadingTodo } from '../LoadingTodo/LoadingTodo';
 import { TodoRender } from '../TodoRender/TodoRender';
 
 export const TodoList = () => {
   const {
     filtredTodos,
+    showLoadingTodo,
   } = useContext(TodoContext);
 
   return (
@@ -15,6 +17,10 @@ export const TodoList = () => {
           todo={todo}
         />
       )) }
+      {showLoadingTodo && (
+        <LoadingTodo />
+      )}
+
     </section>
   );
 };
