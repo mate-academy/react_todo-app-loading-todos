@@ -8,8 +8,8 @@ import {
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErroNotification } from './components/ErrorNot';
-import { TodoFooter } from './components/Footer';
-import { TodoHeader } from './components/TodoHeader';
+import { TodoFooter } from './components/Filters';
+import { TodoHeader } from './components/Todo';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 
@@ -75,7 +75,7 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {errorMessage && (
+      {!!errorMessage && (
         <ErroNotification
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}

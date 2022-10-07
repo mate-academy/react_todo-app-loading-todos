@@ -39,7 +39,6 @@ export const ErroNotification: React.FC<Props> = ({
         className="delete"
         aria-label="a problem"
         onClick={handleError}
-
       />
 
       {errorMessage}
