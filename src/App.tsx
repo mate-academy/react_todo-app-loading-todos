@@ -25,7 +25,7 @@ export const App: React.FC = () => {
     }, 3000);
   }
 
-  const filteredTodos = todos.filter(todo => {
+  const visibleTodos = todos.filter(todo => {
     switch (filterType) {
       case FilterType.Active:
         return !todo.completed;
@@ -81,13 +81,13 @@ export const App: React.FC = () => {
         </header>
 
         <TodoList
-          todos={filteredTodos}
+          todos={visibleTodos}
         />
 
         <Footer
           filterType={filterType}
           setfilterType={setfilterType}
-          filteredTodos={filteredTodos}
+          visibleTodos={visibleTodos}
         />
       </div>
 

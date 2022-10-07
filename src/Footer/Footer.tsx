@@ -4,19 +4,19 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   filterType: string;
-  setfilterType: (type: FilterType) => void;
-  filteredTodos: Todo[];
+  setfilterType: (type: string) => void;
+  visibleTodos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
   filterType,
   setfilterType,
-  filteredTodos,
+  visibleTodos,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${filteredTodos.length} items left`}
+        {`${visibleTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
