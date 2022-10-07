@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TodoLoader } from '../TodoLoader/TodoLoader';
+import { TodoLoader } from '../TodoLoader';
 
 interface Props {
   todoItem: Todo,
