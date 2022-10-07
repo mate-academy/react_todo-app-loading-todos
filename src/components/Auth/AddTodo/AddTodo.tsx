@@ -81,7 +81,6 @@ export const AddTodo: React.FC = () => {
         todos.map(async (item) => {
           const completeTodo = { ...item };
 
-          // changeComplete(item);
           if (todos.some(item2 => !item2.completed)) {
             completeTodo.completed = true;
           } else {
