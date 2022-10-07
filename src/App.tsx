@@ -44,8 +44,6 @@ export const App: React.FC = () => {
     userId = user.id;
   }
 
-  userId = 10;
-
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
@@ -56,6 +54,8 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => (setError(true)));
   }, []);
+
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   return (
     <div className="todoapp">
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
         <Footer
           filterType={filterType}
           setfilterType={setfilterType}
-          visibleTodos={visibleTodos}
+          activeTodos={activeTodos}
         />
       </div>
 
