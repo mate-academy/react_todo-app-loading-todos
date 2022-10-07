@@ -8,7 +8,7 @@ type Props = {
   leftTodosLength: number;
 };
 
-export const Header: React.FC<Props> = ({
+export const NewTodo: React.FC<Props> = ({
   newTodoField,
   todos,
   leftTodosLength,

@@ -8,8 +8,8 @@ import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification }
   from './components/ErrorNotification/ErrorNotification';
-import { Footer } from './components/FilterTodos/FilterTodos';
-import { Header } from './components/NewTodo/NewTodo';
+import { FilterTodos } from './components/FilterTodos/FilterTodos';
+import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import { GroupBy } from './types/GroupBy';
 import { Todo } from './types/Todo';
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
+        <NewTodo
           newTodoField={newTodoField}
           todos={todos}
           leftTodosLength={leftTodos.length}
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
-            <Footer
+            <FilterTodos
               filterTodos={filterTodos}
               completedTodosLength={completedTodos.length}
               leftTodosLength={leftTodos.length}

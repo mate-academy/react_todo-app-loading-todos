@@ -8,7 +8,7 @@ type Props = {
   leftTodosLength: number;
 };
 
-export const Footer: React.FC<Props> = ({
+export const FilterTodos: React.FC<Props> = ({
   filterTodos,
   completedTodosLength,
   leftTodosLength,
