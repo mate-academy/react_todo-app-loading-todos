@@ -8,8 +8,8 @@ import {
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErroNotification } from './components/ErrorNot';
-import { TodoFooter } from './components/Filters';
-import { TodoHeader } from './components/Todo';
+import { Filter } from './components/Filters';
+import { Todos } from './components/Todo';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 
@@ -61,13 +61,13 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <TodoHeader newTodoField={newTodoField} />
+      <Todos newTodoField={newTodoField} />
 
       {todos && (
         <div className="todoapp__content">
           <TodoList todos={filteredTodos} />
 
-          <TodoFooter
+          <Filter
             setFilterBy={setFiterBy}
             todos={filteredTodos}
             filterBy={filterBy}

@@ -7,7 +7,7 @@ type Props = {
   todos: Todo[] | undefined;
 };
 
-export const TodoFooter: React.FC<Props> = ({
+export const Filter: React.FC<Props> = ({
   filterBy,
   todos,
   setFilterBy,

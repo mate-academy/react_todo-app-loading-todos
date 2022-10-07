@@ -4,7 +4,7 @@ type Props = {
   newTodoField: RefObject<HTMLInputElement>;
 };
 
-export const TodoHeader: React.FC<Props> = ({ newTodoField }) => {
+export const Todos: React.FC<Props> = ({ newTodoField }) => {
   return (
     <header className="todoapp__header">
       <button
