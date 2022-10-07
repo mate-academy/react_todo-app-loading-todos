@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { Errors } from './components/Errors';
+import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
@@ -91,7 +91,9 @@ export const App: React.FC = () => {
 
       </div>
 
-      {error && <Errors error={error} unSetError={setError} />}
+      {error && (
+        <ErrorNotification error={error} unSetError={setError} />
+      )}
     </div>
   );
 };
