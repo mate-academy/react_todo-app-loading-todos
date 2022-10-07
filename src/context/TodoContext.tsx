@@ -96,7 +96,7 @@ export function TodoProvider({ children }: { children?: ReactNode }) {
 
     const foundIndex = todos.findIndex(stateTodo => stateTodo.id === todo.id);
 
-    if (type !== TypeChange.delete && type !== TypeChange.deleteAll) {
+    if (type === TypeChange.checkbox || type === TypeChange.title) {
       switch (type) {
         case TypeChange.checkbox:
           found.completed = !found.completed;

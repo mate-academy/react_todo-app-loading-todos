@@ -12,7 +12,7 @@ export const getTodos = (userId: number) => {
 };
 
 export const addTodo = (userId: number, data: Data) => {
-  return client.post(`/todos?userId=${userId}`, data);
+  return client.post<Todo>(`/todos?userId=${userId}`, data);
 };
 
 export const deleteTodo = (todoId: number) => {
@@ -20,5 +20,5 @@ export const deleteTodo = (todoId: number) => {
 };
 
 export const updateTodo = (todoId: number, data: Todo) => {
-  return client.patch(`/todos/${todoId}`, data);
+  return client.patch<Todo>(`/todos/${todoId}`, data);
 };

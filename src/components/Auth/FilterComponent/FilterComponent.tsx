@@ -4,6 +4,7 @@ import { deleteTodo } from '../../../api/todos';
 import { TypeChange } from '../../../types/TypeChange';
 import { Filter } from '../../../types/Filter';
 import { TodoContext } from '../../../context/TodoContext';
+import { Error } from '../../../types/Error';
 
 export const FilterComponent: React.FC = () => {
   const {
@@ -11,13 +12,14 @@ export const FilterComponent: React.FC = () => {
     filterState,
     handleFilter,
     setAllCompletedLoader,
-    setTodos,
     handleStatusChange,
     setErrorMessage,
     setLoadError,
   } = useContext(TodoContext);
 
-  const deleteAllClearFromServer = async () => {
+  const showClear = useMemo(() => todos.some(todo => todo.completed), [todos]);
+
+  const handleClearAllCompleted = async () => {
     try {
       setAllCompletedLoader(true);
       await Promise.all(
@@ -30,15 +32,10 @@ export const FilterComponent: React.FC = () => {
       todos.map(todo => handleStatusChange(todo, TypeChange.deleteAll));
     } catch (_) {
       setLoadError(true);
-      setErrorMessage('Unable to delete completed todos from server');
+      setErrorMessage(Error.delete);
     } finally {
       setAllCompletedLoader(false);
     }
-  };
-
-  const handleClearAllCompleted = () => {
-    deleteAllClearFromServer();
-    setTodos(todos);
   };
 
   const activeCounter = useMemo(() => {
@@ -94,16 +91,18 @@ export const FilterComponent: React.FC = () => {
         </a>
       </nav>
 
-      {todos.some(todo => todo.completed) && (
-        <button
-          data-cy="ClearCompletedButton"
-          type="button"
-          className="todoapp__clear-completed"
-          onClick={handleClearAllCompleted}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        data-cy="ClearCompletedButton"
+        type="button"
+        className="todoapp__clear-completed"
+        onClick={handleClearAllCompleted}
+        style={showClear
+          ? { opacity: '100%' }
+          : { opacity: '0%', cursor: 'default' }}
+        disabled={!showClear}
+      >
+        Clear completed
+      </button>
 
     </footer>
   );

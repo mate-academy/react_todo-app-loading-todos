@@ -10,6 +10,7 @@ import {
 } from './components/Auth/FilterComponent/FilterComponent';
 import { TodoList } from './components/Auth/TodoList/TodoList';
 import { TodoContext } from './context/TodoContext';
+import { Error } from './types/Error';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
         }
       } catch (_) {
         setLoadError(true);
-        setErrorMessage('Unable to load todos from server');
+        setErrorMessage(Error.get);
       }
     };
 
@@ -45,9 +46,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <AddTodo
-          userId={user?.id}
-        />
+        <AddTodo />
 
         <TodoList />
 

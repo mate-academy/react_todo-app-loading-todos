@@ -6,6 +6,7 @@ import { deleteTodo, updateTodo } from '../../../api/todos';
 import { TypeChange } from '../../../types/TypeChange';
 import { Todo } from '../../../types/Todo';
 import { TodoContext } from '../../../context/TodoContext';
+import { Error } from '../../../types/Error';
 
 type Props = {
   todo: Todo,
@@ -41,36 +42,41 @@ export const TodoRender: React.FC<Props> = ({
       handleStatusChange(data, TypeChange.delete);
     } catch (_) {
       setLoadError(true);
-      setErrorMessage('Unable to delete todo from the server');
+      setErrorMessage(Error.delete);
     } finally {
       setTodoIdLoader(null);
       setSelectedTodoId(-1);
     }
   };
 
-  const handleRemoveTodo = (data: Todo) => {
-    removeFromServer(data);
-  };
-
-  const changeCompleteOnServer = async () => {
+  const updateTodoOnServer = async (type: TypeChange) => {
     try {
+      const copyOfTodo = { ...todo };
+
       setTodoIdLoader(id);
-      const todoWithChangedComplete = { ...todo };
+      switch (type) {
+        case TypeChange.checkbox:
+          copyOfTodo.completed = !completed;
+          break;
+        case TypeChange.title:
+          copyOfTodo.title = inputValue;
+          setSelectedTodoId(id);
+          break;
+        default:
+          return;
+      }
 
-      todoWithChangedComplete.completed = !completed;
-
-      await updateTodo(id, todoWithChangedComplete);
-      handleStatusChange(todo, TypeChange.checkbox);
-    } catch (_) {
+      await updateTodo(id, copyOfTodo);
+      handleStatusChange(todo, type);
+    } catch {
       setLoadError(true);
-      setErrorMessage('Unable to change complete status');
+      setErrorMessage(Error.update);
     } finally {
       setTodoIdLoader(null);
+      if (type === TypeChange.title) {
+        setSelectedTodoId(-1);
+      }
     }
-  };
-
-  const handleCompleteChange = () => {
-    changeCompleteOnServer();
   };
 
   const handleRenameTitle = async () => {
@@ -86,20 +92,7 @@ export const TodoRender: React.FC<Props> = ({
       return;
     }
 
-    try {
-      setTodoIdLoader(todo.id);
-      const newTitle = { ...todo };
-
-      newTitle.title = inputValue;
-      await updateTodo(id, newTitle);
-      handleStatusChange(todo, TypeChange.title);
-    } catch (_) {
-      setLoadError(true);
-      setErrorMessage('Unable to rename title. Server didn\'t response');
-    } finally {
-      setTodoIdLoader(null);
-      setSelectedTodoId(-1);
-    }
+    updateTodoOnServer(TypeChange.title);
 
     if (newTodoField.current) {
       newTodoField.current.blur();
@@ -142,7 +135,7 @@ export const TodoRender: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           defaultChecked
-          onClick={handleCompleteChange}
+          onClick={() => updateTodoOnServer(TypeChange.checkbox)}
         />
       </label>
 
@@ -150,7 +143,7 @@ export const TodoRender: React.FC<Props> = ({
         <span
           data-cy="TodoTitle"
           className="todo__title"
-          onDoubleClick={() => handleDoubleClick()}
+          onDoubleClick={handleDoubleClick}
         >
           {title}
         </span>
@@ -170,7 +163,7 @@ export const TodoRender: React.FC<Props> = ({
           type="button"
           className="todo__remove"
           data-cy="TodoDeleteButton"
-          onClick={() => handleRemoveTodo(todo)}
+          onClick={() => removeFromServer(todo)}
         >
           ×
         </button>

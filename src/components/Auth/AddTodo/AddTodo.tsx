@@ -1,16 +1,12 @@
 import {
   ChangeEvent, FormEvent, useContext, useEffect, useRef, useState,
 } from 'react';
-import { addTodo, getTodos, updateTodo } from '../../../api/todos';
+import { addTodo, updateTodo } from '../../../api/todos';
 import { TodoContext } from '../../../context/TodoContext';
+import { Error } from '../../../types/Error';
+import { AuthContext } from '../AuthContext';
 
-type Props = {
-  userId?: number | undefined,
-};
-
-export const AddTodo: React.FC<Props> = ({
-  userId,
-}) => {
+export const AddTodo: React.FC = () => {
   const {
     setTodos,
     handleFilter,
@@ -21,9 +17,10 @@ export const AddTodo: React.FC<Props> = ({
     setToggleLoader,
   } = useContext(TodoContext);
 
+  const user = useContext(AuthContext);
+
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todoField, setTodoField] = useState('');
-  const [tempTodoCount, setTempTodoCount] = useState<number>(0);
   const [activeTodoField, setActiveTodoField] = useState(true);
 
   useEffect(() => {
@@ -33,24 +30,6 @@ export const AddTodo: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    const loadTodos = async () => {
-      try {
-        if (userId) {
-          const todoData = await getTodos(userId);
-
-          setTodos(todoData);
-          handleFilter(filterState, todoData);
-        }
-      } catch (_) {
-        setLoadError(true);
-        setErrorMessage('Unable to load todos from server');
-      }
-    };
-
-    loadTodos();
-  }, [tempTodoCount]);
-
-  useEffect(() => {
     if (newTodoField.current && activeTodoField) {
       newTodoField.current.focus();
     }
@@ -58,22 +37,23 @@ export const AddTodo: React.FC<Props> = ({
 
   const addTodoToTheServer = async () => {
     try {
-      if (userId) {
-        const last = tempTodoCount + 1;
-
+      if (user) {
         const newTodo = {
-          userId,
+          userId: user.id,
           title: todoField,
           completed: false,
-
         };
 
-        await addTodo(userId, newTodo);
-        setTempTodoCount(last);
+        const newOne = await addTodo(user.id, newTodo);
+
+        const todoWhithOut0 = todos.filter(item => item.id !== 0);
+
+        setTodos([...todoWhithOut0, newOne]);
+        handleFilter(filterState, [...todoWhithOut0, newOne]);
       }
     } catch (_) {
       setLoadError(true);
-      setErrorMessage('Unable to add new todo to the server');
+      setErrorMessage(Error.add);
       handleFilter(filterState, todos);
       setTodos(todos);
     } finally {
@@ -83,16 +63,18 @@ export const AddTodo: React.FC<Props> = ({
   };
 
   const addTodoToTheList = () => {
-    if (userId) {
+    if (user) {
       const newTodo = {
         id: 0,
-        userId,
+        userId: user.id,
         title: todoField,
         completed: false,
 
       };
 
-      setTodos([...todos, newTodo]);
+      setTodos((oldState) => {
+        return [...oldState, newTodo];
+      });
       handleFilter(filterState, [...todos, newTodo]);
     }
   };
@@ -104,7 +86,7 @@ export const AddTodo: React.FC<Props> = ({
       addTodoToTheList();
       addTodoToTheServer();
     } else {
-      setErrorMessage('Empty title is not valid');
+      setErrorMessage(Error.empty);
       setLoadError(true);
     }
   };
@@ -113,43 +95,45 @@ export const AddTodo: React.FC<Props> = ({
     setTodoField(event.target.value);
   };
 
-  const toggleAllOnTheServer = async () => {
-    setToggleLoader(true);
-    await Promise.all(
-      todos.map(async (item) => {
-        const completeTodo = { ...item };
+  const handleToggleAll = async () => {
+    try {
+      setToggleLoader(true);
+      await Promise.all(
+        todos.map(async (item) => {
+          const completeTodo = { ...item };
+
+          if (todos.some(item2 => !item2.completed)) {
+            completeTodo.completed = true;
+          } else {
+            completeTodo.completed = false;
+          }
+
+          await updateTodo(item.id, completeTodo);
+        }),
+      );
+
+      const newTodo = todos.map(item => {
+        const toggleTodo = { ...item };
 
         if (todos.some(item2 => !item2.completed)) {
-          completeTodo.completed = true;
-        } else {
-          completeTodo.completed = false;
+          toggleTodo.completed = true;
+
+          return toggleTodo;
         }
 
-        await updateTodo(item.id, completeTodo);
-      }),
-    );
-
-    const newTodo = todos.map(item => {
-      const toggleTodo = { ...item };
-
-      if (todos.some(item2 => !item2.completed)) {
-        toggleTodo.completed = true;
+        toggleTodo.completed = false;
 
         return toggleTodo;
-      }
+      });
 
-      toggleTodo.completed = false;
-
-      return toggleTodo;
-    });
-
-    setTodos(newTodo);
-    handleFilter(filterState, newTodo);
-    setToggleLoader(false);
-  };
-
-  const handleToggleAll = () => {
-    toggleAllOnTheServer();
+      setTodos(newTodo);
+      handleFilter(filterState, newTodo);
+    } catch (_) {
+      setLoadError(true);
+      setErrorMessage(Error.update);
+    } finally {
+      setToggleLoader(false);
+    }
   };
 
   return (

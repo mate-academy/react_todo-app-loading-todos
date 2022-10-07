@@ -3,4 +3,5 @@ export enum TypeChange {
   checkbox,
   delete,
   deleteAll,
+  add,
 }
