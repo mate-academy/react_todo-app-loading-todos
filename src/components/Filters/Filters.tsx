@@ -8,7 +8,7 @@ type Props = {
   handleFilterStatus: (type: string) => void;
 };
 
-export const Footer: React.FC<Props> = ({
+export const Filters: React.FC<Props> = ({
   todos,
   filterType,
   handleFilterStatus,

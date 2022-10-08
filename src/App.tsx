@@ -9,7 +9,7 @@ import React, {
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { TodosList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { Filters } from './components/Filters';
 import { ErrorNotification } from './components/ErrorNotification';
 import { FilterStatus } from './types/Filter';
 import { Todo } from './types/Todo';
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
         <TodosList todos={filteredTodos} />
 
         {TodosList.length > 0 && (
-          <Footer
+          <Filters
             todos={todos}
             filterType={filterStatus}
             handleFilterStatus={setFilterStatus}
