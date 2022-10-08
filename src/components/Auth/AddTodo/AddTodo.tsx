@@ -77,35 +77,21 @@ export const AddTodo: React.FC = () => {
   const handleToggleAll = async () => {
     try {
       setToggleLoader(true);
+      const statusToSet = todos.some(item2 => !item2.completed);
+      const newTodos = [...todos];
+
       await Promise.all(
-        todos.map(async (item) => {
+        todos.map(async (item, index) => {
           const completeTodo = { ...item };
 
-          if (todos.some(item2 => !item2.completed)) {
-            completeTodo.completed = true;
-          } else {
-            completeTodo.completed = false;
-          }
+          completeTodo.completed = statusToSet;
+          newTodos[index].completed = statusToSet;
 
           await updateTodo(item.id, completeTodo);
         }),
       );
 
-      const newTodo = todos.map(item => {
-        const toggleTodo = { ...item };
-
-        if (todos.some(item2 => !item2.completed)) {
-          toggleTodo.completed = true;
-
-          return toggleTodo;
-        }
-
-        toggleTodo.completed = false;
-
-        return toggleTodo;
-      });
-
-      setTodos(newTodo);
+      setTodos(newTodos);
     } catch (_) {
       setLoadError(true);
       setErrorMessage(Error.update);
