@@ -9,10 +9,11 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
-import { deleteTodo, getTodos, updatingTodo } from './api/todos';
+import { deleteTodoOnServer, getTodos, updatingTodo } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorMasage } from './components/ErrorMessage/ErrorMessage';
 import { Loader } from './components/Loader/Loader';
+import { FilterType } from './components/Header/HeaderPropTypes';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
@@ -22,8 +23,10 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [countOfItemsLeft, setCountOfItemsLeft] = useState(0);
-  const [filterType, setFilterType] = useState('All');
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [loadingTodoid, setLoadingTodoId] = useState<number | null>(null);
+  const [temporaryTodo, setTemporaryTodo] = useState<Todo | null>(null);
 
   const uploadTodos = useCallback(
     async () => {
@@ -34,7 +37,9 @@ export const App: React.FC = () => {
         setTodos(data);
         setVisibleTodos(data);
       } catch (err) {
-        setErrorMessage('upload a todo');
+        const errUpload = 'upload a todo';
+
+        setErrorMessage(errUpload);
       } finally {
         setIsLoading(false);
       }
@@ -65,29 +70,16 @@ export const App: React.FC = () => {
     setVisibleTodos(selectedTodos);
   };
 
-  const clearCompleted = () => {
-    const filteredTodos = visibleTodos.filter((todo) => {
-      const { completed, id } = todo;
-
-      if (completed) {
-        deleteTodo(id);
-      }
-
-      return !completed;
-    });
-
-    setTodos(filteredTodos);
-    setVisibleTodos(filteredTodos);
-  };
+  // filtering ↓
 
   useEffect(() => {
     const filteredTodos = todos.filter(todo => {
       switch (filterType) {
-        case 'All':
+        case FilterType.All:
           return true;
-        case 'Active':
+        case FilterType.Active:
           return !todo.completed;
-        case 'Completed':
+        case FilterType.Completed:
           return todo.completed;
         default:
           return true;
@@ -96,6 +88,8 @@ export const App: React.FC = () => {
 
     setVisibleTodos(filteredTodos);
   }, [filterType]);
+
+  // updating ↓
 
   const toggleStatus = (todoId: number, comleted: boolean) => {
     const index = visibleTodos.findIndex(todo => todo.id === todoId);
@@ -109,6 +103,20 @@ export const App: React.FC = () => {
     });
   };
 
+  const changeTitle = (todoId: number, newTitle: string) => {
+    const index = visibleTodos.findIndex(todo => todo.id === todoId);
+
+    setVisibleTodos((prevVisibleTodos) => {
+      const todosCopy = [...prevVisibleTodos];
+
+      todosCopy[index].title = newTitle;
+
+      return todosCopy;
+    });
+  };
+
+  // deleting ↓
+
   const deleteInVisibleTodos = (id: number) => {
     const filteredTodos = visibleTodos.filter(todo => todo.id !== id);
 
@@ -116,9 +124,33 @@ export const App: React.FC = () => {
     setTodos(filteredTodos);
   };
 
+  const deleteTodo = async (id: number) => {
+    setLoadingTodoId(id);
+    try {
+      await deleteTodoOnServer(id);
+      deleteInVisibleTodos(id);
+    } catch {
+      const errDelete = 'delete Todo';
+
+      setErrorMessage(errDelete);
+    } finally {
+      setLoadingTodoId(null);
+    }
+  };
+
+  const clearCompleted = () => {
+    visibleTodos.forEach((todo) => {
+      const { completed, id } = todo;
+
+      if (completed) {
+        deleteTodo(id);
+      }
+    });
+  };
+
   const addInVisibleTodos = (newTodo: Todo) => {
-    setVisibleTodos((prevTodos) => [...prevTodos, newTodo]);
     setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setVisibleTodos((prevTodos) => [...prevTodos, newTodo]);
   };
 
   useEffect(() => {
@@ -132,7 +164,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     const countofLeftItems = visibleTodos
       .filter(({ completed }) => !completed).length;
+    const isAllSelectedNow = !countofLeftItems;
 
+    setIsAllSelected(isAllSelectedNow);
     setCountOfItemsLeft(countofLeftItems);
   }, [visibleTodos]);
 
@@ -146,10 +180,11 @@ export const App: React.FC = () => {
           newTodoField={newTodoField}
           userId={user?.id}
           addInVisibleTodos={addInVisibleTodos}
-          setIsLoading={setIsLoading}
+          setLoadingTodoId={setLoadingTodoId}
           setErrorMessage={setErrorMessage}
           selectAllTodos={selectAllTodos}
           isAllSelected={isAllSelected}
+          setTemporaryTodo={setTemporaryTodo}
         />
 
         {isLoading
@@ -161,7 +196,11 @@ export const App: React.FC = () => {
               todos={visibleTodos}
               toggleStatus={toggleStatus}
               setErrorMessage={setErrorMessage}
-              deleteInVisibleTodos={deleteInVisibleTodos}
+              loadingTodoId={loadingTodoid}
+              setLoadingTodoId={setLoadingTodoId}
+              deleteTodo={deleteTodo}
+              temporaryTodo={temporaryTodo}
+              changeTitle={changeTitle}
             />
           )}
 
@@ -170,6 +209,8 @@ export const App: React.FC = () => {
           setFelterType={setFilterType}
           filterType={filterType}
           clearCompleted={clearCompleted}
+          countOfItemsLeft={countOfItemsLeft}
+          todosLength={todos.length}
         />
 
       </div>

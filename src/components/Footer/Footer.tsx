@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { FilterType } from '../Header/HeaderPropTypes';
 import { Props } from './FooterPropTypes';
 
 export const Footer : React.FC<Props> = ({
@@ -6,7 +7,11 @@ export const Footer : React.FC<Props> = ({
   setFelterType,
   filterType,
   clearCompleted,
+  countOfItemsLeft,
+  todosLength,
 }) => {
+  const isAllSelected = todosLength > countOfItemsLeft;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -19,9 +24,9 @@ export const Footer : React.FC<Props> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'All' },
+            { selected: filterType === FilterType.All },
           )}
-          onClick={() => setFelterType('All')}
+          onClick={() => setFelterType(FilterType.All)}
         >
           All
         </a>
@@ -31,9 +36,9 @@ export const Footer : React.FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'Active' },
+            { selected: filterType === FilterType.Active },
           )}
-          onClick={() => setFelterType('Active')}
+          onClick={() => setFelterType(FilterType.Active)}
         >
           Active
         </a>
@@ -42,18 +47,22 @@ export const Footer : React.FC<Props> = ({
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: filterType === 'Completed' },
+            { selected: filterType === FilterType.Completed },
           )}
-          onClick={() => setFelterType('Completed')}
+          onClick={() => setFelterType(FilterType.Completed)}
         >
           Completed
         </a>
       </nav>
-
       <button
         data-cy="ClearCompletedButton"
         type="button"
-        className="todoapp__clear-completed"
+        disabled={!isAllSelected}
+        className={classNames('todoapp__clear-completed',
+          {
+            hidden: !isAllSelected,
+            visible: isAllSelected,
+          })}
         onClick={() => clearCompleted()}
       >
         Clear completed

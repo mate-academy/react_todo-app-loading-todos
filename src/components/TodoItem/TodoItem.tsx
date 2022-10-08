@@ -1,5 +1,11 @@
 import classNames from 'classnames';
-import { deleteTodo } from '../../api/todos';
+import {
+  FocusEvent,
+  FormEvent,
+  MouseEvent,
+  useState,
+} from 'react';
+import { updatingTodoTitle } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader/Loader';
 
@@ -7,21 +13,66 @@ type Props = {
   todo: Todo;
   toggleStatusOnServer: (id: number, comleted: boolean) => void;
   loadingTodoid: number | null;
-  deleteInVisibleTodos: (id: number) => void;
+  deleteTodo: (id: number) => void;
+  setloadingTodoId: (id: number | null) => void;
+  setErrorMessage: (message: string) => void;
+  changeTitle: (id: number, title: string,) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   toggleStatusOnServer,
   loadingTodoid,
-  deleteInVisibleTodos,
-
+  deleteTodo,
+  setloadingTodoId,
+  setErrorMessage,
+  changeTitle,
 }) => {
+  const [isDoublClick, setIsDublClick] = useState(false);
   const { title, completed, id } = todo;
+  const [newTitle, setNewTitle] = useState(title);
 
-  const onHendleDeleteTodo = (deleteId: number) => {
-    deleteInVisibleTodos(deleteId);
-    deleteTodo(deleteId);
+  const handleClick = (event : MouseEvent) => {
+    if (event.detail === 2) {
+      setIsDublClick(true);
+    }
+  };
+
+  type EventChangeTitle = FormEvent<HTMLFormElement>
+  | FocusEvent<HTMLInputElement> | null;
+
+  const onTitleSubmit = async (
+    event: EventChangeTitle = null,
+    todoId: number,
+  ) => {
+    if (event) {
+      event.preventDefault();
+    }
+
+    setIsDublClick(false);
+    setloadingTodoId(todoId);
+
+    if (!newTitle.trim()) {
+      deleteTodo(todoId);
+      setloadingTodoId(null);
+
+      return;
+    }
+
+    try {
+      await updatingTodoTitle(todoId, newTitle);
+      changeTitle(todoId, newTitle);
+    } catch {
+      setErrorMessage('update todo');
+    } finally {
+      setloadingTodoId(null);
+    }
+  };
+
+  const isEscape = (key: string, todoId: number) => {
+    if (key === 'Escape') {
+      onTitleSubmit(undefined, todoId);
+    }
   };
 
   return (
@@ -44,13 +95,36 @@ export const TodoItem: React.FC<Props> = ({
           onClick={() => toggleStatusOnServer(id, completed)}
         />
       </label>
-
-      <span data-cy="TodoTitle" className="todo__title">{title}</span>
+      {!isDoublClick
+        ? (
+          <span
+            role="presentation"
+            data-cy="TodoTitle"
+            onClick={(event) => handleClick(event)}
+            className="todo__title"
+          >
+            {newTitle}
+          </span>
+        )
+        : (
+          <form
+            onSubmit={(event) => onTitleSubmit(event, id)}
+          >
+            <input
+              type="text"
+              className="todo__title-field"
+              value={newTitle}
+              onChange={(event) => setNewTitle(event.target.value)}
+              onBlur={(event) => onTitleSubmit(event, id)}
+              onKeyDown={event => isEscape(event.key, id)}
+            />
+          </form>
+        )}
       <button
         type="button"
         className="todo__remove"
         data-cy="TodoDeleteButton"
-        onClick={() => onHendleDeleteTodo(id)}
+        onClick={() => deleteTodo(id)}
       >
         х
       </button>

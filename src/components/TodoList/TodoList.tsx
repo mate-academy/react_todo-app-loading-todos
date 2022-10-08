@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { updatingTodo } from '../../api/todos';
 import { TodoItem } from '../TodoItem/TodoItem';
 import { Props } from './TodoListPropTypes';
@@ -7,20 +6,22 @@ export const TodoList : React.FC<Props> = ({
   todos,
   toggleStatus,
   setErrorMessage,
-  deleteInVisibleTodos,
+  setLoadingTodoId,
+  loadingTodoId,
+  deleteTodo,
+  temporaryTodo,
+  changeTitle,
 }) => {
-  const [loadingTodoid, setloadingTodoId] = useState<number | null>(null);
-
   const toggleStatusOnServer = async (id: number, comleted: boolean) => {
-    toggleStatus(id, comleted);
-    setloadingTodoId(id);
+    setLoadingTodoId(id);
 
     try {
       await updatingTodo(id, !comleted);
+      toggleStatus(id, comleted);
     } catch {
       setErrorMessage('update todo');
     } finally {
-      setloadingTodoId(null);
+      setLoadingTodoId(null);
     }
   };
 
@@ -29,13 +30,29 @@ export const TodoList : React.FC<Props> = ({
       {todos.map(todo => {
         return (
           <TodoItem
+            key={todo.id}
             todo={todo}
             toggleStatusOnServer={toggleStatusOnServer}
-            loadingTodoid={loadingTodoid}
-            deleteInVisibleTodos={deleteInVisibleTodos}
+            loadingTodoid={loadingTodoId}
+            deleteTodo={deleteTodo}
+            setloadingTodoId={setLoadingTodoId}
+            setErrorMessage={setErrorMessage}
+            changeTitle={changeTitle}
           />
         );
       })}
+
+      {temporaryTodo && (
+        <TodoItem
+          todo={temporaryTodo}
+          toggleStatusOnServer={toggleStatusOnServer}
+          loadingTodoid={0}
+          deleteTodo={deleteTodo}
+          setloadingTodoId={setLoadingTodoId}
+          setErrorMessage={setErrorMessage}
+          changeTitle={changeTitle}
+        />
+      )}
     </section>
   );
 };

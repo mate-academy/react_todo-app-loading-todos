@@ -7,10 +7,11 @@ export const Header : React.FC<Props> = ({
   newTodoField,
   userId,
   addInVisibleTodos,
-  setIsLoading,
+  setLoadingTodoId,
   setErrorMessage,
   selectAllTodos,
   isAllSelected,
+  setTemporaryTodo,
 }) => {
   const [title, setTitle] = useState('');
 
@@ -18,13 +19,24 @@ export const Header : React.FC<Props> = ({
     async (event: FormEvent) => {
       event.preventDefault();
 
-      setIsLoading(true);
+      setLoadingTodoId(0);
       if (!title.trim()) {
         setErrorMessage('title not able to be empty');
-        setIsLoading(false);
+        setLoadingTodoId(null);
 
         return;
       }
+
+      if (!userId) {
+        return;
+      }
+
+      setTemporaryTodo({
+        title,
+        id: 0,
+        completed: false,
+        userId,
+      });
 
       setTitle('');
       try {
@@ -32,9 +44,12 @@ export const Header : React.FC<Props> = ({
 
         addInVisibleTodos(newTodo);
       } catch {
-        setErrorMessage('add a todo');
+        const errorMesg = 'add a todo';
+
+        setErrorMessage(errorMesg);
       } finally {
-        setIsLoading(false);
+        setTemporaryTodo(null);
+        setLoadingTodoId(null);
       }
     }, [title],
   );
@@ -46,9 +61,9 @@ export const Header : React.FC<Props> = ({
         data-cy="ToggleAllButton"
         type="button"
         className={classNames(
-          'todoapp__toggle-all', { active: isAllSelected },
+          'todoapp__toggle-all', { active: !isAllSelected },
         )}
-        onClick={() => selectAllTodos()}
+        onClick={selectAllTodos}
       />
 
       <form onSubmit={onHandlerSubmit}>

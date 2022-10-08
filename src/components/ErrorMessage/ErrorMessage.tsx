@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Props } from './ErrorMessagePropTypes';
 
 export const ErrorMasage : React.FC<Props> = ({
   errorType,
   setErrorMessage,
 }) => {
-  setTimeout(() => setErrorMessage(''), 3000);
+  let timer : ReturnType<typeof setTimeout>;
+
+  // Will Mount ↓
+
+  useEffect(() => {
+    timer = setTimeout(() => setErrorMessage(''), 3000);
+  }, []);
+
+  // Will Unmount ↓
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div
