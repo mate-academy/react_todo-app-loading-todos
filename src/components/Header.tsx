@@ -37,7 +37,7 @@ export const Header: React.FC<Props> = ({
           value={query}
           onChange={(event) => {
             onSetQuery(event.target.value);
-            onSetError(true);
+            onSetError(false);
           }}
         />
       </form>

@@ -8,11 +8,11 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
+      {todos.map(({ id, title }) => (
         <div
           data-cy="Todo"
           className="todo completed"
-          key={todo.id}
+          key={id}
         >
           <label className="todo__status-label">
             <input
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             />
           </label>
 
-          <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
+          <span data-cy="TodoTitle" className="todo__title">{title}</span>
           <button
             type="button"
             className="todo__remove"

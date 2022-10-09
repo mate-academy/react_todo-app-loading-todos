@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
 
@@ -43,11 +43,11 @@ export const App: React.FC = () => {
 
   const closeNotification = () => {
     setTimeout(() => {
-      setError(true);
+      setError(false);
     }, 3000);
   };
 
-  if (error === false) {
+  if (error === true) {
     closeNotification();
   }
 
@@ -56,9 +56,9 @@ export const App: React.FC = () => {
       case 'all':
         return todo;
       case 'active':
-        return !todo.completed;
-      case 'completed':
         return todo.completed;
+      case 'completed':
+        return !todo.completed;
 
       default:
         return todo;

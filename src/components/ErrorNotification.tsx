@@ -12,14 +12,14 @@ export const ErrorNotification: React.FC<Props> = ({ onSetError, error }) => {
       data-cy="ErrorNotification"
       className={classNames('notification',
         'is-danger is-light has-text-weight-normal',
-        { hidden: error })}
+        { hidden: !error })}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
         aria-label="button"
-        onClick={() => onSetError(true)}
+        onClick={() => onSetError(false)}
       />
 
       Unable to add a todo
