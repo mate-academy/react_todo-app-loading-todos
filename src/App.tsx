@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useMemo, useRef, useState,
+  useContext, useEffect, useMemo, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const [errorNotification, setErrorNotification] = useState(false);
   const [filterType, setFilterType] = useState(FilterType.All);
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadTodos = async (userId: number) => {
@@ -56,7 +55,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          newTodoField={newTodoField}
           activeTodos={activeTodos}
         />
         {todos.length > 0 && (
