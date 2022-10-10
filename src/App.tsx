@@ -39,7 +39,7 @@ export const App: React.FC = () => {
         return todo.completed;
 
       default:
-        return true;
+        return todo;
     }
   }), [todos]);
 
