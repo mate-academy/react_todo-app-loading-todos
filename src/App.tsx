@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
@@ -7,15 +6,15 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { TodoFooter } from './components/Auth/todos/TodoFooter';
-import { TodoHeader } from './components/Auth/todos/TodoHeader';
+import { Footer } from './components/Auth/todos/Footer';
+import { Header } from './components/Auth/todos/Header';
 import { TodoList } from './components/Auth/todos/TodoList';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
-  const [addError, setAddError] = useState(false);
+  const [addError, setAddError] = useState(true);
   const [deleteError, setDeleteError] = useState(false);
   const [updateError, setUpdateError] = useState(false);
 
@@ -63,32 +62,21 @@ export const App: React.FC = () => {
     setVisibleTodos(filterByStatus(status));
   }, [status]);
 
-  // const addTodo = async () => {
-  //   if (user) {
-  //     await postTodo(user?.id, 'copleted');
-  //     console.log('posted');
-  //   }
-  // };
-
-  console.log(visibleTodos);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader />
+        <Header />
 
         <TodoList todos={visibleTodos} />
 
-        <TodoFooter
+        <Footer
           todos={todos}
           selected={status}
           setStatus={setStatus}
         />
       </div>
-
-      {/* ↓↓↓ I use this code in the following tasks ↓↓↓ */}
 
       {hasError() && (
         <div
