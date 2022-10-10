@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -9,10 +8,8 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoCount } from './components/TodoCount/TodoCount';
 import { TodoFilter } from './components/Filter/TodoFilter';
-// import { TodoFooter } from './components/Footer/TodoFooter';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,17 +17,16 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
   }, []);
 
   useEffect(() => {
-    getTodos(4)
+    getTodos(user?.id || 0)
       .then(todosFromServer => setTodos(todosFromServer))
       .catch(() => setErrorMessage('Unable to load data'));
-  }, []);
+  }, [user]);
 
   const activeTodo = todos.filter((todo) => {
     return !todo.completed;
@@ -56,6 +52,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           <button
+            aria-label="Toggle All Todo"
             data-cy="ToggleAllButton"
             type="button"
             className="todoapp__toggle-all active"
