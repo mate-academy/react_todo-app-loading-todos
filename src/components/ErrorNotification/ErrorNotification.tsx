@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useState, useMemo } from 'react';
+import {
+  FC,
+  useState,
+  // useMemo,
+  useEffect,
+} from 'react';
 import classNames from 'classnames';
 
 type Props = {
@@ -9,9 +14,15 @@ type Props = {
 export const ErrorNotification: FC<Props> = ({ errorMessage }) => {
   const [isClosed, setIsClosed] = useState(false);
 
-  useMemo(() => setTimeout(() => {
-    setIsClosed(true);
-  }, 3000), [isClosed]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsClosed(true);
+    }, 3000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isClosed]);
 
   return (
     <div

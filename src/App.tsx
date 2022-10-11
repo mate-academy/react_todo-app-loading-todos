@@ -57,7 +57,7 @@ export const App: FC = () => {
 
   const increase = () => dispatch('increase');
 
-  const getUserFromServer = (userId: number) => {
+  const getUserTodosFromServer = (userId: number) => {
     getTodos(userId)
       .then(userTodosFromServer => setTodos(userTodosFromServer))
       .catch(() => setErrorMessage('Unable to update todos'));
@@ -68,7 +68,7 @@ export const App: FC = () => {
       return;
     }
 
-    getUserFromServer(user.id);
+    getUserTodosFromServer(user.id);
   }, [user]);
 
   useEffect(() => {
