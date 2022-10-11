@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -8,10 +9,10 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(({ id, title }) => (
+      {todos.map(({ id, title, completed }) => (
         <div
           data-cy="Todo"
-          className="todo completed"
+          className={classNames('todo', { completed })}
           key={id}
         >
           <label className="todo__status-label">

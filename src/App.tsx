@@ -56,9 +56,9 @@ export const App: React.FC = () => {
       case 'all':
         return todo;
       case 'active':
-        return todo.completed;
-      case 'completed':
         return !todo.completed;
+      case 'completed':
+        return todo.completed;
 
       default:
         return todo;
