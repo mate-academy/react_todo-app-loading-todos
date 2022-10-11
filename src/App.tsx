@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -15,7 +14,7 @@ import {
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
+import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/Todo';
 import { Todo } from './types/Todo';
 import { TodosFilter } from './types/TodosFilter_Enum';
@@ -73,6 +72,12 @@ export const App: React.FC = () => {
   const forceUpdate = () => {
     setUpdate(prevValue => prevValue + 1);
   };
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -164,7 +169,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
 
-        <Header
+        <NewTodo
           todos={todos}
           newTodoField={newTodoField}
           handleToggleAllTodos={handleToggleAllTodos}
