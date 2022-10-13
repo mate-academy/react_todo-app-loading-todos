@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -9,12 +8,14 @@ type Props = {
 export const Header: React.FC<Props> = ({ todos, newTodoField }) => {
   return (
     <header className="todoapp__header">
-      {todos.length > 0 && (
+      {!!todos.length && (
         <button
           data-cy="ToggleAllButton"
           type="button"
           className="todoapp__toggle-all active"
-        />
+        >
+          &nbsp;
+        </button>
       )}
 
       <form>

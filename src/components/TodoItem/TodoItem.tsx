@@ -1,4 +1,4 @@
-// import React, { useState } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -9,7 +9,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={`todo ${todo.completed && 'todo completed'}`}
+      className={classNames(
+        'todo',
+        { completed: todo.completed },
+      )}
       key={todo.id}
     >
       <label className="todo__status-label">

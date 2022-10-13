@@ -94,7 +94,7 @@ export const App: React.FC = () => {
           todos={visibleTodos}
         />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             filterTodos={filterTodos}
             countActive={countActive}
