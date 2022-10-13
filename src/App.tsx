@@ -9,26 +9,23 @@ import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 import { FilterType } from './types/FilterType';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todos, setTodos] = useState<Todo[] | undefined>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [errorIsHidden, setErrorIsHidden] = useState(true);
+  // const [isErrorHidden, setIsErrorHidden] = useState(true);
   const [filter, setFilter] = useState(FilterType.All);
-  const visibleTodos = useMemo<Todo[] | []>(() => {
+  const visibleTodos = useMemo<Todo[]>(() => {
     if (todos) {
       return [...todos].filter(todo => {
         switch (filter) {
-          case FilterType.All:
-            return true;
           case FilterType.Active:
             return !todo.completed;
           case FilterType.Completed:
             return todo.completed;
+          case FilterType.All:
           default:
             return true;
         }
@@ -39,8 +36,7 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    setErrorIsHidden(true);
+    setErrorMessage('');
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -49,14 +45,13 @@ export const App: React.FC = () => {
       getTodos(user.id)
         .then(result => setTodos(result))
         .catch(() => {
-          setErrorIsHidden(false);
           setErrorMessage('Cannot load todos');
         });
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    setTimeout(() => setErrorIsHidden(true), 3000);
+    setTimeout(() => setErrorMessage(''), 3000);
   }, [errorMessage]);
 
   return (
@@ -94,10 +89,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {!errorIsHidden && (
+      {errorMessage && (
         <ErrorNotification
           errorMessage={errorMessage}
-          hideError={() => setErrorIsHidden(true)}
+          hideError={() => setErrorMessage('')}
         />
       )}
     </div>
