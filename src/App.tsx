@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [filter, setFilter] = useState('all');
 
   if (error === false) {

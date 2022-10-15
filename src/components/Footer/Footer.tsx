@@ -9,10 +9,9 @@ type Props = {
 
 export const Footer: React.FC<Props> = ({ todos, filterLink, setFilter }) => {
   return (
-
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} items left`}
+        {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
