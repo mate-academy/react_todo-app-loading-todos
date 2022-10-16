@@ -1,67 +1,43 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import {
   FC,
   useContext,
   useState,
   useEffect,
   useReducer,
+  useCallback,
   useMemo,
   useRef,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { Filter } from './components/Footer';
 
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { SortType } from './types/Filter';
-
-function filtTodos(
-  todos: Todo[],
-  sortType: SortType,
-) {
-  const visibleTodos = [...todos];
-
-  switch (sortType) {
-    case SortType.Active:
-      return visibleTodos.filter(todo => !todo.completed);
-
-    case SortType.Completed:
-      return visibleTodos.filter(todo => todo.completed);
-    default:
-      return visibleTodos;
-  }
-}
-
-const reducer = (count: number, action: string) => {
-  switch (action) {
-    case 'increase':
-      return count + 1;
-    case 'decrease':
-      return count - 1;
-    case 'clear':
-      return 0;
-    default:
-      return count;
-  }
-};
+import { FiltType } from './types/Filter';
+import { filtTodos } from './components/filtTodos';
+import { reducer } from './components/reducer';
 
 export const App: FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [sortType, setSortType] = useState<SortType>(SortType.All);
+  const [filtType, setFiltType] = useState<FiltType>(FiltType.All);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completeItem, dispatch] = useReducer(reducer, 0);
 
   const increase = () => dispatch('increase');
 
-  const getUserTodosFromServer = (userId: number) => {
-    getTodos(userId)
-      .then(userTodosFromServer => setTodos(userTodosFromServer))
-      .catch(() => setErrorMessage('Unable to update todos'));
-  };
+  const getUserTodosFromServer = useCallback(async (userId: number) => {
+    try {
+      const userTodosFromServer = await getTodos(userId);
+
+      setTodos(userTodosFromServer);
+    } catch {
+      setErrorMessage('Unable to update todos');
+    }
+  }, [user, todos]);
 
   useEffect(() => {
     if (!user) {
@@ -88,8 +64,8 @@ export const App: FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => (
-    filtTodos(todos, sortType)
-  ), [todos, sortType]);
+    filtTodos(todos, filtType)
+  ), [todos, filtType]);
 
   return (
     <div className="todoapp">
@@ -100,6 +76,7 @@ export const App: FC = () => {
           <button
             data-cy="ToggleAllButton"
             type="button"
+            aria-label="toggle all"
             className="todoapp__toggle-all active"
           />
 
@@ -115,11 +92,12 @@ export const App: FC = () => {
         </header>
 
         <TodoList visibleTodos={visibleTodos} />
+
         {!!todos.length && (
-          <Footer
-            sortType={sortType}
+          <Filter
+            filtType={filtType}
             completeItem={completeItem}
-            onSortChange={setSortType}
+            onFiltChange={setFiltType}
           />
         )}
       </div>

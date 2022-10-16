@@ -1,17 +1,17 @@
 import { FC } from 'react';
 import classNames from 'classnames';
-import { SortType } from '../../types/Filter';
+import { FiltType } from '../../types/Filter';
 
 type Props = {
-  sortType: SortType;
+  filtType: FiltType;
   completeItem: number;
-  onSortChange: (sortType: SortType) => void;
+  onFiltChange: (filtType: FiltType) => void;
 };
 
-export const Footer: FC<Props> = ({
-  sortType,
+export const Filter: FC<Props> = ({
+  filtType,
   completeItem,
-  onSortChange,
+  onFiltChange,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -25,9 +25,9 @@ export const Footer: FC<Props> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: sortType === SortType.All },
+            { selected: filtType === FiltType.All },
           )}
-          onClick={() => onSortChange(SortType.All)}
+          onClick={() => onFiltChange(FiltType.All)}
         >
           All
         </a>
@@ -37,9 +37,9 @@ export const Footer: FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: sortType === SortType.Active },
+            { selected: filtType === FiltType.Active },
           )}
-          onClick={() => onSortChange(SortType.Active)}
+          onClick={() => onFiltChange(FiltType.Active)}
         >
           Active
         </a>
@@ -48,9 +48,9 @@ export const Footer: FC<Props> = ({
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: sortType === SortType.Completed },
+            { selected: filtType === FiltType.Completed },
           )}
-          onClick={() => onSortChange(SortType.Completed)}
+          onClick={() => onFiltChange(FiltType.Completed)}
         >
           Completed
         </a>
