@@ -1,6 +1,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -18,7 +19,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [filterValue, setFilterValue] = useState(FilterValues.All);
   const [countActive, setCountActive] = useState(0);
   const [error, setError] = useState({
@@ -42,7 +42,6 @@ export const App: React.FC = () => {
         = await client.get<Todo[]>(`/todos?userId=${user?.id}`);
 
       setTodos(getTodos);
-      setVisibleTodos(getTodos);
       setCountActive(
         (getTodos.filter(todo => !todo.completed)).length,
       );
@@ -61,24 +60,29 @@ export const App: React.FC = () => {
 
   const filterTodos = (value: string) => {
     const { All, Active, Completed } = FilterValues;
+    const filteredTodos = [...todos];
 
     switch (value) {
-      case All:
-        setFilterValue(All);
-        setVisibleTodos(todos);
-        break;
       case Active:
         setFilterValue(Active);
-        setVisibleTodos(todos.filter(todo => !todo.completed));
-        break;
+
+        return filteredTodos.filter(todo => !todo.completed);
+
       case Completed:
         setFilterValue(Completed);
-        setVisibleTodos(todos.filter(todo => todo.completed));
-        break;
+
+        return filteredTodos.filter(todo => todo.completed);
       default:
-        break;
+        setFilterValue(All);
+
+        return filteredTodos;
     }
   };
+
+  const visibleTodos = useMemo(
+    () => filterTodos(filterValue),
+    [todos, filterValue],
+  );
 
   return (
     <div className="todoapp">
