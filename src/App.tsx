@@ -1,17 +1,45 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+/* eslint-disable */
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { getTodos, addTodo } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import { Todo } from './types/Todo';
+
+const useLoadingIds = () => {
+  const [loadingIds, setLoadingIds] = useState<number[]>([]);
+
+  const add = (id: number) => setLoadingIds([...loadingIds, id]);
+  const remove = (id: number) => setLoadingIds(
+    loadingIds.filter(e => e !== id),
+  );
+
+  return [
+    loadingIds,
+    {
+      add,
+      remove,
+    },
+  ];
+};
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loadingIds, setLoadingIds] = useLoadingIds();
+
+  console.log(newTodoField);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    getTodos(user!.id).then(res => setTodos(res));
   }, []);
 
   return (
@@ -33,11 +61,51 @@ export const App: React.FC = () => {
               ref={newTodoField}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addTodo(e.target.value, user!.id, false)
+                    .then(() => getTodos(user!.id)
+                      .then(res => setTodos(res)));
+                }
+              }}
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
+          {todos.map(todo => (
+            <div
+              data-cy="Todo"
+              className={todo.completed ? 'todo completed' : 'todo'}
+              key={todo.id}
+            >
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                  defaultChecked
+                />
+              </label>
+
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDeleteButton"
+              >
+                ×
+              </button>
+
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </div>
+          ))}
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
               <input
