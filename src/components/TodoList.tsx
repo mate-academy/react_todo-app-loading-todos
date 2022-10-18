@@ -6,11 +6,12 @@ import { useContext, useEffect, useState, React } from 'react';
 import { getTodos } from '../api/todos';
 import { AuthContext } from './Auth/AuthContext';
 import { Todo } from '../types/Todo';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { User } from '../types/User';
 
 export const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const user = useContext(AuthContext);
+  const user: User | null = useContext(AuthContext);
 
   useEffect(() => {
     if (!user) {
@@ -30,7 +31,7 @@ export const TodoList = () => {
           <div
             key={todo.id}
             data-cy="Todo"
-            className={classnames(
+            className={classNames(
               'todo',
               { 'completed': todo.completed }
             )}
