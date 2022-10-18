@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { useContext, useEffect, useState, React } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTodos } from '../api/todos';
 import { AuthContext } from './Auth/AuthContext';
 import { Todo } from '../types/Todo';
@@ -21,6 +21,9 @@ export const TodoList = () => {
     getTodos(user.id)
       .then(todos => setTodos(todos));
   }, []);
+
+  console.log('todos', todos);
+
 
   if (todos.length < 1) return;
 
