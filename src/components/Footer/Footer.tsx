@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { FilterValues } from '../../types/FilterValues';
 
 type Props = {
-  filterTodos: (value: string) => void;
+  filterTodos: (value: FilterValues) => void;
   countActive: number;
   filterValue: FilterValues;
 };
@@ -12,9 +12,9 @@ export const Footer: React.FC<Props> = (
 ) => {
   const { All, Active, Completed } = FilterValues;
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    filterTodos((e.target as HTMLAnchorElement).text);
-  };
+  // const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  //   filterTodos((e.target as HTMLAnchorElement).text);
+  // };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -30,7 +30,7 @@ export const Footer: React.FC<Props> = (
             'filter__link',
             { selected: filterValue === All },
           )}
-          onClick={handleClick}
+          onClick={() => filterTodos(FilterValues.All)}
         >
           All
         </a>
@@ -42,7 +42,7 @@ export const Footer: React.FC<Props> = (
             'filter__link',
             { selected: filterValue === Active },
           )}
-          onClick={handleClick}
+          onClick={() => filterTodos(FilterValues.Active)}
         >
           Active
         </a>
@@ -53,7 +53,7 @@ export const Footer: React.FC<Props> = (
             'filter__link',
             { selected: filterValue === Completed },
           )}
-          onClick={handleClick}
+          onClick={() => filterTodos(FilterValues.Completed)}
         >
           Completed
         </a>
