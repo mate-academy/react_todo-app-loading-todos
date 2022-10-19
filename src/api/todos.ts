@@ -16,5 +16,3 @@ export const updateTodo = (todo: Todo) => {
 export const deleteTodo = (todoId: number) => {
   return client.delete(`/todos/${todoId}`);
 };
-
-// Language: typescript

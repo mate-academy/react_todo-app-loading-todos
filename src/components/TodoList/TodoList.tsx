@@ -3,6 +3,7 @@ import {
   CSSTransition,
   TransitionGroup,
 } from 'react-transition-group';
+import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 
@@ -29,11 +30,11 @@ export const TodoList: React.FC<Props>
     };
 
     switch (filterType) {
-      case 'completed':
+      case FilterType.completed:
         filteredTodos = todos.filter((todo) => todo.completed);
         break;
 
-      case 'active':
+      case FilterType.active:
         filteredTodos = todos.filter((todo) => !todo.completed);
         break;
 

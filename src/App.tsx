@@ -7,14 +7,15 @@ import React, {
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
-import { Header } from './components/Header';
+import { HeaderContent } from './components/HeaderContent';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { FooterContent } from './components/FooterContent';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Todo } from './types/Todo';
 import {
   getTodos,
 } from './api/todos';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,7 +31,7 @@ export const App: React.FC = () => {
     getTodos(userId || 0)
       .then(setTodos)
       .catch(() => {
-        setErrorType('get');
+        setErrorType(ErrorType.get);
       });
   }, []);
 
@@ -40,14 +41,14 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
       setErrorType('');
     }
-  }, [todos]);
+  }, [newTodoField]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
+        <HeaderContent
           newTodoField={newTodoField}
           userId={userId || 0}
           setTodos={setTodos}
@@ -62,7 +63,7 @@ export const App: React.FC = () => {
           setErrorType={setErrorType}
         />
 
-        <Footer
+        <FooterContent
           todos={todos}
           setTodos={setTodos}
           setFilterType={setFilterType}

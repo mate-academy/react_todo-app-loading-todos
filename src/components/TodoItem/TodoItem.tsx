@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, updateTodo } from '../../api/todos';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
   todo: Todo;
@@ -23,7 +24,7 @@ export const TodoItem: React.FC<Props>
   }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newTodoTitle, setNewTodoTitle] = useState(todo.title);
-    const [selectedTodo, setSelectedTodo] = useState(-1);
+    const [selectedTodo, setSelectedTodo] = useState<number | null>(null);
     const [isCompleted, setIsCompleted] = useState(todo.completed);
     const editField = useRef<HTMLInputElement>(null);
 
@@ -37,9 +38,7 @@ export const TodoItem: React.FC<Props>
       try {
         await deleteTodo(todo.id);
       } catch (errorObject) {
-        // eslint-disable-next-line no-console
-        console.log(errorObject);
-        setErrorType('delete');
+        setErrorType(ErrorType.delete);
 
         return;
       }
@@ -89,7 +88,7 @@ export const TodoItem: React.FC<Props>
             console.log(errorObject);
             setIsLoading(false);
             setIsEditing(false);
-            setErrorType('update');
+            setErrorType(ErrorType.update);
             setNewTodoTitle(todo.title);
           }
         }
@@ -129,7 +128,7 @@ export const TodoItem: React.FC<Props>
           console.log(errorObject);
           setIsLoading(false);
           setIsEditing(false);
-          setErrorType('update');
+          setErrorType(ErrorType.update);
           setNewTodoTitle(todo.title);
         }
       }
@@ -159,7 +158,7 @@ export const TodoItem: React.FC<Props>
       } catch (ErrorObject) {
         // eslint-disable-next-line no-console
         console.log(ErrorObject);
-        setErrorType('update');
+        setErrorType(ErrorType.update);
 
         completedStateSetter();
       }

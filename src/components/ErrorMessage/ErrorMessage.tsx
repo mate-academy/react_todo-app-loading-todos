@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
   errorType: string;
@@ -7,6 +8,38 @@ type Props = {
 
 export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
   const [wait, setWait] = useState(false);
+
+  let ErrorMessageText = '';
+
+  switch (errorType) {
+    case ErrorType.empty:
+      ErrorMessageText = 'Please enter title';
+      break;
+
+    case ErrorType.delete:
+      ErrorMessageText = 'Unable to delete a todo';
+      break;
+
+    case ErrorType.add:
+      ErrorMessageText = 'Unable to add a todo';
+      break;
+
+    case ErrorType.update:
+      ErrorMessageText = 'Unable to update a todo';
+      break;
+
+    case ErrorType.get:
+      ErrorMessageText = 'Unable to get todos';
+      break;
+
+    case ErrorType.create:
+      ErrorMessageText = 'Unable to create a todo';
+      break;
+
+    default:
+      ErrorMessageText = '';
+      break;
+  }
 
   const handleHideError = () => {
     setErrorType('');
@@ -23,104 +56,21 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, setErrorType }) => {
 
   return (
     <>
-
-      {(errorType === 'empty') && wait && (
-        <>
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              aria-label="Close"
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
-            Title can`t be empty
-            <br />
-
-          </div>
-        </>
-      )}
-      {(errorType === 'delete') && wait && (
-        <>
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              aria-label="Close"
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
-            Unable to delete a todo
-            <br />
-
-          </div>
-        </>
-      )}
-
-      {(errorType === 'add') && wait && (
-        <>
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              aria-label="Close"
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
-            Unable to add a todo
-            <br />
-
-          </div>
-        </>
-      )}
-
-      {(errorType === 'update') && wait && (
-        <>
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              aria-label="Close"
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
-            Unable to update a todo
-            <br />
-
-          </div>
-        </>
-      )}
-
-      {(errorType === 'get') && wait && (
-        <>
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              aria-label="Close"
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
-            Unable to load a todo
-            <br />
-
-          </div>
-        </>
+      {wait && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          <button
+            aria-label="Close"
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={handleHideError}
+          />
+          {ErrorMessageText}
+          <br />
+        </div>
       )}
     </>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import { createTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
@@ -11,7 +12,7 @@ type Props = {
   setErrorType: (errorType: string) => void;
 };
 
-export const Header: React.FC<Props>
+export const HeaderContent: React.FC<Props>
   = ({
     newTodoField,
     userId,
@@ -50,7 +51,7 @@ export const Header: React.FC<Props>
       event.preventDefault();
 
       if (newTodoTitle.trim() === '') {
-        setErrorType('empty');
+        setErrorType(ErrorType.empty);
       } else {
         try {
           createTodo(userId, newTodoTitle)
@@ -59,7 +60,7 @@ export const Header: React.FC<Props>
               setNewTodoTitle('');
             });
         } catch (error) {
-          setErrorType('create');
+          setErrorType(ErrorType.create);
         }
 
         if (newTodoField.current) {
