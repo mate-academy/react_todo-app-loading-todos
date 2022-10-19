@@ -12,10 +12,6 @@ export const Footer: React.FC<Props> = (
 ) => {
   const { All, Active, Completed } = FilterValues;
 
-  // const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  //   filterTodos((e.target as HTMLAnchorElement).text);
-  // };
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
