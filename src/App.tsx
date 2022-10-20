@@ -17,8 +17,7 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isError, setIsError] = useState(false);
-  const [errorText] = useState('');
+  const [isError, setIsError] = useState<string | null>(null);
   const [sortType, setSortType] = useState(SortType.ALL);
 
   const getFilteredTodos = () => {
@@ -40,7 +39,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      getTodos(user.id).then(todoFromServer => setTodos(todoFromServer));
+      getTodos(user.id)
+        .then(todoFromServer => setTodos(todoFromServer))
+        .catch(error => setIsError(`${error}: Unable to loading a todos`));
     }
   }, []);
 
@@ -64,7 +65,6 @@ export const App: React.FC = () => {
       <TodoErrorNotification
         isError={isError}
         setIsError={setIsError}
-        errorText={errorText}
       />
     </div>
   );

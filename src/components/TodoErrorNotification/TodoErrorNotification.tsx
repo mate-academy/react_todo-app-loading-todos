@@ -3,18 +3,16 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 
 type Props = {
-  isError: boolean,
-  setIsError: (value: boolean) => void;
-  errorText: string,
+  isError: string | null,
+  setIsError: (value: string | null) => void;
 };
 
 export const TodoErrorNotification: React.FC<Props> = ({
   isError,
   setIsError,
-  errorText,
 }) => {
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsError(false), 3000);
+    const timer = window.setTimeout(() => setIsError(null), 3000);
 
     return () => {
       window.clearInterval(timer);
@@ -33,9 +31,9 @@ export const TodoErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setIsError(false)}
+        onClick={() => setIsError(null)}
       />
-      {errorText}
+      {isError}
     </div>
   );
 };
