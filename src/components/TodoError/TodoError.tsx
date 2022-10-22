@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
   error: string | null,
@@ -7,8 +7,6 @@ type Props = {
 };
 
 export const TodoError: React.FC<Props> = ({ error, setError }) => {
-  const [notification, setNotification] = useState(false);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
@@ -17,14 +15,14 @@ export const TodoError: React.FC<Props> = ({ error, setError }) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [error, notification]);
+  }, [error]);
 
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: notification },
+        { hidden: error },
       )}
     >
       <button
@@ -32,7 +30,7 @@ export const TodoError: React.FC<Props> = ({ error, setError }) => {
         type="button"
         className="delete"
         aria-label="delete"
-        onClick={() => setNotification(true)}
+        onClick={() => setError(null)}
       />
       <span>{error}</span>
     </div>
