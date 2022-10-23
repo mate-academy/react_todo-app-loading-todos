@@ -3,36 +3,16 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { getTodos, addTodo } from './api/todos';
+import {
+  getTodos,
+  addTodo,
+  deleteTodo,
+  switchTodoStatus,
+  clearTodos,
+} from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
-
-const useError = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const clearError = () => {
-    setErrorMessage(null);
-  };
-
-  const setError = (message: string): void => {
-    setErrorMessage(message);
-
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, 3000);
-  };
-
-  return [errorMessage, setError, clearError] as const;
-};
-
-const useFilter = () => {
-  const [filter, setFilter] = useState<null | boolean>(null);
-
-  const filterAll = () => setFilter(null);
-  const filterActive = () => setFilter(false);
-  const filterCompleted = () => setFilter(true);
-
-  return [filter, filterAll, filterActive, filterCompleted] as const;
-};
+import { useError, useFilter, useLoader } from './utils/customHooks';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,6 +21,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError, clearError] = useError();
   const [filter, filterAll, filterActive, filterCompleted] = useFilter();
+  const [isLoading, addToLoading, removeFromLoading] = useLoader();
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -84,6 +65,16 @@ export const App: React.FC = () => {
                   } else {
                     newTodoField.current!.readOnly = true;
                     newTodoField.current!.blur();
+                    setTodos([
+                      ...todos,
+                      {
+                        id: 0,
+                        title: e.target.value,
+                        completed: false,
+                        userId: user!.id,
+                      },
+                    ]);
+                    addToLoading(0);
                     addTodo(e.target.value, user!.id, false)
                       .then(
                         () => getTodos(user!.id)
@@ -92,9 +83,11 @@ export const App: React.FC = () => {
                             newTodoField.current!.value = '';
                             newTodoField.current!.focus();
                             newTodoField.current!.readOnly = false;
+                            removeFromLoading(0);
                           }),
                         () => {
                           setError('Failed to add');
+                          removeFromLoading(0);
                         },
                       );
                   }
@@ -119,6 +112,20 @@ export const App: React.FC = () => {
                     type="checkbox"
                     className="todo__status"
                     defaultChecked
+                    onClick={() => {
+                      addToLoading(todo.id);
+                      switchTodoStatus(todo).then(
+                        () => getTodos(user!.id)
+                          .then(res => {
+                            removeFromLoading(todo.id);
+                            setTodos(res);
+                          }),
+                        () => {
+                          removeFromLoading(todo.id);
+                          setError('Unable to update');
+                        },
+                      );
+                    }}
                   />
                 </label>
 
@@ -129,11 +136,28 @@ export const App: React.FC = () => {
                   type="button"
                   className="todo__remove"
                   data-cy="TodoDeleteButton"
+                  onClick={() => {
+                    addToLoading(todo.id);
+                    deleteTodo(todo.id).then(
+                      () => getTodos(user!.id)
+                        .then(res => {
+                          removeFromLoading(todo.id);
+                          setTodos(res);
+                        }),
+                      () => {
+                        removeFromLoading(todo.id);
+                        setError('Unable to remove');
+                      },
+                    );
+                  }}
                 >
                   ×
                 </button>
 
-                <div data-cy="TodoLoader" className="modal overlay">
+                <div
+                  data-cy="TodoLoader"
+                  className={`modal overlay ${isLoading.includes(todo.id) && 'is-active'}`}
+                >
                   <div className="modal-background has-background-white-ter" />
                   <div className="loader" />
                 </div>
@@ -180,6 +204,19 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               disabled={!todos.find(todo => todo.completed)}
+              onClick={() => {
+                clearTodos(todos
+                  .filter(todo => todo.completed)
+                  .map(todo => todo.id)).then(
+                  () => getTodos(user!.id)
+                    .then(res => {
+                      setTodos(res);
+                    }),
+                  () => {
+                    setError('Unable to clear');
+                  },
+                );
+              }}
             >
               Clear completed
             </button>
@@ -200,7 +237,6 @@ export const App: React.FC = () => {
             className="delete"
             onClick={() => clearError()}
           />
-
           {error}
         </>
       </div>

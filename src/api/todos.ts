@@ -17,4 +17,20 @@ export const addTodo = (
   });
 };
 
-// Add more methods here
+export const deleteTodo = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
+};
+
+export const clearTodos = (todoIds: number[]) => {
+  return Promise.all(
+    todoIds.map(todoId => client.delete(`/todos/${todoId}`)),
+  );
+};
+
+export const switchTodoStatus = (
+  todo: Todo,
+) => {
+  return client.patch<Todo[]>(`/todos/${todo.id}`, {
+    completed: !todo.completed,
+  });
+};
