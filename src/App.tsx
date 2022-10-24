@@ -15,7 +15,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  // const [isErrorHidden, setIsErrorHidden] = useState(true);
   const [filter, setFilter] = useState(FilterType.All);
   const visibleTodos = useMemo<Todo[]>(() => {
     if (todos) {
@@ -77,7 +76,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos?.length && (
+        {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer
