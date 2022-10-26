@@ -6,7 +6,7 @@ interface Props {
   todos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = React.memo(({ todos }) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos.map((todo) => (
       <div
@@ -41,4 +41,4 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
       </div>
     ))}
   </section>
-);
+));
