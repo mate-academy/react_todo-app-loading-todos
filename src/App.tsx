@@ -5,51 +5,57 @@ import React, {
 import classNames from 'classnames';
 
 import { AuthContext } from './components/Auth/AuthContext';
-import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 
 import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 import { TodoList } from './components/TodoList/TodoList';
+
+import { Status } from './types/Status';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('all');
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [filterBy, setFilterBy] = useState<Status>(Status.ALL);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    const getTodosFromApi = async () => {
+      try {
+        const ID = user ? user.id : 1;
+        const response = await getTodos(ID);
+
+        setTodos(response);
+        setVisibleTodos(response);
+      } catch (e) {
+        setIsError(true);
+
+        setTimeout(() => {
+          setIsError(false);
+        }, 3000);
+      }
+    };
+
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
 
-    if (user) {
-      getTodos(user.id)
-        .then((response) => {
-          setTodos(response);
-        })
-        .catch(() => {
-          setIsError(true);
-
-          setTimeout(() => {
-            setIsError(false);
-          }, 3000);
-        });
-    }
+    getTodosFromApi();
   }, []);
 
   const FilterTodos = () => {
-    if (filterBy === 'completed') {
-      return todos.filter(todoFilter => todoFilter.completed);
+    switch (filterBy) {
+      case Status.ACTIVE:
+        return todos.filter(todoFilter => !todoFilter.completed);
+      case Status.COMPLETED:
+        return todos.filter(todoFilter => todoFilter.completed);
+      default:
+        return todos;
     }
-
-    if (filterBy === 'active') {
-      return todos.filter(todoFilter => !todoFilter.completed);
-    }
-
-    return todos;
   };
 
   return (
@@ -77,7 +83,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={FilterTodos()} />
+            <TodoList todos={visibleTodos} />
 
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="todosCounter">
@@ -92,7 +98,10 @@ export const App: React.FC = () => {
                   className={classNames('filter__link', {
                     selected: filterBy === 'all',
                   })}
-                  onClick={() => setFilterBy('all')}
+                  onClick={() => {
+                    setFilterBy(Status.ALL);
+                    setVisibleTodos(FilterTodos());
+                  }}
                 >
                   All
                 </a>
@@ -103,7 +112,10 @@ export const App: React.FC = () => {
                   className={classNames('filter__link', {
                     selected: filterBy === 'active',
                   })}
-                  onClick={() => setFilterBy('active')}
+                  onClick={() => {
+                    setFilterBy(Status.ACTIVE);
+                    setVisibleTodos(FilterTodos());
+                  }}
                 >
                   Active
                 </a>
@@ -111,9 +123,12 @@ export const App: React.FC = () => {
                   data-cy="FilterLinkCompleted"
                   href="#/completed"
                   className={classNames('filter__link', {
-                    selected: filterBy === 'completed',
+                    selected: filterBy === Status.COMPLETED,
                   })}
-                  onClick={() => setFilterBy('completed')}
+                  onClick={() => {
+                    setFilterBy(Status.COMPLETED);
+                    setVisibleTodos(FilterTodos());
+                  }}
                 >
                   Completed
                 </a>
