@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TodoContent } from './components/TodoContent';
 import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -17,9 +18,15 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <TodoContent newTodoField={newTodoField} />
+      <TodoContent
+        newTodoField={newTodoField}
+        setHasLoadingError={setHasLoadingError}
+      />
 
-      <ErrorNotification />
+      <ErrorNotification
+        hasLoadingError={hasLoadingError}
+        setHasLoadingError={setHasLoadingError}
+      />
     </div>
   );
 };

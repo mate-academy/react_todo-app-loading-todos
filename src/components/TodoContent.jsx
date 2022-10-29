@@ -1,8 +1,31 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable react/jsx-filename-extension */
+import {
+  useContext, useEffect, useState, React,
+} from 'react';
 import { TodoList } from './TodoList';
+import { getTodos } from '../api/todos';
+import { AuthContext } from './Auth/AuthContext';
+import { Footer } from './Footer';
 
-export const TodoContent = ({ newTodoField }) => {
+export const TodoContent = ({ newTodoField, setHasLoadingError }) => {
+  const [todos, setTodos] = useState([]);
+  const [visibleTodos, setVisibleTodos] = useState([]);
+  const user = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    getTodos(user.id)
+      .then((fetchedTodos) => {
+        setTodos(fetchedTodos);
+        setVisibleTodos(fetchedTodos);
+      })
+      .catch(() => setHasLoadingError(true));
+  }, []);
+
   return (
     <div className="todoapp__content">
       <header className="todoapp__header">
@@ -23,46 +46,12 @@ export const TodoContent = ({ newTodoField }) => {
         </form>
       </header>
 
-      <TodoList />
-
-      <footer className="todoapp__footer" data-cy="Footer">
-        <span className="todo-count" data-cy="todosCounter">
-          4 items left
-        </span>
-
-        <nav className="filter" data-cy="Filter">
-          <a
-            data-cy="FilterLinkAll"
-            href="#/"
-            className="filter__link selected"
-          >
-            All
-          </a>
-
-          <a
-            data-cy="FilterLinkActive"
-            href="#/active"
-            className="filter__link"
-          >
-            Active
-          </a>
-          <a
-            data-cy="FilterLinkCompleted"
-            href="#/completed"
-            className="filter__link"
-          >
-            Completed
-          </a>
-        </nav>
-
-        <button
-          data-cy="ClearCompletedButton"
-          type="button"
-          className="todoapp__clear-completed"
-        >
-          Clear completed
-        </button>
-      </footer>
+      <TodoList visibleTodos={visibleTodos} />
+      <Footer
+        setVisibleTodos={setVisibleTodos}
+        todos={todos}
+        visibleTodos={visibleTodos}
+      />
     </div>
   );
 };

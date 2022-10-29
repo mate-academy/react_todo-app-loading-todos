@@ -2,34 +2,20 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { useContext, useEffect, useState } from 'react';
-import { getTodos } from '../api/todos';
-import { AuthContext } from './Auth/AuthContext';
-import { Todo } from '../types/Todo';
 import classNames from 'classnames';
-import { User } from '../types/User';
+import React from 'react';
+import { Todo } from '../types/Todo';
 
-export const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const user: User | null = useContext(AuthContext);
+type Props = {
+  visibleTodos: Todo[],
+}
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    getTodos(user.id)
-      .then(todos => setTodos(todos));
-  }, []);
-
-  console.log('todos', todos);
-
-
-  if (todos.length < 1) return;
+export const TodoList = ({ visibleTodos }: Props) => {
+  if (visibleTodos.length < 1) return;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
+      {visibleTodos.map((todo: Todo) => {
         return (
           <div
             key={todo.id}
