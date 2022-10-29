@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   hasLoadingError: boolean,
-  setHasLoadingError: (arg: any) => void,
+  setHasLoadingError: (arg: boolean) => void,
 };
 
 export const ErrorNotification = (

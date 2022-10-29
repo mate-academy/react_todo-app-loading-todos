@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable react/jsx-filename-extension */
 import {
-  useContext, useEffect, useState, React,
+  useContext, useEffect, useState,
 } from 'react';
 import { TodoList } from './TodoList';
 import { getTodos } from '../api/todos';
