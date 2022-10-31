@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/jsx-filename-extension */
 import {
   useContext, useEffect, useState,
 } from 'react';
@@ -30,6 +28,7 @@ export const TodoContent = ({ newTodoField, setHasLoadingError }) => {
     <div className="todoapp__content">
       <header className="todoapp__header">
         <button
+          aria-label="toggle"
           data-cy="ToggleAllButton"
           type="button"
           className="todoapp__toggle-all active"

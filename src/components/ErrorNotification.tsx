@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
@@ -33,17 +32,15 @@ export const ErrorNotification = (
       )}
     >
       <button
-        data-cy="HideErrorButton"
+        aria-label="delete"
         type="button"
+        data-cy="HideErrorButton"
         className="delete"
         onClick={() => setIsCLosePressed(true)}
       />
       {hasLoadingError && ('Unable to add a todo')}
 
       <br />
-      {/* Unable to delete a todo
-        <br />
-        Unable to update a todo */}
     </div>
   );
 };

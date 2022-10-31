@@ -21,11 +21,11 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
         break;
 
       case 'completed':
-        setVisibleTodos([...todos].filter((todo) => todo.completed));
+        setVisibleTodos(todos.filter((todo) => todo.completed));
         break;
 
       case 'active':
-        setVisibleTodos([...todos].filter((todo) => !todo.completed));
+        setVisibleTodos(todos.filter((todo) => !todo.completed));
         break;
 
       default:
