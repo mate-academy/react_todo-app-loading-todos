@@ -8,7 +8,6 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => (
   <div
-    key={todo.id}
     data-cy="Todo"
     className={classNames('todo', {
       completed: todo.completed,
