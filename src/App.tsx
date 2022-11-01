@@ -47,16 +47,22 @@ export const App: React.FC = () => {
     getTodosFromApi();
   }, []);
 
-  const FilterTodos = () => {
-    switch (filterBy) {
-      case Status.ACTIVE:
-        return todos.filter(todoFilter => !todoFilter.completed);
-      case Status.COMPLETED:
-        return todos.filter(todoFilter => todoFilter.completed);
-      default:
-        return todos;
-    }
-  };
+  useEffect(() => {
+    const newVisibleTodos = todos.filter(todoFilter => {
+      switch (filterBy) {
+        case Status.ACTIVE:
+          return !todoFilter.completed;
+
+        case Status.COMPLETED:
+          return todoFilter.completed;
+
+        default:
+          return todoFilter;
+      }
+    });
+
+    setVisibleTodos(newVisibleTodos);
+  }, [filterBy, todos]);
 
   return (
     <div className="todoapp">
@@ -100,7 +106,6 @@ export const App: React.FC = () => {
                   })}
                   onClick={() => {
                     setFilterBy(Status.ALL);
-                    setVisibleTodos(FilterTodos());
                   }}
                 >
                   All
@@ -114,7 +119,6 @@ export const App: React.FC = () => {
                   })}
                   onClick={() => {
                     setFilterBy(Status.ACTIVE);
-                    setVisibleTodos(FilterTodos());
                   }}
                 >
                   Active
@@ -127,7 +131,6 @@ export const App: React.FC = () => {
                   })}
                   onClick={() => {
                     setFilterBy(Status.COMPLETED);
-                    setVisibleTodos(FilterTodos());
                   }}
                 >
                   Completed
