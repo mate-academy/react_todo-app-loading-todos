@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
@@ -11,20 +8,26 @@ type Props = {
   visibleTodos: Todo[];
 };
 
+enum FilterType {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
 export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState(FilterType.All);
 
   useEffect(() => {
     switch (filterType) {
-      case 'all':
+      case FilterType.All:
         setVisibleTodos(todos);
         break;
 
-      case 'completed':
+      case FilterType.Completed:
         setVisibleTodos(todos.filter((todo) => todo.completed));
         break;
 
-      case 'active':
+      case FilterType.Active:
         setVisibleTodos(todos.filter((todo) => !todo.completed));
         break;
 
@@ -36,29 +39,29 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${visibleTodos.length}`}
-        {' '}
+        {`${visibleTodos.length} `}
         items left
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
+        <button
+          type="button"
           data-cy="FilterLinkAll"
           className={classNames('filter__link', {
-            selected: filterType === 'all',
+            selected: filterType === FilterType.All,
           })}
-          onClick={() => setFilterType('all')}
+          onClick={() => setFilterType(FilterType.All)}
         >
           All
-        </a>
+        </button>
 
         <a
           data-cy="FilterLinkActive"
           href="#/active"
           className={classNames('filter__link', {
-            selected: filterType === 'active',
+            selected: filterType === FilterType.Active,
           })}
-          onClick={() => setFilterType('active')}
+          onClick={() => setFilterType(FilterType.Active)}
         >
           Active
         </a>
@@ -66,9 +69,9 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filterType === 'completed',
+            selected: filterType === FilterType.Completed,
           })}
-          onClick={() => setFilterType('completed')}
+          onClick={() => setFilterType(FilterType.Completed)}
         >
           Completed
         </a>

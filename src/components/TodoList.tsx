@@ -1,17 +1,12 @@
-/* eslint-disable */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-shadow */
 import classNames from 'classnames';
+import { FC } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
   visibleTodos: Todo[],
-}
+};
 
-export const TodoList = ({ visibleTodos }: Props) => {
-  if (visibleTodos.length < 1) return;
-
+export const TodoList: FC<Props> = ({ visibleTodos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map((todo: Todo) => {
@@ -21,9 +16,8 @@ export const TodoList = ({ visibleTodos }: Props) => {
             data-cy="Todo"
             className={classNames(
               'todo',
-              { 'completed': todo.completed }
+              { completed: todo.completed },
             )}
-
           >
             <label className="todo__status-label">
               <input
@@ -34,7 +28,9 @@ export const TodoList = ({ visibleTodos }: Props) => {
               />
             </label>
 
-            <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
+            <span data-cy="TodoTitle" className="todo__title">
+              {todo.title}
+            </span>
             <button
               type="button"
               className="todo__remove"
@@ -48,7 +44,7 @@ export const TodoList = ({ visibleTodos }: Props) => {
               <div className="loader" />
             </div>
           </div>
-        )
+        );
       })}
     </section>
   );
