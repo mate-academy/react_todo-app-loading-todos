@@ -12,6 +12,7 @@ import { Todo } from './types/Todo';
 import { TodosList } from './components/TodosList';
 import { FilterBy } from './types/FilterBy';
 import { Footer } from './components/Footer';
+import { TodoAdd } from './components/TodoAdd';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -99,17 +100,12 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <form onSubmit={handlerFormSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={newTodoTitle}
-              onChange={handlerInputTitle}
-            />
-          </form>
+          <TodoAdd
+            newTodoField={newTodoField}
+            newTodoTitle={newTodoTitle}
+            handlerFormSubmit={handlerFormSubmit}
+            handlerInputTitle={handlerInputTitle}
+          />
         </header>
 
         {todosList.length > 0
