@@ -5,4 +5,6 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+export const updateTodos = (id: number, data: Todo) => {
+  return client.patch<Todo[]>(`/todos/${id}`, data);
+};
