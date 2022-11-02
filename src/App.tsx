@@ -54,14 +54,21 @@ export const App: React.FC = () => {
   const handlerFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!newTodoTitle) {
+    const normilizedTodoTitle = newTodoTitle
+      .trim()
+      .split(' ')
+      .filter(words => words !== '')
+      .join(' ');
+
+    if (!normilizedTodoTitle) {
       setTitleError(true);
+      setNewTodoTitle('');
 
       return;
     }
 
     if (user && !titleError) {
-      await addTodo(user.id, newTodoTitle);
+      await addTodo(user.id, normilizedTodoTitle);
       getTodosList();
     }
 
