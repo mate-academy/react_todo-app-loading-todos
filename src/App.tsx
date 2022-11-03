@@ -103,13 +103,14 @@ export const App: React.FC = () => {
         {hasTodos && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
-              {visibleTodos.map(({ title, completed }) => (
+              {visibleTodos.map(({ title, completed, id }) => (
                 <div
                   data-cy="Todo"
                   className={cn(
                     'todo',
                     { completed },
                   )}
+                  key={id}
                 >
                   <label className="todo__status-label">
                     <input
