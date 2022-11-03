@@ -7,11 +7,13 @@ import './styles/index.scss';
 import { App } from './App';
 import { AuthProvider } from './components/Auth/AuthContext';
 
-const Root = () => (
-  <AuthProvider>
-    <App />
-  </AuthProvider>
-);
+const Root = () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+};
 
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(<Root />);
