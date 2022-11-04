@@ -119,7 +119,7 @@ export const App: React.FC = () => {
     };
 
     try {
-      await client.post('/todos123', date);
+      await client.post('/todos', date);
       updateTodos();
     } catch {
       errorHandler('addTodoError');

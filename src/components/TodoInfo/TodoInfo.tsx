@@ -20,7 +20,7 @@ export const TodoInfo: React.FC<OneTodo> = ({
     errorCloser('deletetodo');
 
     try {
-      await client.delete(`/todos123/${todo.id}`);
+      await client.delete(`/todos/${todo.id}`);
       update();
     } catch {
       errorHandler('deleteTodoError');
@@ -34,7 +34,7 @@ export const TodoInfo: React.FC<OneTodo> = ({
     };
 
     try {
-      await client.patch(`/todos123/${todo.id}`, date);
+      await client.patch(`/todos/${todo.id}`, date);
       update();
     } catch {
       errorHandler('updateTodoError');
