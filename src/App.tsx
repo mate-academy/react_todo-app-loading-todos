@@ -24,8 +24,10 @@ export const App: React.FC = () => {
   // Todo lists
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [renderTodoList, setRenderTodoList] = useState<Todo[]>([]);
-  // eslint-disable-next-line max-len
-  const [activeFilter, seTactiveFilter] = useState<'All' | 'Active' | 'Completed'>('All');
+
+  const [
+    activeFilter,
+    seTactiveFilter] = useState<'All' | 'Active' | 'Completed'>('All');
 
   // Random Id
   const randomId = Math.floor(Math.random() * 1000000);
@@ -207,69 +209,74 @@ export const App: React.FC = () => {
 
         { /* Footer and nav */ }
 
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${todoList.length} items left`}
-          </span>
+        {renderTodoList.length !== 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${todoList.length} items left`}
+            </span>
 
-          <nav className="filter" data-cy="Filter">
-            <a
-              data-cy="FilterLinkAll"
-              href="#/"
-              className={classNames(
-                'filter__link',
-                { selected: activeFilter === 'All' },
-              )}
-              onClick={() => {
-                seTactiveFilter('All');
-                setRenderTodoList(todoList);
-              }}
-            >
-              All
-            </a>
+            <nav className="filter" data-cy="Filter">
+              <a
+                data-cy="FilterLinkAll"
+                href="#/"
+                className={classNames(
+                  'filter__link',
+                  { selected: activeFilter === 'All' },
+                )}
+                onClick={() => {
+                  seTactiveFilter('All');
+                  setRenderTodoList(todoList);
+                }}
+              >
+                All
+              </a>
 
-            <a
-              data-cy="FilterLinkActive"
-              href="#/active"
-              className={classNames(
-                'filter__link',
-                { selected: activeFilter === 'Active' },
-              )}
-              onClick={() => {
-                seTactiveFilter('Active');
-                setRenderTodoList(todoList
-                  .filter(todo => todo.completed === false));
-              }}
-            >
-              Active
-            </a>
-            <a
-              data-cy="FilterLinkCompleted"
-              href="#/completed"
-              className={classNames(
-                'filter__link',
-                { selected: activeFilter === 'Completed' },
-              )}
-              onClick={() => {
-                seTactiveFilter('Completed');
-                setRenderTodoList(todoList
-                  .filter(todo => todo.completed === true));
-              }}
-            >
-              Completed
-            </a>
-          </nav>
+              <a
+                data-cy="FilterLinkActive"
+                href="#/active"
+                className={classNames(
+                  'filter__link',
+                  { selected: activeFilter === 'Active' },
+                )}
+                onClick={() => {
+                  seTactiveFilter('Active');
+                  setRenderTodoList(todoList
+                    .filter(todo => todo.completed === false));
+                }}
+              >
+                Active
+              </a>
+              <a
+                data-cy="FilterLinkCompleted"
+                href="#/completed"
+                className={classNames(
+                  'filter__link',
+                  { selected: activeFilter === 'Completed' },
+                )}
+                onClick={() => {
+                  seTactiveFilter('Completed');
+                  setRenderTodoList(todoList
+                    .filter(todo => todo.completed === true));
+                }}
+              >
+                Completed
+              </a>
+            </nav>
 
-          <button
-            data-cy="ClearCompletedButton"
-            type="button"
-            className="todoapp__clear-completed"
-            hidden={!renderTodoList.some(todo => todo.completed === true)}
-            onClick={buttonDeleteCompleted}
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              data-cy="ClearCompletedButton"
+              type="button"
+              className="todoapp__clear-completed"
+              style={{
+                opacity: !renderTodoList
+                  .some(todo => todo.completed === true) ? 0 : 100,
+              }}
+              onClick={buttonDeleteCompleted}
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       <div
