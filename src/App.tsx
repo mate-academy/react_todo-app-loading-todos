@@ -28,7 +28,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const updateTodos = async () => {
-    await client.get(`/todos?userId=${user?.id}`)
+    await client.get<Todo[]>(`/todos?userId=${user?.id}`)
       .then(setTodosFromServer);
   };
 
