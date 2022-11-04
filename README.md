@@ -12,7 +12,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 ## General info
 
 You have an implemented simple login form. Enter your email to create a user
-or find an existing one in the API.
+or find an existing one in the API...
 
 - tests are NOT implemented yet.
 - load the user todos when the `App` is loaded;
