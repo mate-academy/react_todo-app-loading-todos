@@ -104,6 +104,10 @@
       0 17px 2px -6px rgba(0, 0, 0, 0.2);
   }
 
+  &__clear-hidden {
+    visibility: hidden;
+  }
+
   &__clear-completed {
     margin: 0;
     padding: 0;
