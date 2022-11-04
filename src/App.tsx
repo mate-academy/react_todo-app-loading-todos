@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todosAreLoaded, setTodosAreLoaded] = useState(false);
   const [error, setError] = useState<Error>(Error.NONE);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
@@ -23,23 +23,19 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const getTodosFromApi = async () => {
+    const setTodos = async () => {
       try {
         const userId = user ? user.id : 1;
         const todosFromApi = await getTodos(userId);
 
-        setTodos(todosFromApi);
+        setVisibleTodos(todosFromApi);
         setTodosAreLoaded(true);
-
-        return 0;
       } catch (err) {
         setError(Error.ADD);
 
-        const timerId = setTimeout(() => {
+        setTimeout(() => {
           setError(Error.NONE);
         }, 3000);
-
-        return () => clearTimeout(timerId);
       }
     };
     // focus the element with `ref={newTodoField}`
@@ -48,10 +44,10 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    getTodosFromApi();
+    setTodos();
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = visibleTodos.filter(todo => {
     switch (filter) {
       case Filter.ACTIVE:
         return !todo.completed;
