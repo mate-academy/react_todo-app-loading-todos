@@ -9,8 +9,8 @@ import {
 import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import { Todos } from './components/Todos';
-import { SendedTodo } from './types/sendedTodo';
+import { VisibleTodos } from './components/Todos';
+import { SendedTodo } from './types/SendedTodo';
 import { Todo } from './types/Todo';
 
 const possibleStatus = ['All', 'Active', 'Completed'];
@@ -43,9 +43,15 @@ export const App: React.FC = () => {
   async function sendNewTodo(data: SendedTodo) {
     if (user && data) {
       try {
-        await sendTodos(user?.id, data);
+        const todoFromServer = await sendTodos(user?.id, data);
+        const todoToShow: Todo = {
+          id: todoFromServer.id,
+          title: todoFromServer.title,
+          completed: todoFromServer.completed,
+          userId: todoFromServer.userId,
+        };
 
-        loadTodos();
+        setTodos(current => [...current, todoToShow]);
       } catch {
         setHidden(false);
         setError('Todos not added');
@@ -58,8 +64,9 @@ export const App: React.FC = () => {
     if (user && todoId) {
       try {
         await deleteTodos(todoId);
+        const todosToShow = todos.filter(todo => todo.id !== todoId);
 
-        loadTodos();
+        setTodos(todosToShow);
       } catch {
         setHidden(false);
         setError('Todos not deleted');
@@ -73,9 +80,20 @@ export const App: React.FC = () => {
   ) {
     if (user) {
       try {
-        await patchTodos(todoId, title, completed);
+        const todoFromServer = await patchTodos(todoId, title, completed);
+        const todosToShow = todos.map(todo => {
+          if (todo.id !== todoId) {
+            return todo;
+          }
 
-        loadTodos();
+          return {
+            ...todo,
+            title: todoFromServer.title,
+            completed: todoFromServer.completed,
+          };
+        });
+
+        setTodos(todosToShow);
       } catch {
         setHidden(false);
         setError('Todos not modified');
@@ -155,9 +173,9 @@ export const App: React.FC = () => {
 
     if (!title) {
       deleteCurrentTodo(todoId);
+    } else {
+      modifieTodo(todoId, title);
     }
-
-    modifieTodo(todoId, title);
 
     setIsForm(false);
   };
@@ -209,7 +227,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           {!!todos.length
             && (
-              <Todos
+              <VisibleTodos
                 onRemove={removeTodo}
                 todos={todos}
                 onComplete={handleCompleted}

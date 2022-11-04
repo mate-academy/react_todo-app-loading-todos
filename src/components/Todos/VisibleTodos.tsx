@@ -16,7 +16,7 @@ type Props = {
   status: string,
 };
 
-export const Todos: React.FC<Props> = ({
+export const VisibleTodos: React.FC<Props> = ({
   todos,
   onRemove,
   onComplete,
