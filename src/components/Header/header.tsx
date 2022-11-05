@@ -1,16 +1,24 @@
+import classNames from 'classnames';
 import { RefObject } from 'react';
 
 type Props = {
   newTodoField: RefObject<HTMLInputElement>,
+  numberOfCompletedTodo: number | undefined,
 };
 
-export const Header: React.FC<Props> = ({ newTodoField }) => (
+export const Header: React.FC<Props> = ({
+  newTodoField,
+  numberOfCompletedTodo,
+}) => (
   <header className="todoapp__header">
     <button
       aria-label="ToggleAllButton"
       data-cy="ToggleAllButton"
       type="button"
-      className="todoapp__toggle-all active"
+      className={classNames('todoapp__toggle-all',
+        {
+          active: !numberOfCompletedTodo,
+        })}
     />
 
     <form>

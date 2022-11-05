@@ -2,17 +2,10 @@ import classNames from 'classnames';
 import { useContext, useState } from 'react';
 import { SortParam } from '../../types/SortParam';
 import { NavContext } from '../NavContext';
-// import { NavContext } from '../NavContext';
 
-// type Props = {
-//   setSortBy: React.Dispatch<React.SetStateAction<SortParam>>,
-// };
-
-export const Nav: React.FC/* <Props> */ = (/* { setSortBy } */) => {
+export const Nav: React.FC = () => {
   const [activeButton, setActiveButton] = useState('all');
-  // const [sortBy, setSortBy] = useState(SortParam.All);
   const { setSortBy } = useContext(NavContext);
-  // console.log(sortBy)
 
   function selectSort(param: string | undefined) {
     switch (param) {
