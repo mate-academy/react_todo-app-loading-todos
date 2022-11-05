@@ -21,22 +21,24 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState(FilterType.ALL);
   const [isError, setIsError] = useState(false);
 
+  const getTodoFromServer = async () => {
+    try {
+      const userId = user ? user.id : 0;
+      const response = await getTodos(userId);
+
+      setTodos(response);
+      setVisibleTodos(response);
+    } catch (error) {
+      setIsError(true);
+
+      setTimeout(() => {
+        setIsError(false);
+      }, 3000);
+    }
+  };
+
   useEffect(() => {
-    const getTodoFromServer = async () => {
-      try {
-        const userId = user ? user.id : 0;
-        const response = await getTodos(userId);
-
-        setTodos(response);
-        setVisibleTodos(response);
-      } catch (error) {
-        setIsError(true);
-
-        setTimeout(() => {
-          setIsError(false);
-        }, 3000);
-      }
-    };
+    getTodoFromServer();
 
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
@@ -61,7 +63,7 @@ export const App: React.FC = () => {
     setVisibleTodos(newVisibleTodos);
   }, [filterType, todos]);
 
-  const todosLeft = visibleTodos.reduce((num, todo) => {
+  const todosLeft = todos.reduce((num, todo) => {
     if (!todo.completed) {
       return num + 1;
     }
