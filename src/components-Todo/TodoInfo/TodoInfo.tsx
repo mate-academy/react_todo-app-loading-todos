@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
@@ -39,6 +39,7 @@ export const TodoInfo: React.FC<Props> = ({
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
           </span>
+
           <button
             type="button"
             className="todo__remove"

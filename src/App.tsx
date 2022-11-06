@@ -4,10 +4,11 @@ import React, {
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos } from './api/todos';
-import { ErrorNotification } from './components-Todo/ErrorNotification';
-import { NewTodo } from './components-Todo/NewTodo';
-import { TodoFillter } from './components-Todo/TodoFooter';
-import { TodoList } from './components-Todo/TodoList';
+// eslint-disable-next-line max-len
+import { ErrorNotification } from './components-Todo/ErrorNotification/ErrorNotification';
+import { NewTodo } from './components-Todo/NewTodo/NewTodo';
+import { TodoFillter } from './components-Todo/TodoFooter/TodoFooter';
+import { TodoList } from './components-Todo/TodoList/TodoList';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
