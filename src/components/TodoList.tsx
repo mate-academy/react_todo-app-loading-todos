@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  visibleTodos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
   <section className="todoapp__main" data-cy="TodoList">
-    {todos.map(({ id, title, completed }) => {
+    {visibleTodos.map(({ id, title, completed }) => {
       return (
         <div
           data-cy="Todo"
