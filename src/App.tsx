@@ -3,7 +3,7 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useCallback,
+  useMemo,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
@@ -12,6 +12,8 @@ import { TodoContent } from './components/TodoContent/TodoContent';
 
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
+import { ErrorType } from './types/ErrorType';
+
 import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
@@ -19,10 +21,44 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [filterStatus, setFilterStatus]
     = useState<FilterStatus>(FilterStatus.All);
+
+  const manageErrors = (errorType: ErrorType) => {
+    setErrorMessage(currentMessage => {
+      let newMessage = currentMessage;
+
+      switch (errorType) {
+        case ErrorType.Endpoint:
+          newMessage = 'Fetch error';
+          break;
+
+        case ErrorType.Title:
+          newMessage = 'Title can`t be empty';
+          break;
+
+        case ErrorType.Add:
+          newMessage = 'Unable to add a todo';
+          break;
+
+        case ErrorType.Delete:
+          newMessage = 'Unable to delete a todo';
+          break;
+
+        case ErrorType.Update:
+          newMessage = 'Unable to update a todo';
+          break;
+
+        case ErrorType.None:
+        default:
+          newMessage = '';
+      }
+
+      return newMessage;
+    });
+  };
 
   const getTodosFromServer = async () => {
     try {
@@ -32,9 +68,9 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       }
     } catch (error) {
-      setHasError(true);
+      manageErrors(ErrorType.Endpoint);
 
-      setTimeout(() => setHasError(false), 3000);
+      setTimeout(() => manageErrors(ErrorType.None), 3000);
     }
   };
 
@@ -46,8 +82,8 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const filterTodos = useCallback((filterBy: FilterStatus) => {
-    const filteredBuStatus = todos.filter(todo => {
+  const filterTodos = (filterBy: FilterStatus) => {
+    const filteredByStatus = todos.filter(todo => {
       switch (filterBy) {
         case FilterStatus.Active:
           return !todo.completed;
@@ -60,13 +96,14 @@ export const App: React.FC = () => {
       }
     });
 
-    setVisibleTodos(filteredBuStatus);
     setFilterStatus(filterBy);
-  }, [filterStatus]);
 
-  const closeErrors = useCallback(() => {
-    setHasError(false);
-  }, [hasError]);
+    return filteredByStatus;
+  };
+
+  const filteredTodos = useMemo(() => (
+    filterTodos(filterStatus)
+  ), [filterStatus, todos]);
 
   return (
     <div className="todoapp">
@@ -74,15 +111,15 @@ export const App: React.FC = () => {
 
       <TodoContent
         todos={todos}
-        visibleTodos={visibleTodos}
+        visibleTodos={filteredTodos}
         newTodoField={newTodoField}
         filterTodos={filterTodos}
         filterStatus={filterStatus}
       />
 
       <ErrorMessages
-        hasError={hasError}
-        closeErrors={closeErrors}
+        errorMessage={errorMessage}
+        manageErrors={manageErrors}
       />
     </div>
   );

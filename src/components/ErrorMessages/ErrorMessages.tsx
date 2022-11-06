@@ -1,16 +1,20 @@
 import cn from 'classnames';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
-  hasError: boolean;
-  closeErrors: () => void;
+  manageErrors: (errorType: ErrorType) => void;
+  errorMessage: string;
 };
 
-export const ErrorMessages: React.FC<Props> = ({ hasError, closeErrors }) => {
+export const ErrorMessages: React.FC<Props> = ({
+  manageErrors,
+  errorMessage,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: !hasError,
+        hidden: errorMessage === ErrorType.None,
       })}
     >
       <button
@@ -18,14 +22,10 @@ export const ErrorMessages: React.FC<Props> = ({ hasError, closeErrors }) => {
         type="button"
         className="delete"
         aria-label="delete"
-        onClick={closeErrors}
+        onClick={() => manageErrors(ErrorType.None)}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };
