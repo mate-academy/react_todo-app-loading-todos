@@ -64,9 +64,7 @@ export const App: React.FC = () => {
           {todosFromServer && <TodoList todos={todosFromServer} />}
 
           {todosFromServer?.length !== 0 && todosFromServer && (
-            <Footer
-              numberOfCompletedTodo={numberOfCompletedTodo}
-            />
+            <Footer numberOfCompletedTodo={numberOfCompletedTodo} />
           )}
         </div>
 
