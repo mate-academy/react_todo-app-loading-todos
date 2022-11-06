@@ -9,17 +9,13 @@ import { FilterType } from '../../types/FilterType';
 interface Props {
   todos: Todo[];
   filterBy: FilterType;
-  onFilterAll: () => void;
-  onFilterActive: () => void;
-  onFilterCompleted: () => void;
+  onFilter: (filterType: FilterType) => void;
 }
 
 export const Filters: React.FC<Props> = ({
   todos,
   filterBy,
-  onFilterAll,
-  onFilterActive,
-  onFilterCompleted,
+  onFilter,
 }) => {
   const hasCompletedTodo = todos.some(todo => todo.completed);
   const todosLeft = todos.filter(todo => !todo.completed).length;
@@ -35,7 +31,9 @@ export const Filters: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterBy === FilterType.ALL,
           })}
-          onClick={onFilterAll}
+          onClick={() => {
+            onFilter(FilterType.ALL);
+          }}
         >
           All
         </a>
@@ -46,7 +44,9 @@ export const Filters: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterBy === FilterType.ACTIVE,
           })}
-          onClick={onFilterActive}
+          onClick={() => {
+            onFilter(FilterType.ACTIVE);
+          }}
         >
           Active
         </a>
@@ -56,7 +56,9 @@ export const Filters: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterBy === FilterType.COMPLETED,
           })}
-          onClick={onFilterCompleted}
+          onClick={() => {
+            onFilter(FilterType.COMPLETED);
+          }}
         >
           Completed
         </a>

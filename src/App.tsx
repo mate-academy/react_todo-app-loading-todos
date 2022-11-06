@@ -37,16 +37,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleFilterAll = () => {
-    setFilterBy(FilterType.ALL);
-  };
-
-  const handleFilterActive = () => {
-    setFilterBy(FilterType.ACTIVE);
-  };
-
-  const handleFilterCompleted = () => {
-    setFilterBy(FilterType.COMPLETED);
+  const handleFilter = (filterType: FilterType) => {
+    setFilterBy(filterType);
   };
 
   const handleCloseError = () => {
@@ -98,9 +90,7 @@ export const App: React.FC = () => {
             <Filters
               todos={todos}
               filterBy={filterBy}
-              onFilterAll={handleFilterAll}
-              onFilterActive={handleFilterActive}
-              onFilterCompleted={handleFilterCompleted}
+              onFilter={handleFilter}
             />
           </>
         )}
