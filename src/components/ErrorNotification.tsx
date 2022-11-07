@@ -1,42 +1,27 @@
-import React, { useEffect } from 'react';
-import classNames from 'classnames';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React from 'react';
 
 interface Props {
-  errorMessage: string,
-  setErrorMessage: (errorMessage: string) => void,
+  errorMessage: string;
+  hideError: () => void;
 }
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  setErrorMessage,
+  hideError,
 }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [errorMessage]);
-
   return (
     <div
       data-cy="ErrorNotification"
-      className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: !errorMessage },
-      )}
+      className="notification is-danger is-light has-text-weight-normal"
     >
       <button
-        aria-label="delete"
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={hideError}
       />
       {errorMessage}
     </div>
-
   );
 };
