@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useCallback,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
-import classNames from 'classnames';
+
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { FilterBy } from './types/FilterBy';
+import { TodoNav } from './components/TodoNav';
+import { ErrorNotification } from './components/ErrorNotifications';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
@@ -33,25 +36,27 @@ export const App: React.FC = () => {
     }
   };
 
-  const deleteErrors = () => {
-    setHasError(false);
-  };
+  const deleteErrors = useCallback(() => {
+    return setHasError(false);
+  }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterBy.Completed:
-        return todo.completed === true;
-      case FilterBy.Active:
-        return todo.completed === false;
-      case FilterBy.All:
-      default:
-        return todo;
-    }
-  });
+  const visibleTodos = useMemo(() => (
+    todos.filter(todo => {
+      switch (filterBy) {
+        case FilterBy.Completed:
+          return todo.completed === true;
+        case FilterBy.Active:
+          return todo.completed === false;
+        case FilterBy.All:
+        default:
+          return todo;
+      }
+    })
+  ), [todos, filterBy]);
 
-  const handleFilter = (filter: FilterBy) => {
+  const handleFilter = useCallback((filter: FilterBy) => {
     setFilterBy(filter);
-  };
+  }, []);
 
   useEffect(() => {
     getTodosFromServer();
@@ -61,7 +66,9 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const itemsLeft = todos.filter(todo => !todo.completed).length;
+  const itemsLeft = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
 
   return (
     <div className="todoapp">
@@ -94,40 +101,7 @@ export const App: React.FC = () => {
               <span className="todo-count" data-cy="todosCounter">
                 {`${itemsLeft} items left`}
               </span>
-
-              <nav className="filter" data-cy="Filter">
-                <a
-                  data-cy="FilterLinkAll"
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: filterBy === FilterBy.All,
-                  })}
-                  onClick={() => handleFilter(FilterBy.All)}
-                >
-                  All
-                </a>
-
-                <a
-                  data-cy="FilterLinkActive"
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: filterBy === FilterBy.Active,
-                  })}
-                  onClick={() => handleFilter(FilterBy.Active)}
-                >
-                  Active
-                </a>
-                <a
-                  data-cy="FilterLinkCompleted"
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: filterBy === FilterBy.Completed,
-                  })}
-                  onClick={() => handleFilter(FilterBy.Completed)}
-                >
-                  Completed
-                </a>
-              </nav>
+              <TodoNav filterBy={filterBy} handleFilter={handleFilter} />
 
               <button
                 data-cy="ClearCompletedButton"
@@ -142,23 +116,7 @@ export const App: React.FC = () => {
 
       </div>
       {hasError && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={deleteErrors}
-          />
-
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
+        <ErrorNotification deleteErrors={deleteErrors} />
       )}
     </div>
   );
