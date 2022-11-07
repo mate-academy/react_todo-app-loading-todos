@@ -24,7 +24,7 @@ export const TodosFilter: React.FC<Props> = ({
         href="#/"
         className={cn(
           'filter__link',
-          { selected: todoStatus === 'All' },
+          { selected: todoStatus === TodoStatus.All },
         )}
         onClick={() => handleStatusSelect(TodoStatus.All)}
       >
@@ -36,7 +36,7 @@ export const TodosFilter: React.FC<Props> = ({
         href="#/active"
         className={cn(
           'filter__link',
-          { selected: todoStatus === 'Active' },
+          { selected: todoStatus === TodoStatus.Active },
         )}
         onClick={() => handleStatusSelect(TodoStatus.Active)}
       >
@@ -47,7 +47,7 @@ export const TodosFilter: React.FC<Props> = ({
         href="#/completed"
         className={cn(
           'filter__link',
-          { selected: todoStatus === 'Completed' },
+          { selected: todoStatus === TodoStatus.Completed },
         )}
         onClick={() => handleStatusSelect(TodoStatus.Completed)}
       >
