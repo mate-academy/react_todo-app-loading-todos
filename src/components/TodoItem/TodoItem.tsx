@@ -6,11 +6,11 @@ import { editTodo, deleteTodo } from '../../api/todos';
 
 type Props = {
   todo: Todo
-  setTodoList: (x: Todo[]) => void
+  setTodoList: React.Dispatch<React.SetStateAction<Todo[]>>
   todoList: Todo[]
   loadingItems: number[]
-  setUpdateError: (x: boolean) => void
-  setDeleteError: (x: boolean) => void
+  setUpdateError: React.Dispatch<React.SetStateAction<boolean>>
+  setDeleteError: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -25,8 +25,6 @@ export const TodoItem: React.FC<Props> = ({
 
   const [loaderTodo, setLoaderTodo] = useState(false);
   const [TodoDelete, setTodoDelet] = useState(false);
-
-  // functions
 
   const checkboxActive = () => {
     setLoaderTodo(true);

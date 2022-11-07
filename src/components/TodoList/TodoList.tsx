@@ -5,11 +5,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   renderTodoList: Todo[]
-  setTodoList: (x: Todo[]) => void
+  setTodoList: React.Dispatch<React.SetStateAction<Todo[]>>
   todoList: Todo[]
   loadingItems: number[]
-  setUpdateError: (x: boolean) => void
-  setDeleteError: (x: boolean) => void
+  setUpdateError: React.Dispatch<React.SetStateAction<boolean>>
+  setDeleteError: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const TodoList: React.FC<Props> = ({
