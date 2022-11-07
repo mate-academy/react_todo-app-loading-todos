@@ -73,13 +73,17 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <NewTodo newTodoField={newTodoField} />
 
-        <TodosList todos={visibleTodos} />
+        {todos.length > 0 && (
+          <>
+            <TodosList todos={visibleTodos} />
+            <FilterForTodos
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+              todos={todos}
+            />
+          </>
+        )}
 
-        <FilterForTodos
-          filterBy={filterBy}
-          setFilterBy={setFilterBy}
-          todos={todos}
-        />
       </div>
 
       {isError && (
