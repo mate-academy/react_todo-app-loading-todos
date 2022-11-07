@@ -88,7 +88,7 @@ export const App: React.FC = () => {
             <TodoList todos={visibleTodos} />
 
             <TodosFilter
-              todosLength={todos.length}
+              todos={todos}
               todoStatus={todoStatus}
               handleStatusSelect={handleStatusSelect}
             />
