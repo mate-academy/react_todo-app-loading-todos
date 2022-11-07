@@ -24,7 +24,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
 
-  const getTodosFromServer = useCallback(async () => {
+  const loadTodos = useCallback(async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    getTodosFromServer();
+    loadTodos();
   }, []);
 
   useEffect(() => {
@@ -96,9 +96,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {hasError && (
-        <ErrorNotification handleErrorClose={handleErrorClose} />
-      )}
+      <ErrorNotification
+        hasError={hasError}
+        handleErrorClose={handleErrorClose}
+      />
     </div>
   );
 };

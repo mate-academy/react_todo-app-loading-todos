@@ -1,14 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import cn from 'classnames';
 
 type Props = {
+  hasError: boolean;
   handleErrorClose: () => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({ handleErrorClose }) => (
+export const ErrorNotification: React.FC<Props> = ({
+  hasError,
+  handleErrorClose,
+}) => (
   <div
     data-cy="ErrorNotification"
-    className="notification is-danger is-light has-text-weight-normal"
+    className={cn(
+      'notification is-danger is-light has-text-weight-normal',
+      { hidden: !hasError },
+    )}
   >
     <button
       data-cy="HideErrorButton"
