@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -19,13 +20,14 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
   const [hasError, setHasError] = useState(false);
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     if (user) {
       try {
         const todosFromServer = await getTodos(user.id);
@@ -35,15 +37,15 @@ export const App: React.FC = () => {
         setHasError(true);
       }
     }
-  };
+  }, []);
 
-  const handleFilter = (filterType: FilterType) => {
+  const handleFilterSelect = useCallback((filterType: FilterType) => {
     setFilterBy(filterType);
-  };
+  }, []);
 
-  const handleCloseError = () => {
+  const handleCloseError = useCallback(() => {
     setHasError(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -53,21 +55,25 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterType.ALL:
-        return todo;
+  useEffect(() => {
+    const filteredTodos = todos.filter(todo => {
+      switch (filterBy) {
+        case FilterType.ALL:
+          return todo;
 
-      case FilterType.ACTIVE:
-        return !todo.completed;
+        case FilterType.ACTIVE:
+          return !todo.completed;
 
-      case FilterType.COMPLETED:
-        return todo.completed;
+        case FilterType.COMPLETED:
+          return todo.completed;
 
-      default:
-        return todo;
-    }
-  });
+        default:
+          return true;
+      }
+    });
+
+    setVisibleTodos(filteredTodos);
+  }, [filterBy, todos]);
 
   return (
     <div className="todoapp">
@@ -86,11 +92,11 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={filteredTodos} />
+            <TodoList todos={visibleTodos} />
             <Filters
               todos={todos}
               filterBy={filterBy}
-              onFilter={handleFilter}
+              onFilterSelect={handleFilterSelect}
             />
           </>
         )}

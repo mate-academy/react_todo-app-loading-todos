@@ -9,13 +9,13 @@ import { FilterType } from '../../types/FilterType';
 interface Props {
   todos: Todo[];
   filterBy: FilterType;
-  onFilter: (filterType: FilterType) => void;
+  onFilterSelect: (filterType: FilterType) => void;
 }
 
 export const Filters: React.FC<Props> = ({
   todos,
   filterBy,
-  onFilter,
+  onFilterSelect: onFilter,
 }) => {
   const hasCompletedTodo = todos.some(todo => todo.completed);
   const todosLeft = todos.filter(todo => !todo.completed).length;
