@@ -1,7 +1,12 @@
-import { useState, useEffect, useContext } from 'react';
+import {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+} from 'react';
 import classNames from 'classnames';
 import { User } from '../types/User';
-import { deleteTodos, UpdateTodo, EditTodo } from '../api/todos';
+import { deleteTodos, EditTodo } from '../api/todos';
 import { Todo } from '../types/Todo';
 import { AuthContext } from './Auth/AuthContext';
 
@@ -9,11 +14,9 @@ type Props = {
   todo: Todo,
   foundTodoList: (u: User) => void,
   setErrorUpdate:React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorRemove: React.Dispatch<React.SetStateAction<boolean>>,
-  editTitle: React.RefObject<HTMLInputElement>,
+  setErrorRemove: (value: boolean) => void,
   setHidden: React.Dispatch<React.SetStateAction<boolean>>,
-  edditing?: Todo | null,
-  setEdditing?: any,
+  selectComplited: (toDo: Todo) => Promise<void>,
 };
 
 export const ToDo: React.FC<Props> = ({
@@ -21,32 +24,15 @@ export const ToDo: React.FC<Props> = ({
   foundTodoList,
   setErrorUpdate,
   setErrorRemove,
-  editTitle,
   setHidden,
-  edditing,
-  setEdditing,
+  selectComplited,
 }) => {
   const user = useContext(AuthContext);
   const [editTodoTitile, setEditTodoTitle] = useState('');
   const [isRemovePending, setIsRemovePending] = useState<Todo | null>(null);
   const [toggleDoubleClick, setToggleDoubleClick] = useState<Todo | null>(null);
-
-  const selectComplited = async (toDo:Todo) => {
-    try {
-      if (toDo.completed) {
-        await UpdateTodo(toDo, false);
-      } else {
-        await UpdateTodo(toDo, true);
-      }
-    } catch {
-      setErrorUpdate(true);
-      setHidden(false);
-    }
-
-    if (user) {
-      foundTodoList(user);
-    }
-  };
+  const editTitle = useRef<HTMLInputElement>(null);
+  const [edditing, setEdditing] = useState<Todo | null>(null);
 
   const removeTodo = async (toDo:Todo) => {
     deleteTodos(toDo);
@@ -92,6 +78,7 @@ export const ToDo: React.FC<Props> = ({
 
     if (user) {
       foundTodoList(user);
+      setEdditing(null);
     }
 
     setToggleDoubleClick(null);
@@ -135,6 +122,10 @@ export const ToDo: React.FC<Props> = ({
       setToggleDoubleClick(null);
     }
   };
+
+  const activeTodoLoader = (isRemovePending && isRemovePending.id === todo.id)
+  || (!todo.id)
+  || (edditing?.id === todo.id);
 
   return (
     <div
@@ -189,9 +180,7 @@ export const ToDo: React.FC<Props> = ({
           'modal',
           'overlay',
           {
-            'is-active': (isRemovePending && isRemovePending.id === todo.id)
-            || (!todo.id)
-            || (edditing?.id === todo.id),
+            'is-active': activeTodoLoader,
           },
         )}
       >
