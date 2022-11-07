@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -12,15 +13,19 @@ import { TodoList } from './components/TodoList';
 import { TodosHeader } from './components/TodosHeader';
 import { TodosFooter } from './components/TodosFooter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(false);
 
-  const getTodosFromServer = async () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [hasError, setHasError] = useState(false);
+  const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
+
+  const getTodosFromServer = useCallback(async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -34,7 +39,7 @@ export const App: React.FC = () => {
         setHasError(false);
       }, 3000);
     }
-  };
+  }, []);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -45,7 +50,32 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const handleErrorClose = () => setHasError(false);
+  useEffect(() => {
+    let todosCopy = [...todos];
+
+    if (todoStatus !== 'All') {
+      todosCopy = todosCopy.filter(todo => {
+        switch (todoStatus) {
+          case TodoStatus.Active:
+            return !todo.completed;
+
+          case TodoStatus.Completed:
+            return todo.completed;
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    setVisibleTodos(todosCopy);
+  }, [todoStatus, todos]);
+
+  const handleErrorClose = useCallback(() => setHasError(false), []);
+
+  const handleStatusSelect = useCallback((status: TodoStatus) => {
+    setTodoStatus(status);
+  }, []);
 
   return (
     <div className="todoapp">
@@ -56,9 +86,13 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={todos} />
+            <TodoList todos={visibleTodos} />
 
-            <TodosFooter todosLength={todos.length} />
+            <TodosFooter
+              todosLength={todos.length}
+              todoStatus={todoStatus}
+              handleStatusSelect={handleStatusSelect}
+            />
           </>
         )}
       </div>
