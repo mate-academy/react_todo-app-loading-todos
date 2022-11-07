@@ -4,7 +4,7 @@ interface Props {
   newTodoField: React.RefObject<HTMLInputElement>;
 }
 
-export const Header: React.FC<Props> = React.memo(({ newTodoField }) => (
+export const TodoForm: React.FC<Props> = React.memo(({ newTodoField }) => (
   <header className="todoapp__header">
     <button
       data-cy="ToggleAllButton"

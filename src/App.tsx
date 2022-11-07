@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -10,8 +11,8 @@ import { AuthContext } from './components/Auth/AuthContext';
 import {
   ErrorNotification,
 } from './components/ErrorNotification/ErrorNotification';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
+import { TodosSelection } from './components/TodosSelection/TodosSelection';
+import { TodoForm } from './components/TodoForm/TodoForm';
 import { TodoList } from './components/TodoList/TodoList';
 
 import { Todo } from './types/Todo';
@@ -49,6 +50,10 @@ export const App: React.FC = () => {
     setFiltredTodos(filtredByStatusTodos);
   }, [todos]);
 
+  const uncompletedTodosLength = useMemo(() => {
+    return todos.filter((todo) => !todo.completed).length;
+  }, [todos]);
+
   const getTodosFromServer = async () => {
     try {
       if (user) {
@@ -81,14 +86,14 @@ export const App: React.FC = () => {
       </h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <TodoForm newTodoField={newTodoField} />
 
         {todos.length > 0 && (
           <>
             <TodoList filtredTodos={filtredTodos} />
 
-            <Footer
-              TodosLength={filtredTodos.length}
+            <TodosSelection
+              TodosLength={uncompletedTodosLength}
               statusToFilter={statusToFilter}
               filterTodosBy={filterTodosBy}
             />

@@ -8,7 +8,7 @@ interface Props {
   filterTodosBy: (status: TodosFilter) => void;
 }
 
-export const Footer: React.FC<Props> = React.memo(({
+export const TodosSelection: React.FC<Props> = React.memo(({
   TodosLength,
   statusToFilter,
   filterTodosBy,
