@@ -19,7 +19,6 @@ export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [hasError, setHasError] = useState(false);
