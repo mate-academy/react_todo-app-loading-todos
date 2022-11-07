@@ -10,8 +10,8 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
-import { TodosHeader } from './components/TodosHeader';
-import { TodosFooter } from './components/TodosFooter';
+import { NewTodo } from './components/NewTodo';
+import { TodosFilter } from './components/TodoFilter';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoStatus } from './types/TodoStatus';
 
@@ -81,13 +81,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodosHeader newTodoField={newTodoField} />
+        <NewTodo newTodoField={newTodoField} />
 
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
 
-            <TodosFooter
+            <TodosFilter
               todosLength={todos.length}
               todoStatus={todoStatus}
               handleStatusSelect={handleStatusSelect}

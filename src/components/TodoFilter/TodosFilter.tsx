@@ -8,7 +8,7 @@ type Props = {
   handleStatusSelect: (status: TodoStatus) => void;
 };
 
-export const TodosFooter: React.FC<Props> = ({
+export const TodosFilter: React.FC<Props> = ({
   todosLength,
   todoStatus,
   handleStatusSelect,
