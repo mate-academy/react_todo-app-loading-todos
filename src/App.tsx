@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -17,12 +18,13 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [errorStatus, setErrorStatus] = useState(false);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const getTodosFromApi = async () => {
+  const getTodosFromApi = useCallback(async () => {
     if (user) {
       try {
         const todosApi = await getTodos(user?.id);
@@ -36,7 +38,7 @@ export const App: React.FC = () => {
         }, 3000);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     getTodosFromApi();
@@ -46,24 +48,30 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterBy.ACTIVE:
-        return !todo.completed;
-      case FilterBy.COMPLETED:
-        return todo.completed;
-      default:
-        return todo;
-    }
-  });
+  useEffect(() => {
+    const filteredTodos = todos.filter(todo => {
+      switch (filterBy) {
+        case FilterBy.ACTIVE:
+          return !todo.completed;
+        case FilterBy.COMPLETED:
+          return todo.completed;
+        default:
+          return todo;
+      }
+    });
 
-  const handleFilter = (filter: FilterBy) => {
+    setVisibleTodos(filteredTodos);
+  }, [filterBy, todos]);
+
+  const handleFilter = useCallback((filter: FilterBy) => {
     setFilterBy(filter);
-  };
+  }, []);
 
-  const clearErrors = () => {
+  const clearErrors = useCallback(() => {
     setErrorStatus(false);
-  };
+  }, []);
+
+  const todosLeft = todos.filter(todo => !todo.completed);
 
   return (
     <div className="todoapp">
@@ -94,7 +102,7 @@ export const App: React.FC = () => {
 
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="todosCounter">
-                {`${todos.filter(todo => !todo.completed).length} items left`}
+                {`${todosLeft.length} items left`}
               </span>
 
               <nav className="filter" data-cy="Filter">
