@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
@@ -13,7 +12,6 @@ import { FilterValues } from './types/FilterValues';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -25,7 +23,6 @@ export const App: React.FC = () => {
     = useState<FilterValues>(FilterValues.All);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -72,6 +69,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
+
             <TodoFilter
               selectedFilter={selectedFilter}
               onSelection={(filter:FilterValues) => setSelectedFilter(filter)}
