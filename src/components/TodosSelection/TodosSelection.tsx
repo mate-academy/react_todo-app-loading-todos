@@ -5,13 +5,13 @@ import { TodosFilter } from '../../types/TodosFilter';
 interface Props {
   TodosLength: number;
   statusToFilter: TodosFilter;
-  filterTodosBy: (status: TodosFilter) => void;
+  setStatusToFilter: React.Dispatch<React.SetStateAction<TodosFilter>>;
 }
 
 export const TodosSelection: React.FC<Props> = React.memo(({
   TodosLength,
   statusToFilter,
-  filterTodosBy,
+  setStatusToFilter,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
@@ -25,7 +25,7 @@ export const TodosSelection: React.FC<Props> = React.memo(({
         className={classNames('filter__link', {
           selected: statusToFilter === TodosFilter.All,
         })}
-        onClick={() => filterTodosBy(TodosFilter.All)}
+        onClick={() => setStatusToFilter(TodosFilter.All)}
       >
         All
       </a>
@@ -36,7 +36,7 @@ export const TodosSelection: React.FC<Props> = React.memo(({
         className={classNames('filter__link', {
           selected: statusToFilter === TodosFilter.Active,
         })}
-        onClick={() => filterTodosBy(TodosFilter.Active)}
+        onClick={() => setStatusToFilter(TodosFilter.Active)}
       >
         Active
       </a>
@@ -46,7 +46,7 @@ export const TodosSelection: React.FC<Props> = React.memo(({
         className={classNames('filter__link', {
           selected: statusToFilter === TodosFilter.Completed,
         })}
-        onClick={() => filterTodosBy(TodosFilter.Completed)}
+        onClick={() => setStatusToFilter(TodosFilter.Completed)}
       >
         Completed
       </a>

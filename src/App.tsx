@@ -23,18 +23,18 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filtredTodos, setFiltredTodos] = useState<Todo[]>([]);
   const [
     statusToFilter,
     setStatusToFilter,
   ] = useState<TodosFilter>(TodosFilter.All);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const closeNotification = useCallback(() => setHasError(false), []);
 
-  const filterTodosBy = useCallback((status: TodosFilter) => {
-    const filtredByStatusTodos = todos.filter(({ completed }) => {
-      switch (status) {
+  const filtredTodos = useMemo(() => (
+    todos.filter(({ completed }) => {
+      switch (statusToFilter) {
         case TodosFilter.Active:
           return !completed;
 
@@ -44,15 +44,12 @@ export const App: React.FC = () => {
         default:
           return true;
       }
-    });
+    })
+  ), [todos, statusToFilter]);
 
-    setStatusToFilter(status);
-    setFiltredTodos(filtredByStatusTodos);
-  }, [todos]);
-
-  const uncompletedTodosLength = useMemo(() => {
-    return todos.filter((todo) => !todo.completed).length;
-  }, [todos]);
+  const uncompletedTodosLength = useMemo(() => (
+    todos.filter((todo) => !todo.completed).length
+  ), [todos]);
 
   const getTodosFromServer = async () => {
     try {
@@ -60,10 +57,10 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos(user.id);
 
         setTodos(todosFromServer);
-        setFiltredTodos(todosFromServer);
       }
     } catch (error) {
       setHasError(true);
+      setErrorMessage('Can\'t load todos from server, try to update page!');
     }
   };
 
@@ -95,7 +92,7 @@ export const App: React.FC = () => {
             <TodosSelection
               TodosLength={uncompletedTodosLength}
               statusToFilter={statusToFilter}
-              filterTodosBy={filterTodosBy}
+              setStatusToFilter={setStatusToFilter}
             />
           </>
         )}
@@ -104,7 +101,9 @@ export const App: React.FC = () => {
       <ErrorNotification
         hasError={hasError}
         closeNotification={closeNotification}
-      />
+      >
+        {errorMessage}
+      </ErrorNotification>
     </div>
   );
 };

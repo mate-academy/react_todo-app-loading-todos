@@ -4,11 +4,13 @@ import classNames from 'classnames';
 interface Props {
   hasError: boolean;
   closeNotification: () => void;
+  children: string,
 }
 
 export const ErrorNotification: React.FC<Props> = React.memo(({
   hasError,
   closeNotification,
+  children,
 }) => (
   <div
     data-cy="ErrorNotification"
@@ -24,11 +26,6 @@ export const ErrorNotification: React.FC<Props> = React.memo(({
       className="delete"
       onClick={closeNotification}
     />
-
-    Unable to add a todo
-    <br />
-    Unable to delete a todo
-    <br />
-    Unable to update a todo
+    {children}
   </div>
 ));
