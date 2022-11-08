@@ -4,7 +4,7 @@ import React, {
   useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 
-import { getTodos, addTodo, deleteTodo } from './api/todos';
+import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
@@ -72,35 +72,6 @@ export const App: React.FC = () => {
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
-  const handleSumbitForm = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (user) {
-      try {
-        const newTodos = {
-          title: todoTitle,
-          completed: false,
-          userId: user?.id,
-        };
-
-        const newTodoToServer = await addTodo(user.id, newTodos);
-
-        setTodos((todosfrom) => [...todosfrom, newTodoToServer]);
-      } catch (error) {
-        setErrorMessage('Unable to add todo');
-        setHasError(true);
-      }
-    }
-  };
-
-  const handleDeleteButton = async (event: React.FormEvent, todoId: number) => {
-    event.preventDefault();
-
-    await deleteTodo(todoId);
-
-    setTodos(todos.filter(todo => todo.id !== todoId));
-  };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -113,11 +84,7 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <form
-            action="/api/todos"
-            method="POST"
-            onSubmit={handleSumbitForm}
-          >
+          <form>
             <input
               data-cy="NewTodoField"
               type="text"
@@ -133,7 +100,6 @@ export const App: React.FC = () => {
           <>
             <TodoList
               todos={visibleTodos}
-              handleDeleteButton={handleDeleteButton}
             />
             <TodoFooter
               filterBy={filterBy}
