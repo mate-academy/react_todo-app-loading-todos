@@ -80,12 +80,13 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className="todoapp__toggle-all active"
-          />
-
+          {isTodosAvailable && (
+            <button
+              data-cy="ToggleAllButton"
+              type="button"
+              className="todoapp__toggle-all active"
+            />
+          )}
           <form>
             <input
               data-cy="NewTodoField"
