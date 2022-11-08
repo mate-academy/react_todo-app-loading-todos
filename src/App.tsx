@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [groupBy, setGroupBy] = useState<GroupBy>(GroupBy.ALL);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const loadTodos = async () => {
     try {
@@ -35,6 +36,7 @@ export const App: React.FC = () => {
       }
     } catch (error) {
       setHasError(true);
+      setErrorMessage('Something is wrong, try to update the page!');
 
       setTimeout(() => {
         setHasError(false);
@@ -85,7 +87,7 @@ export const App: React.FC = () => {
             <Footer
               groupBy={groupBy}
               setGroupBy={setGroupBy}
-              todos={visibleTodos}
+              todos={todos}
             />
           </>
         )}
@@ -94,6 +96,7 @@ export const App: React.FC = () => {
       <ErrorNotification
         hasError={hasError}
         onClose={() => setHasError(false)}
+        errorMessage={errorMessage}
       />
     </div>
   );
