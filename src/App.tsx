@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
   useMemo,
+  useCallback,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
@@ -26,17 +27,19 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const getTodosFromServer = async () => {
-    try {
-      if (user) {
-        const todosFromServer = await getTodos(user.id);
+  const getTodosFromServer = useCallback(
+    async () => {
+      try {
+        if (user) {
+          const todosFromServer = await getTodos(user.id);
 
-        setTodos(todosFromServer);
+          setTodos(todosFromServer);
+        }
+      } catch (error) {
+        setHasError(true);
       }
-    } catch (error) {
-      setHasError(true);
-    }
-  };
+    }, [],
+  );
 
   const filtredTodos = useMemo(() => (
     todos.filter(({ completed }) => {

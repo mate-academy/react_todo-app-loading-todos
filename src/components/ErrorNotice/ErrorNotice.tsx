@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 interface Props {
   hasError: boolean,
@@ -8,11 +8,9 @@ interface Props {
 }
 
 export const ErrorNotice: React.FC<Props> = ({ hasError, setHasError }) => {
-  if (hasError) {
-    setTimeout(() => {
-      setHasError(false);
-    }, 3000);
-  }
+  useEffect(() => {
+    setTimeout(() => setHasError(false), 3000);
+  }, [hasError]);
 
   const closeErrorNotice = useCallback(() => setHasError(false), []);
 
