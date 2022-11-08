@@ -1,3 +1,4 @@
+import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
@@ -5,7 +6,7 @@ type Props = {
   onClose: () => void
 };
 
-export const ErrorNotification: React.FC<Props> = ({
+export const ErrorNotification: React.FC<Props> = React.memo(({
   hasError,
   onClose,
 }) => {
@@ -33,4 +34,4 @@ export const ErrorNotification: React.FC<Props> = ({
       Unable to update a todo
     </div>
   );
-};
+});

@@ -1,14 +1,10 @@
-import { Todo } from '../../types/Todo';
+import React from 'react';
 
 type Props = {
-  todo: Todo
+  title: string
 };
 
-export const TodoListItem: React.FC<Props> = ({ todo }) => {
-  const {
-    title,
-  } = todo;
-
+export const TodoListItem: React.FC<Props> = React.memo(({ title }) => {
   return (
     <>
       <label className="todo__status-label">
@@ -35,4 +31,4 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
       </div>
     </>
   );
-};
+});

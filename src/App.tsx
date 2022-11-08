@@ -2,6 +2,7 @@
 import {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -21,7 +22,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
 
@@ -31,16 +31,26 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos(user.id);
 
         setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
       }
     } catch (error) {
       setHasError(true);
-
-      setTimeout(() => {
-        setHasError(false);
-      }, 3000);
     }
   };
+
+  const filtredTodos = useMemo(() => (
+    todos.filter(({ completed }) => {
+      switch (filterType) {
+        case FilterType.Active:
+          return !completed;
+
+        case FilterType.Completed:
+          return completed;
+
+        default:
+          return true;
+      }
+    })
+  ), [todos, filterType]);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -51,41 +61,28 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const filteredTodos = todos.filter(({ completed }) => {
-      switch (filterType) {
-        case FilterType.Completed:
-          return completed;
-
-        case FilterType.Active:
-          return !completed;
-
-        default:
-          return true;
-      }
-    });
-
-    setVisibleTodos(filteredTodos);
-  }, [todos, filterType]);
+    setTimeout(() => {
+      setHasError(false);
+    }, 3000);
+  }, [hasError]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
-          newTodoField={newTodoField}
-        />
+        <Header newTodoField={newTodoField} />
 
         {todos.length > 0 && (
           <>
             <TodoList
-              todos={visibleTodos}
+              todos={filtredTodos}
             />
 
             <Footer
               filterType={filterType}
               setFilterType={setFilterType}
-              todos={visibleTodos}
+              todos={filtredTodos}
             />
           </>
         )}

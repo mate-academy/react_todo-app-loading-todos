@@ -1,8 +1,10 @@
+import React from 'react';
+
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
 };
 
-export const Header: React.FC<Props> = ({ newTodoField }) => {
+export const Header: React.FC<Props> = React.memo(({ newTodoField }) => {
   return (
     <header className="todoapp__header">
       <button
@@ -23,4 +25,4 @@ export const Header: React.FC<Props> = ({ newTodoField }) => {
       </form>
     </header>
   );
-};
+});

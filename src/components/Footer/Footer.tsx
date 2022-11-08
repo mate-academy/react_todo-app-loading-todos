@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import React, { useMemo } from 'react';
 import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
 
@@ -8,17 +9,19 @@ type Props = {
   todos: Todo[]
 };
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<Props> = React.memo(({
   filterType,
   setFilterType,
   todos,
 }) => {
-  const completedCount = todos.filter(({ completed }) => !completed).length;
+  const uncompletedCount = useMemo(() => (
+    todos.filter(({ completed }) => !completed).length
+  ), [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${completedCount} items left`}
+        {`${uncompletedCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -64,4 +67,4 @@ export const Footer: React.FC<Props> = ({
       </button>
     </footer>
   );
-};
+});
