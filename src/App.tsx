@@ -2,12 +2,14 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import cn from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Error } from './types/Error';
 import { Filter } from './types/Filter';
+import { ErrorNotification } from './components/Auth/ErrorNotification';
+import { TodoList } from './components/Auth/TodoList';
+import { Footer } from './components/Auth/Footer';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,26 +20,23 @@ export const App: React.FC = () => {
   const [error, setError] = useState<Error>(Error.NONE);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
 
-  const handleErrorButtonClick = () => {
-    setError(Error.NONE);
+  const setTodos = async () => {
+    try {
+      const userId = user ? user.id : 1;
+      const todosFromApi = await getTodos(userId);
+
+      setVisibleTodos(todosFromApi);
+      setTodosAreLoaded(true);
+    } catch (err) {
+      setError(Error.ADD);
+
+      setTimeout(() => {
+        setError(Error.NONE);
+      }, 3000);
+    }
   };
 
   useEffect(() => {
-    const setTodos = async () => {
-      try {
-        const userId = user ? user.id : 1;
-        const todosFromApi = await getTodos(userId);
-
-        setVisibleTodos(todosFromApi);
-        setTodosAreLoaded(true);
-      } catch (err) {
-        setError(Error.ADD);
-
-        setTimeout(() => {
-          setError(Error.NONE);
-        }, 3000);
-      }
-    };
     // focus the element with `ref={newTodoField}`
 
     if (newTodoField.current) {
@@ -83,127 +82,14 @@ export const App: React.FC = () => {
           </form>
         </header>
         {todosAreLoaded && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {
-              filteredTodos.map(todo => {
-                return (
-                  <div
-                    data-cy="Todo"
-                    className={cn('todo',
-                      { completed: todo.completed })}
-                    key={todo.id}
-                  >
-                    <label className="todo__status-label">
-                      <input
-                        data-cy="TodoStatus"
-                        type="checkbox"
-                        className="todo__status"
-                        defaultChecked
-                      />
-                    </label>
-
-                    <span data-cy="TodoTitle" className="todo__title">
-                      {todo.title}
-                    </span>
-                    <button
-                      type="button"
-                      className="todo__remove"
-                      data-cy="TodoDeleteButton"
-                    >
-                      ×
-                    </button>
-
-                    <div data-cy="TodoLoader" className="modal overlay">
-                      <div
-                        className="modal-background has-background-white-ter"
-                      />
-                      <div className="loader" />
-                    </div>
-                  </div>
-                );
-              })
-            }
-          </section>
-        )}
-        {todosAreLoaded && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="todosCounter">
-              4 items left
-            </span>
-
-            <nav className="filter" data-cy="Filter">
-              <a
-                data-cy="FilterLinkAll"
-                href="#/"
-                className={cn('filter__link',
-                  {
-                    selected: filter === Filter.ALL,
-                  })}
-                onClick={() => {
-                  setFilter(Filter.ALL);
-                }}
-              >
-                All
-              </a>
-
-              <a
-                data-cy="FilterLinkActive"
-                href="#/active"
-                className={cn('filter__link',
-                  {
-                    selected: filter === Filter.ACTIVE,
-                  })}
-                onClick={() => {
-                  setFilter(Filter.ACTIVE);
-                }}
-              >
-                Active
-              </a>
-              <a
-                data-cy="FilterLinkCompleted"
-                href="#/completed"
-                // className="filter__link"
-                className={cn('filter__link',
-                  {
-                    selected: filter === Filter.COMPLETED,
-                  })}
-                onClick={() => {
-                  setFilter(Filter.COMPLETED);
-                }}
-              >
-                Completed
-              </a>
-            </nav>
-
-            <button
-              data-cy="ClearCompletedButton"
-              type="button"
-              className="todoapp__clear-completed"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <>
+            <TodoList todos={filteredTodos} />
+            <Footer filter={filter} setFilter={setFilter} />
+          </>
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn('notification is-danger is-light has-text-weight-normal',
-          {
-            hidden: error === Error.NONE,
-          })}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleErrorButtonClick}
-        />
-
-        {error === Error.ADD && 'Unable to add a todo'}
-        {error === Error.DELETE && 'Unable to delete a todo'}
-        {error === Error.UPDATE && 'Unable to update a todo'}
-      </div>
+      <ErrorNotification error={error} setError={setError} />
     </div>
   );
 };
