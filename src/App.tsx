@@ -9,12 +9,10 @@ import {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import {
-  ErrorNotification,
-} from './components/ErrorNotification/ErrorNotification';
-import { Footer } from './components/Footer/Footer';
+import { ErrorNotification } from './components/ErrorNotification';
+import { Footer } from './components/Footer';
 import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
+import { TodoList } from './components/TodoList';
 import { FilterType } from './types/FilterType';
 import { Todo } from './types/Todo';
 
