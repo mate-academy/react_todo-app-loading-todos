@@ -75,12 +75,14 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
-
-    getTodosFromServer();
-  }, []);
+  }, [todos]);
 
   const filterTodos = (filterBy: FilterStatus) => {
     const filteredByStatus = todos.filter(todo => {
