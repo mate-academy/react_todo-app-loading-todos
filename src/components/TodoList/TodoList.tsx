@@ -4,14 +4,18 @@ import { TodoInfo } from '../TodoInfo';
 
 type Props = {
   todos: Todo[];
+  handleDeleteButton: (event: React.FormEvent, todoId: number) => void;
 };
 
-export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
-  return (
-    <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
-        <TodoInfo todo={todo} key={todo.id} />
-      ))}
-    </section>
-  );
-});
+export const TodoList: React.FC<Props>
+= React.memo(({ todos, handleDeleteButton }) => (
+  <section className="todoapp__main" data-cy="TodoList">
+    {todos.map(todo => (
+      <TodoInfo
+        todo={todo}
+        handleDeleteButton={handleDeleteButton}
+        key={todo.id}
+      />
+    ))}
+  </section>
+));

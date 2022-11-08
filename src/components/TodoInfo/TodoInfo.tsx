@@ -4,9 +4,11 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
+  handleDeleteButton: (event: React.FormEvent, todoId: number) => void;
 };
 
-export const TodoInfo: React.FC<Props> = React.memo(({ todo }) => {
+export const TodoInfo: React.FC<Props>
+= React.memo(({ todo, handleDeleteButton }) => {
   const {
     title,
     completed,
@@ -38,6 +40,7 @@ export const TodoInfo: React.FC<Props> = React.memo(({ todo }) => {
         type="button"
         className="todo__remove"
         data-cy="TodoDeleteButton"
+        onClick={(event) => (handleDeleteButton(event, todo.id))}
       >
         ×
       </button>

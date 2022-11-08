@@ -4,13 +4,13 @@ import React, {
   useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 
-import { getTodos } from './api/todos';
+import { getTodos, addTodo, deleteTodo } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { FilterBy } from './types/FilterBy';
-import { TodoNav } from './components/TodoNav';
 import { ErrorNotification } from './components/ErrorNotifications';
+import { TodoFooter } from './components/TodoFooter';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
@@ -19,6 +19,7 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [hasError, setHasError] = useState(false);
   const [todoTitle, setTodoTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const getTodosFromServer = async () => {
     if (user) {
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       } catch {
         setHasError(true);
+        setErrorMessage('Can not load todos from server');
 
         setTimeout(() => {
           setHasError(false);
@@ -44,9 +46,9 @@ export const App: React.FC = () => {
     todos.filter(todo => {
       switch (filterBy) {
         case FilterBy.Completed:
-          return todo.completed === true;
+          return todo.completed;
         case FilterBy.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case FilterBy.All:
         default:
           return todo;
@@ -70,6 +72,35 @@ export const App: React.FC = () => {
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
+  const handleSumbitForm = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (user) {
+      try {
+        const newTodos = {
+          title: todoTitle,
+          completed: false,
+          userId: user?.id,
+        };
+
+        const newTodoToServer = await addTodo(user.id, newTodos);
+
+        setTodos((todosfrom) => [...todosfrom, newTodoToServer]);
+      } catch (error) {
+        setErrorMessage('Unable to add todo');
+        setHasError(true);
+      }
+    }
+  };
+
+  const handleDeleteButton = async (event: React.FormEvent, todoId: number) => {
+    event.preventDefault();
+
+    await deleteTodo(todoId);
+
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -82,7 +113,11 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <form>
+          <form
+            action="/api/todos"
+            method="POST"
+            onSubmit={handleSumbitForm}
+          >
             <input
               data-cy="NewTodoField"
               type="text"
@@ -96,27 +131,24 @@ export const App: React.FC = () => {
         </header>
         {todos.length > 0 && (
           <>
-            <TodoList todos={visibleTodos} />
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="todosCounter">
-                {`${itemsLeft} items left`}
-              </span>
-              <TodoNav filterBy={filterBy} handleFilter={handleFilter} />
-
-              <button
-                data-cy="ClearCompletedButton"
-                type="button"
-                className="todoapp__clear-completed"
-              >
-                Clear completed
-              </button>
-            </footer>
+            <TodoList
+              todos={visibleTodos}
+              handleDeleteButton={handleDeleteButton}
+            />
+            <TodoFooter
+              filterBy={filterBy}
+              handleFilter={handleFilter}
+              itemsLeft={itemsLeft}
+            />
           </>
         )}
 
       </div>
       {hasError && (
-        <ErrorNotification deleteErrors={deleteErrors} />
+        <ErrorNotification
+          deleteErrors={deleteErrors}
+          errorMessage={errorMessage}
+        />
       )}
     </div>
   );
