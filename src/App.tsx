@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -24,8 +25,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const getTodosFromServer = async () => {
+  const getTodosFromServer = useCallback(async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -34,8 +36,9 @@ export const App: React.FC = () => {
       }
     } catch (error) {
       setHasError(true);
+      setErrorMessage('Can`t download ToDos from server');
     }
-  };
+  }, []);
 
   const filtredTodos = useMemo(() => (
     todos.filter(({ completed }) => {
@@ -91,7 +94,9 @@ export const App: React.FC = () => {
       <ErrorNotification
         hasError={hasError}
         onClose={() => setHasError(false)}
-      />
+      >
+        {errorMessage}
+      </ErrorNotification>
     </div>
   );
 };
