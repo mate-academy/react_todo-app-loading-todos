@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { TodoStatus } from '../../types/TodoStatus';
 import { Todo } from '../../types/Todo';
@@ -14,7 +14,9 @@ export const TodosFilter: React.FC<Props> = ({
   todoStatus,
   handleStatusSelect,
 }) => {
-  const todosLeft = todos.filter(todo => !todo.completed).length;
+  const todosLeft = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
