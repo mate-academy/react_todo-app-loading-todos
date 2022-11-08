@@ -3,12 +3,12 @@ import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 
 interface Props {
-  visibleTodos: Todo[],
+  filtredTodos: Todo[],
 }
 
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
+export const TodoList: React.FC<Props> = ({ filtredTodos }) => (
   <section className="todoapp__main" data-cy="TodoList">
-    {visibleTodos.map(todo => (
+    {filtredTodos.map(todo => (
       <TodoItem todo={todo} key={todo.id} />
     ))}
   </section>

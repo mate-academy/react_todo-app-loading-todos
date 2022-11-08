@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useCallback,
   useContext,
-  useEffect,
   useRef,
   useState,
+  useEffect,
+  useMemo,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
-import { Header } from './components/Header';
+import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { TodoFilter } from './components/TodoFilter';
 import { ErrorNotice } from './components/ErrorNotice';
 
 import { Todo } from './types/Todo';
@@ -20,7 +20,6 @@ import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
   const [hasError, setHasError] = useState(false);
 
@@ -33,16 +32,15 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos(user.id);
 
         setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
       }
     } catch (error) {
       setHasError(true);
     }
   };
 
-  const getFilteredTodos = useCallback((type: FilterType) => {
-    const filtredByTypeTodos = todos.filter(({ completed }) => {
-      switch (type) {
+  const filtredTodos = useMemo(() => (
+    todos.filter(({ completed }) => {
+      switch (filterType) {
         case FilterType.ACTIVE:
           return !completed;
 
@@ -50,13 +48,10 @@ export const App: React.FC = () => {
           return completed;
 
         default:
-          return true;
+          return todos;
       }
-    });
-
-    setFilterType(type);
-    setVisibleTodos(filtredByTypeTodos);
-  }, [todos]);
+    })
+  ), [todos, filterType]);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -73,16 +68,16 @@ export const App: React.FC = () => {
       </h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <NewTodo newTodoField={newTodoField} />
 
         {todos.length !== 0 && (
           <>
-            <TodoList visibleTodos={visibleTodos} />
+            <TodoList filtredTodos={filtredTodos} />
 
-            <Footer
-              leftTodos={visibleTodos.length}
+            <TodoFilter
+              todos={todos}
               filterType={filterType}
-              getFilteredTodos={getFilteredTodos}
+              setFilterType={setFilterType}
             />
           </>
         )}
