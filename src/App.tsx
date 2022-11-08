@@ -101,6 +101,7 @@ export const App: React.FC = () => {
 
       <ErrorNotification
         hasError={hasError}
+        setHasError={setHasError}
         handleErrorClose={handleErrorClose}
       />
     </div>
