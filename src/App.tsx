@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
+import { Error } from './types/Error';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
@@ -21,8 +22,19 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState<Error>({
+    message: '',
+    status: false,
+  });
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
+
+  const showError = useCallback((message: string) => {
+    setHasError({ status: true, message });
+
+    setTimeout(() => {
+      setHasError({ status: false, message: '' });
+    }, 3000);
+  }, []);
 
   const loadTodos = useCallback(async () => {
     try {
@@ -32,11 +44,7 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       }
     } catch (err) {
-      setHasError(true);
-
-      setTimeout(() => {
-        setHasError(false);
-      }, 3000);
+      showError('Unable to load todos');
     }
   }, []);
 
@@ -70,7 +78,9 @@ export const App: React.FC = () => {
     setVisibleTodos(todosCopy);
   }, [todoStatus, todos]);
 
-  const handleErrorClose = useCallback(() => setHasError(false), []);
+  const handleErrorClose = useCallback(
+    () => setHasError({ status: false, message: '' }), [],
+  );
 
   const handleStatusSelect = useCallback((status: TodoStatus) => {
     setTodoStatus(status);

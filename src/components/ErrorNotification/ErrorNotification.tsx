@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import cn from 'classnames';
+import { Error } from '../../types/Error';
 
 type Props = {
-  hasError: boolean;
+  hasError: Error;
   handleErrorClose: () => void;
 };
 
@@ -15,7 +16,7 @@ export const ErrorNotification: React.FC<Props> = ({
     data-cy="ErrorNotification"
     className={cn(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !hasError },
+      { hidden: !hasError.status },
     )}
   >
     <button
@@ -25,10 +26,6 @@ export const ErrorNotification: React.FC<Props> = ({
       onClick={handleErrorClose}
     />
 
-    Unable to add a todo
-    <br />
-    Unable to delete a todo
-    <br />
-    Unable to update a todo
+    {hasError.message}
   </div>
 );
