@@ -1,7 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { ToDo } from './Todo';
-
 import { User } from '../types/User';
 
 type Props = {
@@ -12,6 +11,7 @@ type Props = {
   foundTodoList: (u: User) => void,
   isAdding: Todo | null,
   selectComplited: (todo: Todo) => Promise<void>,
+  clearLoader: boolean,
 };
 
 export const TodoLIst: React.FC<Props> = React.memo((
@@ -23,6 +23,7 @@ export const TodoLIst: React.FC<Props> = React.memo((
     foundTodoList,
     isAdding,
     selectComplited,
+    clearLoader,
   },
 ) => {
   return (
@@ -35,6 +36,7 @@ export const TodoLIst: React.FC<Props> = React.memo((
           setErrorRemove={setErrorRemove}
           setHidden={setHidden}
           selectComplited={selectComplited}
+          clearLoader={clearLoader}
         />
       ))}
 
@@ -46,6 +48,7 @@ export const TodoLIst: React.FC<Props> = React.memo((
           setErrorRemove={setErrorRemove}
           setHidden={setHidden}
           selectComplited={selectComplited}
+          clearLoader={clearLoader}
         />
       )}
     </section>

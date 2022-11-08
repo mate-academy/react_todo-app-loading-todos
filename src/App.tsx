@@ -32,11 +32,13 @@ export const App: React.FC = () => {
   const [errorEmptyTitile, setErrorEmptyTitile] = useState(false);
   const [typeFilter, setTypeFilter] = useState('All');
   const [hidden, setHidden] = useState(true);
+  const [clearLoader, setClearLoader] = useState(false);
 
   const foundTodoList = useCallback((u:User) => {
     getTodos(u.id).then(response => {
       setTodoList(response);
       setIsAdding(null);
+      setClearLoader(false);
     });
   }, [user]);
 
@@ -109,12 +111,13 @@ export const App: React.FC = () => {
   const clearCompletedTodo = useCallback(() => {
     todoList.map(async (todo) => {
       if (todo.completed) {
-        deleteTodos(todo);
         try {
+          setClearLoader(true);
           await deleteTodos(todo);
         } catch {
           setErrorRemove(true);
           setHidden(false);
+          setClearLoader(false);
         }
 
         if (user) {
@@ -197,8 +200,9 @@ export const App: React.FC = () => {
     [todoList]);
   const counterActiveTodos = useMemo(() => countingActiveTodo(todoList),
     [todoList]);
-  const allComplited = useMemo(() => checkedAllCompletedTodo(todoList),
-    [todoList]);
+  const allComplited = useMemo(() => checkedAllCompletedTodo(todoList)
+  && !!todoList.length,
+  [todoList]);
 
   const errorMessage = useMemo(
     () => selectErrors(
@@ -231,6 +235,7 @@ export const App: React.FC = () => {
           foundTodoList={foundTodoList}
           isAdding={isAdding}
           selectComplited={selectComplited}
+          clearLoader={clearLoader}
         />
 
         {!!todoList.length && (

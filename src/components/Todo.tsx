@@ -17,6 +17,7 @@ type Props = {
   setErrorRemove: (value: boolean) => void,
   setHidden: React.Dispatch<React.SetStateAction<boolean>>,
   selectComplited: (toDo: Todo) => Promise<void>,
+  clearLoader: boolean,
 };
 
 export const ToDo: React.FC<Props> = ({
@@ -26,6 +27,7 @@ export const ToDo: React.FC<Props> = ({
   setErrorRemove,
   setHidden,
   selectComplited,
+  clearLoader,
 }) => {
   const user = useContext(AuthContext);
   const [editTodoTitile, setEditTodoTitle] = useState('');
@@ -70,7 +72,6 @@ export const ToDo: React.FC<Props> = ({
       setEdditing(toDo);
       setToggleDoubleClick(null);
       await EditTodo(toDo, validTodoTitle);
-      // setEditTodoTitle('');
     } catch {
       setErrorUpdate(true);
       setHidden(false);
@@ -89,7 +90,7 @@ export const ToDo: React.FC<Props> = ({
       editTitle.current.focus();
     }
 
-    const handleClick = (event:any) => {
+    const handleClick = (event: any) => {
       if (!editTitle.current?.contains(event.target)) {
         setToggleDoubleClick(null);
       }
@@ -125,7 +126,8 @@ export const ToDo: React.FC<Props> = ({
 
   const activeTodoLoader = (isRemovePending && isRemovePending.id === todo.id)
   || (!todo.id)
-  || (edditing?.id === todo.id);
+  || (edditing?.id === todo.id)
+  || (clearLoader && todo.completed);
 
   return (
     <div
