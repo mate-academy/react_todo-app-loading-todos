@@ -1,7 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../../types/Todo';
 import { FilterType } from '../../../utils/enums/FilterType';
+import { Navigation } from '../Navigation/Navigation';
 
 type Props = {
   filterType: FilterType;
@@ -15,42 +15,7 @@ export const Footer: React.FC<Props> = ({ filterType, todos, onFilter }) => (
       {`${todos.length} items left`}
     </span>
 
-    <nav className="filter" data-cy="Filter">
-      <a
-        data-cy="FilterLinkAll"
-        href="#/"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === FilterType.All },
-        )}
-        onClick={() => onFilter(FilterType.All)}
-      >
-        All
-      </a>
-
-      <a
-        data-cy="FilterLinkActive"
-        href="#/active"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === FilterType.Active },
-        )}
-        onClick={() => onFilter(FilterType.Active)}
-      >
-        Active
-      </a>
-      <a
-        data-cy="FilterLinkCompleted"
-        href="#/completed"
-        className={classNames(
-          'filter__link',
-          { selected: filterType === FilterType.Completed },
-        )}
-        onClick={() => onFilter(FilterType.Completed)}
-      >
-        Completed
-      </a>
-    </nav>
+    <Navigation filterType={filterType} onFilter={onFilter} />
 
     <button
       data-cy="ClearCompletedButton"
