@@ -11,13 +11,10 @@ export const NavContext = React.createContext<NavContextt>({
   setSortBy: () => {},
 });
 
-export const NavProvider:
-React.FC<React.DetailedHTMLProps<
+export const NavProvider: React.FC<React.DetailedHTMLProps<
 React.HTMLAttributes<HTMLDivElement>, HTMLDivElement
 >> = ({ children }) => {
   const [sortBy, setSortBy] = useState(SortParam.All);
-
-  // console.log(sortBy);
 
   const contextNav = {
     sortBy,

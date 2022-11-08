@@ -3,7 +3,7 @@ import { RefObject } from 'react';
 
 type Props = {
   newTodoField: RefObject<HTMLInputElement>,
-  numberOfCompletedTodo: number | undefined,
+  numberOfCompletedTodo?: number,
 };
 
 export const Header: React.FC<Props> = ({

@@ -1,8 +1,9 @@
+import { MouseEventHandler } from 'react';
 import { ErrorTodo } from '../../types/ErrorTodo';
 
 type Props = {
   typeError: ErrorTodo,
-  onCloseErrorMessage: React.Dispatch<React.SetStateAction<ErrorTodo | null>>,
+  onCloseErrorMessage: MouseEventHandler<HTMLButtonElement>,
 };
 
 export const ErrorMessage: React.FC<Props> = ({
@@ -18,7 +19,7 @@ export const ErrorMessage: React.FC<Props> = ({
       data-cy="HideErrorButton"
       type="button"
       className="delete"
-      onClick={() => onCloseErrorMessage(null)}
+      onClick={onCloseErrorMessage}
     />
     {typeError === 'download' && 'Unable to download todos'}
     {typeError === 'add' && 'Unable to add a todo'}

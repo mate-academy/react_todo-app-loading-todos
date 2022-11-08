@@ -1,6 +1,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -19,9 +20,22 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>();
   const [errorTodo, setErrorTodo] = useState<ErrorTodo | null>(null);
+  const timerId = useRef<number | undefined>();
+
+  const showErrorMessage = () => {
+    setErrorTodo('download');
+    timerId.current = window.setTimeout(() => {
+      setErrorTodo(null);
+    }, 3000);
+  };
+
+  const closeErrorMessage = () => {
+    setErrorTodo(null);
+    clearTimeout(timerId.current);
+  };
 
   async function loadTodos() {
-    setErrorTodo(null);
+    closeErrorMessage();
 
     if (user) {
       const loadedTodos = await getTodos(user.id);
@@ -33,14 +47,15 @@ export const App: React.FC = () => {
 
         setTodosFromServer(loadedTodos);
       } catch {
-        setErrorTodo('download');
-        setTimeout(setErrorTodo, 3000, null);
+        showErrorMessage();
       }
     }
   }
 
-  const numberOfCompletedTodo
-    = todosFromServer?.filter(todo => !todo.completed).length;
+  const numberOfCompletedTodo = useMemo(
+    () => todosFromServer?.filter(todo => !todo.completed).length,
+    [todosFromServer],
+  );
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -48,6 +63,10 @@ export const App: React.FC = () => {
     }
 
     loadTodos();
+
+    return () => {
+      clearTimeout(timerId.current);
+    };
   }, []);
 
   return (
@@ -63,7 +82,7 @@ export const App: React.FC = () => {
 
           {todosFromServer && <TodoList todos={todosFromServer} />}
 
-          {todosFromServer?.length !== 0 && todosFromServer && (
+          {todosFromServer?.length && (
             <Footer numberOfCompletedTodo={numberOfCompletedTodo} />
           )}
         </div>
@@ -71,7 +90,7 @@ export const App: React.FC = () => {
         {errorTodo && (
           <ErrorMessage
             typeError={errorTodo}
-            onCloseErrorMessage={setErrorTodo}
+            onCloseErrorMessage={closeErrorMessage}
           />
         )}
       </div>

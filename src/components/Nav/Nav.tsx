@@ -7,7 +7,7 @@ export const Nav: React.FC = () => {
   const [activeButton, setActiveButton] = useState('all');
   const { setSortBy } = useContext(NavContext);
 
-  function selectSort(param: string | undefined) {
+  function selectSort(param?: string) {
     switch (param) {
       case 'FilterLinkAll':
         setSortBy(SortParam.All);
@@ -34,10 +34,12 @@ export const Nav: React.FC = () => {
       <a
         data-cy="FilterLinkAll"
         href="#/"
-        className={classNames('filter__link',
+        className={classNames(
+          'filter__link',
           {
             selected: activeButton === 'all',
-          })}
+          },
+        )}
         onClick={(event) => selectSort(event.currentTarget.dataset.cy)}
       >
         All
@@ -46,10 +48,12 @@ export const Nav: React.FC = () => {
       <a
         data-cy="FilterLinkActive"
         href="#/active"
-        className={classNames('filter__link',
+        className={classNames(
+          'filter__link',
           {
             selected: activeButton === 'active',
-          })}
+          },
+        )}
         onClick={(event) => selectSort(event.currentTarget.dataset.cy)}
       >
         Active
@@ -57,10 +61,12 @@ export const Nav: React.FC = () => {
       <a
         data-cy="FilterLinkCompleted"
         href="#/completed"
-        className={classNames('filter__link',
+        className={classNames(
+          'filter__link',
           {
             selected: activeButton === 'completed',
-          })}
+          },
+        )}
         onClick={(event) => selectSort(event.currentTarget.dataset.cy)}
       >
         Completed
