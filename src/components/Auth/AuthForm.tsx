@@ -31,7 +31,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
 
       onLogin(user);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
     }
   }, []);
 
