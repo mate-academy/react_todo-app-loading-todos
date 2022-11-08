@@ -1,18 +1,93 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
+import { AddTodo } from './components/Auth/AddTodo';
+import { Todo } from './types/Todo';
+import { addTodos, getTodos } from './api/todos';
+import { TodoList } from './components/Auth/TodoList';
+import { Footer } from './components/Auth/Footer';
+import { FilterTodos } from './utils/FilterTodos';
+// import { User } from './types/User';
 
 export const App: React.FC = () => {
+  // export enum FilterTodos {
+  //   ALL = 'All',
+  //   ACTIVE = 'Active',
+  //   COMLETED = 'Completed',
+  // }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterBy, setFilterBy] = useState(FilterTodos.ALL);
+  const [queryOfTitle, setQueryOfTitle] = useState('');
+  const [hasError, setHasError] = useState(false);
+  // const [addError, setAddError] = useState(false);
+  // const [deleteError, setDeleteError] = useState(false);
+  // const [updateError, setUpdateError] = useState(false);
+
+  const getTodosFromServer = async () => {
+    try {
+      if (user) {
+        const todosFromServer = await getTodos(user.id);
+
+        setTodos(todosFromServer);
+      }
+    } catch (err) {
+      setHasError(true);
+      setTimeout(() => {
+        setHasError(false);
+      }, 3000);
+    }
+  };
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    getTodosFromServer();
   }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    switch (filterBy) {
+      case FilterTodos.ACTIVE:
+        return !todo.completed;
+      case FilterTodos.COMLETED:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
+  const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimtitle = queryOfTitle.trim();
+
+    if (!trimtitle) {
+      setHasError(true);
+      setQueryOfTitle('');
+
+      return;
+    }
+
+    if (user && !hasError) {
+      await addTodos(user.id, trimtitle);
+      getTodosFromServer();
+    }
+
+    setQueryOfTitle('');
+  };
+
+  const handleQueryOfTitle = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setQueryOfTitle(event.target.value);
+  };
+
+  const activeTodos = todos.filter(todo => todo.completed === false).length;
 
   return (
     <div className="todoapp">
@@ -25,19 +100,14 @@ export const App: React.FC = () => {
             type="button"
             className="todoapp__toggle-all active"
           />
-
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <AddTodo
+            newTodoField={newTodoField}
+            handleQueryOfTitle={handleQueryOfTitle}
+            queryOfTitle={queryOfTitle}
+            handleOnSubmit={handleOnSubmit}
+          />
         </header>
-
-        <section className="todoapp__main" data-cy="TodoList">
+        {/* <section className="todoapp__main" data-cy="TodoList">
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
               <input
@@ -48,7 +118,9 @@ export const App: React.FC = () => {
               />
             </label>
 
-            <span data-cy="TodoTitle" className="todo__title">HTML</span>
+            <span data-cy="TodoTitle" className="todo__title">
+              HTML
+            </span>
             <button
               type="button"
               className="todo__remove"
@@ -72,7 +144,9 @@ export const App: React.FC = () => {
               />
             </label>
 
-            <span data-cy="TodoTitle" className="todo__title">CSS</span>
+            <span data-cy="TodoTitle" className="todo__title">
+              CSS
+            </span>
 
             <button
               type="button"
@@ -122,7 +196,9 @@ export const App: React.FC = () => {
               />
             </label>
 
-            <span data-cy="TodoTitle" className="todo__title">React</span>
+            <span data-cy="TodoTitle" className="todo__title">
+              React
+            </span>
             <button
               type="button"
               className="todo__remove"
@@ -146,7 +222,9 @@ export const App: React.FC = () => {
               />
             </label>
 
-            <span data-cy="TodoTitle" className="todo__title">Redux</span>
+            <span data-cy="TodoTitle" className="todo__title">
+              Redux
+            </span>
             <button
               type="button"
               className="todo__remove"
@@ -160,9 +238,15 @@ export const App: React.FC = () => {
               <div className="loader" />
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <footer className="todoapp__footer" data-cy="Footer">
+        {todos.length > 0 && <TodoList todos={filteredTodos} />}
+        <Footer
+          activeTodos={activeTodos}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+        />
+        {/* <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
             4 items left
           </span>
@@ -199,25 +283,32 @@ export const App: React.FC = () => {
           >
             Clear completed
           </button>
-        </footer>
+        </footer> */}
       </div>
-
-      <div
+      {hasError && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          <button data-cy="HideErrorButton" type="button" className="delete" />
+          Unable to add a todo
+          <br />
+          Unable to delete a todo
+          <br />
+          Unable to update a todo
+        </div>
+      )}
+      {/* <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
       >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-
+        <button data-cy="HideErrorButton" type="button" className="delete" />
         Unable to add a todo
         <br />
         Unable to delete a todo
         <br />
         Unable to update a todo
-      </div>
+      </div> */}
     </div>
   );
 };
