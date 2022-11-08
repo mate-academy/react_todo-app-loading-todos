@@ -9,12 +9,14 @@ body {
 }
 
 .notification {
-  transition-property: opacity, min-height;
+  visibility: visible;
+  transition-property: opacity, min-height, visibility;
   transition-duration: 1s;
   min-height: 36px;
 }
 
 .notification.hidden {
+  visibility: hidden;
   min-height: 0;
   opacity: 0;
   pointer-events: none;
