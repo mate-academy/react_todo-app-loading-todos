@@ -3,7 +3,6 @@ import { User } from '../../types/User';
 import { AuthForm } from './AuthForm';
 
 export const AuthContext = React.createContext<User | null>(null);
-
 type Props = {
   children: React.ReactNode;
 };
