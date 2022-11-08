@@ -100,7 +100,7 @@ export const App: React.FC = () => {
           <>
             <TodosList todos={filteredTodos} />
             <TodosSelection
-              setFilterSelector={() => setFilterSelector}
+              setFilterSelector={setFilterSelector}
               remainActiveTodos={remainActiveTodos}
               filterSelector={filterSelector}
             />
