@@ -52,7 +52,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     let todosCopy = [...todos];
 
-    if (todoStatus !== 'All') {
+    if (todoStatus !== TodoStatus.All) {
       todosCopy = todosCopy.filter(todo => {
         switch (todoStatus) {
           case TodoStatus.Active:
