@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
-import { AuthContext } from './components/Auth/AuthContext';
+import React, { /* useContext, */ useEffect, useRef } from 'react';
+/* import { AuthContext } from './components/Auth/AuthContext'; */
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+  /* const user = useContext(AuthContext); */
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
