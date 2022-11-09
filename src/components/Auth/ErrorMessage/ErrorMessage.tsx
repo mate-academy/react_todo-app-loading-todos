@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ErrorType } from '../../../utils/enums/ErrorType';
 
 type Props = {
@@ -15,21 +15,23 @@ export const ErrorMessage: React.FC<Props> = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
-  switch (errorType) {
-    case ErrorType.Add:
-      setErrorMessage('Unable to add a todo');
-      break;
+  useEffect(() => {
+    switch (errorType) {
+      case ErrorType.Add:
+        setErrorMessage('Unable to add a todo');
+        break;
 
-    case ErrorType.Delete:
-      setErrorMessage('Unable to delete a todo');
-      break;
+      case ErrorType.Delete:
+        setErrorMessage('Unable to delete a todo');
+        break;
 
-    case ErrorType.Update:
-      setErrorMessage('Unable to update a todo');
-      break;
+      case ErrorType.Update:
+        setErrorMessage('Unable to update a todo');
+        break;
 
-    default: setErrorMessage('');
-  }
+      default: setErrorMessage('');
+    }
+  }, [errorType]);
 
   return (
     <div

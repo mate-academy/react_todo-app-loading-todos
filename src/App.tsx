@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         setIsError(false);
       }, 3000);
     }
-  }, []);
+  }, [filterType]);
 
   useEffect(() => {
     loadTodos();
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
-  }, [filterType]);
+  });
 
   return (
     <div className="todoapp">
