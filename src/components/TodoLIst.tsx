@@ -5,9 +5,9 @@ import { User } from '../types/User';
 
 type Props = {
   List: Todo[],
-  setErrorRemove: (value: boolean) => void,
-  setErrorUpdate: (value: boolean) => void,
-  setHidden: (value: boolean) => void,
+  onErrorRemove: (value: boolean) => void,
+  onErrorUpdate: (value: boolean) => void,
+  onHidden: (value: boolean) => void,
   foundTodoList: (u: User) => void,
   isAdding: Todo | null,
   selectComplited: (todo: Todo) => Promise<void>,
@@ -17,9 +17,9 @@ type Props = {
 export const TodoLIst: React.FC<Props> = React.memo((
   {
     List,
-    setErrorRemove,
-    setErrorUpdate,
-    setHidden,
+    onErrorRemove,
+    onErrorUpdate,
+    onHidden,
     foundTodoList,
     isAdding,
     selectComplited,
@@ -32,9 +32,9 @@ export const TodoLIst: React.FC<Props> = React.memo((
         <ToDo
           todo={todo}
           foundTodoList={foundTodoList}
-          setErrorUpdate={setErrorUpdate}
-          setErrorRemove={setErrorRemove}
-          setHidden={setHidden}
+          setErrorUpdate={onErrorUpdate}
+          setErrorRemove={onErrorRemove}
+          setHidden={onHidden}
           selectComplited={selectComplited}
           clearLoader={clearLoader}
         />
@@ -44,9 +44,9 @@ export const TodoLIst: React.FC<Props> = React.memo((
         <ToDo
           todo={isAdding}
           foundTodoList={foundTodoList}
-          setErrorUpdate={setErrorUpdate}
-          setErrorRemove={setErrorRemove}
-          setHidden={setHidden}
+          setErrorUpdate={onErrorUpdate}
+          setErrorRemove={onErrorRemove}
+          setHidden={onHidden}
           selectComplited={selectComplited}
           clearLoader={clearLoader}
         />

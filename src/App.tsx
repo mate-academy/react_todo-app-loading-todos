@@ -246,14 +246,14 @@ export const App: React.FC = () => {
           selectAllTodos={selectAllTodos}
           createTodo={createTodo}
           newTodoTitle={newTodoTitle}
-          setNewTodoTitle={handlerNewTitle}
+          onNewTodoTitle={handlerNewTitle}
         />
 
         <TodoLIst
           List={filtredList}
-          setErrorRemove={handlerRemoveError}
-          setErrorUpdate={hanldeUpdateError}
-          setHidden={handleHidden}
+          onErrorRemove={handlerRemoveError}
+          onErrorUpdate={hanldeUpdateError}
+          onHidden={handleHidden}
           foundTodoList={foundTodoList}
           isAdding={isAdding}
           selectComplited={selectComplited}
@@ -264,7 +264,7 @@ export const App: React.FC = () => {
           <Footer
             counterActiveTodos={counterActiveTodos}
             typeFilter={typeFilter}
-            setTypeFilter={handleTypeFilter}
+            onTypeFilter={handleTypeFilter}
             hasComplitedTodo={hasComplitedTodo}
             clearCompletedTodo={clearCompletedTodo}
           />
@@ -273,7 +273,7 @@ export const App: React.FC = () => {
 
       <Error
         hidden={hidden}
-        handlerCloseErrors={handlerCloseErrors}
+        onCloseErrors={handlerCloseErrors}
         errorMessage={errorMessage}
       />
     </div>

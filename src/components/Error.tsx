@@ -3,13 +3,13 @@ import classNames from 'classnames';
 
 type Props = {
   hidden: boolean,
-  handlerCloseErrors: () => void,
+  onCloseErrors: () => void,
   errorMessage: string | null,
 };
 
 export const Error:React.FC<Props> = React.memo(({
   hidden,
-  handlerCloseErrors,
+  onCloseErrors,
   errorMessage,
 }) => {
   return (
@@ -25,7 +25,7 @@ export const Error:React.FC<Props> = React.memo(({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={handlerCloseErrors}
+        onClick={onCloseErrors}
         aria-label="button-hide Errors"
       />
 

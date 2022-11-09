@@ -6,7 +6,7 @@ type Props = {
   selectAllTodos: () => void,
   createTodo: (event: React.FormEvent<HTMLFormElement>) => Promise<void>
   newTodoTitle: string,
-  setNewTodoTitle: (value: string) => void
+  onNewTodoTitle: (value: string) => void
 };
 
 export const Header:React.FC<Props> = React.memo(({
@@ -14,7 +14,7 @@ export const Header:React.FC<Props> = React.memo(({
   selectAllTodos,
   createTodo,
   newTodoTitle,
-  setNewTodoTitle,
+  onNewTodoTitle,
 }) => {
   return (
     <header className="todoapp__header">
@@ -36,7 +36,7 @@ export const Header:React.FC<Props> = React.memo(({
           type="text"
           className="todoapp__new-todo"
           value={newTodoTitle}
-          onChange={event => setNewTodoTitle(event.target.value)}
+          onChange={event => onNewTodoTitle(event.target.value)}
           placeholder="What needs to be done?"
         />
       </form>

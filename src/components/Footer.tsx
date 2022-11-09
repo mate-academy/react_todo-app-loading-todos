@@ -4,7 +4,7 @@ import classNames from 'classnames';
 type Props = {
   counterActiveTodos:number,
   typeFilter:string,
-  setTypeFilter: (type: string) => void,
+  onTypeFilter: (type: string) => void,
   hasComplitedTodo: boolean,
   clearCompletedTodo: () => void,
 };
@@ -12,12 +12,12 @@ type Props = {
 export const Footer:React.FC<Props> = React.memo(({
   counterActiveTodos,
   typeFilter,
-  setTypeFilter,
+  onTypeFilter,
   hasComplitedTodo,
   clearCompletedTodo,
 }) => {
   const selectTypeFiltred = (type:string) => {
-    setTypeFilter(type);
+    onTypeFilter(type);
   };
 
   return (
