@@ -25,20 +25,26 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const [isAdding, setIsAdding] = useState<Todo | null>(null);
   const [errorAdd, setErrorAdd] = useState(false);
   const [errorRemove, setErrorRemove] = useState(false);
   const [errorUpdate, setErrorUpdate] = useState(false);
   const [errorEmptyTitile, setErrorEmptyTitile] = useState(false);
   const [typeFilter, setTypeFilter] = useState('All');
   const [hidden, setHidden] = useState(true);
+  const [isAdding, setIsAdding] = useState<Todo | null>(null);
   const [clearLoader, setClearLoader] = useState(false);
+  const [loadingAllTodos, setLoadingAllTodos] = useState(false);
+  const [isLoading, setIsLoading] = useState<Todo | null>(null);
 
   const handleHidden = useCallback(
     (value: boolean) => {
       setHidden(value);
     }, [],
   );
+
+  const handleLoading = useCallback((value: Todo | null) => {
+    setIsLoading(value);
+  }, []);
 
   const handleTypeFilter = useCallback((type: string) => {
     setTypeFilter(type);
@@ -61,6 +67,8 @@ export const App: React.FC = () => {
       setTodoList(response);
       setIsAdding(null);
       setClearLoader(false);
+      setIsLoading(null);
+      setLoadingAllTodos(false);
     });
   }, [user]);
 
@@ -88,7 +96,6 @@ export const App: React.FC = () => {
         } catch {
           setErrorAdd(true);
           setHidden(false);
-          setIsAdding(null);
         }
 
         foundTodoList(user);
@@ -103,6 +110,7 @@ export const App: React.FC = () => {
 
   const selectComplited = useCallback(async (todo:Todo) => {
     try {
+      setIsLoading(todo);
       if (todo.completed) {
         await UpdateTodo(todo, false);
       } else {
@@ -111,6 +119,7 @@ export const App: React.FC = () => {
     } catch {
       setErrorUpdate(true);
       setHidden(false);
+      setIsLoading(null);
     }
 
     if (user) {
@@ -120,6 +129,7 @@ export const App: React.FC = () => {
 
   const selectAllTodos = useCallback(() => {
     todoList.map(async (todo) => {
+      setLoadingAllTodos(true);
       if (!checkedAllCompletedTodo(todoList)) {
         if (!todo.completed) {
           selectComplited(todo);
@@ -258,6 +268,9 @@ export const App: React.FC = () => {
           isAdding={isAdding}
           selectComplited={selectComplited}
           clearLoader={clearLoader}
+          loadingAllTodos={loadingAllTodos}
+          onIsLoading={handleLoading}
+          isLoading={isLoading}
         />
 
         {!!todoList.length && (

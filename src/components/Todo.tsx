@@ -18,6 +18,9 @@ type Props = {
   setHidden: (value: boolean) => void,
   selectComplited: (toDo: Todo) => Promise<void>,
   clearLoader: boolean,
+  loadingAllTodos: boolean,
+  onIsLoading: (value: Todo | null) => void,
+  isLoading: Todo | null,
 };
 
 export const ToDo: React.FC<Props> = ({
@@ -28,23 +31,23 @@ export const ToDo: React.FC<Props> = ({
   setHidden,
   selectComplited,
   clearLoader,
+  loadingAllTodos,
+  onIsLoading,
+  isLoading,
 }) => {
   const user = useContext(AuthContext);
   const [editTodoTitile, setEditTodoTitle] = useState('');
-  const [isRemovePending, setIsRemovePending] = useState<Todo | null>(null);
   const [toggleDoubleClick, setToggleDoubleClick] = useState<Todo | null>(null);
   const editTitle = useRef<HTMLInputElement>(null);
-  const [edditing, setEdditing] = useState<Todo | null>(null);
 
   const removeTodo = async (toDo:Todo) => {
     deleteTodos(toDo);
     try {
-      setIsRemovePending(toDo);
+      onIsLoading(toDo);
       await deleteTodos(toDo);
     } catch {
       setErrorRemove(true);
       setHidden(false);
-      setIsRemovePending(null);
     }
 
     if (user) {
@@ -69,7 +72,7 @@ export const ToDo: React.FC<Props> = ({
     }
 
     try {
-      setEdditing(toDo);
+      onIsLoading(toDo);
       setToggleDoubleClick(null);
       await EditTodo(toDo, validTodoTitle);
     } catch {
@@ -79,7 +82,6 @@ export const ToDo: React.FC<Props> = ({
 
     if (user) {
       foundTodoList(user);
-      setEdditing(null);
     }
 
     setToggleDoubleClick(null);
@@ -124,9 +126,9 @@ export const ToDo: React.FC<Props> = ({
     }
   };
 
-  const activeTodoLoader = (isRemovePending && isRemovePending.id === todo.id)
+  const activeTodoLoader = (isLoading && isLoading.id === todo.id)
   || (!todo.id)
-  || (edditing?.id === todo.id)
+  || (loadingAllTodos)
   || (clearLoader && todo.completed);
 
   return (

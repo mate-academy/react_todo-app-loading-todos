@@ -12,6 +12,9 @@ type Props = {
   isAdding: Todo | null,
   selectComplited: (todo: Todo) => Promise<void>,
   clearLoader: boolean,
+  loadingAllTodos: boolean,
+  onIsLoading:(value: Todo | null) => void,
+  isLoading: Todo | null,
 };
 
 export const TodoLIst: React.FC<Props> = React.memo((
@@ -24,6 +27,9 @@ export const TodoLIst: React.FC<Props> = React.memo((
     isAdding,
     selectComplited,
     clearLoader,
+    loadingAllTodos,
+    onIsLoading,
+    isLoading,
   },
 ) => {
   return (
@@ -37,6 +43,9 @@ export const TodoLIst: React.FC<Props> = React.memo((
           setHidden={onHidden}
           selectComplited={selectComplited}
           clearLoader={clearLoader}
+          loadingAllTodos={loadingAllTodos}
+          onIsLoading={onIsLoading}
+          isLoading={isLoading}
         />
       ))}
 
@@ -49,6 +58,9 @@ export const TodoLIst: React.FC<Props> = React.memo((
           setHidden={onHidden}
           selectComplited={selectComplited}
           clearLoader={clearLoader}
+          loadingAllTodos={loadingAllTodos}
+          onIsLoading={onIsLoading}
+          isLoading={isLoading}
         />
       )}
     </section>
