@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -18,18 +19,16 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [fieldForSorting, setFieldForSorting]
     = useState<FieldForSorting>(FieldForSorting.All);
-  const [counterActiveTodos, setCounterActiveTodos] = useState(0);
 
   const getTodosFromAPI = useCallback(async () => {
     setIsError(false);
     if (user) {
       try {
-        const recMovie = await getTodos(user.id);
+        const todosFromAPI = await getTodos(user.id);
 
-        setTodos(recMovie);
+        setTodos(todosFromAPI);
       } catch {
         setIsError(true);
       }
@@ -57,14 +56,14 @@ export const App: React.FC = () => {
     setFieldForSorting(fieldForSort);
   }, [fieldForSorting]);
 
-  const countActiveTodos = useCallback(() => {
+  const counterActiveTodos = useMemo(() => {
     const completedTodos = todos.filter(todo => todo.completed);
 
-    setCounterActiveTodos(todos.length - completedTodos.length);
+    return todos.length - completedTodos.length;
   }, [todos]);
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
       switch (fieldForSorting) {
         case FieldForSorting.Active:
           return !todo.completed;
@@ -72,14 +71,14 @@ export const App: React.FC = () => {
         case FieldForSorting.Completed:
           return todo.completed;
 
+        case FieldForSorting.All:
         default:
           return true;
       }
     });
+  }, [todos, fieldForSorting]);
 
-    setVisibleTodos(filteredTodos);
-    countActiveTodos();
-  }, [todos, fieldForSorting, counterActiveTodos]);
+  const hasTodos = todos.length > 0;
 
   return (
     <div className="todoapp">
@@ -104,17 +103,21 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && <TodoList todos={visibleTodos} />}
-
-        {todos.length > 0 && (
-          <Footer
-            fieldForSorting={fieldForSorting}
-            selectFieldForSorting={selectFieldForSorting}
-            counterActiveTodos={counterActiveTodos}
-          />
-        )}
+        {hasTodos
+          ? (
+            <>
+              <TodoList todos={filteredTodos} />
+              <Footer
+                fieldForSorting={fieldForSorting}
+                selectFieldForSorting={selectFieldForSorting}
+                counterActiveTodos={counterActiveTodos}
+              />
+            </>
+          )
+          : 'List is empty'}
       </div>
-      {todos.length > 0 && <Error isError={isError} closeError={closeError} />}
+
+      {hasTodos && <Error isError={isError} closeError={closeError} />}
     </div>
   );
 };
