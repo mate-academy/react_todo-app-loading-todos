@@ -1,72 +1,160 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import cn from 'classnames';
+import {
+  createTodos, getTodos, removeTodo, updateTodo,
+} from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { FilterType } from './types/filterType';
 import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
-import { TodoList } from './components/TodoList';
-import { ErrorType } from './types/errorType';
+import { TodoComponent } from './components/Todo';
+import { Footer } from './components/Footer';
+import { ErrorMessage } from './components/ErrorMessage';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [inputTitle, setInputTitle] = useState('');
+  const [isAdding, setIsAdding] = useState<Todo | null>(null);
+  const [addError, setAddError] = useState(false);
+  const [removeError, setRemoveError] = useState(false);
+  const [updateError, setUpdateError] = useState(false);
+  const [inputError, setInputError] = useState(false);
+  const [filterType, setFilterType] = useState('All');
+  const [isAllSelected, setIsAllSelected] = useState(true);
+  const [isHidden, setIsHidden] = useState(true);
+  const [isEditing, setIsEditing] = useState<Todo | null>(null);
+
+  const editTitle = useRef<HTMLInputElement>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState(FilterType.ALL);
-  const [error, setError] = useState(ErrorType.NONE);
-
   useEffect(() => {
-    const getTodosFromApi = async () => {
-      try {
-        const userId = user ? user.id : 1;
-
-        const response = await getTodos(userId);
-
-        setTodos(response);
-        setVisibleTodos(response);
-      } catch (err) {
-        setError(ErrorType.UPLOAD);
-
-        setTimeout(() => setError(ErrorType.NONE), 3000);
-      }
-    };
-
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
-
-    getTodosFromApi();
   }, []);
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(todo => {
-      switch (filterType) {
-        case FilterType.ACTIVE:
-          return !todo.completed;
-        case FilterType.COMPLETED:
-          return todo.completed;
-        default:
-          return todo;
+  const getTodosFromApi = async (userId: number) => {
+    try {
+      const response = await getTodos(userId);
+
+      setTodos(response);
+      setIsAdding(null);
+      setIsEditing(null);
+    } catch (error) {
+      throw new Error('Error on loading todos');
+    }
+  };
+
+  const createTodo = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!inputTitle) {
+      setInputError(true);
+      setIsHidden(false);
+
+      return;
+    }
+
+    if (user) {
+      const newTodo = {
+        userId: user.id,
+        title: inputTitle,
+        completed: false,
+      };
+
+      setIsAdding(newTodo);
+
+      try {
+        await createTodos(newTodo);
+      } catch {
+        setAddError(true);
+        setIsHidden(false);
+        setIsAdding(null);
+      }
+
+      getTodosFromApi(user.id);
+      setInputTitle('');
+    }
+  };
+
+  const selectCompleted = async (todo: Todo) => {
+    try {
+      await updateTodo(todo, !todo.completed);
+    } catch {
+      setUpdateError(true);
+      setIsHidden(false);
+    }
+
+    if (user) {
+      getTodosFromApi(user.id);
+    }
+  };
+
+  const selectAll = () => {
+    todos.map(async (todo) => {
+      if (!todo.completed && isAllSelected) {
+        await selectCompleted(todo);
+      } else if (todo.completed && !isAllSelected) {
+        await selectCompleted(todo);
       }
     });
 
-    setVisibleTodos(filteredTodos);
-  }, [todos, filterType]);
-
-  const handleAddError = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      setError(ErrorType.ADD);
-    }
+    setIsAllSelected(prev => !prev);
   };
+
+  const clearCompleted = () => {
+    todos.map(async todo => {
+      if (todo.completed) {
+        removeTodo(todo);
+        try {
+          await removeTodo(todo);
+        } catch {
+          setRemoveError(true);
+          setIsHidden(false);
+        }
+
+        if (user) {
+          getTodosFromApi(user.id);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      getTodosFromApi(user.id);
+    }
+  }, [user]);
+
+  const filteredTodos = todos.filter(todo => {
+    switch (filterType) {
+      case 'Active':
+        return !todo.completed;
+      case 'Completed':
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
+
+  const clearErrors = () => {
+    setIsHidden(true);
+    setAddError(false);
+    setUpdateError(false);
+    setRemoveError(false);
+    setInputError(false);
+  };
+
+  useEffect(() => {
+    setTimeout(clearErrors, 3000);
+  }, [isHidden]);
+
+  const isAllCompleted = todos.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -74,116 +162,73 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {(todos.length > 0) && (
-            <button
-              data-cy="ToggleAllButton"
-              type="button"
-              className="todoapp__toggle-all active"
-              onClick={() => setError(ErrorType.UPDATE)}
-            />
-          )}
+          <button
+            data-cy="ToggleAllButton"
+            type="button"
+            className={cn('todoapp__toggle-all', { active: isAllCompleted })}
+            onClick={selectAll}
+          />
 
-          <form>
+          <form onSubmit={createTodo}>
             <input
               data-cy="NewTodoField"
               type="text"
               ref={newTodoField}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              onKeyDown={(event => handleAddError(event))}
-              onFocus={() => setError(ErrorType.NONE)}
+              value={inputTitle}
+              onChange={event => setInputTitle(event.target.value)}
             />
           </form>
         </header>
 
-        {(todos.length > 0) && (
-          <>
-            <TodoList todos={visibleTodos} />
+        <section className="todoapp__main" data-cy="TodoList">
+          {filteredTodos.map(todo => (
+            <TodoComponent
+              key={todo.id}
+              todo={todo}
+              getTodo={getTodosFromApi}
+              setUpdateError={setUpdateError}
+              setRemoveError={setRemoveError}
+              editTitle={editTitle}
+              setIsHidden={setIsHidden}
+              isEditting={isEditing}
+              setIsEditting={setIsEditing}
+              selectCompleted={selectCompleted}
+            />
+          ))}
 
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="todosCounter">
-                4 items left
-              </span>
+          {isAdding && (
+            <TodoComponent
+              todo={isAdding}
+              getTodo={getTodosFromApi}
+              setUpdateError={setUpdateError}
+              setRemoveError={setRemoveError}
+              editTitle={editTitle}
+              setIsHidden={setIsHidden}
+              selectCompleted={selectCompleted}
+            />
+          )}
+        </section>
 
-              <nav className="filter" data-cy="Filter">
-                <a
-                  data-cy="FilterLinkAll"
-                  href="#/"
-                  className={cn('filter__link', {
-                    selected: filterType === FilterType.ALL,
-                  })}
-                  onClick={() => setFilterType(FilterType.ALL)}
-                >
-                  All
-                </a>
-
-                <a
-                  data-cy="FilterLinkActive"
-                  href="#/active"
-                  className={cn('filter__link', {
-                    selected: filterType === FilterType.ACTIVE,
-                  })}
-                  onClick={() => setFilterType(FilterType.ACTIVE)}
-                >
-                  Active
-                </a>
-                <a
-                  data-cy="FilterLinkCompleted"
-                  href="#/completed"
-                  className={cn('filter__link', {
-                    selected: filterType === FilterType.COMPLETED,
-                  })}
-                  onClick={() => setFilterType(FilterType.COMPLETED)}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button
-                data-cy="ClearCompletedButton"
-                type="button"
-                className="todoapp__clear-completed"
-                onClick={() => setError(ErrorType.DELETE)}
-              >
-                Clear completed
-              </button>
-            </footer>
-          </>
+        {todos.length > 0 && (
+          <Footer
+            todos={todos}
+            filterType={filterType}
+            setFilterType={setFilterType}
+            clearCompleted={clearCompleted}
+          />
         )}
-
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: error === ErrorType.NONE },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setError(ErrorType.NONE)}
-        />
-
-        {(error === ErrorType.ADD) && (
-          'Unable to add a todo'
-        )}
-
-        {(error === ErrorType.DELETE) && (
-          'Unable to delete a todo'
-        )}
-
-        {(error === ErrorType.UPDATE) && (
-          'Unable to update a todo'
-        )}
-
-        {(error === ErrorType.UPLOAD) && (
-          'Unable to upload a todo'
-        )}
-
-      </div>
+      <ErrorMessage
+        isHidden={isHidden}
+        clearErrors={clearErrors}
+        updateError={updateError}
+        addError={addError}
+        removeError={removeError}
+        inputError={inputError}
+      />
     </div>
   );
 };
