@@ -70,6 +70,13 @@ export const TodoItem: React.FC<Props> = ({
       .then(() => {
         setTodoDelet(true);
         setLoaderTodo(false);
+        setTodoList([...todoList.filter(todoItem => {
+          if (todoItem.id === id) {
+            return false;
+          }
+
+          return true;
+        })]);
       }).catch(() => {
         setLoaderTodo(false);
         setDeleteError(true);
