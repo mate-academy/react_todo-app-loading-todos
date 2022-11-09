@@ -1,28 +1,50 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import { ErrorType } from '../../../utils/enums/ErrorType';
 
 type Props = {
   onClose: (errorStatus: boolean) => void;
   isError: boolean;
+  errorType: ErrorType;
 };
 
-export const ErrorMessage: React.FC<Props> = ({ onClose, isError }) => (
-  <div
-    data-cy="ErrorNotification"
-    className="notification is-danger is-light has-text-weight-normal"
-    hidden={!isError}
-  >
-    <button
-      data-cy="HideErrorButton"
-      type="button"
-      className="delete"
-      onClick={() => onClose(false)}
-    />
+export const ErrorMessage: React.FC<Props> = ({
+  onClose,
+  isError,
+  errorType,
+}) => {
+  const [errorMessage, setErrorMessage] = useState('');
 
-    Unable to add a todo
-    <br />
-    Unable to delete a todo
-    <br />
-    Unable to update a todo
-  </div>
-);
+  switch (errorType) {
+    case ErrorType.Add:
+      setErrorMessage('Unable to add a todo');
+      break;
+
+    case ErrorType.Delete:
+      setErrorMessage('Unable to delete a todo');
+      break;
+
+    case ErrorType.Update:
+      setErrorMessage('Unable to update a todo');
+      break;
+
+    default: setErrorMessage('');
+  }
+
+  return (
+    <div
+      data-cy="ErrorNotification"
+      className="notification is-danger is-light has-text-weight-normal"
+      hidden={!isError}
+    >
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={() => onClose(false)}
+      />
+
+      {errorMessage}
+    </div>
+  );
+};

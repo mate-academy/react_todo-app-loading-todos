@@ -1,6 +1,7 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -14,6 +15,7 @@ import { TodoList } from './components/Auth/TodoList';
 import { Footer } from './components/Auth/Footer';
 import { ErrorMessage } from './components/Auth/ErrorMessage';
 import { FilterType } from './utils/enums/FilterType';
+import { ErrorType } from './utils/enums/ErrorType';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,9 +24,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
-  const [filterType, setFilterType] = useState(FilterType.All);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
+  const [errorType] = useState<ErrorType>(ErrorType.None);
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     try {
       const userId = user
         ? user.id
@@ -53,12 +56,11 @@ export const App: React.FC = () => {
         setIsError(false);
       }, 3000);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadTodos();
 
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -86,6 +88,7 @@ export const App: React.FC = () => {
       <ErrorMessage
         onClose={setIsError}
         isError={isError}
+        errorType={errorType}
       />
     </div>
   );
