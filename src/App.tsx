@@ -55,7 +55,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     let todosCopy = [...todos];
 
-    if (todoStatus !== 'All') {
+    if (todoStatus !== FilteringMethod.All) {
       todosCopy = todosCopy.filter(todo => {
         switch (todoStatus) {
           case FilteringMethod.Active:
@@ -72,6 +72,8 @@ export const App: React.FC = () => {
 
     setVisibleTodos(todosCopy);
   }, [todos, todoStatus]);
+
+  // console.log(newTodoField);
 
   const handleErrorClose = useCallback(() => setHasError(false), []);
   const handleStatusSelect = useCallback((status: FilteringMethod) => {
