@@ -11,16 +11,16 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Error } from './components/Error';
-import { Todo } from './types/Todo';
+import { FieldForSorting, Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [fieldForSorting, setFieldForSorting] = useState('all');
+  const [fieldForSorting, setFieldForSorting]
+    = useState<FieldForSorting>(FieldForSorting.All);
   const [counterActiveTodos, setCounterActiveTodos] = useState(0);
 
   const getTodosFromAPI = useCallback(async () => {
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
     setIsError(false);
   }, []);
 
-  const selectFieldForSorting = useCallback((fieldForSort: string) => {
+  const selectFieldForSorting = useCallback((fieldForSort: FieldForSorting) => {
     setFieldForSorting(fieldForSort);
   }, [fieldForSorting]);
 
@@ -66,12 +66,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     const filteredTodos = todos.filter(todo => {
       switch (fieldForSorting) {
-        case 'active':
+        case FieldForSorting.Active:
           return !todo.completed;
 
-        case 'completed':
+        case FieldForSorting.Completed:
           return todo.completed;
-          break;
 
         default:
           return true;

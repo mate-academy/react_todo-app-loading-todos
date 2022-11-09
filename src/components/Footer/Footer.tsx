@@ -1,8 +1,9 @@
 import classNames from 'classnames';
+import { FieldForSorting } from '../../types/Todo';
 
 type Props = {
-  fieldForSorting: string,
-  selectFieldForSorting: (field: string) => void,
+  fieldForSorting: FieldForSorting,
+  selectFieldForSorting: (field: FieldForSorting) => void,
   counterActiveTodos: number,
 };
 
@@ -22,9 +23,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={classNames('filter__link', {
-            selected: fieldForSorting === 'all',
+            selected: fieldForSorting === FieldForSorting.All,
           })}
-          onClick={() => selectFieldForSorting('all')}
+          onClick={() => selectFieldForSorting(FieldForSorting.All)}
         >
           All
         </a>
@@ -33,9 +34,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className={classNames('filter__link', {
-            selected: fieldForSorting === 'active',
+            selected: fieldForSorting === FieldForSorting.Active,
           })}
-          onClick={() => selectFieldForSorting('active')}
+          onClick={() => selectFieldForSorting(FieldForSorting.Active)}
         >
           Active
         </a>
@@ -43,9 +44,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={classNames('filter__link', {
-            selected: fieldForSorting === 'completed',
+            selected: fieldForSorting === FieldForSorting.Completed,
           })}
-          onClick={() => selectFieldForSorting('completed')}
+          onClick={() => selectFieldForSorting(FieldForSorting.Completed)}
         >
           Completed
         </a>
