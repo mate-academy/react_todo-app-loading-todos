@@ -34,6 +34,28 @@ export const App: React.FC = () => {
   const [hidden, setHidden] = useState(true);
   const [clearLoader, setClearLoader] = useState(false);
 
+  const handleHidden = useCallback(
+    (value: boolean) => {
+      setHidden(value);
+    }, [],
+  );
+
+  const handleTypeFilter = useCallback((type: string) => {
+    setTypeFilter(type);
+  }, []);
+
+  const hanldeUpdateError = useCallback((value: boolean) => {
+    setErrorUpdate(value);
+  }, []);
+
+  const handlerRemoveError = useCallback((value: boolean) => {
+    setErrorRemove(value);
+  }, []);
+
+  const handlerNewTitle = useCallback((value: string) => {
+    setNewTodoTitle(value);
+  }, []);
+
   const foundTodoList = useCallback((u:User) => {
     getTodos(u.id).then(response => {
       setTodoList(response);
@@ -224,14 +246,14 @@ export const App: React.FC = () => {
           selectAllTodos={selectAllTodos}
           createTodo={createTodo}
           newTodoTitle={newTodoTitle}
-          setNewTodoTitle={setNewTodoTitle}
+          setNewTodoTitle={handlerNewTitle}
         />
 
         <TodoLIst
           List={filtredList}
-          setErrorRemove={setErrorRemove}
-          setErrorUpdate={setErrorUpdate}
-          setHidden={setHidden}
+          setErrorRemove={handlerRemoveError}
+          setErrorUpdate={hanldeUpdateError}
+          setHidden={handleHidden}
           foundTodoList={foundTodoList}
           isAdding={isAdding}
           selectComplited={selectComplited}
@@ -242,7 +264,7 @@ export const App: React.FC = () => {
           <Footer
             counterActiveTodos={counterActiveTodos}
             typeFilter={typeFilter}
-            setTypeFilter={setTypeFilter}
+            setTypeFilter={handleTypeFilter}
             hasComplitedTodo={hasComplitedTodo}
             clearCompletedTodo={clearCompletedTodo}
           />

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 type Props = {
   counterActiveTodos:number,
   typeFilter:string,
-  setTypeFilter: React.Dispatch<React.SetStateAction<string>>,
+  setTypeFilter: (type: string) => void,
   hasComplitedTodo: boolean,
   clearCompletedTodo: () => void,
 };

@@ -5,9 +5,9 @@ import { User } from '../types/User';
 
 type Props = {
   List: Todo[],
-  setErrorRemove: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorUpdate: React.Dispatch<React.SetStateAction<boolean>>,
-  setHidden: React.Dispatch<React.SetStateAction<boolean>>,
+  setErrorRemove: (value: boolean) => void,
+  setErrorUpdate: (value: boolean) => void,
+  setHidden: (value: boolean) => void,
   foundTodoList: (u: User) => void,
   isAdding: Todo | null,
   selectComplited: (todo: Todo) => Promise<void>,

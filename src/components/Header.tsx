@@ -6,7 +6,7 @@ type Props = {
   selectAllTodos: () => void,
   createTodo: (event: React.FormEvent<HTMLFormElement>) => Promise<void>
   newTodoTitle: string,
-  setNewTodoTitle: (value: React.SetStateAction<string>) => void
+  setNewTodoTitle: (value: string) => void
 };
 
 export const Header:React.FC<Props> = React.memo(({

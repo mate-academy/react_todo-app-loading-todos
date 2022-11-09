@@ -13,9 +13,9 @@ import { AuthContext } from './Auth/AuthContext';
 type Props = {
   todo: Todo,
   foundTodoList: (u: User) => void,
-  setErrorUpdate:React.Dispatch<React.SetStateAction<boolean>>,
+  setErrorUpdate:(value: boolean) => void,
   setErrorRemove: (value: boolean) => void,
-  setHidden: React.Dispatch<React.SetStateAction<boolean>>,
+  setHidden: (value: boolean) => void,
   selectComplited: (toDo: Todo) => Promise<void>,
   clearLoader: boolean,
 };
