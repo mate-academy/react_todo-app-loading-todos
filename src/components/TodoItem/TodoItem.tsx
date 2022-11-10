@@ -16,7 +16,7 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
     <div
       data-cy="Todo"
       className={cn('todo', {
-        complete: completed,
+        completed,
       })}
     >
       <label className="todo__status-label">
@@ -35,16 +35,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       >
         ×
       </button>
-
-      {/* <form>
-        <input
-          data-cy="TodoTitleField"
-          type="text"
-          className="todo__title-field"
-          placeholder="Empty todo will be deleted"
-          defaultValue="JS"
-        />
-      </form> */}
 
       <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />

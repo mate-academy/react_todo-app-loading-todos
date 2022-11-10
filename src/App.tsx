@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  useCallback,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
@@ -23,44 +24,44 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [filterStatus, setFilterStatus]
-    = useState<FilterStatus>(FilterStatus.All);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
 
   const manageErrors = (errorType: ErrorType) => {
-    setErrorMessage(currentMessage => {
-      let newMessage = currentMessage;
-
+    setErrorMessage(() => {
       switch (errorType) {
         case ErrorType.Endpoint:
-          newMessage = 'Fetch error';
-          break;
+          return 'Fetch error';
 
         case ErrorType.Title:
-          newMessage = 'Title can`t be empty';
-          break;
+          return 'Title can`t be empty';
 
         case ErrorType.Add:
-          newMessage = 'Unable to add a todo';
-          break;
+          return 'Unable to add a todo';
 
         case ErrorType.Delete:
-          newMessage = 'Unable to delete a todo';
-          break;
+          return 'Unable to delete a todo';
 
         case ErrorType.Update:
-          newMessage = 'Unable to update a todo';
-          break;
+          return 'Unable to update a todo';
 
         case ErrorType.None:
         default:
-          newMessage = '';
+          return '';
       }
-
-      return newMessage;
     });
   };
 
-  const getTodosFromServer = async () => {
+  const countOfTodos = useMemo(() => todos.length, [todos]);
+
+  const countOfLeftTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
+
+  const hasActiveTodo = useMemo(() => (
+    todos.some(todo => todo.completed)
+  ), [todos]);
+
+  const getTodosFromServer = useCallback(async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
 
       setTimeout(() => manageErrors(ErrorType.None), 3000);
     }
-  };
+  }, []);
 
   useEffect(() => {
     getTodosFromServer();
@@ -85,7 +86,9 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const filterTodos = (filterBy: FilterStatus) => {
-    const filteredByStatus = todos.filter(todo => {
+    setFilterStatus(filterBy);
+
+    return todos.filter(todo => {
       switch (filterBy) {
         case FilterStatus.Active:
           return !todo.completed;
@@ -97,10 +100,6 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-
-    setFilterStatus(filterBy);
-
-    return filteredByStatus;
   };
 
   const filteredTodos = useMemo(() => (
@@ -113,6 +112,9 @@ export const App: React.FC = () => {
 
       <TodoContent
         todos={todos}
+        countOfTodos={countOfTodos}
+        countOfLeftTodos={countOfLeftTodos}
+        hasActiveTodo={hasActiveTodo}
         visibleTodos={filteredTodos}
         newTodoField={newTodoField}
         filterTodos={filterTodos}

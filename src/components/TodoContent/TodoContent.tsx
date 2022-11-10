@@ -9,6 +9,9 @@ import { FilterStatus } from '../../types/FilterStatus';
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
   todos: Todo[],
+  countOfTodos: number,
+  countOfLeftTodos: number,
+  hasActiveTodo: boolean,
   visibleTodos: Todo[],
   filterTodos: (filterBy: FilterStatus) => void;
   filterStatus: FilterStatus,
@@ -17,30 +20,30 @@ type Props = {
 export const TodoContent: React.FC<Props> = React.memo(({
   newTodoField,
   todos,
+  countOfTodos,
+  countOfLeftTodos,
+  hasActiveTodo,
   visibleTodos,
   filterTodos,
   filterStatus,
-}) => {
-  const countOfTodos = todos.length;
+}) => (
+  <div className="todoapp__content">
+    <TodoHeader
+      newTodoField={newTodoField}
+      countOfTodos={countOfTodos}
+    />
 
-  return (
-    <div className="todoapp__content">
-      <TodoHeader newTodoField={newTodoField} />
+    {todos.length > 0 && (
+      <>
+        <TodoBody todos={visibleTodos} />
 
-      {
-        todos.length > 0
-        && (
-          <>
-            <TodoBody todos={visibleTodos} />
-
-            <TodoFooter
-              filterTodos={filterTodos}
-              filterStatus={filterStatus}
-              countOfTodos={countOfTodos}
-            />
-          </>
-        )
-      }
-    </div>
-  );
-});
+        <TodoFooter
+          filterTodos={filterTodos}
+          filterStatus={filterStatus}
+          countOfLeftTodos={countOfLeftTodos}
+          hasActiveTodo={hasActiveTodo}
+        />
+      </>
+    )}
+  </div>
+));

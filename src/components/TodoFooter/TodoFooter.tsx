@@ -3,20 +3,22 @@ import cn from 'classnames';
 import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
+  hasActiveTodo: boolean;
   filterTodos: (filterBy: FilterStatus) => void;
   filterStatus: FilterStatus,
-  countOfTodos: number,
+  countOfLeftTodos: number,
 };
 
 export const TodoFooter:React.FC<Props> = React.memo(({
+  hasActiveTodo,
   filterTodos,
   filterStatus,
-  countOfTodos,
+  countOfLeftTodos,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${countOfTodos} items left`}
+        {`${countOfLeftTodos} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -57,6 +59,7 @@ export const TodoFooter:React.FC<Props> = React.memo(({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
+        disabled={!hasActiveTodo}
       >
         Clear completed
       </button>
