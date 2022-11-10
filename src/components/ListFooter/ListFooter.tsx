@@ -1,15 +1,35 @@
-export const ListFooter = () => {
+import classNames from 'classnames';
+import { Filter } from '../../types/Filter';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[];
+  filter: Filter;
+  onFilterSelect: (filter: Filter) => void;
+};
+
+export const ListFooter: React.FC<Props> = ({
+  todos, filter, onFilterSelect,
+}) => {
+  const hasCompletedTodo = todos.some(todo => todo.completed);
+  const todosCount = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${todosCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
+          className={classNames('filter__link', {
+            selected: filter === Filter.All,
+          })}
+          onClick={() => {
+            onFilterSelect(Filter.All);
+          }}
         >
           All
         </a>
@@ -17,14 +37,25 @@ export const ListFooter = () => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={classNames('filter__link', {
+            selected: filter === Filter.Active,
+          })}
+          onClick={() => {
+            onFilterSelect(Filter.Active);
+          }}
         >
           Active
         </a>
+
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={classNames('filter__link', {
+            selected: filter === Filter.Completed,
+          })}
+          onClick={() => {
+            onFilterSelect(Filter.Completed);
+          }}
         >
           Completed
         </a>
@@ -34,6 +65,7 @@ export const ListFooter = () => {
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
+        style={{ visibility: hasCompletedTodo ? 'visible' : 'hidden' }}
       >
         Clear completed
       </button>

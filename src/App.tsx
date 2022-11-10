@@ -1,42 +1,91 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import { Errors } from './components/Errors';
 import { ListFooter } from './components/ListFooter';
 import { ListHeader } from './components/ListHeader';
 import { TodoList } from './components/TodoList';
+import { Filter } from './types/Filter';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [filter, setFilter] = useState(Filter.All);
+  const [hasError, setHasError] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
+
+  const newTodoField = useRef<HTMLInputElement>(null);
+
+  const getTodosFromsServer = async () => {
+    try {
+      if (user) {
+        const todosFromServer = await getTodos(user.id);
+
+        setTodos(todosFromServer);
+      }
+    } catch (error) {
+      setHasError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+
+    getTodosFromsServer();
+  }, []);
+
+  const filterHandler = (filterSelected: Filter) => {
+    setFilter(filterSelected);
+  };
+
+  const closeErrorHandler = () => {
+    setHasError(false);
+  };
+
+  useEffect(() => {
+    setFilteredTodos(
+      todos.filter(todo => {
+        switch (filter) {
+          case Filter.Active:
+            return !todo.completed;
+
+          case Filter.Completed:
+            return todo.completed;
+
+          case Filter.All:
+          default:
+            return todo;
+        }
+      }),
+    );
+  }, [filter, todos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <ListHeader />
+        <ListHeader newTodoField={newTodoField} />
 
-        <TodoList />
-
-        <ListFooter />
+        {todos.length && (
+          <>
+            <TodoList todos={todos} />
+            <ListFooter
+              todos={filteredTodos}
+              filter={filter}
+              onFilterSelect={filterHandler}
+            />
+          </>
+        )}
       </div>
-
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Errors hasError={hasError} onCloseError={closeErrorHandler} />
     </div>
   );
 };
