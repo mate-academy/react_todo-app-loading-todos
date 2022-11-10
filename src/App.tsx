@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState<Filter>(Filter.All);
 
   const focusField = () => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
