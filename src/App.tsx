@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [todoStatus, setTodoStatus]
     = useState<FilteringMethod>(FilteringMethod.All);
 
@@ -36,9 +37,11 @@ export const App: React.FC = () => {
       }
     } catch (err) {
       setHasError(true);
+      setErrorMessage('Server error!');
 
       setTimeout(() => {
         setHasError(false);
+        setErrorMessage('');
       }, 3000);
     }
   }, []);
@@ -104,6 +107,7 @@ export const App: React.FC = () => {
       <ErrorNotification
         hasError={hasError}
         setHasError={setHasError}
+        errorMessage={errorMessage}
         handleErrorClose={handleErrorClose}
       />
     </div>

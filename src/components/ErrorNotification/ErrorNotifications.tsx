@@ -4,12 +4,14 @@ import cn from 'classnames';
 interface Prop {
   hasError: boolean;
   setHasError: (value: boolean) => void;
+  errorMessage: string;
   handleErrorClose: () => void;
 }
 
 export const ErrorNotification: React.FC<Prop> = ({
   hasError,
   setHasError,
+  errorMessage,
   handleErrorClose,
 }) => {
   useEffect(() => {
@@ -33,12 +35,7 @@ export const ErrorNotification: React.FC<Prop> = ({
         className="delete"
         onClick={handleErrorClose}
       />
-
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };
