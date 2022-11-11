@@ -79,7 +79,7 @@ export const App = (): JSX.Element | null => {
           setErrorMessage(ErrorMessage.CannotLoadTodos);
         });
     }
-  }, [todos]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => setErrorMessage(ErrorMessage.None), 3000);
