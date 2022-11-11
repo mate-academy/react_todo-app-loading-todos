@@ -5,7 +5,9 @@ import React, {
 import { AuthContext } from './components/Auth/AuthContext';
 import { AddTodo } from './components/Auth/AddTodo';
 import { Todo } from './types/Todo';
-import { addTodos, getTodos } from './api/todos';
+import {
+  addTodos, getTodos, editTodo,
+} from './api/todos';
 import { TodoList } from './components/Auth/TodoList';
 import { Footer } from './components/Auth/Footer';
 import { FilterTodos } from './utils/FilterTodos';
@@ -24,6 +26,11 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState(FilterTodos.ALL);
   const [queryOfTitle, setQueryOfTitle] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
+  // const [isCompleted, setIsCompleted] = useState(false);
+  // const [deleteCompletedTodo, setDeleteCompletdTodo] = useState(false);
+  // const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   // const [addError, setAddError] = useState(false);
   // const [deleteError, setDeleteError] = useState(false);
   // const [updateError, setUpdateError] = useState(false);
@@ -36,12 +43,22 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       }
     } catch (err) {
-      setHasError(true);
-      setTimeout(() => {
-        setHasError(false);
-      }, 3000);
+      // setHasError(true);
+      // setTimeout(() => {
+      //   setHasError(false);
+      // }, 3000);
     }
   };
+
+  // const handleDeleteTodo = async (id: number) => {
+  //   try {
+  //     await deleteTodo(id);
+  //     getTodosFromServer();
+  //   } catch (err) {
+  //     setHasError(true);
+  //     setDeleteError(true);
+  //   }
+  // };
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -63,12 +80,26 @@ export const App: React.FC = () => {
     }
   });
 
+  const deleteCompleted = () => {
+    const completedTodos = todos.filter(todo => !todo.completed);
+
+    setTodos(completedTodos);
+  };
+
+  // const handleEditTodo = async (id: number, comleted: boolean) => {
+  //   setIsCompleted(comleted);
+  //   editTodo(id, comleted);
+  //   getTodosFromServer();
+  // };
+
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsAdding(true);
 
     const trimtitle = queryOfTitle.trim();
 
     if (!trimtitle) {
+      setErrorMessage('Title can\'t be empty');
       setHasError(true);
       setQueryOfTitle('');
 
@@ -76,10 +107,19 @@ export const App: React.FC = () => {
     }
 
     if (user && !hasError) {
+      // if (isAdding) {
+      //   const tempoTodo = {
+      //     id: 0,
+      //     userId: user.id,
+      //     title: queryOfTitle,
+      //     completed: false,
+      //   };
+
       await addTodos(user.id, trimtitle);
       getTodosFromServer();
     }
 
+    setIsAdding(false);
     setQueryOfTitle('');
   };
 
@@ -88,6 +128,27 @@ export const App: React.FC = () => {
   };
 
   const activeTodos = todos.filter(todo => todo.completed === false).length;
+
+  const editAllTodos = () => {
+    return todos.map(async (todo) => {
+      if (todo.completed === true) {
+        // const newTodo =
+        await editTodo(todo.id, false);
+
+        getTodosFromServer();
+
+        // return newTodo;
+      } else {
+        await editTodo(todo.id, true);
+
+        getTodosFromServer();
+      }
+
+      // return todo;
+    });
+
+    // setTodos(newListOFTodos);
+  };
 
   return (
     <div className="todoapp">
@@ -99,12 +160,14 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
             type="button"
             className="todoapp__toggle-all active"
+            onClick={editAllTodos}
           />
           <AddTodo
             newTodoField={newTodoField}
             handleQueryOfTitle={handleQueryOfTitle}
             queryOfTitle={queryOfTitle}
             handleOnSubmit={handleOnSubmit}
+            isAdding={isAdding}
           />
         </header>
         {/* <section className="todoapp__main" data-cy="TodoList">
@@ -239,12 +302,20 @@ export const App: React.FC = () => {
             </div>
           </div>
         </section> */}
-
-        {todos.length > 0 && <TodoList todos={filteredTodos} />}
+        {todos.length > 0 && (
+          <TodoList
+            todos={filteredTodos}
+            getTodosFromServer={getTodosFromServer}
+            // isAdding={isAdding}
+            // handleDeleteTodo={handleDeleteTodo}
+            // isCompleted={isCompleted}
+          />
+        )}
         <Footer
           activeTodos={activeTodos}
           filterBy={filterBy}
           setFilterBy={setFilterBy}
+          deleteCompleted={deleteCompleted}
         />
         {/* <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
@@ -290,10 +361,16 @@ export const App: React.FC = () => {
           data-cy="ErrorNotification"
           className="notification is-danger is-light has-text-weight-normal"
         >
-          <button data-cy="HideErrorButton" type="button" className="delete" />
+          {errorMessage}
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={() => setHasError(false)}
+          />
           Unable to add a todo
           <br />
-          Unable to delete a todo
+          {/* {deleteError && 'Unable to delete a todo'} */}
           <br />
           Unable to update a todo
         </div>

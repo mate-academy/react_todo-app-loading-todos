@@ -4,7 +4,8 @@ type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
   handleQueryOfTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   queryOfTitle: string;
-  handleOnSubmit: (event:React.FormEvent<HTMLFormElement>) => void;
+  handleOnSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  isAdding: boolean;
 };
 
 export const AddTodo: React.FC<Props> = ({
@@ -12,6 +13,7 @@ export const AddTodo: React.FC<Props> = ({
   handleQueryOfTitle,
   queryOfTitle,
   handleOnSubmit,
+  isAdding,
 }) => {
   return (
     <form onSubmit={handleOnSubmit}>
@@ -23,6 +25,7 @@ export const AddTodo: React.FC<Props> = ({
         placeholder="What needs to be done?"
         value={queryOfTitle}
         onChange={handleQueryOfTitle}
+        disabled={isAdding}
       />
     </form>
   );

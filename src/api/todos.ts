@@ -15,3 +15,15 @@ export const addTodos = (userId:number, title:string) => {
 
   return client.post<Todo[]>(`/todos?userId=${userId}`, data);
 };
+
+export const deleteTodo = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
+};
+
+export const editTodo = (todoId:number, completed:boolean) => {
+  const data = {
+    completed,
+  };
+
+  return client.patch(`/todos/${todoId}`, data);
+};
