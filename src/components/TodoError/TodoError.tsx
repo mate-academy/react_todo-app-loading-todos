@@ -1,25 +1,34 @@
 import React from 'react';
+import cn from 'classnames';
+
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
-  errorText?: string;
-  closingError: () => void;
+  error: ErrorType;
+  onCloseError: () => void;
 };
 
-export const TodoError: React.FC<Props> = ({ errorText, closingError }) => {
-  return (
-    <div
-      data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
-    >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-        onClick={closingError}
-      />
-
-      {errorText || 'Something went wrong'}
-    </div>
-  );
-};
+export const TodoError: React.FC<Props> = ({
+  error,
+  onCloseError,
+}) => (
+  <div
+    data-cy="TodoError"
+    className={cn(
+      'notification',
+      'is-danger',
+      'is-light',
+      'has-text-weight-normal',
+      { hidden: !error.status },
+    )}
+  >
+    <button
+      data-cy="HideErrorButton"
+      aria-label="delete"
+      type="button"
+      className="delete"
+      onClick={onCloseError}
+    />
+    {error.message}
+  </div>
+);

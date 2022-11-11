@@ -1,10 +1,7 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useRef, useEffect } from 'react';
 
-type Props = {
-  hasTodos: boolean;
-};
-
-export const NewTodo: React.FC<Props> = ({ hasTodos }) => {
+export const NewTodo: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -15,14 +12,11 @@ export const NewTodo: React.FC<Props> = ({ hasTodos }) => {
 
   return (
     <>
-      {hasTodos && (
-        // eslint-disable-next-line jsx-a11y/control-has-associated-label
-        <button
-          data-cy="ToggleAllButton"
-          type="button"
-          className="todoapp__toggle-all active"
-        />
-      )}
+      <button
+        data-cy="ToggleAllButton"
+        type="button"
+        className="todoapp__toggle-all active"
+      />
 
       <form>
         <input

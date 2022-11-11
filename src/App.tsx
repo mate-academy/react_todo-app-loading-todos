@@ -1,77 +1,108 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { getTodos } from './api/todos';
-import { AuthContext } from './components/Auth/AuthContext';
-import { Todo } from './types/Todo';
-import { User } from './types/User';
-import { Error } from './types/Error';
 
-import { TodoList } from './components/TodoList/TodoList';
-import { NewTodo } from './components/NewTodo/NewTodo';
+import { getTodos } from './api/todos';
+
+import { AuthContext } from './components/Auth/AuthContext';
 import { TodoError } from './components/TodoError/TodoError';
+import { Footer } from './components/Footer/Footer';
+import { NewTodo } from './components/NewTodo/NewTodo';
+import { TodoList } from './components/TodoList/TodoList';
+
+import { FilterType } from './types/FilterType';
+import { ErrorType } from './types/ErrorType';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasTodos, setHasTodos] = useState(false);
-  const [error, setError] = useState<Error>({ status: false });
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
+  const [error, setError] = useState<ErrorType>({
+    status: false,
+    message: '',
+  });
 
-  const handleLoadingTodos = async () => {
-    try {
-      setError({ status: false });
+  const user = useContext(AuthContext);
 
-      const todosFromServer = await getTodos((user as User).id);
+  const loadTodos = useCallback(async () => {
+    if (user) {
+      try {
+        const todosFromServer = await getTodos(user.id);
 
-      setTodos(todosFromServer);
-    } catch {
-      setError({ status: true });
-      setTimeout(() => {
-        setError({ status: false });
-      }, 3000);
+        setTodos(todosFromServer);
+      } catch {
+        setError({ status: true, message: '' });
+      }
     }
-  };
+  }, []);
 
-  useEffect(() => {
-    handleLoadingTodos();
+  const handleFilterSelect = useCallback((filterType: FilterType) => {
+    setFilterBy(filterType);
+  }, []);
+
+  const handleCloseError = useCallback(() => {
+    setError({ status: false, message: '' });
   }, []);
 
   useEffect(() => {
-    if (todos.length > 0) {
-      setHasTodos(true);
-    } else {
-      setHasTodos(false);
-    }
-  }, [todos]);
+    loadTodos();
+  }, []);
 
-  const handlerToCloseError = () => {
-    setError({ status: false });
-  };
+  useEffect(() => {
+    const filteredTodos = todos.filter(todo => {
+      switch (filterBy) {
+        case FilterType.ALL:
+          return todo;
+
+        case FilterType.ACTIVE:
+          return !todo.completed;
+
+        case FilterType.COMPLETED:
+          return todo.completed;
+
+        default:
+          return true;
+      }
+    });
+
+    setVisibleTodos(filteredTodos);
+  }, [filterBy, todos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <NewTodo hasTodos={hasTodos} />
+          <button
+            data-cy="ToggleAllButton"
+            type="button"
+            className="todoapp__toggle-all active"
+          />
+
+          <NewTodo />
         </header>
 
-        {hasTodos && (
-          <TodoList todos={todos} />
-        )}
-
-        {error.status && (
-          <TodoError
-            errorText={error.errorText}
-            closingError={handlerToCloseError}
-          />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={visibleTodos} />
+            <Footer
+              todos={todos}
+              filterBy={filterBy}
+              onFilterSelect={handleFilterSelect}
+            />
+          </>
         )}
       </div>
+
+      <TodoError
+        error={error}
+        onCloseError={handleCloseError}
+      />
     </div>
   );
 };
