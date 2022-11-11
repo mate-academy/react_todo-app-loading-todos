@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { createUser, getUserByEmail } from '../../api/users';
 import { User } from '../../types/User';
@@ -81,14 +81,14 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
         </label>
 
         <div
-          className={classNames('control has-icons-left', {
+          className={cn('control has-icons-left', {
             'is-loading': loading,
           })}
         >
           <input
             type="email"
             id="user-email"
-            className={classNames('input', {
+            className={cn('input', {
               'is-danger': !needToRegister && errorMessage,
             })}
             placeholder="Enter your email"
@@ -115,14 +115,14 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
           </label>
 
           <div
-            className={classNames('control has-icons-left', {
+            className={cn('control has-icons-left', {
               'is-loading': loading,
             })}
           >
             <input
               type="text"
               id="user-name"
-              className={classNames('input', {
+              className={cn('input', {
                 'is-danger': needToRegister && errorMessage,
               })}
               placeholder="Enter your name"
@@ -147,7 +147,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
       <div className="field">
         <button
           type="submit"
-          className={classNames('button is-primary', {
+          className={cn('button is-primary', {
             'is-loading': loading,
           })}
         >
