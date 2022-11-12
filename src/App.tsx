@@ -26,11 +26,11 @@ export const App: React.FC = () => {
     if (user) {
       try {
         const todosFromServer = await getTodos(user.id);
+        const activeTodosNumber = todosFromServer
+          .filter(({ completed }) => !completed).length;
 
         setTodos(todosFromServer);
-        setActiveTodosQuantity(
-          todosFromServer.filter(({ completed }) => !completed).length,
-        );
+        setActiveTodosQuantity(activeTodosNumber);
       } catch {
         setIsError(true);
       }
