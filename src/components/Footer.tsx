@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+
 import { useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 
@@ -32,7 +33,7 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
         break;
 
       default:
-        throw new Error('WrongType');
+        throw new Error('Wrong Type');
     }
   }, [filterType]);
 
@@ -50,33 +51,32 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
           className={classNames('filter__link', {
             selected: filterType === FilterType.All,
           })}
-          onClick={() => setFilterType(FilterType.All)}
+          onKeyDown={() => setFilterType(FilterType.All)}
         >
           All
         </button>
 
-        <a
+        <button
+          type="button"
           data-cy="FilterLinkActive"
-          href="#/active"
           className={classNames('filter__link', {
             selected: filterType === FilterType.Active,
           })}
           onClick={() => setFilterType(FilterType.Active)}
         >
           Active
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
           data-cy="FilterLinkCompleted"
-          href="#/completed"
           className={classNames('filter__link', {
             selected: filterType === FilterType.Completed,
           })}
           onClick={() => setFilterType(FilterType.Completed)}
         >
           Completed
-        </a>
+        </button>
       </nav>
-
       <button
         data-cy="ClearCompletedButton"
         type="button"
