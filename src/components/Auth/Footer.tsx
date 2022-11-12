@@ -7,6 +7,7 @@ type Props = {
   filterBy: FilterTodos;
   setFilterBy: React.Dispatch<React.SetStateAction<FilterTodos>>;
   deleteCompleted: () => void;
+  completedTodos: number;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const Footer: React.FC<Props> = ({
   filterBy,
   setFilterBy,
   deleteCompleted,
+  completedTodos,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -54,15 +56,16 @@ export const Footer: React.FC<Props> = ({
           Completed
         </a>
       </nav>
-
-      <button
-        data-cy="ClearCompletedButton"
-        type="button"
-        className="todoapp__clear-completed"
-        onClick={() => deleteCompleted}
-      >
-        Clear completed
-      </button>
+      {!completedTodos || (
+        <button
+          data-cy="ClearCompletedButton"
+          type="button"
+          className="todoapp__clear-completed"
+          onClick={deleteCompleted}
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

@@ -3,28 +3,42 @@ import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, editTodo } from '../../api/todos';
 import { TodoItem } from './TodoItem';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   todos: Todo[];
   getTodosFromServer: () => Promise<void>;
-  // isAdding: boolean;
+  isAdding: boolean;
+  tempTodo: Todo;
+  setHasError: (isError: boolean) => void;
+  setMessageError: (message: ErrorMessage) => void;
+  // <SetStateAction<ErrorMessage>>;
   // handleDeleteTodo: (id: number) => void;
   // handleEditTodo: (id: number, comleted: boolean) => void;
   // isCompleted:boolean;
 };
 
-export const TodoList: React.FC<Props> = (
-  { todos, getTodosFromServer },
-) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  getTodosFromServer,
+  isAdding,
+  tempTodo,
+  setHasError,
+  setMessageError,
+}) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   const handleEditTodo = async (id: number, comleted: boolean) => {
     // const changeComplted =
     // !comleted;
-
-    setIsCompleted(!isCompleted);
-    await editTodo(id, !comleted);
-    getTodosFromServer();
+    try {
+      setIsCompleted(!isCompleted);
+      await editTodo(id, !comleted);
+      await getTodosFromServer();
+    } catch (err) {
+      setHasError(true);
+      setMessageError(ErrorMessage.UpdateError);
+    }
   };
 
   const handleDeleteTodo = async (id: number) => {
@@ -32,91 +46,66 @@ export const TodoList: React.FC<Props> = (
       await deleteTodo(id);
       getTodosFromServer();
     } catch (err) {
-      // setHasError(true);
-      // setDeleteError(true);
+      setHasError(true);
+      setMessageError(ErrorMessage.DeleteError);
     }
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map((todo: Todo) => (
+      {todos.map((todo: Todo) => {
         // const { completed, id, title } = todo;
         // const { completed, id, title } = todo;
+
+        return (
+          <TodoItem
+            // todo={todo}
+            handleEditTodo={handleEditTodo}
+            handleDeleteTodo={handleDeleteTodo}
+            isCompleted={isCompleted}
+            todo={todo}
+            // completed={todo.completed}
+            // id={todo.id}
+            // title={todo.title}
+          />
+        );
+      })}
+      {isAdding && (
         <TodoItem
-          // todo={todo}
           handleEditTodo={handleEditTodo}
           handleDeleteTodo={handleDeleteTodo}
           isCompleted={isCompleted}
-          todo={todo}
-          // completed={todo.completed}
-          // id={todo.id}
-          // title={todo.title}
+          todo={tempTodo}
         />
-        // <div data-cy="Todo" className={cn('todo', { completed })} key={id}>
-        //   <label className="todo__status-label">
-        //     <input
-        //       data-cy="TodoStatus"
-        //       type="checkbox"
-        //       className="todo__status"
-        //       checked={completed}
-        //       onChange={(event) => handleEditTodo(id, event.target.checked)}
-        //     />
-        //   </label>
 
-        //   <span data-cy="TodoTitle" className="todo__title">
-        //     {title}
-        //   </span>
-        //   <button
-        //     type="button"
-        //     className="todo__remove"
-        //     data-cy="TodoDeleteButton"
-        //     onClick={() => handleDeleteTodo(id)}
-        //   >
-        //     ×
-        //   </button>
+      // <div data-cy="Todo" className="todo completed">
+      //   <label className="todo__status-label">
+      //     <input
+      //       data-cy="TodoStatus"
+      //       type="checkbox"
+      //       className="todo__status"
+      //       defaultChecked
+      //     />
+      //   </label>
 
-        //   <div data-cy="TodoLoader" className="modal overlay">
-        //     <div className="modal-background has-background-white-ter" />
-        //     <div className="loader" />
-        //   </div>
-        // </div>
-      ))}
-      {/* {isAdding && <TodoItem
-        handleEditTodo={handleEditTodo}
-        handleDeleteTodo={handleDeleteTodo}
-        isCompleted={isCompleted}
-        todo={todo}
-      />
-      } */}
+      //   <span data-cy="TodoTitle" className="todo__title">
+      //     {tempTodo?.title}
+      //   </span>
+      //   <button
+      //     type="button"
+      //     className="todo__remove"
+      //     data-cy="TodoDeleteButton"
+      //   >
+      //     ×
+      //   </button>
 
-      {/* <div data-cy="Todo" className="todo completed">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            defaultChecked
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          HTML
-        </span>
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDeleteButton"
-        >
-          ×
-        </button>
-
-        <div data-cy="TodoLoader" className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
-
-      <div data-cy="Todo" className="todo">
+      //   <div data-cy="TodoLoader" className="modal overlay">
+      //     <div className="modal-background has-background-white-ter" />
+      //     <div className="loader" />
+      //   </div>
+      // </div>
+      )}
+      {/* <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -218,7 +207,7 @@ export const TodoList: React.FC<Props> = (
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
         </div>
-      </div> */}
+      </div>  */}
     </section>
   );
 };

@@ -2,16 +2,25 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+// import cn from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
 import { AddTodo } from './components/Auth/AddTodo';
 import { Todo } from './types/Todo';
 import {
-  addTodos, getTodos, editTodo,
+  addTodos, getTodos, editTodo, deleteTodo,
 } from './api/todos';
+import { ErrorMessage } from './types/ErrorMessage';
 import { TodoList } from './components/Auth/TodoList';
 import { Footer } from './components/Auth/Footer';
+import { Error } from './components/Auth/Error';
 import { FilterTodos } from './utils/FilterTodos';
 // import { User } from './types/User';
+const defaultTodo = {
+  id: 0,
+  userId: 0,
+  title: '',
+  completed: false,
+};
 
 export const App: React.FC = () => {
   // export enum FilterTodos {
@@ -26,11 +35,11 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState(FilterTodos.ALL);
   const [queryOfTitle, setQueryOfTitle] = useState('');
   const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [messageError, setMessageError] = useState(ErrorMessage.None);
   const [isAdding, setIsAdding] = useState(false);
   // const [isCompleted, setIsCompleted] = useState(false);
   // const [deleteCompletedTodo, setDeleteCompletdTodo] = useState(false);
-  // const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [tempTodo, setTempTodo] = useState<Todo>(defaultTodo);
   // const [addError, setAddError] = useState(false);
   // const [deleteError, setDeleteError] = useState(false);
   // const [updateError, setUpdateError] = useState(false);
@@ -43,7 +52,8 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       }
     } catch (err) {
-      // setHasError(true);
+      setHasError(true);
+      setMessageError(ErrorMessage.LoadError);
       // setTimeout(() => {
       //   setHasError(false);
       // }, 3000);
@@ -81,9 +91,16 @@ export const App: React.FC = () => {
   });
 
   const deleteCompleted = () => {
-    const completedTodos = todos.filter(todo => !todo.completed);
+    return todos.map(async (todo) => {
+      if (todo.completed === true) {
+        // const newTodo =
+        await deleteTodo(todo.id);
 
-    setTodos(completedTodos);
+        await getTodosFromServer();
+      }
+
+      return todo;
+    });
   };
 
   // const handleEditTodo = async (id: number, comleted: boolean) => {
@@ -93,58 +110,84 @@ export const App: React.FC = () => {
   // };
 
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsAdding(true);
+    try {
+      event.preventDefault();
+      setIsAdding(true);
 
-    const trimtitle = queryOfTitle.trim();
+      const trimtitle = queryOfTitle.trim();
 
-    if (!trimtitle) {
-      setErrorMessage('Title can\'t be empty');
-      setHasError(true);
+      if (!trimtitle) {
+        setMessageError(ErrorMessage.TitleError);
+        setHasError(true);
+        setQueryOfTitle('');
+
+        return;
+      }
+
+      if (user && !hasError) {
+        await addTodos(user.id, trimtitle);
+        await getTodosFromServer();
+      }
+
+      setIsAdding(false);
       setQueryOfTitle('');
-
-      return;
+    } catch (err) {
+      setHasError(true);
+      setMessageError(ErrorMessage.AddError);
     }
+    // event.preventDefault();
+    // setIsAdding(true);
 
-    if (user && !hasError) {
-      // if (isAdding) {
-      //   const tempoTodo = {
-      //     id: 0,
-      //     userId: user.id,
-      //     title: queryOfTitle,
-      //     completed: false,
-      //   };
+    // const trimtitle = queryOfTitle.trim();
 
-      await addTodos(user.id, trimtitle);
-      getTodosFromServer();
-    }
+    // if (!trimtitle) {
+    //   setMessageError(ErrorMessage.TitleError);
+    //   setHasError(true);
+    //   setQueryOfTitle('');
 
-    setIsAdding(false);
-    setQueryOfTitle('');
+    //   return;
+    // }
+
+    // if (user && !hasError) {
+    //   await addTodos(user.id, trimtitle);
+    //   getTodosFromServer();
+    // }
+
+    // setIsAdding(false);
+    // setQueryOfTitle('');
   };
 
-  const handleQueryOfTitle = (event:React.ChangeEvent<HTMLInputElement>) => {
+  const handleQueryOfTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const temporaryTodo = {
+      id: 0,
+      userId: user?.id || 0,
+      title: event.target.value,
+      completed: false,
+    };
+
+    setTempTodo(temporaryTodo);
     setQueryOfTitle(event.target.value);
   };
 
   const activeTodos = todos.filter(todo => todo.completed === false).length;
+  const completedTodos = todos.filter(todo => todo.completed === true).length;
 
   const editAllTodos = () => {
     return todos.map(async (todo) => {
-      if (todo.completed === true) {
+      if (todo.completed === false) {
         // const newTodo =
-        await editTodo(todo.id, false);
-
-        getTodosFromServer();
-
-        // return newTodo;
-      } else {
         await editTodo(todo.id, true);
 
-        getTodosFromServer();
+        await getTodosFromServer();
       }
+      // return newTodo;
+      // } else {
+      //   await editTodo(todo.id, true);
 
-      // return todo;
+      //   getTodosFromServer();
+      // }
+
+      return todo;
     });
 
     // setTodos(newListOFTodos);
@@ -306,13 +349,17 @@ export const App: React.FC = () => {
           <TodoList
             todos={filteredTodos}
             getTodosFromServer={getTodosFromServer}
-            // isAdding={isAdding}
+            isAdding={isAdding}
+            tempTodo={tempTodo}
+            setHasError={setHasError}
+            setMessageError={setMessageError}
             // handleDeleteTodo={handleDeleteTodo}
             // isCompleted={isCompleted}
           />
         )}
         <Footer
           activeTodos={activeTodos}
+          completedTodos={completedTodos}
           filterBy={filterBy}
           setFilterBy={setFilterBy}
           deleteCompleted={deleteCompleted}
@@ -357,23 +404,33 @@ export const App: React.FC = () => {
         </footer> */}
       </div>
       {hasError && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          {errorMessage}
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setHasError(false)}
-          />
-          Unable to add a todo
-          <br />
-          {/* {deleteError && 'Unable to delete a todo'} */}
-          <br />
-          Unable to update a todo
-        </div>
+        <Error
+          hasError={hasError}
+          setHasError={setHasError}
+          messageError={messageError}
+        />
+        // <div
+        //   data-cy="ErrorNotification"
+        //   className={cn(
+        //     'notification is-danger is-light has-text-weight-normal',
+        //     {
+        //       hidden: !hasError,
+        //     },
+        //   )}
+        // >
+        //   {titleError && "Title can't be empty"}
+        //   <button
+        //     data-cy="HideErrorButton"
+        //     type="button"
+        //     className="delete"
+        //     onClick={() => setHasError(false)}
+        //   />
+        //   Unable to add a todo
+        //   <br />
+        //   Unable to delete a todo
+        //   <br />
+        //   Unable to update a todo
+        // </div>
       )}
       {/* <div
         data-cy="ErrorNotification"
