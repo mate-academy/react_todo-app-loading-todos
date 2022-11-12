@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
-type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>,
-};
+export const ListHeader: React.FC = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
 
-export const ListHeader: React.FC<Props> = ({ newTodoField }) => {
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button

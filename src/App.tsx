@@ -1,7 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {
-  useContext, useEffect, useRef, useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Errors } from './components/Errors';
@@ -19,8 +17,6 @@ export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
 
-  const newTodoField = useRef<HTMLInputElement>(null);
-
   const getTodosFromsServer = async () => {
     try {
       if (user) {
@@ -34,10 +30,6 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     getTodosFromsServer();
   }, []);
 
@@ -72,13 +64,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <ListHeader newTodoField={newTodoField} />
+        <ListHeader />
 
         {todos.length && (
           <>
-            <TodoList todos={todos} />
+            <TodoList todos={filteredTodos} />
             <ListFooter
-              todos={filteredTodos}
+              todos={todos}
               filter={filter}
               onFilterSelect={filterHandler}
             />
