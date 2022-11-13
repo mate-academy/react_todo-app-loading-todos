@@ -15,7 +15,7 @@ type Props = {
   todo: Todo;
   handleEditTodo: (id: number, comleted: boolean) => Promise<void>;
   handleDeleteTodo: (id: number) => Promise<void>;
-  isCompleted: boolean;
+  // isCompleted: boolean;
   isAdding: boolean;
   isLoading: number[];
   handleEditTitle: (id: number, title: string) => Promise<void>;
@@ -28,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({
   todo,
   handleEditTodo,
   handleDeleteTodo,
-  isCompleted,
+  // isCompleted,
   isAdding,
   isLoading,
   handleEditTitle,
@@ -82,45 +82,44 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={isCompleted}
-          onChange={(event) => handleEditTodo(id, event.target.checked)}
+          checked={completed}
+          onChange={() => handleEditTodo(id, !completed)}
         />
       </label>
-      {isDoubleClicked
-        ? (
-          <form onSubmit={handleSubmit} onBlur={handleSubmit}>
-            <input
-              data-cy="TodoTitleField"
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              ref={newTitleField}
-              value={newTitle}
-              onKeyDown={handleKeyboardEvent}
-              onChange={(event) => {
-                setNewTitle(event.target.value);
-              }}
-            />
-          </form>
-        ) : (
-          <>
-            <span
-              data-cy="TodoTitle"
-              className="todo__title"
-              onDoubleClick={() => setIsDoubleClicked(true)}
-            >
-              {title}
-            </span>
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDeleteButton"
-              onClick={() => handleDeleteTodo(id)}
-            >
-              ×
-            </button>
-          </>
-        )}
+      {isDoubleClicked ? (
+        <form onSubmit={handleSubmit} onBlur={handleSubmit}>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            ref={newTitleField}
+            value={newTitle}
+            onKeyDown={handleKeyboardEvent}
+            onChange={(event) => {
+              setNewTitle(event.target.value);
+            }}
+          />
+        </form>
+      ) : (
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => setIsDoubleClicked(true)}
+          >
+            {title}
+          </span>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDeleteButton"
+            onClick={() => handleDeleteTodo(id)}
+          >
+            ×
+          </button>
+        </>
+      )}
       {/* <span data-cy="TodoTitle" className="todo__title">
         {title}
       </span>

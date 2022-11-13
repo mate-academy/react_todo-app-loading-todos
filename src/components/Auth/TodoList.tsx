@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 // import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, editTodo } from '../../api/todos';
@@ -30,15 +30,15 @@ export const TodoList: React.FC<Props> = ({
   setIsLoading,
   isLoading,
 }) => {
-  const [isCompleted, setIsCompleted] = useState(false);
+  // const [isCompleted, setIsCompleted] = useState(false);
 
   const handleEditTodo = async (id: number, completed: boolean) => {
     // const changeComplted =
     // !comleted;
     try {
       setIsLoading((currentIds) => [...currentIds, id]);
-      setIsCompleted(!isCompleted);
-      await editTodo(id, { completed: !completed });
+      // setIsCompleted(!isCompleted);
+      await editTodo(id, { completed });
       await getTodosFromServer();
       setIsLoading((currentIds) => currentIds
         .filter((numberOfId) => numberOfId !== id));
@@ -85,7 +85,7 @@ export const TodoList: React.FC<Props> = ({
             // todo={todo}
             handleEditTodo={handleEditTodo}
             handleDeleteTodo={handleDeleteTodo}
-            isCompleted={isCompleted}
+            // isCompleted={isCompleted}
             todo={todo}
             isLoading={isLoading}
             isAdding={isAdding}
@@ -100,7 +100,7 @@ export const TodoList: React.FC<Props> = ({
         <TodoItem
           handleEditTodo={handleEditTodo}
           handleDeleteTodo={handleDeleteTodo}
-          isCompleted={isCompleted}
+          // isCompleted={isCompleted}
           todo={tempTodo}
           isLoading={isLoading}
           isAdding={isAdding}

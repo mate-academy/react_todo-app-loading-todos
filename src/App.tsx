@@ -2,7 +2,7 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-// import cn from 'classnames';
+import cn from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
 import { AddTodo } from './components/Auth/AddTodo';
 import { Todo } from './types/Todo';
@@ -195,6 +195,8 @@ export const App: React.FC = () => {
     // setTodos(newListOFTodos);
   };
 
+  const isAllTodosCompleted = todos.length === completedTodos;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -204,7 +206,8 @@ export const App: React.FC = () => {
           <button
             data-cy="ToggleAllButton"
             type="button"
-            className="todoapp__toggle-all active"
+            className={cn('todoapp__toggle-all',
+              { active: isAllTodosCompleted })}
             onClick={editAllTodos}
           />
           <AddTodo
