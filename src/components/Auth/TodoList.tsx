@@ -32,13 +32,13 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleEditTodo = async (id: number, comleted: boolean) => {
+  const handleEditTodo = async (id: number, completed: boolean) => {
     // const changeComplted =
     // !comleted;
     try {
       setIsLoading((currentIds) => [...currentIds, id]);
       setIsCompleted(!isCompleted);
-      await editTodo(id, !comleted);
+      await editTodo(id, { completed: !completed });
       await getTodosFromServer();
       setIsLoading((currentIds) => currentIds
         .filter((numberOfId) => numberOfId !== id));
@@ -61,6 +61,19 @@ export const TodoList: React.FC<Props> = ({
     }
   };
 
+  const handleEditTitle = async (id:number, title:string) => {
+    try {
+      setIsLoading((currentIds) => [...currentIds, id]);
+      await editTodo(id, { title });
+      await getTodosFromServer();
+      setIsLoading((currentIds) => currentIds
+        .filter((numberOfId) => numberOfId !== id));
+    } catch (err) {
+      setHasError(true);
+      setMessageError(ErrorMessage.UpdateError);
+    }
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map((todo: Todo) => {
@@ -76,6 +89,7 @@ export const TodoList: React.FC<Props> = ({
             todo={todo}
             isLoading={isLoading}
             isAdding={isAdding}
+            handleEditTitle={handleEditTitle}
             // completed={todo.completed}
             // id={todo.id}
             // title={todo.title}
@@ -90,6 +104,7 @@ export const TodoList: React.FC<Props> = ({
           todo={tempTodo}
           isLoading={isLoading}
           isAdding={isAdding}
+          handleEditTitle={handleEditTitle}
         />
       )}
       {/* <div data-cy="Todo" className="todo">

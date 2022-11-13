@@ -178,7 +178,7 @@ export const App: React.FC = () => {
     return todos.map(async (todo) => {
       if (todo.completed === false) {
         // const newTodo =
-        await editTodo(todo.id, true);
+        await editTodo(todo.id, { completed: true });
 
         await getTodosFromServer();
       }
