@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -6,10 +6,12 @@ type Props = {
   // completed: boolean;
   // id: number;
   // title: string;
-  todo:Todo,
+  todo: Todo;
   handleEditTodo: (id: number, comleted: boolean) => Promise<void>;
   handleDeleteTodo: (id: number) => Promise<void>;
   isCompleted: boolean;
+  isAdding: boolean;
+  isLoading: number[];
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -20,8 +22,12 @@ export const TodoItem: React.FC<Props> = ({
   handleEditTodo,
   handleDeleteTodo,
   isCompleted,
+  isAdding,
+  isLoading,
 }) => {
   const { completed, id, title } = todo;
+  const isLoadingFinished = useMemo(() => (
+    isLoading.includes(id) || (isAdding && !todo.id)), [isLoading, isAdding]);
 
   return (
     <div data-cy="Todo" className={cn('todo', { completed })} key={id}>
@@ -46,11 +52,19 @@ export const TodoItem: React.FC<Props> = ({
       >
         ×
       </button>
-
-      <div data-cy="TodoLoader" className="modal overlay">
+      {isLoadingFinished && (
+        <div
+          data-cy="TodoLoader"
+          className={cn('modal overlay', { 'is-active': isLoadingFinished })}
+        >
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
+      )}
+      {/* <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
-      </div>
+      </div> */}
     </div>
   );
 };

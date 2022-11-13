@@ -43,6 +43,7 @@ export const App: React.FC = () => {
   // const [addError, setAddError] = useState(false);
   // const [deleteError, setDeleteError] = useState(false);
   // const [updateError, setUpdateError] = useState(false);
+  const [isLoading, setIsLoading] = useState<number[]>([]);
 
   const getTodosFromServer = async () => {
     try {
@@ -135,6 +136,7 @@ export const App: React.FC = () => {
       setHasError(true);
       setMessageError(ErrorMessage.AddError);
     }
+
     // event.preventDefault();
     // setIsAdding(true);
 
@@ -353,6 +355,8 @@ export const App: React.FC = () => {
             tempTodo={tempTodo}
             setHasError={setHasError}
             setMessageError={setMessageError}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
             // handleDeleteTodo={handleDeleteTodo}
             // isCompleted={isCompleted}
           />

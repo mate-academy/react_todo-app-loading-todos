@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 // import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, editTodo } from '../../api/todos';
@@ -12,6 +12,8 @@ type Props = {
   tempTodo: Todo;
   setHasError: (isError: boolean) => void;
   setMessageError: (message: ErrorMessage) => void;
+  setIsLoading: Dispatch<SetStateAction<number[]>>;
+  isLoading: number[];
   // <SetStateAction<ErrorMessage>>;
   // handleDeleteTodo: (id: number) => void;
   // handleEditTodo: (id: number, comleted: boolean) => void;
@@ -25,6 +27,8 @@ export const TodoList: React.FC<Props> = ({
   tempTodo,
   setHasError,
   setMessageError,
+  setIsLoading,
+  isLoading,
 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
@@ -32,9 +36,12 @@ export const TodoList: React.FC<Props> = ({
     // const changeComplted =
     // !comleted;
     try {
+      setIsLoading((currentIds) => [...currentIds, id]);
       setIsCompleted(!isCompleted);
       await editTodo(id, !comleted);
       await getTodosFromServer();
+      setIsLoading((currentIds) => currentIds
+        .filter((numberOfId) => numberOfId !== id));
     } catch (err) {
       setHasError(true);
       setMessageError(ErrorMessage.UpdateError);
@@ -43,8 +50,11 @@ export const TodoList: React.FC<Props> = ({
 
   const handleDeleteTodo = async (id: number) => {
     try {
+      setIsLoading((currentIds) => [...currentIds, id]);
       await deleteTodo(id);
-      getTodosFromServer();
+      await getTodosFromServer();
+      setIsLoading((currentIds) => currentIds
+        .filter((numberOfId) => numberOfId !== id));
     } catch (err) {
       setHasError(true);
       setMessageError(ErrorMessage.DeleteError);
@@ -64,6 +74,8 @@ export const TodoList: React.FC<Props> = ({
             handleDeleteTodo={handleDeleteTodo}
             isCompleted={isCompleted}
             todo={todo}
+            isLoading={isLoading}
+            isAdding={isAdding}
             // completed={todo.completed}
             // id={todo.id}
             // title={todo.title}
@@ -76,34 +88,9 @@ export const TodoList: React.FC<Props> = ({
           handleDeleteTodo={handleDeleteTodo}
           isCompleted={isCompleted}
           todo={tempTodo}
+          isLoading={isLoading}
+          isAdding={isAdding}
         />
-
-      // <div data-cy="Todo" className="todo completed">
-      //   <label className="todo__status-label">
-      //     <input
-      //       data-cy="TodoStatus"
-      //       type="checkbox"
-      //       className="todo__status"
-      //       defaultChecked
-      //     />
-      //   </label>
-
-      //   <span data-cy="TodoTitle" className="todo__title">
-      //     {tempTodo?.title}
-      //   </span>
-      //   <button
-      //     type="button"
-      //     className="todo__remove"
-      //     data-cy="TodoDeleteButton"
-      //   >
-      //     ×
-      //   </button>
-
-      //   <div data-cy="TodoLoader" className="modal overlay">
-      //     <div className="modal-background has-background-white-ter" />
-      //     <div className="loader" />
-      //   </div>
-      // </div>
       )}
       {/* <div data-cy="Todo" className="todo">
         <label className="todo__status-label">
