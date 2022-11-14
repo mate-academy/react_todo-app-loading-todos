@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
   useContext,
@@ -14,12 +13,8 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Filter } from './types/enum';
 import { Todo } from './types/Todo';
-// import './styles/todoapp.scss';
-
-// email that I worked with Nathan@yesenia.net
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -44,7 +39,6 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
