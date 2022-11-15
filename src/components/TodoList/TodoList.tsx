@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import '../../styles/index.scss';
 
@@ -14,7 +14,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           return (
             <div
               data-cy="Todo"
-              className={cn(
+              className={classNames(
                 'todo',
                 { completed: todo.completed },
               )}
@@ -28,26 +28,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                 />
               </label>
 
-              {/* {editing ? (
-                <form>
-                  <input
-                    data-cy="TodoTitleField"
-                    type="text"
-                    className="todo__title-field"
-                    placeholder="Empty todo will be deleted"
-                    defaultValue={todo.title}
-                  />
-                </form>
-              ) : ( */}
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                // onClick={(e) => dbclickHandler(e.currentTarget)}
-                // onKeyDown={dbclickHandler}
               >
                 {todo.title}
               </span>
-              {/* )} */}
 
               <button
                 type="button"
@@ -59,10 +45,9 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
 
               <div
                 data-cy="TodoLoader"
-                className={cn(
+                className={classNames(
                   'modal',
                   'overlay',
-                  // { 'is-active': onLoading },
                 )}
               >
                 <div

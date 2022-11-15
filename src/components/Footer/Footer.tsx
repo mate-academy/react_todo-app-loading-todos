@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import '../../styles/index.scss';
 import { Filter } from '../../types/enum';
@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = ({
           type="button"
           data-cy="FilterLinkAll"
           href="#/"
-          className={cn(
+          className={classNames(
             'filter__link',
             { selected: filter === 'All' },
           )}
@@ -46,7 +46,7 @@ export const Footer: React.FC<Props> = ({
           type="button"
           data-cy="FilterLinkActive"
           href="#/active"
-          className={cn(
+          className={classNames(
             'filter__link',
             { selected: filter === 'Active' },
           )}
@@ -59,7 +59,7 @@ export const Footer: React.FC<Props> = ({
           type="button"
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className={cn(
+          className={classNames(
             'filter__link',
             { selected: filter === 'Completed' },
           )}

@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import classNames from 'classnames';
 import '../../styles/index.scss';
 
 type Props = {
@@ -13,7 +13,7 @@ export const ErrorNotifications: React.FC<Props> = ({
   return (
     <div
       data-cy="ErrorNotification"
-      className={cn(
+      className={classNames(
         'notification is-danger is-light has-text-weight-normal',
         { hidden: !isError },
       )}
