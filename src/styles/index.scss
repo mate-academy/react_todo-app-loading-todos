@@ -8,6 +8,10 @@ body {
   margin: 0 auto;
 }
 
+button {
+  all: unset;
+}
+
 .notification {
   transition-property: opacity, min-height;
   transition-duration: 1s;
