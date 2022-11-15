@@ -1,18 +1,21 @@
 import classNames from 'classnames';
 import React from 'react';
+import { FilterMethods } from '../types/filterMethods';
 
 type Props = {
-  filterMethod: string;
-  setFilterMethod: (value: string) => void,
+  filterMethod: FilterMethods;
+  setFilterMethod: (status: FilterMethods) => void;
+  todosLeft: number;
 };
 
 export const Footer:React.FC<Props> = ({
   filterMethod,
   setFilterMethod,
+  todosLeft,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
-      4 items left
+      {`${todosLeft} items left`}
     </span>
 
     <nav className="filter" data-cy="Filter">
@@ -22,10 +25,10 @@ export const Footer:React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterMethod === 'all',
+            selected: filterMethod === FilterMethods.ALL,
           },
         )}
-        onClick={() => setFilterMethod('all')}
+        onClick={() => setFilterMethod(FilterMethods.ALL)}
       >
         All
       </a>
@@ -36,10 +39,10 @@ export const Footer:React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterMethod === 'active',
+            selected: filterMethod === FilterMethods.ACTIVE,
           },
         )}
-        onClick={() => setFilterMethod('active')}
+        onClick={() => setFilterMethod(FilterMethods.ACTIVE)}
       >
         Active
       </a>
@@ -49,10 +52,10 @@ export const Footer:React.FC<Props> = ({
         className={classNames(
           'filter__link',
           {
-            selected: filterMethod === 'completed',
+            selected: filterMethod === FilterMethods.COMPLETED,
           },
         )}
-        onClick={() => setFilterMethod('completed')}
+        onClick={() => setFilterMethod(FilterMethods.COMPLETED)}
       >
         Completed
       </a>

@@ -13,23 +13,26 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Errors } from './components/Errors';
 import { Footer } from './components/Footer';
+import { FilterMethods } from './types/filterMethods';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterMethod, setFilterMethod] = useState('all');
+  const [filterMethod, setFilterMethod]
+  = useState<FilterMethods>(FilterMethods.ALL);
 
   const getTodosFromsServer = useCallback(async () => {
-    try {
-      if (user) {
-        const todosFromServer = await getTodos(user.id);
+    if (!user) {
+      return;
+    }
 
-        setTodos(todosFromServer);
-      }
+    try {
+      const todosFromServer = await getTodos(user.id);
+
+      setTodos(todosFromServer);
     } catch (Error) {
       setHasError(true);
       setErrorMessage('Loading error!');
@@ -42,7 +45,6 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -50,19 +52,25 @@ export const App: React.FC = () => {
     getTodosFromsServer();
   }, []);
 
-  const filteredTodos = () => {
-    const toFilter = todos.filter(todo => {
-      switch (filterMethod) {
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return todos;
-      }
-    });
+  const filteredTodos = todos.filter(({ completed }) => {
+    switch (filterMethod) {
+      case FilterMethods.COMPLETED:
+        return completed;
 
-    return toFilter;
+      case FilterMethods.ACTIVE:
+        return !completed;
+
+      default:
+        return true;
+    }
+  });
+
+  const todosLeft = () => {
+    const filterActiveTodos = todos.filter((todo) => (
+      !todo.completed
+    ));
+
+    return filterActiveTodos.length;
   };
 
   return (
@@ -72,26 +80,29 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodoField={newTodoField}
-          todos={filteredTodos()}
+          todos={filteredTodos}
         />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
-            <TodoList todos={filteredTodos()} />
+            <TodoList todos={filteredTodos} />
 
             <Footer
               filterMethod={filterMethod}
               setFilterMethod={setFilterMethod}
+              todosLeft={todosLeft()}
             />
           </>
         )}
       </div>
 
-      <Errors
-        hasError={hasError}
-        setHasError={setHasError}
-        errorMessage={errorMessage}
-      />
+      {hasError && (
+        <Errors
+          setHasError={setHasError}
+          errorMessage={errorMessage}
+        />
+      )}
+
     </div>
   );
 };
