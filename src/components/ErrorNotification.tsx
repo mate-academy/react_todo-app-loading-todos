@@ -6,12 +6,10 @@ type Props = {
   setHasLoadingError: (arg: boolean) => void,
 };
 
-export const ErrorNotification = (
-  {
-    hasLoadingError,
-    setHasLoadingError,
-  }: Props,
-) => {
+export const ErrorNotification = ({
+  hasLoadingError,
+  setHasLoadingError,
+}: Props) => {
   const [isClosePressed, setIsCLosePressed] = useState(false);
 
   useEffect(() => {

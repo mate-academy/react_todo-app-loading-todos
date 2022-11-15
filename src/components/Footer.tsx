@@ -51,7 +51,7 @@ export const Footer = ({ todos, setVisibleTodos, visibleTodos }: Props) => {
           className={classNames('filter__link', {
             selected: filterType === FilterType.All,
           })}
-          onKeyDown={() => setFilterType(FilterType.All)}
+          onClick={() => setFilterType(FilterType.All)}
         >
           All
         </button>
