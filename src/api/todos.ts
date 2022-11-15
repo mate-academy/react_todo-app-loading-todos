@@ -6,3 +6,15 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+
+export const createTodo = (userId: number, data: Todo) => {
+  return client.post<Todo[]>(`/todos?userId=${userId}`, data);
+};
+
+export const editTodo = (id: number, data: {}) => {
+  return client.patch<Todo[]>(`/todos/${id}`, data);
+};
+
+export const deleteTodo = (id: number) => {
+  return client.delete(`/todos/${id}`);
+};
