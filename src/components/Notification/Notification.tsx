@@ -31,7 +31,7 @@ export const Notification: React.FC<Props> = React.memo(({
           type="button"
           className="delete"
           aria-label="hide-notification"
-          onClick={() => clickHandler()}
+          onClick={clickHandler}
         />
         {notification}
       </div>

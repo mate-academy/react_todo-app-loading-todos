@@ -85,67 +85,66 @@ export const App: React.FC = () => {
         </header>
 
         {isLoading && <Loader />}
-        {todos.length > 0
-          && (
+        {todos.length !== 0 && (
+          <>
             <TodoList
               todos={visibleTodos}
               onSetNotification={setNotification}
             />
-          )}
-        {todos.length !== 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {`${todos.filter(todo => !todo.completed).length} items left`}
-            </span>
+            <footer className="todoapp__footer" data-cy="Footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {`${todos.filter(todo => !todo.completed).length} items left`}
+              </span>
 
-            <nav className="filter" data-cy="Filter">
-              <a
-                data-cy="FilterLinkAll"
-                href="#/"
-                className={classNames(
-                  'filter__link',
-                  { selected: filterKind === Filter.All },
-                )}
-                onClick={() => setFilterKind(Filter.All)}
-              >
-                All
-              </a>
+              <nav className="filter" data-cy="Filter">
+                <a
+                  data-cy="FilterLinkAll"
+                  href="#/"
+                  className={classNames(
+                    'filter__link',
+                    { selected: filterKind === Filter.All },
+                  )}
+                  onClick={() => setFilterKind(Filter.All)}
+                >
+                  All
+                </a>
 
-              <a
-                data-cy="FilterLinkActive"
-                href="#/active"
-                className={classNames(
-                  'filter__link',
-                  { selected: filterKind === Filter.Active },
-                )}
-                onClick={() => setFilterKind(Filter.Active)}
-              >
-                Active
-              </a>
-              <a
-                data-cy="FilterLinkCompleted"
-                href="#/completed"
-                className={classNames(
-                  'filter__link',
-                  { selected: filterKind === Filter.Completed },
-                )}
-                onClick={() => setFilterKind(Filter.Completed)}
-              >
-                Completed
-              </a>
-            </nav>
+                <a
+                  data-cy="FilterLinkActive"
+                  href="#/active"
+                  className={classNames(
+                    'filter__link',
+                    { selected: filterKind === Filter.Active },
+                  )}
+                  onClick={() => setFilterKind(Filter.Active)}
+                >
+                  Active
+                </a>
+                <a
+                  data-cy="FilterLinkCompleted"
+                  href="#/completed"
+                  className={classNames(
+                    'filter__link',
+                    { selected: filterKind === Filter.Completed },
+                  )}
+                  onClick={() => setFilterKind(Filter.Completed)}
+                >
+                  Completed
+                </a>
+              </nav>
 
-            <button
-              data-cy="ClearCompletedButton"
-              type="button"
-              className="todoapp__clear-completed"
-              onClick={() => {
-                setNotification('Unable to update a todo');
-              }}
-            >
-              Clear completed
-            </button>
-          </footer>
+              <button
+                data-cy="ClearCompletedButton"
+                type="button"
+                className="todoapp__clear-completed"
+                onClick={() => {
+                  setNotification('Unable to update a todo');
+                }}
+              >
+                Clear completed
+              </button>
+            </footer>
+          </>
         )}
       </div>
 
