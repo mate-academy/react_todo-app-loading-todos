@@ -209,7 +209,7 @@ export const App: React.FC = () => {
 
         { /* Footer and nav */ }
 
-        {renderTodoList.length !== 0 && (
+        {todoList.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="todosCounter">
               {`${todoList.length} items left`}
