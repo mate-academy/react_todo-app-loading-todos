@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -19,7 +18,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterMethod, setFilterMethod]
   = useState<FilterMethods>(FilterMethods.ALL);
@@ -34,11 +32,9 @@ export const App: React.FC = () => {
 
       setTodos(todosFromServer);
     } catch (Error) {
-      setHasError(true);
       setErrorMessage('Loading error!');
 
       setTimeout(() => {
-        setHasError(false);
         setErrorMessage('');
       }, 3000);
     }
@@ -65,13 +61,9 @@ export const App: React.FC = () => {
     }
   });
 
-  const todosLeft = () => {
-    const filterActiveTodos = todos.filter((todo) => (
-      !todo.completed
-    ));
-
-    return filterActiveTodos.length;
-  };
+  const todosLeft = todos.filter((todo) => (
+    !todo.completed
+  )).length;
 
   return (
     <div className="todoapp">
@@ -90,19 +82,18 @@ export const App: React.FC = () => {
             <Footer
               filterMethod={filterMethod}
               setFilterMethod={setFilterMethod}
-              todosLeft={todosLeft()}
+              todosLeft={todosLeft}
             />
           </>
         )}
       </div>
 
-      {hasError && (
+      {errorMessage && (
         <Errors
-          setHasError={setHasError}
           errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
       )}
-
     </div>
   );
 };

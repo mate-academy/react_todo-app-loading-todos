@@ -2,13 +2,13 @@
 import React from 'react';
 
 type Props = {
-  setHasError: (value: boolean) => void;
   errorMessage: string;
+  setErrorMessage: (value: string) => void;
 };
 
 export const Errors:React.FC<Props> = ({
-  setHasError,
   errorMessage,
+  setErrorMessage,
 }) => (
   <div
     data-cy="ErrorNotification"
@@ -18,7 +18,7 @@ export const Errors:React.FC<Props> = ({
       data-cy="HideErrorButton"
       type="button"
       className="delete"
-      onClick={() => setHasError(false)}
+      onClick={() => setErrorMessage('')}
     />
 
     {errorMessage}
