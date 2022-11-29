@@ -51,16 +51,16 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (todoStatus !== Filter.All) {
-      setVisibleTodos(todos.filter(todo => {
-        switch (todoStatus) {
-          case Filter.Completed:
-            return todo.completed;
-          default:
-            return !todo.completed;
-        }
-      }));
-    }
+    setVisibleTodos(todos.filter(todo => {
+      switch (todoStatus) {
+        case Filter.Completed:
+          return todo.completed;
+        case Filter.Active:
+          return !todo.completed;
+        default:
+          return true;
+      }
+    }));
   }, [todos, todoStatus]);
 
   const handleErrorClose = useCallback(() => setHasError(false), []);
@@ -74,7 +74,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <NewTodoField newTodoField={newTodoField} />
-        {todos.length && (
+        {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
             <TodoFilter
