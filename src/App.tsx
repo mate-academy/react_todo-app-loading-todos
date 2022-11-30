@@ -18,13 +18,12 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [todoStatus, setTodoStatus]
     = useState<Filter>(Filter.All);
 
-  const getTodosFromServer = useCallback(async () => {
+  const getTodosFromServer = async () => {
     try {
       if (user) {
         const todosFromServer = await getTodos(user.id);
@@ -40,7 +39,7 @@ export const App: React.FC = () => {
         setErrorMessage('');
       }, 3000);
     }
-  }, []);
+  };
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -50,18 +49,16 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  useEffect(() => {
-    setVisibleTodos(todos.filter(todo => {
-      switch (todoStatus) {
-        case Filter.Completed:
-          return todo.completed;
-        case Filter.Active:
-          return !todo.completed;
-        default:
-          return true;
-      }
-    }));
-  }, [todos, todoStatus]);
+  const visibleTodos = todos.filter(todo => {
+    switch (todoStatus) {
+      case Filter.Completed:
+        return todo.completed;
+      case Filter.Active:
+        return !todo.completed;
+      default:
+        return true;
+    }
+  });
 
   const handleErrorClose = useCallback(() => setHasError(false), []);
   const handleStatusSelect = useCallback((status: Filter) => {
