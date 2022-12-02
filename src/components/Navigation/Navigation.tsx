@@ -1,8 +1,9 @@
 import classNames from 'classnames';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   filterBy: string;
-  setFilterBy: (filterBy: string) => void;
+  setFilterBy: (filterBy: Filter) => void;
 };
 
 export const Navigation: React.FC<Props> = ({ filterBy, setFilterBy }) => (
@@ -11,9 +12,9 @@ export const Navigation: React.FC<Props> = ({ filterBy, setFilterBy }) => (
       data-cy="FilterLinkAll"
       href="#/"
       className={
-        classNames('filter__link', { selected: filterBy === 'All' })
+        classNames('filter__link', { selected: filterBy === Filter.All })
       }
-      onClick={() => setFilterBy('ALL')}
+      onClick={() => setFilterBy(Filter.All)}
     >
       All
     </a>
@@ -22,9 +23,9 @@ export const Navigation: React.FC<Props> = ({ filterBy, setFilterBy }) => (
       data-cy="FilterLinkActive"
       href="#/active"
       className={
-        classNames('filter__link', { selected: filterBy === 'ACTIVE' })
+        classNames('filter__link', { selected: filterBy === Filter.ACTIVE })
       }
-      onClick={() => setFilterBy('ACTIVE')}
+      onClick={() => setFilterBy(Filter.ACTIVE)}
     >
       Active
     </a>
@@ -32,9 +33,9 @@ export const Navigation: React.FC<Props> = ({ filterBy, setFilterBy }) => (
       data-cy="FilterLinkCompleted"
       href="#/completed"
       className={
-        classNames('filter__link', { selected: filterBy === 'COMPLETED' })
+        classNames('filter__link', { selected: filterBy === Filter.COMPLETED })
       }
-      onClick={() => setFilterBy('COMPLETED')}
+      onClick={() => setFilterBy(Filter.COMPLETED)}
     >
       Completed
     </a>

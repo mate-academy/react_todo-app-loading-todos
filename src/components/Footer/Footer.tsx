@@ -1,10 +1,11 @@
+import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
 import { Navigation } from '../Navigation/Navigation';
 
 type Props = {
   todos: Todo[];
   filterBy: string;
-  setFilterBy: (filterBy: string) => void;
+  setFilterBy: (filterBy: Filter) => void;
 };
 
 export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {

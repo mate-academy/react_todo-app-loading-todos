@@ -10,23 +10,23 @@ import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
 import { Errors } from './types/Errors';
+import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 // eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.DEFAULT);
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.NONE);
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosFiltered, setTodosFiltered] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('All');
 
-  const onClose = () => setIsError(false);
+  const closeError = () => setIsError(false);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -44,16 +44,16 @@ export const App: React.FC = () => {
       } catch (e) {
         setIsError(true);
         setErrorMessage(Errors.UNEXPECTED);
-        setTimeout(() => setIsError(false), 3000);
+        setTimeout(closeError, 3000);
       }
     })();
 
     const todosVisable = todos.filter(todo => {
       switch (filterBy) {
-        case 'ACTIVE':
+        case Filter.ACTIVE:
           return !todo.completed;
 
-        case 'COMPLETED':
+        case Filter.COMPLETED:
           return todo.completed;
 
         default:
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
             <ErrorNotification
               isError={isError}
               error={errorMessage}
-              onClose={onClose}
+              onClose={closeError}
             />
           </>
         )}

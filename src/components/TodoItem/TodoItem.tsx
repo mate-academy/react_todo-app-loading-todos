@@ -5,13 +5,6 @@ type Props = {
   todo: Todo
 };
 
-// export interface Todo {
-//   id: number;
-//   userId: number;
-//   title: string;
-//   completed: boolean;
-// }
-
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
 
