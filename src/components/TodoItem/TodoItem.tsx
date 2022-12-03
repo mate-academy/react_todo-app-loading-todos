@@ -28,6 +28,17 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
 
       {isEditing
         ? (
+          <form>
+            <input
+              data-cy="TodoTitleField"
+              type="text"
+              className="todo__title-field"
+              placeholder="Empty todo will be deleted"
+              defaultValue="JS"
+            />
+          </form>
+        )
+        : (
           <>
             <span data-cy="TodoTitle" className="todo__title">
               {title}
@@ -40,17 +51,6 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
               ×
             </button>
           </>
-        )
-        : (
-          <form>
-            <input
-              data-cy="TodoTitleField"
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              defaultValue="JS"
-            />
-          </form>
         )}
 
       <div
