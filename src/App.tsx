@@ -1,41 +1,44 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/header';
 import { Footer } from './components/footer';
 import { Main } from './components/main';
+import { Error } from './components/error';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const user = useContext(AuthContext);
+  const [data, setData] = useState('');
+
+  // const handleSubmit = (event: any) => {
+  //   setData(event.target.value);
+  // };
+
+  const handleChange = (event: any) => {
+    setData(event.target.value);
+  };
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
-
-        <Main />
-
-        <Footer />
-      </div>
-
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
+        <Header
+          data={data}
+          handleChange={handleChange}
+          // handleSubmit={handleSubmit}
         />
+        {data && (
+          <Main />
+        )}
 
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {data && (
+          <Footer />
+        )}
+
       </div>
+
+      <Error />
     </div>
   );
 };
