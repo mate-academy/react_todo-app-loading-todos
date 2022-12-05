@@ -7,6 +7,10 @@ type Props = {
 };
 
 export const ErrorType: React.FC<Props> = ({ error, setError }) => {
+  const errorHandler = () => {
+    setError('');
+  };
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -16,7 +20,7 @@ export const ErrorType: React.FC<Props> = ({ error, setError }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={errorHandler}
       />
       {error}
     </div>

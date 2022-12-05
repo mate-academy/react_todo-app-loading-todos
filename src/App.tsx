@@ -20,10 +20,16 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { ErrorType } from './components/ErrorType/ErrorType';
 
+enum SelectedType {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState<string>(SelectedType.ALL);
   const [isError, setIsError] = useState('');
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -87,16 +93,26 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     switch (filter) {
-      case 'active':
+      case SelectedType.ACTIVE:
         return todos.filter(todo => !todo.completed);
 
-      case 'completed':
+      case SelectedType.COMPLETED:
         return todos.filter(todo => todo.completed);
 
       default:
         return [...todos];
     }
   }, [todos, filter]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleNewTodos();
+    setQuery('');
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
   return (
     <div className="todoapp">
@@ -118,12 +134,7 @@ export const App: React.FC = () => {
             />
           )}
 
-          <form onSubmit={(event) => {
-            event.preventDefault();
-            handleNewTodos();
-            setQuery('');
-          }}
-          >
+          <form onSubmit={handleSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
@@ -131,9 +142,7 @@ export const App: React.FC = () => {
               ref={newTodoField}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              onChange={(event) => {
-                setQuery(event.target.value);
-              }}
+              onChange={handleChange}
             />
           </form>
         </header>

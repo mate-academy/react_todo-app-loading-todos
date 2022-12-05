@@ -25,16 +25,14 @@ export const Footer: React.FC<Props> = ({
     });
   };
 
-  const optionSelected = (event: any) => {
+  const optionSelected = (event: React.MouseEvent<HTMLAnchorElement>) => {
     setFilter(event.currentTarget.innerHTML.toLocaleLowerCase());
   };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {todos.length - completedTodos.length }
-        {' '}
-        items left
+        {`${todos.length - completedTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
