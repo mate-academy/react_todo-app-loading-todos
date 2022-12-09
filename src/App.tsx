@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
   useContext,
@@ -32,17 +31,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filterTodos, setFilterTodos] = useState<string>(FilteredStatus.ALL);
-  const [errorType, setErrorType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [changeTodos, setChangeTodos] = useState(true);
 
   const showError = (text: string) => {
-    setErrorType(text);
+    setErrorMessage(text);
     setTimeout(() => {
-      setErrorType('');
+      setErrorMessage('');
     }, 2000);
   };
 
-  const fetshTodo = async () => {
+  const fetchTodo = async () => {
     if (query.trim().length === 0) {
       showError('type something');
 
@@ -71,10 +70,10 @@ export const App: React.FC = () => {
 
   const changeTodo = useCallback(async (todoId: number, object: TodoTitle) => {
     try {
-      const updetedTodo: Todo = await updateTodo(todoId, object);
+      const updatedTodo: Todo = await updateTodo(todoId, object);
 
       setTodos(prev => (prev.map((item) => (item.id === todoId
-        ? updetedTodo
+        ? updatedTodo
         : item))
       ));
     } catch (error) {
@@ -93,7 +92,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(user?.id)
       .then(res => setTodos(res))
-      .catch(() => errorType);
+      .catch(() => errorMessage);
 
     if (newTodoField.current) {
       newTodoField.current.focus();
@@ -119,7 +118,7 @@ export const App: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetshTodo();
+    fetchTodo();
     setQuery('');
   };
 
@@ -131,6 +130,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           {todos.length > 0 && (
             <button
+              aria-label="text"
               data-cy="ToggleAllButton"
               type="button"
               className={classNames('todoapp__toggle-all', {
@@ -171,10 +171,10 @@ export const App: React.FC = () => {
           />
         )}
 
-        {errorType && (
+        {errorMessage && (
           <Error
-            error={errorType}
-            setErrorType={setErrorType}
+            error={errorMessage}
+            setErrorMessage={setErrorMessage}
           />
         )}
       </div>
