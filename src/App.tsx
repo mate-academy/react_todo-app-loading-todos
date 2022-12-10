@@ -9,11 +9,13 @@ import { Main } from './components/main';
 import { Error } from './components/error';
 import { getTodos } from './api/todos';
 import { User } from './types/User';
+// import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user: User | null = useContext(AuthContext);
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
+  const [query, setQuery] = useState('');
   const newTodoField = useRef<HTMLInputElement>(null);
 
   // console.log(user);
@@ -25,19 +27,21 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    const fetchTodos = async () => {
-      const todos = await getTodos(user.id);
+    if (user) {
+      const fetchTodos = async () => {
+        const todos: any = await getTodos(user.id);
 
-      setData(todos);
-    };
+        setData(todos);
+      };
 
-    fetchTodos();
+      fetchTodos();
+    }
   }, []);
 
   // console.log(dataUrl)
 
   const handleChange = (event: any) => {
-    setData(event.target.value);
+    setQuery(event.target.value);
   };
 
   return (
@@ -46,7 +50,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          data={data}
+          query={query}
           handleChange={handleChange}
           newTodoField={newTodoField}
           // handleSubmit={handleSubmit}
