@@ -14,12 +14,21 @@ import { User } from './types/User';
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user: User | null = useContext(AuthContext);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const newTodoField = useRef<HTMLInputElement>(null);
 
+  // console.log(data);
   // console.log(user);
   // console.log(user.id);
+
+  const fetchTodos = async () => {
+    if (user) {
+      const todos: any = await getTodos(user.id);
+
+      setData(todos);
+    }
+  };
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -27,18 +36,8 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
 
-    if (user) {
-      const fetchTodos = async () => {
-        const todos: any = await getTodos(user.id);
-
-        setData(todos);
-      };
-
-      fetchTodos();
-    }
+    fetchTodos();
   }, []);
-
-  // console.log(dataUrl)
 
   const handleChange = (event: any) => {
     setQuery(event.target.value);
