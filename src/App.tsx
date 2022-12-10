@@ -17,6 +17,7 @@ export const App: React.FC = () => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [error] = useState(false);
 
   // console.log(data);
   // console.log(user);
@@ -63,8 +64,10 @@ export const App: React.FC = () => {
         )}
 
       </div>
+      {error && (
+        <Error />
+      )}
 
-      <Error />
     </div>
   );
 };
