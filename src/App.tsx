@@ -23,6 +23,7 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<Status>(Status.All);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [currentError, setCurrentError] = useState<string>('');
 
   const user = useContext(AuthContext);
@@ -36,14 +37,27 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       } catch (error) {
         setCurrentError('add');
+        setHasError(true);
       }
     }
   }, []);
+
+  const resetCurrentError = useCallback(
+    () => {
+      setCurrentError('');
+      setHasError(false);
+    },
+    [currentError],
+  );
 
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    setTimeout(() => {
+      resetCurrentError();
+    }, 3000);
 
     loadUserTodos();
   }, []);
@@ -107,7 +121,8 @@ export const App: React.FC = () => {
       {currentError !== '' && (
         <ErrorNotification
           currentError={currentError}
-          setCurrentError={setCurrentError}
+          resetCurrentError={resetCurrentError}
+          hasError={hasError}
         />
       )}
     </div>
