@@ -6,9 +6,9 @@ import React, {
 import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos, getActiveTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { VisibleTodos } from './components/VisibleTodos/VisibleTodos';
-import { Footer } from './components/Footer/Footer';
-import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
+import { Filter } from './components/Filter/Filter';
+import { NewTodo } from './components/NewTodo/NewTodo';
 import { ErrorsComponent } from './components/ErrorsComponent/ErrorsComponent';
 
 export const App: React.FC = () => {
@@ -49,10 +49,14 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
-        <VisibleTodos visibleTodos={visibleTodos} />
+        <NewTodo
+          newTodoField={newTodoField}
+          activeTodos={activeTodos}
+          allTodos={allTodos}
+        />
+        <TodoList visibleTodos={visibleTodos} />
 
-        <Footer
+        <Filter
           allTodos={allTodos}
           activeTodos={activeTodos}
           user={user}
