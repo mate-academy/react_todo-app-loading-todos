@@ -8,8 +8,10 @@ import React, {
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Auth/Header/Header';
-import { TodoList } from './components/Auth/TodoList/TodoList';
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { TodoList } from './components/TodoList/TodoList';
+import {
+  ErrorNotification,
+} from './components/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
 

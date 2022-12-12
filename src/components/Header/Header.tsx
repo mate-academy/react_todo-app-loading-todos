@@ -4,7 +4,7 @@ import { RefObject } from 'react';
 
 type Props = {
   newTodoField: RefObject<HTMLInputElement>;
-}
+};
 
 export const Header: React.FC<Props> = ({ newTodoField }) => {
   return (
