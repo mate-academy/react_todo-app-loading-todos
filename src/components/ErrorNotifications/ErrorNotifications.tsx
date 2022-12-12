@@ -1,14 +1,38 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 type Props = {
   currentError: string;
-  resetCurrentError: () => void;
+  setCurrentError: React.Dispatch<React.SetStateAction<string>>;
   hasError: boolean;
+  setHasError: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const ErrorNotification: React.FC<Props> = (props) => {
-  const { currentError, resetCurrentError, hasError } = props;
+  const {
+    currentError,
+    setCurrentError,
+    hasError,
+    setHasError,
+  } = props;
+
+  const timerRef = useRef<NodeJS.Timer>();
+
+  const resetCurrentError = useCallback(
+    () => {
+      setCurrentError('');
+      setHasError(false);
+    },
+    [currentError],
+  );
+
+  useEffect(() => {
+    if (hasError) {
+      timerRef.current = setTimeout(resetCurrentError, 3000);
+    } else {
+      clearTimeout(timerRef.current);
+    }
+  }, [hasError]);
 
   return (
     <div
@@ -30,7 +54,7 @@ export const ErrorNotification: React.FC<Props> = (props) => {
         className="delete"
         onClick={resetCurrentError}
       />
-      {`Unable to ${currentError} a todo`}
+      {currentError}
     </div>
   );
 };

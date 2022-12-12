@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>;
-};
+export const NewTodo: React.FC = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
 
-export const NewTodo: React.FC<Props> = ({ newTodoField }) => {
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <form>
       <input

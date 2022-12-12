@@ -2,8 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useRef,
   useState,
 } from 'react';
 import classNames from 'classnames';
@@ -27,7 +25,6 @@ export const App: React.FC = () => {
   const [currentError, setCurrentError] = useState<string>('');
 
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
   const loadUserTodos = useCallback(async () => {
     if (user) {
@@ -36,54 +33,17 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch (error) {
-        setCurrentError('add');
         setHasError(true);
+        setCurrentError('Unable to load user todos');
       }
     }
   }, []);
 
-  const resetCurrentError = useCallback(
-    () => {
-      setCurrentError('');
-      setHasError(false);
-    },
-    [currentError],
-  );
-
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
-    setTimeout(() => {
-      resetCurrentError();
-    }, 3000);
-
     loadUserTodos();
   }, []);
 
   const activeTodos = todos.filter(todo => !todo.completed);
-
-  const getVisibleTodos = useCallback((): Todo[] => {
-    return todos.filter(todo => {
-      switch (status) {
-        case Status.Active:
-          return !todo.completed;
-
-        case Status.Completed:
-          return todo.completed;
-
-        case Status.All:
-        default:
-          return todos;
-      }
-    });
-  }, [todos, status]);
-
-  const visibleTodos = useMemo(
-    getVisibleTodos,
-    [todos, status],
-  );
 
   return (
     <div className="todoapp">
@@ -103,28 +63,44 @@ export const App: React.FC = () => {
             )}
           />
 
-          <NewTodo newTodoField={newTodoField} />
+          <NewTodo />
         </header>
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={visibleTodos} />
-            <TodoFilter
-              todos={activeTodos}
+            <TodoList
+              todos={todos}
               status={status}
-              setStatus={setStatus}
             />
+
+            <footer className="todoapp__footer" data-cy="Footer">
+              <span className="todo-count" data-cy="todosCounter">
+                {`${activeTodos.length} items left`}
+              </span>
+
+              <TodoFilter
+                status={status}
+                setStatus={setStatus}
+              />
+
+              <button
+                data-cy="ClearCompletedButton"
+                type="button"
+                className="todoapp__clear-completed"
+              >
+                Clear completed
+              </button>
+            </footer>
           </>
         )}
       </div>
 
-      {currentError !== '' && (
-        <ErrorNotification
-          currentError={currentError}
-          resetCurrentError={resetCurrentError}
-          hasError={hasError}
-        />
-      )}
+      <ErrorNotification
+        currentError={currentError}
+        setCurrentError={setCurrentError}
+        hasError={hasError}
+        setHasError={setHasError}
+      />
     </div>
   );
 };
