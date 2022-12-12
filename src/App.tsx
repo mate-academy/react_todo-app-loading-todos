@@ -30,7 +30,7 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos(user?.id || 0);
 
       setTodos(todosFromServer);
-    } catch (error: any) {
+    } catch (_) {
       setHasError(true);
       setCurrError('Something went wrong :(. We can not load user`s todos');
     } finally {

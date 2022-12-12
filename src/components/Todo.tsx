@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { Loader } from './Loader';
 
@@ -7,12 +8,20 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
-    <div data-cy="Todo" className="todo">
+    <div
+      data-cy="Todo"
+      className={classNames(
+        'todo', {
+          completed: todo.completed,
+        },
+      )}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          defaultChecked
         />
       </label>
 
