@@ -52,7 +52,6 @@ export const App: React.FC = () => {
         />
         <TodoList todos={todos} />
         <Footer
-          user={user}
           onTodosChange={setTodos}
         />
 

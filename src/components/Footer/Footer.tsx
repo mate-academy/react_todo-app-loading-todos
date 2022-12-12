@@ -1,20 +1,20 @@
 import cn from 'classnames';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTodos } from '../../api/todos';
 import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
+import { AuthContext } from '../Auth/AuthContext';
 
 type Props = {
-  user: User | null;
   onTodosChange: (value: Todo[]) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  user,
   onTodosChange,
 }) => {
   const [clickedValue, setClickedValue] = useState<number>(0);
   const [activeTodos, setActiveTodos] = useState<Todo[]>([]);
+
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     const findActiveTodos = async () => {

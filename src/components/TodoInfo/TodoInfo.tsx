@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -7,7 +8,13 @@ type Props = {
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <>
-      <div data-cy="Todo" className="todo">
+      <div
+        data-cy="Todo"
+        className={cn(
+          'todo',
+          { completed: todo.completed },
+        )}
+      >
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
@@ -16,7 +23,12 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           />
         </label>
 
-        <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+        >
+          {todo.title}
+        </span>
 
         <button
           type="button"
@@ -32,7 +44,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         </div>
       </div>
 
-      {/* <div data-cy="Todo" className="todo completed">
+      {/*
+      <div data-cy="Todo" className="todo completed">
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
