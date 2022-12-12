@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { TodoData } from '../../api/todos';
 import { AuthContext } from '../Auth/AuthContext';
 
 interface Props {
-  todoTitle: string,
-  setTitle: (newTitle: string) => void,
   onAdd: (todo: TodoData) => void,
 }
 
-export const NewTodoForm: React.FC<Props> = ({
-  todoTitle,
-  setTitle,
-  onAdd,
-}) => {
+export const NewTodoForm: React.FC<Props> = ({ onAdd }) => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [isWarningShown, setIsWarningShown] = useState(false);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -24,29 +25,42 @@ export const NewTodoForm: React.FC<Props> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const newTodo = {
-      title: todoTitle,
-      completed: false,
-      userId: user?.id,
-    };
+    if (newTodoTitle.trim()) {
+      const newTodo = {
+        title: newTodoTitle.trim(),
+        completed: false,
+        userId: user?.id,
+      };
 
-    onAdd(newTodo);
-    setTitle('');
+      onAdd(newTodo);
+      setNewTodoTitle('');
+    } else {
+      setIsWarningShown(true);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        data-cy="NewTodoField"
-        type="text"
-        ref={newTodoField}
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
-        value={todoTitle}
-        onChange={(event) => {
-          setTitle(event.target.value);
-        }}
-      />
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <input
+          data-cy="NewTodoField"
+          type="text"
+          ref={newTodoField}
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          value={newTodoTitle}
+          onChange={(event) => {
+            setNewTodoTitle(event.target.value);
+            setIsWarningShown(false);
+          }}
+        />
+      </form>
+      {isWarningShown && (
+        <p>
+          Please, enter the correct title for your todo.
+        </p>
+      )}
+    </>
+
   );
 };

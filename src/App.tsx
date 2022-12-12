@@ -13,17 +13,17 @@ import { ErrorNotification } from './components/ErrorNotification/ErrorNotiicati
 import { NewTodoForm } from './components/NewTodoForm/NewTodoForm';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterOptions } from './types/FilterOptions';
 import { Todo } from './types/Todo';
 import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
-  const [newTodoTitle, setNewTodoTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
   const [isErrorHidden, setIsErrorHidden] = useState(true);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState(FilterOptions.ALL);
 
   const addNewTodo = (todo: TodoData) => {
     setIsErrorHidden(true);
@@ -52,13 +52,13 @@ export const App: React.FC = () => {
   ) => {
     return todosFromServer.filter(todo => {
       switch (option) {
-        case 'active':
+        case FilterOptions.ACTIVE:
           return todo.completed === false;
 
-        case 'completed':
+        case FilterOptions.COMPLETED:
           return todo.completed === true;
 
-        case 'all':
+        case FilterOptions.ALL:
         default:
           return true;
       }
@@ -70,7 +70,7 @@ export const App: React.FC = () => {
   }, [todos, selectedOption]);
 
   const AmountOfActiveTodos = useMemo(() => {
-    return filterBySelect(todos, 'active').length;
+    return filterBySelect(todos, FilterOptions.ACTIVE).length;
   }, [todos]);
 
   return (
@@ -87,8 +87,6 @@ export const App: React.FC = () => {
             />
 
             <NewTodoForm
-              todoTitle={newTodoTitle}
-              setTitle={setNewTodoTitle}
               onAdd={addNewTodo}
             />
           </header>
