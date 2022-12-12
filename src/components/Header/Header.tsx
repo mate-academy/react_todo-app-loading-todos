@@ -5,20 +5,26 @@ import React, { RefObject } from 'react';
 type Props = {
   newTodoField: RefObject<HTMLInputElement>;
   query: string;
-  error: boolean;
   onQueryChange: (value: string) => void;
-  onErrorChange: (value: string) => void;
+  onErrorChange: (value: boolean) => void;
 };
 
 export const Header: React.FC<Props> = ({
   newTodoField,
   query,
-  error,
   onQueryChange,
   onErrorChange,
 }) => {
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!query.length) {
+      onErrorChange(true);
+    }
+
+    setTimeout(() => {
+      onErrorChange(false);
+    }, 3000);
   };
 
   return (

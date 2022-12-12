@@ -47,22 +47,22 @@ export const App: React.FC = () => {
         <Header
           newTodoField={newTodoField}
           query={query}
-          error={error}
           onQueryChange={setQuery}
           onErrorChange={setError}
         />
-
-        {todos.length > 0 && (
-          <>
-            <TodoList todos={todos} />
-            <Footer />
-          </>
-        )}
+        <TodoList todos={todos} />
+        <Footer
+          user={user}
+          onTodosChange={setTodos}
+        />
 
       </div>
 
       {error && (
-        <ErrorNotification />
+        <ErrorNotification
+          query={query}
+          onErrorChange={setError}
+        />
       )}
     </div>
   );

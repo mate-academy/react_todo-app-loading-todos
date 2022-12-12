@@ -1,6 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const ErrorNotification: React.FC = () => {
+type Props = {
+  query: string;
+  onErrorChange: (value: boolean) => void;
+};
+
+export const ErrorNotification: React.FC<Props> = ({
+  query,
+  onErrorChange,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -10,13 +18,13 @@ export const ErrorNotification: React.FC = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        onClick={() => onErrorChange(false)}
       />
 
-      Unable to add a todo
+      {!query && (
+        'Title can\'t be empty'
+      )}
       <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
     </div>
   );
 };
