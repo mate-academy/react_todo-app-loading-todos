@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
@@ -6,13 +5,13 @@ import React, { useEffect, useRef } from 'react';
 interface Props {
   error: string,
   isHidden: boolean,
-  setError: (isError: boolean) => void,
+  setIsHidden: (isError: boolean) => void,
 }
 
 export const ErrorNotification: React.FC<Props> = ({
   error,
   isHidden,
-  setError,
+  setIsHidden: setError,
 }) => {
   const timerRef = useRef<NodeJS.Timer>();
 
@@ -21,20 +20,13 @@ export const ErrorNotification: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log('inside effect - ', timerRef.current);
     if (!isHidden) {
       timerRef.current = setTimeout(() => {
         setError(true);
       }, 3000);
-
-      console.log('inside if - ', timerRef.current);
     } else {
       clearTimeout(timerRef.current);
-
-      console.log('inside else - ', timerRef.current);
     }
-
-    console.log('hidden', isHidden);
   }, [isHidden]);
 
   return (
@@ -53,10 +45,6 @@ export const ErrorNotification: React.FC<Props> = ({
       />
 
       {`Unable to ${error} a todo`}
-      {/* <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };

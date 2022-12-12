@@ -4,22 +4,20 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { createTodo, getTodos, TodoData } from './api/todos';
 import { AuthContext, AuthProvider } from './components/Auth/AuthContext';
 // eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotiication';
+import { NewTodoForm } from './components/NewTodoForm/NewTodoForm';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -43,10 +41,6 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus(); // why it doesn't work???
-    }
-
     if (user) {
       getTodos(user.id).then(todoList => setTodos(todoList));
     }
@@ -79,18 +73,6 @@ export const App: React.FC = () => {
     return filterBySelect(todos, 'active').length;
   }, [todos]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const newTodo = {
-      title: newTodoTitle,
-      completed: false,
-      userId: user?.id,
-    };
-
-    addNewTodo(newTodo);
-    setNewTodoTitle('');
-  };
-
   return (
     <AuthProvider>
       <div className="todoapp">
@@ -104,19 +86,11 @@ export const App: React.FC = () => {
               className="todoapp__toggle-all active"
             />
 
-            <form onSubmit={handleSubmit}>
-              <input
-                data-cy="NewTodoField"
-                type="text"
-                ref={newTodoField}
-                className="todoapp__new-todo"
-                placeholder="What needs to be done?"
-                value={newTodoTitle}
-                onChange={(event) => {
-                  setNewTodoTitle(event.target.value);
-                }}
-              />
-            </form>
+            <NewTodoForm
+              todoTitle={newTodoTitle}
+              setTitle={setNewTodoTitle}
+              onAdd={addNewTodo}
+            />
           </header>
           {todos.length > 0 && (
             <>
@@ -147,7 +121,7 @@ export const App: React.FC = () => {
         <ErrorNotification
           error={error}
           isHidden={isErrorHidden}
-          setError={setIsErrorHidden}
+          setIsHidden={setIsErrorHidden}
         />
       </div>
     </AuthProvider>
