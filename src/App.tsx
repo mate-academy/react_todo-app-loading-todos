@@ -11,18 +11,13 @@ import { Todo } from './types/Todo';
 import { Error } from './components/Error';
 import { TodoList } from './components/TodoList';
 import { Navigation } from './components/Navigation';
-
-const filters = {
-  all: 'All',
-  completed: 'Completed',
-  active: 'Active',
-};
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState(filters.all);
+  const [selectedFilter, setSelectedFilter] = useState(Filter.ALL);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -43,26 +38,20 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = todos.filter(todo => {
-    const { all, active, completed } = filters;
-
     switch (selectedFilter) {
-      case all:
+      case Filter.ALL:
         return todo;
 
-      case active:
+      case Filter.ACTIVE:
         return !todo.completed;
 
-      case completed:
+      case Filter.COMPLETED:
         return todo.completed;
 
       default:
         return todo;
     }
   });
-
-  const filterTodos = (filterBy: string) => {
-    setSelectedFilter(filterBy);
-  };
 
   const uncompletedTodos = todos.filter(todo => !todo.completed);
 
@@ -100,7 +89,7 @@ export const App: React.FC = () => {
 
               <Navigation
                 isSelected={selectedFilter}
-                onTodoFilter={filterTodos}
+                onTodoFilter={setSelectedFilter}
               />
 
               <button

@@ -1,9 +1,10 @@
 import React from 'react';
+import { Filter } from '../types/Filter';
 import { TodoFilter } from './TodoFilter';
 
 interface Props {
-  isSelected: string,
-  onTodoFilter: (filterBy: string) => void,
+  isSelected: Filter,
+  onTodoFilter: (filterBy: Filter) => void,
 }
 
 export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
@@ -11,7 +12,7 @@ export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
     <TodoFilter
       dataAttr="FilterLinkAll"
       hrefAttr="#/"
-      name="All"
+      name={Filter.ALL}
       isSelected={isSelected}
       onTodoFilter={onTodoFilter}
     />
@@ -19,7 +20,7 @@ export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
     <TodoFilter
       dataAttr="FilterLinkActive"
       hrefAttr="#/active"
-      name="Active"
+      name={Filter.ACTIVE}
       isSelected={isSelected}
       onTodoFilter={onTodoFilter}
     />
@@ -27,7 +28,7 @@ export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
     <TodoFilter
       dataAttr="FilterLinkCompleted"
       hrefAttr="#/completed"
-      name="Completed"
+      name={Filter.COMPLETED}
       isSelected={isSelected}
       onTodoFilter={onTodoFilter}
     />

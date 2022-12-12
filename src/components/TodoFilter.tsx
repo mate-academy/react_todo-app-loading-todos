@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
+import { Filter } from '../types/Filter';
 
 interface Props {
   dataAttr: string,
   hrefAttr: string,
-  name: string,
-  isSelected: string,
-  onTodoFilter: (filterBy: string) => void,
+  name: Filter,
+  isSelected: Filter,
+  onTodoFilter: (filterBy: Filter) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -23,7 +24,7 @@ export const TodoFilter: React.FC<Props> = ({
       className={classNames('filter__link', {
         selected: isSelected === name,
       })}
-      onClick={() => onTodoFilter(name)}
+      onClick={() => onTodoFilter(name as Filter)}
     >
       {name}
     </a>
