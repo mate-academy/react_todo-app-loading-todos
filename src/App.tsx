@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
 import React, {
   useCallback,
   useContext,
@@ -19,6 +20,7 @@ import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
   const [isErrorHidden, setIsErrorHidden] = useState(true);
@@ -82,7 +84,10 @@ export const App: React.FC = () => {
             <button
               data-cy="ToggleAllButton"
               type="button"
-              className="todoapp__toggle-all active"
+              className={classNames(
+                'todoapp__toggle-all',
+                { active: AmountOfActiveTodos === 0 },
+              )}
             />
 
             <NewTodoForm
