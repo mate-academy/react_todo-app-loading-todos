@@ -19,7 +19,6 @@ import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
   const [isErrorHidden, setIsErrorHidden] = useState(true);
