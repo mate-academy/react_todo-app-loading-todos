@@ -7,16 +7,18 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { Header } from './components/Auth/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import {
   ErrorNotification,
 } from './components/ErrorNotification/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
+import { Header } from './components/Header/Header';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [query, setQuery] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -42,14 +44,24 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header
+          newTodoField={newTodoField}
+          query={query}
+          error={error}
+          onQueryChange={setQuery}
+          onErrorChange={setError}
+        />
 
-        <TodoList todos={todos} />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={todos} />
+            <Footer />
+          </>
+        )}
 
-        <Footer />
       </div>
 
-      {!true && (
+      {error && (
         <ErrorNotification />
       )}
     </div>
