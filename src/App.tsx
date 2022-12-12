@@ -12,13 +12,14 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
+import { FilterValues } from './types/FilterValues';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [filter, setFilter] = useState<FilterValues>(FilterValues.ALL);
   const user = useContext(AuthContext);
   const activeTodosCount = todos.filter(todoItem => !todoItem.completed).length;
 
@@ -32,14 +33,14 @@ export const App: React.FC = () => {
 
       setTodos(response);
     } catch {
-      setError('Unable to load todos');
+      setErrorMessage('Unable to load todos');
+    } finally {
+      setIsLoaded(true);
     }
-
-    setIsLoaded(true);
   };
 
   const onCloseError = useCallback(() => {
-    setError('');
+    setErrorMessage('');
   }, []);
 
   useEffect(() => {
@@ -49,9 +50,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     const filteredTodos = todos.filter(todo => {
       switch (filter) {
-        case 'active':
+        case FilterValues.ACTIVE:
           return todo.completed === false;
-        case 'completed':
+        case FilterValues.COMPLETED:
           return todo.completed === true;
         default:
           return true;
@@ -79,7 +80,12 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {error && <Error error={error} onCloseError={onCloseError} />}
+      {errorMessage && (
+        <Error
+          error={errorMessage}
+          onCloseError={onCloseError}
+        />
+      )}
     </div>
   );
 };

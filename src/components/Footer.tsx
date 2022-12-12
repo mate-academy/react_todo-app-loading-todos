@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
+import { FilterValues } from '../types/FilterValues';
 
 type Props = {
   activeTodosCount: number,
-  filter: string
-  setFilter: (filter: string) => void,
+  filter: FilterValues
+  setFilter: (filter: FilterValues) => void,
 };
 
 export const Footer: React.FC<Props> = React.memo(
@@ -20,9 +21,9 @@ export const Footer: React.FC<Props> = React.memo(
             data-cy="FilterLinkAll"
             href="#/"
             className={classNames('filter__link', {
-              selected: filter === 'all',
+              selected: filter === FilterValues.ALL,
             })}
-            onClick={() => setFilter('all')}
+            onClick={() => setFilter(FilterValues.ALL)}
           >
             All
           </a>
@@ -31,9 +32,9 @@ export const Footer: React.FC<Props> = React.memo(
             data-cy="FilterLinkActive"
             href="#/active"
             className={classNames('filter__link', {
-              selected: filter === 'active',
+              selected: filter === FilterValues.ACTIVE,
             })}
-            onClick={() => setFilter('active')}
+            onClick={() => setFilter(FilterValues.ACTIVE)}
           >
             Active
           </a>
@@ -41,9 +42,9 @@ export const Footer: React.FC<Props> = React.memo(
             data-cy="FilterLinkCompleted"
             href="#/completed"
             className={classNames('filter__link', {
-              selected: filter === 'completed',
+              selected: filter === FilterValues.COMPLETED,
             })}
-            onClick={() => setFilter('completed')}
+            onClick={() => setFilter(FilterValues.COMPLETED)}
           >
             Completed
           </a>
