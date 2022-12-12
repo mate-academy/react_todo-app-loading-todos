@@ -43,8 +43,9 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={handleCrossButtonClick}
       />
-
-      {`Unable to ${error} a todo`}
+      {error === 'get'
+        ? `Unable to ${error} todos`
+        : `Unable to ${error} a todo`}
     </div>
   );
 };

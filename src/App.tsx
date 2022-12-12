@@ -43,7 +43,14 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      getTodos(user.id).then(todoList => setTodos(todoList));
+      getTodos(user.id)
+        .then(todoList => setTodos(todoList))
+        .catch(errorMes => {
+          if (errorMes) {
+            setError('get');
+            setIsErrorHidden(false);
+          }
+        });
     }
   }, []);
 
