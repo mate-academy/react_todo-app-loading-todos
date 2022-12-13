@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -8,6 +10,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
+import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
@@ -15,24 +18,41 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isErrorLoad, setIsErrorLoad] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<string>(Filter.ALL);
+
+  console.log('APP FILTER', selectedFilter);
+
+  const filteredTodos = [...todos];
+
+  const fetchData = useCallback(async () => {
+    if (user) {
+      try {
+        const inData = await getTodos(user.id);
+
+        console.log('INDATA', inData);
+
+        setTodos(inData);
+      } catch (inError) {
+        console.log('ERROR input', inError);
+        setIsErrorLoad(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+  });
 
-    const fetchData = async () => {
-      const data = user && getTodos(user.id);
-
-      if (data) {
-        setTodos(await data);
-      }
-    };
-
+  useEffect(() => {
     fetchData();
-    // console.log(todos);
-  }, []);
+  }, [selectedFilter]);
+
+  console.log('REDDERINGM APP');
+  console.log('DODOS', todos);
 
   return (
     <div className="todoapp">
@@ -41,12 +61,19 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
 
-        {todos.length !== 0 && <TodoList />}
+        <TodoList
+          todos={filteredTodos}
+          selectedFilter={selectedFilter}
+        />
 
-        {todos.length !== 0 && <Footer />}
+        <Footer
+          todos={todos}
+          onSetFilterGlobal={setSelectedFilter}
+          selectedFilter={selectedFilter}
+        />
       </div>
 
-      {todos.length !== 0 && <ErrorNotification />}
+      <ErrorNotification isErrorLoad={isErrorLoad} />
     </div>
   );
 };
