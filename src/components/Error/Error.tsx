@@ -1,6 +1,11 @@
-// import React from 'react';
+import React from 'react';
 
-export const Error = () => {
+type Props = {
+  errorMessage: string,
+  closeErrorMassage: () => void,
+};
+
+export const Error: React.FC<Props> = ({ errorMessage, closeErrorMassage }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -11,13 +16,9 @@ export const Error = () => {
         aria-label="delete"
         type="button"
         className="delete"
+        onClick={closeErrorMassage}
       />
-
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };

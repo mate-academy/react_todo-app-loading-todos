@@ -19,7 +19,7 @@ or find an existing one in the API.
   - use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
 - hide everything except the `NewTodoField` if there are no todos yet;
 
-## Error messages
+## Errors messages
 
 In case of any error show the notification with an appropriate message at the bottom (just remove the `hidden` class).
 

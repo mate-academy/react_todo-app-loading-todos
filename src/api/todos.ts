@@ -5,12 +5,18 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-export const getActiveTodos = (userId: number) => {
-  return getTodos(userId)
-    .then(todos => todos.filter(todo => !todo.completed));
+export const createTodos = (userId: number, title: string) => {
+  return client.post<Todo>('/todos', {
+    userId,
+    completed: false,
+    title,
+  });
 };
 
-export const getCompletedTodos = (userId: number) => {
-  return getTodos(userId)
-    .then(todos => todos.filter(todo => todo.completed));
+export const updateTodos = (todo: Todo) => {
+  return client.patch(`/todos/${todo.id}`, todo);
+};
+
+export const deleteTodos = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
 };

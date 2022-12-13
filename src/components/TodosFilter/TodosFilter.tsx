@@ -1,36 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { getActiveTodos, getCompletedTodos, getTodos } from '../../api/todos';
-import { Todo, TodoStatus } from '../../types/Todo';
+import { TodoStatus } from '../../types/Todo';
 
 type Props = {
-  handleChangeTodos: (value: Promise<Todo[]>) => void,
-  userId: number,
+  handleChangeTodos: (value: TodoStatus) => void,
+  todoFilter: TodoStatus,
 };
 
-export const TodosFilter: React.FC<Props> = ({ handleChangeTodos, userId }) => {
-  const [selectedItem, setSelectedItem] = useState(`${TodoStatus.All}`);
-  const onSortTodos
-    = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      switch (event.currentTarget.innerText) {
-        case TodoStatus.Active:
-          return (
-            handleChangeTodos(getActiveTodos(userId)),
-            setSelectedItem(`${TodoStatus.Active}`)
-          );
-        case TodoStatus.Completed:
-          return (
-            handleChangeTodos(getCompletedTodos(userId)),
-            setSelectedItem(`${TodoStatus.Completed}`)
-          );
-        default:
-          return (
-            handleChangeTodos(getTodos(userId)),
-            setSelectedItem(`${TodoStatus.All}`)
-          );
-      }
-    };
-
+export const TodosFilter: React.FC<Props> = ({
+  handleChangeTodos,
+  todoFilter,
+}) => {
   return (
     <nav className="filter" data-cy="Filter">
       <a
@@ -38,9 +18,9 @@ export const TodosFilter: React.FC<Props> = ({ handleChangeTodos, userId }) => {
         href="#/"
         className={classNames(
           'filter__link',
-          { selected: selectedItem === `${TodoStatus.All}` },
+          { selected: todoFilter === `${TodoStatus.All}` },
         )}
-        onClick={(event) => onSortTodos(event)}
+        onClick={() => handleChangeTodos(TodoStatus.All)}
       >
         {TodoStatus.All}
       </a>
@@ -50,9 +30,9 @@ export const TodosFilter: React.FC<Props> = ({ handleChangeTodos, userId }) => {
         href="#/active"
         className={classNames(
           'filter__link',
-          { selected: selectedItem === `${TodoStatus.Active}` },
+          { selected: todoFilter === `${TodoStatus.Active}` },
         )}
-        onClick={(event) => onSortTodos(event)}
+        onClick={() => handleChangeTodos(TodoStatus.Active)}
       >
         {TodoStatus.Active}
       </a>
@@ -61,9 +41,9 @@ export const TodosFilter: React.FC<Props> = ({ handleChangeTodos, userId }) => {
         href="#/completed"
         className={classNames(
           'filter__link',
-          { selected: selectedItem === `${TodoStatus.Completed}` },
+          { selected: todoFilter === `${TodoStatus.Completed}` },
         )}
-        onClick={(event) => onSortTodos(event)}
+        onClick={() => handleChangeTodos(TodoStatus.Completed)}
       >
         {TodoStatus.Completed}
       </a>
