@@ -39,6 +39,10 @@ export const App: React.FC = () => {
       setTodos((currentTodos): any => [...currentTodos, todo]);
     };
 
+    if (user === null) {
+      return;
+    }
+
     addNewTodo({
       userId: user.id,
       title: todoTitle,
