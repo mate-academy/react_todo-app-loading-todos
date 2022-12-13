@@ -8,6 +8,9 @@ import React,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import {
+  ErrorNotification,
+} from './components/ErrorNotifications/ErrorNotifications';
 import { TodosFooter } from './components/TodosComponents/TodosFooter';
 import { TodosHeader } from './components/TodosComponents/TodosHeader';
 import { TodosList } from './components/TodosComponents/TodosList';
@@ -17,10 +20,34 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoFilter, setTodoFilter] = useState<FilterValues>(FilterValues.ALL);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [ErrorMessage, setErrorMessage] = useState('');
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+
+  const getErrorStatus = (currentError: string) => {
+    setErrorMessage(currentError);
+
+    setErrorStatus(true);
+
+    const handleId = setTimeout(() => {
+      setErrorStatus(false);
+
+      setErrorMessage('');
+    }, 3000);
+
+    setTimerId(handleId);
+
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+  };
+
+  const onErrorStatus = (errStatus: boolean) => {
+    setErrorStatus(errStatus);
+  };
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -29,7 +56,9 @@ export const App: React.FC = () => {
     }
 
     if (user) {
-      getTodos(user.id).then(setTodos);
+      getTodos(user.id)
+        .then(setTodos)
+        .catch(() => getErrorStatus('cannot access to server, pls try again'));
     }
   }, []);
 
@@ -60,7 +89,11 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodosHeader newTodoField={newTodoField} />
+        <TodosHeader
+          newTodoField={newTodoField}
+          getErrorStatus={getErrorStatus}
+        />
+
         {todos.length > 0 && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
@@ -76,23 +109,13 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-        hidden
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
+      {errorStatus && timerId && (
+        <ErrorNotification
+          timerId={timerId}
+          ErrorMessage={ErrorMessage}
+          onErrorStatus={onErrorStatus}
         />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      )}
     </div>
   );
 };
