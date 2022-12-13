@@ -14,17 +14,19 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [status, setStatus] = useState('All');
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const getTodosFromServer = async() => {
+  const getTodosFromServer = async () => {
     const todosFromServer = user && await getTodos(user.id);
 
     if (todosFromServer) {
       setTodos(todosFromServer);
     }
-  }
+  };
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -34,21 +36,22 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header newTodoField={newTodoField} todos={todos} />
 
-        <TodoList todos={todos} />
-
-        <Footer />
+        {todos.length > 0 && (
+          <>
+            <TodoList status={status} todos={todos} />
+            <Footer status={status} setStatus={setStatus} />
+          </>
+        )}
       </div>
 
-      <ErrorNotification />
+      {todos.length > 0 && <ErrorNotification />}
     </div>
   );
 };

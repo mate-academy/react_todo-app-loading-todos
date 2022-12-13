@@ -1,22 +1,26 @@
-import React from 'react';
-
 import { Filter } from '../Filter';
 
-export const Footer: React.FC = () => (
+type Props = {
+  status: string,
+  setStatus: (status: string) => void,
+};
 
-  <footer className="todoapp__footer" data-cy="Footer">
-    <span className="todo-count" data-cy="todosCounter">
-      4 items left
-    </span>
+export const Footer: React.FC<Props> = ({ status, setStatus }) => {
+  return (
+    <footer className="todoapp__footer" data-cy="Footer">
+      <span className="todo-count" data-cy="todosCounter">
+        4 items left
+      </span>
 
-    <Filter />
+      <Filter status={status} setStatus={setStatus} />
 
-    <button
-      data-cy="ClearCompletedButton"
-      type="button"
-      className="todoapp__clear-completed"
-    >
-      Clear completed
-    </button>
-  </footer>
-);
+      <button
+        data-cy="ClearCompletedButton"
+        type="button"
+        className="todoapp__clear-completed"
+      >
+        Clear completed
+      </button>
+    </footer>
+  );
+};
