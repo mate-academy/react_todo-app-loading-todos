@@ -15,16 +15,23 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('All');
+  const [error, setError] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const getTodosFromServer = async () => {
-    const todosFromServer = user && await getTodos(user.id);
+    if (user) {
+      try {
+        const todosFromServer = await getTodos(user.id);
 
-    if (todosFromServer) {
-      setTodos(todosFromServer);
+        setTodos(todosFromServer);
+      } catch (err) {
+        setHasError(true);
+        setError('error: failed to load todos list');
+      }
     }
   };
 
@@ -51,7 +58,12 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {todos.length > 0 && <ErrorNotification />}
+      <ErrorNotification
+        error={error}
+        setError={setError}
+        hasError={hasError}
+        setHasError={setHasError}
+      />
     </div>
   );
 };
