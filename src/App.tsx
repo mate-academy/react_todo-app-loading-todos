@@ -112,7 +112,7 @@ export const App: React.FC = () => {
 
                 <TodoFilter
                   selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
+                  onOptionChanged={setSelectedOption}
                 />
 
                 <button
@@ -130,7 +130,7 @@ export const App: React.FC = () => {
         <ErrorNotification
           error={error}
           isHidden={isErrorHidden}
-          setIsHidden={setIsErrorHidden}
+          onErrorHidden={setIsErrorHidden}
         />
       </div>
     </AuthProvider>

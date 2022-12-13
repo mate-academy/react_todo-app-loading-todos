@@ -3,12 +3,12 @@ import { FilterOptions } from '../../types/FilterOptions';
 
 interface Props {
   selectedOption: FilterOptions,
-  setSelectedOption: (option: FilterOptions) => void,
+  onOptionChanged: (option: FilterOptions) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
   selectedOption,
-  setSelectedOption,
+  onOptionChanged,
 }) => {
   return (
     <nav className="filter" data-cy="Filter">
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           { selected: selectedOption === FilterOptions.ALL },
         )}
         onClick={() => {
-          setSelectedOption(FilterOptions.ALL);
+          onOptionChanged(FilterOptions.ALL);
         }}
       >
         All
@@ -34,7 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
           { selected: selectedOption === FilterOptions.ACTIVE },
         )}
         onClick={() => {
-          setSelectedOption(FilterOptions.ACTIVE);
+          onOptionChanged(FilterOptions.ACTIVE);
         }}
       >
         Active
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           { selected: selectedOption === FilterOptions.COMPLETED },
         )}
         onClick={() => {
-          setSelectedOption(FilterOptions.COMPLETED);
+          onOptionChanged(FilterOptions.COMPLETED);
         }}
       >
         Completed

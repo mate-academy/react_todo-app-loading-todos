@@ -5,24 +5,24 @@ import React, { useEffect, useRef } from 'react';
 interface Props {
   error: string,
   isHidden: boolean,
-  setIsHidden: (isError: boolean) => void,
+  onErrorHidden: (isError: boolean) => void,
 }
 
 export const ErrorNotification: React.FC<Props> = ({
   error,
   isHidden,
-  setIsHidden: setError,
+  onErrorHidden,
 }) => {
   const timerRef = useRef<NodeJS.Timer>();
 
   const handleCrossButtonClick = () => {
-    setError(true);
+    onErrorHidden(true);
   };
 
   useEffect(() => {
     if (!isHidden) {
       timerRef.current = setTimeout(() => {
-        setError(true);
+        onErrorHidden(true);
       }, 3000);
     } else {
       clearTimeout(timerRef.current);
