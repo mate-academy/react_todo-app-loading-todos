@@ -8,16 +8,15 @@ import React, {
 import classNames from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos } from './api/todos';
-import { Notification } from './components/Notifications';
+import { ErrorNotification } from './components/ErrorNotifications';
 import { NewTodo } from './components/NewTodo';
-import { FilterTodo } from './components/Filter';
+import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Filter } from './types/Filter';
 import { Notifications } from './types/Notifications';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -35,16 +34,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     async function fetchTodos() {
       if (user) {
-        try {
-          const receivedTodos = await getTodos(user.id);
+        const receivedTodos = await getTodos(user.id);
 
-          setTodos(receivedTodos);
-        } catch (error) {
-          setNotification('Unable to add a todo');
-          setTimeout(() => {
-            setNotification('');
-          }, 3000);
-        }
+        setTodos(receivedTodos);
       }
     }
 
@@ -90,7 +82,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList todos={filteredTodos} />
-            <FilterTodo
+            <Footer
               todos={todos}
               filter={filter}
               setFilter={setFilter}
@@ -99,7 +91,7 @@ export const App: React.FC = () => {
         )}
       </div>
       {notification && (
-        <Notification
+        <ErrorNotification
           notification={notification}
           resetNotification={() => setNotification('')}
         />

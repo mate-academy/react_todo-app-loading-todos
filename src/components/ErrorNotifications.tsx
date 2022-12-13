@@ -7,7 +7,7 @@ interface Props {
   resetNotification: () => void,
 }
 
-export const Notification: React.FC<Props> = ({
+export const ErrorNotification: React.FC<Props> = ({
   notification,
   resetNotification,
 }) => (
