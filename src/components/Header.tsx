@@ -1,8 +1,14 @@
-type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>;
-};
+import { useEffect, useRef } from 'react';
 
-export const Header: React.FC<Props> = ({ newTodoField }) => {
+export const Header: React.FC = () => {
+  const newTodoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button

@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -17,7 +16,6 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState<boolean>(false);
   const [currError, setCurrError] = useState<string>('');
@@ -27,7 +25,7 @@ export const App: React.FC = () => {
   const getTodosFromServer = useCallback(async () => {
     try {
       setIsLoading(true);
-      const todosFromServer = await getTodos(user?.id || 0);
+      const todosFromServer = await getTodos(user?.id || 1);
 
       setTodos(todosFromServer);
     } catch (_) {
@@ -42,12 +40,6 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
-
   const activeTodos = todos.filter(todo => !todo.completed);
 
   return (
@@ -55,7 +47,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header newTodoField={newTodoField} />
+        <Header />
         {!isLoading
           ? (
             <>

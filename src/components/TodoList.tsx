@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './Todo';
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos, status }) => {
-  const getVisibleTodos = useCallback((): Todo[] => {
+  const getVisibleTodos = useMemo((): Todo[] => {
     return todos.filter(todo => {
       switch (status) {
         case Status.Active:
@@ -25,10 +25,7 @@ export const TodoList: React.FC<Props> = ({ todos, status }) => {
     });
   }, [todos, status]);
 
-  const visibleTodos = useMemo(
-    getVisibleTodos,
-    [todos, status],
-  );
+  const visibleTodos = getVisibleTodos;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
