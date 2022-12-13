@@ -4,17 +4,17 @@ import { TodoFilter } from './TodoFilter';
 
 interface Props {
   isSelected: Filter,
-  onTodoFilter: (filterBy: Filter) => void,
+  onFilterTodos: (filterBy: Filter) => void,
 }
 
-export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
+export const Navigation: React.FC<Props> = ({ isSelected, onFilterTodos }) => (
   <nav className="filter" data-cy="Filter">
     <TodoFilter
       dataAttr="FilterLinkAll"
       hrefAttr="#/"
       name={Filter.ALL}
       isSelected={isSelected}
-      onTodoFilter={onTodoFilter}
+      onFilterTodos={onFilterTodos}
     />
 
     <TodoFilter
@@ -22,7 +22,7 @@ export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
       hrefAttr="#/active"
       name={Filter.ACTIVE}
       isSelected={isSelected}
-      onTodoFilter={onTodoFilter}
+      onFilterTodos={onFilterTodos}
     />
 
     <TodoFilter
@@ -30,7 +30,7 @@ export const Navigation: React.FC<Props> = ({ isSelected, onTodoFilter }) => (
       hrefAttr="#/completed"
       name={Filter.COMPLETED}
       isSelected={isSelected}
-      onTodoFilter={onTodoFilter}
+      onFilterTodos={onFilterTodos}
     />
   </nav>
 );

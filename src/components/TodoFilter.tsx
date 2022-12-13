@@ -7,7 +7,7 @@ interface Props {
   hrefAttr: string,
   name: Filter,
   isSelected: Filter,
-  onTodoFilter: (filterBy: Filter) => void,
+  onFilterTodos: (filterBy: Filter) => void,
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   hrefAttr,
   name,
   isSelected,
-  onTodoFilter,
+  onFilterTodos,
 }) => {
   return (
     <a
@@ -24,7 +24,7 @@ export const TodoFilter: React.FC<Props> = ({
       className={classNames('filter__link', {
         selected: isSelected === name,
       })}
-      onClick={() => onTodoFilter(name as Filter)}
+      onClick={() => onFilterTodos(name as Filter)}
     >
       {name}
     </a>
