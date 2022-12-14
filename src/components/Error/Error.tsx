@@ -18,6 +18,7 @@ export const Error: React.FC<Props> = ({ error, onErrorChange }) => {
           hidden: error === ErrorNotification.None,
         })}
     >
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
         type="button"

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 type Props = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -12,6 +12,13 @@ export const NewTodo: React.FC<Props> = ({
   onTitleChange,
 }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // focus the element with `ref={newTodoField}`
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
 
   return (
     <form onSubmit={onSubmit}>

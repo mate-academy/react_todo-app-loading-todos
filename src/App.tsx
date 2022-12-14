@@ -2,7 +2,6 @@
 import React, {
   useContext,
   useEffect,
-  useRef,
   useState,
   useMemo,
   useCallback,
@@ -24,18 +23,10 @@ import { Error } from './components/Error/Error';
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(FilterType.All);
   const [title, setTitle] = useState('');
   const [error, setError] = useState(ErrorNotification.None);
-
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-  }, []);
 
   const loadingTodos = async () => {
     if (!user) {
