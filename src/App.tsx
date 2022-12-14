@@ -8,7 +8,6 @@ import React, {
   useState,
 } from 'react';
 import { addTodo, getTodos } from './api/todos';
-// import { AddTodoForm } from './components/AddTodoForm/AddTodoForm';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Errors } from './components/Errors/Errors';
 import { Filter } from './components/Filter/Filter';
