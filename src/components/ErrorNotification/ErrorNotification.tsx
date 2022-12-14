@@ -18,9 +18,10 @@ export const ErrorNotification: React.FC<Props> = memo(({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        aria-label="Hide error notification"
         onClick={() => onErrorTypeChange('')}
       />
-      {false && (`Unable to ${errorType} a todo`)}
+      {`Unable to ${errorType} a todo`}
     </div>
   );
 });

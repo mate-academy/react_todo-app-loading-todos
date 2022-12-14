@@ -51,14 +51,12 @@ export const App: React.FC = () => {
       return;
     }
 
-    setIsError('User is not exist');
-
     try {
       const todosFromServer = await getTodos(user.id);
 
       setTodos(todosFromServer);
     } catch {
-      setIsError('Cant load todos');
+      setErrorType('add');
     }
   }, [user]);
 
@@ -86,7 +84,7 @@ export const App: React.FC = () => {
 
         setNewTitle('');
       } else {
-        setErrorType('submit');
+        setErrorType('add');
       }
     }, [title, user],
   );
@@ -138,10 +136,12 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification
-        errorType={errorType}
-        onErrorTypeChange={setErrorType}
-      />
+      {errorType && (
+        <ErrorNotification
+          errorType={errorType}
+          onErrorTypeChange={setErrorType}
+        />
+      )}
 
       {/* <div
         data-cy="ErrorNotification"
