@@ -17,7 +17,7 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
           })}
         onClick={() => onSetFilter('All')}
       >
-        {`${filter}`}
+        All
       </a>
       <a
         data-cy="FilterLinkAll"
@@ -28,7 +28,7 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
           })}
         onClick={() => onSetFilter('Active')}
       >
-        {`${filter}`}
+        Active
       </a>
       <a
         data-cy="FilterLinkAll"
@@ -39,7 +39,7 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
           })}
         onClick={() => onSetFilter('Complited')}
       >
-        {`${filter}`}
+        Complited
       </a>
     </nav>
   );

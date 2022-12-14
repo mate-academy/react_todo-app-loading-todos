@@ -47,7 +47,7 @@ export const App: React.FC = () => {
     loadTodos();
   }, [user]);
 
-  const maxId = todos.reduce(
+  let maxId = todos.reduce(
     (prevTodoId, todo) => Math.max(prevTodoId, todo.id), 0,
   );
 
@@ -74,6 +74,8 @@ export const App: React.FC = () => {
         id: maxId + 1,
         completed: false,
       });
+
+      maxId += 1;
 
       loadTodos();
     } else {
