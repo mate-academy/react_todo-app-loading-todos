@@ -1,15 +1,17 @@
 import { Filter } from '../Filter';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   status: string,
   setStatus: (status: string) => void,
+  todos: Todo[],
 };
 
-export const Footer: React.FC<Props> = ({ status, setStatus }) => {
+export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
       <Filter status={status} setStatus={setStatus} />

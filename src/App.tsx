@@ -53,7 +53,11 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList status={status} todos={todos} />
-            <Footer status={status} setStatus={setStatus} />
+            <Footer
+              status={status}
+              setStatus={setStatus}
+              todos={todos}
+            />
           </>
         )}
       </div>
