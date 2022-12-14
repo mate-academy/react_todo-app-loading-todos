@@ -7,14 +7,12 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const {
-    id,
     title,
     completed,
   } = todo;
 
   return (
     <div
-      key={id}
       data-cy="Todo"
       className={classNames('todo', {
         completed,
