@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 
 type Props = {
-  filter: string,
-  onSetFilter: (filter: string) => void,
+  filterParam: string,
+  onSetFilter: (filterParam: string) => void,
 };
 
-export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
+export const Filter: React.FC<Props> = ({ filterParam, onSetFilter }) => {
   return (
     <nav className="filter" data-cy="Filter">
       <a
@@ -13,7 +13,7 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
         href="#/"
         className={classNames('filter__link',
           {
-            selected: filter === 'All',
+            selected: filterParam === 'All',
           })}
         onClick={() => onSetFilter('All')}
       >
@@ -24,7 +24,7 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
         href="#/"
         className={classNames('filter__link',
           {
-            selected: filter === 'Active',
+            selected: filterParam === 'Active',
           })}
         onClick={() => onSetFilter('Active')}
       >
@@ -35,11 +35,11 @@ export const Filter: React.FC<Props> = ({ filter, onSetFilter }) => {
         href="#/"
         className={classNames('filter__link',
           {
-            selected: filter === 'Complited',
+            selected: filterParam === 'Completed',
           })}
-        onClick={() => onSetFilter('Complited')}
+        onClick={() => onSetFilter('Completed')}
       >
-        Complited
+        Completed
       </a>
     </nav>
   );

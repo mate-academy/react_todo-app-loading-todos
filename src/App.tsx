@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filterParam, setFilter] = useState('All');
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const complitedTodos = useMemo(() => (
@@ -47,43 +47,45 @@ export const App: React.FC = () => {
     loadTodos();
   }, [user]);
 
-  let maxId = todos.reduce(
-    (prevTodoId, todo) => Math.max(prevTodoId, todo.id), 0,
+  // let maxId = todos.reduce(
+  //   (prevTodoId, todo) => Math.max(prevTodoId, todo.id), 0,
+  // );
+
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      if (user && title.trim()) {
+        await addTodo({
+          userId: user.id,
+          title,
+          // id: maxId + 1,
+          completed: false,
+        });
+
+        // maxId += 1;
+
+        await loadTodos();
+      } else {
+        setError('add');
+      }
+
+      setTitle('');
+    }, [user, title],
   );
 
-  const filteredTodos = useMemo(() => todos.filter(todo => {
-    switch (filter) {
+  const filteredTodos = todos.filter(todo => {
+    switch (filterParam) {
       case 'Active':
         return !todo.completed;
 
-      case 'Comleted':
+      case 'Completed':
         return todo.completed;
 
       case 'All':
       default:
         return todo;
     }
-  }), [todos, filter]);
-
-  const handleSubmit = useCallback((event: React.FormEvent) => {
-    event.preventDefault();
-    if (user && title.trim()) {
-      addTodo({
-        userId: user.id,
-        title,
-        id: maxId + 1,
-        completed: false,
-      });
-
-      maxId += 1;
-
-      loadTodos();
-    } else {
-      setError('add');
-    }
-
-    setTitle('');
-  }, [user, title]);
+  });
 
   return (
     <div className="todoapp">
@@ -121,11 +123,11 @@ export const App: React.FC = () => {
             </span>
 
             <Filter
-              filter={filter}
-              onSetFilter={() => setFilter}
+              filterParam={filterParam}
+              onSetFilter={setFilter}
             />
 
-            {complitedTodos && (
+            {complitedTodos.length > 0 && (
               <button
                 data-cy="ClearCompletedButton"
                 type="button"
