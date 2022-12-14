@@ -26,9 +26,9 @@ export const ErrorNotification: React.FC<Props> = ({
 
   useEffect(() => {
     if (hasError) {
-      timerRef.current = setTimeout(resetError, 3000)
+      timerRef.current = setTimeout(resetError, 3000);
     } else {
-      clearTimeout(timerRef.current)
+      clearTimeout(timerRef.current);
     }
   }, [hasError]);
 
