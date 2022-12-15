@@ -105,24 +105,26 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="todosCounter">
-            {`${activeTodos.length} items left`}
-          </span>
+        {!todos.length || (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="todosCounter">
+              {`${activeTodos.length} items left`}
+            </span>
 
-          <FilterTodos
-            filter={filter}
-            onFilterChange={setFilter}
-          />
+            <FilterTodos
+              filter={filter}
+              onFilterChange={setFilter}
+            />
 
-          <button
-            data-cy="ClearCompletedButton"
-            type="button"
-            className="todoapp__clear-completed"
-          >
-            Clear completed
-          </button>
-        </footer>
+            <button
+              data-cy="ClearCompletedButton"
+              type="button"
+              className="todoapp__clear-completed"
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       <Error
