@@ -7,6 +7,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
+import classNames from 'classnames';
+
 import { addTodo, getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
@@ -99,7 +102,12 @@ export const App: React.FC = () => {
             <button
               data-cy="ToggleAllButton"
               type="button"
-              className="todoapp__toggle-all active"
+              className={classNames(
+                'todoapp__toggle-all',
+                {
+                  active: todos.every(todo => todo.completed),
+                },
+              )}
             />
           )}
 
@@ -142,23 +150,6 @@ export const App: React.FC = () => {
           onErrorTypeChange={setErrorType}
         />
       )}
-
-      {/* <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div> */}
     </div>
   );
 };
