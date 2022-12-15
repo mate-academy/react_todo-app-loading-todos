@@ -16,7 +16,7 @@ or find an existing one in the API.
 
 - tests are NOT implemented yet.
 - load the user todos when the `App` is loaded;
-  - use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
+- use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
 - hide everything except the `NewTodoField` if there are no todos yet;
 
 ## Error messages
