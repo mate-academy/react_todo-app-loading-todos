@@ -8,7 +8,7 @@ import { Erorr } from './components/Erorr/Erorr';
 import { FilterTodoList } from './components/FilterTodoList/FilterTodoList';
 import { TodoList } from './components/TodoList/TodoList';
 import { NewTodo } from './components/NewTodo/NewTodo';
-import { TypeErorr } from './types/ErorrType';
+import { TypeError } from './types/ErorrType';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { FilterType } from './types/FilterType';
@@ -18,8 +18,8 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const [hasErorr, setHasErorr] = useState(false);
-  const [erorrType, setErorrType] = useState<TypeErorr>(TypeErorr.NONE);
+  const [hasError, setHasError] = useState(false);
+  const [errorType, setErrorType] = useState<TypeError>(TypeError.NONE);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -31,14 +31,14 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch {
-        setHasErorr(true);
+        setHasError(true);
       }
     }
   }, []);
 
-  const removeErorrHandler = () => {
-    setHasErorr(false);
-    setErorrType(TypeErorr.NONE);
+  const removeErrorHandler = () => {
+    setHasError(false);
+    setErrorType(TypeError.NONE);
   };
 
   useEffect(() => {
@@ -92,11 +92,11 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {hasErorr
+      {hasError
         && (
           <Erorr
-            erorrType={erorrType}
-            onRemoveErorrHandler={removeErorrHandler}
+            errorType={errorType}
+            onRemoveErrorHandler={removeErrorHandler}
           />
         )}
     </div>

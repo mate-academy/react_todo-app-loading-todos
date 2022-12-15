@@ -1,18 +1,18 @@
 import React from 'react';
-import { TypeErorr } from '../../types/ErorrType';
+import { TypeError } from '../../types/ErorrType';
 
 interface Props {
-  erorrType: string | null,
-  onRemoveErorrHandler: () => void,
+  errorType: string | null,
+  onRemoveErrorHandler: () => void,
 }
 
-const erorrHandler = (erorrType: string | null) => {
-  switch (erorrType) {
-    case TypeErorr.ADD:
+const erorrHandler = (errorType: string | null) => {
+  switch (errorType) {
+    case TypeError.ADD:
       return 'Unable to add a todo';
-    case TypeErorr.DELETE:
+    case TypeError.DELETE:
       return 'Unable to delete a todo';
-    case TypeErorr.UPDATE:
+    case TypeError.UPDATE:
       return 'Unable to update a todo';
     default:
       return 'Erorr';
@@ -20,7 +20,7 @@ const erorrHandler = (erorrType: string | null) => {
 };
 
 export const Erorr: React.FC<Props> = ({
-  erorrType, onRemoveErorrHandler,
+  errorType, onRemoveErrorHandler,
 }) => {
   return (
     <div
@@ -32,10 +32,10 @@ export const Erorr: React.FC<Props> = ({
         type="button"
         aria-label="Delete"
         className="delete"
-        onClick={() => onRemoveErorrHandler}
+        onClick={() => onRemoveErrorHandler}
       />
 
-      {erorrHandler(erorrType)}
+      {erorrHandler(errorType)}
     </div>
   );
 };

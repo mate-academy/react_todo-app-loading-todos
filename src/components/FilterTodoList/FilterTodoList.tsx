@@ -9,7 +9,9 @@ interface Props {
 }
 
 export const FilterTodoList: React.FC<Props> = ({
-  todosLeft, setFilterType, filterType,
+  todosLeft,
+  setFilterType,
+  filterType,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">

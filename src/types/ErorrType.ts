@@ -1,4 +1,4 @@
-export enum TypeErorr {
+export enum TypeError {
   NONE = 'none',
   ADD = 'add',
   DELETE = 'delete',
