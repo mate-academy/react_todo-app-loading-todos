@@ -3,21 +3,15 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo,
-  onTodoDelete: (value: number) => void,
 }
 
-export const TodoItem: React.FC<Props> = (
+export const Loader: React.FC<Props> = (
   {
     todo,
-    onTodoDelete,
   },
 ) => {
   return (
-    <div
-      data-cy="Todo"
-      className="todo"
-      key={todo.id}
-    >
+    <div data-cy="TodoItem" className="todo">
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -29,17 +23,15 @@ export const TodoItem: React.FC<Props> = (
       <span data-cy="TodoTitle" className="todo__title">
         {todo.title}
       </span>
-
       <button
         type="button"
         className="todo__remove"
         data-cy="TodoDeleteButton"
-        onClick={() => onTodoDelete(todo.id)}
       >
         ×
       </button>
 
-      <div data-cy="TodoLoader" className="modal overlay">
+      <div data-cy="TodoLoader" className="modal overlay is-active">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

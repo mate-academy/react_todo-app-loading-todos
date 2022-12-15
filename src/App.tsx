@@ -6,16 +6,16 @@ import React, {
   useState,
 } from 'react';
 
+import { getTodos, removeTodo } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { getTodos } from './api/todos';
 
 import { ErrorMessage } from './types/ErrorMessage';
+import { Status } from './types/Status';
 import { Todo } from './types/Todo';
 
 import { AddField } from './components/AddFiled/AddField';
 import { Filter } from './components/Filter/Filter';
 import { Errors } from './components/Errors/Errors';
-import { Status } from './types/Status';
 import { Todos } from './components/Todos/Todos';
 
 export const App: React.FC = () => {
@@ -23,9 +23,11 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<ErrorMessage>(ErrorMessage.None);
   const [status, setStatus] = useState<Status>(Status.All);
   const [isTodosAvailable, setIsTodosAvailable] = useState(false);
+  const [error, setError] = useState<ErrorMessage>(ErrorMessage.None);
+  const [isAdding, setIsAdding] = useState(false);
+  const [title, setTitle] = useState('');
 
   const loadTodos = useCallback(
     async () => {
@@ -34,7 +36,6 @@ export const App: React.FC = () => {
       }
 
       try {
-        setError(ErrorMessage.None);
         const todosFromServer = await getTodos(user.id);
 
         setTodos(todosFromServer);
@@ -43,12 +44,27 @@ export const App: React.FC = () => {
         setError(ErrorMessage.NoTodos);
       }
     },
-    [],
+    [user],
   );
 
   useEffect(() => {
     loadTodos();
   }, [user]);
+
+  const deleteTodoById = useCallback(
+    async (todoId: number) => {
+      try {
+        setIsAdding(true);
+        await removeTodo(todoId);
+
+        await loadTodos();
+        setIsAdding(false);
+      } catch {
+        setError(ErrorMessage.Delete);
+      }
+    },
+    [],
+  );
 
   const visibleTodos = useMemo(() => (
     todos.filter(todo => {
@@ -71,11 +87,24 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <AddField isTodosAvailable={isTodosAvailable} />
+        <AddField
+          title={title}
+          onTitleChange={setTitle}
+          isTodosAvailable={isTodosAvailable}
+          onErrorsChange={setError}
+          isAdding={isAdding}
+          onIsAddingChange={setIsAdding}
+          loadTodos={loadTodos}
+        />
 
         {isTodosAvailable && (
           <>
-            <Todos todos={visibleTodos} />
+            <Todos
+              title={title}
+              todos={visibleTodos}
+              onTodoDelete={deleteTodoById}
+              isLoading={isAdding}
+            />
             <Filter
               todosQuantity={visibleTodos.length}
               status={status}
@@ -84,7 +113,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {error !== ErrorMessage.None && (
+        {error && (
           <Errors
             onErrorsChange={setError}
             visibleError={error}
