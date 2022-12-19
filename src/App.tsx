@@ -61,26 +61,36 @@ export const App: React.FC = () => {
 
         <div className="todoapp__content">
           <header className="todoapp__header">
-            <button
-              data-cy="ToggleAllButton"
-              type="button"
-              className="todoapp__toggle-all active"
-            />
+            {todos.length
+              ? (
+                <button
+                  data-cy="ToggleAllButton"
+                  type="button"
+                  className="todoapp__toggle-all active"
+                />
+              ) : (<></>)}
+
             <TodoForm />
           </header>
-          <TodoList todos={visibleTodos} />
 
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="todosCounter">
-              {`${todos.filter(todo => !todo.completed).length} items left`}
-            </span>
+          {todos.length ? (
+            <>
+              <TodoList todos={visibleTodos} />
 
-            <TodoFilter
-              status={status}
-              onStatusChange={setStatus}
-            />
+              <footer className="todoapp__footer" data-cy="Footer">
+                <span className="todo-count" data-cy="todosCounter">
+                  {`${todos.filter(todo => !todo.completed).length} items left`}
+                </span>
 
-          </footer>
+                <TodoFilter
+                  status={status}
+                  onStatusChange={setStatus}
+                />
+
+              </footer>
+            </>
+          ) : (<></>)}
+
         </div>
 
         <ErrorNotifications error={error} onErrorMessageChange={setError} />
