@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { getTodos, patchTodos, deleteTodo } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import { ErrorNotification } from './components/Error/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
@@ -18,18 +19,20 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  // const [loadedTodos, setLoadedTodos] = useState<Todo[] | []>([]);
+  const [loadingTodosId, setLoadingTodosId] = useState<number[]>([]);
   const [currentFilter, setCurrentFilter] = useState('all');
-
-  // const [updated, setUpdated] = useState(false);
-  // const [filteredTodos, setFilteredTodos] = useState<Todo[] | []>([]);
+  const [error, setError] = useState('');
 
   const loadTodos = async () => {
-    const TodosFromServer = await getTodos(user?.id || 0);
+    try {
+      const TodosFromServer = await getTodos(user?.id || 0);
 
-    setTodos(TodosFromServer);
-    // setLoadedTodos(TodosFromServer);
-    // setFilteredTodos(TodosFromServer);
+      setTodos(TodosFromServer);
+    } catch {
+      setError('Error to load user todos');
+    } finally {
+      setError('');
+    }
   };
 
   useEffect(() => {
@@ -46,7 +49,15 @@ export const App: React.FC = () => {
   }, []);
 
   const addTodo = async (newTodo: Todo) => {
-    setTodos(currentTodos => [...currentTodos, newTodo]);
+    try {
+      setLoadingTodosId((previous) => [...previous, newTodo.id]);
+      setTodos(currentTodos => [...currentTodos, newTodo]);
+    } catch {
+      setError('Can`t add todo');
+    } finally {
+      setError('');
+      setLoadingTodosId([]);
+    }
   };
 
   const updateTodo = async (
@@ -55,29 +66,44 @@ export const App: React.FC = () => {
     updateAll = true,
   ) => {
     if (JSON.stringify(updatedTodo) !== JSON.stringify(previousTodo)) {
-      const UpdatTodoFromServer = await patchTodos(updatedTodo, updatedTodo.id);
-      const updateTodos = todos.map((todo) => (todo.id === updatedTodo.id
-        ? UpdatTodoFromServer
-        : todo));
+      try {
+        setLoadingTodosId((previous) => [...previous, updatedTodo.id]);
+        const UpdatTodoFromServer
+          = await patchTodos(updatedTodo, updatedTodo.id);
+        const updateTodos = todos.map((todo) => (todo.id === updatedTodo.id
+          ? UpdatTodoFromServer
+          : todo));
 
-      if (updateAll) {
-        setTodos(updateTodos);
+        if (updateAll) {
+          setTodos(updateTodos);
+        }
+      } catch {
+        setError('Cannot update todos');
+      } finally {
+        setError('');
+        setLoadingTodosId([]);
       }
     }
   };
 
   const removeTodo = async (todoId: number, updateAll = true) => {
     // const deletResult = await deleteTodo(todoId);
-    await deleteTodo(todoId);
+    try {
+      await deleteTodo(todoId);
 
-    if (updateAll) {
-      const todosAfterRemove = todos.filter(todo => todo.id !== todoId);
+      if (updateAll) {
+        const todosAfterRemove = todos.filter(todo => todo.id !== todoId);
 
-      setTodos(todosAfterRemove);
+        setTodos(todosAfterRemove);
+      }
+    } catch {
+      setError('Can`t dealete todo');
+    } finally {
+      setError('');
     }
   };
 
-  const seleAll = async () => {
+  const selectAll = async () => {
     const unselectTodos = todos.filter(todo => todo.completed === false);
 
     const promises: any[] = [];
@@ -141,23 +167,29 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader
           addTodo={addTodo}
-          seleAll={seleAll}
+          selectAll={selectAll}
+          setError={setError}
         />
         <TodoList
           todos={memorizeFilter}
           updatedTodo={updateTodo}
           removeTodo={removeTodo}
+          loadingTodosId={loadingTodosId}
         />
         <Footer
           setCurrentFilter={setCurrentFilter}
           itemsLeft={countLeftItems()}
           currentFilter={currentFilter}
           clearCompleted={clearCompleted}
-          // todos={todos}
-          // setTodos={setTodos}
-          // itemsLeft={countLeftItems()}
-          // filterTodos={filterTodos}
         />
+        {error
+        && (
+          <ErrorNotification
+            errorMessage={error}
+            updateError={setError}
+          />
+        )}
+
       </div>
     </div>
   );
