@@ -1,40 +1,24 @@
-import React, { useContext, useRef, useState } from 'react';
-import { postTodos } from '../../api/todos';
-import { Todo } from '../../types/Todo';
-import { AuthContext } from '../Auth/AuthContext';
+import React, { useRef } from 'react';
+// import { postTodos } from '../../api/todos';
+// import { Todo } from '../../types/Todo';
+// import { AuthContext } from '../Auth/AuthContext';
 
 interface Props {
-  addTodo: (newTodo: Todo) => void,
   selectAll: () => void,
-  setError: (NewError: string) => void,
+  todoTitle: string,
+  setTodoTitle: (title: string) => void,
+  handleSubmit: (event: React.ChangeEvent<HTMLFormElement>) => void
 }
 
 export const TodoHeader: React.FC<Props> = (props) => {
-  const { addTodo, selectAll, setError } = props;
-  const user = useContext(AuthContext);
+  const {
+    selectAll, todoTitle, setTodoTitle, handleSubmit,
+  } = props;
+  // const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todoTitle, setTodoTitle] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(event.target.value);
-  };
-
-  const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!todoTitle.trim()) {
-      setError('Can`t add todo with empty title');
-    } else {
-      const newTodo = await postTodos({
-        userId: user?.id || 0,
-        title: todoTitle.trim(),
-        completed: false,
-      });
-
-      addTodo(newTodo);
-    }
-
-    setTodoTitle('');
   };
 
   return (

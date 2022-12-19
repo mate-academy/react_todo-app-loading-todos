@@ -6,7 +6,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { getTodos, patchTodos, deleteTodo } from './api/todos';
+import {
+  getTodos, patchTodos, deleteTodo, postTodos,
+} from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/Error/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
@@ -22,6 +24,8 @@ export const App: React.FC = () => {
   const [loadingTodosId, setLoadingTodosId] = useState<number[]>([]);
   const [currentFilter, setCurrentFilter] = useState('all');
   const [error, setError] = useState('');
+  const [todoTitle, setTodoTitle] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
   const loadTodos = async () => {
     try {
@@ -50,14 +54,35 @@ export const App: React.FC = () => {
 
   const addTodo = async (newTodo: Todo) => {
     try {
-      setLoadingTodosId((previous) => [...previous, newTodo.id]);
+      setIsAdding(true);
       setTodos(currentTodos => [...currentTodos, newTodo]);
     } catch {
       setError('Can`t add todo');
     } finally {
       setError('');
-      setLoadingTodosId([]);
+      setIsAdding(false);
     }
+  };
+
+  const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setIsAdding(true);
+
+    if (!todoTitle.trim()) {
+      setError('Can`t add todo with empty title');
+    } else {
+      const newTodo = await postTodos({
+        userId: user?.id || 0,
+        title: todoTitle.trim(),
+        completed: false,
+      });
+
+      setIsAdding(false);
+      addTodo(newTodo);
+    }
+
+    setTodoTitle('');
   };
 
   const updateTodo = async (
@@ -89,6 +114,7 @@ export const App: React.FC = () => {
   const removeTodo = async (todoId: number, updateAll = true) => {
     // const deletResult = await deleteTodo(todoId);
     try {
+      setLoadingTodosId(previous => [...previous, todoId]);
       await deleteTodo(todoId);
 
       if (updateAll) {
@@ -99,6 +125,7 @@ export const App: React.FC = () => {
     } catch {
       setError('Can`t dealete todo');
     } finally {
+      setLoadingTodosId([]);
       setError('');
     }
   };
@@ -166,15 +193,18 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoHeader
-          addTodo={addTodo}
           selectAll={selectAll}
-          setError={setError}
+          todoTitle={todoTitle}
+          setTodoTitle={setTodoTitle}
+          handleSubmit={handleSubmit}
         />
         <TodoList
           todos={memorizeFilter}
           updatedTodo={updateTodo}
           removeTodo={removeTodo}
           loadingTodosId={loadingTodosId}
+          todoTitle={todoTitle}
+          isAdding={isAdding}
         />
         <Footer
           setCurrentFilter={setCurrentFilter}
