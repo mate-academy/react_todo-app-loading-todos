@@ -49,7 +49,7 @@ export const App: React.FC = () => {
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (title.trim() !== '' && user) {
+      if (title.trim() && user) {
         await addTodo({
           userId: user.id,
           title: title.trim(),
@@ -87,18 +87,20 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length && (
-            <button
-              data-cy="ToggleAllButton"
-              type="button"
-              className={classNames(
-                'todoapp__toggle-all',
-                {
-                  active: activeTodos.length === 0,
-                },
-              )}
-            />
-          )}
+
+          {todos.length
+            ? (
+              <button
+                data-cy="ToggleAllButton"
+                type="button"
+                className={classNames(
+                  'todoapp__toggle-all',
+                  {
+                    active: !activeTodos.length,
+                  },
+                )}
+              />
+            ) : (<></>)}
 
           <NewTodoField
             title={title}
@@ -107,35 +109,36 @@ export const App: React.FC = () => {
           />
         </header>
 
-        {todos.length && (
-          <>
-            <TodoList todos={visibleTodos} />
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="todosCounter">
-                4 items left
-              </span>
+        {todos.length
+          ? (
+            <>
+              <TodoList todos={visibleTodos} />
+              <footer className="todoapp__footer" data-cy="Footer">
+                <span className="todo-count" data-cy="todosCounter">
+                  {`${activeTodos.length} items left`}
+                </span>
 
-              <FilterTodos
-                status={status}
-                onStatusChange={setStatus}
-              />
+                <FilterTodos
+                  status={status}
+                  onStatusChange={setStatus}
+                />
 
-              <button
-                data-cy="ClearCompletedButton"
-                type="button"
-                className="todoapp__clear-completed"
-                style={activeTodos.length === todos.length
-                  ? {
-                    opacity: 0,
-                    pointerEvents: 'none',
-                  }
-                  : {}}
-              >
-                Clear completed
-              </button>
-            </footer>
-          </>
-        )}
+                <button
+                  data-cy="ClearCompletedButton"
+                  type="button"
+                  className="todoapp__clear-completed"
+                  style={activeTodos.length === todos.length
+                    ? {
+                      opacity: 0,
+                      pointerEvents: 'none',
+                    }
+                    : {}}
+                >
+                  Clear completed
+                </button>
+              </footer>
+            </>
+          ) : (<></>)}
       </div>
 
       <ErrorNotification
