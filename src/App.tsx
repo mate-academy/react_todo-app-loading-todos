@@ -17,7 +17,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
-  const [filterBy, setfilterBy] = useState('All');
   const hasTodos = todos.length > 0;
 
   useEffect(() => {
@@ -44,10 +43,6 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = todos.filter(todo => (
-    filterBy === 'All' ? true : todo.completed
-  ));
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -63,15 +58,12 @@ export const App: React.FC = () => {
           )}
           <NewTodoField
             newTodoField={newTodoField}
-            setTodos={setTodos}
-            todos={todos}
           />
         </header>
-        <TodoList todos={visibleTodos} />
+        <TodoList todos={todos} />
       </div>
       <Footer
-        todos={visibleTodos}
-        setfilterBy={setfilterBy}
+        todos={todos}
       />
       <ErrorNotification
         error={error}

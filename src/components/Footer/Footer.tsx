@@ -1,21 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setfilterBy: React.Dispatch<React.SetStateAction<string>>,
 };
 
-export const Footer: React.FC<Props> = ({ todos, setfilterBy }) => {
+export const Footer: React.FC<Props> = ({ todos }) => {
   if (todos.length === 0) {
     return null;
   }
-
-  const handleClickFilter = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-  ) => setfilterBy(e.currentTarget.textContent || '');
-
-  const handleClickClearFilter = () => setfilterBy('All');
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -30,7 +23,6 @@ export const Footer: React.FC<Props> = ({ todos, setfilterBy }) => {
           data-cy="FilterLinkAll"
           href="#/"
           className="filter__link"
-          onClick={handleClickFilter}
         >
           All
         </a>
@@ -39,7 +31,6 @@ export const Footer: React.FC<Props> = ({ todos, setfilterBy }) => {
           data-cy="FilterLinkActive"
           href="#/active"
           className="filter__link"
-          onClick={handleClickFilter}
         >
           Active
         </a>
@@ -47,7 +38,6 @@ export const Footer: React.FC<Props> = ({ todos, setfilterBy }) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className="filter__link"
-          onClick={handleClickFilter}
         >
           Completed
         </a>
@@ -57,7 +47,6 @@ export const Footer: React.FC<Props> = ({ todos, setfilterBy }) => {
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={handleClickClearFilter}
       >
         Clear completed
       </button>
