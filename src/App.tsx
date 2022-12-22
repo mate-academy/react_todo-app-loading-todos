@@ -16,8 +16,9 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
   const hasTodos = todos.length > 0;
+  const [filterBy, setFilterBy] = useState<string>('All');
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -43,6 +44,17 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const visibleTodos = todos.filter(todo => {
+    switch (filterBy) {
+      case 'Completed':
+        return todo.completed === true;
+      case 'Active':
+        return todo.completed === false;
+      default:
+        return true;
+    }
+  });
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -60,10 +72,15 @@ export const App: React.FC = () => {
             newTodoField={newTodoField}
           />
         </header>
-        <TodoList todos={todos} />
+        <section className="todoapp__main" data-cy="TodoList">
+          <TodoList todos={visibleTodos} />
+        </section>
       </div>
       <Footer
         todos={todos}
+        setFilterBy={setFilterBy}
+        filterBy={filterBy}
+
       />
       <ErrorNotification
         error={error}

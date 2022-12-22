@@ -1,14 +1,27 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
+  filterBy: string,
+  setFilterBy: React.Dispatch<React.SetStateAction<string>>,
 };
 
-export const Footer: React.FC<Props> = ({ todos }) => {
+export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
   if (todos.length === 0) {
     return null;
   }
+
+  const handleClickFilter = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    if (!e.currentTarget.textContent) {
+      return;
+    }
+
+    setFilterBy(e.currentTarget.textContent);
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -22,7 +35,11 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { 'filter__link--selected': filterBy === 'All' },
+          )}
+          onClick={handleClickFilter}
         >
           All
         </a>
@@ -30,14 +47,23 @@ export const Footer: React.FC<Props> = ({ todos }) => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { 'filter__link--selected': filterBy === 'Active' },
+          )}
+          onClick={handleClickFilter}
+
         >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { 'filter__link--selected': filterBy === 'Completed' },
+          )}
+          onClick={handleClickFilter}
         >
           Completed
         </a>
