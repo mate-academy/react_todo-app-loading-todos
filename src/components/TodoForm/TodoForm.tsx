@@ -13,7 +13,6 @@ export const TodoForm: React.FC<Props> = ({
   onQueryChange,
   onErrorChange,
 }) => {
-
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -31,11 +30,12 @@ export const TodoForm: React.FC<Props> = ({
       <button
         data-cy="ToggleAllButton"
         type="button"
+        aria-label="toggle"
         className="todoapp__toggle-all active"
       />
 
       <form
-      onSubmit={handleFormSubmit}
+        onSubmit={handleFormSubmit}
       >
         <input
           data-cy="NewTodoField"
@@ -48,5 +48,5 @@ export const TodoForm: React.FC<Props> = ({
         />
       </form>
     </header>
-  )
-}
+  );
+};

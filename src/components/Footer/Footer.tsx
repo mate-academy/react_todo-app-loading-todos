@@ -6,7 +6,7 @@ import { AuthContext } from '../Auth/AuthContext';
 
 type Props = {
   onTodosChange: (value: Todo[]) => void;
-}
+};
 
 export const Footer: React.FC<Props> = ({ onTodosChange }) => {
   const [clickedValue, setClickedValue] = useState<number>(0);
@@ -55,7 +55,7 @@ export const Footer: React.FC<Props> = ({ onTodosChange }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-      {`${activeTodos.length} items left`}
+        {`${activeTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -64,7 +64,7 @@ export const Footer: React.FC<Props> = ({ onTodosChange }) => {
           href="#/"
           className={classNames(
             'filter__link selected',
-            { selected: clickedValue === 0 },  
+            { selected: clickedValue === 0 },
           )}
           onClick={() => {
             showAllHandler();
@@ -79,7 +79,7 @@ export const Footer: React.FC<Props> = ({ onTodosChange }) => {
           href="#/active"
           className={classNames(
             'filter__link',
-            {selected: clickedValue === 1}
+            { selected: clickedValue === 1 },
           )}
           onClick={() => {
             handleFilter(false);
@@ -93,7 +93,7 @@ export const Footer: React.FC<Props> = ({ onTodosChange }) => {
           href="#/completed"
           className={classNames(
             'filter__link',
-            {selected: clickedValue === 2}
+            { selected: clickedValue === 2 },
           )}
           onClick={() => {
             handleFilter(true);
@@ -112,5 +112,5 @@ export const Footer: React.FC<Props> = ({ onTodosChange }) => {
         Clear completed
       </button>
     </footer>
-  )
-}
+  );
+};

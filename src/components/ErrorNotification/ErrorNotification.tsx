@@ -3,9 +3,12 @@ import React from 'react';
 type Props = {
   query: string,
   onErrorChange: (value: boolean) => void,
-}
+};
 
-export const ErrorNotification: React.FC<Props> = ({ query, onErrorChange }) => {
+export const ErrorNotification: React.FC<Props> = ({
+  query,
+  onErrorChange,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,10 +18,14 @@ export const ErrorNotification: React.FC<Props> = ({ query, onErrorChange }) => 
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={onErrorChange(false)}
+        aria-label="delete"
+        onClick={() => onErrorChange(false)}
       />
 
-      {!query && 'Unable to add a todo'}
+      {!query && (
+        'Title can\'t be empty'
+      )}
+      <br />
     </div>
-  )
-}
+  );
+};
