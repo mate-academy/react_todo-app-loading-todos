@@ -16,7 +16,7 @@ or find an existing one in the API.
 
 - tests are NOT implemented yet.
 - load the user todos when the `App` is loaded;
-  - use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
+- use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
 - hide everything except the `NewTodoField` if there are no todos yet;
 
 ## Error messages
@@ -40,4 +40,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Anastasiia-Smirnova.github.io/react_todo-app-loading-todos/) and add it to the PR description.
