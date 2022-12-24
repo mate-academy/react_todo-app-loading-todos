@@ -33,7 +33,7 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const filteredList = (): Todo[] | undefined => todos.filter((todo) => {
+  const filterList = (): Todo[] | undefined => todos.filter((todo) => {
     if (currentFilter === 'Active') {
       setislinkAll(false);
       setislinkActive(true);
@@ -57,179 +57,7 @@ export const App: React.FC = () => {
     return todo;
   });
 
-  useMemo(() => filteredList, [currentFilter, todos]);
-
-  /* const filterHandle = (name: string) => {
-    switch (name) {
-      case "All":
-        setislinkAll(true);
-        setislinkActive(false);
-        setislinkCompleted(false);
-        break;
-      case "Active":
-        setislinkAll(false);
-        setislinkActive(true);
-        setislinkCompleted(false);
-        break;
-      case "Completed":
-        setislinkAll(false);
-        setislinkActive(false);
-        setislinkCompleted(true);
-        break;
-      default:
-        break;
-    }
-  }; */
-
-  /*
-   <section className="todoapp__main" data-cy="TodoList">
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                defaultChecked
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              HTML
-            </span>
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDeleteButton"
-            >
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              CSS
-            </span>
-
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDeleteButton"
-            >
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                defaultValue="JS"
-              />
-            </form>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              React
-            </span>
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDeleteButton"
-            >
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Redux
-            </span>
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDeleteButton"
-            >
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div> */
+  const filteredList = useMemo(() => filterList(), [currentFilter, todos]);
 
   return (
     <div className="todoapp">
@@ -259,7 +87,7 @@ export const App: React.FC = () => {
           </form>
         </header>
         <ul>
-          {todos.map((todo) => (
+          {filteredList && filteredList.map((todo) => (
             <section className="todoapp__main" data-cy="TodoList">
               <li key={todo.id}>
                 <div
