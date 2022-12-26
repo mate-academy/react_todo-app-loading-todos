@@ -52,6 +52,10 @@ export const App: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    todosFilter();
+  }, [status]);
+
   const visibleTodos = todosFilter();
 
   return (
@@ -61,35 +65,36 @@ export const App: React.FC = () => {
 
         <div className="todoapp__content">
           <header className="todoapp__header">
-            {todos.length
-              ? (
+            {todos.length > 0
+              && (
                 <button
                   data-cy="ToggleAllButton"
                   type="button"
                   className="todoapp__toggle-all active"
                 />
-              ) : (<></>)}
+              )}
 
             <TodoForm />
           </header>
 
-          {todos.length ? (
-            <>
-              <TodoList todos={visibleTodos} />
+          {todos.length > 0
+            && (
+              <>
+                <TodoList todos={visibleTodos} />
 
-              <footer className="todoapp__footer" data-cy="Footer">
-                <span className="todo-count" data-cy="todosCounter">
-                  {`${todos.filter(todo => !todo.completed).length} items left`}
-                </span>
+                <footer className="todoapp__footer" data-cy="Footer">
+                  <span className="todo-count" data-cy="todosCounter">
+                    {`${todos.filter(todo => !todo.completed).length} items left`}
+                  </span>
 
-                <TodoFilter
-                  status={status}
-                  onStatusChange={setStatus}
-                />
+                  <TodoFilter
+                    status={status}
+                    onStatusChange={setStatus}
+                  />
 
-              </footer>
-            </>
-          ) : (<></>)}
+                </footer>
+              </>
+            )}
 
         </div>
 
