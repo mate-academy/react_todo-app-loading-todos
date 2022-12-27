@@ -6,12 +6,12 @@ import { AuthContext } from './components/Auth/AuthContext';
 
 import { Todo } from './types/Todo';
 import { Filters } from './types/Filters';
-import { Errors } from './types/Errors';
 
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { Errors } from './types/Errors';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -70,8 +70,27 @@ export const App: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setShowError(Errors.None);
-    }, 5000);
+    }, 3000);
   }, [showError]);
+
+  let text = '';
+
+  switch (showError) {
+    case Errors.Add:
+      text = 'add';
+      break;
+
+    case Errors.Delete:
+      text = 'delete';
+      break;
+
+    case Errors.Update:
+      text = 'update';
+      break;
+
+    default:
+      break;
+  }
 
   return (
     <div className="todoapp">
@@ -79,7 +98,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <NewTodo
-          setShowError={() => setShowError}
+          setShowError={setShowError}
           newTodoField={newTodoField}
         />
 
@@ -87,7 +106,7 @@ export const App: React.FC = () => {
           <>
             <TodoList
               todoList={todoList}
-              setShowError={() => setShowError}
+              setShowError={setShowError}
             />
 
             <footer className="todoapp__footer" data-cy="Footer">
@@ -112,10 +131,12 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification
-        showError={showError}
-        setShowError={() => setShowError}
-      />
+      {showError !== Errors.None && (
+        <ErrorNotification
+          text={text}
+          setShowError={setShowError}
+        />
+      )}
     </div>
   );
 };

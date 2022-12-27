@@ -1,15 +1,10 @@
 import React from 'react';
+import { Filters } from '../../types/Filters';
 
 type Props = {
   filterBy: string,
   setFilterBy: (val: Filters) => void,
 };
-
-enum Filters {
-  All = 'all',
-  Completed = 'completed',
-  Active = 'active',
-}
 
 export const Filter: React.FC<Props> = ({
   filterBy,

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Errors } from '../../types/Errors';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todoList: Todo[],
-  setShowError: (str: string) => void
+  setShowError: (val: Errors) => void
 };
 
 export const TodoList: React.FC<Props> = ({ todoList, setShowError }) => {

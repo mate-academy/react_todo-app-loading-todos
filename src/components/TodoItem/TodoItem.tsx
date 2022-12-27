@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
-  setShowError: (str: string) => void
+  setShowError: (val: Errors) => void
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -29,10 +29,7 @@ export const TodoItem: React.FC<Props> = ({
         <span
           data-cy="TodoTitle"
           className="todo__title"
-          onDoubleClick={(e) => {
-            e.preventDefault();
-            setShowError(Errors.Update);
-          }}
+          onDoubleClick={() => setShowError(Errors.Update)}
         >
           {todo.title}
         </span>
@@ -41,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({
           type="button"
           className="todo__remove"
           data-cy="TodoDeleteButton"
-          onClick={() => setShowError('delete')}
+          onClick={() => setShowError(Errors.Delete)}
         >
           ×
         </button>
