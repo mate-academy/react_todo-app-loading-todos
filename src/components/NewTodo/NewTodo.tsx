@@ -7,6 +7,11 @@ type Props = {
 };
 
 export const NewTodo: React.FC<Props> = ({ newTodoField, setShowError }) => {
+  function submitForm(event: React.FormEvent) {
+    event.preventDefault();
+    setShowError(Errors.Add);
+  }
+
   return (
     <header className="todoapp__header">
       <button
@@ -18,10 +23,7 @@ export const NewTodo: React.FC<Props> = ({ newTodoField, setShowError }) => {
       </button>
 
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setShowError(Errors.Add);
-        }}
+        onSubmit={submitForm}
       >
         <input
           data-cy="NewTodoField"
@@ -29,6 +31,7 @@ export const NewTodo: React.FC<Props> = ({ newTodoField, setShowError }) => {
           ref={newTodoField}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          style={{ outline: 0 }}
         />
       </form>
     </header>

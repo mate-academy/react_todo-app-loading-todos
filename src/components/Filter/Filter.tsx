@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Filters } from '../../types/Filters';
 
@@ -16,9 +17,9 @@ export const Filter: React.FC<Props> = ({
         data-cy="FilterLinkAll"
         href="#/"
         className={
-          filterBy === 'all'
-            ? 'filter__link selected'
-            : 'filter__link'
+          classNames('filter__link', {
+            selected: filterBy === 'all',
+          })
         }
         onClick={() => setFilterBy(Filters.All)}
       >
@@ -29,9 +30,9 @@ export const Filter: React.FC<Props> = ({
         data-cy="FilterLinkActive"
         href="#/active"
         className={
-          filterBy === 'active'
-            ? 'filter__link selected'
-            : 'filter__link'
+          classNames('filter__link', {
+            selected: filterBy === 'active',
+          })
         }
         onClick={() => setFilterBy(Filters.Active)}
       >
@@ -41,9 +42,9 @@ export const Filter: React.FC<Props> = ({
         data-cy="FilterLinkCompleted"
         href="#/completed"
         className={
-          filterBy === 'completed'
-            ? 'filter__link selected'
-            : 'filter__link'
+          classNames('filter__link', {
+            selected: filterBy === 'completed',
+          })
         }
         onClick={() => setFilterBy(Filters.Completed)}
       >

@@ -10,14 +10,15 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todoList, setShowError }) => {
   return (
-    <section className="todoapp__main" data-cy="TodoList">
+    <ul className="todoapp__main" data-cy="TodoList">
       {todoList.map(todo => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          setShowError={setShowError}
-        />
+        <li key={todo.id}>
+          <TodoItem
+            todo={todo}
+            setShowError={setShowError}
+          />
+        </li>
       ))}
-    </section>
+    </ul>
   );
 };

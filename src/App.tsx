@@ -1,5 +1,8 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -32,12 +35,8 @@ export const App: React.FC = () => {
 
     const todos = await getTodos(user.id);
 
-    try {
-      setTodosFromServer(todos);
-      setTodolist(todos);
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    setTodosFromServer(todos);
+    setTodolist(todos);
   }
 
   useEffect(() => {

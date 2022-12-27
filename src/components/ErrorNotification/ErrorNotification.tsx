@@ -20,9 +20,8 @@ export const ErrorNotification: React.FC<Props> = ({
         type="button"
         className="delete"
         onClick={() => setShowError(Errors.None)}
-      >
-        {}
-      </button>
+        aria-label="x"
+      />
 
       {`Unable to ${text} a todo`}
     </div>
