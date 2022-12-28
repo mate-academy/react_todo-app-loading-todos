@@ -6,6 +6,12 @@ import { createTodos, getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 
+enum Filters {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
@@ -16,8 +22,9 @@ export const App: React.FC = () => {
   const [islinkActive, setislinkActive] = useState(false);
   const [islinkCompleted, setislinkCompleted] = useState(false);
   const [savedId, setsavedId] = useState(0);
-  const [currentFilter, setCurrentFilter] = useState('All');
-  const [isError, setisError] = useState(true);
+  const [currentFilter, setCurrentFilter] = useState(Filters.All);
+  const [isError, setisError] = useState(false);
+  const [isHidden, setisHidden] = useState(false);
   const [completedTodo, setCompletedTodo] = useState<Todo>({
     id: 0,
     userId: 0,
@@ -26,8 +33,17 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    getTodos(user?.id).then(setTodos);
-    setisError(false);
+    try {
+      setisHidden(true);
+      getTodos(user?.id).then(setTodos);
+    } catch (error) {
+      setisError(true);
+    }
+
+    setTimeout(() => {
+      setisHidden(true);
+    }, 3000);
+
     createTodos(value).then(setTodos);
     if (newTodoField.current) {
       newTodoField.current.focus();
@@ -35,27 +51,28 @@ export const App: React.FC = () => {
   }, []);
 
   const filterList = (): Todo[] | undefined => todos.filter((todo) => {
-    if (currentFilter === 'Active') {
-      setislinkAll(false);
-      setislinkActive(true);
-      setislinkCompleted(false);
+    switch (currentFilter) {
+      case Filters.Active:
+        setislinkAll(false);
+        setislinkActive(true);
+        setislinkCompleted(false);
 
-      return !todo.completed;
+        return !todo.completed;
+
+      case Filters.Completed:
+        setislinkAll(false);
+        setislinkActive(false);
+        setislinkCompleted(true);
+
+        return todo.completed;
+
+      default:
+        setislinkAll(true);
+        setislinkActive(false);
+        setislinkCompleted(false);
+
+        return todo;
     }
-
-    if (currentFilter === 'Completed') {
-      setislinkAll(false);
-      setislinkActive(false);
-      setislinkCompleted(true);
-
-      return todo.completed;
-    }
-
-    setislinkAll(true);
-    setislinkActive(false);
-    setislinkCompleted(false);
-
-    return todo;
   });
 
   const filteredList = useMemo(() => filterList(), [currentFilter, todos]);
@@ -87,76 +104,77 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-        {todos.length !== 0
-        && (
+        {todos.length !== 0 && (
           <>
             <ul>
               {filteredList
-              && filteredList.map((todo) => (
-                <section className="todoapp__main" data-cy="TodoList">
-                  <li key={todo.id}>
-                    <div
-                      data-cy="Todo"
-                      className={todo.completed ? 'todo completed' : 'todo'}
-                    >
-                      <label className="todo__status-label">
-                        <input
-                          data-cy="TodoStatus"
-                          type="checkbox"
-                          className="todo__status"
-                          defaultChecked
-                          onClick={() => {
-                            setCompletedTodo((prevState) => ({
-                              ...prevState,
-                              completed: !prevState.completed,
-                            }));
-                            /* eslint no-param-reassign: ["error", { "props": false }] */
-                            if (todo.id === savedId && completedTodo) {
-                              todo.completed = false;
-                            } else {
-                              todo.completed = true;
-                            }
-
-                            // setCompletedTodo(todo);
-                            setsavedId(todo.id);
-                          }}
-                        />
-                      </label>
-
-                      <span data-cy="TodoTitle" className="todo__title">
-                        {todo.title}
-                      </span>
-                      <button
-                        type="button"
-                        className="todo__remove"
-                        data-cy="TodoDeleteButton"
+                && filteredList.map((todo) => (
+                  <section className="todoapp__main" data-cy="TodoList">
+                    <li key={todo.id}>
+                      <div
+                        data-cy="Todo"
+                        className={todo.completed ? 'todo completed' : 'todo'}
                       >
-                        ×
-                      </button>
+                        <label className="todo__status-label">
+                          <input
+                            data-cy="TodoStatus"
+                            type="checkbox"
+                            className="todo__status"
+                            defaultChecked
+                            onClick={() => {
+                              setCompletedTodo((prevState) => ({
+                                ...prevState,
+                                completed: !prevState.completed,
+                              }));
+                              /* eslint no-param-reassign: ["error", { "props": false }] */
+                              if (todo.id === savedId && completedTodo) {
+                                todo.completed = false;
+                              } else {
+                                todo.completed = true;
+                              }
 
-                      <div data-cy="TodoLoader" className="modal overlay">
-                        <div className="
+                              setsavedId(todo.id);
+                            }}
+                          />
+                        </label>
+
+                        <span data-cy="TodoTitle" className="todo__title">
+                          {todo.title}
+                        </span>
+                        <button
+                          type="button"
+                          className="todo__remove"
+                          data-cy="TodoDeleteButton"
+                        >
+                          ×
+                        </button>
+
+                        <div data-cy="TodoLoader" className="modal overlay">
+                          <div
+                            className="
                           modal-background
                           has-background-white-ter"
-                        />
-                        <div className="loader" />
+                          />
+                          <div className="loader" />
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                  {' '}
-                </section>
-              ))}
+                    </li>
+                    {' '}
+                  </section>
+                ))}
             </ul>
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="todosCounter">
-                {` ${filteredList?.filter((todo) => !todo.completed)?.length} items left`}
+                {` ${
+                  filteredList?.filter((todo) => !todo.completed)?.length
+                } items left`}
               </span>
 
               <nav className="filter" data-cy="Filter">
                 <a
                   data-cy="FilterLinkAll"
                   href="#/"
-                  onClick={() => setCurrentFilter('All')}
+                  onClick={() => setCurrentFilter(Filters.All)}
                   className={classnames('filter__link', {
                     selected: islinkAll,
                   })}
@@ -167,7 +185,7 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkActive"
                   href="#/active"
-                  onClick={() => setCurrentFilter('Active')}
+                  onClick={() => setCurrentFilter(Filters.Active)}
                   className={classnames('filter__link', {
                     selected: islinkActive,
                   })}
@@ -177,7 +195,7 @@ export const App: React.FC = () => {
                 <a
                   data-cy="FilterLinkCompleted"
                   href="#/completed"
-                  onClick={() => setCurrentFilter('Completed')}
+                  onClick={() => setCurrentFilter(Filters.Completed)}
                   className={classnames('filter__link', {
                     selected: islinkCompleted,
                   })}
@@ -201,12 +219,21 @@ export const App: React.FC = () => {
         {isError && (
           <div
             data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
+            className={classnames(
+              'notification is-danger is-light has-text-weight-normal',
+              {
+                hidden: isHidden,
+              },
+            )}
           >
             <button
               aria-label="button"
               data-cy="HideErrorButton"
               type="button"
+              hidden
+              onClick={() => {
+                setisHidden(true);
+              }}
               className="delete"
             />
             Unable to add a todo
