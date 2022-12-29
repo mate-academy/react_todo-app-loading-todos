@@ -56,7 +56,7 @@ export const App: React.FC = () => {
     }
   });
 
-  const activeTodos = todosFromServer.reduce(
+  const activeTodosCount = todosFromServer.reduce(
     (acc, todo) => (!todo.completed ? 1 : 0) + acc, 0,
   );
 
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
 
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
-            {`${activeTodos} items left`}
+            {`${activeTodosCount} items left`}
           </span>
 
           <Filter

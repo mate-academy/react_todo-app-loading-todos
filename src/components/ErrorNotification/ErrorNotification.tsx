@@ -12,7 +12,6 @@ export const ErrorNotification = ({ error, setError }: Props) => {
   return (
     <div
       data-cy="ErrorNotification"
-      // className="notification is-danger is-light has-text-weight-normal"
       className={
         classNames(
           'notification',
