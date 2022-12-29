@@ -1,17 +1,40 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
+import { TodoList } from './components/TodoList';
+import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+
+  const findTodos = async () => {
+    const loadedTodos = await getTodos(user?.id) || null;
+
+    setTodoList(loadedTodos);
+  };
+
+  // const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   console.log('submited');
+  //   pushTodo('dd', user?.id);
+  // };
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    findTodos();
   }, []);
 
   return (
@@ -37,7 +60,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
+        {/* <section className="todoapp__main" data-cy="TodoList">
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
               <input
@@ -160,46 +183,54 @@ export const App: React.FC = () => {
               <div className="loader" />
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="todosCounter">
-            4 items left
-          </span>
+        {user && (
+          <section className="todoapp__main" data-cy="TodoList">
+            <TodoList todos={todoList} />
+          </section>
+        )}
 
-          <nav className="filter" data-cy="Filter">
-            <a
-              data-cy="FilterLinkAll"
-              href="#/"
-              className="filter__link selected"
+        {todoList.length !== 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="todosCounter">
+              4 items left
+            </span>
+
+            <nav className="filter" data-cy="Filter">
+              <a
+                data-cy="FilterLinkAll"
+                href="#/"
+                className="filter__link selected"
+              >
+                All
+              </a>
+
+              <a
+                data-cy="FilterLinkActive"
+                href="#/active"
+                className="filter__link"
+              >
+                Active
+              </a>
+              <a
+                data-cy="FilterLinkCompleted"
+                href="#/completed"
+                className="filter__link"
+              >
+                Completed
+              </a>
+            </nav>
+
+            <button
+              data-cy="ClearCompletedButton"
+              type="button"
+              className="todoapp__clear-completed"
             >
-              All
-            </a>
-
-            <a
-              data-cy="FilterLinkActive"
-              href="#/active"
-              className="filter__link"
-            >
-              Active
-            </a>
-            <a
-              data-cy="FilterLinkCompleted"
-              href="#/completed"
-              className="filter__link"
-            >
-              Completed
-            </a>
-          </nav>
-
-          <button
-            data-cy="ClearCompletedButton"
-            type="button"
-            className="todoapp__clear-completed"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       <div
