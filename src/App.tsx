@@ -23,12 +23,6 @@ export const App: React.FC = () => {
     setTodoList(loadedTodos);
   };
 
-  // const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log('submited');
-  //   pushTodo('dd', user?.id);
-  // };
-
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();

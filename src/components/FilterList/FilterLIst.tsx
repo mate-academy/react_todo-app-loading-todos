@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import cn from 'classnames';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   itemCount: number,
@@ -9,48 +10,50 @@ type Props = {
 export const FilterList: React.FC<Props> = ({ itemCount }) => {
   const [filterBy, setFilterBy] = useState('All');
 
-  const changeFilter = (newValue: string) => {
+  const handleFilter = (newValue: string) => {
     setFilterBy(newValue);
+    // it'll be filter function here
   };
 
   return (
     <>
       <span className="todo-count" data-cy="todosCounter">
-        {`${itemCount} `}
-        items left
+        {`${itemCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className={cn('filter__link', { selected: filterBy === 'All' })}
+          className={cn('filter__link', { selected: filterBy === Filter.all })}
           onClick={() => {
-            changeFilter('All');
+            handleFilter(Filter.all);
           }}
         >
-          All
+          {Filter.all}
         </a>
 
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className={cn('filter__link', { selected: filterBy === 'Active' })}
+          className={cn('filter__link',
+            { selected: filterBy === Filter.active })}
           onClick={() => {
-            changeFilter('Active');
+            handleFilter(Filter.active);
           }}
         >
-          Active
+          {Filter.active}
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className={cn('filter__link', { selected: filterBy === 'Completed' })}
+          className={cn('filter__link',
+            { selected: filterBy === Filter.completed })}
           onClick={() => {
-            changeFilter('Completed');
+            handleFilter(Filter.completed);
           }}
         >
-          Completed
+          {Filter.completed}
         </a>
       </nav>
 
