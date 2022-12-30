@@ -29,7 +29,6 @@ export const ErrorNotification: FunctionComponent<ErrorProps> = ({
         { hidden: !error },
       )}
     >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
         type="button"

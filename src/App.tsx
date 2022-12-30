@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
   useContext,
@@ -21,8 +20,8 @@ export const App: React.FC = () => {
   const user = useContext<User | null>(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([] || null);
+  const [error, setError] = useState<boolean>(false);
   const [filterBy, setFilterBy] = useState<FilterType>(FilterType.All);
 
   const closeNotification = useCallback(() => setError(false), []);
@@ -45,7 +44,7 @@ export const App: React.FC = () => {
 
     try {
       if (user) {
-        const loadedTodos = await getTodos(user?.id);
+        const loadedTodos = await getTodos(user.id);
 
         setTodos(loadedTodos);
       }
@@ -69,7 +68,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {!todos && (
+          {todos.length > 0 && (
             <button
               data-cy="ToggleAllButton"
               type="button"
@@ -87,7 +86,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {!todos && (
+        {todos.length > 0 && (
           <>
             <TodoList filteredStatus={filteredStatus} />
             <Footer
