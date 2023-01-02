@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  visibleTodos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => (
+export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
   <section className="todoapp__main" data-cy="TodoList">
-    {todos.map(({ id, title, completed }) => {
+    {visibleTodos.map(({ id, title, completed }) => {
       return (
         <div
           data-cy="Todo"
@@ -25,7 +25,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
               className="todo__status"
             />
           </label>
-
           <span data-cy="TodoTitle" className="todo__title">{title}</span>
           <button
             type="button"
@@ -34,7 +33,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
           >
             ×
           </button>
-
           <div data-cy="TodoLoader" className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
