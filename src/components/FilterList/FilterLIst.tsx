@@ -8,10 +8,10 @@ type Props = {
 };
 
 export const FilterList: React.FC<Props> = ({ itemCount }) => {
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.all);
 
   const handleFilter = (newValue: string) => {
-    setFilterBy(newValue);
+    setFilterBy(newValue as Filter);
     // it'll be filter function here
   };
 
