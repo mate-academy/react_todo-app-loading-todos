@@ -19,7 +19,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(false);
+  const [error] = useState(false);
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
