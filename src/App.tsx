@@ -69,43 +69,6 @@ export const App: React.FC = () => {
             {`${visibleTodos.length} items left`}
           </span>
 
-          {/* <nav className="filter" data-cy="Filter">
-            <a
-              data-cy="FilterLinkAll"
-              href="#/"
-              className={cn(
-                'filter__link',
-                { selected: filterStatus === 'All' },
-              )}
-              onClick={() => setFilterStatus('All')}
-            >
-              All
-            </a>
-
-            <a
-              data-cy="FilterLinkActive"
-              href="#/active"
-              className={cn(
-                'filter__link',
-                { selected: filterStatus === 'Active' },
-              )}
-              onClick={() => setFilterStatus('Active')}
-            >
-              Active
-            </a>
-            <a
-              data-cy="FilterLinkCompleted"
-              href="#/completed"
-              className={cn(
-                'filter__link',
-                { selected: filterStatus === 'Completed' },
-              )}
-              onClick={() => setFilterStatus('Completed')}
-            >
-              Completed
-            </a>
-          </nav> */}
-
           <Filter filterStatus={filterStatus} onFilter={setFilterStatus} />
 
           <button
