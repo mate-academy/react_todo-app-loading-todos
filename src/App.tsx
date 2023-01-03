@@ -22,7 +22,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (typeof user?.id === 'number') {
-      getTodos(user.id / 2.5)
+      getTodos(user.id)
         .then(todosFromServer => {
           setTodos(todosFromServer);
         })
