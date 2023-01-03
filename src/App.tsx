@@ -6,7 +6,8 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { TodoContent } from './components/TodoContent';
 
 export const App: React.FC = () => {
-  const [isErrorMessage, setIsErrorMessage] = useState(false);
+  // const [isErrorMessage, setIsErrorMessage] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -21,12 +22,12 @@ export const App: React.FC = () => {
 
       <TodoContent
         newTodoField={newTodoField}
-        setIsErrorMessage={setIsErrorMessage}
+        setHasError={setHasError}
       />
 
       <ErrorNotification
-        isErrorMessage={isErrorMessage}
-        setIsErrorMessage={setIsErrorMessage}
+        hasError={hasError}
+        setHasError={setHasError}
       />
     </div>
   );

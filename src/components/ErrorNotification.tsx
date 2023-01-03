@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  isErrorMessage: boolean,
-  setIsErrorMessage: (value: boolean) => void,
+  hasError: boolean,
+  // setHasError: (value: boolean) => void,
+  setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const ErrorNotification: React.FC<Props> = ({
-  isErrorMessage, setIsErrorMessage,
+  hasError, setHasError,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
-      setIsErrorMessage(false);
+      setHasError(false);
     }, 3000);
   });
 
@@ -25,7 +26,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: isPressed || !isErrorMessage },
+        { hidden: isPressed || !hasError },
       )}
     >
       <button
@@ -35,7 +36,7 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={() => setIsPressed(true)}
       />
-      {isErrorMessage && ('Unable to add a todo')}
+      {hasError && ('Unable to add a todo')}
 
       <br />
     </div>

@@ -9,11 +9,12 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   newTodoField: React.LegacyRef<HTMLInputElement> | undefined,
-  setIsErrorMessage: (value: boolean) => void,
+  // setHasError: (value: boolean) => void,
+  setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const TodoContent: React.FC<Props> = ({
-  newTodoField, setIsErrorMessage,
+  newTodoField, setHasError,
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
@@ -24,10 +25,10 @@ export const TodoContent: React.FC<Props> = ({
       getTodos(user.id)
         .then(todo => {
           setTodos(todo);
-          setIsErrorMessage(false);
+          setHasError(false);
           setVisibleTodos(todo);
         })
-        .catch(() => setIsErrorMessage(true));
+        .catch(() => setHasError(true));
     }
   }, []);
 
