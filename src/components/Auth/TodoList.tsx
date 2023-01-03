@@ -4,12 +4,17 @@ import { Todo } from '../../types/Todo';
 type Props = {
   filteredList: Todo[] | undefined;
   completedTodo: Todo;
-  handleCompletedTodo: () => void;
+  handleCompletedTodo: (
+    savedId: number,
+
+    todo: Todo,
+    setsavedId: (value: React.SetStateAction<number>) => void
+  ) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   filteredList,
-  completedTodo,
+
   handleCompletedTodo,
 }) => {
   const [savedId, setsavedId] = useState(0);
@@ -31,10 +36,12 @@ export const TodoList: React.FC<Props> = ({
                     className="todo__status"
                     defaultChecked
                     onClick={() => {
-                      handleCompletedTodo();
-                      // eslint-disable-next-line no-param-reassign
-                      todo.completed = !(todo.id === savedId && completedTodo);
-                      setsavedId(todo.id);
+                      handleCompletedTodo(
+                        savedId,
+
+                        todo,
+                        setsavedId,
+                      );
                     }}
                   />
                 </label>

@@ -5,19 +5,15 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   setCurrentFilter: React.Dispatch<React.SetStateAction<Filters>>;
-  islinkAll: boolean;
-  islinkActive: boolean;
-  islinkCompleted: boolean;
   setValue: React.Dispatch<React.SetStateAction<string>>;
+  currentFilter: Filters;
 };
 
 export const FooterTodo: React.FC<Props> = ({
   todos,
   setCurrentFilter,
-  islinkAll,
-  islinkActive,
-  islinkCompleted,
   setValue,
+  currentFilter,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -31,7 +27,7 @@ export const FooterTodo: React.FC<Props> = ({
           href="#/"
           onClick={() => setCurrentFilter(Filters.All)}
           className={classnames('filter__link', {
-            selected: islinkAll,
+            selected: currentFilter === Filters.All,
           })}
         >
           All
@@ -42,7 +38,7 @@ export const FooterTodo: React.FC<Props> = ({
           href="#/active"
           onClick={() => setCurrentFilter(Filters.Active)}
           className={classnames('filter__link', {
-            selected: islinkActive,
+            selected: currentFilter === Filters.Active,
           })}
         >
           Active
@@ -52,7 +48,7 @@ export const FooterTodo: React.FC<Props> = ({
           href="#/completed"
           onClick={() => setCurrentFilter(Filters.Completed)}
           className={classnames('filter__link', {
-            selected: islinkCompleted,
+            selected: currentFilter === Filters.Completed,
           })}
         >
           Completed

@@ -15,9 +15,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState('');
-  const [islinkAll, setislinkAll] = useState(true);
-  const [islinkActive, setislinkActive] = useState(false);
-  const [islinkCompleted, setislinkCompleted] = useState(false);
 
   const [currentFilter, setCurrentFilter] = useState(Filters.All);
   const [isError, setisError] = useState(false);
@@ -29,11 +26,17 @@ export const App: React.FC = () => {
     completed: false,
   });
 
-  const handleCompletedTodo = () => {
+  const handleCompletedTodo = (
+    savedId: number,
+    todo: Todo,
+    setsavedId: (value: React.SetStateAction<number>) => void,
+  ) => {
     setCompletedTodo((prevState) => ({
       ...prevState,
-      completed: !prevState.completed,
+      completed: !(prevState.id === savedId && prevState.completed),
     }));
+
+    setsavedId(todo.id);
   };
 
   useEffect(() => {
@@ -56,23 +59,14 @@ export const App: React.FC = () => {
   const filterList = (): Todo[] | undefined => todos.filter((todo) => {
     switch (currentFilter) {
       case Filters.Active:
-        setislinkAll(false);
-        setislinkActive(true);
-        setislinkCompleted(false);
 
         return !todo.completed;
 
       case Filters.Completed:
-        setislinkAll(false);
-        setislinkActive(false);
-        setislinkCompleted(true);
 
         return todo.completed;
 
       default:
-        setislinkAll(true);
-        setislinkActive(false);
-        setislinkCompleted(false);
 
         return todo;
     }
@@ -97,10 +91,8 @@ export const App: React.FC = () => {
             <FooterTodo
               todos={todos}
               setCurrentFilter={setCurrentFilter}
-              islinkAll={islinkAll}
-              islinkActive={islinkActive}
-              islinkCompleted={islinkCompleted}
               setValue={setValue}
+              currentFilter={currentFilter}
             />
           </>
         )}
@@ -125,11 +117,8 @@ export const App: React.FC = () => {
               }}
               className="delete"
             />
+
             Unable to add a todo
-            <br />
-            Unable to delete a todo
-            <br />
-            Unable to update a todo
           </div>
         )}
       </div>
