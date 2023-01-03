@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 
 import { Header } from './components/Header/Header';
@@ -8,8 +13,14 @@ import { Footer } from './components/Footer/Footer';
 import { ErrorNotification } from
   './components/ErrorNotification/ErrorNotification';
 
+import { getTodos } from './api/todos';
+
+import { Todo } from './types/Todo';
+
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState(false);
+
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -20,6 +31,20 @@ export const App: React.FC = () => {
     }
   }, []);
 
+  const loadTodos = async () => {
+    if (!user) {
+      return;
+    }
+
+    const loadedTodos = await getTodos(user.id);
+
+    setTodos(loadedTodos);
+  };
+
+  loadTodos();
+
+  const activeTodos = todos.filter(todo => todo.completed === false).length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -27,12 +52,18 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
 
-        <TodoList />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={todos} />
 
-        <Footer />
+            <Footer
+              activeTodos={activeTodos}
+            />
+          </>
+        )}
       </div>
 
-      <ErrorNotification />
+      {error && (<ErrorNotification />)}
     </div>
   );
 };

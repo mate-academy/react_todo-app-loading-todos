@@ -1,12 +1,16 @@
 import React from 'react';
 
-type Props = {};
+type Props = {
+  activeTodos: number;
+};
 
-export const Footer: React.FC<Props> = () => {
+export const Footer: React.FC<Props> = (props) => {
+  const { activeTodos } = props;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${activeTodos} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
