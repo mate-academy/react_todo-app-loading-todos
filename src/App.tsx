@@ -10,9 +10,9 @@ import { TodoList } from './components/TodoList';
 import { FilterList } from './components/FilterList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -67,22 +67,8 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {todoList.length !== 0 && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-          />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
+      {todoList.length === 0 && (
+        <ErrorNotification />
       )}
     </div>
   );
