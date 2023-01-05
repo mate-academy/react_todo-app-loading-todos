@@ -1,9 +1,9 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
   useRef,
   useState,
+  useCallback,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     if (!user) {
       return;
     }
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
     } catch (error) {
       setError('Can\'t load todos');
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadTodos();
