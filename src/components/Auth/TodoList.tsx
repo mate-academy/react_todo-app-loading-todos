@@ -1,4 +1,4 @@
-import { Todo } from "../../types/Todo";
+import { Todo } from '../../types/Todo';
 
 type Props = {
   filteredList: Todo[] | undefined;
@@ -7,13 +7,13 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ filteredList }) => {
   return (
     <ul>
-      {filteredList &&
-        filteredList.map((todo) => (
+      {filteredList
+        && filteredList.map((todo) => (
           <section className="todoapp__main" data-cy="TodoList">
             <li key={todo.id}>
               <div
                 data-cy="Todo"
-                className={todo.completed ? "todo completed" : "todo"}
+                className={todo.completed ? 'todo completed' : 'todo'}
               >
                 <label className="todo__status-label">
                   <input
@@ -44,7 +44,8 @@ export const TodoList: React.FC<Props> = ({ filteredList }) => {
                   <div className="loader" />
                 </div>
               </div>
-            </li>{" "}
+            </li>
+            {' '}
           </section>
         ))}
     </ul>
