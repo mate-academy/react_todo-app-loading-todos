@@ -2,10 +2,14 @@ import React from 'react';
 
 type Props = {
   activeTodos: number;
+  hasCompletedTodos: boolean;
 };
 
 export const Footer: React.FC<Props> = (props) => {
-  const { activeTodos } = props;
+  const {
+    activeTodos,
+    hasCompletedTodos,
+  } = props;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -44,7 +48,9 @@ export const Footer: React.FC<Props> = (props) => {
         type="button"
         className="todoapp__clear-completed"
       >
-        Clear completed
+        {hasCompletedTodos
+          ? 'Clear completed'
+          : null}
       </button>
     </footer>
   );

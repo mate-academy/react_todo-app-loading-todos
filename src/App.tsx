@@ -19,7 +19,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error] = useState(false);
+  const [errorMessage, setError] = useState('');
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -36,14 +36,22 @@ export const App: React.FC = () => {
       return;
     }
 
-    const loadedTodos = await getTodos(user.id);
+    try {
+      setError('');
+      const loadedTodos = await getTodos(user.id);
 
-    setTodos(loadedTodos);
+      setTodos(loadedTodos);
+    } catch (error) {
+      setError('Can\'t load todos');
+    }
   };
 
-  loadTodos();
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   const activeTodos = todos.filter(todo => todo.completed === false).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed === true);
 
   return (
     <div className="todoapp">
@@ -58,12 +66,18 @@ export const App: React.FC = () => {
 
             <Footer
               activeTodos={activeTodos}
+              hasCompletedTodos={hasCompletedTodos}
             />
           </>
         )}
       </div>
 
-      {error && (<ErrorNotification />)}
+      {errorMessage && (
+        <ErrorNotification
+          error={errorMessage}
+          onClick={setError}
+        />
+      )}
     </div>
   );
 };
