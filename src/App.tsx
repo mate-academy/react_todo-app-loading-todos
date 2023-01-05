@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext,
-  useEffect, useMemo, useRef, useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 
@@ -14,6 +18,7 @@ import { TypeError } from './types/TypeError';
 import { FilterType } from './types/FilterType';
 import { NewTodoField } from './components/NewTodoField/NewTodoField';
 import { getTodos } from './api/todos';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -27,20 +32,20 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  async function LoadTodos() {
-    if (user) {
-      try {
-        const reponse = await getTodos(user.id);
+  async function LoadTodos(utilizer: User) {
+    try {
+      const reponse = await getTodos(utilizer.id);
 
-        setTodos(reponse);
-      } catch {
-        setHasError(true);
-      }
+      setTodos(reponse);
+    } catch {
+      setHasError(true);
     }
   }
 
   useEffect(() => {
-    LoadTodos();
+    if (user) {
+      LoadTodos(user);
+    }
   }, []);
 
   useEffect(() => {
@@ -50,27 +55,30 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const activeTodosLength = todos.filter(todo => todo.completed === false)
-    .length;
+  const activeTodosLength = todos.filter(todo => !todo.completed).length;
 
   const onInputChange = (str: string) => {
     setQuery(str);
   };
 
-  const onFormSubmit = () => {
-    if (query.trim()) {
-      const newTodo: Todo = {
-        id: +new Date(),
-        userId: user?.id || +new Date(),
-        title: query.trim(),
-        completed: false,
-      };
+  const onFormSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-    }
+      if (query.trim()) {
+        const newTodo: Todo = {
+          id: +new Date(),
+          userId: user?.id || +new Date(),
+          title: query.trim(),
+          completed: false,
+        };
 
-    setQuery('');
-  };
+        setTodos((prevTodos) => [...prevTodos, newTodo]);
+      }
+
+      setQuery('');
+    }, [query, user],
+  );
 
   const onDeleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
@@ -89,7 +97,7 @@ export const App: React.FC = () => {
     setTimeout(() => setHasError(false), 3000);
   }
 
-  function getFilteredGoods() {
+  const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filterType) {
         case FilterType.Active:
@@ -102,10 +110,6 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-  }
-
-  const visibleTodos = useMemo(() => {
-    return getFilteredGoods();
   }, [filterType, todos]);
 
   return (

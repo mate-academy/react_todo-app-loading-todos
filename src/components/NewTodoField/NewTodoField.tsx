@@ -4,7 +4,7 @@ export type Props = {
   newTodoField: React.RefObject<HTMLInputElement>,
   query: string,
   onInputChange(str: string): void,
-  onFormSubmit(): void,
+  onFormSubmit(event: React.FormEvent<HTMLFormElement>): void,
 };
 
 export const NewTodoField: React.FC<Props> = ({
