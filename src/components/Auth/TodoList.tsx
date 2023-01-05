@@ -1,33 +1,19 @@
-import { useState } from 'react';
-import { Todo } from '../../types/Todo';
+import { Todo } from "../../types/Todo";
 
 type Props = {
   filteredList: Todo[] | undefined;
-  completedTodo: Todo;
-  handleCompletedTodo: (
-    savedId: number,
-
-    todo: Todo,
-    setsavedId: (value: React.SetStateAction<number>) => void
-  ) => void;
 };
 
-export const TodoList: React.FC<Props> = ({
-  filteredList,
-
-  handleCompletedTodo,
-}) => {
-  const [savedId, setsavedId] = useState(0);
-
+export const TodoList: React.FC<Props> = ({ filteredList }) => {
   return (
     <ul>
-      {filteredList
-        && filteredList.map((todo) => (
+      {filteredList &&
+        filteredList.map((todo) => (
           <section className="todoapp__main" data-cy="TodoList">
             <li key={todo.id}>
               <div
                 data-cy="Todo"
-                className={todo.completed ? 'todo completed' : 'todo'}
+                className={todo.completed ? "todo completed" : "todo"}
               >
                 <label className="todo__status-label">
                   <input
@@ -35,14 +21,6 @@ export const TodoList: React.FC<Props> = ({
                     type="checkbox"
                     className="todo__status"
                     defaultChecked
-                    onClick={() => {
-                      handleCompletedTodo(
-                        savedId,
-
-                        todo,
-                        setsavedId,
-                      );
-                    }}
                   />
                 </label>
 
@@ -66,8 +44,7 @@ export const TodoList: React.FC<Props> = ({
                   <div className="loader" />
                 </div>
               </div>
-            </li>
-            {' '}
+            </li>{" "}
           </section>
         ))}
     </ul>

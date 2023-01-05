@@ -1,43 +1,22 @@
-import React, {
-  useContext, useEffect, useMemo, useRef, useState,
-} from 'react';
-import classnames from 'classnames';
-import { createTodos, getTodos } from './api/todos';
-import { AuthContext } from './components/Auth/AuthContext';
-import { Todo } from './types/Todo';
-import { Filters } from './types/Filters';
-import { Header } from './components/Auth/Header';
-import { TodoList } from './components/Auth/TodoList';
-import { FooterTodo } from './components/Auth/FooterTodo';
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import classnames from "classnames";
+import { createTodos, getTodos } from "./api/todos";
+import { AuthContext } from "./components/Auth/AuthContext";
+import { Todo } from "./types/Todo";
+import { Filters } from "./types/Filters";
+import { Header } from "./components/Auth/Header";
+import { TodoList } from "./components/Auth/TodoList";
+import { FooterTodo } from "./components/Auth/FooterTodo";
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
 
   const [currentFilter, setCurrentFilter] = useState(Filters.All);
   const [isError, setisError] = useState(false);
   const [isHidden, setisHidden] = useState(false);
-  const [completedTodo, setCompletedTodo] = useState<Todo>({
-    id: 0,
-    userId: 0,
-    title: '',
-    completed: false,
-  });
-
-  const handleCompletedTodo = (
-    savedId: number,
-    todo: Todo,
-    setsavedId: (value: React.SetStateAction<number>) => void,
-  ) => {
-    setCompletedTodo((prevState) => ({
-      ...prevState,
-      completed: !(prevState.id === savedId && prevState.completed),
-    }));
-
-    setsavedId(todo.id);
-  };
 
   useEffect(() => {
     setisHidden(true);
@@ -56,21 +35,19 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const filterList = (): Todo[] | undefined => todos.filter((todo) => {
-    switch (currentFilter) {
-      case Filters.Active:
+  const filterList = (): Todo[] | undefined =>
+    todos.filter((todo) => {
+      switch (currentFilter) {
+        case Filters.Active:
+          return !todo.completed;
 
-        return !todo.completed;
+        case Filters.Completed:
+          return todo.completed;
 
-      case Filters.Completed:
-
-        return todo.completed;
-
-      default:
-
-        return todo;
-    }
-  });
+        default:
+          return todo;
+      }
+    });
 
   const filteredList = useMemo(() => filterList(), [currentFilter, todos]);
 
@@ -82,11 +59,7 @@ export const App: React.FC = () => {
         <Header />
         {todos.length !== 0 && (
           <>
-            <TodoList
-              filteredList={filteredList}
-              completedTodo={completedTodo}
-              handleCompletedTodo={handleCompletedTodo}
-            />
+            <TodoList filteredList={filteredList} />
 
             <FooterTodo
               todos={todos}
@@ -101,10 +74,10 @@ export const App: React.FC = () => {
           <div
             data-cy="ErrorNotification"
             className={classnames(
-              'notification is-danger is-light has-text-weight-normal',
+              "notification is-danger is-light has-text-weight-normal",
               {
                 hidden: isHidden,
-              },
+              }
             )}
           >
             <button
@@ -117,7 +90,6 @@ export const App: React.FC = () => {
               }}
               className="delete"
             />
-
             Unable to add a todo
           </div>
         )}
