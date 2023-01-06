@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import classNames from 'classnames';
 import React from 'react';
 import { Error } from '../types/Error';
@@ -24,7 +26,6 @@ export const ErrorMessage: React.FC<Props> = ({ errorType, closeError }) => {
         type="button"
         className="delete"
         onClick={closeError}
-        aria-label="forbiddenTodo"
       />
 
       {`${errorType}`}

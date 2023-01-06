@@ -26,7 +26,7 @@ export const Todos: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={isCompleted}
-          onChange={e => setCompleted(e.target.checked)}
+          onChange={event => setCompleted(event.target.checked)}
         />
       </label>
 
