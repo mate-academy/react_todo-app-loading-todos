@@ -5,35 +5,40 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import cn from 'classnames';
-import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Filter } from './components/Filter';
+import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/TodoList';
+
+import { getTodos } from './api/todos';
+
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterLink';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const [todosFromServer, setTodos] = useState<Todo[]>([]);
+
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('All');
+
+  useEffect(() => {
+    if (user) {
+      getTodos(user.id)
+        .then(setTodosFromServer)
+        .catch(() => {
+          setIsError(true);
+          setErrorMessage('Can\'t load todos');
+        });
+    }
+  }, []);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
-    }
-
-    if (user) {
-      getTodos(user.id)
-        .then(setTodos)
-        .catch(() => {
-          setIsError(true);
-          setTimeout(() => setIsError(false), 3000);
-        });
     }
   }, []);
 
@@ -61,6 +66,10 @@ export const App: React.FC = () => {
   const amountOfTodosToComplete = todosFromServer.filter(
     todo => !todo.completed,
   ).length;
+
+  if (isError) {
+    setTimeout(() => setIsError(false), 3000);
+  }
 
   return (
     <div className="todoapp">
@@ -107,29 +116,11 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification',
-          'is-danger',
-          'is-light',
-          'has-text-weight-normal',
-          { hidden: !isError },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleClickCloseErrorMessage}
-        />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorNotification
+        isError={isError}
+        onCloseErrorMessage={handleClickCloseErrorMessage}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };
