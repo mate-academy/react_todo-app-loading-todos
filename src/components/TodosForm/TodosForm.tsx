@@ -15,7 +15,6 @@ type Props = {
 export const TodosForm: React.FC<Props> = ({ todos }) => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  // const { status } = useParams();
   const currentLocation = useLocation();
 
   const filtredTodos = () => {

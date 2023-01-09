@@ -41,7 +41,6 @@ export const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<TodosForm todos={todos} />} />
-        <Route path="/:status" element={<TodosForm todos={todos} />} />
       </Routes>
 
       {errorLoad && (
