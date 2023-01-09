@@ -5,12 +5,12 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-export const postTodo = (data: any) => {
-  return client.post('/todos', data);
+export const postTodo = (data: Todo) => {
+  return client.post<Todo>('/todos', data);
 };
 
-export const patchTodo = (todoId: number, data: any) => {
-  return client.patch(`/todos/${todoId}`, data);
+export const patchTodo = (todoId: number, data: string) => {
+  return client.patch<Todo>(`/todos/${todoId}`, data);
 };
 
 export const deleteTodo = (todoId: number) => {

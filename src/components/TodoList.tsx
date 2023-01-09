@@ -6,7 +6,7 @@ type Props = {
   todos: Todo[];
 };
 
-export const Main: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   const [inputSelectedId, setInputSelectedId] = useState('');
   const [inputValue, setInputValue] = useState('');
   const selectedTodoField = useRef<HTMLInputElement>(null);
@@ -32,23 +32,23 @@ export const Main: React.FC<Props> = ({ todos }) => {
   });
 
   return (
-    <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
-        <div
+    <ul className="todoapp__main" data-cy="TodoList">
+      {todos.map(({ id, completed, title }) => (
+        <li
           data-cy="Todo"
-          className={classNames('todo', { completed: todo.completed })}
-          key={todo.id}
+          className={classNames('todo', { completed })}
+          key={id}
         >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              defaultChecked={todo.completed}
+              defaultChecked={completed}
             />
           </label>
 
-          {(+inputSelectedId === todo.id) ? (
+          {(+inputSelectedId === id) ? (
             <form>
               <input
                 data-cy="TodoTitleField"
@@ -66,10 +66,10 @@ export const Main: React.FC<Props> = ({ todos }) => {
               <span
                 data-cy="TodoTitle"
                 className="todo__title"
-                id={`${todo.id}`}
+                id={`${id}`}
                 onDoubleClick={onDoubleClick}
               >
-                {todo.title}
+                {title}
               </span>
               <button
                 type="button"
@@ -85,8 +85,8 @@ export const Main: React.FC<Props> = ({ todos }) => {
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
           </div>
-        </div>
+        </li>
       ))}
-    </section>
+    </ul>
   );
 };

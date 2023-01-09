@@ -14,13 +14,24 @@ enum Filter {
 }
 
 export const Footer: React.FC<Props> = ({ todos, showFilteredTodos }) => {
-  const [todosLeft, setTodosLeft] = useState(todos.length);
+  const [todosLeftCount, setTodosLeftCount] = useState(todos.length);
+  const [finishedTodos, setFinishedTodos] = useState<Todo[]>([]);
   const [currentFilter, setCurrentFilter] = useState<Filter>(Filter.ALL);
+
+  const showTodosLeftCount = () => {
+    const completedTodos = todos.filter(todo => !todo.completed);
+
+    setTodosLeftCount(completedTodos.length);
+  };
+
+  const showClearCompleted = () => {
+    const completedTodos = todos.filter(todo => todo.completed);
+
+    setFinishedTodos(completedTodos);
+  };
 
   const allTodos = () => {
     setCurrentFilter(Filter.ALL);
-
-    setTodosLeft(todos.length);
     showFilteredTodos(todos);
   };
 
@@ -28,7 +39,6 @@ export const Footer: React.FC<Props> = ({ todos, showFilteredTodos }) => {
     const filteredArray = todos.filter(todo => !todo.completed);
 
     setCurrentFilter(Filter.ACTIVE);
-    setTodosLeft(filteredArray.length);
     showFilteredTodos(filteredArray);
   };
 
@@ -36,18 +46,19 @@ export const Footer: React.FC<Props> = ({ todos, showFilteredTodos }) => {
     const filteredArray = todos.filter(todo => todo.completed);
 
     setCurrentFilter(Filter.COMPLETED);
-    setTodosLeft(filteredArray.length);
     showFilteredTodos(filteredArray);
   };
 
   useEffect(() => {
     showFilteredTodos(todos);
-  }, []);
+    showTodosLeftCount();
+    showClearCompleted();
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todosLeft} items left`}
+        {`${todosLeftCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -88,6 +99,7 @@ export const Footer: React.FC<Props> = ({ todos, showFilteredTodos }) => {
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
+        disabled={finishedTodos.length === 0}
       >
         Clear completed
       </button>

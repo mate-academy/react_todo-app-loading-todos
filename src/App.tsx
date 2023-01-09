@@ -1,15 +1,18 @@
 import classNames from 'classnames';
 import React, {
-  useContext, useEffect, useState,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Header } from './components/Header';
-import { Main } from './components/Main';
+import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
 enum ErrorTypes {
+  GET = 'GET',
   POST = 'POST',
   PATCH = 'PATCH',
   DELETE = 'DELETE',
@@ -38,6 +41,10 @@ export const App: React.FC = () => {
       } catch (error) {
         if (error instanceof Error) {
           switch (error.message) {
+            case ErrorTypes.GET:
+              setErrorMessage('Unable to fetch data');
+              break;
+
             case ErrorTypes.POST:
               setErrorMessage('Unable to add a todo');
               break;
@@ -82,7 +89,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <Main todos={currentTodos} />
+            <TodoList todos={currentTodos} />
 
             <Footer todos={todos} showFilteredTodos={showFilteredTodos} />
           </>
