@@ -9,7 +9,6 @@ const TodoListItem: React.FC<Props> = ({ todo }) => {
     <div
       data-cy="Todo"
       className={`todo ${todo.completed && 'completed'} `}
-      key={todo.id}
     >
       <label className="todo__status-label">
         <input
