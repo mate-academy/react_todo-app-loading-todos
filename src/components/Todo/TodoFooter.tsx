@@ -3,27 +3,54 @@ import { Todo } from '../../types/Todo';
 import FooterLink from './FooterLink/FooterLink';
 
 type Props = {
-  setVisibleTodos: (arg0: Todo[]) => void,
+  setVisibleTodos: (value: Todo[]) => void,
+  visibleTodos: Todo[]
   todos: Todo[]
 };
 
-const TodoFooter: React.FC<Props> = ({ setVisibleTodos, todos }) => {
+enum FilterTypes {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+
+const TodoFooter:
+React.FC<Props> = ({ setVisibleTodos, todos, visibleTodos }) => {
   const filterTodos = () => {
     setVisibleTodos(todos.filter((todo: Todo) => {
       return todo;
     }));
   };
 
-  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedClass, setSelectedClass] = useState('all');
 
   useEffect(() => {
     filterTodos();
   }, []);
 
+  const showAllTodos = () => {
+    filterTodos();
+    setSelectedClass(FilterTypes.All);
+  };
+
+  const showFilteredTodos = (value: string) => {
+    if (value === 'active') {
+      setVisibleTodos(todos.filter((todo: Todo) => {
+        return !todo.completed;
+      }));
+    } else {
+      setVisibleTodos(todos.filter((todo: Todo) => {
+        return todo.completed;
+      }));
+    }
+
+    setSelectedClass(value);
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${visibleTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -32,34 +59,21 @@ const TodoFooter: React.FC<Props> = ({ setVisibleTodos, todos }) => {
           dataCy="FilterLinkAll"
           className={`filter__link ${selectedClass === 'all' && 'selected'}`}
           text="All"
-          onClick={() => {
-            filterTodos();
-            setSelectedClass('all');
-          }}
+          onClick={showAllTodos}
         />
         <FooterLink
           href="#/active"
           dataCy="FilterLinkActive"
           className={`filter__link ${selectedClass === 'active' && 'selected'}`}
           text="Active"
-          onClick={() => {
-            setVisibleTodos(todos.filter((todo: Todo) => {
-              return !todo.completed;
-            }));
-            setSelectedClass('active');
-          }}
+          onClick={() => showFilteredTodos(FilterTypes.Active)}
         />
         <FooterLink
           dataCy="FilterLinkCompleted"
           href="#/completed"
           className={`filter__link ${selectedClass === 'completed' && 'selected'}`}
           text="Completed"
-          onClick={() => {
-            setVisibleTodos(todos.filter((todo: Todo) => {
-              return todo.completed;
-            }));
-            setSelectedClass('completed');
-          }}
+          onClick={() => showFilteredTodos(FilterTypes.Completed)}
         />
 
       </nav>

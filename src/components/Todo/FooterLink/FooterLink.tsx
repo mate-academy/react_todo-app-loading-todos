@@ -5,7 +5,7 @@ type Props = {
   href: string,
   className: string,
   text: string,
-  onClick: any,
+  onClick: () => void,
 };
 
 const FooterLink: React.FC<Props> = ({

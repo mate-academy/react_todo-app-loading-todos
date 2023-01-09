@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 
 type Props = {
   error: boolean,
-  setError: (arg0: boolean)=>void,
+  setError: (value: boolean) => void,
   errorText: string,
 };
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 const Error:React.FC<Props> = ({ error, setError, errorText }) => {
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -27,6 +26,7 @@ const Error:React.FC<Props> = ({ error, setError, errorText }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        aria-label="Close error"
         onClick={() => {
           setError(false);
         }}

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -51,29 +50,21 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             data-cy="ToggleAllButton"
+            aria-label="Add todo"
             type="button"
             className="todoapp__toggle-all active"
           />
           <TodoForm newTodoField={newTodoField} />
         </header>
-        {
-          todos
-          && (
-            <TodoList
-              todos={visibleTodos}
-            />
-          )
-        }
-
-        {
-          Boolean(todos.length)
+        {todos && <TodoList todos={visibleTodos} /> }
+        {!!todos.length
           && (
             <TodoFooter
               setVisibleTodos={setVisibleTodos}
+              visibleTodos={visibleTodos}
               todos={todos}
             />
-          )
-        }
+          )}
       </div>
 
       <Error error={error} setError={setError} errorText={errorText} />
