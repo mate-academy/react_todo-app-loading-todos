@@ -43,16 +43,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         ×
       </button>
 
-      {/* <form>
-        <input
-          data-cy="TodoTitleField"
-          type="text"
-          className="todo__title-field"
-          placeholder="Empty todo will be deleted"
-          defaultValue="JS"
-        />
-      </form> */}
-
       <TodoLoader isLoading={false} />
     </div>
   );
