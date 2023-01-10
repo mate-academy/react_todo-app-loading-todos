@@ -12,10 +12,10 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
 enum ErrorTypes {
-  GET = 'GET',
-  POST = 'POST',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
+  Get = 'GET',
+  Post = 'POST',
+  Patch = 'PATCH',
+  Delete = 'DELETE',
 }
 
 export const App: React.FC = () => {
@@ -41,19 +41,19 @@ export const App: React.FC = () => {
       } catch (error) {
         if (error instanceof Error) {
           switch (error.message) {
-            case ErrorTypes.GET:
+            case ErrorTypes.Get:
               setErrorMessage('Unable to fetch data');
               break;
 
-            case ErrorTypes.POST:
+            case ErrorTypes.Post:
               setErrorMessage('Unable to add a todo');
               break;
 
-            case ErrorTypes.PATCH:
+            case ErrorTypes.Patch:
               setErrorMessage('Unable to update a todo');
               break;
 
-            case ErrorTypes.DELETE:
+            case ErrorTypes.Delete:
               setErrorMessage('Unable to delete a todo');
               break;
 
