@@ -1,8 +1,8 @@
-import { User } from '../types/User';
-import { client } from '../utils/fetchClient';
+import User from 'models/User';
+import { HttpClient } from '../utilities/HttpClient';
 
 export const getUserByEmail = async (email: string) => {
-  const users = await client.get<User[]>(`/users?email=${email}`);
+  const users = await HttpClient.get<User[]>(`/users?email=${email}`);
 
   return users[0] || null;
 };
@@ -10,5 +10,5 @@ export const getUserByEmail = async (email: string) => {
 type UserData = Pick<User, 'name' | 'email'>;
 
 export const createUser = async ({ email, name }: UserData) => {
-  return client.post<User>('/users', { email, name });
+  return HttpClient.post<Omit<User, 'id'>>('/users', { email, name });
 };
