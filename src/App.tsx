@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -65,6 +64,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             data-cy="ToggleAllButton"
+            aria-label="toggle-button"
             type="button"
             className="todoapp__toggle-all active"
           />
