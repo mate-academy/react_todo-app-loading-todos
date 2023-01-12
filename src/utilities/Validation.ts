@@ -8,7 +8,7 @@ export const isEmailValid = {
   message: 'E-mail is not valid',
 };
 
-export const isMinValue = (value:string | undefined, min:number) => {
+export const isMinValue = (value:string, min:number) => {
   if (!value) {
     return true;
   }

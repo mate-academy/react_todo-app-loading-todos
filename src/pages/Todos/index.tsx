@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { useAppSelector } from 'hooks/useRedux';
-import { selectTodos } from 'store/todos/todosSelectors';
+import { useAppSelector } from '../../hooks/useRedux';
+import { selectTodos } from '../../store/todos/todosSelectors';
 import TodosErrors from './TodosErrors';
 import TodosFooter from './TodosFooter';
 import TodosHeader from './TodosHeader';

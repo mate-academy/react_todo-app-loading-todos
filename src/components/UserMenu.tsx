@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import useMenu from 'hooks/useMenu';
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import AuthAsync from 'store/auth/authAsync';
-import { selectCurrentUser } from 'store/users/usersSelectors';
-import User from 'models/User';
 import { Box, Avatar, Chip } from '@mui/material';
 import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
+import useMenu from '../hooks/useMenu';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import AuthAsync from '../store/auth/authAsync';
+import { selectCurrentUser } from '../store/users/usersSelectors';
+import User from '../models/User';
 
 const UserMenu:FC = () => {
   const dispatch = useAppDispatch();

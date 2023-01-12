@@ -1,9 +1,9 @@
 import {
   FC, useState, useRef, useEffect, KeyboardEvent, ChangeEvent,
 } from 'react';
-import { useAppDispatch } from 'hooks/useRedux';
-import Todo from 'models/Todo';
-import TodosAsync from 'store/todos/todosAsync';
+import { useAppDispatch } from '../../hooks/useRedux';
+import Todo from '../../models/Todo';
+import TodosAsync from '../../store/todos/todosAsync';
 
 type Props = {
   todo: Todo;

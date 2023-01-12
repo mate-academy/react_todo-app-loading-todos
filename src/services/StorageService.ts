@@ -1,6 +1,6 @@
-import User from 'models/User';
+import User from '../models/User';
 
-const StorageService = {
+const storageService = {
   getUser: () => {
     const user = localStorage.getItem('user');
 
@@ -14,4 +14,4 @@ const StorageService = {
   },
 };
 
-export default StorageService;
+export default storageService;

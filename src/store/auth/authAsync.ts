@@ -1,14 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import StorageService from 'services/StorageService';
-import { usersActions } from 'store/users/usersSlice';
+import storageService from '../../services/StorageService';
+import { usersActions } from '../users/usersSlice';
 import { authActions } from './authSlice';
 
 const AuthAsync = {
-  // Check authenticated
   checkAuthenticated: createAsyncThunk(
     'auth/checkAuthenticated',
     async (_, thunkApi) => {
-      const user = StorageService.getUser();
+      const user = storageService.getUser();
 
       if (user) {
         thunkApi.dispatch(usersActions.setCurrentUser(user));
@@ -18,9 +17,8 @@ const AuthAsync = {
       }
     },
   ),
-  // Sign out
   signOut: createAsyncThunk('auth/signOut', async (_, thunkApi) => {
-    StorageService.removeUser();
+    storageService.removeUser();
     thunkApi.dispatch(usersActions.setCurrentUser(null));
     thunkApi.dispatch(authActions.setAuthenticated(false));
   }),

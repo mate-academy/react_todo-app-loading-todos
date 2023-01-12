@@ -1,10 +1,10 @@
 import { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import Todo from 'models/Todo';
-import TodosAsync from 'store/todos/todosAsync';
-import { todosActions } from 'store/todos/todosSlice';
-import { selectFilteredTodos } from 'store/todos/todosSelectors';
-import { selectCurrentUser } from 'store/users/usersSelectors';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import Todo from '../../models/Todo';
+import TodosAsync from '../../store/todos/todosAsync';
+import { todosActions } from '../../store/todos/todosSlice';
+import { selectFilteredTodos } from '../../store/todos/todosSelectors';
+import { selectCurrentUser } from '../../store/users/usersSelectors';
 import TodoItem from './TodoItem';
 
 const TodosList:FC = () => {

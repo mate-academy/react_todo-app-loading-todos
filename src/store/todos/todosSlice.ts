@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Todo from 'models/Todo';
-import FilterTypes from 'types/FilterTypes';
+import Todo from '../../models/Todo';
+import FilterTypes from '../../types/FilterTypes';
 import TodosAsync from './todosAsync';
 
 export interface State {
@@ -30,14 +30,12 @@ export const todosSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Todos
       .addCase(
         TodosAsync.fetchTodos.fulfilled,
         (state: State, action: PayloadAction<Todo[]>) => {
           state.todos = action.payload;
         },
       )
-      // Create Todo
       .addCase(
         TodosAsync.createTodo.fulfilled,
         (state: State, action: PayloadAction<Todo>) => {
@@ -49,7 +47,6 @@ export const todosSlice = createSlice({
       .addCase(TodosAsync.createTodo.rejected, (state:State) => {
         state.error = 'Unable to add a todo';
       })
-      // Update Todo
       .addCase(
         TodosAsync.updateTodo.fulfilled,
         (state: State, action: PayloadAction<Todo>) => {
@@ -63,7 +60,6 @@ export const todosSlice = createSlice({
       .addCase(TodosAsync.updateTodo.rejected, (state:State) => {
         state.error = 'Unable to update a todo';
       })
-      // Delete Todo
       .addCase(
         TodosAsync.deleteTodo.fulfilled,
         (state: State, action) => {

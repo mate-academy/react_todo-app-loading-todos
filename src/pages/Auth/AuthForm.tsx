@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import classNames from 'classnames';
 import { useForm, Controller } from 'react-hook-form';
-import { useAppDispatch } from 'hooks/useRedux';
-import Input from 'components/Controls/Input';
-import User from 'models/User';
-import UsersAsync from 'store/users/usersAsync';
-import { usersActions } from 'store/users/usersSlice';
-import { authActions } from 'store/auth/authSlice';
+import { useAppDispatch } from '../../hooks/useRedux';
+import Input from '../../components/Controls/Input';
+import UsersAsync from '../../store/users/usersAsync';
+import { usersActions } from '../../store/users/usersSlice';
+import { authActions } from '../../store/auth/authSlice';
 import {
   isEmailValid, isFieldRequired, isMinValue,
-} from 'utilities/Validation';
+} from '../../utilities/Validation';
 
 interface Form {
   email: string;
@@ -46,7 +45,7 @@ const AuthForm:FC = () => {
 
   const createUser = (data: Form) => {
     setLoading(true);
-    dispatch(UsersAsync.createUser(data as User))
+    dispatch(UsersAsync.createUser(data))
       .unwrap()
       .then(() => {
         dispatch(authActions.setAuthenticated(true));
@@ -94,7 +93,7 @@ const AuthForm:FC = () => {
           rules={{
             required: isFieldRequired,
             validate: {
-              isMinValue: (value:string | undefined) => isMinValue(value, 8),
+              isMinValue: (value) => isMinValue(value, 4),
             },
           }}
           render={({ field: { value, onChange } }) => (

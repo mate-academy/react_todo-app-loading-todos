@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
 import { FC } from 'react';
-import { selectError } from 'store/todos/todosSelectors';
-import { todosActions } from 'store/todos/todosSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { selectError } from '../../store/todos/todosSelectors';
+import { todosActions } from '../../store/todos/todosSlice';
 
 const TodosErrors:FC = () => {
   const dispatch = useAppDispatch();

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import AuthForm from 'pages/Auth/AuthForm';
-import Todos from 'pages/Todos';
-import PrivateRoute from 'components/PrivateRoute';
-import PublicRoute from 'components/PublicRoute';
+import AuthForm from '../pages/Auth/AuthForm';
+import Todos from '../pages/Todos';
+import PrivateRoute from '../components/PrivateRoute';
+import PublicRoute from '../components/PublicRoute';
 
 const AppRouting:FC = () => {
   return (

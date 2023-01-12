@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import User from 'models/User';
+import User from '../../models/User';
 import UsersAsync from './usersAsync';
 
 export interface State {
@@ -21,14 +21,12 @@ export const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Users
       .addCase(
         UsersAsync.fetchUser.fulfilled,
         (state: State, action: PayloadAction<User>) => {
           state.currentUser = action.payload;
         },
       )
-      // Create Users
       .addCase(
         UsersAsync.createUser.fulfilled,
         (state: State, action: PayloadAction<User>) => {

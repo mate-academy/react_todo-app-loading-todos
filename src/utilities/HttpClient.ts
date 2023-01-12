@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: 'https://mate.academy/students-api',
 });
 
-export const HttpClient = {
+export const httpClient = {
   async get<T>(url: string) {
     const { data } = await instance.get<T>(url);
 

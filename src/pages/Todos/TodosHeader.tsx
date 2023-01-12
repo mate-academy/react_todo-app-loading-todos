@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
-import TodosAsync from 'store/todos/todosAsync';
-import { selectCurrentUser } from 'store/users/usersSelectors';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import TodosAsync from '../../store/todos/todosAsync';
+import { selectCurrentUser } from '../../store/users/usersSelectors';
 import {
   selectCompletedTodosIds,
   selectActiveTodosIds,
   selectTodos,
-} from 'store/todos/todosSelectors';
+} from '../../store/todos/todosSelectors';
 
 interface Form {
   title: string;

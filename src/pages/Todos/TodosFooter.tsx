@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
   selectActiveTodosIds,
   selectCompletedTodosIds,
   selectFilter,
-} from 'store/todos/todosSelectors';
-import { todosActions } from 'store/todos/todosSlice';
-import FilterTypes from 'types/FilterTypes';
-import TodosAsync from 'store/todos/todosAsync';
+} from '../../store/todos/todosSelectors';
+import { todosActions } from '../../store/todos/todosSlice';
+import FilterTypes from '../../types/FilterTypes';
+import TodosAsync from '../../store/todos/todosAsync';
 
 const TodosFooter:FC = () => {
   const dispatch = useAppDispatch();
