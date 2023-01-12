@@ -1,11 +1,16 @@
+import classNames from 'classnames';
 import React from 'react';
 import { SortType } from '../../types/SortType';
 
 interface Props {
+  selectParametr: string,
   setSelectParametr: (param: string) => void,
 }
 
-export const TodoAppFooter: React.FC<Props> = ({ setSelectParametr }) => {
+export const TodoAppFooter: React.FC<Props> = ({
+  selectParametr,
+  setSelectParametr,
+}) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const { title } = event.currentTarget;
 
@@ -23,7 +28,9 @@ export const TodoAppFooter: React.FC<Props> = ({ setSelectParametr }) => {
           title={SortType.all}
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
+          className={classNames(
+            'filter__link', { selected: selectParametr === SortType.all },
+          )}
           onClick={handleClick}
         >
           All
@@ -33,7 +40,9 @@ export const TodoAppFooter: React.FC<Props> = ({ setSelectParametr }) => {
           title={SortType.active}
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={classNames(
+            'filter__link', { selected: selectParametr === SortType.active },
+          )}
           onClick={handleClick}
         >
           Active
@@ -43,7 +52,9 @@ export const TodoAppFooter: React.FC<Props> = ({ setSelectParametr }) => {
           title={SortType.completed}
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={classNames(
+            'filter__link', { selected: selectParametr === SortType.completed },
+          )}
           onClick={handleClick}
         >
           Completed
