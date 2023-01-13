@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React from 'react';
 import { IsError } from '../../types/IsError';
 
@@ -10,6 +9,7 @@ interface Props {
 export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
   const error = Object.entries(isError);
   const errorName = error.find(el => el[1] === true);
+  const justErrorName = errorName && errorName[0].slice(0, -5);
 
   const handleClose = () => {
     setIsError({ ...isError, loadError: false });
@@ -18,12 +18,7 @@ export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={
-        classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !error.some(el => el[1] === true) },
-        )
-      }
+      className="notification is-danger is-light has-text-weight-normal"
     >
       <button
         data-cy="HideErrorButton"
@@ -33,7 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
         onClick={handleClose}
       />
 
-      {(error && errorName !== undefined) && `Unable to ${errorName[0].slice(0, -5)} a todo`}
+      {(errorName !== undefined) && `Unable to ${justErrorName} a todo`}
 
     </div>
   );

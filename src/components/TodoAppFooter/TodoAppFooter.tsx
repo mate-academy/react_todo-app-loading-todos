@@ -4,23 +4,27 @@ import { SortType } from '../../types/SortType';
 
 interface Props {
   selectParametr: string,
-  setSelectParametr: (param: string) => void,
+  setSelectParametr: (param: SortType) => void,
+  activeTodosLength: number,
+  completTodoLength: number,
 }
 
 export const TodoAppFooter: React.FC<Props> = ({
   selectParametr,
   setSelectParametr,
+  activeTodosLength,
+  completTodoLength,
 }) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     const { title } = event.currentTarget;
 
-    setSelectParametr(title);
+    setSelectParametr(title as SortType);
   };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${activeTodosLength} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -65,6 +69,7 @@ export const TodoAppFooter: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
+        style={{ visibility: completTodoLength === 0 ? 'hidden' : 'visible' }}
       >
         Clear completed
       </button>

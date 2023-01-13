@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -17,7 +17,7 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 export const App: React.FC = () => {
-  const user = useContext(AuthContext);
+  const user = useContext(AuthContext) as User;
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const isErrorDefault = {
@@ -30,10 +30,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [copyTodos, setCopyTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(isErrorDefault);
-  const [selectParametr, setSelectParametr] = useState('all');
+  const [selectParametr, setSelectParametr] = useState(SortType.all);
 
   const loadTodos = async () => {
-    const { id } = user as User;
+    const { id } = user;
 
     try {
       const loadedTodos = await getTodos(id);
@@ -69,6 +69,14 @@ export const App: React.FC = () => {
     setTodos(filteredTodos);
   }, [selectParametr, copyTodos]);
 
+  const activeTodosLength = useMemo(() => (
+    copyTodos.filter(el => !el.completed).length
+  ), [copyTodos]);
+
+  const completTodoLength = useMemo(() => (
+    todos.length - activeTodosLength
+  ), [copyTodos]);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -78,15 +86,18 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && <TodosList todos={todos} />}
 
-        {todos.length > 0 && (
+        {(todos.length > 0 || selectParametr !== SortType.all) && (
           <TodoAppFooter
             selectParametr={selectParametr}
             setSelectParametr={setSelectParametr}
+            activeTodosLength={activeTodosLength}
+            completTodoLength={completTodoLength}
           />
         )}
       </div>
 
-      <ErrorNotification isError={isError} setIsError={setIsError} />
+      {Object.entries(isError).some(el => el[1] === true)
+        && <ErrorNotification isError={isError} setIsError={setIsError} />}
     </div>
   );
 };
