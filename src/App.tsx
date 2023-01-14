@@ -77,6 +77,8 @@ export const App: React.FC = () => {
     todos.length - activeTodosLength
   ), [copyTodos]);
 
+  const isSomeError = Object.entries(isError).some(el => el[1] === true);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -96,7 +98,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {Object.entries(isError).some(el => el[1] === true)
+      {isSomeError
         && <ErrorNotification isError={isError} setIsError={setIsError} />}
     </div>
   );

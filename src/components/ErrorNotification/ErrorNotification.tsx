@@ -28,7 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
         onClick={handleClose}
       />
 
-      {(errorName !== undefined) && `Unable to ${justErrorName} a todo`}
+      {(errorName) && `Unable to ${justErrorName} a todo`}
 
     </div>
   );
