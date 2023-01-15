@@ -3,15 +3,15 @@ import cn from 'classnames';
 
 type Props = {
   error: string;
-  onClick: React.Dispatch<React.SetStateAction<string>>;
+  onSetErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const ErrorNotification: React.FC<Props> = (props) => {
-  const { error, onClick } = props;
+  const { error, onSetErrorMessage } = props;
 
   useEffect(() => {
     setTimeout(() => {
-      onClick('');
+      onSetErrorMessage('');
     }, 3000);
   }, []);
 
@@ -28,9 +28,8 @@ export const ErrorNotification: React.FC<Props> = (props) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => onClick('')}
+        onClick={() => onSetErrorMessage('')}
       />
-
       {error}
     </div>
   );

@@ -20,7 +20,7 @@ import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [filterType, setFilterType] = useState(FilterType.All);
 
   const user = useContext(AuthContext);
@@ -39,12 +39,12 @@ export const App: React.FC = () => {
     }
 
     try {
-      setError('');
+      setErrorMessage('');
       const loadedTodos = await getTodos(user.id);
 
       setTodos(loadedTodos);
     } catch (error) {
-      setError('Can\'t load todos');
+      setErrorMessage('Can\'t load todos');
     }
   }, []);
 
@@ -59,10 +59,10 @@ export const App: React.FC = () => {
           return todo;
 
         case FilterType.Active:
-          return todo.completed === false;
+          return !todo.completed;
 
         case FilterType.Completed:
-          return todo.completed === true;
+          return todo.completed;
 
         default:
           throw new Error('Invalid type');
@@ -71,8 +71,8 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = filterTodos();
-  const activeTodos = todos.filter(todo => todo.completed === false).length;
-  const hasCompletedTodos = todos.some(todo => todo.completed === true);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -95,12 +95,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <ErrorNotification
-          error={errorMessage}
-          onClick={setError}
-        />
-      )}
+      <ErrorNotification
+        error={errorMessage}
+        onSetErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
