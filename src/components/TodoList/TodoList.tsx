@@ -5,7 +5,7 @@ type Props = {
   todos: Todo[]
 };
 
-const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
 
@@ -15,5 +15,3 @@ const TodoList: React.FC<Props> = ({ todos }) => {
     </section>
   );
 };
-
-export default TodoList;

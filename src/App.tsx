@@ -11,7 +11,7 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorMessages } from './components/ErrorMessages';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import TodoList from './components/TodoList/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/Filter';
 
