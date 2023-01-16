@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useRef, useState,
+} from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 
@@ -29,12 +31,12 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
         setError(false);
       })
-      .catch(() => {
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-        }, 3000)
-      })
+        .catch(() => {
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+          }, 3000);
+        });
     }
   }, []);
 
@@ -55,11 +57,11 @@ export const App: React.FC = () => {
 
   const handleFilter = (filterValue: string) => {
     setFilter(filterValue);
-  }
+  };
 
   const handleErrorClose = () => {
     setError(false);
-  }
+  };
 
   return (
     <div className="todoapp">
