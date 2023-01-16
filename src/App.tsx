@@ -12,7 +12,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Header } from './components/Header';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[] | []>([]);
   const [title, setTitle] = useState<string>('');
   const [filter, setFilter] = useState(Filter.all);
   const [onError, setOnError] = useState<string>('');
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
           setIsHidden={setIsHidden}
         />
 
-        {todos && (
+        {todos.length > 0 && (
           <>
             <TodosList todos={visibleTodos} />
 
