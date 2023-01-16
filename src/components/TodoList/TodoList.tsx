@@ -3,15 +3,15 @@ import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo/TodoInfo';
 
 type Props = {
-  todos: Todo[],
+  filtredTodos: Todo[],
 };
 
 export const TodoList: React.FC<Props> = ({
-  todos,
+  filtredTodos,
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todoItem => (
+      {filtredTodos.map(todoItem => (
         <TodoInfo
           todoList={todoItem}
           key={todoItem.id}

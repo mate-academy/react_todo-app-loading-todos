@@ -1,15 +1,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
 import { AuthContext } from './components/Auth/AuthContext';
-import { TodosForm } from './components/TodosForm/TodosForm';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { InputForm } from './components/InputForm/InputForm';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodoFilters } from './components/TodoFilters/TodoFilters';
 
 export const App: React.FC = () => {
-  const [hideErrorNotification, setHideErrorNotification] = useState(false);
   const [errorLoad, setErrorLoad] = useState(false);
+  const [isLoadError, setisLoadError] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filtredTodos, setFiltredTodos] = useState<Todo[]>([]);
 
   const user = useContext(AuthContext);
 
@@ -21,7 +23,7 @@ export const App: React.FC = () => {
         setTodos(getTodosFromServer);
       }
     } catch (error) {
-      setErrorLoad(true);
+      setisLoadError(true);
     }
   };
 
@@ -31,29 +33,34 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setErrorLoad(false);
+      setisLoadError(false);
     }, 3000);
-  }, [errorLoad]);
+  }, [isLoadError]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
+      <div className="todoapp__content">
 
-      <Routes>
-        <Route path="/" element={<TodosForm todos={todos} />} />
-      </Routes>
+        <InputForm />
+        <TodoList filtredTodos={filtredTodos} />
+        <TodoFilters
+          todos={todos}
+          setFiltredTodos={setFiltredTodos}
+        />
+      </div>
 
-      {errorLoad && (
+      {isLoadError && (
         <div
           data-cy="ErrorNotification"
-          className={hideErrorNotification ? 'is-hidden'
+          className={errorLoad ? 'is-hidden'
             : 'notification is-danger is-light has-text-weight-normal'}
         >
           <button
             data-cy="HideErrorButton"
             type="button"
             className="delete"
-            onClick={() => setHideErrorNotification(true)}
+            onClick={() => setErrorLoad(true)}
           />
 
           Unable to load a todos
