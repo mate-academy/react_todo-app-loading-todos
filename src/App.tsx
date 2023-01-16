@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -26,10 +27,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const [filterType, setFilterType] = useState(FilterType.all);
-  const [activeTodoLength, setActiveTodosLength] = useState(0);
 
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState(ErrorType.none);
+
+  const activeTodos: Todo[] = todos.filter(todo => !todo.completed);
 
   async function loadTodos(userData: User) {
     try {
@@ -58,10 +60,6 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    setActiveTodosLength(todos.filter(todo => todo.completed !== true).length);
-  }, [todos]);
-
   const onInputChange = (str: string) => {
     setQuery(str);
   };
@@ -89,18 +87,18 @@ export const App: React.FC = () => {
     setTodos(todos.filter(todo => todo.completed !== true));
   };
 
-  const visibleTodos = () => {
+  const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filterType) {
         case FilterType.completed:
-          return todo.completed === true;
+          return todo.completed;
         case FilterType.active:
-          return todo.completed === false;
+          return !todo.completed;
         default:
-          return todo;
+          return true;
       }
     });
-  };
+  }, [todos, filterType]);
 
   return (
     <div className="todoapp">
@@ -125,12 +123,12 @@ export const App: React.FC = () => {
           <>
             <section className="todoapp__main" data-cy="TodoList">
               <TodoList
-                todos={visibleTodos()}
+                todos={visibleTodos}
               />
             </section>
 
             <Footer
-              todoItemLeft={activeTodoLength}
+              todoItemLeft={activeTodos.length}
               filterType={filterType}
               setFilterType={setFilterType}
               clearCompleted={clearCompleted}

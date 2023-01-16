@@ -15,42 +15,42 @@ export const Footer: React.FC<Props> = ({
   setFilterType,
   clearCompleted,
 }) => {
-  return (
+  const arrFilterType = [{
+    data: 'FilterLinkAll',
+    href: '#/',
+    type: FilterType.all,
+    text: 'All',
+  }, {
+    data: 'FilterLinkActive',
+    href: '#/active',
+    type: FilterType.active,
+    text: 'Active',
+  }, {
+    data: 'FilterLinkCompleted',
+    href: '#/completed',
+    type: FilterType.completed,
+    text: 'Completed',
+  }];
 
+  return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
         {`${todoItemLeft} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className={classNames('filter__link',
-            { selected: FilterType.all === filterType })}
-          onClick={() => setFilterType(FilterType.all)}
-        >
-          All
-        </a>
-
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className={classNames('filter__link',
-            { selected: FilterType.active === filterType })}
-          onClick={() => setFilterType(FilterType.active)}
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className={classNames('filter__link',
-            { selected: FilterType.completed === filterType })}
-          onClick={() => setFilterType(FilterType.completed)}
-        >
-          Completed
-        </a>
+        {arrFilterType.map(filter => (
+          <a
+            key={filter.text}
+            data-cy={filter.data}
+            href={filter.href}
+            className={classNames('filter__link',
+              { selected: filter.type === filterType })}
+            onClick={() => setFilterType(filter.type)}
+          >
+            {filter.text}
+          </a>
+        ))}
       </nav>
 
       <button
