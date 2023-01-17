@@ -46,14 +46,16 @@ export const App: React.FC = () => {
         case Filters.All:
           return todo;
         case Filters.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case Filters.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           return todo;
       }
     });
   }, [todos, filter]);
+
+  const isComponentVisible = visibleTodos.length > 0;
 
   const handleFilter = (filterValue: string) => {
     setFilter(filterValue);
@@ -80,11 +82,13 @@ export const App: React.FC = () => {
           />
         </header>
 
-        <TodoList
-          todos={visibleTodos}
-        />
+        {isComponentVisible && (
+          <TodoList
+            todos={visibleTodos}
+          />
+        )}
 
-        {visibleTodos.length > 0 && (
+        {isComponentVisible && (
           <Footer
             todos={visibleTodos}
             filter={filter}
