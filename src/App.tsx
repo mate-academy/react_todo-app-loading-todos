@@ -55,7 +55,7 @@ export const App: React.FC = () => {
     });
   }, [todos, filter]);
 
-  const isComponentVisible = visibleTodos.length > 0;
+  const isComponentVisible = todos.length > 0;
 
   const handleFilter = (filterValue: string) => {
     setFilter(filterValue);
