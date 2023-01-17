@@ -2,6 +2,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -9,7 +10,7 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { NewTodo } from './components/NewTodo';
-import { TodoList } from './components/Auth/TodoList';
+import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
 
 export const App: React.FC = () => {
@@ -44,16 +45,18 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = todos.filter(({ completed }) => {
-    switch (filterStatus) {
-      case 'Active':
-        return !completed;
-      case 'Completed':
-        return completed;
-      default:
-        return true;
-    }
-  });
+  const visibleTodos = useMemo(() => (
+    todos.filter(({ completed }) => {
+      switch (filterStatus) {
+        case 'Active':
+          return !completed;
+        case 'Completed':
+          return completed;
+        default:
+          return true;
+      }
+    })
+  ), [todos, filterStatus]);
 
   return (
     <div className="todoapp">
