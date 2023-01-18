@@ -71,7 +71,7 @@ export const App: React.FC = () => {
     });
   }, [todos, filterType]);
 
-  const activeTodos = useMemo(() => (
+  const activeTodosAmount = useMemo(() => (
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
             <TodoList todos={filteredTodos} />
 
             <Footer
-              activeTodos={activeTodos}
+              activeTodosAmount={activeTodosAmount}
               hasCompletedTodos={hasCompletedTodos}
               filterType={filterType}
               onChangeType={setFilterType}
