@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import { FC, memo } from 'react';
 import { Todo } from '../../types/Todo';
+import './TodoItem.scss';
 
 type Props = {
   todo: Todo

@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { Todo } from '../../types/Todo';
-import { TodoItem } from '../Todo';
+import { TodoItem } from '../TodoItem';
 
 type Props = {
   todos: Todo[]

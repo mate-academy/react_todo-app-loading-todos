@@ -9,6 +9,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { FilterTypes } from './types/FilterTypes';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -126,24 +127,10 @@ export const App: React.FC = memo(() => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification',
-          'is-danger',
-          'is-light',
-          'has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onCloseBtnClick={() => setErrorMessage('')}
+      />
     </div>
   );
 });
