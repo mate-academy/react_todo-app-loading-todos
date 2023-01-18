@@ -4,6 +4,7 @@ import React, {
   useRef,
   useState,
   useCallback,
+  useMemo,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 
@@ -52,7 +53,7 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const filterTodos = () => {
+  const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filterType) {
         case FilterType.All:
@@ -68,11 +69,15 @@ export const App: React.FC = () => {
           throw new Error('Invalid type');
       }
     });
-  };
+  }, [todos, filterType]);
 
-  const filteredTodos = filterTodos();
-  const activeTodos = todos.filter(todo => !todo.completed).length;
-  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const activeTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
+
+  const hasCompletedTodos = useMemo(() => (
+    todos.some(todo => todo.completed)
+  ), [todos]);
 
   return (
     <div className="todoapp">

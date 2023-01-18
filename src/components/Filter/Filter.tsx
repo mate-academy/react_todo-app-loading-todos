@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 
 import { FilterType } from '../../types/FilterType';
@@ -8,7 +8,7 @@ type Props = {
   onChangeType: React.Dispatch<React.SetStateAction<FilterType>>;
 };
 
-export const Filter: React.FC<Props> = (props) => {
+export const Filter: React.FC<Props> = memo((props) => {
   const { filterType, onChangeType } = props;
 
   return (
@@ -50,4 +50,4 @@ export const Filter: React.FC<Props> = (props) => {
       </a>
     </nav>
   );
-};
+});

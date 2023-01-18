@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>;
 };
 
-export const Header: React.FC<Props> = (props) => {
+export const Header: React.FC<Props> = memo((props) => {
   const { newTodoField } = props;
 
   return (
@@ -27,4 +27,4 @@ export const Header: React.FC<Props> = (props) => {
       </form>
     </header>
   );
-};
+});
