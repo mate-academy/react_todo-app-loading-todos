@@ -102,6 +102,7 @@ export const App: React.FC = memo(() => {
               <nav className="filter" data-cy="Filter">
                 {filterOptions.map(option => (
                   <a
+                    key={option}
                     data-cy="FilterLinkAll"
                     href="#/"
                     className={cn(
