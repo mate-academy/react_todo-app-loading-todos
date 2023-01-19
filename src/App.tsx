@@ -12,7 +12,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Header } from './components/Header';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState<string>('');
   const [filter, setFilter] = useState(Filter.all);
   const [onError, setOnError] = useState<string>('');
@@ -48,9 +48,7 @@ export const App: React.FC = () => {
 
     addTodo(todo)
       .then(result => setTodos(
-        prevTodos => (prevTodos
-          ? [...prevTodos, result]
-          : [result]),
+        prevTodos => [...prevTodos, result],
       ))
       .catch(() => {
         setOnError('add');
@@ -75,8 +73,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const visibleTodos = !todos ? [] : handleFilter(todos, filter);
-  const activeCount = !todos ? 0 : todos.filter(todo => !todo.completed).length;
+  const visibleTodos = handleFilter(todos, filter);
+  const activeCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">

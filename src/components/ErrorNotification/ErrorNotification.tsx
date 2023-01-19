@@ -29,9 +29,9 @@ export const ErrorNotification: React.FC<Props> = (
         onClick={() => setIsHidden(true)}
       />
       {onError === 'add' && 'Unable to add a todo'}
-      {/* <br /> */}
+
       {onError === 'delete' && 'Unable to delete a todo'}
-      {/* <br /> */}
+
       {onError === 'update' && 'Unable to update a todo'}
     </div>
   );

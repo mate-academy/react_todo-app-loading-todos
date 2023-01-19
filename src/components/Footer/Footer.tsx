@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Filter } from '../types/Filter';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   activeCount: number;
