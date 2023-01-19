@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {
+import {
   useCallback,
-  useContext, useEffect, useMemo, useRef, useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import cn from 'classnames';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -10,17 +14,19 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { getVisibleTodos } from './helper';
+import { Filter } from './types/filter';
+import { NewTodo } from './components/NewTodo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
   const [error, setError] = useState(false);
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const handleFilter = useCallback((str: string) => setFilter(str), []);
+  const handleFilter = useCallback((str: Filter) => setFilter(str), []);
   const handleError = () => {
     setError(true);
 
@@ -28,7 +34,7 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = useMemo(() => (
-    filter === 'all'
+    filter === Filter.all
       ? todos
       : getVisibleTodos(todos, filter)
   ), [filter, todos]);
@@ -66,15 +72,7 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
           />
 
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <NewTodo newTodoField={newTodoField} />
         </header>
 
         {!todos.length || (
