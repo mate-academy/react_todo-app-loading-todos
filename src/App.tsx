@@ -2,9 +2,11 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
+
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
@@ -17,16 +19,19 @@ import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [filter, setFilter] = useState('All');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  // const incompleteTodos = todos.filter(todo => !todo.completed).length;
-
   useEffect(() => {
     if (user) {
       getTodos(user.id)
-        .then(setTodos);
+        .then(setTodos)
+        .catch(() => (
+          setErrorMessage('Unable to load a todos')
+        ));
     }
   }, []);
 
@@ -36,6 +41,31 @@ export const App: React.FC = () => {
       newTodoField.current.focus();
     }
   }, []);
+
+  const incompleteTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
+
+  const completeTodos = useMemo(
+    () => todos.filter(todo => todo.completed),
+    [todos],
+  );
+
+  const filterTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filter) {
+        case 'Completed':
+          return todo.completed;
+
+        case 'Active':
+          return !todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filter]);
 
   return (
     <div className="todoapp">
@@ -47,14 +77,24 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={todos} />
+            <TodoList todos={filterTodos} />
 
-            <Footer />
+            <Footer
+              incompleteTodos={incompleteTodos}
+              completeTodos={completeTodos}
+              filter={filter}
+              setFilter={setFilter}
+            />
           </>
         )}
       </div>
 
-      <ErrorNotification />
+      {errorMessage && (
+        <ErrorNotification
+          error={errorMessage}
+          onChange={setErrorMessage}
+        />
+      )}
     </div>
   );
 };
