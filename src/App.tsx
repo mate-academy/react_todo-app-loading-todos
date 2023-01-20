@@ -3,13 +3,15 @@ import React, {
   KeyboardEvent, useContext, useEffect, useRef, useState,
 } from 'react';
 import { getTodos, addTodo } from './api/todos';
-import { AuthContext } from './components/Auth/AuthContext';
-import { Footer } from './components/Footer';
-import { TodosList } from './components/TodosList';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import { ErrorNotification } from './components/ErrorNotification';
-import { Header } from './components/Header';
+import { AuthContext } from './components/Auth';
+import {
+  Footer,
+  TodosList,
+  ErrorNotification,
+  Header,
+} from './components';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,7 +33,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (user) {
       getTodos(user.id)
-        .then(setTodos);
+        .then(setTodos)
+        .catch(() => {
+          setOnError('load');
+          setIsHidden(false);
+        })
+        .finally(() => setTimeout(() => setIsHidden(true), 3000));
     }
   }, []);
 

@@ -30,6 +30,8 @@ export const ErrorNotification: React.FC<Props> = (
       />
       {onError === 'add' && 'Unable to add a todo'}
 
+      {onError === 'load' && 'Unable to load a todos'}
+
       {onError === 'delete' && 'Unable to delete a todo'}
 
       {onError === 'update' && 'Unable to update a todo'}
