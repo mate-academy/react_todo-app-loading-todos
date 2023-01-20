@@ -1,16 +1,23 @@
-import { useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { TodoItem } from './TodoItem';
 import { AuthContext } from '../Auth/AuthContext';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { TodoFooter } from './TodoFooter';
+import { ErrorMsg } from '../../types/ErrorMsg';
 
-export const TodoList = () => {
+type Props = {
+  setError: (err: boolean, msg: ErrorMsg) => void;
+};
+
+export const TodoList: FC<Props> = ({ setError }) => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos(user?.id || 0).then(data => setTodos(prev => [...prev, ...data]));
+    getTodos(user?.id || 0)
+      .then(data => setTodos(prev => [...prev, ...data]))
+      .catch(() => setError(true, ErrorMsg.AddError));
   }, []);
 
   if (!todos.length) {
@@ -23,13 +30,15 @@ export const TodoList = () => {
         className="todoapp__main"
         data-cy="TodoList"
       >
-        {todos.length
-        && todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-          />
-        ))}
+        {
+          todos.length
+          && todos.map(todo => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+            />
+          ))
+        }
 
         {/* <div
         data-cy="Todo"

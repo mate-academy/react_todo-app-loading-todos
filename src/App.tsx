@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TodoContent } from './components/Todo/TodoContent';
 import { Error } from './components/Error/Error';
 import { ErrorMsg } from './types/ErrorMsg';
@@ -7,10 +7,18 @@ export const App = () => {
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<ErrorMsg>(ErrorMsg.NoError);
 
-  const setError = (error: boolean, msg = ErrorMsg.NoError) => {
+  const setError = (error = false, msg = ErrorMsg.NoError) => {
     setErrorMsg(msg);
     setIsError(error);
   };
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+
+    setTimeout(setError, 3000);
+  }, [isError]);
 
   return (
     <div className="todoapp">
@@ -20,7 +28,7 @@ export const App = () => {
 
       <Error
         error={isError}
-        errorMsg={(errorMsg)}
+        errorMsg={errorMsg}
       />
     </div>
   );
