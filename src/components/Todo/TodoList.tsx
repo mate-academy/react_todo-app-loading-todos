@@ -1,13 +1,16 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import {
+  FC, useContext, useEffect, useState,
+} from 'react';
 import { TodoItem } from './TodoItem';
 import { AuthContext } from '../Auth/AuthContext';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { TodoFooter } from './TodoFooter';
 import { ErrorMsg } from '../../types/ErrorMsg';
+import { SetError } from '../../types/SetError';
 
 type Props = {
-  setError: (err: boolean, msg: ErrorMsg) => void;
+  setError: SetError;
 };
 
 export const TodoList: FC<Props> = ({ setError }) => {
@@ -15,6 +18,8 @@ export const TodoList: FC<Props> = ({ setError }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
+    setError();
+
     getTodos(user?.id || 0)
       .then(data => setTodos(prev => [...prev, ...data]))
       .catch(() => setError(true, ErrorMsg.AddError));

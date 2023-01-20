@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { TodoContent } from './components/Todo/TodoContent';
-import { Error } from './components/Error/Error';
 import { ErrorMsg } from './types/ErrorMsg';
+import { SetError } from './types/SetError';
+import { Error } from './components/Error/Error';
 
 export const App = () => {
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<ErrorMsg>(ErrorMsg.NoError);
 
-  const setError = (error = false, msg = ErrorMsg.NoError) => {
+  const setError: SetError = (error = false, msg = ErrorMsg.NoError) => {
     setErrorMsg(msg);
     setIsError(error);
   };
@@ -29,6 +30,7 @@ export const App = () => {
       <Error
         error={isError}
         errorMsg={errorMsg}
+        setError={setError}
       />
     </div>
   );
