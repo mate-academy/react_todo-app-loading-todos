@@ -10,8 +10,9 @@ export const fetchTodos = (
   userId: number,
   todosSetter: (value: React.SetStateAction<Todo[]>) => void,
   errorSetter: Dispatch<SetStateAction<string>>,
+  error: string,
 ) => {
   getTodos(userId)
     .then(todosFromServer => todosSetter(todosFromServer))
-    .catch(() => errorSetter('ServerFail'));
+    .catch(() => errorSetter(error));
 };

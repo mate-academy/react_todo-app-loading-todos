@@ -11,6 +11,13 @@ import { NewTodo } from './components/React/NewTodo';
 import { TodoList } from './components/React/TodoList';
 import { Todo } from './types/Todo';
 
+enum Errors {
+  Server = 'Unable to load data from the Server',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
+}
+
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
@@ -20,39 +27,8 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState('');
 
-  const handleAllTodos = () => {
-    setFilter('all');
-  };
-
-  const handleActiveTodos = () => {
-    setFilter('active');
-  };
-
-  const handleCompletedTodos = () => {
-    setFilter('completed');
-  };
-
-  const matchTheError = (errorType: string) => {
-    if (!errorType) {
-      return '';
-    }
-
-    switch (errorType) {
-      case 'ServerFail':
-        return 'Unable to load data from the Server';
-
-      case 'Add':
-        return 'Unable to add a todo';
-
-      case 'Delete':
-        return 'Unable to delete a todo';
-
-      case 'Update':
-        return 'Unable to update a todo';
-
-      default:
-        return 'Unknown Error';
-    }
+  const handleTodosFilter = (filterType: string) => {
+    setFilter(filterType);
   };
 
   const handleErrorCloser = () => {
@@ -65,7 +41,7 @@ export const App: React.FC = () => {
     }
 
     if (user) {
-      fetchTodos(user.id, setTodos, setError);
+      fetchTodos(user.id, setTodos, setError, Errors.Server);
     }
   }, []);
 
@@ -91,10 +67,7 @@ export const App: React.FC = () => {
               filter={filter}
             />
             <Filter
-              todos={todos}
-              onAllClick={handleAllTodos}
-              onActiveClick={handleActiveTodos}
-              onCompletedClick={handleCompletedTodos}
+              onFilterChange={handleTodosFilter}
               filter={filter}
             />
           </>
@@ -116,7 +89,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={() => handleErrorCloser()}
         />
-        {matchTheError(error)}
+        {error}
       </div>
     </div>
   );

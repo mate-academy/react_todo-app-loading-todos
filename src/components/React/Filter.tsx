@@ -1,20 +1,20 @@
 import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
-  todos: Todo[],
   filter: string,
-  onAllClick: () => void,
-  onActiveClick: () => void,
-  onCompletedClick: () => void,
+  onFilterChange: (filterType: string) => void,
 };
+
+enum Filters {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export const Filter: React.FC<Props> = ({
   filter,
-  onAllClick,
-  onActiveClick,
-  onCompletedClick,
+  onFilterChange,
 }) => {
   const compareFilter = (filterName: string) => {
     return classNames(
@@ -37,7 +37,7 @@ export const Filter: React.FC<Props> = ({
             data-cy="FilterLinkAll"
             href="#/"
             className={compareFilter('all')}
-            onClick={() => onAllClick()}
+            onClick={() => onFilterChange(Filters.All)}
           >
             All
           </a>
@@ -46,7 +46,7 @@ export const Filter: React.FC<Props> = ({
             data-cy="FilterLinkActive"
             href="#/active"
             className={compareFilter('active')}
-            onClick={() => onActiveClick()}
+            onClick={() => onFilterChange(Filters.Active)}
           >
             Active
           </a>
@@ -54,7 +54,7 @@ export const Filter: React.FC<Props> = ({
             data-cy="FilterLinkCompleted"
             href="#/completed"
             className={compareFilter('completed')}
-            onClick={() => onCompletedClick()}
+            onClick={() => onFilterChange(Filters.Completed)}
           >
             Completed
           </a>
