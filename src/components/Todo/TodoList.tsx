@@ -1,12 +1,30 @@
+import { useContext, useEffect, useState } from 'react';
 import { TodoItem } from './TodoItem';
+import { AuthContext } from '../Auth/AuthContext';
+import { Todo } from '../../types/Todo';
+import { getTodos } from '../../api/todos';
 
 export const TodoList = () => {
+  const user = useContext(AuthContext);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    getTodos(user?.id || 0).then(data => setTodos(prev => [...prev, ...data]));
+  }, []);
+
   return (
     <section
       className="todoapp__main"
       data-cy="TodoList"
     >
-      <TodoItem />
+
+      {todos.length
+        && todos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+          />
+        ))}
 
       {/* <div
         data-cy="Todo"

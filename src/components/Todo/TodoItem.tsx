@@ -1,4 +1,11 @@
-export const TodoItem = () => {
+import { FC } from 'react';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todo: Todo;
+};
+
+export const TodoItem: FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
@@ -9,7 +16,7 @@ export const TodoItem = () => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked
+          checked={todo.completed}
         />
       </label>
 
@@ -17,7 +24,7 @@ export const TodoItem = () => {
         data-cy="TodoTitle"
         className="todo__title"
       >
-        HTML
+        {todo.title}
       </span>
       <button
         type="button"
