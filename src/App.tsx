@@ -24,7 +24,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -37,8 +36,8 @@ export const App: React.FC = () => {
         .catch(() => {
           setOnError('load');
           setIsHidden(false);
-        })
-        .finally(() => setTimeout(() => setIsHidden(true), 3000));
+          setTimeout(() => setIsHidden(true), 3000);
+        });
     }
   }, []);
 
@@ -60,10 +59,10 @@ export const App: React.FC = () => {
       .catch(() => {
         setOnError('add');
         setIsHidden(false);
+        setTimeout(() => setIsHidden(true), 3000);
       })
       .finally(() => {
         setTitle('');
-        setTimeout(() => setIsHidden(true), 3000);
       });
   };
 
