@@ -7,7 +7,7 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
->
+
 # ❗️❗️❗️</br>In this working example implemented all 3 parts of the task.</br>In this task you have to implement only the first part described below.</br>❗️❗️❗️
 
 ## General info
