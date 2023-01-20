@@ -20,6 +20,12 @@ export const App: React.FC = memo(() => {
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedFilterType, setSelectedFilterType] = useState(FilterTypes.ALL);
 
+  const handleFilterOptionClick = (newOption: FilterTypes) => {
+    if (selectedFilterType !== newOption) {
+      setSelectedFilterType(newOption);
+    }
+  };
+
   const showErrorMessage = (message: string) => {
     setErrorMessage(message);
 
@@ -109,7 +115,7 @@ export const App: React.FC = memo(() => {
                       'filter__link',
                       { selected: selectedFilterType === option },
                     )}
-                    onClick={() => setSelectedFilterType(option)}
+                    onClick={() => handleFilterOptionClick(option)}
                   >
                     {option}
                   </a>
