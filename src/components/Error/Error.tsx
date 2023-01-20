@@ -1,21 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const Error = () => {
+import { FC } from 'react';
+import cn from 'classnames';
+import { ErrorMsg } from '../../types/ErrorMsg';
+
+type Props = {
+  error: boolean;
+  errorMsg: ErrorMsg;
+};
+
+export const Error: FC<Props> = ({ error, errorMsg }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={cn('notification is-danger is-light has-text-weight-normal', {
+        hidden: !error,
+      })}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
-        className="delete hidden"
+        className="delete"
       />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMsg}
     </div>
   );
 };
