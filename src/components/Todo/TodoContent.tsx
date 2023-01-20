@@ -1,5 +1,4 @@
 import { TodoHeader } from './TodoHeader';
-import { TodoFooter } from './TodoFooter';
 import { TodoList } from './TodoList';
 
 export const TodoContent = () => {
@@ -9,7 +8,6 @@ export const TodoContent = () => {
 
       <TodoList />
 
-      <TodoFooter />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { TodoItem } from './TodoItem';
 import { AuthContext } from '../Auth/AuthContext';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
+import { TodoFooter } from './TodoFooter';
 
 export const TodoList = () => {
   const user = useContext(AuthContext);
@@ -12,13 +13,17 @@ export const TodoList = () => {
     getTodos(user?.id || 0).then(data => setTodos(prev => [...prev, ...data]));
   }, []);
 
-  return (
-    <section
-      className="todoapp__main"
-      data-cy="TodoList"
-    >
+  if (!todos.length) {
+    return null;
+  }
 
-      {todos.length
+  return (
+    <>
+      <section
+        className="todoapp__main"
+        data-cy="TodoList"
+      >
+        {todos.length
         && todos.map(todo => (
           <TodoItem
             key={todo.id}
@@ -26,7 +31,7 @@ export const TodoList = () => {
           />
         ))}
 
-      {/* <div
+        {/* <div
         data-cy="Todo"
         className="todo"
       >
@@ -162,6 +167,8 @@ export const TodoList = () => {
           <div className="loader" />
         </div>
       </div> */}
-    </section>
+      </section>
+      <TodoFooter />
+    </>
   );
 };
