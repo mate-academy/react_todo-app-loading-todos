@@ -1,4 +1,10 @@
+import { FilterStatus } from '../../types/Filter';
+import { toCapitalCase } from '../../utils/toCapitalCase';
+import { useTodoContext } from '../../store/todoContext';
+
 export const TodoFooter = () => {
+  const { changeFilterStatus, todos } = useTodoContext();
+
   return (
     <footer
       className="todoapp__footer"
@@ -8,35 +14,26 @@ export const TodoFooter = () => {
         className="todo-count"
         data-cy="todosCounter"
       >
-        4 items left
+        {todos.length && `${todos.length} items left`}
       </span>
 
       <nav
         className="filter"
         data-cy="Filter"
       >
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className="filter__link selected"
-        >
-          All
-        </a>
-
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className="filter__link"
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className="filter__link"
-        >
-          Completed
-        </a>
+        {(Object.keys(FilterStatus) as Array<keyof typeof FilterStatus>).map(
+          status => (
+            <a
+              key={status}
+              data-cy="FilterLinkAll"
+              href={`#/${FilterStatus[status]}`}
+              className="filter__link selected"
+              onClick={() => changeFilterStatus(FilterStatus[status])}
+            >
+              {toCapitalCase(FilterStatus[status])}
+            </a>
+          ),
+        )}
       </nav>
 
       <button

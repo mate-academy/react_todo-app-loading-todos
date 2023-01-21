@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { Error, SetError, ErrorMsg } from '../types/Error';
+import { FilterStatus } from '../types/Filter';
 import { getTodos } from '../api/todos';
 import { AuthContext } from '../components/Auth/AuthContext';
 
@@ -15,18 +16,23 @@ interface InitialState {
   todos: Todo[];
   newTodo: Todo | null;
   error: Error;
+  filter: FilterStatus;
 }
 
 const initialState: InitialState = {
   todos: [],
   newTodo: null,
   error: [false, ErrorMsg.NoError],
+  filter: FilterStatus.All,
 };
 
 const useTodos = (initial: InitialState) => {
   const [todos, setTodos] = useState<Todo[]>(initial.todos);
   const [newTodo, setNewTodo] = useState<Todo | null>(initial.newTodo);
   const [error, errorSet] = useState<Error>(initial.error);
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>(
+    initial.filter,
+  );
 
   const setError: SetError = (err = false, msg = ErrorMsg.NoError) => {
     errorSet([err, msg]);
@@ -46,12 +52,30 @@ const useTodos = (initial: InitialState) => {
       .catch(() => setError(true, ErrorMsg.AddError));
   }, []);
 
+  const changeFilterStatus = (status: FilterStatus) => {
+    setFilterStatus(status);
+  };
+
+  const filteredTodos = todos.filter(todo => {
+    switch (filterStatus) {
+      case FilterStatus.Completed:
+        return todo.completed;
+
+      case FilterStatus.Active:
+        return !todo.completed;
+
+      default:
+        return todo;
+    }
+  });
+
   return {
-    todos,
+    todos: filteredTodos,
     newTodo,
     error,
     setError,
     getNewTodo,
+    changeFilterStatus,
   };
 };
 
