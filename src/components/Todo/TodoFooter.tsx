@@ -1,9 +1,10 @@
+import cn from 'classnames';
 import { FilterStatus } from '../../types/Filter';
 import { toCapitalCase } from '../../utils/toCapitalCase';
 import { useTodoContext } from '../../store/todoContext';
 
 export const TodoFooter = () => {
-  const { changeFilterStatus, todoLength } = useTodoContext();
+  const { changeFilterStatus, filterStatus, todoLength } = useTodoContext();
 
   return (
     <footer
@@ -25,9 +26,11 @@ export const TodoFooter = () => {
           status => (
             <a
               key={status}
-              data-cy="FilterLinkAll"
+              data-cy={`FilterLink${status}`}
               href={`#/${FilterStatus[status]}`}
-              className="filter__link selected"
+              className={cn('filter__link', {
+                selected: filterStatus === FilterStatus[status],
+              })}
               onClick={() => changeFilterStatus(FilterStatus[status])}
             >
               {toCapitalCase(FilterStatus[status])}

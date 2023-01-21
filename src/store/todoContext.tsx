@@ -79,6 +79,7 @@ const useTodos = (initial: InitialState) => {
     setError,
     getNewTodo,
     changeFilterStatus,
+    filterStatus,
   };
 };
 
