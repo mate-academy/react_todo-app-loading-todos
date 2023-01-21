@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useRef } from 'react';
+import React, { Dispatch, SetStateAction, useRef } from 'react';
 
 type Props = {
   title: string;
-  setTitle: (arg: string) => void;
-  setIsHidden: (arg: boolean) => void;
+  setTitle: Dispatch<SetStateAction<string>>;
+  setIsHidden: Dispatch<SetStateAction<boolean>>;
   handleEnterPress: (event: React.KeyboardEvent) => void;
 };
 

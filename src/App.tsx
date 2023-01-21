@@ -12,12 +12,13 @@ import {
   ErrorNotification,
   Header,
 } from './components';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState<string>('');
   const [filter, setFilter] = useState(Filter.all);
-  const [onError, setOnError] = useState<string>('');
+  const [error, setError] = useState<ErrorType | null>(null);
   const [isHidden, setIsHidden] = useState(true);
 
   const user = useContext(AuthContext);
@@ -34,7 +35,7 @@ export const App: React.FC = () => {
       getTodos(user.id)
         .then(setTodos)
         .catch(() => {
-          setOnError('load');
+          setError(ErrorType.load);
           setIsHidden(false);
           setTimeout(() => setIsHidden(true), 3000);
         });
@@ -57,7 +58,7 @@ export const App: React.FC = () => {
         prevTodos => [...prevTodos, result],
       ))
       .catch(() => {
-        setOnError('add');
+        setError(ErrorType.add);
         setIsHidden(false);
         setTimeout(() => setIsHidden(true), 3000);
       })
@@ -110,7 +111,7 @@ export const App: React.FC = () => {
       <ErrorNotification
         isHidden={isHidden}
         setIsHidden={setIsHidden}
-        onError={onError}
+        error={error}
       />
     </div>
   );
