@@ -1,5 +1,5 @@
 import { Todo } from './types/Todo';
-import { Filter } from './types/filter';
+import { Filter } from './types/Filter';
 
 export const getVisibleTodos = (todos: Todo[], filter: Filter) => (
   todos.filter(todo => {

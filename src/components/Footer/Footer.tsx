@@ -1,18 +1,18 @@
 import { FC, memo } from 'react';
 import cn from 'classnames';
-import { Filter } from '../../types/filter';
+import { Filter } from '../../types/Filter';
 
 interface Props {
-  length: number;
+  todosLength: number;
   onFilter: (str: Filter) => void;
   filter: Filter;
 }
 
-export const Footer: FC<Props> = memo(({ length, onFilter, filter }) => {
+export const Footer: FC<Props> = memo(({ todosLength, onFilter, filter }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${length} items left`}
+        {`${todosLength} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">

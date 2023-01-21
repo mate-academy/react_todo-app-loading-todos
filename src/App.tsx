@@ -14,23 +14,23 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { getVisibleTodos } from './helper';
-import { Filter } from './types/filter';
+import { Filter } from './types/Filter';
 import { NewTodo } from './components/NewTodo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.all);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const handleFilter = useCallback((str: Filter) => setFilter(str), []);
   const handleError = () => {
-    setError(true);
+    setIsError(true);
 
-    setTimeout(() => setError(false), 3000);
+    setTimeout(() => setIsError(false), 3000);
   };
 
   const visibleTodos = useMemo(() => (
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
             <TodoList todos={visibleTodos} />
 
             <Footer
-              length={todos.length}
+              todosLength={todos.length}
               onFilter={handleFilter}
               filter={filter}
             />
@@ -91,13 +91,13 @@ export const App: React.FC = () => {
       <div
         data-cy="ErrorNotification"
         className={cn('notification is-danger is-light has-text-weight-normal',
-          { hidden: !error })}
+          { hidden: !isError })}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setError(false)}
+          onClick={() => setIsError(false)}
         />
 
         Unable to add a todo
