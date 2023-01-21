@@ -7,9 +7,7 @@ import {
   ReactNode,
 } from 'react';
 import { Todo } from '../types/Todo';
-import { ErrorMsg } from '../types/ErrorMsg';
-import { SetError } from '../types/SetError';
-import { Error } from '../types/Error';
+import { Error, SetError, ErrorMsg } from '../types/Error';
 import { getTodos } from '../api/todos';
 import { AuthContext } from '../components/Auth/AuthContext';
 
