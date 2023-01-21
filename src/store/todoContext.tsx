@@ -42,6 +42,8 @@ const useTodos = (initial: InitialState) => {
     setNewTodo(todo);
   };
 
+  const todoLength = todos.length;
+
   const user = useContext(AuthContext);
 
   useEffect(() => {
@@ -71,6 +73,7 @@ const useTodos = (initial: InitialState) => {
 
   return {
     todos: filteredTodos,
+    todoLength,
     newTodo,
     error,
     setError,

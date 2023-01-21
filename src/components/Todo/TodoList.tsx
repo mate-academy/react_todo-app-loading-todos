@@ -4,9 +4,9 @@ import { TodoFooter } from './TodoFooter';
 import { useTodoContext } from '../../store/todoContext';
 
 export const TodoList = () => {
-  const { todos } = useTodoContext();
+  const { todos, todoLength } = useTodoContext();
 
-  if (!todos.length) {
+  if (todoLength === 0) {
     return null;
   }
 
@@ -16,7 +16,7 @@ export const TodoList = () => {
         className="todoapp__main"
         data-cy="TodoList"
       >
-        {todos.length &&
+        {todos.length > 0 &&
           todos.map(todo => (
             <TodoItem
               key={todo.id}

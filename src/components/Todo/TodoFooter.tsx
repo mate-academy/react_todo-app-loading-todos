@@ -3,7 +3,7 @@ import { toCapitalCase } from '../../utils/toCapitalCase';
 import { useTodoContext } from '../../store/todoContext';
 
 export const TodoFooter = () => {
-  const { changeFilterStatus, todos } = useTodoContext();
+  const { changeFilterStatus, todoLength } = useTodoContext();
 
   return (
     <footer
@@ -14,7 +14,7 @@ export const TodoFooter = () => {
         className="todo-count"
         data-cy="todosCounter"
       >
-        {todos.length && `${todos.length} items left`}
+        {todoLength > 0 && `${todoLength} items left`}
       </span>
 
       <nav
