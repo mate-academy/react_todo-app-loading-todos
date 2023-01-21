@@ -1,37 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TodoContent } from './components/Todo/TodoContent';
-import { ErrorMsg } from './types/ErrorMsg';
-import { SetError } from './types/SetError';
+import { useTodoContext } from './store/todoContext';
+
 import { Error } from './components/Error/Error';
 
 export const App = () => {
-  const [isError, setIsError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<ErrorMsg>(ErrorMsg.NoError);
-
-  const setError: SetError = (error = false, msg = ErrorMsg.NoError) => {
-    setErrorMsg(msg);
-    setIsError(error);
-  };
+  const { error, setError } = useTodoContext();
 
   useEffect(() => {
-    if (!isError) {
+    if (!error[0]) {
       return;
     }
 
     setTimeout(setError, 3000);
-  }, [isError]);
+  }, [error[0]]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <TodoContent setError={setError} />
+      <TodoContent />
 
-      <Error
-        error={isError}
-        errorMsg={errorMsg}
-        setError={setError}
-      />
+      <Error />
     </div>
   );
 };

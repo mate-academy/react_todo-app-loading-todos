@@ -1,29 +1,10 @@
-import {
-  FC, useContext, useEffect, useState,
-} from 'react';
+/* eslint-disable operator-linebreak */
 import { TodoItem } from './TodoItem';
-import { AuthContext } from '../Auth/AuthContext';
-import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api/todos';
 import { TodoFooter } from './TodoFooter';
-import { ErrorMsg } from '../../types/ErrorMsg';
-import { SetError } from '../../types/SetError';
+import { useTodoContext } from '../../store/todoContext';
 
-type Props = {
-  setError: SetError;
-};
-
-export const TodoList: FC<Props> = ({ setError }) => {
-  const user = useContext(AuthContext);
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    setError();
-
-    getTodos(user?.id || 0)
-      .then(data => setTodos(prev => [...prev, ...data]))
-      .catch(() => setError(true, ErrorMsg.AddError));
-  }, []);
+export const TodoList = () => {
+  const { todos } = useTodoContext();
 
   if (!todos.length) {
     return null;
@@ -35,15 +16,13 @@ export const TodoList: FC<Props> = ({ setError }) => {
         className="todoapp__main"
         data-cy="TodoList"
       >
-        {
-          todos.length
-          && todos.map(todo => (
+        {todos.length &&
+          todos.map(todo => (
             <TodoItem
               key={todo.id}
               todo={todo}
             />
-          ))
-        }
+          ))}
 
         {/* <div
         data-cy="Todo"
