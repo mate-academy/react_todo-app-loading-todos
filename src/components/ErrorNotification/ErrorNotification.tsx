@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   onChange: (value: string) => void,
 };
 
-export const ErrorNotification: React.FC<Props> = (props) => {
+export const ErrorNotification: React.FC<Props> = memo((props) => {
   const { error, onChange } = props;
 
   setTimeout(() => onChange, 3000);
@@ -14,7 +14,6 @@ export const ErrorNotification: React.FC<Props> = (props) => {
   return (
     <div
       data-cy="ErrorNotification"
-      // className="notification is-danger is-light has-text-weight-normal"
       className={cn(
         'notification is-danger is-light has-text-weight-normal', {
           hidden: !error,
@@ -31,4 +30,4 @@ export const ErrorNotification: React.FC<Props> = (props) => {
       {error}
     </div>
   );
-};
+});

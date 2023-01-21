@@ -14,31 +14,29 @@ import { Footer } from './components/Footer/Footer';
 import {
   ErrorNotification,
 } from './components/ErrorNotification/ErrorNotification';
+
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState('All');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [filter, setFilter] = useState<Filter>(Filter.all);
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+
     if (user) {
       getTodos(user.id)
         .then(setTodos)
         .catch(() => (
           setErrorMessage('Unable to load a todos')
         ));
-    }
-  }, []);
-
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
     }
   }, []);
 
@@ -55,10 +53,10 @@ export const App: React.FC = () => {
   const filterTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filter) {
-        case 'Completed':
+        case Filter.completed:
           return todo.completed;
 
-        case 'Active':
+        case Filter.active:
           return !todo.completed;
 
         default:
