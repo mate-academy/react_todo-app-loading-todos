@@ -53,7 +53,6 @@ export const TodoList: FC<Props> = memo(
           </div>
         ))}
       </section>
-
     );
   },
 );

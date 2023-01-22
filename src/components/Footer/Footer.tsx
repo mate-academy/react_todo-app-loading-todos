@@ -1,7 +1,16 @@
 import { FC, memo } from 'react';
+import { Filter } from '../../types/Filter';
 
-export const Footer: FC = memo(
-  () => {
+interface Props {
+  onSelectFilter: (filterType: Filter) => void;
+}
+
+export const Footer: FC<Props> = memo(
+  ({ onSelectFilter }) => {
+    const handleClickFilter = (filterType: Filter) => {
+      onSelectFilter(filterType);
+    };
+
     return (
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="todosCounter">
@@ -13,6 +22,7 @@ export const Footer: FC = memo(
             data-cy="FilterLinkAll"
             href="#/"
             className="filter__link selected"
+            onClick={() => handleClickFilter(Filter.ALL)}
           >
             All
           </a>
@@ -21,6 +31,7 @@ export const Footer: FC = memo(
             data-cy="FilterLinkActive"
             href="#/active"
             className="filter__link"
+            onClick={() => handleClickFilter(Filter.ACTIVE)}
           >
             Active
           </a>
@@ -28,6 +39,7 @@ export const Footer: FC = memo(
             data-cy="FilterLinkCompleted"
             href="#/completed"
             className="filter__link"
+            onClick={() => handleClickFilter(Filter.COMPLITED)}
           >
             Completed
           </a>
@@ -37,6 +49,7 @@ export const Footer: FC = memo(
           data-cy="ClearCompletedButton"
           type="button"
           className="todoapp__clear-completed"
+          onClick={() => handleClickFilter(Filter.ALL)}
         >
           Clear completed
         </button>
