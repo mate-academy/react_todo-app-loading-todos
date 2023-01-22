@@ -1,5 +1,6 @@
 import React,
 {
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -21,11 +22,13 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleAddTodo = async () => {
-    const todo = await addTodos(title, user?.id, false);
+  const handleAddTodo = useCallback(
+    async () => {
+      const todo = await addTodos(title, user?.id, false);
 
-    setTodos(prev => [...prev, todo]);
-  };
+      setTodos(prev => [...prev, todo]);
+    }, [],
+  );
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
