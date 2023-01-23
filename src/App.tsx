@@ -12,6 +12,7 @@ import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
+  const [isHidden, setIsHidden] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const activeTodos = todos.filter(({ completed }) => !completed);
   const completedTodos = todos.filter(({ completed }) => completed);
@@ -27,6 +28,12 @@ export const App: React.FC = () => {
       }
     }());
   }, []);
+
+  useEffect(() => {
+    window.setTimeout(
+      setIsHidden, 3000, true,
+    );
+  }, [isHidden]);
 
   // will save to API instead
   const submitTodo = (newTodo: Todo) => {
@@ -100,26 +107,27 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* change */}
-      {false && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-          />
+      <div
+        data-cy="ErrorNotification"
+        className={cn(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: isHidden },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setIsHidden(true)}
+        />
 
-          {/* add conditions */}
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
-      )}
+        {/* add conditions */}
+        Unable to add a todo
+        <br />
+        Unable to delete a todo
+        <br />
+        Unable to update a todo
+      </div>
     </div>
   );
 };
