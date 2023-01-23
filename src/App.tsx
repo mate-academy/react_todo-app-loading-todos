@@ -78,7 +78,6 @@ export const App: React.FC = () => {
       {errorText && (
         <ErrorNotification
           errorText={errorText}
-          // isError={isError}
           onChangeErrorText={setErrorText}
         />
       )}
