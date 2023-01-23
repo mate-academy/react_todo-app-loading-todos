@@ -12,6 +12,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       {todos.map((todo) => (
         <div
           data-cy="Todo"
+          key={todo.id}
           className={classNames('todo', {
             completed: todo.completed,
           })}
