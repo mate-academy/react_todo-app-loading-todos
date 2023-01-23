@@ -1,23 +1,21 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useState } from 'react';
 
 export interface Props {
   newTodoField: React.RefObject<HTMLInputElement>;
-  title: string,
-  setTitle: React.Dispatch<React.SetStateAction<string>>,
-  onAddTodo: () => void
+  onAddTodo: (title: string) => void,
 }
 
 export const Header: FC<Props> = memo(
   ({
     newTodoField,
-    title,
-    setTitle,
     onAddTodo,
   }) => {
+    const [title, setQuery] = useState('');
+
     const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      onAddTodo();
+      onAddTodo(title);
     };
 
     return (
@@ -26,10 +24,10 @@ export const Header: FC<Props> = memo(
           onSubmit={handleAddTodo}
         >
           <button
-            data-cy="ToggleAllButton"
             type="button"
-            className="todoapp__toggle-all active"
             aria-label="toggle"
+            data-cy="ToggleAllButton"
+            className="todoapp__toggle-all active"
           />
 
           <input
@@ -39,7 +37,7 @@ export const Header: FC<Props> = memo(
             data-cy="NewTodoField"
             className="todoapp__new-todo"
             placeholder="What needs to be done?"
-            onChange={(event) => setTitle(event.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
           />
         </form>
 

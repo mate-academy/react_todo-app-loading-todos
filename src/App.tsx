@@ -21,12 +21,11 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoaded, setLoaded] = useState(false);
 
   const handleAddTodo = useCallback(
-    async () => {
+    async (title: string) => {
       const todo = await addTodos(title, user?.id, false);
 
       setTodos(prev => [...prev, todo]);
@@ -67,8 +66,8 @@ export const App: React.FC = () => {
         })
         .catch(() => {
           setErrorMessage('Todos not found');
-        })
-        .finally(() => {
+
+          setLoaded(false);
         });
     }
   }, []);
@@ -80,14 +79,12 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodoField={newTodoField}
-          title={title}
-          setTitle={setTitle}
           onAddTodo={handleAddTodo}
         />
 
         <TodoList todos={todos} />
 
-        {!isLoaded && <Footer onSelectFilter={handleClickFilter} />}
+        {isLoaded && <Footer onSelectFilter={handleClickFilter} />}
       </div>
 
       {errorMessage && <ErrorMessage message={errorMessage} />}
