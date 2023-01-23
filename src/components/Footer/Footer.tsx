@@ -4,18 +4,18 @@ import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
 type Props = {
-  completeTodos: Todo[],
+  completeTodosLength: number,
   incompleteTodos: Todo[],
-  filter: Filter,
-  setFilter: React.Dispatch<React.SetStateAction<Filter>>,
+  completedFilter: Filter,
+  setCompletedFilter: React.Dispatch<React.SetStateAction<Filter>>,
 };
 
 export const Footer: React.FC<Props> = memo((props) => {
   const {
-    completeTodos,
+    completeTodosLength,
     incompleteTodos,
-    filter,
-    setFilter,
+    completedFilter,
+    setCompletedFilter,
   } = props;
 
   return (
@@ -29,9 +29,9 @@ export const Footer: React.FC<Props> = memo((props) => {
           data-cy="FilterLinkAll"
           href="#/"
           className={cn('filter__link', {
-            selected: filter === Filter.all,
+            selected: completedFilter === Filter.all,
           })}
-          onClick={() => setFilter(Filter.all)}
+          onClick={() => setCompletedFilter(Filter.all)}
         >
           All
         </a>
@@ -40,9 +40,9 @@ export const Footer: React.FC<Props> = memo((props) => {
           data-cy="FilterLinkActive"
           href="#/active"
           className={cn('filter__link', {
-            selected: filter === Filter.active,
+            selected: completedFilter === Filter.active,
           })}
-          onClick={() => setFilter(Filter.active)}
+          onClick={() => setCompletedFilter(Filter.active)}
         >
           Active
         </a>
@@ -50,15 +50,15 @@ export const Footer: React.FC<Props> = memo((props) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={cn('filter__link', {
-            selected: filter === Filter.completed,
+            selected: completedFilter === Filter.completed,
           })}
-          onClick={() => setFilter(Filter.completed)}
+          onClick={() => setCompletedFilter(Filter.completed)}
         >
           Completed
         </a>
       </nav>
 
-      {completeTodos && (
+      {completeTodosLength !== 0 && (
         <button
           data-cy="ClearCompletedButton"
           type="button"

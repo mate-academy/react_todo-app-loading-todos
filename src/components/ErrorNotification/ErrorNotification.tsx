@@ -3,13 +3,11 @@ import cn from 'classnames';
 
 type Props = {
   error: string,
-  onChange: (value: string) => void,
+  closeNotification: (value: string) => void,
 };
 
 export const ErrorNotification: React.FC<Props> = memo((props) => {
-  const { error, onChange } = props;
-
-  setTimeout(() => onChange, 3000);
+  const { error, closeNotification } = props;
 
   return (
     <div
@@ -25,7 +23,7 @@ export const ErrorNotification: React.FC<Props> = memo((props) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => onChange('')}
+        onClick={() => closeNotification('')}
       />
       {error}
     </div>

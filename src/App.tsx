@@ -18,13 +18,19 @@ import {
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import { getTodos } from './api/todos';
+import {getFilterTodos} from "./components/helperFunction";
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<Filter>(Filter.all);
+  const [completedFilter, setCompletedFilter] = useState<Filter>(Filter.all);
+
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
+
+  const handleError = () => {
+    setTimeout(() => setErrorMessage(''), 3000);
+  };
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -34,9 +40,10 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
-        .catch(() => (
-          setErrorMessage('Unable to load a todos')
-        ));
+        .catch(() => {
+          setErrorMessage('Unable to load a todos');
+          handleError();
+        });
     }
   }, []);
 
@@ -45,25 +52,14 @@ export const App: React.FC = () => {
     [todos],
   );
 
-  const completeTodos = useMemo(
-    () => todos.filter(todo => todo.completed),
+  const completeTodosLength = useMemo(
+    () => todos.filter(todo => todo.completed).length,
     [todos],
   );
 
   const filterTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filter) {
-        case Filter.completed:
-          return todo.completed;
-
-        case Filter.active:
-          return !todo.completed;
-
-        default:
-          return todo;
-      }
-    });
-  }, [todos, filter]);
+    return getFilterTodos(todos, completedFilter);
+  }, [todos, completedFilter]);
 
   return (
     <div className="todoapp">
@@ -79,9 +75,9 @@ export const App: React.FC = () => {
 
             <Footer
               incompleteTodos={incompleteTodos}
-              completeTodos={completeTodos}
-              filter={filter}
-              setFilter={setFilter}
+              completeTodosLength={completeTodosLength}
+              completedFilter={completedFilter}
+              setCompletedFilter={setCompletedFilter}
             />
           </>
         )}
@@ -90,7 +86,7 @@ export const App: React.FC = () => {
       {errorMessage && (
         <ErrorNotification
           error={errorMessage}
-          onChange={setErrorMessage}
+          closeNotification={setErrorMessage}
         />
       )}
     </div>
