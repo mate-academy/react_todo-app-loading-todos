@@ -15,6 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -45,6 +46,21 @@ export const App: React.FC = () => {
     setTimeout(() => setIsError(false), 3000);
   }
 
+  const visibleTodos = todos.filter((todo) => {
+    switch (filterStatus) {
+      case 'active':
+        return !todo.completed;
+
+      case 'completed':
+        return todo.completed;
+
+      default:
+        return true;
+    }
+  });
+
+  const amountOfItems = todos.filter(todo => !todo.completed).length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -52,9 +68,15 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
 
-        <TodoList todos={todos} />
+        <TodoList todos={visibleTodos} />
 
-        {Boolean(todos.length) && <Footer />}
+        {Boolean(todos.length) && (
+          <Footer
+            status={filterStatus}
+            onStatus={setFilterStatus}
+            amountOfItems={amountOfItems}
+          />
+        )}
       </div>
 
       <ErrorNotification

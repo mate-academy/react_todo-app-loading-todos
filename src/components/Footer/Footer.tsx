@@ -1,24 +1,58 @@
+import classNames from 'classnames';
 import React from 'react';
 
-export const Footer: React.FC = () => {
+type Props = {
+  status: string;
+  onStatus: React.Dispatch<React.SetStateAction<string>>;
+  amountOfItems: number;
+};
+
+export const Footer: React.FC<Props> = ({
+  status,
+  onStatus,
+  amountOfItems,
+}) => {
+  const FILTERS = {
+    all: 'all',
+    completed: 'completed',
+    active: 'active',
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${amountOfItems} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a data-cy="FilterLinkAll" href="#/" className="filter__link selected">
+        <a
+          data-cy="FilterLinkAll"
+          href="#/"
+          className={classNames('filter__link ', {
+            selected: status === FILTERS.all,
+          })}
+          onClick={() => onStatus('all')}
+        >
           All
         </a>
 
-        <a data-cy="FilterLinkActive" href="#/active" className="filter__link">
+        <a
+          data-cy="FilterLinkActive"
+          href="#/active"
+          className={classNames('filter__link ', {
+            selected: status === FILTERS.active,
+          })}
+          onClick={() => onStatus('active')}
+        >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={classNames('filter__link ', {
+            selected: status === FILTERS.completed,
+          })}
+          onClick={() => onStatus('completed')}
         >
           Completed
         </a>
