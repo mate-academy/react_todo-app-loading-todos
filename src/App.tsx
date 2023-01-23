@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorsAlerts } from './components/ErrorsAlerts';
@@ -38,9 +39,13 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const filteredTodos = filterTodos(todos, filterProp);
+  const filteredTodos = useMemo(() => (
+    filterTodos(todos, filterProp)
+  ), [todos, filterProp]);
 
-  const activeTodosNum = todos.filter(todo => !todo.completed).length;
+  const activeTodosNum = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
 
   return (
     <div className="todoapp">
