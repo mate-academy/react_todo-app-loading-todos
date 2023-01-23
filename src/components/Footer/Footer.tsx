@@ -4,11 +4,15 @@ import { Filter } from '../../types/Filter';
 
 interface Props {
   todosLength: number;
-  onFilter: (str: Filter) => void;
-  filter: Filter;
+  onCompletedFilterChange: (str: Filter) => void;
+  complitedFilter: Filter;
 }
 
-export const Footer: FC<Props> = memo(({ todosLength, onFilter, filter }) => {
+export const Footer: FC<Props> = memo(({
+  todosLength,
+  onCompletedFilterChange,
+  complitedFilter,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -19,8 +23,9 @@ export const Footer: FC<Props> = memo(({ todosLength, onFilter, filter }) => {
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className={cn('filter__link', { selected: filter === Filter.all })}
-          onClick={() => onFilter(Filter.all)}
+          className={cn('filter__link',
+            { selected: complitedFilter === Filter.all })}
+          onClick={() => onCompletedFilterChange(Filter.all)}
         >
           All
         </a>
@@ -28,8 +33,9 @@ export const Footer: FC<Props> = memo(({ todosLength, onFilter, filter }) => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className={cn('filter__link', { selected: filter === Filter.active })}
-          onClick={() => onFilter(Filter.active)}
+          className={cn('filter__link',
+            { selected: complitedFilter === Filter.active })}
+          onClick={() => onCompletedFilterChange(Filter.active)}
         >
           Active
         </a>
@@ -37,8 +43,8 @@ export const Footer: FC<Props> = memo(({ todosLength, onFilter, filter }) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={cn('filter__link',
-            { selected: filter === Filter.completed })}
-          onClick={() => onFilter(Filter.completed)}
+            { selected: complitedFilter === Filter.completed })}
+          onClick={() => onCompletedFilterChange(Filter.completed)}
         >
           Completed
         </a>

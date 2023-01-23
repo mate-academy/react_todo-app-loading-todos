@@ -20,24 +20,24 @@ import { NewTodo } from './components/NewTodo';
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filter>(Filter.all);
-  const [isError, setIsError] = useState(false);
+  const [completedFilter, setCompletedFilter] = useState<Filter>(Filter.all);
+  const [isError, setIsError] = useState('');
 
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const handleFilter = useCallback((str: Filter) => setFilter(str), []);
-  const handleError = () => {
-    setIsError(true);
+  const handleChangeCompletedFilter = useCallback((str: Filter) => {
+    setCompletedFilter(str);
+  }, []);
+  const showErrorMessage = (message: string) => {
+    setIsError(message);
 
-    setTimeout(() => setIsError(false), 3000);
+    setTimeout(() => setIsError(''), 3000);
   };
 
   const visibleTodos = useMemo(() => (
-    filter === Filter.all
-      ? todos
-      : getVisibleTodos(todos, filter)
-  ), [filter, todos]);
+    getVisibleTodos(todos, completedFilter)
+  ), [completedFilter, todos]);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
 
           setTodos(todosFromServer);
         } catch (e) {
-          handleError();
+          showErrorMessage('Unable to get a todo');
         }
       }
     }
@@ -75,14 +75,14 @@ export const App: React.FC = () => {
           <NewTodo newTodoField={newTodoField} />
         </header>
 
-        {!todos.length || (
+        {todos.length !== 0 && (
           <>
             <TodoList todos={visibleTodos} />
 
             <Footer
               todosLength={todos.length}
-              onFilter={handleFilter}
-              filter={filter}
+              onCompletedFilterChange={handleChangeCompletedFilter}
+              complitedFilter={completedFilter}
             />
           </>
         )}
@@ -97,14 +97,10 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setIsError(false)}
+          onClick={() => setIsError('')}
         />
 
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {isError}
       </div>
     </div>
   );
