@@ -1,17 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
 import React from 'react';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>,
+  areAllCompleted: boolean,
 };
 
-export const AppHeader: React.FC<Props> = ({ newTodoField }) => {
+export const AppHeader: React.FC<Props> = ({
+  newTodoField,
+  areAllCompleted,
+}) => {
   return (
     <header className="todoapp__header">
       <button
         data-cy="ToggleAllButton"
         type="button"
-        className="todoapp__toggle-all active"
+        className={classNames('todoapp__toggle-all',
+          { active: areAllCompleted })}
       />
 
       <form>

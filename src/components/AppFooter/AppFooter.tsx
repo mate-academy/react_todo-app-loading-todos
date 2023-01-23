@@ -3,20 +3,22 @@ import React, { SetStateAction } from 'react';
 import { Filter } from '../../types/Filter';
 
 type Props = {
-  amountOfCompleted: number,
+  amountOfActive: number,
+  amountofCompleted: boolean,
   status: Filter,
   changeStatus: React.Dispatch<SetStateAction<Filter>>,
 };
 
 export const AppFooter: React.FC<Props> = ({
-  amountOfCompleted,
+  amountOfActive,
+  amountofCompleted,
   status,
   changeStatus,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${amountOfCompleted} items left`}
+        {`${amountOfActive} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -55,6 +57,7 @@ export const AppFooter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         onClick={() => changeStatus('All')}
+        hidden={!amountofCompleted}
       >
         Clear completed
       </button>

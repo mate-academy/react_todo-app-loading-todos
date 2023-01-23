@@ -18,6 +18,7 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<Filter>('All');
+  const [error, setError] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
@@ -32,8 +33,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      getTodos(user.id)
-        .then(setTodos);
+      try {
+        getTodos(user.id)
+          .then(setTodos);
+      } catch {
+        setError('Can\'t add todo');
+      }
     }
   });
 
@@ -53,29 +58,47 @@ export const App: React.FC = () => {
     }
   });
 
-  const amountOfCompleted = todos.filter(
-    todo => todo.completed,
+  const amountOfActive = todos.filter(
+    todo => !todo.completed,
   ).length;
+
+  const amountofCompleted = filteredTodos.some(
+    todo => todo.completed,
+  );
+
+  const allCompleted = todos.filter(
+    todo => todo.completed,
+  ).length === filteredTodos.length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <AppHeader newTodoField={newTodoField} />
-
-        <TodoList todos={filteredTodos} />
+        <AppHeader
+          newTodoField={newTodoField}
+          areAllCompleted={allCompleted}
+        />
 
         {todos.length > 0 && (
-          <AppFooter
-            amountOfCompleted={amountOfCompleted}
-            status={status}
-            changeStatus={setStatus}
-          />
+          <>
+            <TodoList
+              todos={filteredTodos}
+            />
+
+            <AppFooter
+              amountOfActive={amountOfActive}
+              amountofCompleted={amountofCompleted}
+              status={status}
+              changeStatus={setStatus}
+            />
+          </>
         )}
       </div>
 
-      <ErrorNotification />
+      <ErrorNotification
+        error={error}
+      />
     </div>
   );
 };
