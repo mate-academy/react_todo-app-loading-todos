@@ -1,9 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -16,6 +13,8 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -27,9 +26,24 @@ export const App: React.FC = () => {
     }
 
     if (user) {
-      getTodos(user?.id).then((loadedTodos) => setTodos(loadedTodos));
+      getTodos(user?.id)
+        .then((loadedTodos) => {
+          setTodos(loadedTodos);
+        })
+        .catch(() => {
+          setIsError(true);
+          setErrorMessage('Something went wrong');
+        });
     }
   }, []);
+
+  const closeErrorMassage = () => {
+    setIsError(false);
+  };
+
+  if (isError) {
+    setTimeout(() => setIsError(false), 3000);
+  }
 
   return (
     <div className="todoapp">
@@ -42,7 +56,12 @@ export const App: React.FC = () => {
 
         {Boolean(todos.length) && <Footer />}
       </div>
-      {Boolean(todos.length) && <ErrorNotification />}
+
+      <ErrorNotification
+        isError={isError}
+        errorMessage={errorMessage}
+        onCloseError={closeErrorMassage}
+      />
     </div>
   );
 };
