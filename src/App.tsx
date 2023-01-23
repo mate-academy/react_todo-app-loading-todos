@@ -22,8 +22,8 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorText, setErrorText] = useState('');
   const [filterType, setFilterType] = useState(FilterType.all);
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -57,10 +57,6 @@ export const App: React.FC = () => {
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
-  const isCompletedTodos = useMemo(() => (
-    todos.some(todo => todo.completed)
-  ), [todos]);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -73,7 +69,6 @@ export const App: React.FC = () => {
             <TodoList todos={filteredTodos} />
             <Footer
               activeTodos={activeTodos}
-              isCompletedTodos={isCompletedTodos}
               filterType={filterType}
               onChangeType={setFilterType}
             />
@@ -81,7 +76,11 @@ export const App: React.FC = () => {
         )}
       </div>
       {errorText && (
-        <ErrorNotification errorText={errorText} />
+        <ErrorNotification
+          errorText={errorText}
+          // isError={isError}
+          onChangeErrorText={setErrorText}
+        />
       )}
     </div>
   );

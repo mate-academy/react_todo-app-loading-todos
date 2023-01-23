@@ -4,14 +4,12 @@ import { FilterType } from '../../types/FiltersType';
 
 type Props = {
   activeTodos: number,
-  isCompletedTodos: boolean,
   filterType: FilterType,
   onChangeType: (str: FilterType) => void
 };
 
 export const Footer: React.FC<Props> = memo(({
   activeTodos,
-  isCompletedTodos,
   filterType,
   onChangeType,
 }) => {
@@ -54,15 +52,13 @@ export const Footer: React.FC<Props> = memo(({
           Completed
         </a>
       </nav>
-      {isCompletedTodos && (
-        <button
-          data-cy="ClearCompletedButton"
-          type="button"
-          className="todoapp__clear-completed"
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        data-cy="ClearCompletedButton"
+        type="button"
+        className="todoapp__clear-completed"
+      >
+        Clear completed
+      </button>
     </footer>
   );
 });

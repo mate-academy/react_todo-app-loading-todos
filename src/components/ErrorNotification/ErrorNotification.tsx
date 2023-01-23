@@ -1,11 +1,19 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import cn from 'classnames';
 
 type Props = {
-  errorText: string
+  errorText: string;
+  onChangeErrorText: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const ErrorNotification: React.FC<Props> = memo(({ errorText }) => {
+export const ErrorNotification: React.FC<Props> = memo(({
+  errorText,
+  onChangeErrorText,
+}) => {
+  useEffect(() => {
+    setTimeout(() => onChangeErrorText(''), 3000);
+  }, []);
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -17,6 +25,7 @@ export const ErrorNotification: React.FC<Props> = memo(({ errorText }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        onClick={() => onChangeErrorText('')}
       />
       {errorText}
     </div>
