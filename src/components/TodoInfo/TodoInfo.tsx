@@ -10,18 +10,12 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const [title, setTitle] = useState(todo.title);
   const [isChecked, setIsChecked] = useState(todo.completed);
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const titleField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     titleField.current?.focus();
   }, [isEditing]);
-
-  // delete todo and update
-  const onDelete = () => {
-    setIsLoading(true);
-  };
 
   // update todo.completed
   const onCheck = () => {
@@ -31,10 +25,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   // update todo.title
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!title) {
-      onDelete();
-    }
 
     setIsEditing(false);
   };
@@ -87,7 +77,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               type="button"
               className="todo__remove"
               data-cy="TodoDeleteButton"
-              onClick={onDelete}
             >
               ×
             </button>
@@ -97,7 +86,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
       <div
         data-cy="TodoLoader"
         className={cn('modal overlay', {
-          'is-active': isLoading,
+          'is-active': false,
         })}
       >
         <div className="modal-background has-background-white-ter" />
