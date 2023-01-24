@@ -1,27 +1,35 @@
-import { FC, memo } from 'react';
+import { FC, memo, useContext } from 'react';
+import cn from 'classnames';
 import { Filter } from '../../types/Filter';
+import { TodosLength } from '../../TodosLength';
 
 interface Props {
-  onSelectFilter: (filterType: Filter) => void;
+  onSelectFilter: (value: Filter) => void
+  filterType: Filter;
 }
 
 export const Footer: FC<Props> = memo(
-  ({ onSelectFilter }) => {
+  ({ onSelectFilter, filterType: filter }) => {
     const handleClickFilter = (filterType: Filter) => {
       onSelectFilter(filterType);
     };
 
+    const todosLength = useContext(TodosLength);
+
     return (
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="todosCounter">
-          4 items left
+          {`${todosLength} items left`}
         </span>
 
         <nav className="filter" data-cy="Filter">
           <a
             data-cy="FilterLinkAll"
             href="#/"
-            className="filter__link selected"
+            className={cn(
+              'filter__link',
+              { selected: filter === Filter.ALL },
+            )}
             onClick={() => handleClickFilter(Filter.ALL)}
           >
             All
@@ -30,7 +38,10 @@ export const Footer: FC<Props> = memo(
           <a
             data-cy="FilterLinkActive"
             href="#/active"
-            className="filter__link"
+            className={cn(
+              'filter__link',
+              { selected: filter === Filter.ACTIVE },
+            )}
             onClick={() => handleClickFilter(Filter.ACTIVE)}
           >
             Active
@@ -38,7 +49,10 @@ export const Footer: FC<Props> = memo(
           <a
             data-cy="FilterLinkCompleted"
             href="#/completed"
-            className="filter__link"
+            className={cn(
+              'filter__link',
+              { selected: filter === Filter.COMPLITED },
+            )}
             onClick={() => handleClickFilter(Filter.COMPLITED)}
           >
             Completed

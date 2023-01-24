@@ -5,8 +5,6 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
-
 export const addTodos = (
   title: string,
   userId: number | undefined,
@@ -17,4 +15,8 @@ export const addTodos = (
     userId,
     completed,
   });
+};
+
+export const deleteTodo = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
 };

@@ -3,52 +3,93 @@ import React,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header/Header';
-import { addTodos, getTodos } from './api/todos';
+import {
+  addTodos,
+  getTodos,
+  deleteTodo,
+} from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import { Footer } from './components/Footer/Footer';
 import { Filter } from './types/Filter';
+import { TodosLength } from './TodosLength';
+import { isUserLoaded } from './IsUserContext';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [title, setTitle] = useState('');
+  const [filterType, setFilterType] = useState(Filter.ALL);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoaded, setLoaded] = useState(false);
+  const [isLoadedUser, setLoadedUser] = useState(false);
 
-  const handleAddTodo = useCallback(
-    async (title: string) => {
-      const todo = await addTodos(title, user?.id, false);
+  const clearTitle = () => {
+    setTitle('');
+  };
 
-      setTodos(prev => [...prev, todo]);
+  const handleDeleteItem = useCallback(
+    async (todoId: number) => {
+      deleteTodo(todoId)
+        .then(() => (
+          setTodos(currentTodos => currentTodos
+            .filter(todo => todo.id !== todoId))
+        ))
+        .catch(() => {
+          setErrorMessage('Unable to delete a todo');
+        });
     }, [],
   );
 
-  const handleClickFilter = useCallback((filterType: Filter) => {
-    if (user) {
-      getTodos(user.id)
-        .then(result => {
-          return result.filter((item: Todo) => {
-            if (filterType === Filter.ACTIVE) {
-              return item.completed === false;
-            }
+  const handleAddTodo = useCallback(
+    async () => {
+      setLoadedUser(true);
 
-            if (filterType === Filter.COMPLITED) {
-              return item.completed;
-            }
+      if (title) {
+        const todo = await addTodos(title, user?.id, false);
 
-            return true;
-          });
-        });
-    }
+        setTodos(prev => [...prev, todo]);
+
+        clearTitle();
+      }
+
+      if (!title) {
+        setErrorMessage('Title can\'t be empty');
+      }
+
+      setLoadedUser(false);
+    }, [user?.id, title],
+  );
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      if (filterType === Filter.ACTIVE) {
+        return !todo.completed;
+      }
+
+      if (filterType === Filter.COMPLITED) {
+        return todo.completed;
+      }
+
+      return true;
+    });
+  }, [todos, filterType]);
+
+  const handleClickMessage = () => {
+    setErrorMessage('');
+  };
+
+  const handleFilterType = useCallback((value: Filter) => {
+    setFilterType(value);
   }, []);
 
   useEffect(() => {
@@ -61,16 +102,12 @@ export const App: React.FC = () => {
       getTodos(user.id)
         .then(result => {
           setTodos(result);
-
-          setLoaded(true);
         })
         .catch(() => {
           setErrorMessage('Todos not found');
-
-          setLoaded(false);
         });
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="todoapp">
@@ -79,15 +116,36 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodoField={newTodoField}
+          title={title}
+          setTitle={setTitle}
           onAddTodo={handleAddTodo}
         />
 
-        <TodoList todos={todos} />
+        {visibleTodos && (
+          <isUserLoaded.Provider value={isLoadedUser}>
+            <TodoList
+              todos={visibleTodos}
+              onDeleteItem={handleDeleteItem}
+            />
+          </isUserLoaded.Provider>
+        )}
 
-        {isLoaded && <Footer onSelectFilter={handleClickFilter} />}
+        {!!todos.length && (
+          <TodosLength.Provider value={todos.length}>
+            <Footer
+              onSelectFilter={handleFilterType}
+              filterType={filterType}
+            />
+          </TodosLength.Provider>
+        )}
       </div>
 
-      {errorMessage && <ErrorMessage message={errorMessage} />}
+      {errorMessage && (
+        <ErrorMessage
+          message={errorMessage}
+          onCloseError={handleClickMessage}
+        />
+      )}
     </div>
   );
 };
