@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterProp, setFilterProp] = useState<Filter>('All');
+  const [filterProp, setFilterProp] = useState(Filter.All);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`

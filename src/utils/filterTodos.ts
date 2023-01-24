@@ -3,9 +3,9 @@ import { Filter } from '../types/Filter';
 
 export const filterTodos = (todos: Todo[], filterProp: Filter) => {
   switch (filterProp) {
-    case 'Active':
+    case Filter.Active:
       return todos.filter(todo => !todo.completed);
-    case 'Completed':
+    case Filter.Completed:
       return todos.filter(todo => todo.completed);
     default:
       return todos;

@@ -23,9 +23,9 @@ export const TodosFooter: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={
-            `filter__link ${filterProp === 'All' && 'selected'}`
+            `filter__link ${filterProp === Filter.All && 'selected'}`
           }
-          onClick={() => changeFilterProp('All')}
+          onClick={() => changeFilterProp(Filter.All)}
         >
           All
         </a>
@@ -34,9 +34,9 @@ export const TodosFooter: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className={
-            `filter__link ${filterProp === 'Active' && 'selected'}`
+            `filter__link ${filterProp === Filter.Active && 'selected'}`
           }
-          onClick={() => changeFilterProp('Active')}
+          onClick={() => changeFilterProp(Filter.Active)}
         >
           Active
         </a>
@@ -44,9 +44,9 @@ export const TodosFooter: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={
-            `filter__link ${filterProp === 'Completed' && 'selected'}`
+            `filter__link ${filterProp === Filter.Completed && 'selected'}`
           }
-          onClick={() => changeFilterProp('Completed')}
+          onClick={() => changeFilterProp(Filter.Completed)}
         >
           Completed
         </a>
