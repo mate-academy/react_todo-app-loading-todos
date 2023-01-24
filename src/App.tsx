@@ -1,6 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useRef } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
+import { Header } from './components/Header/Header';
+import { Filters } from './components/Filters/Filters';
+import { Footer } from './components/Footer/Footer';
+import { Errors } from './components/Errors/Errors';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -202,22 +206,14 @@ export const App: React.FC = () => {
         </footer>
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
+      {errorMessage && (
+        // create new todos => catch the error => and set it
+        // new useState for errors
+        <Errors
+        // errorMessage and set matched text on click
         />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      )}
+    </div>
     </div>
   );
 };
