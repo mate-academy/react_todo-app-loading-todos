@@ -4,16 +4,16 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   amountOfActive: number,
-  amountofCompleted: boolean,
-  status: Filter,
-  changeStatus: React.Dispatch<SetStateAction<Filter>>,
+  completedTodosLength: number,
+  statusFilter: Filter,
+  onChangeStatusFilter: React.Dispatch<SetStateAction<Filter>>,
 };
 
 export const AppFooter: React.FC<Props> = ({
   amountOfActive,
-  amountofCompleted,
-  status,
-  changeStatus,
+  completedTodosLength,
+  statusFilter: status,
+  onChangeStatusFilter,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -27,7 +27,7 @@ export const AppFooter: React.FC<Props> = ({
           href="#/"
           className={classNames('filter__link',
             { selected: status === 'All' })}
-          onClick={() => changeStatus('All')}
+          onClick={() => onChangeStatusFilter('All')}
         >
           All
         </a>
@@ -37,7 +37,7 @@ export const AppFooter: React.FC<Props> = ({
           href="#/active"
           className={classNames('filter__link',
             { selected: status === 'Active' })}
-          onClick={() => changeStatus('Active')}
+          onClick={() => onChangeStatusFilter('Active')}
         >
           Active
         </a>
@@ -46,7 +46,7 @@ export const AppFooter: React.FC<Props> = ({
           href="#/completed"
           className={classNames('filter__link',
             { selected: status === 'Completed' })}
-          onClick={() => changeStatus('Completed')}
+          onClick={() => onChangeStatusFilter('Completed')}
         >
           Completed
         </a>
@@ -56,8 +56,8 @@ export const AppFooter: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={() => changeStatus('All')}
-        hidden={!amountofCompleted}
+        onClick={() => onChangeStatusFilter('All')}
+        hidden={completedTodosLength === 0}
       >
         Clear completed
       </button>

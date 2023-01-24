@@ -4,12 +4,12 @@ import React from 'react';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>,
-  areAllCompleted: boolean,
+  isAllCompleted: boolean,
 };
 
 export const AppHeader: React.FC<Props> = ({
   newTodoField,
-  areAllCompleted,
+  isAllCompleted,
 }) => {
   return (
     <header className="todoapp__header">
@@ -17,7 +17,7 @@ export const AppHeader: React.FC<Props> = ({
         data-cy="ToggleAllButton"
         type="button"
         className={classNames('todoapp__toggle-all',
-          { active: areAllCompleted })}
+          { active: isAllCompleted })}
       />
 
       <form>

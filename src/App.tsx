@@ -2,9 +2,11 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
+import { getFilteredTodos } from './api/helper';
 import { getTodos } from './api/todos';
 import { AppFooter } from './components/AppFooter/AppFooter';
 import { AppHeader } from './components/AppHeader/AppHeader';
@@ -17,7 +19,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<Filter>('All');
+  const [statusFilter, setStatusFilter] = useState<Filter>('All');
   const [error, setError] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,33 +44,23 @@ export const App: React.FC = () => {
     }
   });
 
-  const filteredTodos = todos.filter(todo => {
-    switch (status) {
-      case 'All':
-        return todo;
+  const filteredTodos = useMemo(() => (
+    getFilteredTodos(todos, statusFilter)
+  ), [todos, statusFilter]);
 
-      case 'Active':
-        return !todo.completed;
+  const amountOfActive = useMemo(() => (
+    todos.filter(
+      todo => !todo.completed,
+    ).length
+  ), [todos]);
 
-      case 'Completed':
-        return todo.completed;
+  const completedTodosLength = useMemo(() => (
+    todos.filter(
+      todo => todo.completed,
+    ).length
+  ), [todos]);
 
-      default:
-        throw new Error('Invalid filter type');
-    }
-  });
-
-  const amountOfActive = todos.filter(
-    todo => !todo.completed,
-  ).length;
-
-  const amountofCompleted = filteredTodos.some(
-    todo => todo.completed,
-  );
-
-  const allCompleted = todos.filter(
-    todo => todo.completed,
-  ).length === filteredTodos.length;
+  const isAllCompleted = completedTodosLength === todos.length;
 
   return (
     <div className="todoapp">
@@ -77,7 +69,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <AppHeader
           newTodoField={newTodoField}
-          areAllCompleted={allCompleted}
+          isAllCompleted={isAllCompleted}
         />
 
         {todos.length > 0 && (
@@ -88,9 +80,9 @@ export const App: React.FC = () => {
 
             <AppFooter
               amountOfActive={amountOfActive}
-              amountofCompleted={amountofCompleted}
-              status={status}
-              changeStatus={setStatus}
+              completedTodosLength={completedTodosLength}
+              statusFilter={statusFilter}
+              onChangeStatusFilter={setStatusFilter}
             />
           </>
         )}
