@@ -9,11 +9,11 @@ const filterStatuses = {
 
 interface Props {
   filterStatus: string,
-  onFilter: React.Dispatch<React.SetStateAction<string>>,
+  onStatusFilterChange: React.Dispatch<React.SetStateAction<string>>,
 }
 
 export const Filter: FC<Props> = memo(
-  ({ filterStatus, onFilter }) => (
+  ({ filterStatus, onStatusFilterChange }) => (
     <nav className="filter" data-cy="Filter">
       <a
         data-cy="FilterLinkAll"
@@ -22,7 +22,7 @@ export const Filter: FC<Props> = memo(
           'filter__link',
           { selected: filterStatus === filterStatuses.All },
         )}
-        onClick={() => onFilter(filterStatuses.All)}
+        onClick={() => onStatusFilterChange(filterStatuses.All)}
       >
         All
       </a>
@@ -34,7 +34,7 @@ export const Filter: FC<Props> = memo(
           'filter__link',
           { selected: filterStatus === filterStatuses.Active },
         )}
-        onClick={() => onFilter(filterStatuses.Active)}
+        onClick={() => onStatusFilterChange(filterStatuses.Active)}
       >
         Active
       </a>
@@ -45,7 +45,7 @@ export const Filter: FC<Props> = memo(
           'filter__link',
           { selected: filterStatus === filterStatuses.Completed },
         )}
-        onClick={() => onFilter(filterStatuses.Completed)}
+        onClick={() => onStatusFilterChange(filterStatuses.Completed)}
       >
         Completed
       </a>

@@ -3,19 +3,18 @@ import { Todo } from '../types/Todo';
 import { TodoComponent } from './Todo';
 
 interface Props {
-  visibleTodos: Todo[]
+  todos: Todo[]
 }
 
 export const TodoList: FC<Props> = memo(
-  ({ visibleTodos }) => (
+  ({ todos }) => (
     <section className="todoapp__main" data-cy="TodoList">
       {
-        visibleTodos
-          .map(({ title, completed, id }) => (
+        todos
+          .map((todo) => (
             <TodoComponent
-              key={id}
-              title={title}
-              completed={completed}
+              key={todo.id}
+              todo={todo}
             />
           ))
       }

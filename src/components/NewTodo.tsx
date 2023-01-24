@@ -8,11 +8,11 @@ interface Props {
 export const NewTodo: FC<Props> = memo(
   ({ newTodoField, onFocus }) => (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="ToggleAllButton"
         type="button"
         className="todoapp__toggle-all active"
+        aria-label="button can toggle all toods into one state"
       />
 
       <form>

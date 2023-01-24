@@ -12,29 +12,30 @@ import { Todo } from './types/Todo';
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
+import { filterTodos } from './helpers/filterTodos';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [noError, setNoError] = useState(true);
-  const [filterStatus, setFilterStatus] = useState('All');
+  const [isError, setIsError] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('All');
+
+  const showErrorMessage = () => {
+    setTimeout(() => {
+      setIsError(true);
+    }, 3000);
+  };
 
   useEffect(() => {
-    if (typeof user?.id === 'number') {
+    if (user) {
       getTodos(user.id)
-        .then(todosFromServer => {
-          setTodos(todosFromServer);
-        })
+        .then(setTodos)
         .catch(() => {
-          setNoError(false);
+          setIsError(false);
         })
-        .finally(() => {
-          setTimeout(() => {
-            setNoError(true);
-          }, 3000);
-        });
+        .finally(showErrorMessage);
     }
   }, []);
 
@@ -45,34 +46,29 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = useMemo(() => (
-    todos.filter(({ completed }) => {
-      switch (filterStatus) {
-        case 'Active':
-          return !completed;
-        case 'Completed':
-          return completed;
-        default:
-          return true;
-      }
-    })
-  ), [todos, filterStatus]);
+  const visibleTodos = useMemo(
+    () => (filterTodos(todos, statusFilter)),
+    [todos, statusFilter],
+  );
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <NewTodo onFocus={setNoError} newTodoField={newTodoField} />
+        <NewTodo onFocus={setIsError} newTodoField={newTodoField} />
 
-        <TodoList visibleTodos={visibleTodos} />
+        <TodoList todos={visibleTodos} />
 
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="todosCounter">
             {`${visibleTodos.length} items left`}
           </span>
 
-          <Filter filterStatus={filterStatus} onFilter={setFilterStatus} />
+          <Filter
+            filterStatus={statusFilter}
+            onStatusFilterChange={setStatusFilter}
+          />
 
           <button
             data-cy="ClearCompletedButton"
@@ -87,13 +83,13 @@ export const App: React.FC = () => {
       <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
-        hidden={noError}
+        hidden={isError}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setNoError(true)}
+          onClick={() => setIsError(true)}
         />
 
         Unable to add a todo

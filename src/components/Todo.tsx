@@ -1,41 +1,48 @@
 import { FC, memo } from 'react';
 import cn from 'classnames';
+import { Todo } from '../types/Todo';
 
 interface Props {
-  title: string,
-  completed: boolean,
+  todo: Todo
 }
 
 export const TodoComponent: FC<Props> = memo(
-  ({ title, completed }) => (
-    <div
-      data-cy="Todo"
-      className={cn('todo', { completed })}
-    >
-      <label className="todo__status-label">
-        <input
-          data-cy="TodoStatus"
-          type="checkbox"
-          className="todo__status"
-          defaultChecked
-        />
-      </label>
+  ({ todo }) => {
+    const {
+      title,
+      completed,
+    } = todo;
 
-      <span data-cy="TodoTitle" className="todo__title">
-        {title}
-      </span>
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDeleteButton"
+    return (
+      <div
+        data-cy="Todo"
+        className={cn('todo', { completed })}
       >
-        ×
-      </button>
+        <label className="todo__status-label">
+          <input
+            data-cy="TodoStatus"
+            type="checkbox"
+            className="todo__status"
+            defaultChecked
+          />
+        </label>
 
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
+        <span data-cy="TodoTitle" className="todo__title">
+          {title}
+        </span>
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDeleteButton"
+        >
+          ×
+        </button>
+
+        <div data-cy="TodoLoader" className="modal overlay">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
       </div>
-    </div>
-  ),
+    );
+  },
 );
