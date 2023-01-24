@@ -37,7 +37,7 @@ export const App: React.FC = () => {
         getTodos(user.id)
           .then(setTodos);
       } catch {
-        setError('Can\'t add todo');
+        setError('Can\'t load todo');
       }
     }
   });
