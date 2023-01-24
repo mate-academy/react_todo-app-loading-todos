@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FilterStatus } from '../../types/FilterStatus';
 import { Filter } from '../Filter/Filter';
 
@@ -9,7 +9,7 @@ type Props = {
   onFilterStatusChange: React.Dispatch<React.SetStateAction<FilterStatus>>;
 };
 
-export const Footer: React.FC<Props> = (props) => {
+export const Footer: React.FC<Props> = memo((props) => {
   const {
     filterStatus,
     activeTodosQuantity,
@@ -39,4 +39,4 @@ export const Footer: React.FC<Props> = (props) => {
       )}
     </footer>
   );
-};
+});

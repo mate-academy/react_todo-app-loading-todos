@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import cn from 'classnames';
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   onClosingErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const ErrorNotification: React.FC<Props> = (props) => {
+export const ErrorNotification: React.FC<Props> = memo((props) => {
   const { error, onClosingErrorMessage } = props;
 
   useEffect(() => {
@@ -33,4 +33,4 @@ export const ErrorNotification: React.FC<Props> = (props) => {
       {error}
     </div>
   );
-};
+});

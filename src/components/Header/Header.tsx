@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>
 };
 
-export const Header: React.FC<Props> = ({ newTodoField }) => {
+export const Header: React.FC<Props> = memo(({ newTodoField }) => {
   return (
     <header className="todoapp__header">
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
@@ -25,4 +25,4 @@ export const Header: React.FC<Props> = ({ newTodoField }) => {
       </form>
     </header>
   );
-};
+});

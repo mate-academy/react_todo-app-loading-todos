@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader/Loader';
@@ -7,7 +7,7 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = memo(({ todo }) => {
   return (
     <div
       data-cy="Todo"
@@ -38,4 +38,4 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <Loader todo={todo} />
     </div>
   );
-};
+});
