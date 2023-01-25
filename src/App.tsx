@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import { ErrorNotification } from './components/errorNotification';
 import { Footer } from './components/footer';
 import { Header } from './components/header';
 import { TodoList } from './components/todoList';
@@ -14,18 +15,33 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const newTodoField = useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [filterStatus, setFilterStatus] = useState(Boolean);
 
-  if (user) {
-    getTodos(user.id)
-      .then(setTodos);
-  }
+  const newTodoField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+
+    const setErrorDelay = (message: string) => {
+      setErrorMessage(message);
+      setTimeout(() => {
+        setErrorDelay('');
+      }, 3000);
+    };
+
+    if (user) {
+      getTodos(user.id)
+        .then(setTodos)
+        .catch(() => setErrorDelay('Unable to load todos'));
+    }
   }, []);
+
+  const visibleTodos = () => {
+    return todos.filter(todo => todo.completed === filterStatus);
+  };
 
   return (
     <div className="todoapp">
@@ -34,10 +50,17 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
 
-        <TodoList todos={todos} />
-
-        <Footer />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={visibleTodos()} />
+            <Footer onchangeFilter={() => setFilterStatus()} />
+          </>
+        )}
       </div>
+      <ErrorNotification
+        onCloseErrorButton={() => setErrorMessage('')}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };
