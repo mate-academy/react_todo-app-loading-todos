@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
   onCloseError: () => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({
+export const ErrorNotification: React.FC<Props> = memo(({
   isError,
   errorMessage,
   onCloseError,
@@ -30,4 +30,4 @@ export const ErrorNotification: React.FC<Props> = ({
       {errorMessage}
     </div>
   );
-};
+});

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -9,13 +9,14 @@ import { ErrorNotification }
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterType } from './types/FilterType';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>(FilterType.ALL);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
@@ -48,10 +49,10 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter((todo) => {
     switch (filterStatus) {
-      case 'active':
+      case FilterType.ACTIVE:
         return !todo.completed;
 
-      case 'completed':
+      case FilterType.COMPLETED:
         return todo.completed;
 
       default:
@@ -59,7 +60,10 @@ export const App: React.FC = () => {
     }
   });
 
-  const amountOfItems = todos.filter(todo => !todo.completed).length;
+  const amountOfItems = useMemo(
+    () => todos.filter((todo) => !todo.completed).length,
+    [todos],
+  );
 
   return (
     <div className="todoapp">
@@ -72,8 +76,8 @@ export const App: React.FC = () => {
 
         {Boolean(todos.length) && (
           <Footer
-            status={filterStatus}
-            onStatus={setFilterStatus}
+            filterStatus={filterStatus}
+            onFilterStatus={setFilterStatus}
             amountOfItems={amountOfItems}
           />
         )}
