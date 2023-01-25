@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import cn from 'classnames';
 
-import { TodoLoader } from '../TodoLoader/TodoLoader';
-
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -38,8 +36,6 @@ export const TodoItem: React.FC<Props> = memo(({ todo }) => {
       >
         ×
       </button>
-
-      <TodoLoader />
     </div>
   );
 });

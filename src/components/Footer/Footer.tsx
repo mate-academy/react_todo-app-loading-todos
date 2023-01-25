@@ -1,21 +1,21 @@
 import React, { memo } from 'react';
 
-import { FilterType } from '../../types/FilterType';
+import { StatusFilter } from '../../types/StatusFilter';
 import { Filter } from '../Filter/Filter';
 
 type Props = {
   activeTodosAmount: number;
-  hasCompletedTodos: boolean;
-  filterType: FilterType;
-  onChangeType: React.Dispatch<React.SetStateAction<FilterType>>;
+  isCompletedTodos: boolean;
+  statusFilter: StatusFilter;
+  onChangeStatusFilter: React.Dispatch<React.SetStateAction<StatusFilter>>;
 };
 
 export const Footer: React.FC<Props> = memo((props) => {
   const {
     activeTodosAmount,
-    hasCompletedTodos,
-    filterType,
-    onChangeType,
+    isCompletedTodos,
+    statusFilter,
+    onChangeStatusFilter,
   } = props;
 
   return (
@@ -25,11 +25,11 @@ export const Footer: React.FC<Props> = memo((props) => {
       </span>
 
       <Filter
-        filterType={filterType}
-        onChangeType={onChangeType}
+        statusFilter={statusFilter}
+        onChangeStatusFilter={onChangeStatusFilter}
       />
 
-      {hasCompletedTodos && (
+      {isCompletedTodos && (
         <button
           data-cy="ClearCompletedButton"
           type="button"
