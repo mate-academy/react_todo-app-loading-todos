@@ -27,7 +27,6 @@ export const Footer: React.FC<FooterProps> = memo(({
       <a
         data-cy="FilterLinkAll"
         href="#/"
-        // className="filter__link selected"
         className={cn(
           'filter__link', {
             selected: filter === Filters.all,
@@ -41,7 +40,6 @@ export const Footer: React.FC<FooterProps> = memo(({
       <a
         data-cy="FilterLinkActive"
         href="#/active"
-        // className="filter__link"
         className={cn(
           'filter__link', {
             selected: filter === Filters.active,
@@ -54,7 +52,6 @@ export const Footer: React.FC<FooterProps> = memo(({
       <a
         data-cy="FilterLinkCompleted"
         href="#/completed"
-        // className="filter__link"
         className={cn(
           'filter__link', {
             selected: filter === Filters.completed,

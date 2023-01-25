@@ -1,5 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -26,15 +32,13 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
-        .catch(() => setError('Unable to load a todos'))
+        .catch(() => setError('Unable to load a todos'));
     }
   }, []);
 
-  const activeTodos = () => (
-    todos.filter(todo => !todo.completed).length
-  );
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
-  const filteredTodos = () => (
+  const filteredTodos = useMemo(() => (
     todos.filter(todo => {
       switch (filter) {
         case Filters.completed:
@@ -45,7 +49,7 @@ export const App: React.FC = () => {
           return todo;
       }
     })
-  );
+  ), [todos, filter]);
 
   return (
     <div className="todoapp">
