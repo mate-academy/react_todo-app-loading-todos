@@ -44,21 +44,23 @@ export const App: React.FC = () => {
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
-  const filteredTodos = useMemo(() => todos.filter(todo => {
-    switch (status) {
-      case Filter.All:
-        return todo;
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (status) {
+        case Filter.All:
+          return todo;
 
-      case Filter.Active:
-        return !todo.completed;
+        case Filter.Active:
+          return !todo.completed;
 
-      case Filter.Completed:
-        return todo.completed;
+        case Filter.Completed:
+          return todo.completed;
 
-      default:
-        return todos;
-    }
-  }), [status, todos]);
+        default:
+          return todos;
+      }
+    });
+  }, [status, todos]);
 
   return (
     <div className="todoapp">
