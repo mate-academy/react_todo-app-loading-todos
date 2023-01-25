@@ -1,10 +1,10 @@
 import React from 'react';
 
 type HeaderProps = {
-  //
+  newTodoField: React.RefObject<HTMLInputElement>;
 };
 
-export const Header: React.FC<HeaderProps> = () => (
+export const Header: React.FC<HeaderProps> = ({ newTodoField }) => (
   <header className="todoapp__header">
     {/* eslint-disable-next-line */}
     <button
