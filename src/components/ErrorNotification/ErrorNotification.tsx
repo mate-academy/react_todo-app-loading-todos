@@ -3,26 +3,29 @@
 import { memo } from 'react';
 
 interface Props {
-  message: string,
+  messages: string[],
+  close: (message: string) => void;
 }
 
-export const ErrorNotification: React.FC<Props> = memo(() => {
-  return (
-    <div
-      data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
-    >
-      <button
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-      />
+export const ErrorNotification: React.FC<Props> = memo((
+  { messages, close },
+) => (
+  <>
+    {messages.map(message => (
+      <div
+        data-cy="ErrorNotification"
+        className="notification is-danger is-light has-text-weight-normal"
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => close(message)}
+        />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
-    </div>
-  );
-});
+        {message}
+        <br />
+      </div>
+    ))}
+  </>
+));

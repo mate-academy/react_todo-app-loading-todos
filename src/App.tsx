@@ -1,10 +1,10 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
+  useCallback,
 } from 'react';
 
 import { AuthContext } from './components/Auth/AuthContext';
@@ -21,16 +21,30 @@ import { CompletedFilter } from './types/CompletedFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [completedFilter, setCompletedFilter] = useState(CompletedFilter.All);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
+  const closeErrorMessage = useCallback((message: string) => {
+    setErrorMessages((prev) => {
+      const messageIndex = prev.indexOf(message);
+      const messagesCopy = [...prev];
+
+      messagesCopy.splice(messageIndex, 1);
+
+      return messagesCopy;
+    });
+  }, []);
+
+  const showError = useCallback((message: string) => {
+    setErrorMessages((prev) => [message, ...prev]);
+
+    setTimeout(() => closeErrorMessage(message), 3000);
+  }, [closeErrorMessage]);
+
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
@@ -38,7 +52,7 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then((todosFromServer) => setTodos(todosFromServer))
-        .catch(() => setErrorMessage('Todos loading failed'));
+        .catch(() => showError('Todos loading failed'));
     }
   }, [user]);
 
@@ -81,8 +95,11 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage.length > 0 && (
-        <ErrorNotification message={errorMessage} />
+      {errorMessages.length > 0 && (
+        <ErrorNotification
+          messages={errorMessages}
+          close={closeErrorMessage}
+        />
       )}
     </div>
   );
