@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 enum Filters {
   all = 'all',
@@ -7,10 +7,16 @@ enum Filters {
 }
 
 type FooterProps = {
-  //
+  filter: Filters,
+  activeTodos: number,
+  onChange: void
 };
 
-export const Footer: React.FC<FooterProps> = () => (
+export const Footer: React.FC<FooterProps> = memo(({
+  filter,
+  activeTodos,
+  onChange,
+}) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
       4 items left
@@ -49,4 +55,4 @@ export const Footer: React.FC<FooterProps> = () => (
       Clear completed
     </button>
   </footer>
-);
+));
