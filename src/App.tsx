@@ -33,7 +33,7 @@ export const App: React.FC = () => {
     const setErrorDelay = (message: string) => {
       setErrorMessage(message);
       setTimeout(() => {
-        setErrorDelay('');
+        setErrorMessage('');
       }, 3000);
     };
 
