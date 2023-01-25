@@ -1,6 +1,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -39,9 +40,9 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = () => {
+  const visibleTodos = useMemo(() => {
     return todos.filter(todo => todo.completed === filterStatus);
-  };
+  }, [todos, filterStatus]);
 
   return (
     <div className="todoapp">
@@ -52,14 +53,18 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={visibleTodos()} />
-            <Footer onchangeFilter={() => setFilterStatus()} />
+            <TodoList todos={visibleTodos} />
+            <Footer
+              onChangeAll={() => setFilterStatus(Boolean)}
+              onChangeCompleted={() => setFilterStatus(true)}
+              onChangeActive={() => setFilterStatus(false)}
+            />
           </>
         )}
       </div>
       <ErrorNotification
-        onCloseErrorButton={() => setErrorMessage('')}
         errorMessage={errorMessage}
+        onCloseErrorButton={() => setErrorMessage('')}
       />
     </div>
   );

@@ -1,10 +1,14 @@
-import { Todo } from '../types/Todo';
-
 type Props = {
-  onchangeFilter: () => Todo[],
+  onChangeAll: () => void,
+  onChangeCompleted: () => void,
+  onChangeActive: () => void,
 };
 
-export const Footer: React.FC<Props> = ({ onchangeFilter }) => {
+export const Footer: React.FC<Props> = ({
+  onChangeAll,
+  onChangeCompleted,
+  onChangeActive,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -16,7 +20,7 @@ export const Footer: React.FC<Props> = ({ onchangeFilter }) => {
           data-cy="FilterLinkAll"
           href="#/"
           className="filter__link selected"
-          onClick={() => onchangeFilter(Boolean)}
+          onClick={onChangeAll}
         >
           All
         </a>
@@ -25,7 +29,7 @@ export const Footer: React.FC<Props> = ({ onchangeFilter }) => {
           data-cy="FilterLinkActive"
           href="#/active"
           className="filter__link"
-          onClick={() => onchangeFilter(false)}
+          onClick={onChangeActive}
         >
           Active
         </a>
@@ -33,7 +37,7 @@ export const Footer: React.FC<Props> = ({ onchangeFilter }) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className="filter__link"
-          onClick={() => onchangeFilter(true)}
+          onClick={onChangeCompleted}
         >
           Completed
         </a>
