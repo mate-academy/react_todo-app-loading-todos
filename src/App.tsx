@@ -19,23 +19,23 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isError, setIsError] = useState(true);
+  const [isErrorHidden, setIsErrorHidden] = useState(true);
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const showErrorMessage = () => {
+  const hideErrorMessage = () => {
     setTimeout(() => {
-      setIsError(true);
+      setIsErrorHidden(true);
     }, 3000);
   };
 
   useEffect(() => {
     if (user) {
-      getTodos(user.id)
+      getTodos(user.id / 5.5)
         .then(setTodos)
         .catch(() => {
-          setIsError(false);
+          setIsErrorHidden(false);
         })
-        .finally(showErrorMessage);
+        .finally(hideErrorMessage);
     }
   }, []);
 
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <NewTodo onFocus={setIsError} newTodoField={newTodoField} />
+        <NewTodo onFocus={setIsErrorHidden} newTodoField={newTodoField} />
 
         <TodoList todos={visibleTodos} />
 
@@ -83,20 +83,16 @@ export const App: React.FC = () => {
       <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
-        hidden={isError}
+        hidden={isErrorHidden}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setIsError(true)}
+          onClick={() => setIsErrorHidden(true)}
         />
 
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        Unable to load a todo
       </div>
     </div>
   );
