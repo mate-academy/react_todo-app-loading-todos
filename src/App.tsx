@@ -20,25 +20,25 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('All');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const showError = useCallback((message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(''), 3000);
+  }, []);
+
+  const closeErrorMessage = useCallback(() => {
+    setErrorMessage('');
+  }, []);
+
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
     getTodos(user?.id || 0)
       .then(todo => setTodos(todo))
       .catch(() => {
-        setErrorMessage('Error request for todos failed');
+        showError('Error request for todos failed');
       });
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
-  }, []);
-
-  // const showError = useCallback((message: string) => {
-  //   setErrorMessage(message);
-  //   setTimeout(() => setErrorMessage(''), 3000);
-  // }, []);
-
-  const closeErrorMessage = useCallback(() => {
-    setErrorMessage('');
   }, []);
 
   const uncompletedAmount = useMemo(() => {
