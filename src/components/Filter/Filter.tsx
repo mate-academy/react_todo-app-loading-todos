@@ -1,15 +1,15 @@
 import React, { memo } from 'react';
 import cn from 'classnames';
 
-import { StatusFilter } from '../../types/StatusFilter';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
-  statusFilter: StatusFilter;
-  onChangeStatusFilter: React.Dispatch<React.SetStateAction<StatusFilter>>;
+  filterStatus: FilterStatus;
+  changeFilterStatus: React.Dispatch<React.SetStateAction<FilterStatus>>;
 };
 
 export const Filter: React.FC<Props> = memo((props) => {
-  const { statusFilter, onChangeStatusFilter } = props;
+  const { filterStatus: statusFilter, changeFilterStatus } = props;
 
   return (
     <nav className="filter" data-cy="Filter">
@@ -17,9 +17,9 @@ export const Filter: React.FC<Props> = memo((props) => {
         data-cy="FilterLinkAll"
         href="#/"
         className={cn('filter__link', {
-          selected: statusFilter === StatusFilter.All,
+          selected: statusFilter === FilterStatus.All,
         })}
-        onClick={() => onChangeStatusFilter(StatusFilter.All)}
+        onClick={() => changeFilterStatus(FilterStatus.All)}
       >
         All
       </a>
@@ -28,9 +28,9 @@ export const Filter: React.FC<Props> = memo((props) => {
         data-cy="FilterLinkActive"
         href="#/active"
         className={cn('filter__link', {
-          selected: statusFilter === StatusFilter.Active,
+          selected: statusFilter === FilterStatus.Active,
         })}
-        onClick={() => onChangeStatusFilter(StatusFilter.Active)}
+        onClick={() => changeFilterStatus(FilterStatus.Active)}
       >
         Active
       </a>
@@ -39,9 +39,9 @@ export const Filter: React.FC<Props> = memo((props) => {
         data-cy="FilterLinkCompleted"
         href="#/completed"
         className={cn('filter__link', {
-          selected: statusFilter === StatusFilter.Completed,
+          selected: statusFilter === FilterStatus.Completed,
         })}
-        onClick={() => onChangeStatusFilter(StatusFilter.Completed)}
+        onClick={() => changeFilterStatus(FilterStatus.Completed)}
       >
         Completed
       </a>

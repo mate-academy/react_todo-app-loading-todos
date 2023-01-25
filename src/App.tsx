@@ -15,13 +15,13 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from
   './components/ErrorNotification/ErrorNotification';
-import { StatusFilter } from './types/StatusFilter';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [statusFilter, setStatusFilter] = useState(StatusFilter.All);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -52,22 +52,19 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter((todo) => {
-      switch (statusFilter) {
-        case StatusFilter.All:
-          return todo;
+    switch (filterStatus) {
+      case FilterStatus.Active:
+        return todos.filter(todo => (
+          !todo.completed));
 
-        case StatusFilter.Active:
-          return !todo.completed;
+      case FilterStatus.Completed:
+        return todos.filter(todo => (
+          todo.completed));
 
-        case StatusFilter.Completed:
-          return todo.completed;
-
-        default:
-          throw new Error(' No valide type ');
-      }
-    });
-  }, [todos, statusFilter]);
+      default:
+        return todos;
+    }
+  }, [filterStatus, todos]);
 
   const activeTodosAmount = useMemo(() => (
     todos.filter(todo => !todo.completed).length
@@ -91,8 +88,8 @@ export const App: React.FC = () => {
             <Footer
               activeTodosAmount={activeTodosAmount}
               isCompletedTodos={isCompletedTodos}
-              statusFilter={statusFilter}
-              onChangeStatusFilter={setStatusFilter}
+              filterStatus={filterStatus}
+              changeFilterStatus={setFilterStatus}
             />
           </>
         )}
