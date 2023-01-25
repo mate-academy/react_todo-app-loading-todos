@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
   const [error, setError] = useState('');
+
   const activeTodosQuantity = useMemo(() => (
     todos.filter(todo => !todo.completed).length
   ), [todos]);
@@ -38,11 +39,13 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  if (user) {
-    getTodos(user.id)
-      .then(setTodos)
-      .catch(() => setError('Something went wrong'));
-  }
+  useEffect(() => {
+    if (user) {
+      getTodos(user.id)
+        .then(setTodos)
+        .catch(() => setError('Something went wrong'));
+    }
+  }, []);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
