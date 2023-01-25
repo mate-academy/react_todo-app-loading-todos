@@ -10,6 +10,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map((todo => (
         <div
+          key={todo.id}
           data-cy="Todo"
           className={cn('todo',
             { completed: todo.completed })}

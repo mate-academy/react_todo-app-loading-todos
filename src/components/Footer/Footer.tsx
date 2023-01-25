@@ -1,15 +1,34 @@
-export const Footer: React.FC = () => {
+import cn from 'classnames';
+import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/FilterType';
+
+interface Props {
+  activeTodos: Todo[],
+  filterType: string,
+  onChangeFilterType: React.Dispatch<React.SetStateAction<FilterType>>;
+}
+
+export const Footer: React.FC<Props> = ({
+  activeTodos,
+  filterType,
+  onChangeFilterType,
+
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${activeTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
+          className={cn(
+            'filter__link',
+            { selected: filterType === FilterType.All },
+          )}
+          onClick={() => onChangeFilterType(FilterType.All)}
         >
           All
         </a>
@@ -17,14 +36,22 @@ export const Footer: React.FC = () => {
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={cn(
+            'filter__link',
+            { selected: filterType === FilterType.Active },
+          )}
+          onClick={() => onChangeFilterType(FilterType.Active)}
         >
           Active
         </a>
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={cn(
+            'filter__link',
+            { selected: filterType === FilterType.Completed },
+          )}
+          onClick={() => onChangeFilterType(FilterType.Completed)}
         >
           Completed
         </a>
