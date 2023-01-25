@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 interface Props {
   errorMessage: string;
-  setErrorMessage: () => void,
+  setErrorMessage: (value: string) => void,
 }
 export const ErrorNotification: FC<Props> = ({
   errorMessage, setErrorMessage,
