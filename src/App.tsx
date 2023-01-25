@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -8,42 +8,46 @@ import { ErrorNotification } from './components/ErrorNotification/ErrorNotificat
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterTypes } from './types/Enums';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterTodos, setFilterTodos] = useState('All');
+  const [filterType, setFilterType] = useState(FilterTypes.All);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const handleButtonClickAll = () => {
-    setFilterTodos('All');
+    setFilterType(FilterTypes.All);
   };
 
   const handleButtonClickActive = () => {
-    setFilterTodos('Active');
+    setFilterType(FilterTypes.ACTIVE);
   };
 
   const handleButtonClickCompleted = () => {
-    setFilterTodos('Completed');
+    setFilterType(FilterTypes.COMPLETED);
   };
 
-  let visibleTodos = todos;
+  const visibleTodos = useMemo(() => {
+    switch (filterType) {
+      case FilterTypes.ACTIVE:
+        return todos.filter(todo => !todo.completed);
+
+      case FilterTypes.COMPLETED:
+        return todos.filter(todo => todo.completed);
+
+      default:
+        return todos;
+    }
+  }, [todos, filterType]);
 
   if (errorMessage) {
     setTimeout(() => {
       setErrorMessage('');
     }, 3000);
-  }
-
-  if (filterTodos === 'Active') {
-    visibleTodos = todos.filter(todo => !todo.completed);
-  }
-
-  if (filterTodos === 'Completed') {
-    visibleTodos = todos.filter(todo => todo.completed);
   }
 
   const todosLeft = visibleTodos.filter(todo => !todo.completed);
@@ -72,11 +76,11 @@ export const App: React.FC = () => {
           <>
             <TodoList todos={visibleTodos} />
             <Footer
-              filterTodos={filterTodos}
+              filterType={filterType}
               todosLeft={todosLeft}
-              onClickAll={handleButtonClickAll}
-              onClickActive={handleButtonClickActive}
-              onClickCompleted={handleButtonClickCompleted}
+              handleButtonClickAll={handleButtonClickAll}
+              handleButtonClickActive={handleButtonClickActive}
+              handleButtonClickCompleted={handleButtonClickCompleted}
             />
           </>
         )}

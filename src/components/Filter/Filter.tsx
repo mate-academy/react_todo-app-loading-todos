@@ -2,17 +2,17 @@ import React from 'react';
 import cn from 'classnames';
 
 type Props = {
-  filterTodos: string,
-  onClickAll: () => void,
-  onClickActive: () => void,
-  onClickCompleted: () => void,
+  filterType: string,
+  handleButtonClickAll: () => void,
+  handleButtonClickActive: () => void,
+  handleButtonClickCompleted: () => void,
 };
 
 export const Filter: React.FC<Props> = ({
-  filterTodos,
-  onClickAll,
-  onClickActive,
-  onClickCompleted,
+  filterType,
+  handleButtonClickAll,
+  handleButtonClickActive,
+  handleButtonClickCompleted,
 }) => (
   <nav className="filter" data-cy="Filter">
     <a
@@ -20,9 +20,9 @@ export const Filter: React.FC<Props> = ({
       href="#/"
       className={cn(
         'filter__link',
-        { selected: filterTodos === 'All' },
+        { selected: filterType === 'All' },
       )}
-      onClick={onClickAll}
+      onClick={handleButtonClickAll}
     >
       All
     </a>
@@ -32,9 +32,9 @@ export const Filter: React.FC<Props> = ({
       href="#/active"
       className={cn(
         'filter__link',
-        { selected: filterTodos === 'Active' },
+        { selected: filterType === 'Active' },
       )}
-      onClick={onClickActive}
+      onClick={handleButtonClickActive}
     >
       Active
     </a>
@@ -43,9 +43,9 @@ export const Filter: React.FC<Props> = ({
       href="#/completed"
       className={cn(
         'filter__link',
-        { selected: filterTodos === 'Completed' },
+        { selected: filterType === 'Completed' },
       )}
-      onClick={onClickCompleted}
+      onClick={handleButtonClickCompleted}
     >
       Completed
     </a>

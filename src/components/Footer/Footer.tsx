@@ -2,23 +2,23 @@ import { Todo } from '../../types/Todo';
 import { Filter } from '../Filter/Filter';
 
 type Props = {
-  filterTodos: string,
+  filterType: string,
   todosLeft: Todo[],
-  onClickAll: () => void,
-  onClickActive: () => void,
-  onClickCompleted: () => void,
+  handleButtonClickAll: () => void,
+  handleButtonClickActive: () => void,
+  handleButtonClickCompleted: () => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  filterTodos,
+  filterType,
   todosLeft,
-  onClickAll,
-  onClickActive,
-  onClickCompleted,
+  handleButtonClickAll,
+  handleButtonClickActive,
+  handleButtonClickCompleted,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
-      {filterTodos
+      {filterType
         ? (
           <span className="todo-count" data-cy="todosCounter">
             {`${todosLeft.length} items left`}
@@ -30,10 +30,10 @@ export const Footer: React.FC<Props> = ({
         )}
 
       <Filter
-        filterTodos={filterTodos}
-        onClickAll={onClickAll}
-        onClickActive={onClickActive}
-        onClickCompleted={onClickCompleted}
+        filterType={filterType}
+        handleButtonClickAll={handleButtonClickAll}
+        handleButtonClickActive={handleButtonClickActive}
+        handleButtonClickCompleted={handleButtonClickCompleted}
       />
 
       <button
