@@ -3,10 +3,11 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { ErrorNotification } from './components/ErrorNotification';
-import { Footer } from './components/Footer';
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+// eslint-disable-next-line max-len
+import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
