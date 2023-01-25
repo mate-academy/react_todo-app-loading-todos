@@ -1,8 +1,20 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
-export const getTodos = (userId: number) => {
-  return client.get<Todo[]>(`/todos?userId=${userId}`);
+const ENDPOINTS = {
+  todosByUserId: '/todos?userId=',
+  createTodo: '/todos',
 };
 
-// Add more methods here
+export const getTodosByUserId = (userId: number): Promise<Todo[]> => {
+  const requestUrl = `${ENDPOINTS.todosByUserId}${userId}`;
+
+  return client.get<Todo[]>(requestUrl);
+};
+
+export const createTodo = (fieldsToCreate: Omit<Todo, 'id'>) => {
+  const body = JSON.stringify(fieldsToCreate);
+  const requestUrl = `${ENDPOINTS.createTodo}`;
+
+  return client.post<Todo>(requestUrl, body);
+};

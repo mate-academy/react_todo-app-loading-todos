@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
@@ -25,7 +26,6 @@ function request<T>(
     };
   }
 
-  // we wait for testing purpose to see loaders
   return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
