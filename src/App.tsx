@@ -33,23 +33,21 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
-        .catch(() => setError('Something is wrong...'));
+        .catch(() => setError('Unable to load a todos'));
     }
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterTodo) {
-        case FilterType.active:
-          return !todo.completed;
+    switch (filterTodo) {
+      case FilterType.active:
+        return todos.filter(todo => !todo.completed);
 
-        case FilterType.completed:
-          return todo.completed;
+      case FilterType.completed:
+        return todos.filter(todo => todo.completed);
 
-        default:
-          return todo;
-      }
-    });
+      default:
+        return todos;
+    }
   }, [todos, filterTodo]);
 
   const activeTodosQuantity = useMemo(() => (
@@ -67,10 +65,11 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList todos={filteredTodos} />
+
             <Footer
               activeTodosQuantity={activeTodosQuantity}
               filterType={filterTodo}
-              onChange={setFilterTodo}
+              handleFilterChange={setFilterTodo}
             />
 
           </>

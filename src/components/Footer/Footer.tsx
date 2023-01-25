@@ -5,13 +5,13 @@ import { FilterType } from '../../types/FilterType';
 type Props = {
   activeTodosQuantity: number,
   filterType: FilterType,
-  onChange: (str: FilterType) => void
+  handleFilterChange: (str: FilterType) => void
 };
 
 export const Footer: React.FC<Props> = memo(({
   activeTodosQuantity,
   filterType,
-  onChange,
+  handleFilterChange,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -26,7 +26,7 @@ export const Footer: React.FC<Props> = memo(({
           className={cn('filter__link', {
             selected: filterType === FilterType.all,
           })}
-          onClick={() => onChange(FilterType.all)}
+          onClick={() => handleFilterChange(FilterType.all)}
         >
           All
         </a>
@@ -37,17 +37,18 @@ export const Footer: React.FC<Props> = memo(({
           className={cn('filter__link', {
             selected: filterType === FilterType.active,
           })}
-          onClick={() => onChange(FilterType.active)}
+          onClick={() => handleFilterChange(FilterType.active)}
         >
           Active
         </a>
+
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={cn('filter__link', {
             selected: filterType === FilterType.completed,
           })}
-          onClick={() => onChange(FilterType.completed)}
+          onClick={() => handleFilterChange(FilterType.completed)}
         >
           Completed
         </a>

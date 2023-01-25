@@ -27,6 +27,7 @@ export const TodoList: React.FC<Props> = memo(({ todos }) => {
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
           </span>
+
           <button
             type="button"
             className="todo__remove"
