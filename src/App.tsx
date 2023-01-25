@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -8,6 +8,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
+import { FilterType } from './types/FilterTypes';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
@@ -15,11 +16,18 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [sortType, setSortType] = useState('all');
+  const [sortType, setSortType] = useState<FilterType>(FilterType.ALL);
+  const [errorText, setErrorText] = useState('');
+
+  const showErrorBanner = (errorMsg: string) => {
+    setErrorText(errorMsg);
+    setTimeout(() => setErrorText(''), 3000);
+  };
 
   useEffect(() => {
     if (user) {
-      getTodos(user.id).then(setTodos);
+      getTodos(user.id)
+        .then(setTodos).catch(() => showErrorBanner('Cant load user todos'));
     }
 
     // focus the element with `ref={newTodoField}`
@@ -28,7 +36,7 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const filteredTodos: Todo[] = todos.filter(todo => {
+  const filteredTodos: Todo[] = useMemo(() => todos.filter(todo => {
     if (sortType === 'active') {
       return !todo.completed;
     }
@@ -38,24 +46,37 @@ export const App: React.FC = () => {
     }
 
     return true;
-  });
+  }), [todos, sortType]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header newTodoField={newTodoField} todos={todos} />
 
-        <TodoList todos={filteredTodos} />
+        { filteredTodos.length || sortType !== 'all'
+          ? (
+            <>
+              <TodoList todos={filteredTodos} />
 
-        <Footer
-          todos={filteredTodos}
-          sortType={sortType}
-          setSortType={setSortType}
-        />
+              <Footer
+                todos={filteredTodos}
+                sortType={sortType}
+                setSortType={setSortType}
+              />
+            </>
+          )
+          : null}
       </div>
-      <ErrorNotification />
+      {errorText
+        ? (
+          <ErrorNotification
+            errorText={errorText}
+            setErrorText={setErrorText}
+          />
+        )
+        : null }
     </div>
   );
 };

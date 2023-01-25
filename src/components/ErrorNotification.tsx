@@ -1,6 +1,14 @@
 import React from 'react';
 
-export const ErrorNotification: React.FC = () => {
+export type Props = {
+  setErrorText: (arg: string) => void,
+  errorText: string
+};
+
+export const ErrorNotification: React.FC<Props> = ({
+  setErrorText,
+  errorText,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -11,13 +19,10 @@ export const ErrorNotification: React.FC = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        onClick={() => setErrorText('')}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorText}
     </div>
   );
 };

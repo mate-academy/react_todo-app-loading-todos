@@ -1,18 +1,19 @@
 import classNames from 'classnames';
 import React from 'react';
+import { FilterType } from '../types/FilterTypes';
 import { Todo } from '../types/Todo';
 
 export type Props = {
   todos: Todo[],
-  setSortType: (arg: string) => void,
-  sortType: string,
+  setSortType: (arg: FilterType) => void,
+  sortType: FilterType,
 };
 
 export const Footer: React.FC<Props> = ({ todos, setSortType, sortType }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.length} items left`}
+        {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -20,9 +21,10 @@ export const Footer: React.FC<Props> = ({ todos, setSortType, sortType }) => {
           data-cy="FilterLinkAll"
           href="#/"
           className={
-            classNames('filter__link', { selected: sortType === 'all' })
+            classNames('filter__link',
+              { selected: sortType === FilterType.ALL })
           }
-          onClick={() => setSortType('all')}
+          onClick={() => setSortType(FilterType.ALL)}
         >
           All
         </a>
@@ -31,9 +33,10 @@ export const Footer: React.FC<Props> = ({ todos, setSortType, sortType }) => {
           data-cy="FilterLinkActive"
           href="#/active"
           className={
-            classNames('filter__link', { selected: sortType === 'active' })
+            classNames('filter__link',
+              { selected: sortType === FilterType.ACTIVE })
           }
-          onClick={() => setSortType('active')}
+          onClick={() => setSortType(FilterType.ACTIVE)}
         >
           Active
         </a>
@@ -41,9 +44,10 @@ export const Footer: React.FC<Props> = ({ todos, setSortType, sortType }) => {
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={
-            classNames('filter__link', { selected: sortType === 'completed' })
+            classNames('filter__link',
+              { selected: sortType === FilterType.COMPLETED })
           }
-          onClick={() => setSortType('completed')}
+          onClick={() => setSortType(FilterType.COMPLETED)}
         >
           Completed
         </a>
@@ -53,7 +57,7 @@ export const Footer: React.FC<Props> = ({ todos, setSortType, sortType }) => {
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        onClick={() => setSortType('all')}
+        onClick={() => setSortType(FilterType.ALL)}
       >
         Clear completed
       </button>
