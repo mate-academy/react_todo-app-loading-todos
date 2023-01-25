@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import cn from 'classnames';
 
 enum Filters {
   all = 'all',
@@ -9,7 +10,7 @@ enum Filters {
 type FooterProps = {
   filter: Filters,
   activeTodos: number,
-  onChange: void
+  onChange: (arg: Filters) => void
 };
 
 export const Footer: React.FC<FooterProps> = memo(({
@@ -19,14 +20,20 @@ export const Footer: React.FC<FooterProps> = memo(({
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
-      4 items left
+      {`${activeTodos} items left`}
     </span>
 
     <nav className="filter" data-cy="Filter">
       <a
         data-cy="FilterLinkAll"
         href="#/"
-        className="filter__link selected"
+        // className="filter__link selected"
+        className={cn(
+          'filter__link', {
+            selected: filter === Filters.all,
+          },
+        )}
+        onClick={() => onChange(Filters.all)}
       >
         All
       </a>
@@ -34,14 +41,25 @@ export const Footer: React.FC<FooterProps> = memo(({
       <a
         data-cy="FilterLinkActive"
         href="#/active"
-        className="filter__link"
+        // className="filter__link"
+        className={cn(
+          'filter__link', {
+            selected: filter === Filters.active,
+          },
+        )}
       >
         Active
       </a>
+
       <a
         data-cy="FilterLinkCompleted"
         href="#/completed"
-        className="filter__link"
+        // className="filter__link"
+        className={cn(
+          'filter__link', {
+            selected: filter === Filters.completed,
+          },
+        )}
       >
         Completed
       </a>
