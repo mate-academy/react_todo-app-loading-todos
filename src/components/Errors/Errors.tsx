@@ -1,17 +1,17 @@
 import React, { memo, useEffect } from 'react';
 import cn from 'classnames';
 
-type FilterProps = {
+type ErrorsProps = {
   errorMessage: string;
-  handleOnChangeErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  onHideError: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const Errors: React.FC<FilterProps> = memo(({
+export const Errors: React.FC<ErrorsProps> = memo(({
   errorMessage,
-  handleOnChangeErrorMessage,
+  onHideError,
 }) => {
   useEffect(() => {
-    setTimeout(() => handleOnChangeErrorMessage(''), 3000);
+    setTimeout(() => onHideError(''), 3000);
   }, []);
 
   return (
@@ -27,7 +27,7 @@ export const Errors: React.FC<FilterProps> = memo(({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => handleOnChangeErrorMessage('')}
+        onClick={() => onHideError('')}
       />
       {errorMessage}
     </div>

@@ -1,5 +1,11 @@
 import React from 'react';
 
+enum Filters {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 type FooterProps = {
   //
 };
