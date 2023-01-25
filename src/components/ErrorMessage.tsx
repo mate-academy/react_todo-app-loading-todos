@@ -11,11 +11,12 @@ export const ErrorMessage:FC<Props> = React.memo(({ message, closeButton }) => {
       data-cy="ErrorNotification"
       className="notification is-danger is-light has-text-weight-normal"
     >
+      {/* eslint-disable jsx-a11y/control-has-associated-label */ }
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => closeButton()}
+        onClick={closeButton}
       />
 
       {message}

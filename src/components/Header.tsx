@@ -11,6 +11,7 @@ export const Header:FC = React.memo(() => {
 
   return (
     <header className="todoapp__header">
+      {/* eslint-disable jsx-a11y/control-has-associated-label */ }
       <button
         data-cy="ToggleAllButton"
         type="button"
