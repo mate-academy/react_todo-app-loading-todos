@@ -45,21 +45,18 @@ export const App: React.FC = () => {
   ), [todos]);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (status) {
-        case Filter.All:
-          return todo;
+    switch (status) {
+      case Filter.Active:
+        return todos.filter(todo => (
+          !todo.completed));
 
-        case Filter.Active:
-          return !todo.completed;
+      case Filter.Completed:
+        return todos.filter(todo => (
+          todo.completed));
 
-        case Filter.Completed:
-          return todo.completed;
-
-        default:
-          return todos;
-      }
-    });
+      default:
+        return todos;
+    }
   }, [status, todos]);
 
   return (
