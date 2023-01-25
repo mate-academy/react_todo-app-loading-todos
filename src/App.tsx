@@ -54,21 +54,18 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterType) {
-        case FilterType.All:
-          return todo;
+    switch (filterType) {
+      case FilterType.All:
+        return todos;
 
-        case FilterType.Active:
-          return !todo.completed;
+      case FilterType.Active:
+        return todos.filter(todo => !todo.completed);
 
-        case FilterType.Completed:
-          return todo.completed;
-
-        default:
-          throw new Error('Invalid type');
-      }
-    });
+      case FilterType.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        throw new Error('Invalid type');
+    }
   }, [todos, filterType]);
 
   const activeTodosAmount = useMemo(() => (
