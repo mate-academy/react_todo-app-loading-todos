@@ -15,16 +15,15 @@ import { TodoList } from './components/TodoList/TodoList';
 import { getTodos } from './api/todos';
 
 import { Todo } from './types/Todo';
-import { FilterType } from './types/FilterType';
+import { CompletedFilter } from './types/CompletedFilter';
 import { ErrorNotification } from
   './components/ErrorNotification/ErrorNotification';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterType, setFilterType] = useState(FilterType.All);
+  const [completedFilter, setCompletedFilter] = useState(CompletedFilter.All);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
@@ -41,29 +40,29 @@ export const App: React.FC = () => {
         .then((todosFromServer) => setTodos(todosFromServer))
         .catch(() => setErrorMessage('Todos loading failed'));
     }
-  }, []);
+  }, [user]);
 
   const activeTodos = useMemo(() => (
     todos.filter(todo => !todo.completed)
-  ), [todos, filterType]);
+  ), [todos, completedFilter]);
 
   const visibleTodos = useMemo(() => (
     todos.filter(todo => {
-      switch (filterType) {
-        case FilterType.All:
+      switch (completedFilter) {
+        case CompletedFilter.All:
           return todo;
 
-        case FilterType.Active:
+        case CompletedFilter.Active:
           return !todo.completed;
 
-        case FilterType.Completed:
+        case CompletedFilter.Completed:
           return todo.completed;
 
         default:
           throw new Error('Invalid type');
       }
     })
-  ), [todos, filterType]);
+  ), [todos, completedFilter]);
 
   return (
     <div className="todoapp">
@@ -72,19 +71,19 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header newTodoField={newTodoField} />
 
-        {todos.length > 0 && (
+        {todos.length !== 0 && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer
               activeTodos={activeTodos}
-              filterType={filterType}
-              onChangeFilterType={setFilterType}
+              completedFilter={completedFilter}
+              setCompletedFilter={setCompletedFilter}
             />
           </>
         )}
       </div>
 
-      {errorMessage && <ErrorNotification />}
+      {errorMessage && <ErrorNotification message={errorMessage} />}
     </div>
   );
 };

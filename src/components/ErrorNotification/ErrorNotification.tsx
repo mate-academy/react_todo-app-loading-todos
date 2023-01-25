@@ -2,7 +2,11 @@
 
 import { memo } from 'react';
 
-export const ErrorNotification: React.FC = memo(() => {
+interface Props {
+  message: string,
+}
+
+export const ErrorNotification: React.FC<Props> = memo(() => {
   return (
     <div
       data-cy="ErrorNotification"

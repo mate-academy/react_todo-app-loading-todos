@@ -1,24 +1,24 @@
 import cn from 'classnames';
 import { memo } from 'react';
 import { Todo } from '../../types/Todo';
-import { FilterType } from '../../types/FilterType';
+import { CompletedFilter } from '../../types/CompletedFilter';
 
 interface Props {
   activeTodos: Todo[],
-  filterType: string,
-  onChangeFilterType: React.Dispatch<React.SetStateAction<FilterType>>;
+  completedFilter: CompletedFilter,
+  setCompletedFilter: (v: CompletedFilter) => void;
 }
 
 export const Footer: React.FC<Props> = memo(({
   activeTodos,
-  filterType,
-  onChangeFilterType,
+  completedFilter,
+  setCompletedFilter,
 
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodos.length} items left`}
+        {`${activeTodos.length} item${activeTodos.length > 1 ? 's' : ''} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -27,9 +27,9 @@ export const Footer: React.FC<Props> = memo(({
           href="#/"
           className={cn(
             'filter__link',
-            { selected: filterType === FilterType.All },
+            { selected: completedFilter === CompletedFilter.All },
           )}
-          onClick={() => onChangeFilterType(FilterType.All)}
+          onClick={() => setCompletedFilter(CompletedFilter.All)}
         >
           All
         </a>
@@ -39,9 +39,9 @@ export const Footer: React.FC<Props> = memo(({
           href="#/active"
           className={cn(
             'filter__link',
-            { selected: filterType === FilterType.Active },
+            { selected: completedFilter === CompletedFilter.Active },
           )}
-          onClick={() => onChangeFilterType(FilterType.Active)}
+          onClick={() => setCompletedFilter(CompletedFilter.Active)}
         >
           Active
         </a>
@@ -50,9 +50,9 @@ export const Footer: React.FC<Props> = memo(({
           href="#/completed"
           className={cn(
             'filter__link',
-            { selected: filterType === FilterType.Completed },
+            { selected: completedFilter === CompletedFilter.Completed },
           )}
-          onClick={() => onChangeFilterType(FilterType.Completed)}
+          onClick={() => setCompletedFilter(CompletedFilter.Completed)}
         >
           Completed
         </a>
