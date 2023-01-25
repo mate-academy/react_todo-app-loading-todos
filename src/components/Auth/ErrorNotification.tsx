@@ -1,29 +1,25 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import cn from 'classnames';
 import React from 'react';
 
 type Props = {
-  errorPush: boolean;
   errorMessage: string;
-  setErrorPush: (value: boolean) => void;
+  close: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
-  errorPush,
   errorMessage,
-  setErrorPush,
+  close,
 }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={cn('notification is-danger is-light has-text-weight-normal',
-        { hidden: !errorPush })}
+      className="notification is-danger is-light has-text-weight-normal"
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorPush(!errorPush)}
+        onClick={close}
       />
 
       {errorMessage}

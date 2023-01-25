@@ -22,6 +22,7 @@ export const Content: React.FC<Props> = ({ preaperedTodo }) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
+              checked={todo.completed}
             />
           </label>
 

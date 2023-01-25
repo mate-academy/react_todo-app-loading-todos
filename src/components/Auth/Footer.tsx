@@ -4,13 +4,18 @@ import cn from 'classnames';
 type Props = {
   onStatus:(state: string) => void;
   status: string;
+  uncompletedAmount: number;
 };
 
-export const Footer: React.FC<Props> = ({ onStatus, status }) => {
+export const Footer: React.FC<Props> = ({
+  onStatus,
+  status,
+  uncompletedAmount,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${uncompletedAmount} item${uncompletedAmount > 1 ? 's' : ''}`}
       </span>
 
       <nav className="filter" data-cy="Filter">

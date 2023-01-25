@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useEffect, useRef, useState,
+  useCallback,
+  useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';// import Authprovider+
@@ -17,7 +18,6 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('All');
-  const [errorPush, setErrorPush] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -25,13 +25,25 @@ export const App: React.FC = () => {
     getTodos(user?.id || 0)
       .then(todo => setTodos(todo))
       .catch(() => {
-        setErrorPush(true);
         setErrorMessage('Error request for todos failed');
       });
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
   }, []);
+
+  // const showError = useCallback((message: string) => {
+  //   setErrorMessage(message);
+  //   setTimeout(() => setErrorMessage(''), 3000);
+  // }, []);
+
+  const closeErrorMessage = useCallback(() => {
+    setErrorMessage('');
+  }, []);
+
+  const uncompletedAmount = useMemo(() => {
+    return todos.filter(todo => todo.completed).length;
+  }, [todos]);
 
   const swithCase = (value: string) => {
     switch (value) {
@@ -63,14 +75,16 @@ export const App: React.FC = () => {
         <Footer
           onStatus={setStatus}
           status={status}
+          uncompletedAmount={uncompletedAmount}
         />
       </div>
 
-      <ErrorNotification
-        errorPush={errorPush}
-        errorMessage={errorMessage}
-        setErrorPush={(state: boolean) => setErrorPush(state)}
-      />
+      {errorMessage && (
+        <ErrorNotification
+          errorMessage={errorMessage}
+          close={closeErrorMessage}
+        />
+      )}
     </div>
   );
 };
