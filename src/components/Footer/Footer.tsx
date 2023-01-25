@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import cn from 'classnames';
 
-enum Filters {
+export enum Filters {
   all = 'all',
   active = 'active',
   completed = 'completed',
