@@ -7,10 +7,11 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
-import { ErrorNotification } from './components/errorNotification';
-import { Footer } from './components/footer';
-import { Header } from './components/header';
-import { TodoList } from './components/todoList';
+// eslint-disable-next-line max-len
+import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
