@@ -12,15 +12,18 @@ import { ErrorNotification } from './components/ErrorNotification/ErrorNotificat
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterStatus } from './types/Filterstatus';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterStatus, setFilterStatus] = useState(Boolean);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
 
   const newTodoField = useRef<HTMLInputElement>(null);
+
+  const completedTodos = todos.filter(todo => todo.completed === true);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -41,9 +44,17 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    return todos.filter(todo => todo.completed === filterStatus);
-  }, [todos, filterStatus]);
+  const visibleTodos = useMemo(() => todos
+    .filter(todo => {
+      switch (filterStatus) {
+        case FilterStatus.Active:
+          return !todo.completed;
+        case FilterStatus.Completed:
+          return todo.completed;
+        default:
+          return todo;
+      }
+    }), [todos, filterStatus]);
 
   return (
     <div className="todoapp">
@@ -56,9 +67,8 @@ export const App: React.FC = () => {
           <>
             <TodoList todos={visibleTodos} />
             <Footer
-              onChangeAll={() => setFilterStatus(Boolean)}
-              onChangeCompleted={() => setFilterStatus(true)}
-              onChangeActive={() => setFilterStatus(false)}
+              completedTodos={completedTodos}
+              onStatusChange={setFilterStatus}
             />
           </>
         )}

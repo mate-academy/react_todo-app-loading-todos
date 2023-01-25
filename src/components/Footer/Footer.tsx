@@ -1,13 +1,14 @@
+import { FilterStatus } from '../../types/Filterstatus';
+import { Todo } from '../../types/Todo';
+
 type Props = {
-  onChangeAll: () => void,
-  onChangeCompleted: () => void,
-  onChangeActive: () => void,
+  completedTodos: Todo[] | [],
+  onStatusChange: (str: FilterStatus) => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  onChangeAll,
-  onChangeCompleted,
-  onChangeActive,
+  completedTodos,
+  onStatusChange,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -20,7 +21,7 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className="filter__link selected"
-          onClick={onChangeAll}
+          onClick={() => onStatusChange(FilterStatus.All)}
         >
           All
         </a>
@@ -29,27 +30,31 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className="filter__link"
-          onClick={onChangeActive}
+          onClick={() => onStatusChange(FilterStatus.Active)}
         >
           Active
         </a>
+
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className="filter__link"
-          onClick={onChangeCompleted}
+          onClick={() => onStatusChange(FilterStatus.Completed)}
         >
           Completed
         </a>
+
       </nav>
 
-      <button
-        data-cy="ClearCompletedButton"
-        type="button"
-        className="todoapp__clear-completed"
-      >
-        Clear completed
-      </button>
+      {completedTodos.length > 0 && (
+        <button
+          data-cy="ClearCompletedButton"
+          type="button"
+          className="todoapp__clear-completed"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
