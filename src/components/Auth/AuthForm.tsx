@@ -33,6 +33,7 @@ export const AuthForm: React.FC<Props> = ({ onLogin }) => {
     } catch (error) {
       setErrorMessage('Make sure to login!');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUser = async () => {

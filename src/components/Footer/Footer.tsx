@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { FilterType } from '../../types/FilterType';
@@ -9,7 +9,7 @@ interface FooterProps {
   setFilter: (value: FilterType) => void,
 }
 
-export const Footer: FC<FooterProps> = ({ todos, filter, setFilter }) => {
+export const Footer: FC<FooterProps> = memo(({ todos, filter, setFilter }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
@@ -62,4 +62,4 @@ export const Footer: FC<FooterProps> = ({ todos, filter, setFilter }) => {
       </button>
     </footer>
   );
-};
+});

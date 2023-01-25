@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
-  useContext, useEffect, useRef, useState, FC,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  FC,
+  useMemo,
+  useCallback,
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
@@ -13,34 +19,34 @@ import { FilterType } from './types/FilterType';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState<FilterType>(FilterType.ALL);
+
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
-  const visibleTodos = todos;
-  const onSetFilter = (value : FilterType) => setFilter(value);
+  const onSetFilter = useCallback(
+    () => (value: FilterType) => setFilter(value), [],
+  );
 
-  if (filter !== FilterType.ALL) {
-    visibleTodos.filter(todo => {
-      switch (filter) {
-        case FilterType.ACTIVE:
-          return !todo.completed;
+  const visibleTodos = useMemo(() => (todos.filter(todo => {
+    switch (filter) {
+      case FilterType.ACTIVE:
+        return !todo.completed;
 
-        case FilterType.COMPLETED:
-          return todo.completed;
+      case FilterType.COMPLETED:
+        return todo.completed;
 
-        default:
-          return true;
-      }
-    });
-  }
+      default:
+        return true;
+    }
+  })), [filter, todos]);
 
   useEffect(() => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
         .catch(() => {
-          setError('Something went wrong...');
+          setErrorMessage('Unable to load todos');
         });
     }
 
@@ -48,6 +54,7 @@ export const App: FC = () => {
     if (newTodoField.current) {
       newTodoField.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -58,7 +65,7 @@ export const App: FC = () => {
         <Header
           newTodoField={newTodoField}
         />
-        {!visibleTodos.length && (
+        {todos.length !== 0 && (
           <>
             <TodoList
               todos={visibleTodos}
@@ -72,7 +79,10 @@ export const App: FC = () => {
         )}
 
       </div>
-      <ErrorNotification error={error} />
+      <ErrorNotification
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
