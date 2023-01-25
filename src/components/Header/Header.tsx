@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { memo } from 'react';
 
 interface Props {
   newTodoField: React.RefObject<HTMLInputElement>,
 }
 
-export const Header: React.FC<Props> = (props) => {
+export const Header: React.FC<Props> = memo((props) => {
   const {
     newTodoField,
   } = props;
@@ -28,4 +29,4 @@ export const Header: React.FC<Props> = (props) => {
       </form>
     </header>
   );
-};
+});

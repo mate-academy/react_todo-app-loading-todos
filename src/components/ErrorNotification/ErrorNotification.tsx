@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const ErrorNotification: React.FC = () => {
+import { memo } from 'react';
+
+export const ErrorNotification: React.FC = memo(() => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -19,4 +21,4 @@ export const ErrorNotification: React.FC = () => {
       Unable to update a todo
     </div>
   );
-};
+});

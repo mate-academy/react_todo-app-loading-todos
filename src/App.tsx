@@ -2,6 +2,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -42,23 +43,27 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed)
+  ), [todos, filterType]);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filterType) {
-      case FilterType.All:
-        return todo;
+  const visibleTodos = useMemo(() => (
+    todos.filter(todo => {
+      switch (filterType) {
+        case FilterType.All:
+          return todo;
 
-      case FilterType.Active:
-        return !todo.completed;
+        case FilterType.Active:
+          return !todo.completed;
 
-      case FilterType.Completed:
-        return todo.completed;
+        case FilterType.Completed:
+          return todo.completed;
 
-      default:
-        throw new Error('Invalid type');
-    }
-  });
+        default:
+          throw new Error('Invalid type');
+      }
+    })
+  ), [todos, filterType]);
 
   return (
     <div className="todoapp">

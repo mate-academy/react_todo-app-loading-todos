@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { memo } from 'react';
 import { Todo } from '../../types/Todo';
 import { FilterType } from '../../types/FilterType';
 
@@ -8,7 +9,7 @@ interface Props {
   onChangeFilterType: React.Dispatch<React.SetStateAction<FilterType>>;
 }
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<Props> = memo(({
   activeTodos,
   filterType,
   onChangeFilterType,
@@ -66,4 +67,4 @@ export const Footer: React.FC<Props> = ({
       </button>
     </footer>
   );
-};
+});
