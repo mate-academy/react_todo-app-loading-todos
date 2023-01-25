@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { Filter } from '../Filter/Filter';
 
 type Props = {
   filterTodos: string,
@@ -29,42 +29,12 @@ export const Footer: React.FC<Props> = ({
           </span>
         )}
 
-      <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className={cn(
-            'filter__link',
-            { selected: filterTodos === 'All' },
-          )}
-          onClick={onClickAll}
-        >
-          All
-        </a>
-
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className={cn(
-            'filter__link',
-            { selected: filterTodos === 'Active' },
-          )}
-          onClick={onClickActive}
-        >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className={cn(
-            'filter__link',
-            { selected: filterTodos === 'Completed' },
-          )}
-          onClick={onClickCompleted}
-        >
-          Completed
-        </a>
-      </nav>
+      <Filter
+        filterTodos={filterTodos}
+        onClickAll={onClickAll}
+        onClickActive={onClickActive}
+        onClickCompleted={onClickCompleted}
+      />
 
       <button
         data-cy="ClearCompletedButton"
