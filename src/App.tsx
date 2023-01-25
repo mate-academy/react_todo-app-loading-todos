@@ -11,13 +11,13 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
+import { ErrorNotification } from
+  './components/ErrorNotification/ErrorNotification';
 
 import { getTodos } from './api/todos';
 
 import { Todo } from './types/Todo';
 import { CompletedFilter } from './types/CompletedFilter';
-import { ErrorNotification } from
-  './components/ErrorNotification/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -46,23 +46,21 @@ export const App: React.FC = () => {
     todos.filter(todo => !todo.completed)
   ), [todos, completedFilter]);
 
-  const visibleTodos = useMemo(() => (
-    todos.filter(todo => {
-      switch (completedFilter) {
-        case CompletedFilter.All:
-          return todo;
+  const visibleTodos = useMemo(() => {
+    switch (completedFilter) {
+      case CompletedFilter.All:
+        return todos;
 
-        case CompletedFilter.Active:
-          return !todo.completed;
+      case CompletedFilter.Active:
+        return todos.filter(todo => !todo.completed);
 
-        case CompletedFilter.Completed:
-          return todo.completed;
+      case CompletedFilter.Completed:
+        return todos.filter(todo => todo.completed);
 
-        default:
-          throw new Error('Invalid type');
-      }
-    })
-  ), [todos, completedFilter]);
+      default:
+        throw new Error('Invalid type');
+    }
+  }, [todos, completedFilter]);
 
   return (
     <div className="todoapp">
@@ -83,7 +81,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && <ErrorNotification message={errorMessage} />}
+      {errorMessage.length > 0 && (
+        <ErrorNotification message={errorMessage} />
+      )}
     </div>
   );
 };
