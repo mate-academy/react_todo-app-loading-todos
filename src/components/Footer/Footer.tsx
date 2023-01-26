@@ -3,13 +3,13 @@ import { Filter } from '../Filter/Filter';
 
 type Props = {
   filterStatus: string;
-  onFilterStatus: React.Dispatch<React.SetStateAction<string>>;
+  onFilterChangeStatus: React.Dispatch<React.SetStateAction<string>>;
   amountOfItems: number;
 };
 
 export const Footer: React.FC<Props> = memo(({
   filterStatus,
-  onFilterStatus,
+  onFilterChangeStatus,
   amountOfItems,
 }) => {
   return (
@@ -18,7 +18,10 @@ export const Footer: React.FC<Props> = memo(({
         {`${amountOfItems} items left`}
       </span>
 
-      <Filter filterStatus={filterStatus} onFilterStatus={onFilterStatus} />
+      <Filter
+        filterStatus={filterStatus}
+        onFilterChangeStatus={onFilterChangeStatus}
+      />
 
       <button
         data-cy="ClearCompletedButton"

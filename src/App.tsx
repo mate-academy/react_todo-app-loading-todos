@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
+  useCallback,
   useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -39,15 +40,15 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const closeErrorMassage = () => {
+  const closeErrorMassage = useCallback(() => {
     setIsError(false);
-  };
+  }, []);
 
   if (isError) {
     setTimeout(() => setIsError(false), 3000);
   }
 
-  const visibleTodos = todos.filter((todo) => {
+  const visibleTodos = useMemo(() => todos.filter((todo) => {
     switch (filterStatus) {
       case FilterType.ACTIVE:
         return !todo.completed;
@@ -58,7 +59,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), []);
 
   const amountOfItems = useMemo(
     () => todos.filter((todo) => !todo.completed).length,
@@ -77,7 +78,7 @@ export const App: React.FC = () => {
         {Boolean(todos.length) && (
           <Footer
             filterStatus={filterStatus}
-            onFilterStatus={setFilterStatus}
+            onFilterChangeStatus={setFilterStatus}
             amountOfItems={amountOfItems}
           />
         )}

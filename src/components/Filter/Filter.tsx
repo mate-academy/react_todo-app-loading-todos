@@ -4,12 +4,12 @@ import { FilterType } from '../../types/FilterType';
 
 type Props = {
   filterStatus: string;
-  onFilterStatus: React.Dispatch<React.SetStateAction<string>>;
+  onFilterChangeStatus: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const Filter: React.FC<Props> = memo(({
   filterStatus,
-  onFilterStatus,
+  onFilterChangeStatus,
 }) => {
   return (
     <nav className="filter" data-cy="Filter">
@@ -19,7 +19,7 @@ export const Filter: React.FC<Props> = memo(({
         className={classNames('filter__link ', {
           selected: filterStatus === FilterType.ALL,
         })}
-        onClick={() => onFilterStatus(FilterType.ALL)}
+        onClick={() => onFilterChangeStatus(FilterType.ALL)}
       >
         All
       </a>
@@ -30,7 +30,7 @@ export const Filter: React.FC<Props> = memo(({
         className={classNames('filter__link ', {
           selected: filterStatus === FilterType.ACTIVE,
         })}
-        onClick={() => onFilterStatus(FilterType.ACTIVE)}
+        onClick={() => onFilterChangeStatus(FilterType.ACTIVE)}
       >
         Active
       </a>
@@ -40,7 +40,7 @@ export const Filter: React.FC<Props> = memo(({
         className={classNames('filter__link ', {
           selected: filterStatus === FilterType.COMPLETED,
         })}
-        onClick={() => onFilterStatus(FilterType.COMPLETED)}
+        onClick={() => onFilterChangeStatus(FilterType.COMPLETED)}
       >
         Completed
       </a>
