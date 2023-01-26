@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 
@@ -6,7 +6,7 @@ type Props = {
   todos: Todo[],
 };
 
-export const TodoList: FC<Props> = ({ todos }) => {
+export const TodoList: FC<Props> = React.memo(({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
@@ -14,4 +14,4 @@ export const TodoList: FC<Props> = ({ todos }) => {
       ))}
     </section>
   );
-};
+});

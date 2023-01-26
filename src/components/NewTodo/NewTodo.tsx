@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, RefObject } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 
-type Props = {
-  newTodoField: RefObject<HTMLInputElement>,
-};
+export const NewTodo: FC = React.memo(() => {
+  const newTodoField = useRef<HTMLInputElement>(null);
 
-export const NewTodo: FC<Props> = ({ newTodoField }) => {
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
+    }
+  }, []);
+
   return (
     <header className="todoapp__header">
       <button
@@ -25,4 +29,4 @@ export const NewTodo: FC<Props> = ({ newTodoField }) => {
       </form>
     </header>
   );
-};
+});
