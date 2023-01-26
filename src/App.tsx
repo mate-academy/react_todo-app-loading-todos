@@ -4,13 +4,17 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
+import { ErrorMessage } from './components/ErrorMessage';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
+import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState('');
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
   const user = useContext(AuthContext);
 
   const getTodosFromServer = async () => {
@@ -18,9 +22,13 @@ export const App: React.FC = () => {
       return;
     }
 
-    const receivedTodos = await getTodos(user.id);
+    try {
+      const receivedTodos = await getTodos(user.id);
 
-    setTodos(receivedTodos);
+      setTodos(receivedTodos);
+    } catch (err) {
+      setError('No todos were loaded!');
+    }
   };
 
   useEffect(() => {
@@ -33,26 +41,21 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        <TodoList todos={todos} />
-        <Footer />
-      </div>
-
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
+        <TodoList
+          todos={todos}
+          filterStatus={filterStatus}
         />
-
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        <Footer
+          onStatusClick={setFilterStatus}
+          todos={todos}
+          filterStatus={filterStatus}
+        />
       </div>
+
+      <ErrorMessage
+        errorMessage={error}
+        setErrorMessage={setError}
+      />
     </div>
   );
 };
