@@ -1,10 +1,9 @@
 import { FilterStatus } from '../../types/Filter';
-import { Todo } from '../../types/Todo';
 import { Filter } from '../Filter';
 
 type Props = {
-  remainingTodos: Todo[],
-  completedTodos: Todo[],
+  remainingTodos: number,
+  completedTodos: number,
   setFilterStatus: React.Dispatch<React.SetStateAction<FilterStatus>>,
   filterStatus: string,
 };
@@ -18,7 +17,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${remainingTodos.length} items left`}
+        {`${remainingTodos} items left`}
       </span>
 
       <Filter setFilterStatus={setFilterStatus} filterStatus={filterStatus} />
@@ -27,7 +26,7 @@ export const Footer: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
-        style={{ visibility: `${!completedTodos.length ? 'hidden' : 'visible'}` }}
+        style={{ visibility: `${!completedTodos ? 'hidden' : 'visible'}` }}
       >
         Clear completed
       </button>

@@ -3,6 +3,7 @@ import React,
 {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -21,7 +22,10 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('All');
+  const [
+    filterStatus,
+    setFilterStatus,
+  ] = useState<FilterStatus>(FilterStatus.All);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -38,20 +42,21 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const remainingTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
-  const filteredTodos = todos.filter(todo => {
+  const remainingTodos = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.filter(todo => todo.completed).length;
+  const filteredTodos = useMemo(() => {
     switch (filterStatus) {
-      case 'Completed':
-        return todo.completed;
+      case FilterStatus.Completed:
+        return todos.filter(todo => todo.completed);
 
-      case 'Active':
-        return !todo.completed;
+      case FilterStatus.Active:
+        return todos.filter(todo => !todo.completed);
 
+      case FilterStatus.All:
       default:
-        return true;
+        return todos;
     }
-  });
+  }, [filterStatus, todos]);
 
   return (
     <div className="todoapp">
