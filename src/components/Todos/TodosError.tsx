@@ -24,16 +24,13 @@ export const TodosError = memo(() => {
     if (parentRef.current) {
       autoAnimate(parentRef.current);
     }
-  }, [parentRef]);
+  }, []);
 
   if (length) {
     setInterval(() => {
       closeErrors();
     }, 3000);
   }
-
-  // eslint-disable-next-line no-console
-  console.log('Rendering: TodosError');
 
   return (
     <div

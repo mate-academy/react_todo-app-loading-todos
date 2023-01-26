@@ -20,9 +20,6 @@ export const TodosList = () => {
     }
   }, [parentRef]);
 
-  // eslint-disable-next-line no-console
-  console.log('Rendering: TodoList');
-
   const filteredTodos = todos.filter(item => {
     switch (filterType) {
       case 'all':

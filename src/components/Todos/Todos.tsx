@@ -39,9 +39,6 @@ export const Todos = memo(
     const allChecked = todos.every(todo => todo.completed);
     const todosCount = todos.length;
 
-    // eslint-disable-next-line no-console
-    console.log('Rendering: Todos');
-
     return (
       <div className="todoapp">
         <h1 className="todoapp__title">todos</h1>

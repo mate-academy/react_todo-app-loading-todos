@@ -17,7 +17,6 @@ type Props = {
 };
 
 export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
-  const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const titleRef = useRef<HTMLInputElement | null>(null);
 
@@ -27,7 +26,7 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
     ) {
       setEditMode(false);
     }
-  }, [titleRef.current]);
+  }, [setEditMode]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
@@ -46,12 +45,8 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
     ];
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log(`Rendering todo: ${todo.id}`);
-
   const save = () => {
     if (titleRef.current) {
-      setLoading(true);
       updateTodo(
         todo.id,
         { title: titleRef.current?.innerText || '' },
@@ -71,12 +66,10 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
         .catch(_ => {
           setErrors(addErrorCallback('Unable to update a todo'));
         });
-      setLoading(false);
     }
   };
 
   const remove = () => {
-    setLoading(true);
     deleteTodo(todo.id)
       .then(_ => {
         setTodos(prev => prev.filter(item => item.id !== todo.id));
@@ -87,7 +80,6 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
   };
 
   const handleCheckboxClick = () => {
-    setLoading(true);
     updateTodo(todo.id, { completed: !todo.completed })
       .then(res => {
         setTodos(prev => [...prev.map(item => {
@@ -101,7 +93,6 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
       .catch(_ => {
         setErrors(prev => [...prev, 'Unable to update a todo']);
       });
-    setLoading(false);
   };
 
   return (
@@ -116,7 +107,6 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
           className="todo__status"
           checked={todo.completed}
           onChange={handleCheckboxClick}
-          disabled={loading}
         />
       </label>
 

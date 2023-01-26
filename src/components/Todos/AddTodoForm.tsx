@@ -20,9 +20,6 @@ const AddTodoForm = memo(() => {
     }
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log('Rendering: AddTodoForm');
-
   const save = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

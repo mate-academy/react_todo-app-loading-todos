@@ -75,9 +75,6 @@ export const TodosProvider: FC<Props> = ({ children }) => {
     return null;
   }
 
-  // eslint-disable-next-line no-console
-  console.log('Rendering: TodosContext');
-
   return (
     <TodosContext.Provider value={{
       todos,
