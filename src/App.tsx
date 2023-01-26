@@ -38,7 +38,7 @@ export const App: React.FC = () => {
           setErrorMessage('Something went wrong');
         });
     }
-  }, []);
+  }, [user]);
 
   const closeErrorMassage = useCallback(() => {
     setIsError(false);
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  }), []);
+  }), [filterStatus, todos]);
 
   const amountOfItems = useMemo(
     () => todos.filter((todo) => !todo.completed).length,
