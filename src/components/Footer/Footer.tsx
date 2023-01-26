@@ -3,11 +3,11 @@ import { TodosFilter } from '../../types/TodosFilted';
 
 interface Props {
   activeTodosAmount: number
-  onTodoChange: (type: number) => void
+  setTodosFilter: (type: number) => void
 }
 
 export const Footer: React.FC<Props> = React.memo((
-  { activeTodosAmount, onTodoChange },
+  { activeTodosAmount, setTodosFilter },
 ) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = React.memo((
           data-cy="FilterLinkAll"
           href="#/"
           className="filter__link selected"
-          onClick={() => onTodoChange(TodosFilter.All)}
+          onClick={() => setTodosFilter(TodosFilter.All)}
         >
           All
         </a>
@@ -29,7 +29,7 @@ export const Footer: React.FC<Props> = React.memo((
           data-cy="FilterLinkActive"
           href="#/active"
           className="filter__link"
-          onClick={() => onTodoChange(TodosFilter.Active)}
+          onClick={() => setTodosFilter(TodosFilter.Active)}
         >
           Active
         </a>
@@ -37,7 +37,7 @@ export const Footer: React.FC<Props> = React.memo((
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className="filter__link"
-          onClick={() => onTodoChange(TodosFilter.Completed)}
+          onClick={() => setTodosFilter(TodosFilter.Completed)}
         >
           Completed
         </a>

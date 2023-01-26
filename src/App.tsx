@@ -34,17 +34,17 @@ export const App: React.FC = () => {
     setErrorMessage('');
   }, []);
 
-  const filteredTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => todos.filter(todo => {
     switch (todosFilter) {
       case TodosFilter.Active:
-        return todos.filter(todo => !todo.completed);
+        return !todo.completed;
       case TodosFilter.Completed:
-        return todos.filter(todo => todo.completed);
+        return todo.completed;
       case TodosFilter.All:
       default:
-        return todos.filter(todo => todo);
+        return todo;
     }
-  }, [todos, todosFilter]);
+  }), [todos, todosFilter]);
 
   const activeTodosAmount = useMemo(() => {
     return todos.filter(todo => !todo.completed).length;
@@ -71,7 +71,7 @@ export const App: React.FC = () => {
               <TodoList todos={filteredTodos} />
               <Footer
                 activeTodosAmount={activeTodosAmount}
-                onTodoChange={setTodosFilter}
+                setTodosFilter={setTodosFilter}
               />
             </>
           )
