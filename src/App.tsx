@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import { getTodos } from './api/todos';
 import { ErrorMessage } from './components/ErrorMessage';
 import { TodosFilter } from './components/TodosFilter';
+import { Header } from './components/Header';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
@@ -15,22 +16,18 @@ import { TodoList } from './components/TodoList';
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
   const [todosFromServer, setUsersFromServer] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [errorType, setErrorType] = useState<ErrorType>(ErrorType.NONE);
   const [isError, setIsError] = useState(false);
 
-  const onFilter = (filteredTodos: Todo[]) => {
-    setVisibleTodos(filteredTodos);
-  };
+  const onFilter = useCallback(
+    (filteredTodos: Todo[]) => {
+      setVisibleTodos(filteredTodos);
+    }, [visibleTodos],
+  );
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     getTodos((user as User).id)
       .then(result => {
         setUsersFromServer(result);
@@ -64,25 +61,9 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
+      <Header />
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className="todoapp__toggle-all active"
-          />
-
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
         {isTodos && (
           <>
             <TodoList todosToShow={visibleTodos} />
