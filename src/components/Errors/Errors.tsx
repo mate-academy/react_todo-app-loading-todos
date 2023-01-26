@@ -2,12 +2,12 @@ import React, { memo, useEffect } from 'react';
 import cn from 'classnames';
 
 type ErrorsProps = {
-  errorMessage: string;
+  message: string;
   onHideError: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const Errors: React.FC<ErrorsProps> = memo(({
-  errorMessage,
+  message,
   onHideError,
 }) => {
   useEffect(() => {
@@ -19,7 +19,7 @@ export const Errors: React.FC<ErrorsProps> = memo(({
       data-cy="ErrorNotification"
       className={cn(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !errorMessage },
+        { hidden: !message },
       )}
     >
       {/* eslint-disable-next-line */}
@@ -29,7 +29,7 @@ export const Errors: React.FC<ErrorsProps> = memo(({
         className="delete"
         onClick={() => onHideError('')}
       />
-      {errorMessage}
+      {message}
     </div>
   );
 });

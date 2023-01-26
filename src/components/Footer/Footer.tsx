@@ -15,12 +15,12 @@ type FooterProps = {
 
 export const Footer: React.FC<FooterProps> = memo(({
   filter,
-  activeTodos,
+  activeTodos: activeTodosCount,
   onChange,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
-      {`${activeTodos} items left`}
+      {`${activeTodosCount} item${activeTodosCount > 1 ? 's' : ''} left`}
     </span>
 
     <nav className="filter" data-cy="Filter">
@@ -45,6 +45,7 @@ export const Footer: React.FC<FooterProps> = memo(({
             selected: filter === Filters.active,
           },
         )}
+        onClick={() => onChange(Filters.active)}
       >
         Active
       </a>
@@ -57,6 +58,7 @@ export const Footer: React.FC<FooterProps> = memo(({
             selected: filter === Filters.completed,
           },
         )}
+        onClick={() => onChange(Filters.completed)}
       >
         Completed
       </a>

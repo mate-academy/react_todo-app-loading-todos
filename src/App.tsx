@@ -13,6 +13,9 @@ import { Header } from './components/Header/Header';
 import { Filters, Footer } from './components/Footer/Footer';
 import { Errors } from './components/Errors/Errors';
 import { TodoList } from './components/TodoList/TodoList';
+import { filteredTodos } from './helpers/helpers';
+
+// email to check jklajsdf@adsf.com
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,7 +23,7 @@ export const App: React.FC = () => {
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [errorMessage, setError] = useState('');
   const [filter, setFilter] = useState(Filters.all);
 
   useEffect(() => {
@@ -36,19 +39,12 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const activeTodosCount = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
 
-  const filteredTodos = useMemo(() => (
-    todos.filter(todo => {
-      switch (filter) {
-        case Filters.completed:
-          return todo.completed;
-        case Filters.active:
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    })
+  const visibleTodos = useMemo(() => (
+    filteredTodos(todos, filter)
   ), [todos, filter]);
 
   return (
@@ -62,10 +58,10 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList
-              todos={filteredTodos}
+              todos={visibleTodos}
             />
             <Footer
-              activeTodos={activeTodos}
+              activeTodos={activeTodosCount}
               filter={filter}
               onChange={setFilter}
             />
@@ -73,9 +69,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {error && (
+      {errorMessage && (
         <Errors
-          errorMessage={error}
+          message={errorMessage}
           onHideError={setError}
         />
       )}
