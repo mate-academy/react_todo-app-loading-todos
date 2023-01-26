@@ -2,34 +2,30 @@
 import React, {
   useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
-import cn from 'classnames';
 
 import { getTodos } from './api/todos';
+
 import { AuthContext } from './components/Auth/AuthContext';
-import { Todo } from './types/Todo';
+import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
-import { FilterTypes } from './types/FilterTypes';
+import { Footer } from './components/Footer/Footer';
 import { ErrorNotification } from
   './components/ErrorNotification/ErrorNotification';
 
+import { Todo } from './types/Todo';
+import { FilterTypes } from './types/FilterTypes';
+import { filterTodosByCompleted } from './helpers/helpers';
+
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [completedFilter, setCompletedFilter] = useState(FilterTypes.ALL);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterType, setFilterType] = useState(FilterTypes.ALL);
 
   useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
     if (user) {
       getTodos(user.id)
         .then(setTodos)
@@ -37,118 +33,49 @@ export const App: React.FC = () => {
           setErrorMessage('Can\'t load todos');
         });
     }
-  }, []);
-
-  const visibleTodos = todos.filter(todo => {
-    switch (filterType) {
-      case FilterTypes.ACTIVE:
-        return !todo.completed;
-
-      case FilterTypes.COMPLETED:
-        return todo.completed;
-
-      case FilterTypes.ALL:
-      default:
-        return todo;
-    }
-  });
+  }, [user]);
 
   if (errorMessage) {
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
+    setTimeout(() => setErrorMessage(''), 3000);
   }
 
-  const handleClickFilterButton = (status: FilterTypes) => {
-    setFilterType(status);
+  const closeErrorMessage = () => {
+    setErrorMessage('');
   };
+
+  const visibleTodos = filterTodosByCompleted(todos, completedFilter);
+
+  const uncompletedTodosAmount = visibleTodos.filter(
+    todo => !todo.completed,
+  ).length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            data-cy="ToggleAllButton"
-            type="button"
-            className="todoapp__toggle-all active"
-          />
-
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              ref={newTodoField}
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <Header />
 
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
 
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="todosCounter">
-                4 items left
-              </span>
-
-              <nav className="filter" data-cy="Filter">
-                <a
-                  data-cy="FilterLinkAll"
-                  href="#/"
-                  className={cn(
-                    'filter__link',
-                    { selected: filterType === FilterTypes.ALL },
-                  )}
-                  onClick={() => handleClickFilterButton(FilterTypes.ALL)}
-                >
-                  All
-                </a>
-
-                <a
-                  data-cy="FilterLinkActive"
-                  href="#/active"
-                  className={cn(
-                    'filter__link',
-                    { selected: filterType === FilterTypes.ACTIVE },
-                  )}
-                  onClick={() => handleClickFilterButton(FilterTypes.ACTIVE)}
-                >
-                  Active
-                </a>
-                <a
-                  data-cy="FilterLinkCompleted"
-                  href="#/completed"
-                  className={cn(
-                    'filter__link',
-                    { selected: filterType === FilterTypes.COMPLETED },
-                  )}
-                  onClick={() => handleClickFilterButton(FilterTypes.COMPLETED)}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button
-                data-cy="ClearCompletedButton"
-                type="button"
-                className="todoapp__clear-completed"
-              >
-                Clear completed
-              </button>
-            </footer>
+            <Footer
+              uncompletedTodosAmount={uncompletedTodosAmount}
+              completedFilter={completedFilter}
+              onFilterButtonClick={setCompletedFilter}
+            />
           </>
 
         )}
       </div>
 
-      <ErrorNotification
-        errorMessage={errorMessage}
-        onCloseButtonClick={() => setErrorMessage('')}
-      />
+      {errorMessage && (
+        <ErrorNotification
+          errorMessage={errorMessage}
+          onCloseMessage={closeErrorMessage}
+        />
+      )}
     </div>
   );
 };

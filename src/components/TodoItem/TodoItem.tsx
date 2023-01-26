@@ -20,7 +20,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked
+          checked={todo.completed}
+          readOnly
         />
       </label>
 

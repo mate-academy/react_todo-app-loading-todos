@@ -4,12 +4,12 @@ import cn from 'classnames';
 
 type Props = {
   errorMessage: string;
-  onCloseButtonClick: () => void;
+  onCloseMessage: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  onCloseButtonClick,
+  onCloseMessage,
 }) => {
   return (
     <div
@@ -26,16 +26,10 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={onCloseButtonClick}
+        onClick={onCloseMessage}
       />
 
       {errorMessage}
-
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };
