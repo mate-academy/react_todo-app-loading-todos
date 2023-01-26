@@ -24,6 +24,7 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
+  const handleErrorClose = () => setError('');
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -37,16 +38,10 @@ export const App: FC = () => {
         })
         .catch(() => {
           setError('Can\'t load todos');
-          setTimeout(() => {
-            setError('');
-          }, 3000);
+          setTimeout(handleErrorClose, 3000);
         });
     }
   }, []);
-
-  const handleErrorClose = () => {
-    setError('');
-  };
 
   let visibleTodos = [...todos];
 
