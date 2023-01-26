@@ -1,24 +1,19 @@
 import { Todo } from '../types/Todo';
-import { FilterTypes } from '../types/FilterTypes';
+import { FilterType } from '../types/FilterType';
 
 export const filterTodosByCompleted = (
-  todosToFilter: Todo[],
-  completedFilter: FilterTypes,
+  todos: Todo[],
+  completedFilter: FilterType,
 ) => {
-  if (completedFilter === FilterTypes.ALL) {
-    return todosToFilter;
+  switch (completedFilter) {
+    case FilterType.ACTIVE:
+      return todos.filter(todo => !todo.completed);
+
+    case FilterType.COMPLETED:
+      return todos.filter(todo => todo.completed);
+
+    case FilterType.ALL:
+    default:
+      return [...todos];
   }
-
-  return todosToFilter.filter(todo => {
-    switch (completedFilter) {
-      case FilterTypes.ACTIVE:
-        return !todo.completed;
-
-      case FilterTypes.COMPLETED:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
 };

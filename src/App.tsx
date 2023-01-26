@@ -15,14 +15,14 @@ import { ErrorNotification } from
   './components/ErrorNotification/ErrorNotification';
 
 import { Todo } from './types/Todo';
-import { FilterTypes } from './types/FilterTypes';
+import { FilterType } from './types/FilterType';
 import { filterTodosByCompleted } from './helpers/helpers';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedFilter, setCompletedFilter] = useState(FilterTypes.ALL);
+  const [completedFilter, setCompletedFilter] = useState(FilterType.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -35,17 +35,17 @@ export const App: React.FC = () => {
     }
   }, [user]);
 
-  if (errorMessage) {
-    setTimeout(() => setErrorMessage(''), 3000);
-  }
-
-  const closeErrorMessage = () => {
+  const removeErrorMessage = () => {
     setErrorMessage('');
   };
 
+  if (errorMessage) {
+    setTimeout(() => removeErrorMessage(), 3000);
+  }
+
   const visibleTodos = filterTodosByCompleted(todos, completedFilter);
 
-  const uncompletedTodosAmount = visibleTodos.filter(
+  const activeTodosAmount = visibleTodos.filter(
     todo => !todo.completed,
   ).length;
 
@@ -61,9 +61,9 @@ export const App: React.FC = () => {
             <TodoList todos={visibleTodos} />
 
             <Footer
-              uncompletedTodosAmount={uncompletedTodosAmount}
+              activeTodosAmount={activeTodosAmount}
               completedFilter={completedFilter}
-              onFilterButtonClick={setCompletedFilter}
+              setCompletedFilter={setCompletedFilter}
             />
           </>
 
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
       {errorMessage && (
         <ErrorNotification
           errorMessage={errorMessage}
-          onCloseMessage={closeErrorMessage}
+          removeErrorMessage={removeErrorMessage}
         />
       )}
     </div>

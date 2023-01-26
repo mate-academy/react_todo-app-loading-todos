@@ -1,23 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import cn from 'classnames';
-import { FilterTypes } from '../../types/FilterTypes';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  uncompletedTodosAmount: number;
+  activeTodosAmount: number;
   completedFilter: string;
-  onFilterButtonClick: (status: FilterTypes) => void;
+  setCompletedFilter: (status: FilterType) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  uncompletedTodosAmount,
+  activeTodosAmount,
   completedFilter,
-  onFilterButtonClick,
+  setCompletedFilter,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${uncompletedTodosAmount} item${uncompletedTodosAmount > 1 ? 's' : ''} left`}
+        {`${activeTodosAmount} item${activeTodosAmount > 1 ? 's' : ''} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -26,9 +26,9 @@ export const Footer: React.FC<Props> = ({
           href="#/"
           className={cn(
             'filter__link',
-            { selected: completedFilter === FilterTypes.ALL },
+            { selected: completedFilter === FilterType.ALL },
           )}
-          onClick={() => onFilterButtonClick(FilterTypes.ALL)}
+          onClick={() => setCompletedFilter(FilterType.ALL)}
         >
           All
         </a>
@@ -38,9 +38,9 @@ export const Footer: React.FC<Props> = ({
           href="#/active"
           className={cn(
             'filter__link',
-            { selected: completedFilter === FilterTypes.ACTIVE },
+            { selected: completedFilter === FilterType.ACTIVE },
           )}
-          onClick={() => onFilterButtonClick(FilterTypes.ACTIVE)}
+          onClick={() => setCompletedFilter(FilterType.ACTIVE)}
         >
           Active
         </a>
@@ -49,9 +49,9 @@ export const Footer: React.FC<Props> = ({
           href="#/completed"
           className={cn(
             'filter__link',
-            { selected: completedFilter === FilterTypes.COMPLETED },
+            { selected: completedFilter === FilterType.COMPLETED },
           )}
-          onClick={() => onFilterButtonClick(FilterTypes.COMPLETED)}
+          onClick={() => setCompletedFilter(FilterType.COMPLETED)}
         >
           Completed
         </a>
