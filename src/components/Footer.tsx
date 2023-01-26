@@ -3,14 +3,14 @@ import React, { FC } from 'react';
 import { Filter } from '../types/Filters';
 
 type Props = {
-  uncomplitedTodosUnmount: number
+  uncomplitedTodosCount: number
   complitedFilter: Filter
   setComplitedFilter: (v: Filter) => void
 };
 
 export const Footer: FC<Props> = React.memo((props) => {
   const {
-    uncomplitedTodosUnmount,
+    uncomplitedTodosCount,
     complitedFilter,
     setComplitedFilter,
   } = props;
@@ -18,7 +18,7 @@ export const Footer: FC<Props> = React.memo((props) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {` ${uncomplitedTodosUnmount} items left`}
+        {`${uncomplitedTodosCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">

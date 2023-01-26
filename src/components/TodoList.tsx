@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import { FC } from 'react';
 import { Todo } from '../types/Todo';
 
@@ -12,7 +12,8 @@ export const TodoList: FC<Props> = ({ todos }) => {
       {todos.map((todo) => (
         <div
           data-cy="Todo"
-          className={classNames('todo', { 'todo completed': todo.completed })}
+          className={cn('todo', { 'todo completed': todo.completed })}
+          key={todo.id}
         >
           <label className="todo__status-label">
             <input

@@ -22,11 +22,11 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [complitedFiler, setComplitedFilter] = useState(Filter.All);
 
-  const uncomplitedTodosUnmount = useMemo(() => {
-    const uncomplitedTodos = todos.filter((todo) => todo.completed);
+  const uncomplitedTodosCount = useMemo(() => {
+    const uncomplitedTodos = todos.filter((todo) => !todo.completed);
 
     return uncomplitedTodos.length;
-  }, []);
+  }, [todos]);
 
   const showError = useCallback((message: string) => {
     setErrorMessage(message);
@@ -54,6 +54,7 @@ export const App: React.FC = () => {
     return filteredTodos;
   }, [todos, complitedFiler]);
 
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
             <TodoList todos={visibleTodos} />
 
             <Footer
-              uncomplitedTodosUnmount={uncomplitedTodosUnmount}
+              uncomplitedTodosCount={uncomplitedTodosCount}
               complitedFilter={complitedFiler}
               setComplitedFilter={setComplitedFilter}
             />
