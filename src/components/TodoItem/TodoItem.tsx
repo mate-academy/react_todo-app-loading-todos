@@ -10,9 +10,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     <div
       data-cy="Todo"
       className={cn('todo',
-        { completed: todo.completed === true })}
+        { completed: todo.completed })}
     >
-      {todo.completed === true
+      {todo.completed
         ? (
           <>
             <label className="todo__status-label">
@@ -45,22 +45,46 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
+                checked={false}
               />
             </label>
 
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                defaultValue={todo.title}
-              />
-            </form>
+            <span data-cy="TodoTitle" className="todo__title">
+              {todo.title}
+            </span>
+
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDeleteButton"
+            >
+              ×
+            </button>
           </>
+          // <>
+          //   <label className="todo__status-label">
+          //     <input
+          //       data-cy="TodoStatus"
+          //       type="checkbox"
+          //       className="todo__status"
+          //       checked={todo.completed}
+          //     />
+          //   </label>
+
+      //   <form>
+      //     <input
+      //       data-cy="TodoTitleField"
+      //       type="text"
+      //       className="todo__title-field"
+      //       placeholder="Empty todo will be deleted"
+      //       defaultValue={todo.title}
+      //     />
+      //   </form>
+      // </>
         )}
 
-      <div data-cy="TodoLoader" className="modal overlay is-active">
+      <div data-cy="TodoLoader" className="modal overlay">
+        {/* is-active */}
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

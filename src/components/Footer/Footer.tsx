@@ -1,26 +1,32 @@
+import cn from 'classnames';
 import { FilterStatus } from '../../types/Filterstatus';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   completedTodos: Todo[] | [],
+  uncompletedTodosAmount: number,
   onStatusChange: (str: FilterStatus) => void,
+  filterStatus: FilterStatus,
 };
 
 export const Footer: React.FC<Props> = ({
   completedTodos,
+  uncompletedTodosAmount,
   onStatusChange,
+  filterStatus,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {`${uncompletedTodosAmount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className="filter__link selected"
+          className={cn('filter__link',
+            { selected: filterStatus === FilterStatus.All })}
           onClick={() => onStatusChange(FilterStatus.All)}
         >
           All
@@ -29,7 +35,8 @@ export const Footer: React.FC<Props> = ({
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className="filter__link"
+          className={cn('filter__link',
+            { selected: filterStatus === FilterStatus.Active })}
           onClick={() => onStatusChange(FilterStatus.Active)}
         >
           Active
@@ -38,7 +45,8 @@ export const Footer: React.FC<Props> = ({
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className="filter__link"
+          className={cn('filter__link',
+            { selected: filterStatus === FilterStatus.Completed })}
           onClick={() => onStatusChange(FilterStatus.Completed)}
         >
           Completed
