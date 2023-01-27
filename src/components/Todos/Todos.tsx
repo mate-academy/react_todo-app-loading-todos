@@ -5,11 +5,12 @@ import {
   useContext,
 } from 'react';
 import autoAnimate from '@formkit/auto-animate';
+import classNames from 'classnames';
 import AddTodoForm from './AddTodoForm';
 import { TodosList } from './TodosList';
-import { updateTodo } from '../../api/todos';
 import { TodosError } from './TodosError';
 import { TodosFooter } from './TodosFooter';
+import { updateTodo } from '../../api/todos';
 import { TodosContext } from './TodosContext';
 
 export const Todos = memo(
@@ -47,7 +48,10 @@ export const Todos = memo(
             <button
               data-cy="ToggleAllButton"
               type="button"
-              className={`todoapp__toggle-all ${allChecked ? 'active' : ''}`}
+              className={classNames(
+                'todoapp__toggle-all',
+                { active: allChecked },
+              )}
               aria-label="Toggle list"
               onClick={checkAll}
             />

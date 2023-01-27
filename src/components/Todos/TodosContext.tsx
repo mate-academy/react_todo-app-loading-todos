@@ -7,19 +7,20 @@ import {
   createContext,
   useCallback,
 } from 'react';
-import { getPendingTodosByUser } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { AuthContext } from '../Auth/AuthContext';
+import { getPendingTodosByUserId } from '../../api/todos';
 
 type FilterTypes = 'all' | 'active' | 'completed';
 
 type ContextProps = {
   todos: Todo[];
   errors: string[];
-  setTodos: (cb: (tds: Todo[]) => Todo[]) => void;
-  setErrors: (ers: string[] | ((prv: string[]) => string[])) => void;
+  setTodos: (callback: (prevTodos: Todo[]) => Todo[]) => void;
+  setErrors: (errorsOrCallback: string[]
+  | ((prevErrors: string[]) => string[])) => void;
   filterType: FilterTypes;
-  setFilterType: (fT: FilterTypes) => void;
+  setFilterType: (newFilterType: FilterTypes) => void;
 };
 
 export const TodosContext = createContext<ContextProps>({
@@ -45,7 +46,7 @@ export const TodosProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      getPendingTodosByUser(user.id)
+      getPendingTodosByUserId(user.id)
         .then(result => {
           setTodos(result);
           setLoading(false);
@@ -53,22 +54,23 @@ export const TodosProvider: FC<Props> = ({ children }) => {
     }
   }, []);
 
-  const setTodosCB = useCallback((cb: (tds: Todo[]) => Todo[]) => {
-    setTodos(prev => cb(prev));
+  const setTodosCB = useCallback((callback: (prevTodos: Todo[]) => Todo[]) => {
+    setTodos(prev => callback(prev));
   }, [setTodos]);
 
   const setErrorsCB = useCallback(
-    (ersOrCallback: string[] | ((prv: string[]) => string[])) => {
-      if (Array.isArray(ersOrCallback)) {
-        setErrors(ersOrCallback);
+    (errorsOrCallback: string[]
+    | ((prevErrors: string[]) => string[])) => {
+      if (Array.isArray(errorsOrCallback)) {
+        setErrors(errorsOrCallback);
       } else {
-        setErrors(prev => ersOrCallback(prev));
+        setErrors(prev => errorsOrCallback(prev));
       }
     }, [setErrors],
   );
 
-  const setFilterTypeCB = useCallback((fT: FilterTypes) => {
-    setFilterType(fT);
+  const setFilterTypeCB = useCallback((newFilterType: FilterTypes) => {
+    setFilterType(newFilterType);
   }, [setFilterType]);
 
   if (loading) {

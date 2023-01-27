@@ -18,7 +18,7 @@ export const getTodosByUser = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-export const getPendingTodosByUser = (userId: number) => {
+export const getPendingTodosByUserId = (userId: number) => {
   return client
     .get<Todo[]>(`/todos?userId=${userId}&completed=false`);
 };

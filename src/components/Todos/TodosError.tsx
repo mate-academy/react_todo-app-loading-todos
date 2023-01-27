@@ -6,6 +6,7 @@ import {
   useCallback,
 } from 'react';
 import autoAnimate from '@formkit/auto-animate';
+import classNames from 'classnames';
 import { TodosContext } from './TodosContext';
 
 export const TodosError = memo(() => {
@@ -36,7 +37,10 @@ export const TodosError = memo(() => {
     <div
       ref={parentRef}
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${!errors.length ? 'hidden' : ''}`}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !errors.length },
+      )}
     >
       <button
         data-cy="HideErrorButton"

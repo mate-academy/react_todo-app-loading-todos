@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { FC, memo, useContext } from 'react';
 import { TodosContext } from './TodosContext';
 
@@ -20,7 +21,10 @@ export const TodosFooter: FC<{ todosCount: number }> = memo(({
         <a
           data-cy="FilterLinkAll"
           href="#/"
-          className={`filter__link ${filterType === 'all' ? 'selected' : ''}`}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'all' },
+          )}
           onClick={() => setFilterType('all')}
         >
           All
@@ -29,7 +33,10 @@ export const TodosFooter: FC<{ todosCount: number }> = memo(({
         <a
           data-cy="FilterLinkActive"
           href="#/active"
-          className={`filter__link ${filterType === 'active' ? 'selected' : ''}`}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'active' },
+          )}
           onClick={() => setFilterType('active')}
         >
           Active
@@ -37,7 +44,10 @@ export const TodosFooter: FC<{ todosCount: number }> = memo(({
         <a
           data-cy="FilterLinkCompleted"
           href="#/completed"
-          className={`filter__link ${filterType === 'completed' ? 'selected' : ''}`}
+          className={classNames(
+            'filter__link',
+            { selected: filterType === 'completed' },
+          )}
           onClick={() => setFilterType('completed')}
         >
           Completed

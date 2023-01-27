@@ -7,13 +7,15 @@ import {
   useEffect,
   useCallback,
 } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, updateTodo } from '../../api/todos';
 
 type Props = {
   todo: Todo;
-  setTodos: (cb: (tds: Todo[]) => Todo[]) => void;
-  setErrors: (ers: string[] | ((prv: string[]) => string[])) => void;
+  setTodos: (callback: (prevTodos: Todo[]) => Todo[]) => void;
+  setErrors: (errorsOrCallback: string[]
+  | ((prevErrors: string[]) => string[])) => void;
 };
 
 export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
@@ -52,16 +54,13 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
         { title: titleRef.current?.innerText || '' },
       )
         .then(res => {
-          setTodos(prev => [...prev.map(item => {
+          setTodos(prev => prev.map(item => {
             if (item.id === res.id) {
-              return {
-                ...item,
-                title: titleRef.current?.innerText || '',
-              };
+              return res;
             }
 
-            return todo;
-          })]);
+            return item;
+          }));
         })
         .catch(_ => {
           setErrors(addErrorCallback('Unable to update a todo'));
@@ -98,7 +97,10 @@ export const TodoInfo: FC<Props> = memo(({ todo, setTodos, setErrors }) => {
   return (
     <div
       data-cy="Todo"
-      className={`todo ${todo.completed ? 'completed' : ''}`}
+      className={classNames(
+        'todo',
+        { completed: todo.completed },
+      )}
     >
       <label className="todo__status-label">
         <input
