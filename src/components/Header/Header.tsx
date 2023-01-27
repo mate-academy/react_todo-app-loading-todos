@@ -1,14 +1,14 @@
 type Props = {
   newTodoField: React.RefObject<HTMLInputElement>,
-  onAddTodo: () => void,
-  onSetNewTitle: (title: string) => void,
+  createTodo: () => void,
+  setNewTitle: (title: string) => void,
   newTitle: string,
 };
 
 export const Header: React.FC<Props> = ({
   newTodoField,
-  onAddTodo,
-  onSetNewTitle,
+  createTodo,
+  setNewTitle,
   newTitle,
 }) => {
   return (
@@ -21,7 +21,7 @@ export const Header: React.FC<Props> = ({
       />
 
       <form
-        onSubmit={onAddTodo}
+        onSubmit={createTodo}
       >
         <input
           data-cy="NewTodoField"
@@ -30,7 +30,7 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTitle}
-          onChange={(event) => onSetNewTitle(event.target.value)}
+          onChange={(event) => setNewTitle(event.target.value)}
         />
       </form>
     </header>

@@ -61,26 +61,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               ×
             </button>
           </>
-          // <>
-          //   <label className="todo__status-label">
-          //     <input
-          //       data-cy="TodoStatus"
-          //       type="checkbox"
-          //       className="todo__status"
-          //       checked={todo.completed}
-          //     />
-          //   </label>
-
-      //   <form>
-      //     <input
-      //       data-cy="TodoTitleField"
-      //       type="text"
-      //       className="todo__title-field"
-      //       placeholder="Empty todo will be deleted"
-      //       defaultValue={todo.title}
-      //     />
-      //   </form>
-      // </>
         )}
 
       <div data-cy="TodoLoader" className="modal overlay">

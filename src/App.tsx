@@ -14,6 +14,7 @@ import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { filterTodosByCompleted } from './helpers/helpers';
+import { TodoErrors } from './types/Errors';
 import { FilterStatus } from './types/Filterstatus';
 import { Todo } from './types/Todo';
 
@@ -48,13 +49,13 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
-        .catch(() => showError('Unable to load todos'));
+        .catch(() => showError(TodoErrors.UnableToLoad));
     }
   }, [user]);
 
   const createTodo = () => {
     if (newTitle === '') {
-      showError("Title can't be empty");
+      showError(TodoErrors.TitleCantBeEmpty);
     }
 
     if (user) {
@@ -69,7 +70,7 @@ export const App: React.FC = () => {
           ...prev,
           createdTodo,
         ])))
-        .catch(() => showError('Unable to add a todo`'));
+        .catch(() => showError(TodoErrors.UnableToAddTodo));
     }
   };
 
@@ -84,8 +85,8 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodoField={newTodoField}
-          onAddTodo={createTodo}
-          onSetNewTitle={setNewTitle}
+          createTodo={createTodo}
+          setNewTitle={setNewTitle}
           newTitle={newTitle}
         />
 
@@ -95,7 +96,7 @@ export const App: React.FC = () => {
             <Footer
               completedTodos={completedTodos}
               uncompletedTodosAmount={uncompletedTodosAmount}
-              onStatusChange={setFilterStatus}
+              setFilterStatus={setFilterStatus}
               filterStatus={filterStatus}
             />
           </>
