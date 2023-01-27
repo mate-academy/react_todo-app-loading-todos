@@ -3,15 +3,15 @@ import cn from 'classnames';
 
 type Props = {
   error: string;
-  onChangeError: React.Dispatch<React.SetStateAction<string>>;
+  setIsError: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const ErrorOccured: React.FC<Props> = memo(({
   error,
-  onChangeError,
+  setIsError,
 }) => {
   useEffect(() => {
-    setTimeout(() => onChangeError(''), 3000);
+    setTimeout(() => setIsError(''), 3000);
   }, []);
 
   return (
@@ -27,7 +27,7 @@ export const ErrorOccured: React.FC<Props> = memo(({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => onChangeError('')}
+        onClick={() => setIsError('')}
       />
       {error}
     </div>

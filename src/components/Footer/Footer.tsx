@@ -5,13 +5,13 @@ import { FilterStatus } from '../../types/FilterStatus';
 type Props = {
   activeTodoQuantity: number,
   filterType: FilterStatus,
-  onChange: (str: FilterStatus) => void
+  setFilteredStatus: React.Dispatch<React.SetStateAction<FilterStatus>>
 };
 
 export const Footer: React.FC<Props> = memo(({
   activeTodoQuantity,
   filterType,
-  onChange,
+  setFilteredStatus,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -26,7 +26,7 @@ export const Footer: React.FC<Props> = memo(({
           className={cn('filter__link', {
             selected: filterType === FilterStatus.ALL,
           })}
-          onClick={() => onChange(FilterStatus.ALL)}
+          onClick={() => setFilteredStatus(FilterStatus.ALL)}
         >
           All
         </a>
@@ -37,7 +37,7 @@ export const Footer: React.FC<Props> = memo(({
           className={cn('filter__link', {
             selected: filterType === FilterStatus.ACTIVE,
           })}
-          onClick={() => onChange(FilterStatus.ACTIVE)}
+          onClick={() => setFilteredStatus(FilterStatus.ACTIVE)}
         >
           Active
         </a>
@@ -47,7 +47,7 @@ export const Footer: React.FC<Props> = memo(({
           className={cn('filter__link', {
             selected: filterType === FilterStatus.COMPLETED,
           })}
-          onClick={() => onChange(FilterStatus.COMPLETED)}
+          onClick={() => setFilteredStatus(FilterStatus.COMPLETED)}
         >
           Completed
         </a>

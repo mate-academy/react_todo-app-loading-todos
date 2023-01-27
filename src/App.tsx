@@ -72,7 +72,7 @@ export const App: React.FC = () => {
             <Footer
               activeTodoQuantity={activeTodoQuantity}
               filterType={filteredStatus}
-              onChange={setFilteredStatus}
+              setFilteredStatus={setFilteredStatus}
             />
           </>
         )}
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
       {isError && (
         <ErrorOccured
           error={isError}
-          onChangeError={setIsError}
+          setIsError={setIsError}
         />
       )}
     </div>
