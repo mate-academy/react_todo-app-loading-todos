@@ -1,8 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
-import { Filter } from '../types/Filter';
-
-const { all, active, completed } = Filter;
+import { Filter } from '../types';
 
 type Props = {
   typeFilter: string;
@@ -35,9 +33,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkAll"
           href="#/"
           className={classNames('filter__link', {
-            selected: typeFilter === all,
+            selected: typeFilter === Filter.all,
           })}
-          onClick={() => setTypeFilter(all)}
+          onClick={() => setTypeFilter(Filter.all)}
         >
           All
         </a>
@@ -46,9 +44,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkActive"
           href="#/active"
           className={classNames('filter__link', {
-            selected: typeFilter === active,
+            selected: typeFilter === Filter.active,
           })}
-          onClick={() => setTypeFilter(active)}
+          onClick={() => setTypeFilter(Filter.active)}
         >
           Active
         </a>
@@ -56,9 +54,9 @@ export const Footer: React.FC<Props> = ({
           data-cy="FilterLinkCompleted"
           href="#/completed"
           className={classNames('filter__link', {
-            selected: typeFilter === completed,
+            selected: typeFilter === Filter.completed,
           })}
-          onClick={() => setTypeFilter(completed)}
+          onClick={() => setTypeFilter(Filter.completed)}
         >
           Completed
         </a>

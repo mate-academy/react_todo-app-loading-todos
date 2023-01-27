@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   isHidden: boolean;
-  setIsHidden: (isHidden: boolean) => void;
+  setIsHidden: Dispatch<SetStateAction<boolean>>;
   error: string;
 };
 

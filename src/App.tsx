@@ -1,25 +1,29 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 // eslint-disable-next-line object-curly-newline
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { getTodos, createTodo } from './api/todos';
-import { Todo } from './types/Todo';
-import { AuthContext } from './components/Auth/AuthContext';
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
-import { ErrorNotification } from './components/ErrorNotification';
 import { filterTotos } from './api/filter';
-import { Filter } from './types/Filter';
-import { Error } from './types/Error';
+import { useAuthContext } from './components/Auth/useAuth';
+import {
+  ErrorNotification,
+  Header,
+  TodoList,
+  Footer,
+} from './components';
+import { Todo, Filter, Error } from './types';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const user = useContext(AuthContext);
+  const user = useAuthContext();
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [typeFilter, setTypeFilter] = useState(Filter.all);
   const [error, setError] = useState('');
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHiddenErrorNote, setIsHiddenErrorNote] = useState(true);
 
   const newTodoField = useRef<HTMLInputElement>(null);
 
@@ -34,9 +38,9 @@ export const App: React.FC = () => {
         .then((loadedTodos) => setTodos(loadedTodos))
         .catch(() => {
           setError(Error.loading);
-          setIsHidden(false);
+          setIsHiddenErrorNote(false);
           setTimeout(() => {
-            setIsHidden(true);
+            setIsHiddenErrorNote(true);
           }, 3000);
         });
     }
@@ -58,9 +62,9 @@ export const App: React.FC = () => {
       .then((loadedTodos) => setTodos(loadedTodos))
       .catch(() => {
         setError(Error.add);
-        setIsHidden(false);
+        setIsHiddenErrorNote(false);
         setTimeout(() => {
-          setIsHidden(true);
+          setIsHiddenErrorNote(true);
         }, 3000);
       })
       .finally(() => setTitle(''));
@@ -90,8 +94,8 @@ export const App: React.FC = () => {
         )}
       </div>
       <ErrorNotification
-        isHidden={isHidden}
-        setIsHidden={setIsHidden}
+        isHidden={isHiddenErrorNote}
+        setIsHidden={setIsHiddenErrorNote}
         error={error}
       />
     </div>

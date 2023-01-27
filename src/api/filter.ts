@@ -1,13 +1,10 @@
-import { Todo } from '../types/Todo';
-import { Filter } from '../types/Filter';
-
-const { active, completed } = Filter;
+import { Todo, Filter } from '../types';
 
 export function filterTotos(todosArr: Todo[], type: string) {
   switch (type) {
-    case completed:
+    case Filter.completed:
       return todosArr.filter((todo) => todo.completed);
-    case active:
+    case Filter.active:
       return todosArr.filter((todo) => !todo.completed);
     default:
       return todosArr;
