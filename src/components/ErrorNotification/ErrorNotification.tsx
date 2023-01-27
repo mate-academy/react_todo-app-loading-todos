@@ -7,29 +7,31 @@ type Props = {
   removeErrorMessage: () => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({
-  errorMessage,
-  removeErrorMessage,
-}) => {
-  return (
-    <div
-      data-cy="ErrorNotification"
-      className={cn(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: !errorMessage },
-      )}
-    >
-      <button
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-        onClick={removeErrorMessage}
-      />
+export const ErrorNotification: React.FC<Props> = React.memo(
+  ({
+    errorMessage,
+    removeErrorMessage,
+  }) => {
+    return (
+      <div
+        data-cy="ErrorNotification"
+        className={cn(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={removeErrorMessage}
+        />
 
-      {errorMessage}
-    </div>
-  );
-};
+        {errorMessage}
+      </div>
+    );
+  },
+);

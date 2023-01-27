@@ -2,6 +2,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -43,11 +44,13 @@ export const App: React.FC = () => {
     setTimeout(() => removeErrorMessage(), 3000);
   }
 
-  const visibleTodos = filterTodosByCompleted(todos, completedFilter);
+  const visibleTodos = useMemo(() => {
+    return filterTodosByCompleted(todos, completedFilter);
+  }, [todos, completedFilter]);
 
-  const activeTodosAmount = visibleTodos.filter(
-    todo => !todo.completed,
-  ).length;
+  const activeTodosAmount = useMemo(() => {
+    return visibleTodos.filter(todo => !todo.completed).length;
+  }, [visibleTodos]);
 
   return (
     <div className="todoapp">
