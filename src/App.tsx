@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  memo, useContext, useEffect, useMemo, useRef, useState,
+  memo, useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 // import cn from 'classnames';
 
@@ -28,13 +28,13 @@ export const App: React.FC = memo(() => {
     }
   };
 
-  const showErrorMessage = (message: string) => {
+  const showErrorMessage = useCallback((message: string) => {
     setErrorMessage(message);
 
     setTimeout(() => {
       showErrorMessage('');
     }, 3000);
-  };
+  }, []);
 
   useEffect(() => {
     if (newTodoField.current) {
@@ -48,13 +48,15 @@ export const App: React.FC = memo(() => {
           showErrorMessage('Unable to load a todos');
         });
     }
-  }, []);
+  }, [showErrorMessage, user]);
 
   const visibleTodos = useMemo(() => {
     return getFilteredTodos(todos, selectedFilterType);
   }, [todos, selectedFilterType]);
 
-  const filterOptions = Object.values(FilterTypes);
+  const filterOptions = useMemo(() => {
+    return Object.values(FilterTypes);
+  }, []);
 
   const activeItemsCounter = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
@@ -88,7 +90,7 @@ export const App: React.FC = memo(() => {
             <TodoList todos={visibleTodos} />
 
             <Footer
-              filterClick={handleFilterOptionClick}
+              setFilterType={handleFilterOptionClick}
               itemsCounter={activeItemsCounter}
               filterOptions={filterOptions}
               filterType={selectedFilterType}
