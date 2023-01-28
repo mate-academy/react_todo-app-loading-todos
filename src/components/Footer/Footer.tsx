@@ -6,7 +6,7 @@ type Props = {
   activeTodosAmount: number;
   hasCompletedTodos: boolean;
   filterType: FilterType;
-  onChangeFilterType: React.Dispatch<React.SetStateAction<FilterType>>;
+  setFilterType: (v: FilterType) => void;
 };
 
 export const Footer: React.FC<Props> = memo((props) => {
@@ -14,18 +14,18 @@ export const Footer: React.FC<Props> = memo((props) => {
     activeTodosAmount,
     hasCompletedTodos,
     filterType,
-    onChangeFilterType,
+    setFilterType,
   } = props;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodosAmount} items left`}
+        {`${activeTodosAmount} items ${activeTodosAmount > 1 ? 's' : ''} left`}
       </span>
 
       <Filter
         filterType={filterType}
-        onChangeFilterType={onChangeFilterType}
+        setFilterType={setFilterType}
       />
 
       {hasCompletedTodos && (

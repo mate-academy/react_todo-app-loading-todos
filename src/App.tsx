@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
   useMemo,
+  useCallback,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
 import { getTodos } from './api/todos';
@@ -15,6 +16,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorNotification }
   from './components/ErrorNotification/ErrorNotification';
+import { getFilteredTodos } from './components/helper/filterTodo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -25,9 +27,15 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const handleError = () => {
+  const showError = useCallback((message: string) => {
+    setErrorMessage(message);
+
     setTimeout(() => setErrorMessage(''), 3000);
-  };
+  }, []);
+
+  const closeErrorMessage = useCallback(() => {
+    setErrorMessage('');
+  }, []);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -38,38 +46,21 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(setTodos)
-        .catch(() => {
-          setErrorMessage('Todos are not loaded');
-          handleError();
-        });
+        .catch(() => showError('Todos are not loaded'));
     }
-  }, []);
+  }, [user]);
 
-  const hasCompletedTodo = useMemo(() => todos.some(todo => todo.completed),
-    [todos]);
+  const hasCompletedTodo = useMemo(() => (
+    todos.some(todo => todo.completed)
+  ), [todos]);
 
   const amountOfActiveTodo = useMemo(
     () => todos.filter(todo => todo.completed).length,
     [todos],
   );
 
-  const getFilterTodos = (arrTodos: Todo[], isCompleted: FilterType) => {
-    return arrTodos.filter(todo => {
-      switch (isCompleted) {
-        case FilterType.Completed:
-          return todo.completed;
-
-        case FilterType.Active:
-          return !todo.completed;
-
-        default:
-          return todo;
-      }
-    });
-  };
-
-  const filterTodos = useMemo(() => {
-    return getFilterTodos(todos, filterType);
+  const visibleTodos = useMemo(() => {
+    return getFilteredTodos(todos, filterType);
   }, [todos, filterType]);
 
   return (
@@ -82,13 +73,13 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={filterTodos} />
+            <TodoList todos={visibleTodos} />
 
             <Footer
               activeTodosAmount={amountOfActiveTodo}
               hasCompletedTodos={hasCompletedTodo}
               filterType={filterType}
-              onChangeFilterType={setFilterType}
+              setFilterType={setFilterType}
             />
           </>
         )}
@@ -96,8 +87,8 @@ export const App: React.FC = () => {
 
       {errorMessage && (
         <ErrorNotification
-          error={errorMessage}
-          closeErrorMessage={setErrorMessage}
+          message={errorMessage}
+          close={closeErrorMessage}
         />
       )}
     </div>

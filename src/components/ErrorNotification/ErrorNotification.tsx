@@ -2,19 +2,19 @@ import React, { memo } from 'react';
 import cn from 'classnames';
 
 type Props = {
-  error: string;
-  closeErrorMessage: (value: string) => void;
+  message: string;
+  close: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = memo((props) => {
-  const { error, closeErrorMessage } = props;
+  const { message, close } = props;
 
   return (
     <div
       data-cy="ErrorNotification"
       className={cn(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !error },
+        { hidden: !message },
       )}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -22,9 +22,9 @@ export const ErrorNotification: React.FC<Props> = memo((props) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => closeErrorMessage('')}
+        onClick={close}
       />
-      {error}
+      {message}
     </div>
   );
 });
