@@ -6,12 +6,14 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({
+  todo: { id, title, completed },
+}) => {
   return (
     <div
-      key={todo.id}
+      key={id}
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed })}
     >
       <label className="todo__status-label">
         <input
@@ -25,7 +27,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         data-cy="TodoTitle"
         className="todo__title"
       >
-        {todo.title}
+        {title}
       </span>
       <button
         type="button"

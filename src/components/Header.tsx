@@ -1,21 +1,20 @@
-import React, { RefObject } from 'react';
+import { FormEvent, forwardRef } from 'react';
 
 type Props = {
-  newTodoField: RefObject<HTMLInputElement>;
   title: string;
   setTitle: (title: string) => void;
-  handleAddToto: (title: string) => void;
+  onAddToto: (title: string) => void;
 };
 
+type Ref = HTMLInputElement;
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const Header: React.FC<Props> = ({
-  newTodoField,
-  title,
-  setTitle,
-  handleAddToto,
-}) => {
-  const handleSubmit = () => {
-    handleAddToto(title);
+export const Header = forwardRef<Ref, Props>((props, ref) => {
+  const { title, setTitle, onAddToto } = props;
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onAddToto(title);
   };
 
   return (
@@ -29,7 +28,7 @@ export const Header: React.FC<Props> = ({
         <input
           data-cy="NewTodoField"
           type="text"
-          ref={newTodoField}
+          ref={ref}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
@@ -38,4 +37,4 @@ export const Header: React.FC<Props> = ({
       </form>
     </header>
   );
-};
+});
