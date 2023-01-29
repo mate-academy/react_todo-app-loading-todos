@@ -2,12 +2,12 @@ import { Error } from '../../types/Error';
 
 type Props = {
   errorType?: Error,
-  OnCloseNotif: () => void;
+  onCloseNotification: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorType,
-  OnCloseNotif,
+  onCloseNotification,
 }) => {
   const errorMessage = (type?: Error) => {
     switch (type) {
@@ -35,7 +35,7 @@ export const ErrorNotification: React.FC<Props> = ({
         aria-label="Hide error"
         type="button"
         className="delete"
-        onClick={() => OnCloseNotif()}
+        onClick={() => onCloseNotification()}
       />
       {errorMessage(errorType)}
     </div>

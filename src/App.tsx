@@ -2,6 +2,7 @@
 import React, {
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -10,7 +11,8 @@ import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
-import { ErrorNotification } from './components/ErrorNotif/ErrorNotif';
+import { ErrorNotification }
+  from './components/ErrorNotification/ErrorNotification';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 import { Error } from './types/Error';
@@ -20,7 +22,6 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState<Error>();
@@ -31,7 +32,6 @@ export const App: React.FC = () => {
         const todosFromServer = await getTodos(user.id);
 
         setTodos(todosFromServer);
-        setVisibleTodos(todosFromServer);
       }
     } catch (error) {
       setHasError(true);
@@ -51,8 +51,8 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(({ completed }) => {
+  const filteredTodos = useMemo(() => (
+    todos.filter(({ completed }) => {
       switch (filter) {
         case Filter.COMPLETED:
           return completed;
@@ -62,12 +62,10 @@ export const App: React.FC = () => {
         default:
           return true;
       }
-    });
+    })
+  ), [todos, filter]);
 
-    setVisibleTodos(filteredTodos);
-  }, [todos, filter]);
-
-  const OnCloseNotif = () => setHasError(false);
+  const onCloseNotification = () => setHasError(false);
 
   return (
     <div className="todoapp">
@@ -77,7 +75,7 @@ export const App: React.FC = () => {
         <Header newTodoField={newTodoField} />
         {todos.length > 0 && (
           <>
-            <TodoList todos={visibleTodos} />
+            <TodoList todos={filteredTodos} />
             <Footer todos={todos} filter={filter} setFilter={setFilter} />
           </>
         )}
@@ -86,7 +84,7 @@ export const App: React.FC = () => {
       {hasError && (
         <ErrorNotification
           errorType={errorType}
-          OnCloseNotif={OnCloseNotif}
+          onCloseNotification={onCloseNotification}
         />
       )}
     </div>
