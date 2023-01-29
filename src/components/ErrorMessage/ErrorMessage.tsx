@@ -26,7 +26,6 @@ export const ErrorMessage: React.FC<Props> = ({
       onClick={onHideError}
       className="delete"
     />
-
-    {`Unable to ${errorType} todo`}
+    {errorType}
   </div>
 );

@@ -12,32 +12,57 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { ErrorType } from './types/ErrorType';
 import { TodoList } from './components/TodoList';
+import { useTodoChange } from './customHooks/useTodoChange';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const [todosFromServer, setUsersFromServer] = useState<Todo[]>([]);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [errorType, setErrorType] = useState<ErrorType>(ErrorType.NONE);
+  const [idOfChangingTodo, isTodosChanging, setTodoChange] = useTodoChange();
   const [isError, setIsError] = useState(false);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
-  const onFilter = useCallback(
+  const filterTodos = useCallback(
     (filteredTodos: Todo[]) => {
       setVisibleTodos(filteredTodos);
     }, [visibleTodos],
   );
 
+  const onChangeError = useCallback((error: ErrorType) => {
+    setErrorType(error);
+    setIsError(true);
+  }, [errorType]);
+
+  const onTodosChange = useCallback(
+    (currentStatus: boolean, idOfTodo: number) => {
+      setTodoChange(idOfTodo, currentStatus);
+    }, [idOfChangingTodo],
+  );
+
+  const addTempTodo = useCallback(
+    (tempTodotoAdd: Todo | null) => {
+      setTempTodo(tempTodotoAdd);
+    }, [tempTodo],
+  );
+
   useEffect(() => {
-    getTodos((user as User).id)
-      .then(result => {
-        setUsersFromServer(result);
-        setVisibleTodos(result);
-      })
-      .catch(() => {
-        setErrorType(ErrorType.LOAD);
-        setIsError(true);
-      });
-  }, []);
+    if (!isTodosChanging) {
+      getTodos((user as User).id)
+        .then(result => {
+          setTodosFromServer(result);
+          setVisibleTodos(result);
+          setTodoChange(-1, false);
+        })
+        .catch(() => {
+          setErrorType(ErrorType.LOAD);
+          setIsError(true);
+        });
+    } else if (tempTodo !== null) {
+      setVisibleTodos((prevRes => [...prevRes, tempTodo as Todo]));
+    }
+  }, [isTodosChanging]);
 
   const hideError = useCallback(
     () => {
@@ -56,20 +81,32 @@ export const App: React.FC = () => {
     }
   }, [errorType]);
 
-  const isTodos = todosFromServer.length > 0;
+  const areTodosEmpty = !todosFromServer.length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-      <Header />
+      <Header
+        onAdd={onTodosChange}
+        onError={onChangeError}
+        isTodosChanging={isTodosChanging}
+        onAddTempTodo={addTempTodo}
+      />
 
       <div className="todoapp__content">
-        {isTodos && (
+        {!areTodosEmpty && (
           <>
-            <TodoList todosToShow={visibleTodos} />
+            <TodoList
+              todosToShow={visibleTodos}
+              changingTodosId={idOfChangingTodo}
+              onTodoAction={setTodoChange}
+              onError={onChangeError}
+            />
             <TodosFilter
               usersTodos={todosFromServer}
-              onFilter={onFilter}
+              onFilter={filterTodos}
+              onDeleteCompleted={setTodoChange}
+              onError={onChangeError}
             />
           </>
         )}
