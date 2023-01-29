@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Header } from './components/Header/Header';
 import { Filters, Footer } from './components/Footer/Footer';
-import { Errors } from './components/Errors/Errors';
+import { Errors } from './components/Error/Error';
 import { TodoList } from './components/TodoList/TodoList';
 import { filteredTodos } from './helpers/helpers';
 
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setError] = useState('');
-  const [filter, setFilter] = useState(Filters.all);
+  const [filterStatus, setFilterStatus] = useState(Filters.all);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -44,8 +44,8 @@ export const App: React.FC = () => {
   ), [todos]);
 
   const visibleTodos = useMemo(() => (
-    filteredTodos(todos, filter)
-  ), [todos, filter]);
+    filteredTodos(todos, filterStatus)
+  ), [todos, filterStatus]);
 
   return (
     <div className="todoapp">
@@ -62,8 +62,8 @@ export const App: React.FC = () => {
             />
             <Footer
               activeTodos={activeTodosCount}
-              filter={filter}
-              onChange={setFilter}
+              filter={filterStatus}
+              onChange={setFilterStatus}
             />
           </>
         )}

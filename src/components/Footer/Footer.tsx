@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 import cn from 'classnames';
 
 export enum Filters {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
 }
 
 type FooterProps = {
@@ -29,10 +29,10 @@ export const Footer: React.FC<FooterProps> = memo(({
         href="#/"
         className={cn(
           'filter__link', {
-            selected: filter === Filters.all,
+            selected: filter === Filters.ALL,
           },
         )}
-        onClick={() => onChange(Filters.all)}
+        onClick={() => onChange(Filters.ALL)}
       >
         All
       </a>
@@ -42,10 +42,10 @@ export const Footer: React.FC<FooterProps> = memo(({
         href="#/active"
         className={cn(
           'filter__link', {
-            selected: filter === Filters.active,
+            selected: filter === Filters.ACTIVE,
           },
         )}
-        onClick={() => onChange(Filters.active)}
+        onClick={() => onChange(Filters.ACTIVE)}
       >
         Active
       </a>
@@ -55,10 +55,10 @@ export const Footer: React.FC<FooterProps> = memo(({
         href="#/completed"
         className={cn(
           'filter__link', {
-            selected: filter === Filters.completed,
+            selected: filter === Filters.COMPLETED,
           },
         )}
-        onClick={() => onChange(Filters.completed)}
+        onClick={() => onChange(Filters.COMPLETED)}
       >
         Completed
       </a>

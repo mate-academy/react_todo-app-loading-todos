@@ -1,12 +1,12 @@
 import React, { memo, useEffect } from 'react';
 import cn from 'classnames';
 
-type ErrorsProps = {
+type ErrorProps = {
   message: string;
   onHideError: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const Errors: React.FC<ErrorsProps> = memo(({
+export const Errors: React.FC<ErrorProps> = memo(({
   message,
   onHideError,
 }) => {
