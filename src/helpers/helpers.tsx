@@ -5,11 +5,11 @@ export const filteredTodos = (
   todos: Todo[],
   filter: Filters,
 ) => {
-  if (filter === Filters.all) {
+  if (filter === Filters.ALL) {
     return todos;
   }
 
-  return todos.filter((todo) => (filter === Filters.completed
+  return todos.filter((todo) => (filter === Filters.COMPLETED
     ? todo.completed
     : !todo.completed
   ));
