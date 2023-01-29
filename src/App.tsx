@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -9,7 +10,7 @@ import cn from 'classnames';
 import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { Todo } from './types/Todo';
-import { FilterCondition } from './types/FilterCondition';
+import { ErorrMessage, FilterCondition } from './types/enums';
 import { Header } from './components/Main/Header';
 import { TodoList } from './components/Main/TodoList';
 import { Footer } from './components/Main/Footer';
@@ -27,22 +28,23 @@ export const App: React.FC = () => {
     setTimeout(() => setIsError(false), 3000);
   }
 
-  const getSelected = (allTodos: Todo[]): Todo[] => {
-    return allTodos.filter(item => {
+  const getSelected = useCallback(
+    (allTodos: Todo[]): Todo[] => {
       switch (filterCondition) {
-        case FilterCondition.ALL:
-          return true;
-
         case FilterCondition.COMPLETED:
-          return item.completed === true;
+          return allTodos.filter(item => item.completed === true);
 
         case FilterCondition.ACTIVE:
-          return item.completed === false;
+          return allTodos.filter(item => item.completed === false);
 
-        default: return true;
+        case FilterCondition.ALL:
+        default: return allTodos;
       }
-    });
-  };
+    }, [filterCondition],
+  );
+
+  const isTodoExist = todosList.length > 0
+    || filterCondition !== FilterCondition.ALL;
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
@@ -57,7 +59,7 @@ export const App: React.FC = () => {
         .catch(() => {
           setTodosList([]);
           setIsError(true);
-          setErrorText('Unable to upload a todo-list');
+          setErrorText(ErorrMessage.ON_UPLOAD);
         });
     }
   }, [filterCondition]);
@@ -74,7 +76,7 @@ export const App: React.FC = () => {
         />
         <TodoList todosList={todosList} />
 
-        {(todosList.length > 0 || filterCondition !== FilterCondition.ALL) && (
+        {isTodoExist && (
           <Footer
             todosList={todosList}
             filterCondition={filterCondition}
@@ -97,11 +99,6 @@ export const App: React.FC = () => {
           onClick={() => setIsError(false)}
         />
         {errorText}
-        {/* Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo */}
       </div>
     </div>
   );
