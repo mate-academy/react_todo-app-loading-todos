@@ -30,9 +30,9 @@ export const ErrorNotification: React.FC<Props> = ({
       data-cy="ErrorNotification"
       className="notification is-danger is-light has-text-weight-normal"
     >
-      {/* eslint-disable-next-line */}
       <button
         data-cy="HideErrorButton"
+        aria-label="Hide error"
         type="button"
         className="delete"
         onClick={() => OnCloseNotif()}
