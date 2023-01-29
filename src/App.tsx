@@ -24,7 +24,7 @@ export const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setError] = useState('');
-  const [filterStatus, setFilterStatus] = useState(Filters.all);
+  const [filterStatus, setFilterStatus] = useState(Filters.ALL);
 
   useEffect(() => {
     // focus the element with `ref={newTodoField}`
