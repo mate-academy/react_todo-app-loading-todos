@@ -7,7 +7,6 @@ type Props = {
 };
 
 export const List: React.FC<Props> = ({ todo }) => {
-  
   return (
     <div
       data-cy="Todo"

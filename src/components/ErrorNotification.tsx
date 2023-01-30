@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import classnames from "classnames";
+import React, { useEffect } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   error: boolean,
   setError: React.Dispatch<React.SetStateAction<boolean>>,
-}
+};
 
 export const ErrorNotification: React.FC<Props> = ({ error, setError }) => {
   useEffect(() => {
     setTimeout(() => {
       setError(false);
     }, 3000);
-  })
+  });
 
   return (
     <div
@@ -33,6 +33,6 @@ export const ErrorNotification: React.FC<Props> = ({ error, setError }) => {
 
       Unable to fetch data
       <br />
-  </div>
-  )
-}
+    </div>
+  );
+};

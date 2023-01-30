@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   changeFunction: (event: React.MouseEvent) => void
 };
 
 export const Navigation: React.FC<Props> = ({ changeFunction }) => {
+  const [active, setActive] = useState('All');
+
   return (
     <nav className="filter" data-cy="Filter">
       <a
         data-cy="FilterLinkAll"
         href="#/"
-        className="filter__link selected"
-        onClick={(event) => changeFunction(event)}
+        className={classnames({
+          ['filter__link']: true,
+          selected: active === 'All',
+        })}
+        onClick={(event) => {
+          changeFunction(event);
+          setActive(event.currentTarget.innerHTML);
+        }}
       >
         All
       </a>
@@ -19,16 +28,28 @@ export const Navigation: React.FC<Props> = ({ changeFunction }) => {
       <a
         data-cy="FilterLinkActive"
         href="#/active"
-        className="filter__link"
-        onClick={(event) => changeFunction(event)}
+        className={classnames({
+          ['filter__link']: true,
+          selected: active === 'Active',
+        })}
+        onClick={(event) => {
+          changeFunction(event);
+          setActive(event.currentTarget.innerHTML);
+        }}
       >
         Active
       </a>
       <a
         data-cy="FilterLinkCompleted"
         href="#/completed"
-        className="filter__link"
-        onClick={(event) => changeFunction(event)}
+        className={classnames({
+          ['filter__link']: true,
+          selected: active === 'Completed',
+        })}
+        onClick={(event) => {
+          changeFunction(event);
+          setActive(event.currentTarget.innerHTML);
+        }}
       >
         Completed
       </a>
