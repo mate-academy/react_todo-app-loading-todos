@@ -1,4 +1,3 @@
-/* eslint-disable curly */
 import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { Error } from '../../types/Error';
@@ -15,7 +14,7 @@ export const ErrorNotification: React.FC<Props> = ({ error, setIsError }) => {
     }, 3000);
   }, []);
 
-  const getErrorsNotification = useMemo(() => {
+  const getErrorNotification = useMemo(() => {
     switch (error) {
       case Error.Add:
         return 'Unable to add a todo';
@@ -43,7 +42,7 @@ export const ErrorNotification: React.FC<Props> = ({ error, setIsError }) => {
         className="delete"
         onClick={() => setIsError(null)}
       />
-      {getErrorsNotification}
+      {getErrorNotification}
     </div>
   );
 };
