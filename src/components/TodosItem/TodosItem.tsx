@@ -10,7 +10,7 @@ export const TodosItem: React.FC<Props> = ({ todo }) => {
   const [query, setQuery] = useState('');
 
   return (
-    <div
+    <li
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
@@ -45,6 +45,6 @@ export const TodosItem: React.FC<Props> = ({ todo }) => {
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
-    </div>
+    </li>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable curly */
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { Error } from '../../types/Error';
 
@@ -15,12 +15,25 @@ export const ErrorNotification: React.FC<Props> = ({ error, setIsError }) => {
     }, 3000);
   }, []);
 
+  const getErrorsNotification = useMemo(() => {
+    switch (error) {
+      case Error.Add:
+        return 'Unable to add a todo';
+      case Error.Delete:
+        return 'Unable to delete a todo';
+      case Error.Update:
+        return 'Unable to update a todo';
+      default:
+        return null;
+    }
+  }, [error]);
+
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         ('notification is-danger is-light has-text-weight-normal'),
-        { hidden: error === null },
+        { hidden: !error },
       )}
     >
       <button
@@ -30,11 +43,7 @@ export const ErrorNotification: React.FC<Props> = ({ error, setIsError }) => {
         className="delete"
         onClick={() => setIsError(null)}
       />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {getErrorsNotification}
     </div>
   );
 };

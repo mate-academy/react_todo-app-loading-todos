@@ -30,7 +30,7 @@ export const App: React.FC = () => {
       .catch(() => setIsError(Error.Update));
   };
 
-  const filterdTodos = () => {
+  const filteredTodos = () => {
     if (!todos) return null;
 
     return todos?.filter((todo) => {
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
     });
   };
 
-  const getFilterStatus = (arg: Filter) => {
+  const setFilterStatus = (arg: Filter) => {
     setFilter(arg);
   };
 
@@ -57,15 +57,17 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header />
-        <TodoList todos={filterdTodos()} />
+        {todos && (
+          <TodoList todos={filteredTodos()} />
+        )}
         <Footer
           filter={filter}
-          getFilter={getFilterStatus}
+          setFilter={setFilterStatus}
           todos={todos}
         />
       </div>
 
-      {isError !== null && (
+      {isError && (
         <ErrorNotification
           error={isError}
           setIsError={setIsError}

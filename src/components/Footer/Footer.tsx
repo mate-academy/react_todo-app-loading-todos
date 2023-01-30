@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   filter: Filter,
-  getFilter: (arg: Filter) => void,
+  setFilter: (arg: Filter) => void,
   todos: Todo[] | null,
 };
 
 export const Footer: React.FC<Props> = ({
   filter,
-  getFilter,
+  setFilter,
   todos,
 }) => {
   const getItemsIsLeft = () => {
@@ -53,7 +53,7 @@ export const Footer: React.FC<Props> = ({
           className={
             classNames('filter__link', { selected: filter === Filter.All })
           }
-          onClick={() => getFilter(Filter.All)}
+          onClick={() => setFilter(Filter.All)}
         >
           All
         </a>
@@ -64,7 +64,7 @@ export const Footer: React.FC<Props> = ({
           className={
             classNames('filter__link', { selected: filter === Filter.Active })
           }
-          onClick={() => getFilter(Filter.Active)}
+          onClick={() => setFilter(Filter.Active)}
         >
           Active
         </a>
@@ -77,7 +77,7 @@ export const Footer: React.FC<Props> = ({
               { selected: filter === Filter.Completed },
             )
           }
-          onClick={() => getFilter(Filter.Completed)}
+          onClick={() => setFilter(Filter.Completed)}
         >
           Completed
         </a>
