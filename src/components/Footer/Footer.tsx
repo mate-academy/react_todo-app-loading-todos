@@ -1,16 +1,17 @@
 import cn from 'classnames';
 import { memo } from 'react';
+import { FilterType } from '../../types/FilterType';
 
 interface FooterProps {
-  countActiveTodos: number,
-  selectedFilterForTodos: string,
-  onChosedFilter: (str: 'all' | 'active' | 'completed') => void,
+  activeTodosCount: number,
+  selectedFilter: string,
+  selectFilter: (str: FilterType) => void,
 }
 
 export const Footer: React.FC<FooterProps> = memo(({
-  countActiveTodos,
-  selectedFilterForTodos,
-  onChosedFilter,
+  activeTodosCount: countActiveTodos,
+  selectedFilter: selectedFilterForTodos,
+  selectFilter: onChosedFilter,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="todosCounter">
@@ -22,9 +23,9 @@ export const Footer: React.FC<FooterProps> = memo(({
         data-cy="FilterLinkAll"
         href="#/"
         className={cn('filter__link', {
-          selected: selectedFilterForTodos === 'all',
+          selected: selectedFilterForTodos === FilterType.All,
         })}
-        onClick={() => onChosedFilter('all')}
+        onClick={() => onChosedFilter(FilterType.All)}
       >
         All
       </a>
@@ -33,9 +34,9 @@ export const Footer: React.FC<FooterProps> = memo(({
         data-cy="FilterLinkActive"
         href="#/active"
         className={cn('filter__link', {
-          selected: selectedFilterForTodos === 'active',
+          selected: selectedFilterForTodos === FilterType.Active,
         })}
-        onClick={() => onChosedFilter('active')}
+        onClick={() => onChosedFilter(FilterType.Active)}
       >
         Active
       </a>
@@ -43,9 +44,9 @@ export const Footer: React.FC<FooterProps> = memo(({
         data-cy="FilterLinkCompleted"
         href="#/completed"
         className={cn('filter__link', {
-          selected: selectedFilterForTodos === 'completed',
+          selected: selectedFilterForTodos === FilterType.Completed,
         })}
-        onClick={() => onChosedFilter('completed')}
+        onClick={() => onChosedFilter(FilterType.Completed)}
       >
         Completed
       </a>
