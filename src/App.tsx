@@ -6,39 +6,60 @@ import { getTodos } from './api/todos';
 import { AuthContext } from './components/Auth/AuthContext';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
+import { Loader } from './components/Loader';
 import { NewTodo } from './components/NewTodo';
 import { TodoList } from './components/TodoList';
-import { FilterStatus } from './enums/Status';
+import { ErrorMessage } from './enums/ErrorMessage';
+import { Filter } from './enums/Filter';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
-  const newTodoField = useRef<HTMLInputElement>(null);
+  const newTodoField = useRef<HTMLInputElement | null>(null);
   const [userTodos, setUserTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>();
   const [filterStatus, setFilterStatus] = (
-    useState<FilterStatus>(FilterStatus.ALL)
+    useState(Filter.ALL)
   );
 
+  const normalizeTodos = (todos: Todo[]) => {
+    return todos.map(({
+      id, title, completed, userId,
+    }) => {
+      return {
+        id,
+        userId,
+        title,
+        completed,
+      };
+    });
+  };
+
+  const getVisibleTodos = () => {
+    switch (filterStatus) {
+      case Filter.ACTIVE:
+        return userTodos.filter((todo) => !todo.completed);
+      case Filter.COMPLETED:
+        return userTodos.filter((todo) => todo.completed);
+      default:
+        return userTodos;
+    }
+  };
+
   const loadTodos = async (userID: number) => {
-    setError('');
+    setErrorMessage(null);
+    setIsLoading(true);
     try {
       const serverTodos = await getTodos(userID);
-      const normalizedTodos = serverTodos.map(({
-        id, title, completed, userId,
-      }) => {
-        return {
-          id,
-          userId,
-          title,
-          completed,
-        };
-      });
+      const normalizedTodos = normalizeTodos(serverTodos);
 
       setUserTodos(normalizedTodos);
     } catch {
-      setError('Unable to load todos');
+      setErrorMessage(ErrorMessage.LOAD);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,18 +73,8 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    return userTodos.filter((todo) => {
-      switch (filterStatus) {
-        case FilterStatus.ACTIVE:
-          return !todo.completed;
-        case FilterStatus.COMPLETED:
-          return todo.completed;
-        default:
-          return todo;
-      }
-    });
-  }, [filterStatus, userTodos]);
+  const visibleTodos = useMemo(getVisibleTodos, [filterStatus, userTodos]);
+  const unfinishedTodosLeft = userTodos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -71,13 +82,18 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <NewTodo
-          newTodoField={newTodoField}
+          newTodoInputRef={newTodoField}
         />
+
+        {isLoading && (
+          <Loader />
+        )}
 
         {!!userTodos.length && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer
+              unfinishedTodosLeft={unfinishedTodosLeft}
               activeFilter={filterStatus}
               setFilter={setFilterStatus}
             />
@@ -85,9 +101,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {!!error && (
+      {!!errorMessage && (
         <ErrorNotification
-          errorMessage={error}
+          errorMessage={errorMessage}
         />
       )}
     </div>

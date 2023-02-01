@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { ErrorMessage } from '../../enums/ErrorMessage';
 
 type Props = {
-  errorMessage: string;
+  errorMessage: ErrorMessage;
 };
 
 export const ErrorNotification: React.FC<Props> = ({ errorMessage }) => {

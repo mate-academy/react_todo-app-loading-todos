@@ -1,58 +1,62 @@
 import classNames from 'classnames';
-import { FilterStatus } from '../../enums/Status';
+import { Filter } from '../../enums/Filter';
 
 type Props = {
-  activeFilter: FilterStatus,
-  setFilter: React.Dispatch<React.SetStateAction<FilterStatus>>,
+  unfinishedTodosLeft: number,
+  activeFilter: Filter,
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>,
 };
 
-export const Footer: React.FC<Props> = ({ setFilter, activeFilter }) => {
+export const Footer: React.FC<Props> = ({
+  setFilter, activeFilter, unfinishedTodosLeft,
+}) => {
   const handleClick = (event: React.MouseEvent) => {
     const option = event.currentTarget.textContent;
 
-    setFilter(option as FilterStatus);
+    setFilter(option as Filter);
   };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        4 items left
+        {unfinishedTodosLeft}
+        items left
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
-          href="#/"
+          href="/#"
           className={classNames(
             'filter__link',
-            { selected: activeFilter === FilterStatus.ALL },
+            { selected: activeFilter === Filter.ALL },
           )}
           onClick={handleClick}
         >
-          {FilterStatus.ALL}
+          {Filter.ALL}
         </a>
 
         <a
           data-cy="FilterLinkActive"
-          href="#/active"
+          href="/#active"
           className={classNames(
             'filter__link',
-            { selected: activeFilter === FilterStatus.ACTIVE },
+            { selected: activeFilter === Filter.ACTIVE },
           )}
           onClick={handleClick}
         >
-          {FilterStatus.ACTIVE}
+          {Filter.ACTIVE}
         </a>
         <a
           data-cy="FilterLinkCompleted"
-          href="#/completed"
+          href="/#completed"
           className={classNames(
             'filter__link',
-            { selected: activeFilter === FilterStatus.COMPLETED },
+            { selected: activeFilter === Filter.COMPLETED },
           )}
           onClick={handleClick}
         >
-          {FilterStatus.COMPLETED}
+          {Filter.COMPLETED}
         </a>
       </nav>
 

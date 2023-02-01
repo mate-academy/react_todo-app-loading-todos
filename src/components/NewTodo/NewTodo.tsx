@@ -1,10 +1,10 @@
 import { LegacyRef } from 'react';
 
 type Props = {
-  newTodoField: LegacyRef<HTMLInputElement>,
+  newTodoInputRef: LegacyRef<HTMLInputElement>,
 };
 
-export const NewTodo: React.FC<Props> = ({ newTodoField }) => {
+export const NewTodo: React.FC<Props> = ({ newTodoInputRef: newTodoField }) => {
   return (
     <header className="todoapp__header">
       <button

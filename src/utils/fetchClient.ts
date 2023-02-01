@@ -6,6 +6,7 @@ function wait(delay: number) {
     setTimeout(resolve, delay);
   });
 }
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // To have autocompletion and avoid mistypes
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
