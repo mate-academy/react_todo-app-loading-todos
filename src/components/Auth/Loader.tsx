@@ -1,27 +1,8 @@
 import React from 'react';
-import cn from 'classnames';
 
-type Props = {
-  isDelete: number[];
-  todoId: number;
-  updatingTodoIds: number[];
-};
-
-export const Loader: React.FC<Props> = ({
-  isDelete,
-  todoId,
-  updatingTodoIds,
-}) => {
+export const Loader: React.FC = () => {
   return (
-    <div
-      data-cy="TodoLoader"
-      className={cn('modal overlay',
-        {
-          'is-active': isDelete.includes(todoId)
-            || todoId === 0
-            || updatingTodoIds.includes(todoId),
-        })}
-    >
+    <div data-cy="TodoLoader" className="modal overlay">
       <div className="modal-background has-background-white-ter" />
       <div className="loader" />
     </div>
