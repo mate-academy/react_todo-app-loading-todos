@@ -75,6 +75,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(getVisibleTodos, [filterStatus, userTodos]);
   const unfinishedTodosLeft = userTodos.filter(todo => !todo.completed).length;
+  const isAllFinished = userTodos.length - unfinishedTodosLeft === 0;
 
   return (
     <div className="todoapp">
@@ -82,6 +83,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <NewTodo
+          isAllFinished={isAllFinished}
           newTodoInputRef={newTodoField}
         />
 
