@@ -11,17 +11,17 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 ## General info
 
-Learn the `src/utils/fetchClient.ts` to understand how to use it to interact with the API.
-
-If you want to implement it yourself you can delete the `fetchClient`.
-
-- get your userId [here](https://mate-academy.github.io/react_student-registration/);
-- use the working example page to create some todos for testing;
+- register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
+- save the received `userId` in the `App` and use to load load todos
+- log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
+- create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
     ```
     https://mate.academy/students-api/todos?userId=???
     ```
-- hide everything except the `NewTodoField` if there are no todos yet;
+- hide the list and the footer if there are no todos yet;
+
+> The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
 
 ## Error messages
 
