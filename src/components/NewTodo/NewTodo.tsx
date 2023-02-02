@@ -7,7 +7,8 @@ type Props = {
 };
 
 export const NewTodo: React.FC<Props> = ({
-  newTodoInputRef, isAllFinished,
+  newTodoInputRef,
+  isAllFinished,
 }) => {
   return (
     <header className="todoapp__header">

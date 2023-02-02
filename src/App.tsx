@@ -26,7 +26,10 @@ export const App: React.FC = () => {
 
   const normalizeTodos = (todos: Todo[]) => {
     return todos.map(({
-      id, title, completed, userId,
+      id,
+      title,
+      completed,
+      userId,
     }) => {
       return {
         id,
