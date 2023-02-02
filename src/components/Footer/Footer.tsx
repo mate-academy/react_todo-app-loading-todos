@@ -1,3 +1,4 @@
+import React, { memo } from 'react';
 import classnames from 'classnames';
 import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
@@ -8,7 +9,7 @@ type Props = {
   setFilter: (value: Filter) => void;
 };
 
-export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
+export const Footer: React.FC<Props> = memo(({ todos, filter, setFilter }) => {
   const activeTodos = todos.filter(({ completed }) => !completed).length;
 
   return (
@@ -61,4 +62,4 @@ export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
       )}
     </footer>
   );
-};
+});
