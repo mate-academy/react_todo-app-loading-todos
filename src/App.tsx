@@ -1,13 +1,33 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 0;
+const USER_ID = 6101;
 
 export const App: React.FC = () => {
+  const [title, setTitle] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [completed, setCompleted] = useState(false);
+
+  useEffect(() => {
+    getTodos(USER_ID).then((data) => setTodos(data));
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const newTodo = {
+    title,
+    id: Math.max(...todos.map(item => item.id)) + 1,
+    status: completed,
+  };
+
+  const addTodo = () => {
+    return [...todos, newTodo];
+  };
 
   return (
     <div className="todoapp">
@@ -16,14 +36,21 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+          />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={addTodo}>
             <input
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={title}
+              onChange={(event) => {
+                setTitle(event.target.value);
+              }}
             />
           </form>
         </header>
@@ -36,13 +63,21 @@ export const App: React.FC = () => {
                 type="checkbox"
                 className="todo__status"
                 checked
+                onClick={() => {
+                  setCompleted((state) => !state);
+                }}
               />
             </label>
 
             <span className="todo__title">Completed Todo</span>
 
             {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
+            <button
+              type="button"
+              className="todo__remove"
+            >
+              ×
+            </button>
 
             {/* overlay will cover the todo while it is being updated */}
             <div className="modal overlay">
@@ -61,7 +96,12 @@ export const App: React.FC = () => {
             </label>
 
             <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
+            <button
+              type="button"
+              className="todo__remove"
+            >
+              ×
+            </button>
 
             <div className="modal overlay">
               <div className="modal-background has-background-white-ter" />

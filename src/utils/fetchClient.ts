@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
@@ -43,3 +44,7 @@ export const client = {
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
 };
+// on Submit I will have to use the post method, to add the todos
+// get should be when rendering to get what we have so far
+//  patch it would be to update the todo
+//  delete = remove it
