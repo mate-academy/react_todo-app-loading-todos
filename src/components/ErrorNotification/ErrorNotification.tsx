@@ -1,43 +1,36 @@
-import { Error } from '../../types/Error';
+import React, { memo, useEffect } from 'react';
+import cn from 'classnames';
 
 type Props = {
-  errorType?: Error,
-  onCloseNotification: () => void;
+  errorMessage: string;
+  setErrorMessage: (errorMessage: string) => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({
-  errorType,
-  onCloseNotification,
+export const ErrorNotification: React.FC<Props> = memo(({
+  errorMessage,
+  setErrorMessage,
 }) => {
-  const errorMessage = (type?: Error) => {
-    switch (type) {
-      case Error.LOAD:
-        return 'An error occured when loading todos!';
-      case Error.ADD:
-        return 'Unable to add a todo';
-      case Error.DELETE:
-        return 'Unable to delete a todo';
-      case Error.UPDATE:
-        return 'Unable to update a todo';
-
-      default:
-        return 'Oops..!Something went wrong';
-    }
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  }, []);
 
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={cn('notification is-danger is-light has-text-weight-normal',
+        { hidden: !errorMessage })}
     >
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
-        aria-label="Hide error"
         type="button"
         className="delete"
-        onClick={() => onCloseNotification()}
+        onClick={() => setErrorMessage('')}
       />
-      {errorMessage(errorType)}
+
+      {errorMessage}
     </div>
   );
-};
+});

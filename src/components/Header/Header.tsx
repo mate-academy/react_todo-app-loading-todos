@@ -1,24 +1,28 @@
+import React, { memo } from 'react';
+
 type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>
+  newTodoField: React.RefObject<HTMLInputElement>,
 };
 
-export const Header: React.FC<Props> = ({ newTodoField }) => (
-  <header className="todoapp__header">
-    <button
-      data-cy="ToggleAllButton"
-      type="button"
-      className="todoapp__toggle-all active"
-      aria-label="toggle All"
-    />
-
-    <form>
-      <input
-        data-cy="NewTodoField"
-        type="text"
-        ref={newTodoField}
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
+export const Header: React.FC<Props> = memo(({ newTodoField }) => {
+  return (
+    <header className="todoapp__header">
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        data-cy="ToggleAllButton"
+        type="button"
+        className="todoapp__toggle-all active"
       />
-    </form>
-  </header>
-);
+
+      <form>
+        <input
+          data-cy="NewTodoField"
+          type="text"
+          ref={newTodoField}
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+        />
+      </form>
+    </header>
+  );
+});
