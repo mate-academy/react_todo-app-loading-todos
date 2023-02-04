@@ -18,6 +18,8 @@ export const App: React.FC = () => {
   const activeTodosCount = countActiveTodos(todos);
   const hasCompletedTodos = !!(todos.length - activeTodosCount);
 
+  const isFooterVisible = !!todos.length;
+
   useEffect(() => {
     getTodos(USER_ID)
       .then(fetchedTodos => {
@@ -40,17 +42,19 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {!!todos.length && (
-          <>
-            <TodoList todos={visibleTodos} />
-            <Footer
-              activeTodosCount={activeTodosCount}
-              filterType={filterType}
-              setFilter={setFilterType}
-              isClearButtonVisible={hasCompletedTodos}
-            />
-          </>
+        <section className="todoapp__main">
+          <TodoList todos={visibleTodos} />
+        </section>
+
+        {isFooterVisible && (
+          <Footer
+            activeTodosCount={activeTodosCount}
+            filterType={filterType}
+            setFilter={setFilterType}
+            isClearButtonVisible={hasCompletedTodos}
+          />
         )}
+
       </div>
 
       <Notification

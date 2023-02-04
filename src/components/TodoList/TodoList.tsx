@@ -9,21 +9,19 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
-    <section className="todoapp__main">
-      <TransitionGroup>
-        {todos.map(todo => (
-          <CSSTransition
+    <TransitionGroup>
+      {todos.map(todo => (
+        <CSSTransition
+          key={todo.id}
+          timeout={300}
+          classNames="item"
+        >
+          <TodoItem
             key={todo.id}
-            timeout={300}
-            classNames="item"
-          >
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-            />
-          </CSSTransition>
-        ))}
-      </TransitionGroup>
-    </section>
+            todo={todo}
+          />
+        </CSSTransition>
+      ))}
+    </TransitionGroup>
   );
 };
