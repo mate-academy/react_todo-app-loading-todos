@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 
 type Props = {
-  newTodoField: React.RefObject<HTMLInputElement>,
+  newTodoField: React.RefObject<HTMLInputElement>
 };
 
 export const Header: React.FC<Props> = memo(({ newTodoField }) => {
   return (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */ }
       <button
         data-cy="ToggleAllButton"
         type="button"

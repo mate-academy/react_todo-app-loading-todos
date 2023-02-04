@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -7,57 +6,59 @@ import React, {
   useState,
 } from 'react';
 import { AuthContext } from './components/Auth/AuthContext';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { ErrorNotification }
+  from './components/ErrorNotification';
 import { getTodos } from './api/todos';
-import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
-import { Footer } from './components/Footer/Footer';
-// eslint-disable-next-line max-len
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Todo } from './types/Todo';
-import { Filter } from './types/Filter';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState(Filter.All);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    // focus the element with `ref={newTodoField}`
-    if (newTodoField.current) {
-      newTodoField.current.focus();
-    }
-
-    if (user) {
-      getTodos(user.id)
-        .then(setTodos)
-        .catch(() => {
-          setErrorMessage('Failed to load todos');
-        });
-    }
-  }, []);
-
-  const activeTodos = useMemo(() => (
+  const activeTodosQuantity = useMemo(() => (
     todos.filter(todo => !todo.completed).length
   ), [todos]);
 
-  const filteredTodos = useMemo(() => {
-    switch (status) {
-      case Filter.Active:
-        return todos.filter(todo => (
-          !todo.completed));
+  const isAnyTodoCompleted = useMemo(() => (
+    todos.some(todo => todo.completed)
+  ), [todos]);
 
-      case Filter.Completed:
-        return todos.filter(todo => (
-          todo.completed));
-
-      default:
-        return todos;
+  useEffect(() => {
+    if (newTodoField.current) {
+      newTodoField.current.focus();
     }
-  }, [status, todos]);
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      getTodos(user.id)
+        .then(setTodos)
+        .catch(() => setError('Something went wrong'));
+    }
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterStatus) {
+        case FilterStatus.Active:
+          return !todo.completed;
+
+        case FilterStatus.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filterStatus]);
 
   return (
     <div className="todoapp">
@@ -68,20 +69,20 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <TodoList todos={filteredTodos} />
+            <TodoList todos={visibleTodos} />
+
             <Footer
-              activeTodos={activeTodos}
-              status={status}
-              setStatus={setStatus}
+              filterStatus={filterStatus}
+              isAnyTodoCompleted={isAnyTodoCompleted}
+              activeTodosQuantity={activeTodosQuantity}
+              onFilterStatusChange={setFilterStatus}
             />
           </>
         )}
+
       </div>
 
-      <ErrorNotification
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorNotification error={error} onClosingErrorMessage={setError} />
     </div>
   );
 };

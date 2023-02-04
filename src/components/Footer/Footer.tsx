@@ -1,65 +1,42 @@
 import React, { memo } from 'react';
-import classnames from 'classnames';
-import { Filter } from '../../types/Filter';
+import { FilterStatus } from '../../types/FilterStatus';
+import { Filter } from '../Filter';
 
 type Props = {
-  activeTodos: number,
-  status: string
-  setStatus:(status: Filter) => void
+  filterStatus: string;
+  activeTodosQuantity: number;
+  isAnyTodoCompleted: boolean;
+  onFilterStatusChange: React.Dispatch<React.SetStateAction<FilterStatus>>;
 };
 
-export const Footer: React.FC<Props> = memo(({
-  activeTodos,
-  status,
-  setStatus,
-}) => {
+export const Footer: React.FC<Props> = memo((props) => {
+  const {
+    filterStatus,
+    activeTodosQuantity,
+    isAnyTodoCompleted,
+    onFilterStatusChange,
+  } = props;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodos} items left`}
+        {`${activeTodosQuantity} items left`}
       </span>
 
-      <nav className="filter" data-cy="Filter">
-        <a
-          data-cy="FilterLinkAll"
-          href="#/"
-          className={classnames('filter__link', {
-            selected: status === Filter.All,
-          })}
-          onClick={() => setStatus(Filter.All)}
-        >
-          All
-        </a>
+      <Filter
+        filterStatus={filterStatus}
+        onFilterStatusChange={onFilterStatusChange}
+      />
 
-        <a
-          data-cy="FilterLinkActive"
-          href="#/active"
-          className={classnames('filter__link', {
-            selected: status === Filter.Active,
-          })}
-          onClick={() => setStatus(Filter.Active)}
+      {isAnyTodoCompleted && (
+        <button
+          data-cy="ClearCompletedButton"
+          type="button"
+          className="todoapp__clear-completed"
         >
-          Active
-        </a>
-        <a
-          data-cy="FilterLinkCompleted"
-          href="#/completed"
-          className={classnames('filter__link', {
-            selected: status === Filter.Completed,
-          })}
-          onClick={() => setStatus(Filter.Completed)}
-        >
-          Completed
-        </a>
-      </nav>
-
-      <button
-        data-cy="ClearCompletedButton"
-        type="button"
-        className="todoapp__clear-completed"
-      >
-        Clear completed
-      </button>
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 });
