@@ -1,59 +1,68 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
+import { TodoModal } from './TodoModal';
 
 type Props = {
   todos: Todo[],
-  // onSetCompleted:(state:boolean) => void,
   onRemoveTodo: (userId: number, todoId: number) => void,
-  userId:number
+  userId: number
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  // onSetCompleted,
   onRemoveTodo,
   userId,
-}) => (
-  <section className="todoapp__main">
-    {todos.map((todo) => (
-      <div
-        key={todo.id}
-        className={classNames(
-          'todo',
-          { completed: todo.completed },
-        )}
-      >
-        <label className="todo__status-label">
-          <input
-            type="checkbox"
-            className="todo__status"
-            checked={todo.completed}
-            onChange={(() => {
-              // onSetCompleted((state) => !state);
-            })}
-          />
-        </label>
+}) => {
+  const [editing, setEditing] = useState(false);
 
-        <span className="todo__title">{todo.title}</span>
-
-        <button
-          type="button"
-          className="todo__remove"
-          onClick={() => {
-            onRemoveTodo(userId, todo.id);
-          }}
-        >
-          ×
-        </button>
-        {/* overlay will cover the todo while it is being updated */}
+  return (
+    <section className="todoapp__main">
+      {todos.map((todo) => (
         <div
-          className="modal overlay"
+          key={todo.id}
+          className={classNames(
+            'todo',
+            { completed: todo.completed },
+          )}
         >
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
+          <label
+            className="todo__status-label"
+          >
+            <input
+              type="checkbox"
+              className="todo__status"
+              id="todo_selected"
+              checked={todo.completed}
+              onChange={(() => {
+                // onSetCompleted((state) => !state);
+              })}
+            />
+          </label>
+          <span
+            className="todo__title"
+            onDoubleClick={() => {
+              setEditing(true);
+            }}
+          >
+            {todo.title}
+          </span>
+
+          <button
+            type="button"
+            className="todo__remove"
+            onClick={() => {
+              onRemoveTodo(userId, todo.id);
+            }}
+          >
+            ×
+          </button>
+          {/* overlay will cover the todo while it is being updated */}
+          {editing && (
+            <TodoModal />
+          )}
         </div>
-      </div>
-    ))}
-  </section>
-);
+      ))}
+    </section>
+  );
+};
