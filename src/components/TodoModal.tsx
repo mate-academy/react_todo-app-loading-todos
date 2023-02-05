@@ -1,8 +1,17 @@
-export const TodoModal: React.FC = () => (
-  <div className="modal overlay">
+import classNames from 'classnames';
+
+type Props = {
+  editing: boolean
+};
+
+export const TodoModal: React.FC<Props> = ({ editing }) => (
+  <div
+    className={classNames(
+      'modal overlay',
+      { 'is-active': editing },
+    )}
+  >
     <div className="modal-background has-background-white-ter" />
     <div className="loader" />
   </div>
 );
-// is-active
-// Is active className is conditional to the state if we are editing or not

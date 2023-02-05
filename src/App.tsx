@@ -5,14 +5,13 @@ import { getTodos, removeTodo } from './api/todos';
 import { Footer } from './components/Footer';
 import { Form } from './components/Form';
 import { TodoList } from './components/TodoList';
-import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
 const USER_ID = 6101;
 
 export const App: React.FC = () => {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState<string>('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completed] = useState(false);
   const [filter, setFilter] = useState('all');
@@ -73,6 +72,8 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <>
             <TodoList
+              title={title}
+              setTitle={setTitle}
               todos={visibleTodos}
               // onSetCompleted={setCompleted}
               onRemoveTodo={removeTodo}
@@ -111,9 +112,6 @@ export const App: React.FC = () => {
           >
             ×
           </button>
-
-          {/* 'is-active' class puts this modal on top of the todo */}
-          <TodoModal />
         </div>
       </div>
 
