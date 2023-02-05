@@ -10,9 +10,13 @@ export const ErrorNotification: React.FC<Props> = memo((props) => {
   const { error, onClosingErrorMessage } = props;
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       onClosingErrorMessage('');
     }, 3000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (
