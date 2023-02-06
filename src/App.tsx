@@ -98,46 +98,28 @@ export const App: React.FC = () => {
             />
           </>
         )}
-        {/* This todo is in loadind state */}
-        <div className="todo">
-          <label className="todo__status-label">
-            <input
-              type="checkbox"
-              className="todo__status"
-            />
-          </label>
-
-          <span className="todo__title">Todo is being saved now</span>
-          <button
-            type="button"
-            className="todo__remove"
+        {/* Notification is shown in case of any error */}
+        {/* Add the 'hidden' class to hide the message smoothly */}
+        {showError && (
+          <div
+            className={classNames(
+              'notification is-danger is-light has-text-weight-normal',
+              { hidden: !showError },
+            )}
           >
-            ×
-          </button>
-        </div>
+            <button
+              type="button"
+              className="delete"
+              onClick={() => {
+                setShowError(false);
+              }}
+            />
+
+            {/* show only one message at a time */}
+            {error}
+          </div>
+        )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {showError && (
-        <div
-          className={classNames(
-            'notification is-danger is-light has-text-weight-normal',
-            { hidden: !showError },
-          )}
-        >
-          <button
-            type="button"
-            className="delete"
-            onClick={() => {
-              setShowError(false);
-            }}
-          />
-
-          {/* show only one message at a time */}
-          {error}
-        </div>
-      )}
     </div>
   );
 };
