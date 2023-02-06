@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { getTodos, removeTodo } from './api/todos';
+import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Form } from './components/Form';
 import { TodoList } from './components/TodoList';
@@ -87,9 +87,6 @@ export const App: React.FC = () => {
               title={title}
               setTitle={setTitle}
               todos={visibleTodos}
-              // onSetCompleted={setCompleted}
-              onRemoveTodo={removeTodo}
-              userId={USER_ID}
             />
             <Footer
               todos={todos}
@@ -98,8 +95,6 @@ export const App: React.FC = () => {
             />
           </>
         )}
-        {/* Notification is shown in case of any error */}
-        {/* Add the 'hidden' class to hide the message smoothly */}
         {showError && (
           <div
             className={classNames(
@@ -114,8 +109,6 @@ export const App: React.FC = () => {
                 setShowError(false);
               }}
             />
-
-            {/* show only one message at a time */}
             {error}
           </div>
         )}
