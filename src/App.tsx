@@ -15,11 +15,23 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completed] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [error, setError] = useState('');
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((data) => setTodos(data))
-      .catch(() => { });
+      .then((data) => {
+        setTodos(data);
+        setError('');
+      })
+      .catch(() => {
+        setShowError(true);
+        setError('Unable to load todos');
+
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
+      });
   }, []);
 
   const visibleTodos = todos
@@ -41,7 +53,7 @@ export const App: React.FC = () => {
   const newTodo = {
     title,
     id: Math.max(...todos.map(item => item.id)) + 1,
-    status: completed,
+    completed,
   };
 
   const addTodo = () => {
@@ -86,16 +98,6 @@ export const App: React.FC = () => {
             />
           </>
         )}
-
-        {/* This form is shown instead of the title and remove button */}
-        <Form
-          title={title}
-          onSubmit={addTodo}
-          setTitle={setTitle}
-          className="todo__title-field"
-          placeholder="Empty todo will be deleted"
-        />
-
         {/* This todo is in loadind state */}
         <div className="todo">
           <label className="todo__status-label">
@@ -117,19 +119,25 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button
-          type="button"
-          className="delete"
-        />
+      {showError && (
+        <div
+          className={classNames(
+            'notification is-danger is-light has-text-weight-normal',
+            { hidden: !showError },
+          )}
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={() => {
+              setShowError(false);
+            }}
+          />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+          {/* show only one message at a time */}
+          {error}
+        </div>
+      )}
     </div>
   );
 };
