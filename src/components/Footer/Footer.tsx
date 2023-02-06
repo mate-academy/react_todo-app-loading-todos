@@ -5,12 +5,14 @@ import { Filter } from '../../types/Filter';
 type Props = {
   onSetFilterType: React.Dispatch<Filter>,
   activeTodos: number,
+  completedTodos: number,
   filterType: Filter,
 };
 
 export const Footer: React.FC<Props> = ({
   onSetFilterType,
   activeTodos,
+  completedTodos,
   filterType,
 }) => {
   return (
@@ -60,6 +62,7 @@ export const Footer: React.FC<Props> = ({
         data-cy="ClearCompletedButton"
         type="button"
         className="todoapp__clear-completed"
+        disabled={completedTodos === 0}
       >
         Clear completed
       </button>

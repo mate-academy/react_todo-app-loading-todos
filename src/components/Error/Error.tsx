@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React from 'react';
 import { ErrorType } from '../../types/ErrorType';
@@ -24,6 +23,7 @@ export const Error: React.FC<Props> = ({
       )}
     >
       <button
+        aria-label="hide_error"
         data-cy="HideErrorButton"
         type="button"
         className="delete"

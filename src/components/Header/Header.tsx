@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 type Props = {
@@ -15,6 +14,8 @@ export const Header: React.FC<Props> = ({
   return (
     <header className="todoapp__header">
       <button
+        aria-label="toggle_button"
+        id="toggle_button"
         data-cy="ToggleAllButton"
         type="button"
         className="todoapp__toggle-all active"

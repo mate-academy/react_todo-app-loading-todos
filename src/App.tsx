@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useContext,
   useEffect,
@@ -20,7 +19,7 @@ export const App: React.FC = () => {
   const user = useContext(AuthContext);
   const newTodoField = useRef<HTMLInputElement>(null);
 
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
   const [typeOfError, setTypeOfError] = useState(ErrorType.success);
   const [filterType, setFilterType] = useState(Filter.all);
@@ -40,13 +39,13 @@ export const App: React.FC = () => {
         .then(list => handleGetRequest(list))
         .catch(() => setTypeOfError(ErrorType.get));
     }
-  }, []);
 
-  useEffect(() => {
-    if (typeOfError !== ErrorType.success) {
-      setTimeout(() => setTypeOfError(ErrorType.success), 3000);
-    }
-  }, [typeOfError]);
+    const timeoutID = setTimeout(() => setTypeOfError(ErrorType.success), 3000);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, []);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -61,15 +60,17 @@ export const App: React.FC = () => {
   const listModified = (type: Filter) => {
     switch (type) {
       case Filter.active:
-        return todos.filter(item => item.completed === false);
+        return todos.filter(item => !item.completed);
       case Filter.completed:
-        return todos.filter(item => item.completed === true);
+        return todos.filter(item => item.completed);
       default:
         return todos;
     }
   };
 
-  const listBoolean = !!todos.length;
+  const activeTodos = listModified(Filter.active).length;
+  const completedTodos = listModified(Filter.completed).length;
+  const todosFiltered = listModified(filterType);
 
   return (
     <AuthProvider>
@@ -82,11 +83,12 @@ export const App: React.FC = () => {
             onHandleInput={handleInput}
             inputValue={title}
           />
-          <TodoList todos={listModified(filterType)} />
-          {listBoolean && (
+          <TodoList todos={todosFiltered} />
+          {!!todos.length && (
             <Footer
               onSetFilterType={setFilterType}
-              activeTodos={listModified(Filter.active).length}
+              activeTodos={activeTodos}
+              completedTodos={completedTodos}
               filterType={filterType}
             />
           )}
