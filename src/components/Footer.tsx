@@ -1,0 +1,81 @@
+import React from 'react';
+import classNames from 'classnames';
+
+import { Filter } from '../types/Filter';
+import { Todo } from '../types/Todo';
+
+type Props = {
+  visibleTodos: Todo[] | null
+  filter: Filter
+  onChange: (selector: Filter) => void
+};
+
+export const Footer: React.FC<Props> = ({
+  visibleTodos,
+  filter,
+  onChange,
+}) => {
+  const onAllClick = () => {
+    onChange(Filter.all);
+  };
+
+  const onActiveClick = () => {
+    onChange(Filter.active);
+  };
+
+  const onCompletedClick = () => {
+    onChange(Filter.completed);
+  };
+
+  const isSomeCompleted = visibleTodos?.some(todo => todo.completed);
+
+  return (
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${visibleTodos?.length} items left`}
+      </span>
+
+      {/* Active filter should have a 'selected' class */}
+      <nav className="filter">
+        <a
+          href="#/"
+          className={classNames(
+            'filter__link',
+            { selected: filter === Filter.all },
+          )}
+          onClick={onAllClick}
+        >
+          All
+        </a>
+
+        <a
+          href="#/active"
+          className={classNames(
+            'filter__link',
+            { selected: filter === Filter.active },
+          )}
+          onClick={onActiveClick}
+        >
+          Active
+        </a>
+
+        <a
+          href="#/completed"
+          className={classNames(
+            'filter__link',
+            { selected: filter === Filter.completed },
+          )}
+          onClick={onCompletedClick}
+        >
+          Completed
+        </a>
+      </nav>
+
+      {isSomeCompleted && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
+    </footer>
+  );
+};
