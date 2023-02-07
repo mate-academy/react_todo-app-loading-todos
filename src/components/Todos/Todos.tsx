@@ -15,7 +15,6 @@ export const Todos: React.FC<Props> = ({
         id,
         title,
         completed,
-        userId,
       }) => (
         <div
           className={cn('todo', { completed })}
@@ -31,7 +30,6 @@ export const Todos: React.FC<Props> = ({
 
           <span className="todo__title">
             {title}
-            {userId}
           </span>
 
           {/* Remove button appears only on hover */}
