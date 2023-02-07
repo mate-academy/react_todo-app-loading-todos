@@ -64,7 +64,7 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {/* Added following button for testing/review behaviour, removing on next tasks */}
+      {/* Added following button for review/testing behaviour, will be removed on the next task */}
       <button
         type="button"
         className="button is-warning active mb-2"
