@@ -9,3 +9,7 @@ export const getTodos = (userId: number) => {
 export const getTodo = (id: number): Promise<Todo> => {
   return client.get<Todo>(`/todos/${id}`);
 };
+
+export const deleteTodo = (id: number) => {
+  return client.delete(`/todos/${id}`);
+};
