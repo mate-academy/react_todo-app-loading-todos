@@ -68,7 +68,10 @@ export const App: React.FC = () => {
       <button
         type="button"
         className="button is-warning active mb-2"
-        onClick={() => handleError('in case of error, this behaviour...')}
+        onClick={() => {
+          setHideNotification(false);
+          handleError('in case of error, this behaviour...');
+        }}
       >
         test error notification
       </button>
