@@ -1,27 +1,72 @@
-export const TodoFooter = () => {
+import React from 'react';
+import classNames from 'classnames';
+
+import { Filter } from '../../types/Filter';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[] | null;
+  filter: Filter;
+  onChange: (selector: Filter) => void;
+};
+
+export const TodoFooter: React.FC<Props> = ({ todos, filter, onChange }) => {
+  const onAllClick = () => {
+    onChange(Filter.all);
+  };
+
+  const onActiveClick = () => {
+    onChange(Filter.active);
+  };
+
+  const onCompletedClick = () => {
+    onChange(Filter.completed);
+  };
+
+  const isSomeCompleted = todos?.some((todo) => todo.completed);
+
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">3 items left</span>
+      <span className="todo-count">{`${todos?.length} items left`}</span>
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
-        <a href="#/" className="filter__link selected">
+        <a
+          href="#/"
+          className={classNames('filter__link', {
+            selected: filter === Filter.all,
+          })}
+          onClick={onAllClick}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link">
+        <a
+          href="#/active"
+          className={classNames('filter__link', {
+            selected: filter === Filter.active,
+          })}
+          onClick={onActiveClick}
+        >
           Active
         </a>
 
-        <a href="#/completed" className="filter__link">
+        <a
+          href="#/completed"
+          className={classNames('filter__link', {
+            selected: filter === Filter.completed,
+          })}
+          onClick={onCompletedClick}
+        >
           Completed
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {isSomeCompleted && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
