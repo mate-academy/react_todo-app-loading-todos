@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
-import { Notification } from './components/Notification';
-import { TodoContent } from './components/TodoContent';
-import { UserWarning } from './UserWarning';
-import { getTodos } from './api/todos';
-import { Todo } from './types/Todo';
+import React, { useEffect, useState } from "react";
+import { Errors } from "./components/Errors";
+import { TodoContent } from "./components/TodoContent";
+import { UserWarning } from "./UserWarning";
+import { getTodos } from "./api/todos";
+import { Todo } from "./types/Todo";
 
 const USER_ID = 6232;
 
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
 
       <TodoContent todos={todos} />
 
-      <Notification />
+      <Errors />
     </div>
   );
 };

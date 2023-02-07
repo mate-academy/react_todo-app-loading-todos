@@ -1,4 +1,4 @@
-export const Footer = () => {
+export const TodoFooter = () => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">3 items left</span>

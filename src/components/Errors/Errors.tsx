@@ -1,7 +1,7 @@
 /* Notification is shown in case of any error */
 /* Add the 'hidden' class to hide the message smoothly */
 
-export const Notification = () => {
+export const Errors = () => {
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
       {/* <button type="button" className="delete" /> */}
