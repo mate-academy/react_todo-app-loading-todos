@@ -21,41 +21,45 @@ export const Footer: React.FC<Props> = ({
     .length;
 
   return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
-        {`${countTodosLeft} items left`}
-      </span>
+    <>
+      {todos.length !== 0 && (
+        <footer className="todoapp__footer">
+          <span className="todo-count">
+            {`${countTodosLeft} items left`}
+          </span>
 
-      {/* Active filter should have a 'selected' class */}
+          <nav className="filter">
+            {Object.values(SelectFilter)
+              .filter(value => typeof value === 'string')
+              .map((option) => {
+                const optionLowCase = option
+                  .toString().toLowerCase();
+                const isOptionSelected = optionLowCase === currentFilter;
 
-      <nav className="filter">
-        {Object.values(SelectFilter)
-          .filter(value => typeof value === 'string')
-          .map((option) => {
-            const optionLowCase = option
-              .toString().toLowerCase();
-            const isOptionSelected = optionLowCase === currentFilter;
+                return (
+                  <a
+                    href={`#/${optionLowCase}`}
+                    key={option}
+                    onClick={() => setFilter(optionLowCase)}
+                    className={cn(
+                      'filter__link',
+                      { selected: isOptionSelected },
+                    )}
+                  >
+                    {option}
+                  </a>
+                );
+              })}
+          </nav>
 
-            return (
-              <a
-                href={`#/${optionLowCase}`}
-                key={option}
-                onClick={() => setFilter(optionLowCase)}
-                className={cn('filter__link', { selected: isOptionSelected })}
-              >
-                {option}
-              </a>
-            );
-          })}
-      </nav>
-
-      {/* don't show this button if there are no completed todos */}
-      {hasCompletedTodo
-    && (
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
-    )}
-    </footer>
+          {hasCompletedTodo
+        && (
+          <button type="button" className="todoapp__clear-completed">
+            Clear completed
+          </button>
+        )}
+        </footer>
+      )}
+    </>
   );
 };

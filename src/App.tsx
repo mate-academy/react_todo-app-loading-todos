@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 import { Todos } from './components/Todos';
 import { FilterOptions } from './types/FilterOptions';
 import { Todo } from './types/Todo';
@@ -41,20 +42,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
+        <Header />
         <Todos todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
