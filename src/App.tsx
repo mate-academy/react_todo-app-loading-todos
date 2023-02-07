@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
+import { Notification } from './components/Notification';
 import { Todos } from './components/Todos';
 import { FilterOptions } from './types/FilterOptions';
 import { Todo } from './types/Todo';
@@ -13,11 +14,23 @@ const USER_ID = 6133;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
+  const [notification, setNotification] = useState('');
+  const [hideNotification, setHideNotification] = useState(false);
+
+  const handleHideNotification = () => setHideNotification(true);
+  const handleError = (error: string) => {
+    setNotification(error);
+    setTimeout(() => {
+      setHideNotification(true);
+    }, 3000);
+  };
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(loadedTodos => {
         setTodos(loadedTodos);
+      }).catch(() => {
+        handleError('Unable to load Todos');
       });
   }, []);
 
@@ -44,29 +57,27 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <Todos todos={filteredTodos} />
-
-        {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && (
-          <Footer
-            todos={todos}
-            currentFilter={filter}
-            setFilter={setFilter}
-          />
-        )}
+        <Footer
+          todos={todos}
+          currentFilter={filter}
+          setFilter={setFilter}
+        />
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
+      {/* Added following button for testing/review behaviour, removing on next tasks */}
+      <button
+        type="button"
+        className="button is-warning active mb-2"
+        onClick={() => handleError('in case of error, this behaviour...')}
+      >
+        test error notification
+      </button>
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Notification
+        message={notification}
+        hidden={hideNotification}
+        setHidden={handleHideNotification}
+      />
     </div>
   );
 };
