@@ -14,7 +14,7 @@ export const filteredTodos = (todos: Todo[], filter: Filter) => (
         return completed;
 
       default:
-        throw new Error('Incorrect filter type');
+        return 0;
     }
   })
 );
