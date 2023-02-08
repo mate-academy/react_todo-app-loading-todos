@@ -12,7 +12,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 ## General info
 
 - register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-- save the received `userId` in the `App` and use to load load todos
+- save the received `userId` in the `App` and use to load todos
 - log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
