@@ -21,7 +21,7 @@ export const ShowError: React.FC<Props> = ({ error }) => {
 
   return (
     <div className={cn(
-      'notification', 'is-danger', 'is-light', 'has-text-weight-normal',
+      'notification is-danger is-light has-text-weight-normal',
       { hidden: isHidden },
     )}
     >

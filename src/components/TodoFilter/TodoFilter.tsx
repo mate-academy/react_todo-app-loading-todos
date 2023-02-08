@@ -1,9 +1,10 @@
 import cn from 'classnames';
 import React from 'react';
+import { FilterBy } from '../../types/Filter';
 
 type Props = {
   filter: string,
-  onFilterClick: (filter: string) => void,
+  onFilterClick: (filter: FilterBy) => void,
   renderClearCompleted: boolean,
 };
 
@@ -23,9 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/"
           className={cn(
             'filter__link',
-            { selected: filter === 'All' },
+            { selected: filter === FilterBy.all },
           )}
-          onClick={() => onFilterClick('All')}
+          onClick={() => onFilterClick(FilterBy.all)}
         >
           All
         </a>
@@ -34,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/active"
           className={cn(
             'filter__link',
-            { selected: filter === 'Active' },
+            { selected: filter === FilterBy.active },
           )}
-          onClick={() => onFilterClick('Active')}
+          onClick={() => onFilterClick(FilterBy.active)}
         >
           Active
         </a>
@@ -45,9 +46,9 @@ export const TodoFilter: React.FC<Props> = ({
           href="#/completed"
           className={cn(
             'filter__link',
-            { selected: filter === 'Completed' },
+            { selected: filter === FilterBy.completed },
           )}
-          onClick={() => onFilterClick('Completed')}
+          onClick={() => onFilterClick(FilterBy.completed)}
         >
           Completed
         </a>

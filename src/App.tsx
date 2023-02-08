@@ -8,23 +8,24 @@ import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
 import { Header } from './components/Header/Header';
+import { FilterBy } from './types/Filter';
 
 const USER_ID = 6156;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosToRender, setTodosToRender] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todoFilter, setTodoFilter] = useState('All');
   const [error] = useState('');
 
-  const renderClearCompleted
-    = !!(todos.filter(todo => todo.completed).length);
+  const isAnyTodoCompleted
+    = Boolean(todos.filter(todo => todo.completed).length);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(r => {
-        setTodos(r);
-        setTodosToRender(r);
+      .then(response => {
+        setTodos(response);
+        setVisibleTodos(response);
       });
   }, []);
 
@@ -32,20 +33,20 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleFilterClick = (filter: string) => {
+  const handleFilterClick = (filter: FilterBy) => {
     if (todoFilter !== filter) {
       setTodoFilter(filter);
 
       switch (filter) {
-        case 'All':
+        case FilterBy.all:
         default:
-          setTodosToRender(todos);
+          setVisibleTodos(todos);
           break;
-        case 'Active':
-          setTodosToRender(todos.filter(todo => !todo.completed));
+        case FilterBy.active:
+          setVisibleTodos(todos.filter(todo => !todo.completed));
           break;
-        case 'Completed':
-          setTodosToRender(todos.filter(todo => todo.completed));
+        case FilterBy.completed:
+          setVisibleTodos(todos.filter(todo => todo.completed));
           break;
       }
     }
@@ -58,13 +59,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header userId={USER_ID} />
 
-        <TodoList todos={todosToRender} />
+        <TodoList todos={visibleTodos} />
 
-        {todos.length !== 0 && (
+        {todos.length > 0 && (
           <TodoFilter
             filter={todoFilter}
             onFilterClick={handleFilterClick}
-            renderClearCompleted={renderClearCompleted}
+            renderClearCompleted={isAnyTodoCompleted}
           />
         )}
       </div>
