@@ -10,9 +10,14 @@ const USER_ID = 6232;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    getTodos(USER_ID).then((result) => setTodos(result));
+    getTodos(USER_ID)
+      .then((result) => setTodos(result))
+      .catch(() => {
+        setError('Unable to load todos');
+      });
   }, []);
 
   if (!USER_ID) {
@@ -25,7 +30,7 @@ export const App: React.FC = () => {
 
       <TodoContent todos={todos} />
 
-      <Errors />
+      {error !== '' && <Errors error={error} />}
     </div>
   );
 };
