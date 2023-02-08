@@ -3,17 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Content } from './components/Content';
 import { Errors } from './components/Errors';
-import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
+
+import { Error } from './types/Error';
+import { Todo } from './types/Todo';
 
 const USER_ID = 6192;
 
 export const App: React.FC = () => {
-  const [allTodos, setAllTodos] = useState<Todo[] | null>(null);
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<Error>(Error.succes);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(result => setAllTodos(result));
+      .then(result => setAllTodos(result))
+      .catch(() => setError(Error.addError));
   }, []);
 
   if (!USER_ID) {
@@ -26,7 +30,7 @@ export const App: React.FC = () => {
 
       <Content todos={allTodos} />
 
-      <Errors />
+      <Errors errorMessage={error} />
     </div>
   );
 };

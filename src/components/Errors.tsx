@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { Error } from '../types/Error';
 
-export const Errors: React.FC = () => {
+type Props = {
+  errorMessage: Error
+};
+
+export const Errors: React.FC<Props> = ({ errorMessage }) => {
   const [hidden, setHidden] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,12 +33,7 @@ export const Errors: React.FC = () => {
         onClick={onCloseClick}
       />
 
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  visibleTodos: Todo[] | null
+  visibleTodos: Todo[] | null,
 };
 
 export const Main: React.FC<Props> = ({ visibleTodos }) => {

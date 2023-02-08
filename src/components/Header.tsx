@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  active: boolean | undefined
+  active: boolean | undefined,
 };
 
 export const Header: React.FC<Props> = ({ active }) => {
