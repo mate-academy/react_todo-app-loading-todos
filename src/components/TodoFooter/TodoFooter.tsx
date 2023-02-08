@@ -2,15 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { Filter } from '../../types/Filter';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[] | null;
+  todosLength: number | undefined;
   filter: Filter;
   onChange: (selector: Filter) => void;
 };
 
-export const TodoFooter: React.FC<Props> = ({ todos, filter, onChange }) => {
+export const TodoFooter: React.FC<Props> = ({
+  todosLength,
+  filter,
+  onChange,
+}) => {
   const onAllClick = () => {
     onChange(Filter.all);
   };
@@ -23,11 +26,9 @@ export const TodoFooter: React.FC<Props> = ({ todos, filter, onChange }) => {
     onChange(Filter.completed);
   };
 
-  const isSomeCompleted = todos?.some((todo) => todo.completed);
-
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">{`${todos?.length} items left`}</span>
+      <span className="todo-count">{`${todosLength} items left`}</span>
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
@@ -62,11 +63,9 @@ export const TodoFooter: React.FC<Props> = ({ todos, filter, onChange }) => {
         </a>
       </nav>
 
-      {isSomeCompleted && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button type="button" className="todoapp__clear-completed">
+        Clear completed
+      </button>
     </footer>
   );
 };
