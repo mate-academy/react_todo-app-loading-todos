@@ -20,8 +20,8 @@ export const TodoContent: React.FC<Props> = ({ todos, filterTodos }) => {
       {todos && (
         <TodoFooter
           todosLength={todos?.length}
-          filter={filter}
-          onChange={(selectedFilter) => {
+          selectFilter={filter}
+          switchFilter={(selectedFilter) => {
             setFilter(selectedFilter);
             filterTodos(selectedFilter);
           }}

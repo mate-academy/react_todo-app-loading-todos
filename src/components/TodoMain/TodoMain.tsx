@@ -1,14 +1,15 @@
 import cn from 'classnames';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
-  const [changeCheck, setChangeCheck] = useState<number>(-1);
+  const [isEditActive, setIsEditActive] = useState<number>(-1);
+  const [tempTitle, setTempTitle] = useState('');
 
   const onSubmitChanges = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setChangeCheck(-1);
+    setIsEditActive(-1);
   };
 
   return (
@@ -22,14 +23,19 @@ export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
               <input type="checkbox" className="todo__status" checked />
             </label>
 
-            {changeCheck === id ? (
+            {isEditActive === id ? (
               <>
                 <form onSubmit={onSubmitChanges}>
                   <input
                     type="text"
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
-                    value={title}
+                    value={tempTitle}
+                    onChange={
+                      (e: React.FormEvent<HTMLInputElement>) => {
+                        setTempTitle(e.currentTarget.value);
+                      }
+                    }
                   />
                 </form>
               </>
@@ -38,7 +44,8 @@ export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
                 <span
                   className="todo__title"
                   onDoubleClick={() => {
-                    setChangeCheck(id);
+                    setTempTitle(title);
+                    setIsEditActive(id);
                   }}
                 >
                   {title}

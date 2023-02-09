@@ -6,21 +6,28 @@ import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import { ErrorsEnum } from './types/ErrorsEnum';
 
 const USER_ID = 6232;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<ErrorsEnum | null>(null);
 
   const filterTodos = (filterBy: Filter) => {
-    if (filterBy === Filter.active) {
-      setFilteredTodos(todos.filter((todo) => todo.completed === false));
-    } else if (filterBy === Filter.completed) {
-      setFilteredTodos(todos.filter((todo) => todo.completed === true));
-    } else {
-      setFilteredTodos(todos);
+    switch (filterBy) {
+      case Filter.active:
+        setFilteredTodos(todos.filter((todo) => todo.completed === false));
+        break;
+
+      case Filter.completed:
+        setFilteredTodos(todos.filter((todo) => todo.completed === true));
+        break;
+
+      default:
+        setFilteredTodos(todos);
+        break;
     }
   };
 
@@ -31,7 +38,7 @@ export const App: React.FC = () => {
         setFilteredTodos(result);
       })
       .catch(() => {
-        setError('Unable to load todos');
+        setError(ErrorsEnum.loadingTodos);
       });
   }, []);
 
@@ -45,7 +52,7 @@ export const App: React.FC = () => {
 
       <TodoContent todos={filteredTodos} filterTodos={filterTodos} />
 
-      {error !== '' && <Errors error={error} />}
+      {error && <Errors error={error} />}
     </div>
   );
 };
