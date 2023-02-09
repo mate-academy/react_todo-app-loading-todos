@@ -6,14 +6,14 @@ import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import { ErrorsEnum } from './types/ErrorsEnum';
+import { ErrorMessages } from './types/ErrorMessages';
 
 const USER_ID = 6232;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<ErrorsEnum | null>(null);
+  const [error, setError] = useState<ErrorMessages | null>(null);
 
   const filterTodos = (filterBy: Filter) => {
     switch (filterBy) {
@@ -38,7 +38,7 @@ export const App: React.FC = () => {
         setFilteredTodos(result);
       })
       .catch(() => {
-        setError(ErrorsEnum.loadingTodos);
+        setError(ErrorMessages.loadingTodos);
       });
   }, []);
 

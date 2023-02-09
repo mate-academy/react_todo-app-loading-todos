@@ -12,6 +12,11 @@ export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
     setIsEditActive(-1);
   };
 
+  const activateEdit = (title: string, id: number) => {
+    setTempTitle(title);
+    setIsEditActive(id);
+  };
+
   return (
     <section className="todoapp__main">
       {todos?.map((todo) => {
@@ -31,11 +36,9 @@ export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
                     value={tempTitle}
-                    onChange={
-                      (e: React.FormEvent<HTMLInputElement>) => {
-                        setTempTitle(e.currentTarget.value);
-                      }
-                    }
+                    onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                      setTempTitle(e.currentTarget.value);
+                    }}
                   />
                 </form>
               </>
@@ -43,10 +46,7 @@ export const TodoMain: React.FC<{ todos: Todo[] | null }> = ({ todos }) => {
               <>
                 <span
                   className="todo__title"
-                  onDoubleClick={() => {
-                    setTempTitle(title);
-                    setIsEditActive(id);
-                  }}
+                  onDoubleClick={() => activateEdit(title, id)}
                 >
                   {title}
                 </span>

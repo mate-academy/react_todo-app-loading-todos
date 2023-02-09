@@ -14,7 +14,7 @@ export const TodoFooter: React.FC<Props> = ({
   selectFilter,
   switchFilter,
 }) => {
-  const switchHandler = (filter: Filter) => {
+  const changeFilterBy = (filter: Filter) => {
     switch (filter) {
       case Filter.active:
         switchFilter(Filter.active);
@@ -41,7 +41,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectFilter === Filter.all,
           })}
-          onClick={() => switchHandler(Filter.all)}
+          onClick={() => changeFilterBy(Filter.all)}
         >
           All
         </a>
@@ -51,7 +51,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectFilter === Filter.active,
           })}
-          onClick={() => switchHandler(Filter.active)}
+          onClick={() => changeFilterBy(Filter.active)}
         >
           Active
         </a>
@@ -61,7 +61,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectFilter === Filter.completed,
           })}
-          onClick={() => switchHandler(Filter.completed)}
+          onClick={() => changeFilterBy(Filter.completed)}
         >
           Completed
         </a>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { ErrorsEnum } from '../../types/ErrorsEnum';
+import { ErrorsEnum } from '../../types/ErrorMessages';
 
 type Props = {
   error: ErrorsEnum | null;
