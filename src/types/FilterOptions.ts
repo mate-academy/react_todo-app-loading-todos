@@ -1,3 +1,5 @@
-export interface FilterOptions {
-  [key: string]: boolean
+export enum FilterOptions {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }

@@ -24,7 +24,7 @@ export const Todos: React.FC<Props> = ({
             <input
               type="checkbox"
               className="todo__status"
-              checked={completed}
+              defaultChecked={completed}
             />
           </label>
 

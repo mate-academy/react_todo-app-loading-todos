@@ -1,16 +1,16 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   message: string,
   hidden: boolean,
-  setHidden: () => void,
+  setHideNotification: Dispatch<SetStateAction<boolean>>,
 };
 
 export const Notification: React.FC<Props> = ({
   message,
   hidden,
-  setHidden,
+  setHideNotification,
 }) => {
   return (
     <>
@@ -25,7 +25,7 @@ export const Notification: React.FC<Props> = ({
           <button
             type="button"
             className="delete"
-            onClick={setHidden}
+            onClick={() => setHideNotification(true)}
           />
           {message}
 
