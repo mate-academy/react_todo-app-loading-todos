@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 
 import { Filter } from '../types/Filter';
@@ -27,7 +27,10 @@ export const Footer: React.FC<Props> = ({
     onChange(Filter.completed);
   };
 
-  const isSomeCompleted = visibleTodos?.some(todo => todo.completed);
+  const isSomeCompleted = useMemo(
+    () => visibleTodos?.some(todo => todo.completed),
+    [visibleTodos],
+  );
 
   return (
     <footer className="todoapp__footer">

@@ -12,7 +12,7 @@ const USER_ID = 6192;
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<Error>(Error.succes);
+  const [error, setError] = useState<Error>(Error.success);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
 
       <Content todos={allTodos} />
 
-      <Errors errorMessage={error} />
+      {!error.length || (<Errors errorMessage={error} />)}
     </div>
   );
 };

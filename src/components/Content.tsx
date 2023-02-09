@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Todo } from '../types/Todo';
 import { Header } from './Header';
@@ -33,7 +33,10 @@ export const Content: React.FC<Props> = ({ todos }) => {
     }));
   }, [visibleTodos, filter]);
 
-  const isAllActive = todos?.every(todo => !todo.completed);
+  const isAllActive = useMemo(
+    () => todos?.every(todo => todo.completed),
+    [todos],
+  );
 
   return (
     <div className="todoapp__content">
