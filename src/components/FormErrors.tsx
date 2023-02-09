@@ -1,29 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 
-export const FormErrors: React.FC = () => {
-  const [errors] = useState<string[]>([
-    'Unable to add todo',
-    'Unable to delete todo',
-    'Unable to update todo',
-  ]);
+type Props = {
+  errorMsg: string,
+  error: boolean,
+  setError: (error: boolean) => void,
+};
 
-  if (errors.length === 0) {
-    return null;
-  }
-
+export const FormErrors: React.FC<Props> = ({ errorMsg, error, setError }) => {
   return (
     <div
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: !errors,
+        hidden: !error,
       })}
     >
-      <button type="button" className="delete" />
-
-      {errors.map(error => (
-        <p>{error}</p>
-      ))}
+      <button
+        type="button"
+        className="delete"
+        onClick={() => setError(false)}
+      />
+      {errorMsg}
     </div>
   );
 };

@@ -6,9 +6,14 @@ type Props = {
   todos: Todo[],
   filter: string,
   setFilter: (filter: string) => void;
+  onClearCompleted: () => void,
 };
 
-export const FormFooter: React.FC<Props> = ({ todos, filter, setFilter }) => {
+export const FormFooter: React.FC<Props> = ({
+  todos, filter, setFilter, onClearCompleted,
+}) => {
+  const completedTodos = todos.filter(todo => todo.completed);
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -57,23 +62,18 @@ export const FormFooter: React.FC<Props> = ({ todos, filter, setFilter }) => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      {(todos.filter(todo => todo.completed)).length > 0
-        ? (
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-          >
-            Clear completed
-          </button>
-        )
-        : (
-          <button
-            type="button"
-            className="todoapp__clear-completed__no-completed"
-          >
-            Clear completed
-          </button>
-        )}
+      {completedTodos.length > 0 && (
+        <button
+          type="button"
+          className={classNames(
+            'todoapp__clear-completed',
+            { 'todoapp__clear-completed__no': completedTodos.length === 0 },
+          )}
+          onClick={() => onClearCompleted()}
+        >
+          Clear completed
+        </button>
+      )}
 
     </footer>
   );

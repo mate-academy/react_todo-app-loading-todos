@@ -6,12 +6,17 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[],
-  onAdd: (todoData: string) => void,
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void,
+  newTodoTitle: string,
+  setNewTodoTitle: (event: string) => void,
 };
 
-export const NewTodoForm: React.FC<Props> = ({ todos, onAdd }) => {
+export const NewTodoForm: React.FC<Props> = (
+  {
+    todos, onSubmit, newTodoTitle, setNewTodoTitle,
+  },
+) => {
   const [todo, setTodo] = useState<Todo>();
-  const [title, setTitle] = useState('');
 
   useEffect(() => {
     if (todo) {
@@ -30,20 +35,13 @@ export const NewTodoForm: React.FC<Props> = ({ todos, onAdd }) => {
       />
 
       {/* Add a todo on form submit */}
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        onAdd(title);
-        setTitle('');
-      }}
-      >
+      <form onSubmit={onSubmit}>
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={title}
-          onChange={(event) => {
-            setTitle(event.target.value);
-          }}
+          value={newTodoTitle}
+          onChange={(event) => setNewTodoTitle(event.target.value)}
         />
       </form>
     </header>

@@ -4,12 +4,14 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
-  selectedTodo: (id: number) => void;
   onRemove: (todoId: number) => void;
+  onTodoUpdate: (todo: Todo) => void;
 };
 
 export const FormMain: React.FC<Props> = (
-  { todos, selectedTodo, onRemove },
+  {
+    todos, onRemove, onTodoUpdate,
+  },
 ) => {
   return (
     <section className="todoapp__main">
@@ -26,9 +28,10 @@ export const FormMain: React.FC<Props> = (
               type="checkbox"
               className="todo__status"
               checked={todo.completed}
-              onClick={() => {
-                selectedTodo(todo.id);
-              }}
+              onChange={() => onTodoUpdate({
+                ...todo,
+                completed: !todo.completed,
+              })}
             />
           </label>
 
