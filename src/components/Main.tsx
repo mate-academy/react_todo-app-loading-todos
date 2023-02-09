@@ -4,11 +4,13 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   onTodos: Todo[]
+  onDeleteTodo: (value: number) => void
+  onUpdateTodo: (value: Todo) => void
 };
 
 export const Main: React.FC<Props>
 
-  = ({ onTodos }) => {
+  = ({ onTodos, onDeleteTodo, onUpdateTodo }) => {
     const [isEditing] = useState(false);
 
     return (
@@ -29,6 +31,10 @@ export const Main: React.FC<Props>
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
+                  onChange={() => onUpdateTodo({
+                    ...todo,
+                    completed: !todo.completed,
+                  })}
                 />
               </label>
 
@@ -57,6 +63,7 @@ export const Main: React.FC<Props>
                       type="button"
                       className="todo__remove"
                       data-cy="TodoDeleteButton"
+                      onClick={() => onDeleteTodo(todo.id)}
                     >
                       ×
                     </button>

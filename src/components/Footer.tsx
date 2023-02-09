@@ -7,13 +7,18 @@ type Props = {
   OnFilteredState: FilteredState
   onSetFilteredState: (value: FilteredState) => void
   todos: Todo[]
+  onDeleteTodo: (value: number) => void
 };
 
 export const Footer: React.FC<Props>
-  = ({ OnFilteredState, onSetFilteredState, todos }) => {
+  // eslint-disable-next-line object-curly-newline
+  = ({ OnFilteredState, onSetFilteredState, todos, onDeleteTodo }) => {
     const todosLeft = useMemo(() => {
       return todos.filter(todo => !todo.completed).length;
     }, [todos]);
+
+    // const activeTodos = todos.filter(todo => !todo.completed);
+    const completedTodos = todos.filter(todo => todo.completed);
 
     return (
       <footer className="todoapp__footer">
@@ -52,6 +57,7 @@ export const Footer: React.FC<Props>
               { selected: OnFilteredState === FilteredState.Completed },
             )}
             onClick={() => onSetFilteredState(FilteredState.Completed)}
+
           >
             Completed
           </a>
@@ -59,7 +65,16 @@ export const Footer: React.FC<Props>
 
         {/* don't show this button if there are no completed todos */}
 
-        <button type="button" className="todoapp__clear-completed">
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          onClick={() => {
+            completedTodos.forEach(todo => {
+              onDeleteTodo(todo.id);
+            });
+          }}
+
+        >
           Clear completed
         </button>
       </footer>

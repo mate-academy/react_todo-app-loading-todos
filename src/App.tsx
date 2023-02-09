@@ -17,6 +17,22 @@ export const App: React.FC = () => {
   const [filteredState, setFilteredState] = useState(FilteredState.All);
   const [errorMessage, setErrorMessage] = React.useState('');
 
+  const deleteTodo = (todoId: number) => {
+    setTodos(currentTodo => currentTodo.filter(todo => todo.id !== todoId));
+  };
+
+  const updateTodo = (todoToUpdate: Todo) => {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === todoToUpdate.id) {
+          return todoToUpdate;
+        }
+
+        return todo;
+      }),
+    );
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -63,12 +79,15 @@ export const App: React.FC = () => {
         />
         <Main
           onTodos={visibleTodos}
+          onDeleteTodo={deleteTodo}
+          onUpdateTodo={updateTodo}
         />
         {todos.length > 0 && (
           <Footer
             OnFilteredState={filteredState}
             onSetFilteredState={setFilteredState}
             todos={todos}
+            onDeleteTodo={deleteTodo}
           />
         )}
       </div>
