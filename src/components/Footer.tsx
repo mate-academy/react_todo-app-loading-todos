@@ -17,7 +17,6 @@ export const Footer: React.FC<Props>
       return todos.filter(todo => !todo.completed).length;
     }, [todos]);
 
-    // const activeTodos = todos.filter(todo => !todo.completed);
     const completedTodos = todos.filter(todo => todo.completed);
 
     return (
@@ -26,7 +25,6 @@ export const Footer: React.FC<Props>
           {`${todosLeft} items left`}
         </span>
 
-        {/* Active filter should have a 'selected' class */}
         <nav className="filter">
           <a
             href="#/"
@@ -62,8 +60,6 @@ export const Footer: React.FC<Props>
             Completed
           </a>
         </nav>
-
-        {/* don't show this button if there are no completed todos */}
 
         <button
           type="button"

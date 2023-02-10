@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredState, setFilteredState] = useState(FilteredState.All);
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const deleteTodo = (todoId: number) => {
     setTodos(currentTodo => currentTodo.filter(todo => todo.id !== todoId));
@@ -37,15 +37,16 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  let visibleTodos = [...todos];
-
-  if (filteredState === FilteredState.Active) {
-    visibleTodos = visibleTodos.filter(todo => !todo.completed);
-  }
-
-  if (filteredState === FilteredState.Completed) {
-    visibleTodos = visibleTodos.filter(todo => todo.completed);
-  }
+  const visibleTodos = todos.filter(todo => {
+    switch (filteredState) {
+      case FilteredState.Active:
+        return !todo.completed;
+      case FilteredState.Completed:
+        return todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   const addTodo = (newTodo: Todo) => {
     return setTodos([...todos, newTodo]);

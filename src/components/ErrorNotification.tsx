@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
 import React, { useEffect } from 'react';
+import { Error } from '../types/Error';
 
 type Props = {
   errorMessage: string;
@@ -13,7 +14,7 @@ export const ErrorNotification: React.FC<Props> = ({
 }) => {
   useEffect(() => {
     setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(Error.noError);
     }, 3000);
   }, []);
 
@@ -29,7 +30,7 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => setErrorMessage(Error.noError)}
       />
       {errorMessage}
     </div>
