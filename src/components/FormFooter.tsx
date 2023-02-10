@@ -5,19 +5,26 @@ import { Todo } from '../types/Todo';
 type Props = {
   todos: Todo[],
   filter: string,
-  setFilter: (filter: string) => void;
+  setFilter: (filter: Filters) => void;
   onClearCompleted: () => void,
 };
+
+enum Filters {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
 
 export const FormFooter: React.FC<Props> = ({
   todos, filter, setFilter, onClearCompleted,
 }) => {
   const completedTodos = todos.filter(todo => todo.completed);
+  const unCompletedTodos = todos.filter(todo => !todo.completed);
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${(todos.filter(todo => !todo.completed)).length} items left`}
+        {`${unCompletedTodos.length} items left`}
       </span>
 
       <nav className="filter">
@@ -28,7 +35,7 @@ export const FormFooter: React.FC<Props> = ({
             { selected: filter === 'all' },
           )}
           onClick={() => {
-            setFilter('all');
+            setFilter(Filters.All);
           }}
         >
           All
@@ -41,7 +48,7 @@ export const FormFooter: React.FC<Props> = ({
             { selected: filter === 'active' },
           )}
           onClick={() => {
-            setFilter('active');
+            setFilter(Filters.Active);
           }}
         >
           Active
@@ -54,7 +61,7 @@ export const FormFooter: React.FC<Props> = ({
             { selected: filter === 'completed' },
           )}
           onClick={() => {
-            setFilter('completed');
+            setFilter(Filters.Completed);
           }}
         >
           Completed

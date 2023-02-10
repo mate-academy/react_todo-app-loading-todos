@@ -12,12 +12,26 @@ import { FormErrors } from './components/FormErrors';
 
 const USER_ID = 6146;
 
+enum Filters {
+  Active = 'active',
+  Completed = 'completed',
+  All = 'all',
+}
+
+enum ErrorMessage {
+  Loading = 'Unable to load todos',
+  Adding = 'Unable to add todo',
+  Deleting = 'Unable to delete todo',
+  Updating = 'Unable to update todo',
+  Empty = 'Title cant be empty',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<Filters>(Filters.All);
   const [newTodoTitle, setNewTodoTitle] = useState('');
 
   useEffect(() => {
@@ -25,7 +39,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setError(true);
-        setErrorMsg('Unable to load todos');
+        setErrorMsg(ErrorMessage.Loading);
 
         setTimeout(() => {
           setError(false);
@@ -42,7 +56,7 @@ export const App: React.FC = () => {
   const addTodo = (todoData: Omit<Todo, 'id'>) => {
     createTodo(todoData)
       .then(newTodo => setTodos([...todos, newTodo]))
-      .catch(() => setErrorMsg('Unable to add todo'));
+      .catch(() => setErrorMsg(ErrorMessage.Adding));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -62,9 +76,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter((td) => {
     switch (filter) {
-      case 'active':
+      case Filters.Active:
         return !td.completed;
-      case 'completed':
+      case Filters.Completed:
         return td.completed;
       default:
         return true;
@@ -76,7 +90,7 @@ export const App: React.FC = () => {
       .then(() => {
         setTodos(todos.filter(td => td.id !== todoId));
       })
-      .catch(() => setErrorMsg('Unable to delete todo'));
+      .catch(() => setErrorMsg(ErrorMessage.Deleting));
   };
 
   const todoUpdate = (todoToUpdate: Todo) => {
@@ -92,7 +106,7 @@ export const App: React.FC = () => {
           }),
         );
       })
-      .catch(() => setErrorMsg('Unable to update todo'));
+      .catch(() => setErrorMsg(ErrorMessage.Updating));
   };
 
   const completedTodos = todos.filter(td => td.completed);
