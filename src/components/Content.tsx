@@ -13,7 +13,7 @@ type Props = {
 
 export const Content: React.FC<Props> = ({ todos }) => {
   const [filter, setFilter] = useState<Filter>(Filter.all);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     setVisibleTodos(todos.filter(todo => {

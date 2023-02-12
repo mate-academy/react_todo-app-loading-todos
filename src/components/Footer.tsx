@@ -5,9 +5,9 @@ import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  visibleTodos: Todo[] | null
-  filter: Filter
-  onChange: (selector: Filter) => void
+  visibleTodos: Todo[],
+  filter: Filter,
+  onChange: (selector: Filter) => void,
 };
 
 export const Footer: React.FC<Props> = ({
@@ -28,14 +28,14 @@ export const Footer: React.FC<Props> = ({
   };
 
   const isSomeCompleted = useMemo(
-    () => visibleTodos?.some(todo => todo.completed),
+    () => visibleTodos.some(todo => todo.completed),
     [visibleTodos],
   );
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${visibleTodos?.length} items left`}
+        {`${visibleTodos.length} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
