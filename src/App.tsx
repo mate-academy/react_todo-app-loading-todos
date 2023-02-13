@@ -69,7 +69,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
 
-        {/* Hide the footer if there are no todos */}
         <Header
           onNewTitle={newTitle}
           onSetNewTitle={setNewTitle}
