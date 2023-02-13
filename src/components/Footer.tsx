@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../types/Todo';
 
@@ -17,8 +18,23 @@ enum Filters {
 export const Footer: React.FC<Props> = ({
   todos, filter, setFilter, onClearCompleted,
 }) => {
+  const completedTodos = todos.filter(todo => todo.completed).length;
   const unCompletedTodos = todos.filter(todo => !todo.completed).length;
-  const showClearButton = todos.some(todo => todo.completed);
+
+  const filters = [
+    {
+      label: 'All',
+      filter: Filters.All,
+    },
+    {
+      label: 'Active',
+      filter: Filters.Active,
+    },
+    {
+      label: 'Completed',
+      filter: Filters.Completed,
+    },
+  ];
 
   return (
     <footer className="todoapp__footer">
@@ -27,35 +43,24 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter">
-        <button
-          type="button"
-          className={filter === 'all'
-            ? 'filter__link selected' : 'filter__link'}
-          onClick={() => setFilter(Filters.All)}
-        >
-          All
-        </button>
-
-        <button
-          type="button"
-          className={filter === 'active'
-            ? 'filter__link selected' : 'filter__link'}
-          onClick={() => setFilter(Filters.Active)}
-        >
-          Active
-        </button>
-
-        <button
-          type="button"
-          className={filter === 'completed'
-            ? 'filter__link selected' : 'filter__link'}
-          onClick={() => setFilter(Filters.Completed)}
-        >
-          Completed
-        </button>
+        {filters.map((f) => (
+          <a
+            href="#/"
+            key={f.filter}
+            className={classNames(
+              'filter__link',
+              { selected: filter === f.filter },
+            )}
+            onClick={() => {
+              setFilter(f.filter);
+            }}
+          >
+            {f.label}
+          </a>
+        ))}
       </nav>
 
-      {showClearButton && (
+      {completedTodos > 0 && (
         <button
           type="button"
           className="todoapp__clear-completed"
@@ -64,7 +69,6 @@ export const Footer: React.FC<Props> = ({
           Clear completed
         </button>
       )}
-
     </footer>
   );
 };

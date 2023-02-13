@@ -1,7 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { getTodo } from '../api/todos';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -16,14 +14,6 @@ export const Todos: React.FC<Props> = (
     todos, onSubmit, newTodoTitle, setNewTodoTitle,
   },
 ) => {
-  const [todo, setTodo] = useState<Todo>();
-
-  useEffect(() => {
-    if (todo) {
-      getTodo(todo.id).then(setTodo);
-    }
-  });
-
   return (
     <header className="todoapp__header">
       <button
