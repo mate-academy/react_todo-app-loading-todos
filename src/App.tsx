@@ -32,7 +32,7 @@ export const App: React.FC = () => {
 
         setTimeout(() => {
           setError(false);
-        }, 500);
+        }, 3000);
       });
   }, []);
 
