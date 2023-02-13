@@ -8,14 +8,15 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilterState } from './types/FilterState';
 import { Todo } from './types/Todo';
+import { Error } from './types/ErrorMessage';
 
 const USER_ID = 6268;
 
 export const App: React.FC = () => {
   const [todoTitle, setTodoTitile] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterState, setFilterState] = useState(FilterState.All);
-  const [error, setError] = useState('');
+  const [filterBy, setFilterBy] = useState(FilterState.All);
+  const [error, setError] = useState(Error.NoError);
   const user = useContext(AuthContext);
 
   const getTodosFromServer = async () => {
@@ -28,7 +29,7 @@ export const App: React.FC = () => {
 
       setTodos(todosFromServer);
     } catch (err) {
-      setError('No todos were loaded!');
+      setError(Error.Error);
     }
   };
 
@@ -40,7 +41,9 @@ export const App: React.FC = () => {
     setTodos([...todos, newTodo]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     const newTodo = {
       id: Date.now(),
       userId: USER_ID,
@@ -62,19 +65,19 @@ export const App: React.FC = () => {
         <Header
           onTodoTitle={todoTitle}
           onSetTodoTitle={setTodoTitile}
-          onHandleSubmit={handleSubmit}
+          onHandleSubmit={() => handleSubmit}
         />
 
         <TodoList
           todos={todos}
-          filterState={filterState}
+          filterBy={filterBy}
         />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
-            filterState={filterState}
-            onSetFilterState={setFilterState}
+            filterState={filterBy}
+            setFilterBy={setFilterBy}
             todos={todos}
           />
         )}

@@ -5,15 +5,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  filterState: FilterState;
+  filterBy: FilterState;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  filterState,
+  filterBy,
 }) => {
   const visibleTodos = todos.filter(todo => {
-    switch (filterState) {
+    switch (filterBy) {
       case FilterState.Active:
         return !todo.completed;
       case FilterState.Completed:

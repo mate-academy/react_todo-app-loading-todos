@@ -5,22 +5,22 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   filterState: FilterState,
-  onSetFilterState: (value: FilterState) => void,
+  setFilterBy: (value: FilterState) => void,
   todos: Todo[]
 };
 
 export const Footer: React.FC<Props> = ({
   filterState,
-  onSetFilterState,
+  setFilterBy,
   todos,
 }) => {
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const activeTodosCount = activeTodos.length;
+  // const activeTodos = todos.filter(todo => !todo.completed);
+  // const activeTodosCount = activeTodos.length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${activeTodosCount} items left`}
+        {`${todos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -31,7 +31,7 @@ export const Footer: React.FC<Props> = ({
             cn('filter__link',
               { selected: filterState === FilterState.All })
           }
-          onClick={() => onSetFilterState(FilterState.All)}
+          onClick={() => setFilterBy(FilterState.All)}
         >
           All
         </a>
@@ -43,7 +43,7 @@ export const Footer: React.FC<Props> = ({
             cn('filter__link',
               { selected: filterState === FilterState.Active })
           }
-          onClick={() => onSetFilterState(FilterState.Active)}
+          onClick={() => setFilterBy(FilterState.Active)}
         >
           Active
         </a>
@@ -54,7 +54,7 @@ export const Footer: React.FC<Props> = ({
             cn('filter__link',
               { selected: filterState === FilterState.Completed })
           }
-          onClick={() => onSetFilterState(FilterState.Completed)}
+          onClick={() => setFilterBy(FilterState.Completed)}
         >
           Completed
         </a>
