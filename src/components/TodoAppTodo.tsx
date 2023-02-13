@@ -19,7 +19,7 @@ export const TodoAppTodo: React.FC<Props> = ({ todo, deleteHandler }) => {
         <input
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          // checked={todo.completed}
         />
       </label>
 

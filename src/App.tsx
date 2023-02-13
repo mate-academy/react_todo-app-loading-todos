@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
+import { TypeError } from './types/TypeError';
 import { UserWarning } from './UserWarning';
 import { TodoAppHeader } from './components/TodoAppHeader';
 import { TodoAppTodo } from './components/TodoAppTodo';
@@ -14,13 +15,47 @@ const USER_ID = 6270;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [typeError, setTypeError] = useState('');
-  const [errorHidden, setErrorHidden] = useState(true);
+  const [textError, setTextError] = useState('');
   const [timerIdError, setTimerIdError] = useState<NodeJS.Timeout | null>(null);
   const [filterByStatus, setFilterByStatus] = useState(Status.All);
 
   const activeTodos = todos.filter(todo => !todo.completed);
-  const allTodosCompleted = todos.every(todo => todo.completed);
+  const areAllTodosCompleted = todos.every(todo => todo.completed);
   let visibleTodos;
+
+  const getErrorText = () => {
+    return typeError === 'unexpected'
+      ? 'Unexpected error'
+      : `Unable to ${textError} a todo`;
+  };
+
+  const deleteHandler = () => {
+    setTypeError('');
+
+    deleteTodo()
+      .catch(() => {
+        setTypeError(TypeError.Delete);
+        setTextError(TypeError.Delete);
+      });
+  };
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(loadedTodos => setTodos(loadedTodos))
+      .catch(() => {
+        setTypeError(TypeError.Unexpected);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (timerIdError) {
+      clearTimeout(timerIdError);
+    }
+
+    const timerId = setTimeout(setTypeError, 3000, '');
+
+    setTimerIdError(timerId);
+  }, [typeError]);
 
   switch (filterByStatus) {
     case Status.Active:
@@ -36,36 +71,6 @@ export const App: React.FC = () => {
       break;
   }
 
-  const getErrorText = () => {
-    return typeError.length > 0
-      ? `Unable to ${typeError} a todo`
-      : 'Unexpected error';
-  };
-
-  const deleteHandler = () => {
-    setErrorHidden(true);
-    if (timerIdError) {
-      clearTimeout(timerIdError);
-    }
-
-    deleteTodo()
-      .catch(() => {
-        setTypeError('delete');
-        setErrorHidden(false);
-        const timerId = setTimeout(setErrorHidden, 3000, true);
-
-        setTimerIdError(timerId);
-      });
-  };
-
-  useEffect(() => {
-    getTodos(USER_ID)
-      .then(loadedTodos => setTodos(loadedTodos))
-      .catch(() => {
-        setErrorHidden(false);
-      });
-  }, []);
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -75,7 +80,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoAppHeader allTodosCompleted={allTodosCompleted} />
+        <TodoAppHeader allTodosCompleted={areAllTodosCompleted} />
 
         {todos.length > 0 && (
           <>
@@ -104,13 +109,13 @@ export const App: React.FC = () => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: errorHidden },
+          { hidden: typeError.length === 0 },
         )}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => setErrorHidden(true)}
+          onClick={() => setTypeError('')}
         />
         {getErrorText()}
       </div>
