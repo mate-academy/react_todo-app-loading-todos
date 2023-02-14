@@ -3,7 +3,10 @@ export const warningTimer = <T>(
   value: T,
   delay: number,
 ) => {
-  setTimeout(() => {
+  let timerId;
+
+  clearInterval(timerId);
+  timerId = setTimeout(() => {
     callback(value);
   }, delay);
 };

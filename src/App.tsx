@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [hasError, setHasError] = useState(false);
-  const hasActiveTodos = todos.some(todo => todo.completed === false);
+  const hasActiveTodos = todos.filter(todo => !todo.completed);
   const hasCompletedTodos = todos.some(todo => todo.completed === true);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header hasActiveTodos={hasActiveTodos} />
+        <Header hasActiveTodos={hasActiveTodos.length} />
 
         <section className="todoapp__main">
           {visibleTodos.map(todo => (
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {!!todos.length && (
           <Footer
-            quantity={todos.length}
+            quantity={hasActiveTodos.length}
             filterBy={filterBy}
             setFilterBy={setFilterBy}
             hasCompletedTodos={hasCompletedTodos}

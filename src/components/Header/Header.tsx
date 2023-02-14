@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 
 type Props = {
-  hasActiveTodos: boolean,
+  hasActiveTodos: number,
 };
 
 export const Header: React.FC<Props> = ({ hasActiveTodos }) => {
