@@ -13,3 +13,13 @@ export const getTodo = (id: number): Promise<Todo> => {
 export const createTodo = (newTodo: Omit<Todo, 'id'>): Promise<Todo> => {
   return client.post('/todos', newTodo);
 };
+
+export const removeTodo = (id: number) => {
+  return client.delete(`/todos/${id}`);
+};
+
+export const refreshTodo = ({
+  id, title, completed, userId,
+}: Todo) => {
+  return client.patch(`/todos/${id}`, { title, completed, userId });
+};
