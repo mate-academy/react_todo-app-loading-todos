@@ -16,7 +16,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [typeError, setTypeError] = useState('');
   const [textError, setTextError] = useState('');
-  const [timerIdError, setTimerIdError] = useState<NodeJS.Timeout | null>(null);
   const [filterByStatus, setFilterByStatus] = useState(Status.All);
 
   const activeTodos = todos.filter(todo => !todo.completed);
@@ -48,13 +47,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (timerIdError) {
-      clearTimeout(timerIdError);
-    }
-
     const timerId = setTimeout(setTypeError, 3000, '');
 
-    setTimerIdError(timerId);
+    return () => clearTimeout(timerId);
   }, [typeError]);
 
   switch (filterByStatus) {
