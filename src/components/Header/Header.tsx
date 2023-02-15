@@ -10,7 +10,7 @@ type Props = {
 export const Header: React.FC<Props> = ({ userId }) => {
   const [todoTitle, setTodoTitle] = useState('');
 
-  const handlePostTodo = () => {
+  const createTodo = () => {
     postTodo(userId, todoTitle);
   };
 
@@ -23,7 +23,7 @@ export const Header: React.FC<Props> = ({ userId }) => {
       />
 
       {/* Add a todo on form submit */}
-      <form onSubmit={() => handlePostTodo()}>
+      <form onSubmit={() => createTodo()}>
         <input
           type="text"
           className="todoapp__new-todo"

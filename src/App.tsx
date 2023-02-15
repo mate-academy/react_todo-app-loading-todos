@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
-import { ShowError } from './components/ShowError/ShowError';
+import { ShowError as Error } from './components/Error/Error';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
@@ -15,11 +15,11 @@ const USER_ID = 6156;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [todoFilter, setTodoFilter] = useState('All');
+  const [todoFilter, setTodoFilter] = useState(FilterBy.all);
   const [error] = useState('');
 
   const isAnyTodoCompleted
-    = Boolean(todos.filter(todo => todo.completed).length);
+    = todos.some(todo => todo.completed);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -33,23 +33,24 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleFilterClick = (filter: FilterBy) => {
-    if (todoFilter !== filter) {
-      setTodoFilter(filter);
+  const changeTodosFilter = (filter: FilterBy) => {
+    if (todoFilter === filter) {
+      return;
+    }
 
+    setTodoFilter(filter);
+
+    setVisibleTodos(todos.filter(todo => {
       switch (filter) {
         case FilterBy.all:
         default:
-          setVisibleTodos(todos);
-          break;
+          return true;
         case FilterBy.active:
-          setVisibleTodos(todos.filter(todo => !todo.completed));
-          break;
+          return !todo.completed;
         case FilterBy.completed:
-          setVisibleTodos(todos.filter(todo => todo.completed));
-          break;
+          return todo.completed;
       }
-    }
+    }));
   };
 
   return (
@@ -64,13 +65,13 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <TodoFilter
             filter={todoFilter}
-            onFilterClick={handleFilterClick}
+            filterTodos={changeTodosFilter}
             renderClearCompleted={isAnyTodoCompleted}
           />
         )}
       </div>
 
-      <ShowError error={error} />
+      <Error error={error} />
     </div>
   );
 };
