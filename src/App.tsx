@@ -9,6 +9,7 @@ import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
 import { Header } from './components/Header/Header';
 import { FilterBy } from './types/Filter';
+import { ErrorOf } from './types/Error';
 
 const USER_ID = 6156;
 
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [todoFilter, setTodoFilter] = useState(FilterBy.all);
-  const [error] = useState('');
+  const [error] = useState(ErrorOf.none);
 
   const isAnyTodoCompleted
     = todos.some(todo => todo.completed);
