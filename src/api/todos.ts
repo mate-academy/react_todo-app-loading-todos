@@ -9,7 +9,7 @@ export const postTodo = (userId: number, title: string) => {
   const todo = {
     userId,
     title,
-    id: new Date(),
+    id: Date.now(),
   };
 
   client.post<Todo>(`/todos?userId=${userId}`, todo);
