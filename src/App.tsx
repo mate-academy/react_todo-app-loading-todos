@@ -65,7 +65,7 @@ export const App: React.FC = () => {
         <Header
           onTodoTitle={todoTitle}
           onSetTodoTitle={setTodoTitile}
-          onHandleSubmit={() => handleSubmit}
+          onHandleSubmit={handleSubmit}
         />
 
         <TodoList

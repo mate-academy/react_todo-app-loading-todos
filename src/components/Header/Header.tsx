@@ -3,7 +3,7 @@
 type Props = {
   onTodoTitle: string,
   onSetTodoTitle: (value: string) => void,
-  onHandleSubmit: () => void
+  onHandleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 };
 
 export const Header: React.FC<Props> = ({
