@@ -7,7 +7,7 @@ type Props = {
   error: string,
 };
 
-export const ShowError: React.FC<Props> = ({ error }) => {
+export const Error: React.FC<Props> = ({ error }) => {
   const [isHidden, setIsHidden] = useState(true);
 
   useEffect(() => {

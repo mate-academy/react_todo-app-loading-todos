@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
-import { ShowError as Error } from './components/Error/Error';
+import { Error } from './components/Error/Error';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
