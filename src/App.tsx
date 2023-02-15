@@ -5,7 +5,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
-import { FilteredState } from './types/filteredState';
+import { FilteredState } from './types/FilteredState';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 

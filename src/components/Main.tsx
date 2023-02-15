@@ -9,7 +9,6 @@ type Props = {
 };
 
 export const Main: React.FC<Props>
-
   = ({ onTodos, onDeleteTodo, onUpdateTodo }) => {
     const [isEditing] = useState(false);
 
@@ -17,11 +16,12 @@ export const Main: React.FC<Props>
       <section className="todoapp__main">
         {onTodos.map(todo => (
           <>
-
-            <div className={cn(
-              'todo',
-              { completed: todo.completed },
-            )}
+            <div
+              key={todo.id}
+              className={cn(
+                'todo',
+                { completed: todo.completed },
+              )}
             >
               <label
                 className="todo__status-label"
@@ -39,7 +39,6 @@ export const Main: React.FC<Props>
               </label>
 
               {isEditing ? (
-
                 <form>
                   <input
                     data-cy="TodoTitleField"
@@ -49,7 +48,6 @@ export const Main: React.FC<Props>
                     value={todo.title}
                   />
                 </form>
-
               )
                 : (
                   <>
@@ -69,7 +67,6 @@ export const Main: React.FC<Props>
                     </button>
                   </>
                 )}
-
               <div
                 data-cy="TodoLoader"
                 className="modal overlay"

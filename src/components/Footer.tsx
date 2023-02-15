@@ -1,6 +1,5 @@
 import cn from 'classnames';
-import { useMemo } from 'react';
-import { FilteredState } from '../types/filteredState';
+import { FilteredState } from '../types/FilteredState';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -13,16 +12,14 @@ type Props = {
 export const Footer: React.FC<Props>
   // eslint-disable-next-line object-curly-newline
   = ({ OnFilteredState, onSetFilteredState, todos, onDeleteTodo }) => {
-    const todosLeft = useMemo(() => {
-      return todos.filter(todo => !todo.completed).length;
-    }, [todos]);
-
     const completedTodos = todos.filter(todo => todo.completed);
+
+    const todosLeft = todos.filter(todo => !todo.completed);
 
     return (
       <footer className="todoapp__footer">
         <span className="todo-count">
-          {`${todosLeft} items left`}
+          {`${todosLeft.length} items left`}
         </span>
 
         <nav className="filter">
@@ -60,19 +57,21 @@ export const Footer: React.FC<Props>
             Completed
           </a>
         </nav>
+        {todos.find(todo => todo.completed) && (
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            onClick={() => {
+              completedTodos.forEach(todo => {
+                onDeleteTodo(todo.id);
+              });
+            }}
 
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          onClick={() => {
-            completedTodos.forEach(todo => {
-              onDeleteTodo(todo.id);
-            });
-          }}
+          >
+            Clear completed
+          </button>
 
-        >
-          Clear completed
-        </button>
+        )}
       </footer>
     );
   };
