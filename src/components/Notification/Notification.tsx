@@ -1,25 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 type Props = {
   hasError: boolean,
+  setHasError: (bool: boolean) => void
   errorMessage: string,
-  onClear: () => void
 };
 
 export const Notification: React.FC<Props> = ({
   hasError,
+  setHasError,
   errorMessage,
-  onClear,
 }) => {
+  const [isHidden, setIsHidden] = useState(true);
+
+  const closeNotification = () => {
+    const timeId = window.setTimeout(() => {
+      setIsHidden(true);
+      setHasError(false);
+    }, 3000);
+
+    window.clearTimeout(timeId);
+  };
+
   useEffect(() => {
-    setInterval(onClear, 3000);
-  }, [errorMessage]);
+    if (hasError) {
+      setIsHidden(false);
+      closeNotification();
+    } else {
+      setIsHidden(true);
+    }
+  }, [hasError]);
 
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !hasError },
+      { hidden: isHidden },
     )}
     >
 
@@ -27,9 +43,10 @@ export const Notification: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={onClear}
+        onClick={() => {
+          setIsHidden(true);
+        }}
       />
-
       {errorMessage}
     </div>
   );

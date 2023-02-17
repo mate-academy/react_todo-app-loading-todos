@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -8,14 +8,16 @@ import { TodoList } from './components/TodoList';
 import { ErrorMessages } from './types/ErrorMessages';
 import { FilterBy } from './types/FilterBy';
 import { Todo } from './types/Todo';
+import { getVisibleTodos } from './utils/getVisibleTodos';
 
 const USER_ID = 6315;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState(FilterBy.ALL);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(ErrorMessages.NONE);
+  const [errorMessage, setErrorMessage]
+    = useState<ErrorMessages>(ErrorMessages.NONE);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -28,29 +30,11 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const visibleTodos = todos.filter(todo => {
-    switch (filterBy) {
-      case FilterBy.ALL:
-        return true;
-
-      case FilterBy.ACTIVE:
-        return !todo.completed;
-
-      case FilterBy.COMPLETED:
-        return todo.completed;
-
-      default:
-        throw new Error('error!');
-    }
-  });
+  const visibleTodos = getVisibleTodos(todos, filterBy);
 
   const countActiveTodos = todos.filter(todo => !todo.completed).length;
   const isFooterVisible = !!todos.length;
   const isClearButtonVisible = !!(todos.length - countActiveTodos);
-
-  const clearNotification = useCallback(() => {
-    setHasError(false);
-  }, []);
 
   return (
     <div className="todoapp">
@@ -73,8 +57,8 @@ export const App: React.FC = () => {
 
       <Notification
         hasError={hasError}
+        setHasError={setHasError}
         errorMessage={errorMessage}
-        onClear={clearNotification}
       />
     </div>
   );
