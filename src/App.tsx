@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -36,6 +36,10 @@ export const App: React.FC = () => {
   const isFooterVisible = !!todos.length;
   const isClearButtonVisible = !!(todos.length - countActiveTodos);
 
+  const clearNotification = useCallback(() => {
+    setHasError(false);
+  }, []);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -57,8 +61,8 @@ export const App: React.FC = () => {
 
       <Notification
         hasError={hasError}
-        setHasError={setHasError}
         errorMessage={errorMessage}
+        onClear={clearNotification}
       />
     </div>
   );
