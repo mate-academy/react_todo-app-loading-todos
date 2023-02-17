@@ -26,8 +26,6 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn(error);
         setErrorMessage(ErrorMessage.SHOW);
         setHasError(true);
       }
