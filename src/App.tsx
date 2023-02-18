@@ -6,7 +6,7 @@ import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer/Footer';
-import { ErrorMessage } from './components/ErrorMessages';
+import { ErrorMessage } from './components/ErrorMessage';
 
 // utils for loading
 import { getTodos } from './api/todos';
