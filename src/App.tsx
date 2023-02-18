@@ -5,9 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import cn from 'classnames';
 import { prepareTodos } from './utils/prepareTodos';
-import { NewFormTodo } from './components/NewFormTodo';
 import { TodoList } from './components/TodoList';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
@@ -16,6 +14,7 @@ import { Notifications } from './components/Notifications';
 import { ErrorType } from './types/ErrorType';
 import { FilterBy } from './types/FilterBy';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 
 const USER_ID = 6332;
 
@@ -24,6 +23,7 @@ export const App: React.FC = () => {
   const [errorType, setErrorType] = useState<ErrorType>(ErrorType.LOAD);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [hasError, setHasError] = useState(false);
+  const [title, setTitle] = useState('');
 
   const fetchTodos = async () => {
     try {
@@ -72,11 +72,11 @@ export const App: React.FC = () => {
 
   const notCompletedTodos = todos.filter(todo => !todo.completed).length;
 
-  const isAllActiveTodos = useMemo(() => { // add class on button in header
+  const isAllTodosActive = useMemo(() => { // add class on button in header
     return todos.every(todo => todo.completed);
   }, [todos, notCompletedTodos]); // depends on has all todo completed true
 
-  const isFooterVisible = !!todos.length;
+  const isTodosNotEmpty = !!todos.length;
   const isClearButtonVisible = todos.some(todo => todo.completed);
 
   if (!USER_ID) {
@@ -88,30 +88,21 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-
-          {todos.length > 0 && (
-            <button
-              type="button"
-              className={cn('todoapp__toggle-all',
-                {
-                  active: isAllActiveTodos,
-                })}
-            />
-          )}
-
-          <NewFormTodo />
-
-        </header>
+        <Header
+          isAllTodosActive={isAllTodosActive}
+          isTodosNotEmpty={isTodosNotEmpty}
+          title={title}
+          onTitleChange={setTitle}
+        />
 
         {visibleTodos.length > 0 && (
           <TodoList todos={visibleTodos} />
         )}
 
-        {isFooterVisible && (
+        {isTodosNotEmpty && (
           <Footer
             filterBy={filterBy}
-            setFilterBy={setFilterBy}
+            onFilterBy={setFilterBy}
             notCompletedTodos={notCompletedTodos}
             isClearButtonVisible={isClearButtonVisible}
           />

@@ -3,14 +3,14 @@ import cn from 'classnames';
 import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
-  setFilterBy: (filter: FilterBy) => void,
+  onFilterBy: (filter: FilterBy) => void,
   filterBy: FilterBy,
   notCompletedTodos:number,
   isClearButtonVisible: boolean;
 };
 
 export const Footer: React.FC<Props> = React.memo(({
-  setFilterBy,
+  onFilterBy,
   filterBy,
   notCompletedTodos,
   isClearButtonVisible,
@@ -29,7 +29,7 @@ export const Footer: React.FC<Props> = React.memo(({
               selected: filterBy === FilterBy.ALL,
             })}
           onClick={() => {
-            setFilterBy(FilterBy.ALL);
+            onFilterBy(FilterBy.ALL);
           }}
         >
           All
@@ -42,7 +42,7 @@ export const Footer: React.FC<Props> = React.memo(({
               selected: filterBy === FilterBy.ACTIVE,
             })}
           onClick={() => {
-            setFilterBy(FilterBy.ACTIVE);
+            onFilterBy(FilterBy.ACTIVE);
           }}
         >
           Active
@@ -55,7 +55,7 @@ export const Footer: React.FC<Props> = React.memo(({
               selected: filterBy === FilterBy.COMPLETED,
             })}
           onClick={() => {
-            setFilterBy(FilterBy.COMPLETED);
+            onFilterBy(FilterBy.COMPLETED);
           }}
         >
           Completed
