@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
 import React, { Dispatch, SetStateAction } from 'react';
 import { Error } from '../types/Error';
 
@@ -28,10 +30,15 @@ export const ErrorMessage: React.FC<Props> = ({ error, onDeleteClick }) => {
 
   return (
     <div
-      className="notification is-danger is-light has-text-weight-normal"
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        { hidden: error === Error.NONE },
+      )}
     >
       <>{errorText()}</>
-      {/* eslint-disable-next-line */}
       <button
         type="button"
         className="delete"
