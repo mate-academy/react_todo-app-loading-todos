@@ -16,10 +16,12 @@ export const Notification: React.FC<Props> = ({ error, closeNotification }) => {
 
   return (
     <div
-      className={classNames('notification is-danger is-light has-text-weight-normal', {
-        hidden: error === ErrorMessage.None,
-      })}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: error === ErrorMessage.None },
+      )}
     >
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className="delete"
