@@ -23,7 +23,6 @@ export const Footer: React.FC<Props> = ({
         {`${itemsLeft.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"

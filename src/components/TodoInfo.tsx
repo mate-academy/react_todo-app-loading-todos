@@ -1,20 +1,78 @@
+import { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { deleteTodo, toogleTodo } from '../api/todos';
 
 type Props = {
   todo: Todo;
+  handleUpdateTodo: (todoId: number, todo: Todo) => void;
+  onSetErrorMessage: (str: string) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo }) => {
+export const TodoInfo: React.FC<Props> = ({
+  todo,
+  handleUpdateTodo,
+  onSetErrorMessage,
+}) => {
   const { title, completed } = todo;
+  const [isEditing, setIsEditing] = useState(false);
+  const [todoTitle, setTodoTitle] = useState(title);
 
-  const removeTodo = (todoId: number) => {
-    deleteTodo(todoId);
+  const removeTodo = async (todoId: number) => {
+    try {
+      await deleteTodo(todoId);
+    } catch {
+      onSetErrorMessage('Unable to delete a todo');
+    }
   };
 
-  const handleClick = (todoId: number) => {
-    toogleTodo(todoId, !completed);
+  const handleToogleClick = async (todoId: number) => {
+    try {
+      await toogleTodo(todoId, !completed);
+    } catch {
+      onSetErrorMessage('Unable to cange status a todo');
+    }
+  };
+
+  const eventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setTodoTitle(value);
+  };
+
+  const handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const trimTodoTitle = todoTitle.trim();
+
+    if (trimTodoTitle === todo.title) {
+      setIsEditing(false);
+      setTodoTitle(title);
+
+      return;
+    }
+
+    if (!trimTodoTitle) {
+      deleteTodo(todo.id);
+
+      return;
+    }
+
+    handleUpdateTodo(todo.id, {
+      ...todo,
+      title: todoTitle,
+    });
+
+    setIsEditing(false);
+  };
+
+  const onCancelEditing = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.code === 'Escape') {
+      setIsEditing(false);
+      setTodoTitle(todo.title);
+    }
   };
 
   return (
@@ -23,18 +81,34 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         'todo',
         { completed },
       )}
+      onDoubleClick={() => setIsEditing(true)}
     >
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
           onClick={() => {
-            handleClick(todo.id);
+            handleToogleClick(todo.id);
           }}
         />
       </label>
 
-      <span className="todo__title">{title}</span>
+      {isEditing ? (
+        <form
+          onSubmit={handleOnSubmit}
+        >
+          <input
+            type="text"
+            value={todoTitle}
+            placeholder="Empty todo will be deleted"
+            className="todo__title-field"
+            onChange={(e) => eventChange(e)}
+            onKeyUp={(e) => onCancelEditing(e)}
+          />
+        </form>
+      ) : (
+        <span className="todo__title">{todoTitle}</span>
+      )}
 
       <button
         type="button"

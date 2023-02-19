@@ -1,11 +1,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import {
   getTodos,
   createTodo,
   deleteTodo,
   toogleTodo,
+  updateTodo,
 } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
@@ -21,6 +27,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [hasError, setHasError] = useState(false);
   const [selectFilter, setSelectFilter] = useState('all');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const itemsLeft = todos.filter(todo => todo.completed === false);
 
@@ -30,10 +37,14 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      await createTodo(query);
+    } catch {
+      setErrorMessage('Unable to add a todo');
+    }
 
-    createTodo(query);
     setQuery('');
   };
 
@@ -54,6 +65,14 @@ export const App: React.FC = () => {
       todos.forEach(todo => toogleTodo(todo.id, true));
     }
   };
+
+  const handleUpdateTodo = useCallback(async (todoId: number, todo: Todo) => {
+    try {
+      await updateTodo(todoId, todo);
+    } catch {
+      setErrorMessage('Unable to update a todo');
+    }
+  }, []);
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -79,13 +98,17 @@ export const App: React.FC = () => {
 
         setTodos(todosData);
       } catch (error) {
-        setHasError(true);
-        warningTimer(setHasError, false, 3000);
+        setErrorMessage('Unable to loading todos');
       }
     };
 
     onLoadGetTodos();
   });
+
+  useEffect(() => {
+    setHasError(true);
+    warningTimer(setHasError, false, 3000);
+  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -104,7 +127,11 @@ export const App: React.FC = () => {
           onEventChange={eventChange}
         />
 
-        <TodoList todos={visibleTodos} />
+        <TodoList
+          todos={visibleTodos}
+          handleUpdateTodo={handleUpdateTodo}
+          onSetErrorMessage={setErrorMessage}
+        />
 
         {todos.length !== 0 ? (
           <Footer
@@ -120,6 +147,7 @@ export const App: React.FC = () => {
       <Notification
         hasError={hasError}
         setHasError={setHasError}
+        errorMessage={errorMessage}
       />
     </div>
   );

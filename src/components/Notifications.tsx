@@ -3,10 +3,15 @@ import cn from 'classnames';
 
 type Props = {
   hasError: boolean,
+  errorMessage: string
   setHasError: (value: boolean) => void,
 };
 
-export const Notification: React.FC<Props> = ({ hasError, setHasError }) => {
+export const Notification: React.FC<Props> = ({
+  hasError,
+  errorMessage,
+  setHasError,
+}) => {
   return (
     <div
       className={cn(
@@ -20,13 +25,7 @@ export const Notification: React.FC<Props> = ({ hasError, setHasError }) => {
         className="delete"
         onClick={() => setHasError(false)}
       />
-
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };
