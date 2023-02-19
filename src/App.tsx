@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
+ /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 0;
+const USER_ID = 6357;
 
 export const App: React.FC = () => {
   if (!USER_ID) {
