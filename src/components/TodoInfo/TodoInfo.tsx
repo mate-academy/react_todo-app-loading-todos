@@ -10,7 +10,11 @@ export const TodoInfo: React.FC<Props> = React.memo(({ todo }) => {
   const { title, completed } = todo;
 
   return (
-    <div className={cn('todo', { completed })}>
+    <div className={cn(
+      'todo',
+      { completed },
+    )}
+    >
       <label className="todo__status-label">
         <input
           type="checkbox"
