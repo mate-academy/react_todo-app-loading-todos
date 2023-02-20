@@ -5,10 +5,9 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Filter } from './types/Filter';
 import { Error } from './types/Error';
-import { Header } from './components/Header';
-import { TodosList } from './components/TodosList';
-import { Footer } from './components/Footer';
-import { ErrorNotifications } from './components/ErrorNotifications';
+import {
+  Header, TodosList, Footer, ErrorNotifications,
+} from './components';
 
 const USER_ID = 6335;
 
