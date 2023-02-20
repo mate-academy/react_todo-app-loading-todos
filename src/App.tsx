@@ -32,6 +32,10 @@ export const App: React.FC = () => {
     fetchAllTodos();
   }, []);
 
+  const handleError = (error: boolean) => {
+    setHasError(error);
+  };
+
   const handleInput = (input: string) => {
     setQuery(input);
   };
@@ -89,7 +93,11 @@ export const App: React.FC = () => {
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       {hasError && (
-        <Notification errorType={errorType} />
+        <Notification
+          errorType={errorType}
+          hasError={hasError}
+          handleError={handleError}
+        />
       )}
     </div>
   );
