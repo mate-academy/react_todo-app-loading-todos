@@ -31,7 +31,24 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
-        throw new Error();
+        let errorMessage;
+
+        switch (method) {
+          case 'POST':
+            errorMessage = 'Unable to add a todo';
+            break;
+          case 'PATCH':
+            errorMessage = 'Unable to update a todo';
+            break;
+          case 'DELETE':
+            errorMessage = 'Unable to delete a todo';
+            break;
+          default:
+            errorMessage = 'Unexpected Error';
+            break;
+        }
+
+        throw new Error(errorMessage);
       }
 
       return response.json();
