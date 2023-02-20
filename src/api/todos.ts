@@ -6,3 +6,6 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+export const loadTodos = (userId: number) => {
+  return client.get<Todo[]>(`/todos?userId=${userId}`);
+};
