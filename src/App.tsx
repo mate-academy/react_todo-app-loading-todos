@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { ErrorMessage } from './components/ErrorMassage';
@@ -22,6 +22,10 @@ export const App: React.FC = () => {
   const count = todos.length;
 
   const preparedTodos = prepareTodos(filterBy, todos);
+
+  const isActive = useMemo(() => {
+     return todos.filter(todo => !todo.completed)
+  }, [todos]);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -49,7 +53,10 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header count={count} />
+        <Header
+          count={count}
+          isActiveCount={isActive.length}
+        />
 
         {todos.length > 0 && (
           <>
@@ -59,6 +66,7 @@ export const App: React.FC = () => {
 
             <Footer
               filterBy={filterBy}
+              isActiveCount={isActive.length}
               onSetFilterByField={setFilterByField}
             />
           </>

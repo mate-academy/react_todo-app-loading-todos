@@ -6,17 +6,19 @@ import { FilterField } from '../../types/FilterField';
 
 type Props = {
   filterBy: FilterField,
+  isActiveCount: number,
   onSetFilterByField: (field: FilterField) => void,
 };
 
 export const Footer: React.FC<Props> = ({
   filterBy,
+  isActiveCount,
   onSetFilterByField,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${isActiveCount} items left`}
       </span>
 
       <nav className="filter">
@@ -52,7 +54,10 @@ export const Footer: React.FC<Props> = ({
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+      >
         Clear completed
       </button>
     </footer>

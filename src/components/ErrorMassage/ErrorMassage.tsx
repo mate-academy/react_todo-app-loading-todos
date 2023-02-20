@@ -59,10 +59,11 @@ export const ErrorMessage: React.FC<Props> = ({
       'is-danger',
       'is-light',
       'has-text-weight-normal',
-      { hiden: !isError },
+      { hidden: !isError },
     )}
     >
       <button
+        aria-label="delete error massage"
         type="button"
         className="delete"
         onClick={onErrorClose}
