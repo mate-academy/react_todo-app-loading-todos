@@ -7,12 +7,14 @@ type Props = {
   todo: Todo;
   handleUpdateTodo: (todoId: number, todo: Todo) => void;
   onSetErrorMessage: (str: string) => void;
+  isHasError: () => void;
 };
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
   handleUpdateTodo,
   onSetErrorMessage,
+  isHasError,
 }) => {
   const { title, completed } = todo;
   const [isEditing, setIsEditing] = useState(false);
@@ -23,6 +25,7 @@ export const TodoInfo: React.FC<Props> = ({
       await deleteTodo(todoId);
     } catch {
       onSetErrorMessage('Unable to delete a todo');
+      isHasError();
     }
   };
 

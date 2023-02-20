@@ -5,12 +5,14 @@ type Props = {
   todos: Todo[];
   handleUpdateTodo: (todoId: number, todo: Todo) => void;
   onSetErrorMessage: (str: string) => void;
+  isHasError: () => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   handleUpdateTodo,
   onSetErrorMessage,
+  isHasError,
 }) => {
   return (
     <ul className="todoapp__main">
@@ -20,6 +22,7 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
           handleUpdateTodo={handleUpdateTodo}
           onSetErrorMessage={onSetErrorMessage}
+          isHasError={isHasError}
         />
       ))}
     </ul>

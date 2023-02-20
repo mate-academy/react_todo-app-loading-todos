@@ -37,12 +37,18 @@ export const App: React.FC = () => {
     setQuery(value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const isHasError = useCallback(() => {
+    setHasError(true);
+    warningTimer(setHasError, false, 3000);
+  }, [errorMessage]);
+
+  const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createTodo(query);
     } catch {
       setErrorMessage('Unable to add a todo');
+      isHasError();
     }
 
     setQuery('');
@@ -71,6 +77,7 @@ export const App: React.FC = () => {
       await updateTodo(todoId, todo);
     } catch {
       setErrorMessage('Unable to update a todo');
+      isHasError();
     }
   }, []);
 
@@ -99,16 +106,12 @@ export const App: React.FC = () => {
         setTodos(todosData);
       } catch (error) {
         setErrorMessage('Unable to loading todos');
+        isHasError();
       }
     };
 
     onLoadGetTodos();
   });
-
-  useEffect(() => {
-    setHasError(true);
-    warningTimer(setHasError, false, 3000);
-  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -122,7 +125,7 @@ export const App: React.FC = () => {
         <Header
           isAllCompleted={isAllCompleted}
           onToogleAllTodo={toogleAllTodo}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleAddTodo}
           query={query}
           onEventChange={eventChange}
         />
@@ -131,6 +134,7 @@ export const App: React.FC = () => {
           todos={visibleTodos}
           handleUpdateTodo={handleUpdateTodo}
           onSetErrorMessage={setErrorMessage}
+          isHasError={isHasError}
         />
 
         {todos.length !== 0 ? (
