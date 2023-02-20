@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 type Props = {
@@ -19,13 +20,13 @@ export const Notification: React.FC<Props> = React.memo(({
 
   return (
     <div
-      className="
-        notification
-        is-danger
-        is-light
-        has-text-weight-normal
-      "
-      hidden={!hasError}
+      className={cn(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        { hidden: !hasError },
+      )}
     >
       <button
         type="button"
