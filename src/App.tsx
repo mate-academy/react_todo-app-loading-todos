@@ -6,22 +6,28 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
+import { getVisibleTodos } from './utils/getVisibleTodos';
+import { Filter } from './types/filter';
+import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 
-const USER_ID = 0;
+const USER_ID = 6390;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isError, setError] = useState('');
+  const [isError, setError] = useState(false);
+  const [filter, setFilter] = useState<Filter>(Filter.ALL);
+  const [errorType, setErrorType] = useState('');
 
   useEffect(() => {
     const getTodosById = async () => {
       try {
-        setError('');
+        setError(false);
         const todosFromServer = await getTodos(USER_ID);
 
         setTodos(todosFromServer);
       } catch (error) {
-        setError('Oops.. Something wrong');
+        setError(true);
+        setErrorType('Oops..something is wrong');
       }
     };
 
@@ -32,30 +38,34 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const visibleTodos = getVisibleTodos(todos, filter);
+  const isThereCompleted = todos.some(todo => todo.completed);
+  const activeTodosAmount = todos.filter(todo => !todo.completed).length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <Header />
-        <TodoList todos={todos} />
-        {/* Hide the footer if there are no todos */}
-        <Footer />
+        <TodoList todos={visibleTodos} />
+        {todos.length && (
+          <Footer
+            filter={filter}
+            setFilter={setFilter}
+            activeTodosAmount={activeTodosAmount}
+            isThereCompleted={isThereCompleted}
+          />
+        )}
+
       </div>
 
-      {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       {isError && (
-        <div className="notification is-danger is-light has-text-weight-normal">
-          <button type="button" className="delete" />
-
-          {/* show only one message at a time */}
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
+        <ErrorMessage
+          errorType={errorType}
+          setError={setError}
+        />
       )}
     </div>
   );
