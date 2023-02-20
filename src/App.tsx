@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { getTodos } from './api/todos';
+import { getTodos, createTodo } from './api/todos';
 import { Todo } from './types/Todo';
-import { createTodo } from './api/todos';
 
 type Status = 'all' | 'active' | 'completed';
 
