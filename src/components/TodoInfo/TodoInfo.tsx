@@ -1,31 +1,41 @@
 import cn from 'classnames';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo,
 }
 
-export const TodoInfo:React.FC<Props> = ({ todo }) => (
-  <div
-    className={cn('todo', {
-      completed: todo.completed,
-    })}
-  >
-    <label className="todo__status-label">
-      <input
-        type="checkbox"
-        className="todo__status"
-        // defaultChecked={completed}
-      />
-    </label>
+export const TodoInfo:React.FC<Props> = React.memo(
+  ({ todo }) => {
+    const {
+      title,
+      completed,
+    } = todo;
 
-    <span className="todo__title">{todo.title}</span>
+    return (
+      <div
+        className={cn('todo', {
+          completed,
+        })}
+      >
+        <label className="todo__status-label">
+          <input
+            type="checkbox"
+            className="todo__status"
+            // defaultChecked={completed}
+          />
+        </label>
 
-    <button type="button" className="todo__remove">×</button>
+        <span className="todo__title">{title}</span>
 
-    <div className="modal overlay">
-      <div className="modal-background has-background-white-ter" />
-      <div className="loader" />
-    </div>
-  </div>
+        <button type="button" className="todo__remove">×</button>
+
+        <div className="modal overlay">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
+      </div>
+    );
+  },
 );

@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import React from 'react';
 
 interface Props {
   isHidden: boolean,
@@ -6,7 +7,7 @@ interface Props {
   setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const ErrorNotification: React.FC<Props> = (
+export const ErrorNotification: React.FC<Props> = React.memo((
   {
     isHidden,
     message,
@@ -22,11 +23,11 @@ export const ErrorNotification: React.FC<Props> = (
     >
       <button
         type="button"
-        aria-label="close error notification"
+        aria-label="close_error_notification"
         className="delete"
         onClick={() => setIsHidden(false)}
       />
       {message}
     </div>
   );
-};
+});

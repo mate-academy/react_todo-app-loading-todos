@@ -17,10 +17,10 @@ const USER_ID = 6344;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasActive, setHasActive] = useState(false);
+  const [hasAllActive, setHasAllActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [hasError, setHasErrorMessage] = useState(false);
-  const [filter, setFilter] = useState<Filter>(Filter.ALL);
+  const [filterValue, setFilterValue] = useState<Filter>(Filter.ALL);
 
   const applyError = useCallback((message: string) => {
     setErrorMessage(message);
@@ -45,17 +45,17 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const hasNotCompleted = todos.some(todo => !todo.completed);
+    const allAreActive = todos.every(todo => todo.completed);
 
-    setHasActive(hasNotCompleted);
+    setHasAllActive(allAreActive);
   }, [todos]);
 
   const visibleTodos = useMemo(() => (
-    getVisibleTodos(filter, todos)
-  ), [filter, todos]);
+    getVisibleTodos(filterValue, todos)
+  ), [filterValue, todos]);
 
   const handleSetFilterClick = useCallback((value:Filter) => {
-    setFilter(value);
+    setFilterValue(value);
   }, []);
 
   if (!USER_ID) {
@@ -67,12 +67,17 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header hasActive={hasActive} getData={getTodosFromServer} />
+        <Header hasAllActive={hasAllActive} getData={getTodosFromServer} />
 
         <TodoList todos={visibleTodos} />
 
         {todos.length
-        && <Footer currentOption={filter} setOption={handleSetFilterClick} />}
+        && (
+          <Footer
+            currentOption={filterValue}
+            setOption={handleSetFilterClick}
+          />
+        )}
 
       </div>
 
