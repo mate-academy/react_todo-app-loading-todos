@@ -19,9 +19,8 @@ export const Footer: React.FC<Props> = React.memo(({
     onFilterType(type);
   }, []);
 
-  const isSelected = useCallback((type: FilterType) => (
-    filterType === type
-  ), []);
+  const isSelected = useCallback((type: FilterType) => filterType === type,
+    [filterType]);
 
   return (
     <footer className="todoapp__footer">

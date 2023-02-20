@@ -13,7 +13,7 @@ import { getFilteredTodos } from './utils/filteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState(FilterType.All);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState('upload');
 
@@ -26,10 +26,9 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn('Error:', error);
         setHasError(true);
         setErrorType('upload');
+        throw Error('An occur error while load todos');
       }
     };
 

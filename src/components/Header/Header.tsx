@@ -15,7 +15,7 @@ export const Header: React.FC<Props> = React.memo(({
     {todos.length !== 0 && (
       <button
         type="button"
-        aria-label="toggle button"
+        aria-label="toggle todos butoon"
         className={cn(
           'todoapp__toggle-all',
           { active: !activeTodos },
