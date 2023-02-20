@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { Todo } from './types/Todo';
 
 import { getTodos } from './api/todos';
@@ -18,16 +20,20 @@ export const App: React.FC = () => {
   const USER_ID = 6381;
 
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(todosFromServer => {
+    const fetchTodo = async () => {
+      try {
+        const todosFromServer = await getTodos(USER_ID);
+
         setTodos(todosFromServer);
-      })
-      .catch(error => {
+      } catch (error) {
         // eslint-disable-next-line no-console
         console.warn('Error:', error);
         setHasError(true);
         setErrorType('upload');
-      });
+      }
+    };
+
+    fetchTodo();
   }, []);
 
   const filteredTodos = useMemo(() => (
@@ -36,6 +42,14 @@ export const App: React.FC = () => {
 
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
+
+  const changeFilterType = useCallback((type: FilterType) => {
+    setFilterType(type);
+  }, []);
+
+  const setError = useCallback((status: React.SetStateAction<boolean>) => {
+    setHasError(status);
+  }, []);
 
   return (
     <div className="todoapp">
@@ -54,7 +68,7 @@ export const App: React.FC = () => {
             activeTodos={activeTodos.length}
             completedTodos={completedTodos.length}
             filterType={filterType}
-            onFilterType={setFilterType}
+            onFilterType={changeFilterType}
           />
         )}
       </div>
@@ -64,7 +78,7 @@ export const App: React.FC = () => {
       <Notification
         errorType={errorType}
         hasError={hasError}
-        onError={setHasError}
+        onError={setError}
       />
     </div>
   );

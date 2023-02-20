@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -14,63 +14,73 @@ export const Footer: React.FC<Props> = React.memo(({
   completedTodos,
   filterType,
   onFilterType,
-}) => (
-  <footer className="todoapp__footer">
-    <span className="todo-count">
-      {`${activeTodos} items left`}
-    </span>
+}) => {
+  const changeFilterType = useCallback((type: FilterType) => {
+    onFilterType(type);
+  }, []);
 
-    <nav className="filter">
-      <a
-        href="#/"
-        className={cn(
-          'filter__link',
-          { selected: filterType === FilterType.All },
-        )}
-        onClick={() => {
-          onFilterType(FilterType.All);
+  const isSelected = useCallback((type: FilterType) => (
+    filterType === type
+  ), []);
+
+  return (
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${activeTodos} items left`}
+      </span>
+
+      <nav className="filter">
+        <a
+          href="#/"
+          className={cn(
+            'filter__link',
+            { selected: isSelected(FilterType.All) },
+          )}
+          onClick={() => {
+            changeFilterType(FilterType.All);
+          }}
+        >
+          All
+        </a>
+
+        <a
+          href="#/active"
+          className={cn(
+            'filter__link',
+            { selected: isSelected(FilterType.Active) },
+          )}
+          onClick={() => {
+            changeFilterType(FilterType.Active);
+          }}
+        >
+          Active
+        </a>
+
+        <a
+          href="#/completed"
+          className={cn(
+            'filter__link',
+            { selected: isSelected(FilterType.Completed) },
+          )}
+          onClick={() => {
+            changeFilterType(FilterType.Completed);
+          }}
+        >
+          Completed
+        </a>
+      </nav>
+
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{
+          visibility: completedTodos
+            ? 'visible'
+            : 'hidden',
         }}
       >
-        All
-      </a>
-
-      <a
-        href="#/active"
-        className={cn(
-          'filter__link',
-          { selected: filterType === FilterType.Active },
-        )}
-        onClick={() => {
-          onFilterType(FilterType.Active);
-        }}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        className={cn(
-          'filter__link',
-          { selected: filterType === FilterType.Completed },
-        )}
-        onClick={() => {
-          onFilterType(FilterType.Completed);
-        }}
-      >
-        Completed
-      </a>
-    </nav>
-
-    <button
-      type="button"
-      className="todoapp__clear-completed"
-      style={{
-        visibility: completedTodos
-          ? 'visible'
-          : 'hidden',
-      }}
-    >
-      Clear completed
-    </button>
-  </footer>
-));
+        Clear completed
+      </button>
+    </footer>
+  );
+});
