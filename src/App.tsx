@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { getTodos } from './api/todos';
 
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
-import { Footer } from './components/Footer';
+import { Footer } from './components/Footer/Footer';
 
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';

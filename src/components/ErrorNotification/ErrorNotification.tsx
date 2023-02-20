@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
-import { ErrorType } from '../types/ErrorType';
+import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
   errorType: ErrorType;

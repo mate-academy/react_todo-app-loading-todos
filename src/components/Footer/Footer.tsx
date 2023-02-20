@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { FilterStatus } from '../types/FilterStatus';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
   activeTodos: number;
