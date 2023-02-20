@@ -1,24 +1,65 @@
+import classNames from 'classnames';
 import React from 'react';
-import './filter.scss';
+import { FilterType } from '../../types/FilterType';
+import { Todo } from '../../types/Todo';
 
-export const Footer: React.FC = () => {
+type Props = {
+  todos: Todo[],
+  filterType: FilterType,
+  handleFilterType: (filter: FilterType) => void,
+};
+
+export const Footer: React.FC<Props> = ({
+  todos,
+  filterType,
+  handleFilterType,
+}) => {
+  const todosLeft = todos.filter(todo => todo.completed).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${todosLeft} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
-        <a href="#/" className="filter__link selected">
+        <a
+          href="#/"
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === FilterType.All,
+            },
+          )}
+          onClick={() => handleFilterType(FilterType.All)}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link">
+        <a
+          href="#/active"
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === FilterType.Active,
+            },
+          )}
+          onClick={() => handleFilterType(FilterType.Active)}
+        >
           Active
         </a>
 
-        <a href="#/completed" className="filter__link">
+        <a
+          href="#/completed"
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === FilterType.Completed,
+            },
+          )}
+          onClick={() => handleFilterType(FilterType.Completed)}
+        >
           Completed
         </a>
       </nav>
