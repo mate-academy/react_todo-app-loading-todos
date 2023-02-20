@@ -5,4 +5,14 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+// https://mate.academy/students-api/todos?userId=6383
+
+export const getCompleted = (userId: number) => {
+  return getTodos(userId)
+    .then(todos => todos.filter(todo => todo.completed));
+};
+
+export const getActive = (userId: number) => {
+  return getTodos(userId)
+    .then(todos => todos.filter(todo => !todo.completed));
+};
