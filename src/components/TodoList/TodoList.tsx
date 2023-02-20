@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../../types/Todo';
 
@@ -6,14 +7,18 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todo }) => {
-  const { title } = todo;
+  const { title, completed } = todo;
 
   return (
-    <div className="todo">
+    <div
+      // className="todo"
+      className={classNames('todo', { completed })}
+    >
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
+          checked
         />
       </label>
 
