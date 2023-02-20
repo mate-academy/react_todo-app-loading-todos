@@ -6,6 +6,7 @@ type Props = {
   selectStatus: (status:TodoStatus)=> void;
   selectedStatus: TodoStatus;
 };
+type Statuses = ['All', 'Active', 'Completed'];
 
 export const StatusFilter: React.FC<Props> = ({
   selectStatus,
@@ -13,11 +14,11 @@ export const StatusFilter: React.FC<Props> = ({
 }) => {
   const handleButton = (status:TodoStatus) => selectStatus(status);
 
-  const statuses = Object.keys(TodoStatus);
+  const statuses: Statuses = ['All', 'Active', 'Completed'];
 
   return (
     <nav className="filter">
-      {statuses.map(status => (
+      {statuses.map((status) => (
         <a
           href="#/"
           key={status}
