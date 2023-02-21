@@ -49,7 +49,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={classNames('filter__link',
-            { selectedselected: checkFilter(FilterBy.COMPLETED) })}
+            { selected: checkFilter(FilterBy.COMPLETED) })}
           onClick={() => setFilterBy(FilterBy.COMPLETED)}
         >
           Completed
