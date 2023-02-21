@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -17,24 +19,30 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage]
-  = useState<ErrorMessage>(ErrorMessage.NONE);
+    = useState<ErrorMessage>(ErrorMessage.NONE);
+
+  const loadTodos = async () => {
+    try {
+      const loadedTodos = await getTodos(USER_ID);
+
+      setTodos(loadedTodos);
+    } catch {
+      setHasError(true);
+      setErrorMessage(ErrorMessage.ONLOAD);
+    }
+  };
 
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(fetchTodos => {
-        setTodos(fetchTodos);
-      })
-      .catch(() => {
-        setHasError(true);
-        setErrorMessage(ErrorMessage.ONLOAD);
-      });
+    loadTodos();
   }, []);
 
-  const visibleTodos = getFiltredTodos(todos, filterBy);
+  const visibleTodos = useMemo(() => (
+    getFiltredTodos(todos, filterBy)
+  ), [todos, filterBy]);
 
-  const countActiveTodos = todos.filter(todo => !todo.completed).length;
+  const activeTodosAmount = todos.filter(todo => !todo.completed).length;
   const isFooterVisible = !!todos.length;
-  const isClearButtonVisible = !!(todos.length - countActiveTodos);
+  const isClearButtonVisible = !!(todos.length - activeTodosAmount);
 
   const clearNotification = useCallback(() => {
     setHasError(false);
@@ -53,17 +61,19 @@ export const App: React.FC = () => {
           <Footer
             filterBy={filterBy}
             setFilterBy={setFilterBy}
-            countActiveTodos={countActiveTodos}
+            activeTodosAmount={activeTodosAmount}
             isClearButtonVisible={isClearButtonVisible}
           />
         )}
       </div>
 
-      <Notification
-        hasError={hasError}
-        errorMessage={errorMessage}
-        onClear={clearNotification}
-      />
+      {hasError && (
+        <Notification
+          hasError={hasError}
+          errorMessage={errorMessage}
+          onClear={clearNotification}
+        />
+      )}
     </div>
   );
 };
