@@ -25,6 +25,7 @@ export const App: React.FC = () => {
     } catch (error) {
       setHasError(true);
       setErrorType('update');
+      throw new Error('Error downloading todos');
     }
   };
 

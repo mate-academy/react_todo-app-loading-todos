@@ -12,7 +12,7 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ query, todos, handleInput }) => {
   const activeTodos = useMemo(() => {
-    return todos.filter(todo => !todo.completed);
+    return todos.some(todo => !todo.completed);
   }, [todos]);
 
   return (
@@ -22,7 +22,7 @@ export const Header: React.FC<Props> = ({ query, todos, handleInput }) => {
         type="button"
         className={classNames(
           'todoapp__toggle-all', {
-            active: activeTodos.length,
+            active: activeTodos,
           },
         )}
 
