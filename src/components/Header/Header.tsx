@@ -1,31 +1,21 @@
-import React from 'react';
-import classNames from 'classnames';
-
-type Props = {
-  count: number,
-  isActiveCount: number,
-};
-
-export const Header: React.FC<Props> = ({ count, isActiveCount }) => (
-  <header className="todoapp__header">
-    {/* this buttons is active only if there are some active todos */}
-    {count > 0 && (
+export const Header = () => {
+  return (
+    <header className="todoapp__header">
+      {/* this buttons is active only if there are some active todos */}
       <button
-        aria-label="complited todo"
         type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: !isActiveCount,
-        })}
+        className="todoapp__toggle-all active"
+        aria-label="Toggle-active"
       />
-    )}
 
-    {/* Add a todo on form submit */}
-    <form>
-      <input
-        type="text"
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
-      />
-    </form>
-  </header>
-);
+      {/* Add a todo on form submit */}
+      <form>
+        <input
+          type="text"
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+        />
+      </form>
+    </header>
+  );
+};

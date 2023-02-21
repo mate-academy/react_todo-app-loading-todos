@@ -1,4 +1,4 @@
-export enum FilterField {
+export enum Filter {
   ALL,
   ACTIVE,
   COMPLETED,

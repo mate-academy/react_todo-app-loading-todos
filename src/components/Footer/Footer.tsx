@@ -1,64 +1,81 @@
 import React from 'react';
-
 import classNames from 'classnames';
-
-import { FilterField } from '../../types/FilterField';
+import { Filter } from '../../types/Filter';
 
 type Props = {
-  filterBy: FilterField,
-  isActiveCount: number,
-  onSetFilterByField: (field: FilterField) => void,
+  filterType: Filter;
+  onFilterTypeChange: (value: Filter) => void;
+  completedTodos: number;
+  activeTodos: number;
 };
 
-export const Footer: React.FC<Props> = ({
-  filterBy,
-  isActiveCount,
-  onSetFilterByField,
-}) => {
+export const Footer: React.FC<Props> = (
+  {
+    filterType,
+    onFilterTypeChange,
+    completedTodos,
+    activeTodos,
+  },
+) => {
+  const changeFilterType = (newFilterType: Filter) => {
+    onFilterTypeChange(newFilterType);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${isActiveCount} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <nav className="filter">
         <a
           href="#/"
-          className={classNames('filter__link', {
-            selected: filterBy === FilterField.ALL,
-          })}
-          onClick={() => onSetFilterByField(FilterField.ALL)}
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === Filter.ALL,
+            },
+          )}
+          onClick={() => changeFilterType(Filter.ALL)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={classNames('filter__link', {
-            selected: filterBy === FilterField.ACTIVE,
-          })}
-          onClick={() => onSetFilterByField(FilterField.ACTIVE)}
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === Filter.ACTIVE,
+            },
+          )}
+          onClick={() => changeFilterType(Filter.ACTIVE)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={classNames('filter__link', {
-            selected: filterBy === FilterField.COMPLETED,
-          })}
-          onClick={() => onSetFilterByField(FilterField.COMPLETED)}
+          className={classNames(
+            'filter__link',
+            {
+              selected: filterType === Filter.COMPLETED,
+            },
+          )}
+          onClick={() => changeFilterType(Filter.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-      >
-        Clear completed
-      </button>
+      {completedTodos !== 0 && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

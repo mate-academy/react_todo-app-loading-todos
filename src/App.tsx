@@ -1,48 +1,46 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Errors } from './components/Errors/Errors';
 import { Footer } from './components/Footer/Footer';
-import { ErrorType } from './types/ErrorType';
-import { FilterField } from './types/FilterField';
+import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { UserWarning } from './UserWarning';
-import { prepareTodos } from './utils/prepareTodos';
+import { filterTodos } from './utils/prepareTodos';
+import { Error } from './types/Error'
 
 const USER_ID = 6405;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(ErrorType.NONE);
-  const [isError, setIsError] = useState(false);
-  const [filterBy, setFilterBy] = useState<FilterField>(FilterField.ALL);
+  const [showError, setShowError] = useState(false);
+  const [filterType, setFilterType] = useState<Filter>(Filter.ALL);
+  const [errorType, setErrorType] = useState(Error.None);
 
-  const count = todos.length;
+  const loadTodosFromServer = async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
 
-  const preparedTodos = prepareTodos(filterBy, todos);
-
-  const isActive = useMemo(() => {
-    return todos.filter(todo => !todo.completed);
-  }, [todos]);
+      setTodos(todosFromServer);
+    } catch {
+      setErrorType(Error.Download);
+      setShowError(true);
+      window.setTimeout(() => setShowError(false), 3000);
+    }
+  };
 
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(data => setTodos(data))
-      .catch(() => {
-        setHasError(ErrorType.UPLOAD_ERROR);
-        setIsError(true);
-      });
-  }, [USER_ID]);
+    loadTodosFromServer();
+  }, []);
 
-  const errorClose = () => {
-    setIsError(false);
-  };
+  const visibleTodos = filterTodos(todos, filterType);
 
-  const setFilterByField = (field: FilterField) => {
-    setFilterBy(field);
-  };
+  const completedTodos = todos
+    .filter(todo => todo.completed).length;
+
+  const activeTodos = todos.length - completedTodos;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -53,33 +51,27 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header count={count} isActiveCount={isActive.length} />
+
+        <Header />
 
         {todos.length > 0 && (
           <>
-            <TodoList
-              todos={preparedTodos}
-            />
-
+            <TodoList todos={visibleTodos} />
             <Footer
-              filterBy={filterBy}
-              isActiveCount={isActive.length}
-              onSetFilterByField={setFilterByField}
+              filterType={filterType}
+              onFilterTypeChange={setFilterType}
+              completedTodos={completedTodos}
+              activeTodos={activeTodos}
             />
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {isError
-        && (
-          <Errors
-            errorMassage={hasError}
-            onErrorClose={errorClose}
-            isError={isError}
-          />
-        )}
+      <Errors
+        errorMessage={errorType}
+        showError={showError}
+        setError={setShowError}
+      />
     </div>
   );
 };

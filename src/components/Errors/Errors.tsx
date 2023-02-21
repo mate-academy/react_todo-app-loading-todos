@@ -1,57 +1,23 @@
-import React, { useEffect } from 'react';
-
+import React from 'react';
 import classNames from 'classnames';
-import { ErrorType } from '../../types/ErrorType';
+import { Error } from '../../types/Error';
 
 type Props = {
-  errorMassage: ErrorType,
-  onErrorClose: () => void,
-  isError: boolean,
+  errorMessage: Error;
+  showError: boolean;
+  setError: (value: boolean) => void;
 };
 
 export const Errors: React.FC<Props> = ({
-  errorMassage,
-  onErrorClose,
-  isError,
+  errorMessage,
+  showError,
+  setError,
 }) => {
-  let massage = '';
-  const errorUpload = 'Unable to upload todos';
-  const errorAdd = 'Unable to add a todo';
-  const errorDelete = 'Unable to delete a todo';
-  const errorUpdate = 'Unable to update a todo';
+  const errorString = `Unable to ${errorMessage} a todo`;
 
-  useEffect(() => {
-    if (isError) {
-      const timer = setTimeout(() => {
-        onErrorClose();
-        clearTimeout(timer);
-      }, 3000);
-    }
-  }, [isError]);
-
-  switch (errorMassage) {
-    case ErrorType.UPLOAD_ERROR:
-      massage = errorUpload;
-      break;
-
-    case (ErrorType.ADD_ERROR):
-      massage = errorAdd;
-      break;
-
-    case (ErrorType.DELETE_ERROR):
-      massage = errorDelete;
-      break;
-
-    case (ErrorType.UPDATE_ERROR):
-      massage = errorUpdate;
-      break;
-
-    case (ErrorType.NONE):
-      break;
-
-    default:
-      throw new Error('Unexpected error type');
-  }
+  const handleCloseButtonClick = () => {
+    setError(false);
+  };
 
   return (
     <div className={classNames(
@@ -59,17 +25,19 @@ export const Errors: React.FC<Props> = ({
       'is-danger',
       'is-light',
       'has-text-weight-normal',
-      { hidden: !isError },
+      {
+        hidden: !showError,
+      },
     )}
     >
       <button
-        aria-label="delete error massage"
         type="button"
         className="delete"
-        onClick={onErrorClose}
+        aria-label="Delete"
+        onClick={() => handleCloseButtonClick()}
       />
 
-      {massage}
+      {errorString}
     </div>
   );
 };
