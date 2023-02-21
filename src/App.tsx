@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((data: any) => {
+      .then((data) => {
         setTodos(data);
       })
       .catch(() => {
