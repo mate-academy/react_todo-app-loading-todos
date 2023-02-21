@@ -79,14 +79,15 @@ export const App: React.FC = () => {
           handleInput={handleInput}
         />
 
-        <TodoList todos={visibleTodos} />
-
-        {todos.length && (
-          <Footer
-            todos={visibleTodos}
-            filterType={filterType}
-            handleFilterType={handleFilterType}
-          />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={visibleTodos} />
+            <Footer
+              todos={visibleTodos}
+              filterType={filterType}
+              handleFilterType={handleFilterType}
+            />
+          </>
         )}
 
       </div>
