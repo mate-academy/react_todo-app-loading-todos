@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { addTodos, deleteTodo, getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -20,7 +20,9 @@ export const App: React.FC = () => {
   const [errorType, setErrorType] = useState<ErrorMessages>(ErrorMessages.NONE);
   const [,setTempTodo] = useState<Todo | null>(null);
 
-  const visibletodos = getVisibleTodos(todos, status);
+  const visibletodos = useMemo(() => {
+    return getVisibleTodos(todos, status);
+  }, [todos, status]);
 
   const getTodosFromServer = async () => {
     try {
