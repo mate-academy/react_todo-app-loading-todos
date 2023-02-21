@@ -1,14 +1,21 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useMemo, useEffect, useState } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { FilterBy } from './types/FilterBy';
 import { warningTimer } from './utils/warningTimer';
-import { TodoInfo } from './components/TodoInfo';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header';
 import { Notification } from './components/Notification';
+import { TodoList } from './components/TodoList';
+import { getFilteredTodos } from './utils/getFilteredTodos';
+import { ErrorMessages } from './types/ErrorMessages';
 
 const USER_ID = 6316;
 
@@ -16,8 +23,24 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.ALL);
   const [hasError, setHasError] = useState(false);
-  const hasActiveTodos = todos.filter(todo => !todo.completed);
-  const hasCompletedTodos = todos.some(todo => todo.completed === true);
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState<ErrorMessages>(ErrorMessages.NOUN);
+
+  const countActiveTodos = useMemo(
+    () => todos.filter(todo => !todo.completed).length,
+    [todos],
+  );
+  const hasCompletedTodos = useMemo(
+    () => todos.some(todo => todo.completed),
+    [todos],
+  );
+
+  const showErrorMessage = useCallback((message: ErrorMessages) => {
+    setHasError(true);
+    setErrorMessage(message);
+  }, []);
 
   useEffect(() => {
     const onLoadGetTodos = async () => {
@@ -26,28 +49,30 @@ export const App: React.FC = () => {
 
         setTodos(todosData);
       } catch (error) {
-        setHasError(true);
-        warningTimer(setHasError, false, 3000);
+        showErrorMessage(ErrorMessages.ONLOAD);
       }
     };
 
     onLoadGetTodos();
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    const filteredTodos = todos.filter(todo => {
-      switch (filterBy) {
-        case FilterBy.ACTIVE:
-          return !todo.completed;
-        case FilterBy.COMPLETED:
-          return todo.completed;
-        default:
-          return true;
-      }
-    });
+  useEffect(() => {
+    if (hasError) {
+      warningTimer(setHasError, false, 3000);
+    }
+  }, [hasError]);
 
-    return filteredTodos;
-  }, [todos, filterBy]);
+  const visibleTodos = useMemo(() => (
+    getFilteredTodos(todos, filterBy)
+  ), [todos, filterBy]);
+
+  const handleHasError = (isError: boolean) => {
+    setHasError(isError);
+  };
+
+  const handleFilterBy = (filterType: FilterBy) => {
+    setFilterBy(filterType);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -58,29 +83,24 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header hasActiveTodos={hasActiveTodos.length} />
+        <Header someActiveTodos={countActiveTodos} />
 
-        <section className="todoapp__main">
-          {visibleTodos.map(todo => (
-            <TodoInfo key={todo.id} todo={todo} />
-          ))}
-        </section>
+        <TodoList visibleTodos={visibleTodos} />
 
-        {/* Hide the footer if there are no todos */}
         {!!todos.length && (
           <Footer
-            quantity={hasActiveTodos.length}
+            quantity={countActiveTodos}
             filterBy={filterBy}
-            setFilterBy={setFilterBy}
+            onFilterBy={handleFilterBy}
             hasCompletedTodos={hasCompletedTodos}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
       <Notification
         hasError={hasError}
-        setHasError={setHasError}
+        errorMessage={errorMessage}
+        onHasError={handleHasError}
       />
     </div>
   );

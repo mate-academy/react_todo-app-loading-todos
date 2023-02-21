@@ -1,6 +1,6 @@
-export const warningTimer = <T>(
-  callback: (value: T) => void,
-  value: T,
+export const warningTimer = (
+  callback: (value: boolean) => void,
+  value: boolean,
   delay: number,
 ) => {
   let timerId;
