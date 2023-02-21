@@ -12,11 +12,12 @@ import { getFilteredTodos } from './utils/getFilteredTodos';
 import { ErrorMessage } from './components/ErrorMessage';
 import { ErrorMessages } from './types/ErrorMessages';
 
-export const App: React.FC<Todo[]> = () => {
+export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState(FilterType.All);
   const [errorType, setErrorType] = useState<ErrorMessages>(ErrorMessages.None);
   const [isErrorHidden, setIsErrorHidden] = useState(true);
+  const [updatingStage, setUpdatingStage] = useState<number[]>([]);
 
   const loadTodos = async () => {
     try {
@@ -29,6 +30,16 @@ export const App: React.FC<Todo[]> = () => {
     }
   };
 
+  const addToUpdateStage = (id: number) => {
+    setUpdatingStage(prev => [...prev, id]);
+  };
+
+  const removeFromUpdateStage = (id: number) => {
+    setTimeout(() => {
+      setUpdatingStage(prev => prev.filter(prevInd => prevInd !== id));
+    }, 500);
+  };
+
   const filteredTodos = useMemo(() => {
     return getFilteredTodos(todos, filterType);
   }, [filterType, todos]);
@@ -38,28 +49,32 @@ export const App: React.FC<Todo[]> = () => {
   }, []);
 
   useEffect(() => {
-    const timerId = setTimeout(setIsErrorHidden, 3000, true);
-
-    return () => clearTimeout(timerId);
+    setTimeout(setIsErrorHidden, 3000, true);
   }, [isErrorHidden]);
 
   const addTodoOnServer = async (todo: Todo) => {
     try {
+      addToUpdateStage(todo.id);
       await addTodo(todo);
       await loadTodos();
     } catch (error) {
       setErrorType(ErrorMessages.Add);
       setIsErrorHidden(false);
+    } finally {
+      removeFromUpdateStage(todo.id);
     }
   };
 
   const removeTodoFromServer = async (id: number) => {
     try {
+      addToUpdateStage(id);
       await removeTodo(id);
       await loadTodos();
     } catch (error) {
       setErrorType(ErrorMessages.Delete);
       setIsErrorHidden(false);
+    } finally {
+      removeFromUpdateStage(id);
     }
   };
 
@@ -75,11 +90,14 @@ export const App: React.FC<Todo[]> = () => {
 
   const updateTodoOnServer = async (todo: Todo) => {
     try {
+      addToUpdateStage(todo.id);
       await updateTodo(todo);
       await loadTodos();
     } catch (error) {
       setErrorType(ErrorMessages.Update);
       setIsErrorHidden(false);
+    } finally {
+      removeFromUpdateStage(todo.id);
     }
   };
 
@@ -122,6 +140,7 @@ export const App: React.FC<Todo[]> = () => {
           todos={filteredTodos}
           removeTodoFromServer={removeTodoFromServer}
           updateTodoOnServer={updateTodoOnServer}
+          updatingStage={updatingStage}
         />
         <Footer
           filterBy={setFilterType}
