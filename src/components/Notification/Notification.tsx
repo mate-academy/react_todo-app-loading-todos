@@ -26,7 +26,7 @@ export const Notification: React.FC<Props> = ({
       />
 
       {/* show only one message at a time */}
-      {`Unable to ${errorType} a todo`}
+      {`${errorType}`}
     </div>
   );
 };

@@ -10,7 +10,11 @@ type Props = {
   handleInput: (input: string) => void,
 };
 
-export const Header: React.FC<Props> = ({ query, todos, handleInput }) => {
+export const Header: React.FC<Props> = ({
+  query,
+  todos,
+  handleInput,
+}) => {
   const activeTodos = useMemo(() => {
     return todos.some(todo => !todo.completed);
   }, [todos]);
@@ -25,7 +29,7 @@ export const Header: React.FC<Props> = ({ query, todos, handleInput }) => {
             active: activeTodos,
           },
         )}
-
+        disabled={activeTodos}
       />
 
       {/* Add a todo on form submit */}

@@ -5,8 +5,10 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Notification } from './components/Notification';
 import { TodoList } from './components/TodoList';
+import { ErrorType } from './types/ErrorType';
 import { FilterType } from './types/FilterType';
 import { Todo } from './types/Todo';
+import { prepareTodos } from './utils/prepareTodos';
 
 const USER_ID = 6396;
 
@@ -15,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
-  const [errorType, setErrorType] = useState('');
+  const [errorType, setErrorType] = useState<ErrorType>(ErrorType.None);
 
   const fetchAllTodos = async () => {
     try {
@@ -24,7 +26,7 @@ export const App: React.FC = () => {
       setTodos(todosFromServer);
     } catch (error) {
       setHasError(true);
-      setErrorType('update');
+      setErrorType(ErrorType.Update);
       throw new Error('Error downloading todos');
     }
   };
@@ -45,27 +47,9 @@ export const App: React.FC = () => {
     setFilterType(filter);
   };
 
-  const visibleTodos = useMemo(() => {
-    let preparedTodos = [...todos];
-
-    if (filterType) {
-      switch (filterType) {
-        case FilterType.All:
-          preparedTodos = [...todos];
-          break;
-        case FilterType.Active:
-          preparedTodos = todos.filter(todo => !todo.completed);
-          break;
-        case FilterType.Completed:
-          preparedTodos = todos.filter(todo => todo.completed);
-          break;
-        default:
-          throw new Error('Unexpected filter error');
-      }
-    }
-
-    return preparedTodos;
-  }, [query, todos, filterType]);
+  const visibleTodos = useMemo(() => (
+    prepareTodos(todos, filterType)
+  ), [todos, filterType]);
 
   return (
     <div className="todoapp">
@@ -79,7 +63,7 @@ export const App: React.FC = () => {
           handleInput={handleInput}
         />
 
-        {todos.length > 0 && (
+        {todos.length && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer
