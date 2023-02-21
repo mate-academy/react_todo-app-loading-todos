@@ -1,13 +1,83 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
+import React, { useState, useEffect, useCallback } from 'react';
+import classnames from 'classnames';
+import { getTodos } from './api/todos';
+import { TodoList } from './components/TodoList';
+import { FilterType } from './types/FilterTypes';
+import { Todo } from './types/Todo';
+import { Notification } from './components/Notification';
 
-const USER_ID = 0;
+const USER_ID = 6418;
+
+export const getFilteredTodos = (
+  todos: Todo[],
+  filterBy: FilterType,
+) => {
+  let visibleTodos = [...todos];
+
+  switch (filterBy) {
+    case FilterType.ACTIVE:
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
+      break;
+
+    case FilterType.COMPLETED:
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+      break;
+
+    case FilterType.ALL:
+    default:
+      break;
+  }
+
+  return visibleTodos;
+};
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState(FilterType.ALL);
+
+  const [hasLoadingError, sethasLoadingError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isTodosLoaded, setIsTodosLoaded] = useState(false);
+
+  const notify = (message: string) => {
+    sethasLoadingError(true);
+    setErrorMessage(message);
+
+    setTimeout(() => {
+      sethasLoadingError(false);
+    }, 3000);
+  };
+
+  const getTodosFromServer = useCallback(async () => {
+    sethasLoadingError(false);
+
+    try {
+      const fetchTodos = await getTodos(USER_ID);
+
+      setTodos(fetchTodos);
+      // setIsTodosLoaded(true);
+    } catch {
+      notify('Oppps smth went wrong with load todos...');
+    } finally {
+      // setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    getTodosFromServer();
+  }, []);
+
+  const handleFilterSelect = useCallback((filterType: FilterType) => {
+    setSelectedFilter(filterType);
+  }, []);
+
+  const handleCloseNotification = useCallback(() => {
+    sethasLoadingError(false);
+  }, []);
+
+  const visibleTodos = getFilteredTodos(todos, selectedFilter);
 
   return (
     <div className="todoapp">
@@ -28,106 +98,49 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main">
-          {/* This is a completed todo */}
-          <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span className="todo__title">Completed Todo</span>
-
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
-
-            {/* overlay will cover the todo while it is being updated */}
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is not completed */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input type="checkbox" className="todo__status" />
-            </label>
-
-            <span className="todo__title">Todo is being saved now</span>
-            <button type="button" className="todo__remove">×</button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
+        <TodoList todos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer">
           <span className="todo-count">
-            3 items left
+            {`${visibleTodos.length} items left`}
           </span>
 
           {/* Active filter should have a 'selected' class */}
           <nav className="filter">
-            <a href="#/" className="filter__link selected">
+            <a
+              href="#/"
+              className={classnames('filter__link', {
+                selected: selectedFilter === FilterType.ALL,
+              })}
+              onClick={() => {
+                handleFilterSelect(FilterType.ALL);
+              }}
+            >
               All
             </a>
 
-            <a href="#/active" className="filter__link">
+            <a
+              href="#/active"
+              className={classnames('filter__link', {
+                selected: selectedFilter === FilterType.ACTIVE,
+              })}
+              onClick={() => {
+                handleFilterSelect(FilterType.ACTIVE);
+              }}
+            >
               Active
             </a>
 
-            <a href="#/completed" className="filter__link">
+            <a
+              href="#/completed"
+              className={classnames('filter__link', {
+                selected: selectedFilter === FilterType.COMPLETED,
+              })}
+              onClick={() => {
+                handleFilterSelect(FilterType.COMPLETED);
+              }}
+            >
               Completed
             </a>
           </nav>
@@ -141,16 +154,15 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Notification
+        message={errorMessage}
+        onClose={handleCloseNotification}
+        hidden={!hasLoadingError}
+      />
     </div>
   );
 };
+
+// function useCallback(arg0: () => Promise<void>) {
+//   throw new Error('Function not implemented.');
+// }
