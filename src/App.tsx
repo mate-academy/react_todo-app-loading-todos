@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
 import { getTodos } from './api/todos';
 import { UserWarning } from './UserWarning';
@@ -7,30 +6,32 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { ErrorNotification } from './components/ErrorNotification';
+import { ErrorMessages } from './types/ErrorMessages';
 
 const USER_ID = 6345;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  // const [userId, setUserId] = useState<number>(USER_ID);
+  const [errorMessage, setErrorMessage] = useState<string>(
+    ErrorMessages.NOERROR,
+  );
 
   type LoadTodos = (id: number) => Promise<Todo[]>;
 
   const handleFilterClick = async (loadTodos: LoadTodos) => {
     try {
-      setErrorMessage('');
       const todosFromServer = await loadTodos(USER_ID);
+
+      setErrorMessage(ErrorMessages.NOERROR);
 
       setTodos(todosFromServer);
     } catch (error) {
-      setErrorMessage('Unable to recieve todos');
+      setErrorMessage(ErrorMessages.ONLOAD);
     }
   };
 
   useEffect(() => {
     handleFilterClick(getTodos);
-    // getTodos(USER_ID);
   }, []);
 
   if (!USER_ID) {
@@ -43,8 +44,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        { !!todos.length
-        && (
+        { !!todos.length && (
           <>
             <TodoList todos={todos} />
             <Footer onFilterClick={handleFilterClick} />

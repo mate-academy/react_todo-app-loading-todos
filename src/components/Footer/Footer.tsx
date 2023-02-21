@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { getTodos, getCompleted, getActive } from '../../api/todos';
+import { Options } from '../../types/Options';
 
 type Props = {
   onFilterClick: (func: (id: number) => Promise<Todo[]>) => void
@@ -9,7 +10,7 @@ type Props = {
 
 export const Footer: React.FC<Props> = React.memo(
   ({ onFilterClick }) => {
-    const [selectedOption, setSelectedOption] = useState<string>('all');
+    const [selectedOption, setSelectedOption] = useState<string>(Options.ALL);
 
     return (
       <footer className="todoapp__footer">
@@ -19,47 +20,32 @@ export const Footer: React.FC<Props> = React.memo(
 
         {/* Active filter should have a 'selected' class */}
         <nav className="filter">
-          <a
-            href="#/"
-            className={classNames(
-              'filter__link',
-              { selected: selectedOption === 'all' },
-            )}
-            onClick={() => {
-              onFilterClick(getTodos);
-              setSelectedOption('all');
-            }}
-          >
-            All
-          </a>
+          { Object.values(Options).map(option => (
+            <a
+              key={option}
+              href={`#/${option.toLowerCase()}`}
+              className={classNames(
+                'filter__link',
+                { selected: selectedOption === option },
+              )}
+              onClick={() => {
+                switch (option) {
+                  case 'Active':
+                    onFilterClick(getActive);
+                    break;
+                  case 'Completed':
+                    onFilterClick(getCompleted);
+                    break;
+                  default:
+                    onFilterClick(getTodos);
+                }
 
-          <a
-            href="#/active"
-            className={classNames(
-              'filter__link',
-              { selected: selectedOption === 'active' },
-            )}
-            onClick={() => {
-              onFilterClick(getActive);
-              setSelectedOption('active');
-            }}
-          >
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            className={classNames(
-              'filter__link',
-              { selected: selectedOption === 'completed' },
-            )}
-            onClick={() => {
-              onFilterClick(getCompleted);
-              setSelectedOption('completed');
-            }}
-          >
-            Completed
-          </a>
+                setSelectedOption(option);
+              }}
+            >
+              {option}
+            </a>
+          ))}
         </nav>
 
         {/* don't show this button if there are no completed todos */}
