@@ -2,16 +2,16 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  activeTodos: number;
+  activeTodosAmount: number;
 };
 
-export const Header: React.FC<Props> = React.memo(({ activeTodos }) => {
+export const Header: React.FC<Props> = React.memo(({ activeTodosAmount }) => {
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
-          active: activeTodos === 0,
+          active: !activeTodosAmount,
         })}
         aria-label="Toggle all todos"
       />

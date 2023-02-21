@@ -9,13 +9,15 @@ import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
 import { ErrorType } from './types/ErrorType';
+import { activeTodosAmount, completedTodosAmount } from './helpers';
 
 const USER_ID = 6373;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterByStatus, setFilterByStatus] = useState(FilterStatus.All);
-  const [errorType, setErrorType] = useState(ErrorType.None);
+  const [filterByStatus, setFilterByStatus]
+    = useState<FilterStatus>(FilterStatus.All);
+  const [errorType, setErrorType] = useState<ErrorType>(ErrorType.None);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -33,15 +35,9 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  const activeTodos = todos.filter(todo => !todo.completed).length;
-  const completedTodos = todos.filter(todo => todo.completed).length;
-
   const filterTodos = useMemo(() => {
     return todos.filter((todo) => {
       switch (filterByStatus) {
-        case FilterStatus.All:
-          return true;
-
         case FilterStatus.Active:
           return !todo.completed;
 
@@ -59,14 +55,14 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header activeTodos={activeTodos} />
+        <Header activeTodosAmount={activeTodosAmount(todos)} />
 
         <TodoList todos={filterTodos} />
 
-        {todos.length > 0 && (
+        {todos.length && (
           <Footer
-            activeTodos={activeTodos}
-            completedTodos={completedTodos}
+            activeTodosAmount={activeTodosAmount(todos)}
+            completedTodosAmount={completedTodosAmount(todos)}
             filterByStatus={filterByStatus}
             setFilterByStatus={setFilterByStatus}
           />
