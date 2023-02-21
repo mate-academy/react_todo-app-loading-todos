@@ -1,24 +1,23 @@
 import React from 'react';
 import cn from 'classnames';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
-  activeTodos: number,
+  hasTodos: number,
+  hasActiveTodos: number,
 };
 
 export const Header: React.FC<Props> = React.memo(({
-  todos,
-  activeTodos,
+  hasTodos,
+  hasActiveTodos,
 }) => (
   <header className="todoapp__header">
-    {todos.length !== 0 && (
+    {hasTodos !== 0 && (
       <button
         type="button"
         aria-label="toggle todos butoon"
         className={cn(
           'todoapp__toggle-all',
-          { active: !activeTodos },
+          { active: !hasActiveTodos },
         )}
       />
     )}

@@ -4,14 +4,14 @@ import { FilterType } from '../../types/FilterType';
 
 type Props = {
   activeTodos: number;
-  completedTodos: number;
+  hasCompletedTodos: number;
   filterType: FilterType;
   onFilterType: (value: FilterType) => void;
 };
 
 export const Footer: React.FC<Props> = React.memo(({
   activeTodos,
-  completedTodos,
+  hasCompletedTodos,
   filterType,
   onFilterType,
 }) => {
@@ -73,7 +73,7 @@ export const Footer: React.FC<Props> = React.memo(({
         type="button"
         className="todoapp__clear-completed"
         style={{
-          visibility: completedTodos
+          visibility: hasCompletedTodos
             ? 'visible'
             : 'hidden',
         }}

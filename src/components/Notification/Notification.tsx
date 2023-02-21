@@ -1,22 +1,25 @@
 import cn from 'classnames';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
-  errorType: string,
+  error: string,
   hasError: boolean,
-  onError: Dispatch<SetStateAction<boolean>>,
+  changeError: (status: boolean) => void,
 };
 
 export const Notification: React.FC<Props> = React.memo(({
-  errorType,
+  error,
   hasError,
-  onError,
+  changeError,
 }) => {
   useEffect(() => {
-    setTimeout(() => {
-      onError(false);
-    }, 3000);
-  }, []);
+    if (hasError) {
+      const timerId = window.setTimeout(() => {
+        window.clearTimeout(timerId);
+        changeError(false);
+      }, 3000);
+    }
+  }, [hasError]);
 
   return (
     <div
@@ -33,12 +36,11 @@ export const Notification: React.FC<Props> = React.memo(({
         className="delete"
         aria-label="delete button"
         onClick={() => {
-          onError(false);
+          changeError(false);
         }}
       />
 
-      {`Unable to ${errorType} a todo`}
-      <br />
+      {hasError && `${error}`}
     </div>
   );
 });

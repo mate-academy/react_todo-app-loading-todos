@@ -15,24 +15,24 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
-  const [errorType, setErrorType] = useState('upload');
+  const [error, setError] = useState('');
 
   const USER_ID = 6381;
 
   useEffect(() => {
-    const fetchTodo = async () => {
+    const fetchTodos = async (userId: number) => {
       try {
-        const todosFromServer = await getTodos(USER_ID);
+        const todosFromServer = await getTodos(userId);
 
         setTodos(todosFromServer);
-      } catch (error) {
+      } catch {
         setHasError(true);
-        setErrorType('upload');
+        setError('Unable to upload a todo');
         throw Error('An occur error while load todos');
       }
     };
 
-    fetchTodo();
+    fetchTodos(USER_ID);
   }, []);
 
   const filteredTodos = useMemo(() => (
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
     setFilterType(type);
   }, []);
 
-  const setError = useCallback((status: React.SetStateAction<boolean>) => {
+  const changeError = useCallback((status: boolean) => {
     setHasError(status);
   }, []);
 
@@ -56,8 +56,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          todos={todos}
-          activeTodos={activeTodos.length}
+          hasTodos={todos.length}
+          hasActiveTodos={activeTodos.length}
         />
 
         <TodoList todos={filteredTodos} />
@@ -65,19 +65,17 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <Footer
             activeTodos={activeTodos.length}
-            completedTodos={completedTodos.length}
+            hasCompletedTodos={completedTodos.length}
             filterType={filterType}
             onFilterType={changeFilterType}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <Notification
-        errorType={errorType}
+        error={error}
         hasError={hasError}
-        onError={setError}
+        changeError={changeError}
       />
     </div>
   );
