@@ -5,13 +5,18 @@ import { FilterBy } from '../../types/FilterBy';
 type Props = {
   filterBy: FilterBy,
   setFilterBy: (filter: FilterBy) => void,
+  countTodos: number,
 };
 
-export const Footer:React.FC<Props> = ({ filterBy, setFilterBy }) => {
+export const Footer:React.FC<Props> = ({
+  filterBy,
+  setFilterBy,
+  countTodos,
+}) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${countTodos} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}

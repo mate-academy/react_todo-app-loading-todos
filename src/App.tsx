@@ -26,9 +26,9 @@ export const App: React.FC = () => {
     window.setTimeout(() => {
       setIsError(false);
     }, 3000);
-
-    // window.clearTimeout(timerId);
   };
+
+  const countTodos = todos.length;
 
   const getTodosFromServer = async () => {
     try {
@@ -74,6 +74,7 @@ export const App: React.FC = () => {
         <Footer
           filterBy={filterBy}
           setFilterBy={setFilterBy}
+          countTodos={countTodos}
         />
       </div>
 
