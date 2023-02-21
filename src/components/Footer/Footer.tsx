@@ -6,14 +6,21 @@ type Props = {
   todos: Todo[]
   status: Status
   setStatus: (status: Status) => void;
+  handleDeleteCompletedTodos: () => void;
 };
-export const Footer:React.FC<Props> = ({ todos, status, setStatus }) => {
-  const todoLeft = todos.filter(todo => !todo.completed).length;
+export const Footer:React.FC<Props> = ({
+  todos,
+  status,
+  setStatus,
+  handleDeleteCompletedTodos,
+}) => {
+  const activeTodosAmount = todos.filter(todo => !todo.completed).length;
+  const completedTodo = todos.filter(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todoLeft} items left`}
+        {`${activeTodosAmount} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -50,9 +57,16 @@ export const Footer:React.FC<Props> = ({ todos, status, setStatus }) => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {completedTodo.length > 0
+       && (
+         <button
+           type="button"
+           className="todoapp__clear-completed"
+           onClick={handleDeleteCompletedTodos}
+         >
+           Clear completed
+         </button>
+       )}
     </footer>
   );
 };

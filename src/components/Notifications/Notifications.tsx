@@ -51,7 +51,7 @@ export const Notification:React.FC<Props> = ({
           setIsHidden(true);
         }}
       />
-      {`Unable to ${errorType} a todo`}
+      {`${errorType}`}
     </div>
   );
 };

@@ -4,11 +4,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
-  query: string,
-  setQuery: (event: string) => void,
+  name: string,
+  setName: (event: string) => void,
+  handleAddTodo: (todoName: string) => void,
 };
-export const Header:React.FC<Props> = ({ todos, query, setQuery }) => {
-  const isActive = todos.filter(todo => !todo.completed);
+export const Header:React.FC<Props> = ({
+  todos,
+  name,
+  setName,
+  handleAddTodo,
+}) => {
+  const isActive = todos.filter(todo => !todo.completed).length > 0;
 
   return (
     <header className="todoapp__header">
@@ -19,13 +25,17 @@ export const Header:React.FC<Props> = ({ todos, query, setQuery }) => {
       />
 
       {/* Add a todo on form submit */}
-      <form>
+      <form onSubmit={(event) => {
+        event.preventDefault()
+        handleAddTodo(name);
+      }}
+      >
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={query}
-          onChange={event => setQuery(event.target.value)}
+          value={name}
+          onChange={event => setName(event.target.value)}
         />
       </form>
     </header>

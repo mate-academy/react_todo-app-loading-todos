@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import { getTodos } from './api/todos';
+import { addTodos, deleteTodo, getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Notification } from './components/Notifications';
 import { TodoList } from './components/TodoList';
+import { ErrorMessages } from './types/errorMessages';
 import { Status } from './types/Status';
 import { Todo } from './types/Todo';
+import { getVisibleTodos } from './utils/preparedTodos';
 
 const USER_ID = 6386;
 
@@ -14,19 +16,11 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hasServerError, setServerError] = useState(false);
   const [status, setStatus] = useState<Status>(Status.All);
-  const [query, setQuery] = useState('');
-  const [errorType, setErrorType] = useState('');
+  const [name, setName] = useState('');
+  const [errorType, setErrorType] = useState<ErrorMessages>(ErrorMessages.NONE);
+  const [,setTempTodo] = useState<Todo | null>(null);
 
-  const visibletodos = todos.filter(todo => {
-    switch (status) {
-      case Status.Active:
-        return !todo.completed;
-      case Status.Completed:
-        return todo.completed;
-      default:
-        return todo;
-    }
-  });
+  const visibletodos = getVisibleTodos(todos, status);
 
   const getTodosFromServer = async () => {
     try {
@@ -36,13 +30,60 @@ export const App: React.FC = () => {
       setTodos(todosFromServer);
     } catch {
       setServerError(true);
-      setErrorType('upload');
     }
   };
 
   useEffect(() => {
     getTodosFromServer();
   }, []);
+
+  const handleAddTodo = async (todoName: string) => {
+    if (todoName.length === 0) {
+      setErrorType(ErrorMessages.TITLE);
+      setServerError(true);
+
+      return;
+    }
+
+    const todoToAdd = {
+      id: 0,
+      userId: USER_ID,
+      title: todoName,
+      completed: false,
+    };
+
+    try {
+      setName('');
+
+      const newTodo = await addTodos(USER_ID, todoToAdd);
+
+      setTempTodo(newTodo);
+
+      await getTodosFromServer();
+    } catch {
+      setServerError(true);
+      setErrorType(ErrorMessages.ADD);
+    }
+  };
+
+  const handleDeleteTodo = async (todoToDelete: Todo) => {
+    try {
+      await deleteTodo(USER_ID, todoToDelete.id);
+
+      await getTodosFromServer();
+    } catch {
+      setServerError(true);
+      setErrorType(ErrorMessages.DELETE);
+    }
+  };
+
+  const handleDeleteCompletedTodos = () => {
+    todos.forEach(todo => {
+      if (todo.completed) {
+        handleDeleteTodo(todo);
+      }
+    });
+  };
 
   return (
     <div className="todoapp">
@@ -51,16 +92,18 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          query={query}
-          setQuery={setQuery}
+          name={name}
+          setName={setName}
+          handleAddTodo={handleAddTodo}
         />
-        <TodoList todos={visibletodos} />
+        <TodoList todos={visibletodos} handleDeleteTodo={handleDeleteTodo} />
 
         {todos.length > 0 && (
           <Footer
             todos={visibletodos}
             status={status}
             setStatus={setStatus}
+            handleDeleteCompletedTodos={handleDeleteCompletedTodos}
           />
         )}
 
@@ -68,11 +111,13 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Notification
-        errorType={errorType}
-        hasError={hasServerError}
-        setHasError={setServerError}
-      />
+      {hasServerError && (
+        <Notification
+          errorType={errorType}
+          hasError={hasServerError}
+          setHasError={setServerError}
+        />
+      )}
     </div>
   );
 };
