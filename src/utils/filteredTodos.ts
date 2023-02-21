@@ -7,14 +7,13 @@ export const getFilteredTodos = (
 ): Todo[] => {
   const preparedTodos = todos.filter(todo => {
     switch (filterType) {
-      case FilterType.All:
-        return true;
       case FilterType.Active:
         return !todo.completed;
       case FilterType.Completed:
         return todo.completed;
+      case FilterType.All:
       default:
-        throw new Error('Incorrect filter type');
+        return true;
     }
   });
 

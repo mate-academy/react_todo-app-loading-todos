@@ -10,12 +10,13 @@ import { FilterType } from './types/FilterType';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notification';
 import { getFilteredTodos } from './utils/filteredTodos';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [hasError, setHasError] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(ErrorType.NO_ERROR);
 
   const USER_ID = 6381;
 
@@ -27,8 +28,9 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       } catch {
         setHasError(true);
-        setError('Unable to upload a todo');
-        throw Error('An occur error while load todos');
+        setError(ErrorType.UPLOAD_ERROR);
+        // eslint-disable-next-line no-console
+        console.warn('An occur error while load todos');
       }
     };
 
