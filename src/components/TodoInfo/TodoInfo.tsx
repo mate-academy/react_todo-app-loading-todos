@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -10,7 +10,6 @@ export const TodoInfo: React.FC<Props> = React.memo(({
   todo,
 }) => {
   const { title, completed } = todo;
-  const [isEdited] = useState(false);
 
   return (
     <div className={classNames(
@@ -26,29 +25,23 @@ export const TodoInfo: React.FC<Props> = React.memo(({
         />
       </label>
 
-      {isEdited
-        ? (
-          <input
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        )
-        : (
-          <>
-            <span className="todo__title">
-              {title}
-            </span>
+      <input
+        type="text"
+        className="todo__title-field"
+        placeholder="Empty todo will be deleted"
+        value="Todo is being edited now"
+      />
 
-            <button
-              type="button"
-              className="todo__remove"
-            >
-              ×
-            </button>
-          </>
-        )}
+      <span className="todo__title">
+        {title}
+      </span>
+
+      <button
+        type="button"
+        className="todo__remove"
+      >
+        ×
+      </button>
 
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />
