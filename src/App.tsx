@@ -71,7 +71,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {todos.length
+        {Boolean(todos.length)
         && (
           <Footer
             currentOption={filterValue}
