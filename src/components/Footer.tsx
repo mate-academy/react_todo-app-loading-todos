@@ -1,13 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { FilterTodos } from '../types/FilterTodos';
 
 type Props = {
   itemsLeft: Todo[];
   selectFilter: string;
   setSelectFilter: (str: string) => void
   allCompleted: Todo[];
-  clearCompleted: () => void;
+  onClearCompleted: () => void;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -15,7 +16,7 @@ export const Footer: React.FC<Props> = ({
   selectFilter,
   setSelectFilter,
   allCompleted,
-  clearCompleted,
+  onClearCompleted,
 }) => {
   return (
     <footer className="todoapp__footer">
@@ -28,9 +29,9 @@ export const Footer: React.FC<Props> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            { selected: selectFilter === 'all' },
+            { selected: selectFilter === FilterTodos.ALL },
           )}
-          onClick={() => setSelectFilter('all')}
+          onClick={() => setSelectFilter(FilterTodos.ALL)}
         >
           All
         </a>
@@ -39,9 +40,9 @@ export const Footer: React.FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: selectFilter === 'active' },
+            { selected: selectFilter === FilterTodos.ACTIVE },
           )}
-          onClick={() => setSelectFilter('active')}
+          onClick={() => setSelectFilter(FilterTodos.ACTIVE)}
         >
           Active
         </a>
@@ -50,23 +51,25 @@ export const Footer: React.FC<Props> = ({
           href="#/completed"
           className={classNames(
             'filter__link',
-            { selected: selectFilter === 'completed' },
+            { selected: selectFilter === FilterTodos.COMPLETED },
           )}
-          onClick={() => setSelectFilter('completed')}
+          onClick={() => setSelectFilter(FilterTodos.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      {allCompleted.length !== 0 ? (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
-      ) : ''}
+      <button
+        type="button"
+        className={classNames(
+          'todoapp__clear-completed',
+          { visible: !allCompleted.length },
+        )}
+        onClick={onClearCompleted}
+      >
+        Clear completed
+      </button>
+
     </footer>
   );
 };

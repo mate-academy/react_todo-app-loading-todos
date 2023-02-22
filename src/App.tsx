@@ -19,22 +19,25 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notifications';
 import { warningTimer } from './utils/warningTimer';
+import { FilterTodos } from './types/FilterTodos';
 
 const USER_ID = 6336;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
+  const [title, setTitle] = useState('');
+  const [creatingTodo, setCreatingTodo] = useState<Todo | null>(null);
+  const [todosInProcessed, setTodosInProcessed] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState(false);
   const [selectFilter, setSelectFilter] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
 
   const itemsLeft = todos.filter(todo => todo.completed === false);
 
-  const eventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    setQuery(value);
+    setTitle(value);
   };
 
   const isHasError = useCallback(() => {
@@ -44,19 +47,34 @@ export const App: React.FC = () => {
 
   const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!title.trim().length) {
+      setErrorMessage('Title can\'t be empty');
+      isHasError();
+      setTitle('');
+
+      return;
+    }
+
     try {
-      await createTodo(query);
+      setCreatingTodo({
+        id: 0,
+        title,
+        userId: USER_ID,
+        completed: false,
+      });
+
+      await createTodo(title);
     } catch {
       setErrorMessage('Unable to add a todo');
       isHasError();
+    } finally {
+      setCreatingTodo(null);
+      setTitle('');
     }
-
-    setQuery('');
   };
 
-  const allCompleted = useMemo(() => {
-    return todos.filter(todo => todo.completed === true);
-  }, [todos]);
+  const allCompleted = todos.filter(({ completed }) => completed);
 
   const isAllCompleted = allCompleted.length === todos.length;
 
@@ -65,38 +83,48 @@ export const App: React.FC = () => {
   };
 
   const toogleAllTodo = () => {
-    if (isAllCompleted) {
-      todos.forEach(todo => toogleTodo(todo.id, false));
-    } else {
-      todos.forEach(todo => toogleTodo(todo.id, true));
-    }
+    todos.forEach(async todo => {
+      try {
+        setTodosInProcessed(currentTodos => [...currentTodos, todo]);
+
+        await toogleTodo(todo.id, !isAllCompleted);
+      } catch (error) {
+        setErrorMessage('Unable to change completed');
+        isHasError();
+      } finally {
+        setTodosInProcessed(currentTodos => currentTodos
+          .filter(({ id }) => id !== todo.id));
+      }
+    });
   };
 
-  const handleUpdateTodo = useCallback(async (todoId: number, todo: Todo) => {
+  const handleUpdateTodo = useCallback(async (
+    todoId: number,
+    todoUpdate: Todo,
+  ) => {
     try {
-      await updateTodo(todoId, todo);
+      setTodosInProcessed(currentTodos => [...currentTodos, todoUpdate]);
+      await updateTodo(todoId, todoUpdate);
     } catch {
       setErrorMessage('Unable to update a todo');
       isHasError();
+    } finally {
+      setTodosInProcessed(currentTodos => (
+        currentTodos.filter(({ id }) => id !== todoUpdate.id)
+      ));
     }
   }, []);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const completedTodo = todo.completed;
-
-      switch (selectFilter) {
-        case 'all':
-          return todo;
-        case 'active':
-          return !completedTodo;
-        case 'completed':
-          return completedTodo;
-        default:
-          return false;
-      }
-    });
-  }, [todos, query, selectFilter]);
+    switch (selectFilter) {
+      case FilterTodos.ACTIVE:
+        return todos.filter(({ completed }) => !completed);
+      case FilterTodos.COMPLETED:
+        return todos.filter(({ completed }) => completed);
+      default:
+        return todos;
+    }
+  }, [todos, selectFilter]);
 
   useEffect(() => {
     const onLoadGetTodos = async () => {
@@ -126,12 +154,15 @@ export const App: React.FC = () => {
           isAllCompleted={isAllCompleted}
           onToogleAllTodo={toogleAllTodo}
           handleSubmit={handleAddTodo}
-          query={query}
-          onEventChange={eventChange}
+          query={title}
+          onEventChange={handleEventChange}
         />
 
         <TodoList
           todos={visibleTodos}
+          creatingTodo={creatingTodo}
+          todosLoadingState={todosInProcessed}
+          setTodosLoadingState={setTodosInProcessed}
           handleUpdateTodo={handleUpdateTodo}
           onSetErrorMessage={setErrorMessage}
           isHasError={isHasError}
@@ -143,7 +174,7 @@ export const App: React.FC = () => {
             selectFilter={selectFilter}
             setSelectFilter={setSelectFilter}
             allCompleted={allCompleted}
-            clearCompleted={clearCompleted}
+            onClearCompleted={clearCompleted}
           />
         ) : ''}
       </div>

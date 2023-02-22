@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { deleteTodo, toogleTodo } from '../api/todos';
@@ -8,6 +8,8 @@ type Props = {
   handleUpdateTodo: (todoId: number, todo: Todo) => void;
   onSetErrorMessage: (str: string) => void;
   isHasError: () => void;
+  todosLoadingState: Todo[],
+  setTodosLoadingState: Dispatch<SetStateAction<Todo[]>>;
 };
 
 export const TodoInfo: React.FC<Props> = ({
@@ -15,25 +17,35 @@ export const TodoInfo: React.FC<Props> = ({
   handleUpdateTodo,
   onSetErrorMessage,
   isHasError,
+  todosLoadingState,
+  setTodosLoadingState,
 }) => {
   const { title, completed } = todo;
   const [isEditing, setIsEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(title);
 
-  const removeTodo = async (todoId: number) => {
+  const removeTodo = async (todoRemove: Todo) => {
     try {
-      await deleteTodo(todoId);
+      setTodosLoadingState(currentTodos => [...currentTodos, todoRemove]);
+      await deleteTodo(todo.id);
     } catch {
       onSetErrorMessage('Unable to delete a todo');
       isHasError();
+    } finally {
+      setTodosLoadingState(currentTodos => currentTodos
+        .filter(({ id }) => id !== todoRemove.id));
     }
   };
 
-  const handleToogleClick = async (todoId: number) => {
+  const handleToogleClick = async (todoTogle: Todo) => {
     try {
-      await toogleTodo(todoId, !completed);
+      setTodosLoadingState(currentTodos => [...currentTodos, todoTogle]);
+      await toogleTodo(todoTogle.id, !completed);
     } catch {
       onSetErrorMessage('Unable to cange status a todo');
+    } finally {
+      setTodosLoadingState(currentTodos => currentTodos
+        .filter(({ id }) => id !== todoTogle.id));
     }
   };
 
@@ -45,11 +57,11 @@ export const TodoInfo: React.FC<Props> = ({
 
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsEditing(false);
 
     const trimTodoTitle = todoTitle.trim();
 
     if (trimTodoTitle === todo.title) {
-      setIsEditing(false);
       setTodoTitle(title);
 
       return;
@@ -65,8 +77,6 @@ export const TodoInfo: React.FC<Props> = ({
       ...todo,
       title: todoTitle,
     });
-
-    setIsEditing(false);
   };
 
   const onCancelEditing = (
@@ -77,6 +87,11 @@ export const TodoInfo: React.FC<Props> = ({
       setTodoTitle(todo.title);
     }
   };
+
+  const hasLoadingState = todosLoadingState
+    .some(todoLoading => todoLoading.id === todo.id);
+
+  const isLoading = todo.id === 0 || hasLoadingState;
 
   return (
     <li
@@ -91,7 +106,7 @@ export const TodoInfo: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           onClick={() => {
-            handleToogleClick(todo.id);
+            handleToogleClick(todo);
           }}
         />
       </label>
@@ -117,13 +132,18 @@ export const TodoInfo: React.FC<Props> = ({
         type="button"
         className="todo__remove"
         onClick={() => {
-          removeTodo(todo.id);
+          removeTodo(todo);
         }}
       >
         ×
       </button>
 
-      <div className="modal overlay">
+      <div
+        className={classNames(
+          'modal overlay',
+          { 'is-active': isLoading },
+        )}
+      >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
