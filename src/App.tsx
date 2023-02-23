@@ -23,9 +23,12 @@ export const App: React.FC = () => {
       .then(result => setTodos(result))
       .catch(() => {
         setIsError(Error.DATA);
-        window.setTimeout(() => setIsError(Error.RESET), 3000);
       });
   }, []);
+
+  if (isError) {
+    window.setTimeout(() => setIsError(Error.RESET), 3000);
+  }
 
   const visibleTodos = filteredTodos(todos, filter);
 
