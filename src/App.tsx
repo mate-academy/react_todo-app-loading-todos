@@ -1,17 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
+import { ErrorMessage } from './components/ErrorMessage';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { Filter } from './enum/Filter';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
+import { handlerError } from './utils/Errors';
 import { filteredTodos } from './utils/filter';
+import { Error } from './enum/Error';
 
 const USER_ID = 6387;
 
 export const App: React.FC = () => {
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(Error.RESET);
   const [filter, setFilter] = useState(Filter.ALL);
   const [todos, setTodos] = useState<Todo[]>([]);
 
@@ -19,15 +22,17 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(result => setTodos(result))
       .catch(() => {
-        setError(true);
-        window.setTimeout(() => setError(false), 3000);
+        setIsError(Error.DATA);
+        window.setTimeout(() => setIsError(Error.RESET), 3000);
       });
   }, []);
 
   const visibleTodos = filteredTodos(todos, filter);
 
+  const ErrorTitle = handlerError(isError);
+
   if (!USER_ID) {
-    setError(true);
+    setIsError(Error.USER);
 
     return <UserWarning />;
   }
@@ -67,22 +72,13 @@ export const App: React.FC = () => {
 
       </div>
 
-      {error && (
-        <div className="notification is-danger is-light has-text-weight-normal">
-          <button
-            type="button"
-            className="delete"
-            onClick={() => setError(false)}
+      {!isError
+        || (
+          <ErrorMessage
+            setIsError={setIsError}
+            ErrorTitle={ErrorTitle}
           />
-
-          {/* show only one message at a time */}
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
-      )}
+        ) }
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -9,7 +9,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
 
   return (
-    <div className={cn('todo', { completed })}>
+    <li className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           type="checkbox"
@@ -25,6 +25,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
-    </div>
+    </li>
   );
 };
