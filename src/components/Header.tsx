@@ -28,19 +28,13 @@ export const Header: React.FC<Props> = ({
         onClick={onToogleAllTodo}
       />
 
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-      >
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={(e) => {
-            onEventChange(e);
-          }}
+          onChange={onEventChange}
         />
       </form>
     </header>
