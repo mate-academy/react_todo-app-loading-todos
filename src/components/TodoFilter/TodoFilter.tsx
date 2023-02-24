@@ -1,4 +1,4 @@
-import cn from 'classnames';
+import classNames from 'classnames';
 import { Filter } from '../../enum/Filter';
 
 type Props = {
@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
     <nav className="filter">
       <a
         href="#/"
-        className={cn('filter__link',
+        className={classNames('filter__link',
           { selected: filter === Filter.ALL })}
         onClick={() => setFilter(Filter.ALL)}
       >
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
 
       <a
         href="#/active"
-        className={cn('filter__link',
+        className={classNames('filter__link',
           { selected: filter === Filter.ACTIVE })}
         onClick={() => setFilter(Filter.ACTIVE)}
       >
@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
 
       <a
         href="#/completed"
-        className={cn('filter__link',
+        className={classNames('filter__link',
           { selected: filter === Filter.COMPLETED })}
         onClick={() => setFilter(Filter.COMPLETED)}
       >

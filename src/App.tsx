@@ -7,9 +7,8 @@ import { TodoList } from './components/TodoList';
 import { Filter } from './enum/Filter';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
-import { handlerError } from './utils/Errors';
 import { filteredTodos } from './utils/filter';
-import { Error } from './enum/Error';
+import { Error } from './enum/Errors';
 
 const USER_ID = 6387;
 
@@ -21,9 +20,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(result => setTodos(result))
-      .catch(() => {
-        setIsError(Error.DATA);
-      });
+      .catch(() => setIsError(Error.DATA));
   }, []);
 
   if (isError) {
@@ -32,11 +29,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = filteredTodos(todos, filter);
 
-  const ErrorTitle = handlerError(isError);
-
   if (!USER_ID) {
-    setIsError(Error.USER);
-
     return <UserWarning />;
   }
 
@@ -59,7 +52,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {!todos.length || (
+        {!!todos.length && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               {`${todos.length} items left`}
@@ -75,11 +68,11 @@ export const App: React.FC = () => {
 
       </div>
 
-      {!isError
-        || (
+      {!!isError
+        && (
           <ErrorMessage
             setIsError={setIsError}
-            ErrorTitle={ErrorTitle}
+            isError={isError}
           />
         ) }
     </div>

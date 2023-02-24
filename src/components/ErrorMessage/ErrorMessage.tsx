@@ -1,11 +1,12 @@
-import { Error } from '../../enum/Error';
+import { Error } from '../../enum/Errors';
+import { Errors } from '../../utils/Errors';
 
 type Props = {
   setIsError: (value: Error) => void;
-  ErrorTitle: string
+  isError: Error
 };
 
-export const ErrorMessage: React.FC<Props> = ({ setIsError, ErrorTitle }) => {
+export const ErrorMessage: React.FC<Props> = ({ setIsError, isError }) => {
   return (
     <div
       className="notification is-danger is-light has-text-weight-normal"
@@ -16,7 +17,7 @@ export const ErrorMessage: React.FC<Props> = ({ setIsError, ErrorTitle }) => {
         className="delete"
         onClick={() => setIsError(Error.RESET)}
       />
-      {ErrorTitle}
+      {Errors[isError]}
     </div>
   );
 };
