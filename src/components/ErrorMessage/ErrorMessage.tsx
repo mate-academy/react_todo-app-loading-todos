@@ -1,4 +1,4 @@
-import { Error } from '../../enum/Errors';
+import { Error } from '../../enum/Error';
 import { Errors } from '../../utils/Errors';
 
 type Props = {

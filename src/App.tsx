@@ -8,7 +8,7 @@ import { Filter } from './enum/Filter';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { filteredTodos } from './utils/filter';
-import { Error } from './enum/Errors';
+import { Error } from './enum/Error';
 
 const USER_ID = 6387;
 
