@@ -6,7 +6,7 @@ import { FilterTodos } from '../types/FilterTodos';
 type Props = {
   itemsLeft: Todo[];
   selectFilter: string;
-  setSelectFilter: (str: string) => void
+  setSelectFilter: (filter: FilterTodos) => void
   allCompleted: Todo[];
   onClearCompleted: () => void;
 };

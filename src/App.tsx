@@ -29,10 +29,10 @@ export const App: React.FC = () => {
   const [creatingTodo, setCreatingTodo] = useState<Todo | null>(null);
   const [todosInProcessed, setTodosInProcessed] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState(false);
-  const [selectFilter, setSelectFilter] = useState('all');
+  const [selectFilter, setSelectFilter] = useState(FilterTodos.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const itemsLeft = todos.filter(todo => todo.completed === false);
+  const itemsLeft = todos.filter(({ completed }) => !completed);
 
   const handleEventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     setTitle(value);
   };
 
-  const isHasError = useCallback(() => {
+  const pushError = useCallback(() => {
     setHasError(true);
     warningTimer(setHasError, false, 3000);
   }, [errorMessage]);
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
 
     if (!title.trim().length) {
       setErrorMessage('Title can\'t be empty');
-      isHasError();
+      pushError();
       setTitle('');
 
       return;
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
       setTodos(currentTodos => [...currentTodos, addedTodo]);
     } catch {
       setErrorMessage('Unable to add a todo');
-      isHasError();
+      pushError();
     } finally {
       setCreatingTodo(null);
       setTitle('');
@@ -110,7 +110,7 @@ export const App: React.FC = () => {
         }));
       } catch (error) {
         setErrorMessage('Unable to change completed');
-        isHasError();
+        pushError();
       } finally {
         setTodosInProcessed(currentTodos => currentTodos
           .filter(({ id }) => id !== todo.id));
@@ -133,7 +133,7 @@ export const App: React.FC = () => {
       }));
     } catch {
       setErrorMessage('Unable to update a todo');
-      isHasError();
+      pushError();
     } finally {
       setTodosInProcessed(currentTodos => (
         currentTodos.filter(({ id }) => id !== todoUpdate.id)
@@ -160,7 +160,7 @@ export const App: React.FC = () => {
         setTodos(todosData);
       } catch (error) {
         setErrorMessage('Unable to loading todos');
-        isHasError();
+        pushError();
       }
     };
 
@@ -192,10 +192,10 @@ export const App: React.FC = () => {
           setTodosLoadingState={setTodosInProcessed}
           handleUpdateTodo={handleUpdateTodo}
           onSetErrorMessage={setErrorMessage}
-          isHasError={isHasError}
+          isHasError={pushError}
         />
 
-        {todos.length !== 0 ? (
+        {!!todos.length ? (
           <Footer
             itemsLeft={itemsLeft}
             selectFilter={selectFilter}

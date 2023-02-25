@@ -94,7 +94,7 @@ export const TodoInfo: React.FC<Props> = ({
     });
   };
 
-  const onCancelEditing = (
+  const handleCancelEditing = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.code === 'Escape') {
@@ -134,7 +134,7 @@ export const TodoInfo: React.FC<Props> = ({
             placeholder="Empty todo will be deleted"
             className="todo__title-field"
             onChange={(e) => eventChange(e)}
-            onKeyUp={(e) => onCancelEditing(e)}
+            onKeyUp={(e) => handleCancelEditing(e)}
           />
         </form>
       ) : (
