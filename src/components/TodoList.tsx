@@ -5,6 +5,7 @@ import { TodoInfo } from './TodoInfo';
 
 type Props = {
   todos: Todo[];
+  onSetTodos: Dispatch<SetStateAction<Todo[]>>;
   creatingTodo: Todo | null;
   handleUpdateTodo: (todoId: number, todo: Todo) => void;
   onSetErrorMessage: (str: string) => void;
@@ -15,6 +16,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  onSetTodos,
   creatingTodo,
   handleUpdateTodo,
   onSetErrorMessage,
@@ -33,6 +35,7 @@ export const TodoList: React.FC<Props> = ({
           >
             <TodoInfo
               todo={todo}
+              onSetTodos={onSetTodos}
               key={todo.id}
               todosLoadingState={todosLoadingState}
               setTodosLoadingState={setTodosLoadingState}
@@ -51,6 +54,7 @@ export const TodoList: React.FC<Props> = ({
           >
             <TodoInfo
               todo={creatingTodo}
+              onSetTodos={onSetTodos}
               todosLoadingState={todosLoadingState}
               setTodosLoadingState={setTodosLoadingState}
               handleUpdateTodo={handleUpdateTodo}

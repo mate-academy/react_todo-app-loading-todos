@@ -19,9 +19,9 @@ export const Notification: React.FC<Props> = ({
         { hidden: !hasError },
       )}
     >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
+        aria-label="Clear error"
         className="delete"
         onClick={() => setHasError(false)}
       />

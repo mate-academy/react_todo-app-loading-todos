@@ -1,10 +1,16 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { deleteTodo, toogleTodo } from '../api/todos';
 
 type Props = {
   todo: Todo;
+  onSetTodos: Dispatch<SetStateAction<Todo[]>>;
   handleUpdateTodo: (todoId: number, todo: Todo) => void;
   onSetErrorMessage: (str: string) => void;
   isHasError: () => void;
@@ -14,6 +20,7 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
+  onSetTodos,
   handleUpdateTodo,
   onSetErrorMessage,
   isHasError,
@@ -24,10 +31,12 @@ export const TodoInfo: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [todoTitle, setTodoTitle] = useState(title);
 
-  const removeTodo = async (todoRemove: Todo) => {
+  const removeTodo = useCallback(async (todoRemove: Todo) => {
     try {
       setTodosLoadingState(currentTodos => [...currentTodos, todoRemove]);
       await deleteTodo(todo.id);
+      onSetTodos(prevTodos => prevTodos
+        .filter(({ id }) => id !== todoRemove.id));
     } catch {
       onSetErrorMessage('Unable to delete a todo');
       isHasError();
@@ -35,19 +44,25 @@ export const TodoInfo: React.FC<Props> = ({
       setTodosLoadingState(currentTodos => currentTodos
         .filter(({ id }) => id !== todoRemove.id));
     }
-  };
+  }, [todo]);
 
-  const handleToogleClick = async (todoTogle: Todo) => {
+  const handleToogleClick = useCallback(async (todoTogle: Todo) => {
     try {
       setTodosLoadingState(currentTodos => [...currentTodos, todoTogle]);
-      await toogleTodo(todoTogle.id, !completed);
+      const todoChange = await toogleTodo(todoTogle.id, !completed);
+
+      onSetTodos(currentTodos => currentTodos.map(todoToogle => {
+        return todoToogle.id === todoChange.id
+          ? todoChange
+          : todoToogle;
+      }));
     } catch {
       onSetErrorMessage('Unable to cange status a todo');
     } finally {
       setTodosLoadingState(currentTodos => currentTodos
         .filter(({ id }) => id !== todoTogle.id));
     }
-  };
+  }, [todo]);
 
   const eventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

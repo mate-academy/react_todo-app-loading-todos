@@ -64,7 +64,9 @@ export const App: React.FC = () => {
         completed: false,
       });
 
-      await createTodo(title);
+      const addedTodo = await createTodo(title);
+
+      setTodos(currentTodos => [...currentTodos, addedTodo]);
     } catch {
       setErrorMessage('Unable to add a todo');
       isHasError();
@@ -78,16 +80,34 @@ export const App: React.FC = () => {
 
   const isAllCompleted = allCompleted.length === todos.length;
 
-  const clearCompleted = () => {
-    allCompleted.forEach(todo => deleteTodo(todo.id));
-  };
+  const clearCompleted = useCallback(() => {
+    allCompleted.forEach(async todo => {
+      try {
+        setTodosInProcessed(currentTodos => [...currentTodos, todo]);
+        await deleteTodo(todo.id);
+        setTodos(prevTodos => prevTodos.filter(({ completed }) => !completed));
+      } catch (error) {
+        setErrorMessage('Unable to delete a todo');
+        warningTimer(setErrorMessage, '', 3000);
+      } finally {
+        setTodosInProcessed(currentTodos => currentTodos
+          .filter(({ completed }) => !completed));
+      }
+    });
+  }, [todos]);
 
-  const toogleAllTodo = () => {
+  const toogleAllTodo = useCallback(() => {
     todos.forEach(async todo => {
       try {
         setTodosInProcessed(currentTodos => [...currentTodos, todo]);
 
-        await toogleTodo(todo.id, !isAllCompleted);
+        const todoChange = await toogleTodo(todo.id, !isAllCompleted);
+
+        setTodos(currentTodos => currentTodos.map(todoToogle => {
+          return todoToogle.id === todoChange.id
+            ? todoChange
+            : todoToogle;
+        }));
       } catch (error) {
         setErrorMessage('Unable to change completed');
         isHasError();
@@ -96,7 +116,7 @@ export const App: React.FC = () => {
           .filter(({ id }) => id !== todo.id));
       }
     });
-  };
+  }, [todos]);
 
   const handleUpdateTodo = useCallback(async (
     todoId: number,
@@ -104,7 +124,13 @@ export const App: React.FC = () => {
   ) => {
     try {
       setTodosInProcessed(currentTodos => [...currentTodos, todoUpdate]);
-      await updateTodo(todoId, todoUpdate);
+      const todoChange = await updateTodo(todoId, todoUpdate);
+
+      setTodos(currentTodos => currentTodos.map(todo => {
+        return todo.id === todoChange.id
+          ? todoChange
+          : todo;
+      }));
     } catch {
       setErrorMessage('Unable to update a todo');
       isHasError();
@@ -139,7 +165,7 @@ export const App: React.FC = () => {
     };
 
     onLoadGetTodos();
-  });
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -160,6 +186,7 @@ export const App: React.FC = () => {
 
         <TodoList
           todos={visibleTodos}
+          onSetTodos={setTodos}
           creatingTodo={creatingTodo}
           todosLoadingState={todosInProcessed}
           setTodosLoadingState={setTodosInProcessed}
