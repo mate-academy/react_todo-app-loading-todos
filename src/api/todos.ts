@@ -5,4 +5,10 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+export const getTodosCompleted = (userId: number) => {
+  return getTodos(userId).then(todos => todos.filter(todo => todo.completed));
+};
+
+export const getTodosActive = (userId: number) => {
+  return getTodos(userId).then(todos => todos.filter(todo => !todo.completed));
+};
