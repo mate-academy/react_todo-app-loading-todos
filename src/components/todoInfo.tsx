@@ -26,7 +26,7 @@ export const TodoInfo: React.FC<Props> = ({ todoInfo, addComplitedTodo }) => {
   };
 
   return (
-    <div className={`"todo" ${completed}`}>
+    <div className={`todo ${completed}`}>
       <label className="todo__status-label">
         <input
           type="checkbox"
@@ -50,7 +50,13 @@ export const TodoInfo: React.FC<Props> = ({ todoInfo, addComplitedTodo }) => {
         )
         : (
           <>
-            <span className="todo__title">{title}</span>
+            <span
+              data-cy="TodoTitle"
+              className="todo__title"
+            >
+              {title}
+
+            </span>
             <button type="button" className="todo__remove">×</button>
           </>
         )}

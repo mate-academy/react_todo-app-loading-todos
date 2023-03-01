@@ -23,13 +23,12 @@ export const Footer: React.FC<Props> = ({
         items left
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
           className={classNames(
-            'filter__link', 'selected', {
-              'is-active': selectedFilter === SelectOptions.ALL,
+            'filter__link', {
+              selected: selectedFilter === SelectOptions.ALL,
             },
           )}
           onClick={() => {
@@ -43,8 +42,8 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={classNames(
-            'filter__link', 'selected', {
-              'is-active': selectedFilter === SelectOptions.ACTIVE,
+            'filter__link', {
+              selected: selectedFilter === SelectOptions.ACTIVE,
             },
           )}
           onClick={() => {
@@ -58,8 +57,8 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={classNames(
-            'filter__link', 'selected', {
-              'is-active': selectedFilter === SelectOptions.COMPLETED,
+            'filter__link', {
+              selected: selectedFilter === SelectOptions.COMPLETED,
             },
           )}
           onClick={() => {
@@ -71,12 +70,15 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {completedTodosCount
-        && (
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        )}
+      {completedTodosCount > 0 && (
+        <button
+          type="button"
+          data-cy="ClearCompletedButton"
+          className="todoapp__clear-completed"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
