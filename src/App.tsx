@@ -1,9 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-
-// https://mate.academy/students-api/todos?userId=6476
 import React, { useEffect, useMemo, useState } from 'react';
-
-// import { client } from './utils/fetchClient';
 
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header/Header';
@@ -47,6 +43,8 @@ export const App: React.FC = () => {
     );
   }, [filterBy, todos]);
 
+  const noCompleteTodos = todos.some((todo) => !todo.completed);
+
   const loadTodosData = async () => {
     try {
       setIsError(false);
@@ -76,13 +74,14 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
-            <Footer filterBy={filterBy} setFilterBy={setFilterBy} />
+            <Footer 
+              noCompleteTodos={noCompleteTodos} 
+              filterBy={filterBy} 
+              setFilterBy={setFilterBy} 
+            />
           </>
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
 
       {isError && (
         <Notification />

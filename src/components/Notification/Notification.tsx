@@ -29,7 +29,6 @@ export const Notification: React.FC = () => {
         onClick={() => setIsHidden(true)}
       />
 
-      {/* show only one message at a time */}
       Unable to add a todo
       <br />
       Unable to delete a todo

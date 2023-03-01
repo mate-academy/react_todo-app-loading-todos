@@ -1,20 +1,23 @@
 import classNames from 'classnames';
 
 type Props = {
+  noCompleteTodos: boolean,
   filterBy: string,
   setFilterBy: (value: string) => void
 };
 
 const navigation = ['All', 'Active', 'Completed'];
 
-export const Footer: React.FC<Props> = ({ filterBy, setFilterBy }) => {
+export const Footer: React.FC<Props> = ({
+  noCompleteTodos, 
+  filterBy, 
+  setFilterBy }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
         3 items left
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
 
         {navigation.map((nav) => {
@@ -34,10 +37,11 @@ export const Footer: React.FC<Props> = ({ filterBy, setFilterBy }) => {
         })}
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {noCompleteTodos && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
