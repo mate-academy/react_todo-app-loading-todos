@@ -10,10 +10,6 @@ export const ErrorNotification: React.FC<Props> = ({
   onNotificationClose,
   isErrorOccuring,
 }) => {
-  const onCloseHandler = () => {
-    onNotificationClose();
-  };
-
   return (
     <div className={classnames('notification', 'is-danger',
       'is-light', 'has-text-weight-normal', { hidden: isErrorOccuring })}
@@ -21,7 +17,7 @@ export const ErrorNotification: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={onCloseHandler}
+        onClick={onNotificationClose}
       />
       {/* show only one message at a time */}
       Unable to add a todo

@@ -100,7 +100,7 @@ export const App: React.FC = () => {
         {todos.length > 0
           && <Main todos={visibleTodos} addComplitedTodo={addComplitedTodo} />}
 
-        {todos && (
+        {todos.length && (
           <Footer
             filterTodos={filterTodosBySelectOptions}
             todosCount={todos.length}
