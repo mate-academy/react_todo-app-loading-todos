@@ -15,12 +15,15 @@ export const Footer: React.FC<Props> = ({
 }) => {
   const [selectedFilter, setSelectedFilter] = useState(SelectOptions.ALL);
 
+  const setCurrentFilter = (filterToSet:SelectOptions) => {
+    setSelectedFilter(filterToSet);
+    filterTodos(filterToSet);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {todosCount}
-        {' '}
-        items left
+        {`${todosCount} items left`}
       </span>
 
       <nav className="filter">
@@ -32,8 +35,7 @@ export const Footer: React.FC<Props> = ({
             },
           )}
           onClick={() => {
-            setSelectedFilter(SelectOptions.ALL);
-            filterTodos(SelectOptions.ALL);
+            setCurrentFilter(SelectOptions.ALL);
           }}
         >
           {SelectOptions.ALL}
@@ -47,8 +49,7 @@ export const Footer: React.FC<Props> = ({
             },
           )}
           onClick={() => {
-            setSelectedFilter(SelectOptions.ACTIVE);
-            filterTodos(SelectOptions.ACTIVE);
+            setCurrentFilter(SelectOptions.ACTIVE);
           }}
         >
           {SelectOptions.ACTIVE}
@@ -62,23 +63,22 @@ export const Footer: React.FC<Props> = ({
             },
           )}
           onClick={() => {
-            setSelectedFilter(SelectOptions.COMPLETED);
-            filterTodos(SelectOptions.COMPLETED);
+            setCurrentFilter(SelectOptions.COMPLETED);
           }}
         >
           {SelectOptions.COMPLETED}
         </a>
       </nav>
 
-      {completedTodosCount > 0 && (
-        <button
-          type="button"
-          data-cy="ClearCompletedButton"
-          className="todoapp__clear-completed"
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        data-cy="ClearCompletedButton"
+        className={classNames('todoapp__clear-completed',
+          { hidden: completedTodosCount < 1 })}
+      >
+        Clear completed
+      </button>
+
     </footer>
   );
 };

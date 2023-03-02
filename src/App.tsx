@@ -32,8 +32,6 @@ export const App: React.FC = () => {
         setVisibleTodos(todos.filter((todo: Todo) => todo.completed));
         break;
       case SelectOptions.ALL:
-        setVisibleTodos(todos);
-        break;
       default:
         setVisibleTodos(todos);
     }
@@ -63,9 +61,11 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutID = setTimeout(() => {
       setOnError(false);
     }, 3000);
+
+    return () => clearTimeout(timeoutID);
   }, []);
 
   const closeNotification = () => {
@@ -97,7 +97,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {todos.length
+        {todos.length > 0
           && <Main todos={visibleTodos} addComplitedTodo={addComplitedTodo} />}
 
         {todos && (

@@ -35,31 +35,29 @@ export const TodoInfo: React.FC<Props> = ({ todoInfo, addComplitedTodo }) => {
           onChange={() => addComplitedTodo(id)}
         />
       </label>
-      {isTodoEditing
-        ? (
-          <form>
-            <input
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              value={editedValue}
-              onChange={onInputChange}
-              onBlur={onInputBlur}
-            />
-          </form>
-        )
-        : (
-          <>
-            <span
-              data-cy="TodoTitle"
-              className="todo__title"
-            >
-              {title}
+      {isTodoEditing ? (
+        <form>
+          <input
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={editedValue}
+            onChange={onInputChange}
+            onBlur={onInputBlur}
+          />
+        </form>
+      ) : (
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+          >
+            {title}
 
-            </span>
-            <button type="button" className="todo__remove">×</button>
-          </>
-        )}
+          </span>
+          <button type="button" className="todo__remove">×</button>
+        </>
+      )}
 
       <ModalOverlay isTodoUpdating={false} />
     </div>
