@@ -7,9 +7,7 @@ type Props = {
   todos: Todo[];
 };
 
-export const Header: React.FC<Props> = ({
-  todos,
-}) => {
+export const Header: React.FC<Props> = ({ todos }) => {
   const [title, setTitle] = useState('');
   const hasActive = todos.some(todoItem => !todoItem.completed);
 

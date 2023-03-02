@@ -43,7 +43,6 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          userId={USER_ID}
         />
 
         { !!todos.length && (
