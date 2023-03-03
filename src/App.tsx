@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Error } from './components/Error/Error';
 import { Filter } from './components/Filter/Filter';
@@ -11,21 +11,23 @@ const USER_ID = 6470;
 
 export const App: React.FC = () => {
   const [listTodo, setListTodo] = useState<Todo[]>([]);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
 
-  const getListTodo = (filter?: boolean) => {
-    getTodos(USER_ID, filter)
-      .then(res => setListTodo(res))
-      .catch(() => {
-        setError('Oops, something were wrong, please try again later');
-      });
-  };
+  const getListTodo = useCallback(async (filter?: boolean) => {
+    try {
+      const result = await getTodos(USER_ID, filter);
+
+      setListTodo(result);
+    } catch (e) {
+      setError('Oops, something were wrong, please try again later');
+    }
+  }, []);
 
   useEffect(() => {
     getListTodo();
   }, []);
 
-  const clearError = () => setError('');
+  const clearError = useCallback(() => setError(''), []);
 
   if (!USER_ID) {
     return <UserWarning />;

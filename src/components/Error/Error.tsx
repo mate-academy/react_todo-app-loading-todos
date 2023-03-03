@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   errorText: string,
   errorClear: () => void
 };
-export const Error: React.FC<Props> = ({ errorClear, errorText }) => {
+export const Error: FC<Props> = ({ errorClear, errorText }) => {
   useEffect(() => {
-    const idTimer = setTimeout(() => errorClear(), 3000);
+    const idTimer = setTimeout(errorClear, 3000);
 
     if (errorText) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
