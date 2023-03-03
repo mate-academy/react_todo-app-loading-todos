@@ -19,17 +19,11 @@ import { initData } from './constants/initData';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(initData.todos);
-
   const [filter, setFilter] = useState<Filter>(initData.filter);
-
-  const [customError, setError] = useState<CustomError>(initData.customError);
-
+  const [customError, setError]
+    = useState<CustomError | null>(initData.customError);
   const [activeTodoData, setActiveTodo]
     = useState<ActiveTodoData>(initData.activeTodoData);
-
-  const hideError = () => {
-    setError({ ...customError, active: false });
-  };
 
   const filterCallback = ((todo: Todo) => {
     switch (filter) {
@@ -52,8 +46,8 @@ export const App: React.FC = () => {
         });
       })
       .catch(() => {
-        setError({ active: true, text: 'Unable to update a todo' });
-        setTimeout(hideError, 3000);
+        setError(CustomError.update);
+        setTimeout(() => setError(null), 3000);
       });
   }, []);
 
@@ -62,7 +56,7 @@ export const App: React.FC = () => {
       hasActiveTodo: todos.some(todo => !todo.completed),
       activeLeft: todos.filter(todo => !todo.completed).length,
     });
-    hideError();
+    setError(null);
   }, [todos]);
 
   if (!USER_ID) {
@@ -90,10 +84,12 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification
-        customError={customError}
-        hideError={hideError}
-      />
+      {customError && (
+        <ErrorNotification
+          customError={customError}
+          setError={setError}
+        />
+      )}
     </div>
   );
 };

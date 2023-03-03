@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import classNames from 'classnames';
 
+import { TodoComponent } from './TodoComponent';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -11,37 +11,17 @@ type Props = {
 export const ListOfTodos: FC<Props> = ({
   todos,
   filterCallback,
-}) => {
-  return (
-    <section
-      className="todoapp__main"
-    >
-      {todos.filter(filterCallback)
-        .map(({ id, title, completed }: Todo) => (
-          <div
-            key={id}
-            className={classNames('todo', { completed })}
-          >
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked={completed}
-              />
-            </label>
-
-            <span className="todo__title">{title}</span>
-
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="
-                        modal-background has-background-white-ter"
-              />
-              <div className="loader" />
-            </div>
-          </div>
-        ))}
-    </section>
-  );
-};
+}) => (
+  <section
+    className="todoapp__main"
+  >
+    {todos.filter(filterCallback)
+      .map(({ id, title, completed }: Todo) => (
+        <TodoComponent
+          id={id}
+          completed={completed}
+          title={title}
+        />
+      ))}
+  </section>
+);

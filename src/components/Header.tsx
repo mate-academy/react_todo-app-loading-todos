@@ -10,25 +10,22 @@ type Props = {
 
 export const Header: FC<Props> = ({
   activeTodoData,
-}) => {
-  return (
-    <header className="todoapp__header">
-      <button
-        type="button"
-        className={classNames(
-          'todoapp__toggle-all',
-          { active: activeTodoData.hasActiveTodo },
-        )}
+}) => (
+  <header className="todoapp__header">
+    <button
+      type="button"
+      className={classNames(
+        'todoapp__toggle-all',
+        { active: activeTodoData.hasActiveTodo },
+      )}
+    />
+
+    <form>
+      <input
+        type="text"
+        className="todoapp__new-todo"
+        placeholder="What needs to be done?"
       />
-
-      <form>
-        <input
-          type="text"
-          className="todoapp__new-todo"
-          placeholder="What needs to be done?"
-        />
-      </form>
-    </header>
-
-  );
-};
+    </form>
+  </header>
+);

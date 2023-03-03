@@ -4,24 +4,22 @@ import { CustomError } from '../types/CustomError';
 
 type Props = {
   customError: CustomError,
-  hideError: () => void,
+  setError: (error: CustomError | null) => void,
 };
 
-export const ErrorNotification: FC<Props> = ({ customError, hideError }) => {
-  return (
-    <div
-      className="notification is-danger is-light has-text-weight-normal"
-      hidden={!customError.active}
-    >
-      <button
-        type="button"
-        className="delete"
-        onClick={hideError}
-      />
+export const ErrorNotification: FC<Props> = ({ customError, setError }) => (
+  <div
+    className="notification is-danger is-light has-text-weight-normal"
+    hidden={!customError}
+  >
+    <button
+      type="button"
+      className="delete"
+      onClick={() => setError(null)}
+    />
 
-      <p>
-        {customError.text}
-      </p>
-    </div>
-  );
-};
+    <p>
+      {customError}
+    </p>
+  </div>
+);
