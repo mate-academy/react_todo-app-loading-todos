@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import { ErrorNotification } from './components/ErrorNotification';
 import { FooterMenu } from './components/FooterMenu';
@@ -53,11 +53,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setActiveTodo({
-      hasActiveTodo: todos.some(todo => !todo.completed),
+      hasActiveTodo: !!todos.some(todo => !todo.completed),
       activeLeft: todos.filter(todo => !todo.completed).length,
     });
     setError(null);
   }, [todos]);
+
+  const filteredTodos = useMemo(
+    () => todos.filter(filterCallback),
+    [todos, filter],
+  );
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -71,11 +76,10 @@ export const App: React.FC = () => {
         <Header activeTodoData={activeTodoData} />
 
         <ListOfTodos
-          todos={todos}
-          filterCallback={filterCallback}
+          todos={filteredTodos}
         />
 
-        {Boolean(todos.length) && (
+        {!!todos.length && (
           <FooterMenu
             activeTodoData={activeTodoData}
             filter={filter}

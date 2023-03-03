@@ -5,23 +5,20 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[],
-  filterCallback: (todo: Todo) => boolean,
 };
 
 export const ListOfTodos: FC<Props> = ({
   todos,
-  filterCallback,
 }) => (
   <section
     className="todoapp__main"
   >
-    {todos.filter(filterCallback)
-      .map(({ id, title, completed }: Todo) => (
-        <TodoComponent
-          id={id}
-          completed={completed}
-          title={title}
-        />
-      ))}
+    {todos.map(({ id, title, completed }: Todo) => (
+      <TodoComponent
+        key={id}
+        completed={completed}
+        title={title}
+      />
+    ))}
   </section>
 );

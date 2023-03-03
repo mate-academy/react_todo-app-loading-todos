@@ -2,18 +2,15 @@ import { FC } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  id: number,
   completed: boolean,
   title: string,
 };
 
 export const TodoComponent: FC<Props> = ({
-  id,
   completed,
   title,
 }) => (
   <div
-    key={id}
     className={classNames('todo', { completed })}
   >
     <label className="todo__status-label">
@@ -29,12 +26,7 @@ export const TodoComponent: FC<Props> = ({
     <button type="button" className="todo__remove">×</button>
 
     <div className="modal overlay">
-      <div
-        className="
-                  modal-background
-                  has-background-white-ter
-                "
-      />
+      <div className="modal-background has-background-white-ter" />
       <div className="loader" />
     </div>
   </div>
