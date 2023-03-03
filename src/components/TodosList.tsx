@@ -56,7 +56,7 @@ export const TodosList: React.FC<Props> = ({
     )));
   }, [newUpdateTodo]);
 
-  const filterTodos = () => {
+  const getFilteredTodos = () => {
     switch (filterMode) {
       case 'active':
         return todos.filter(todo => todo.completed);
@@ -100,7 +100,7 @@ export const TodosList: React.FC<Props> = ({
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      { filterTodos().map(todo => (
+      { getFilteredTodos().map(todo => (
         <div
           key={todo.id}
           data-cy="Todo"
@@ -119,8 +119,8 @@ export const TodosList: React.FC<Props> = ({
             />
           </label>
           { todo.editMode && (
-            <form onSubmit={(e) => {
-              onSubmitEdit(e, todo);
+            <form onSubmit={(event) => {
+              onSubmitEdit(event, todo);
             }}
             >
               <input

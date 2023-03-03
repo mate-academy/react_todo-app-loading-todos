@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -18,14 +19,16 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="todosCounter">
-        {`${todos.filter((t: Todo) => !t.completed).length} items left`}
+        {`${todos.filter((todo: Todo) => !todo.completed).length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <Link
           data-cy="FilterLinkAll"
           to="#/"
-          className={`filter__link ${filterMode === 'all' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filterMode === 'all',
+          })}
           onClick={() => {
             filterModeHandler('all');
           }}
@@ -36,7 +39,9 @@ export const Footer: React.FC<Props> = ({
         <Link
           data-cy="FilterLinkActive"
           to="#/active"
-          className={`filter__link ${filterMode === 'active' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filterMode === 'active',
+          })}
           onClick={() => {
             filterModeHandler('active');
           }}
@@ -46,7 +51,9 @@ export const Footer: React.FC<Props> = ({
         <Link
           data-cy="FilterLinkCompleted"
           to="#/completed"
-          className={`filter__link ${filterMode === 'complete' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filterMode === 'complete',
+          })}
           onClick={() => {
             filterModeHandler('complete');
           }}

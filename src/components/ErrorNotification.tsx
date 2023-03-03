@@ -27,21 +27,19 @@ export const ErrorNotification: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button
-          aria-label="Close error"
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={closeErrorHandler}
-        />
+    <div
+      data-cy="ErrorNotification"
+      className="notification is-danger is-light has-text-weight-normal"
+    >
+      <button
+        aria-label="Close error"
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={closeErrorHandler}
+      />
 
-        {showError()}
-      </div>
-    </>
+      {showError()}
+    </div>
   );
 };
