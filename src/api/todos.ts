@@ -6,3 +6,21 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+
+// Creates new todo
+
+// const BaseURL = 'https://mate.academy/students-api/todos?userId=6502';
+
+// fetch(BaseURL, {
+//   method: 'POST',
+//   body: JSON.stringify({
+//     userId: 6502,
+//     title: 'Learn React',
+//     completed: false,
+//   }),
+//   headers: {
+//     'Content-type': 'application/json; charset=UTF-8',
+//   },
+// })
+//   .then((response) => response.json())
+//   .then((json) => console.log(json));
