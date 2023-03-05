@@ -1,23 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import classNames from 'classnames';
 import React, { useState } from 'react';
-import { Todo } from '../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
-  todos: Todo[];
+  hasActive: boolean;
 };
 
-export const Header: React.FC<Props> = ({ todos }) => {
+export const Header: React.FC<Props> = ({ hasActive }) => {
   const [title, setTitle] = useState('');
-  const hasActive = todos.some(todoItem => !todoItem.completed);
 
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
-          // eslint-disable-next-line
-          'active': hasActive,
+          active: hasActive,
         })}
         disabled={!hasActive}
       />

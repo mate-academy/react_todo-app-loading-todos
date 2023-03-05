@@ -5,6 +5,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Todolist } from './components/Todolist';
+import { filterValues } from './constants';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
@@ -12,10 +13,23 @@ const USER_ID = 6438;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorType, setErrorType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const [errorType, setErrorType] = useState('');
+  const hasActive = todos.some(todoItem => !todoItem.completed);
+
+  const filteredTodos = todos.filter(todo => {
+    if (selectedFilter === filterValues.completed) {
+      return todo.completed;
+    }
+
+    if (selectedFilter === filterValues.active) {
+      return !todo.completed;
+    }
+
+    return true;
+  });
 
   const getTodosFromServer = async () => {
     try {
@@ -42,15 +56,14 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          todos={todos}
+          hasActive={hasActive}
         />
 
         { !!todos.length && (
           <>
             <Todolist
-              todos={todos}
+              todos={filteredTodos}
               setHasCompleted={setHasCompleted}
-              selectedFilter={selectedFilter}
             />
 
             <Footer

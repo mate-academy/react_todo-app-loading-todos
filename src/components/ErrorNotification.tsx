@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type Props = {
   errorType: string;
   hasError: boolean;
-  setHasError: (argument: boolean) => void;
+  setHasError: React.Dispatch<boolean>;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
@@ -39,8 +39,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal', {
-          // eslint-disable-next-line
-          'hidden': isHidden,
+          hidden: isHidden,
         },
       )}
     >
