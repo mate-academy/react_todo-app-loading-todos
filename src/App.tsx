@@ -10,7 +10,7 @@ import { Status } from './types/Status';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 6472;
+const USER_ID = 4392;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         {
-          todos.length !== 0 && (
+          todos.length && (
             <>
               <TodoList todos={todosByStatus} />
               <Footer
