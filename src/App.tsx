@@ -11,7 +11,7 @@ import { Footer } from './Components/Footer/Footer';
 
 const USER_ID = 6340;
 
-export enum SortType {
+export enum FilterType {
   ALL = 'All',
   ACTIVE = 'Active',
   COMPLETED = 'Completed',
@@ -25,17 +25,14 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     return (todos.filter((todo) => {
       switch (filterBy) {
-        case SortType.ALL:
-          return true;
-
-        case SortType.ACTIVE:
+        case FilterType.ACTIVE:
           return !todo.completed;
 
-        case SortType.COMPLETED:
+        case FilterType.COMPLETED:
           return todo.completed;
 
         default:
-          return [];
+          return true;
       }
     })
     );
@@ -65,7 +62,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        {todos.length > 0 && (
+        {todos.length && (
           <>
             <header className="todoapp__header">
 
