@@ -15,7 +15,7 @@ export const Footer: React.FC<Props> = ({
   filterBy,
   onFilterTodos,
 }) => {
-  const filterLinks = [FilterBy.all, FilterBy.active, FilterBy.completed];
+  const filterLinks = Object.values(FilterBy);
   const completedTodosCount = allTodosCount - activeTodosCount;
 
   const capitalize = (string:string) => {
@@ -35,7 +35,7 @@ export const Footer: React.FC<Props> = ({
             href={filterLink === FilterBy.all ? '#/' : `#/${filterLink}`}
             className={classNames(
               'filter__link',
-              { selected: filterBy },
+              { selected: filterBy === filterLink },
             )}
             onClick={() => onFilterTodos(filterLink)}
           >
