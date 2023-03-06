@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     return (todos.filter((todo) => {
       switch (filterBy) {
         case SortType.ALL:
-          return todos;
+          return true;
 
         case SortType.ACTIVE:
           return !todo.completed;
