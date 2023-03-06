@@ -1,7 +1,7 @@
 export enum ErrorType {
-  none = '',
-  load = 'Unable to load the todos',
-  add = 'Unable to add a todo',
-  delete = 'Unable to delete a todo',
-  update = 'Unable to update a todo',
+  None = '',
+  Load = 'Unable to load the todos',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
 }

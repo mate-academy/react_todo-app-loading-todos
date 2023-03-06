@@ -7,9 +7,8 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
-  const [isBtnVisible, setIsBtnVisible] = useState(false);
-
   const { title, completed } = todo;
+  const [isBtnVisible, setIsBtnVisible] = useState(false);
 
   return (
     <>

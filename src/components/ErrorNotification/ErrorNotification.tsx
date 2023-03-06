@@ -5,13 +5,11 @@ import { ErrorType } from '../../types/ErrorType';
 type Props = {
   errorMessage: ErrorType;
   onCloseError: () => void;
-  hasError: boolean;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   onCloseError,
-  hasError,
 }) => {
   useEffect(() => {
     setTimeout(() => {
@@ -25,7 +23,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !hasError })}
+        { hidden: !errorMessage })}
     >
       <button
         type="button"

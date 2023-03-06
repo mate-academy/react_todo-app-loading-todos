@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { capitalize } from '../../helpers/capitalize';
 import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
@@ -18,10 +19,6 @@ export const Footer: React.FC<Props> = ({
   const filterLinks = Object.values(FilterBy);
   const completedTodosCount = allTodosCount - activeTodosCount;
 
-  const capitalize = (string:string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -32,7 +29,7 @@ export const Footer: React.FC<Props> = ({
         {filterLinks.map(filterLink => (
           <a
             key={filterLink}
-            href={filterLink === FilterBy.all ? '#/' : `#/${filterLink}`}
+            href={filterLink === FilterBy.All ? '#/' : `#/${filterLink}`}
             className={classNames(
               'filter__link',
               { selected: filterBy === filterLink },
@@ -52,7 +49,6 @@ export const Footer: React.FC<Props> = ({
       >
         Clear completed
       </button>
-
     </footer>
   );
 };

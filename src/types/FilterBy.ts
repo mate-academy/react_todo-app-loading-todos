@@ -1,5 +1,5 @@
 export enum FilterBy {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }

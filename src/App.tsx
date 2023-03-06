@@ -13,30 +13,24 @@ const USER_ID = 6481;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(ErrorType.none);
+  const [errorMessage, setErrorMessage] = useState(ErrorType.None);
   const [visibleTodos, setVisibleTodos] = useState(todos);
-  const [filterBy, setFilterBy] = useState(FilterBy.all);
+  const [filterBy, setFilterBy] = useState(FilterBy.All);
 
   useEffect(() => {
     const getTodosFromServer = async () => {
       try {
-        setHasError(false);
+        setErrorMessage(ErrorType.None);
         const todosFromServer = await getTodos(USER_ID);
 
         setTodos(todosFromServer);
       } catch (error) {
-        setHasError(true);
-        setErrorMessage(ErrorType.load);
+        setErrorMessage(ErrorType.Load);
       }
     };
 
     getTodosFromServer();
   }, []);
-
-  const handleCloseError = () => {
-    setHasError(false);
-  };
 
   const allTodosCount = todos.length;
 
@@ -46,23 +40,21 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    const filteredTodos = todos.filter(todo => {
+    const filteredTodos = (() => {
       switch (filterBy) {
-        case FilterBy.active:
-          return !todo.completed;
-        case FilterBy.completed:
-          return todo.completed;
+        case FilterBy.All:
+          return todos;
+        case FilterBy.Active:
+          return todos.filter(todo => !todo.completed);
+        case FilterBy.Completed:
+          return todos.filter(todo => todo.completed);
         default:
-          return true;
+          return [];
       }
     });
 
     setVisibleTodos(filteredTodos);
   }, [filterBy, todos]);
-
-  const handleFilterTodos = (status: FilterBy) => {
-    setFilterBy(status);
-  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -83,17 +75,16 @@ export const App: React.FC = () => {
               allTodosCount={allTodosCount}
               activeTodosCount={activeTodosCount}
               filterBy={filterBy}
-              onFilterTodos={handleFilterTodos}
+              onFilterTodos={(status: FilterBy) => setFilterBy(status)}
             />
           </>
         )}
       </div>
 
-      {hasError && (
+      {!!errorMessage && (
         <ErrorNotification
           errorMessage={errorMessage}
-          onCloseError={handleCloseError}
-          hasError={hasError}
+          onCloseError={() => setErrorMessage(ErrorType.None)}
         />
       )}
     </div>
