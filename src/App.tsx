@@ -49,7 +49,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && (
+        {todos.length && (
           <Filter
             counterActiveTodos={counterActiveTodos}
             counterCompletedTodos={counterCompletedTodos}
