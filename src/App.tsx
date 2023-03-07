@@ -4,22 +4,16 @@ import { UserWarning } from './UserWarning';
 import { TodoList } from './Components/ToDoList/ToDoList';
 import { Notification } from './Components/errorNotification/errorNotification';
 
-import { Todo } from './types/Todo';
+import { FilterType, Todo } from './types/Todo';
 
 import { getTodos } from './api/todos';
 import { Footer } from './Components/Footer/Footer';
 
 const USER_ID = 6340;
 
-export enum FilterType {
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.ALL);
   const [isError, setIsError] = useState(true);
 
   const visibleTodos = useMemo(() => {
@@ -78,7 +72,11 @@ export const App: React.FC = () => {
             </header>
 
             <TodoList todos={visibleTodos} />
-            <Footer filterBy={filterBy} setFilterBy={setFilterBy} />
+            <Footer
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+              todos={visibleTodos}
+            />
           </>
         )}
       </div>

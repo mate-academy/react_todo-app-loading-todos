@@ -1,33 +1,40 @@
 import classNames from 'classnames';
+import { Todo, FilterType } from '../../types/Todo';
 
 type Props = {
-  filterBy: string,
-  setFilterBy: (value: string) => void
+  filterBy: FilterType,
+  setFilterBy: (value: FilterType) => void,
+  todos: Todo[]
 };
 
-const navigation = ['All', 'Active', 'Completed'];
+const filterOptions = Object.values(FilterType);
 
-export const Footer: React.FC<Props> = ({ filterBy, setFilterBy }) => {
+export const Footer: React.FC<Props> = ({
+  filterBy,
+  setFilterBy,
+  todos,
+}) => {
+  const itemsLeftLength = todos.filter((todo) => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${itemsLeftLength} items left`}
       </span>
 
       <nav className="filter">
-
-        {navigation.map((nav) => {
+        {filterOptions.map((option) => {
           return (
             <a
-              key={nav}
-              href="#/"
+              key={option}
+              href={`#/${option}`}
               className={classNames(
                 'filter__link',
-                { selected: filterBy === nav },
+                { selected: filterBy === option },
               )}
-              onClick={() => setFilterBy(nav)}
+              onClick={() => setFilterBy(option)}
             >
-              {nav}
+              {option}
             </a>
           );
         })}
