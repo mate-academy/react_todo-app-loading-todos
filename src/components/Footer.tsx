@@ -8,7 +8,7 @@ type Props = {
   todos: Todo[];
   hasCompleted: boolean;
   selectedFilter: string;
-  setSelectedFilter: React.Dispatch<string>;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const Footer: React.FC<Props> = ({

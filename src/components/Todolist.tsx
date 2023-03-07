@@ -5,7 +5,7 @@ import { TodoInfo } from './TodoInfo';
 
 type Props = {
   todos: Todo[];
-  setHasCompleted: React.Dispatch<boolean>;
+  setHasCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Todolist: React.FC<Props> = ({
