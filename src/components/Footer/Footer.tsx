@@ -44,7 +44,7 @@ export const Footer: React.FC<Props> = ({
       <button
         type="button"
         className="todoapp__clear-completed"
-        style={completedTodosCount ? { opacity: 1 } : { opacity: 0 }}
+        style={{ opacity: +Boolean(completedTodosCount) }}
         disabled={!completedTodosCount}
       >
         Clear completed

@@ -49,7 +49,7 @@ export const App: React.FC = () => {
         case FilterBy.Completed:
           return todos.filter(todo => todo.completed);
         default:
-          return [];
+          return todos;
       }
     });
 
