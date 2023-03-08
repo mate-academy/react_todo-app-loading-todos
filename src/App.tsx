@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 
 import { Todo } from './types/Todo';
@@ -14,14 +14,13 @@ const USER_ID = 6459;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosToShow, setTodosToShow] = useState<Todo[]>(todos);
   const [query, setQuery] = useState('');
   const [todoStatus, setTodoStatus] = useState<FilteredBy>(FilteredBy.ALL);
   const [errorFromServer, setErrorFromServer] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(todo => {
+  const todosToShow = useMemo(() => {
+    return todos.filter(todo => {
       switch (todoStatus) {
         case FilteredBy.ALL:
           return true;
@@ -36,8 +35,6 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-
-    setTodosToShow(filteredTodos);
   }, [todos, todoStatus]);
 
   useEffect(() => {

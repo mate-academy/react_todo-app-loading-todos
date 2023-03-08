@@ -17,13 +17,11 @@ export const Footer: React.FC<Props> = ({
   const activeTodosLeft = todosToShow.filter(todo => !todo.completed);
 
   return (
-    // {/* Hide the footer if there are no todos */} ++
     <footer className="todoapp__footer">
       <span className="todo-count">
         {`${activeTodosLeft.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -59,7 +57,6 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>

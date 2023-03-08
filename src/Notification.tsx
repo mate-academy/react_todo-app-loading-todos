@@ -12,12 +12,12 @@ export const Notifications: React.FC<Props> = ({
   setErrorFromServer,
   errorMessage,
 }) => {
-  const [hidden, setHidden] = useState(true);
+  const [isHidden, setisHidden] = useState(true);
 
   useEffect(() => {
     const notificationCloser = () => {
       const timerId = window.setTimeout(() => {
-        setHidden(true);
+        setisHidden(true);
         setErrorFromServer(false);
       }, 3000);
 
@@ -25,10 +25,10 @@ export const Notifications: React.FC<Props> = ({
     };
 
     if (errorFromServer) {
-      setHidden(false);
+      setisHidden(false);
       notificationCloser();
     } else {
-      setHidden(true);
+      setisHidden(true);
     }
   });
 
@@ -36,14 +36,14 @@ export const Notifications: React.FC<Props> = ({
     <div
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden },
+        { hidden: isHidden },
       )}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className="delete"
-        onClick={() => setHidden(true)}
+        onClick={() => setisHidden(true)}
       />
       {`Unable to ${errorMessage} a todo`}
     </div>

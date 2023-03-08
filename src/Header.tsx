@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import { useMemo } from 'react';
 import { Todo } from './types/Todo';
 
 type Props = {
@@ -12,7 +13,10 @@ export const Header: React.FC<Props> = ({
   setQuery,
   todos,
 }) => {
-  const isActicve = todos.filter(todo => !todo.completed);
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed),
+    [todos],
+  );
 
   return (
     <header className="todoapp__header">
@@ -20,12 +24,11 @@ export const Header: React.FC<Props> = ({
         type="button"
         className={classnames(
           'todoapp__toggle-all',
-          { active: isActicve },
+          { active: activeTodos },
         )}
         aria-label="Add todo"
       />
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"
