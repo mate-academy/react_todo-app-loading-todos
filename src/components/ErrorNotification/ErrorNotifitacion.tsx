@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react';
-import classNames from 'classnames';
 
 import { ErrorMessage } from '../../enums/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage;
-  isErrorShown: boolean;
   onErrorClose: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  isErrorShown,
   onErrorClose,
 }) => {
   useEffect(() => {
@@ -19,24 +16,13 @@ export const ErrorNotification: React.FC<Props> = ({
   }, []);
 
   return (
-    <div
-      className={classNames(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        {
-          hidden: !isErrorShown,
-        },
-      )}
-    >
+    <div className="notification is-danger is-light has-text-weight-normal">
       <button
         type="button"
         className="delete"
         onClick={onErrorClose}
         aria-label="Close error message"
       />
-
       {errorMessage}
     </div>
   );

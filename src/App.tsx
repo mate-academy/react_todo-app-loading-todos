@@ -62,11 +62,12 @@ export const App: React.FC = () => {
           />
         )}
 
-        <ErrorNotification
-          errorMessage={errorMessage}
-          isErrorShown={isErrorShown}
-          onErrorClose={() => setIsErrorShown(false)}
-        />
+        {isErrorShown && (
+          <ErrorNotification
+            errorMessage={errorMessage}
+            onErrorClose={() => setIsErrorShown(false)}
+          />
+        )}
       </div>
     </div>
   );
