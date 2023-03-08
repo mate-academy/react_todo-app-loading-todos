@@ -8,40 +8,27 @@ type Props = {
   changeFilter: (value: Filters) => void;
 };
 
+const links = [
+  { id: 1, href: '/', type: Filters.All },
+  { id: 2, href: '/active', type: Filters.ACTIVE },
+  { id: 3, href: '/completed', type: Filters.COMPLETED },
+];
+
 const Filter: React.FC<Props> = ({ filter: selectedTodo, changeFilter }) => (
   <nav className="filter">
-    <a
-      href="#/"
-      className={classNames(
-        'filter__link',
-        { selected: selectedTodo === Filters.All },
-      )}
-      onClick={() => changeFilter(Filters.All)}
-    >
-      All
-    </a>
-
-    <a
-      href="#/active"
-      className={classNames(
-        'filter__link',
-        { selected: selectedTodo === Filters.ACTIVE },
-      )}
-      onClick={() => changeFilter(Filters.ACTIVE)}
-    >
-      Active
-    </a>
-
-    <a
-      href="#/completed"
-      className={classNames(
-        'filter__link',
-        { selected: selectedTodo === Filters.COMPLETED },
-      )}
-      onClick={() => changeFilter(Filters.COMPLETED)}
-    >
-      Completed
-    </a>
+    {links.map(({ id, href, type }) => (
+      <a
+        key={id}
+        href={`#${href}`}
+        className={classNames(
+          'filter__link',
+          { selected: selectedTodo === type },
+        )}
+        onClick={() => changeFilter(type)}
+      >
+        {type}
+      </a>
+    ))}
   </nav>
 );
 

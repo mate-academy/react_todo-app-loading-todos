@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { getTodos } from './api/todos';
 
@@ -13,9 +13,24 @@ import Header from './Components/Header/Header';
 
 const USER_ID = 6535;
 
+function filteredTodos(filter: Filters, todos: TodoType[]) {
+  switch (filter) {
+    case Filters.All:
+
+      return todos;
+    case Filters.ACTIVE:
+
+      return todos.filter((todo: TodoType) => !todo.completed);
+    case Filters.COMPLETED:
+
+      return todos.filter((todo: TodoType) => todo.completed);
+    default:
+      return todos;
+  }
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<TodoType[]>([]);
   const [isError, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
   const [filter, setFilter] = useState(Filters.All);
@@ -29,28 +44,9 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    let result: TodoType[];
-
-    switch (filter) {
-      case Filters.All:
-        result = todos;
-
-        break;
-      case Filters.ACTIVE:
-        result = todos.filter(todo => !todo.completed);
-
-        break;
-      case Filters.COMPLETED:
-        result = todos.filter(todo => todo.completed);
-
-        break;
-      default:
-        result = todos;
-    }
-
-    setVisibleTodos(result);
-  }, [filter, todos]);
+  const visibleTodos = useMemo(() => {
+    return filteredTodos(filter, todos);
+  }, [todos, filter]);
 
   const closeError = () => {
     setError(false);
@@ -64,8 +60,9 @@ export const App: React.FC = () => {
     setFilter(value);
   };
 
-  const completedTodosLength = visibleTodos
-    .filter(todo => todo.completed).length;
+  const completedTodosLength = useMemo(() => {
+    return visibleTodos.filter(todo => todo.completed).length;
+  }, [visibleTodos]);
 
   return (
     <div className="todoapp">

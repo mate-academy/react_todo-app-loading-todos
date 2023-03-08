@@ -1,45 +1,66 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 type Props = {
   completed: boolean,
   title: string,
 };
 
-const Todo: React.FC<Props> = ({ completed, title }) => (
-  <li
-    className={classNames(
-      'todo',
-      { completed },
-    )}
-  >
-    <label className="todo__status-label">
-      <input
-        type="checkbox"
-        className="todo__status"
-        checked={completed}
-      />
-    </label>
+const Todo: React.FC<Props> = ({ completed, title }) => {
+  const [isEditTodo, setEditTodo] = useState(false);
+  const [value, setValue] = useState(title);
 
-    <span className="todo__title">{title}</span>
-    <button type="button" className="todo__remove">×</button>
+  const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
-    {false && (
-      <form>
+  const onDoubleClickHandle = () => setEditTodo(true);
+  const onBlurHandle = () => setEditTodo(false);
+
+  return (
+    <li
+      className={classNames(
+        'todo',
+        { completed },
+      )}
+    >
+      <label className="todo__status-label">
         <input
-          type="text"
-          className="todo__title-field"
-          placeholder="Empty todo will be deleted"
-          value="Todo is being edited now"
+          type="checkbox"
+          className="todo__status"
+          checked={completed}
         />
-      </form>
-    )}
+      </label>
 
-    <div className="modal overlay">
-      <div className="modal-background has-background-white-ter" />
-      <div className="loader" />
-    </div>
-  </li>
-);
+      {isEditTodo
+        ? (
+          <form>
+            <input
+              type="text"
+              className="todo__title-field"
+              placeholder="Empty todo will be deleted"
+              value={value}
+              onChange={onChangeValue}
+              onBlur={onBlurHandle}
+            />
+          </form>
+        ) : (
+          <span
+            className="todo__title"
+            onDoubleClick={onDoubleClickHandle}
+          >
+            {value}
+          </span>
+        )}
+
+      <button type="button" className="todo__remove">×</button>
+
+      <div className="modal overlay">
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
+    </li>
+  );
+};
 
 export default Todo;
