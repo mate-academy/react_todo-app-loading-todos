@@ -1,21 +1,20 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import classNames from 'classnames';
 import React from 'react';
-import { filterValues } from '../constants';
+import classNames from 'classnames';
+import { FilterValues } from '../constants';
 import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
   hasCompleted: boolean;
   selectedFilter: string;
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  onChange: React.Dispatch<React.SetStateAction<FilterValues>>;
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
   hasCompleted,
   selectedFilter,
-  setSelectedFilter,
+  onChange,
 }) => {
   const todosCount = `${todos.length} items left`;
 
@@ -26,18 +25,18 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter">
-        { Object.values(filterValues).map((value) => (
+        {Object.values(FilterValues).map((value) => (
           <a
             href="#/"
             key={value}
             className={classNames('filter__link', {
               selected: selectedFilter === value,
             })}
-            onClick={() => setSelectedFilter(value)}
+            onClick={() => onChange(value)}
           >
             {value}
           </a>
-        )) }
+        ))}
       </nav>
 
       <button

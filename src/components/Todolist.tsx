@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoInfo } from './TodoInfo';
@@ -14,19 +13,18 @@ export const Todolist: React.FC<Props> = ({
 }) => {
   return (
     <section className="todoapp__main">
-      {todos
-        .map(todo => {
-          if (todo.completed) {
-            setHasCompleted(true);
-          }
+      {todos.map(todo => {
+        if (todo.completed) {
+          setHasCompleted(true);
+        }
 
-          return (
-            <TodoInfo
-              todo={todo}
-              key={todo.id}
-            />
-          );
-        })}
+        return (
+          <TodoInfo
+            todo={todo}
+            key={todo.id}
+          />
+        );
+      })}
     </section>
   );
 };

@@ -4,7 +4,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Todolist } from './components/Todolist';
-import { filterValues } from './constants';
+import { FilterValues } from './constants';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
@@ -15,19 +15,19 @@ export const App: React.FC = () => {
   const [errorType, setErrorType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState(FilterValues.ALL);
   const hasActive = todos.some(todoItem => !todoItem.completed);
 
   const filteredTodos = todos.filter(todo => {
-    if (selectedFilter === filterValues.completed) {
-      return todo.completed;
-    }
+    switch (selectedFilter) {
+      case FilterValues.COMPLITED:
+        return todo.completed;
 
-    if (selectedFilter === filterValues.active) {
-      return !todo.completed;
-    }
+      case FilterValues.ACTIVE:
+        return !todo.completed;
 
-    return true;
+      default: return true;
+    }
   });
 
   const getTodosFromServer = async () => {
@@ -54,11 +54,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
-          hasActive={hasActive}
-        />
+        <Header hasActive={hasActive} />
 
-        { !!todos.length && (
+        {!!todos.length && (
           <>
             <Todolist
               todos={filteredTodos}
@@ -69,19 +67,19 @@ export const App: React.FC = () => {
               todos={todos}
               hasCompleted={hasCompleted}
               selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
+              onChange={setSelectedFilter}
             />
           </>
-        ) }
+        )}
       </div>
 
-      { hasError && (
+      {hasError && (
         <ErrorNotification
           errorType={errorType}
-          hasError={hasError}
-          setHasError={setHasError}
+          isError={hasError}
+          onError={setHasError}
         />
-      ) }
+      )}
     </div>
   );
 };

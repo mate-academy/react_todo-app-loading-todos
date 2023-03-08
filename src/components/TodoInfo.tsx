@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
@@ -11,32 +11,33 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const [query, setQuery] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
 
-  const todoContent = isEditing
-    ? (
-      <form>
-        <input
-          type="text"
-          className="todo__title-field"
-          placeholder="Empty todo will be deleted"
-          value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-          }}
-          onBlur={() => setIsEditing(false)}
-        />
-      </form>
-    )
-    : (
-      <>
-        <span
-          className="todo__title"
-          onDoubleClick={() => setIsEditing(true)}
-        >
-          {todo.title}
-        </span>
-        <button type="button" className="todo__remove">×</button>
-      </>
-    );
+  const todoContent = useMemo(() => (
+    isEditing
+      ? (
+        <form>
+          <input
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+            }}
+            onBlur={() => setIsEditing(false)}
+          />
+        </form>
+      )
+      : (
+        <>
+          <span
+            onDoubleClick={() => setIsEditing(true)}
+          >
+            {todo.title}
+          </span>
+          <button type="button" className="todo__remove">×</button>
+        </>
+      )
+  ), [isEditing, query]);
 
   return (
     <div className={classNames('todo', {
@@ -54,7 +55,9 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {todoContent}
+      <div className="todo__title">
+        {todoContent}
+      </div>
 
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />

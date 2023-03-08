@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -13,6 +12,7 @@ export const Header: React.FC<Props> = ({ hasActive }) => {
     <header className="todoapp__header">
       <button
         type="button"
+        aria-label="toggle all todos statuses"
         className={classNames('todoapp__toggle-all', {
           active: hasActive,
         })}
