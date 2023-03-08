@@ -2,14 +2,10 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
 type Props = {
-  errorFromServer: boolean,
-  setErrorFromServer: (errorFromServer: boolean) => void,
   errorMessage: string,
 };
 
 export const Notifications: React.FC<Props> = ({
-  errorFromServer,
-  setErrorFromServer,
   errorMessage,
 }) => {
   const [isHidden, setisHidden] = useState(true);
@@ -18,13 +14,12 @@ export const Notifications: React.FC<Props> = ({
     const notificationCloser = () => {
       const timerId = window.setTimeout(() => {
         setisHidden(true);
-        setErrorFromServer(false);
       }, 3000);
 
       window.clearTimeout(timerId);
     };
 
-    if (errorFromServer) {
+    if (errorMessage.length > 0) {
       setisHidden(false);
       notificationCloser();
     } else {

@@ -16,7 +16,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [todoStatus, setTodoStatus] = useState<FilteredBy>(FilteredBy.ALL);
-  const [errorFromServer, setErrorFromServer] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const todosToShow = useMemo(() => {
@@ -41,10 +40,8 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setErrorFromServer(false);
       })
       .catch(() => {
-        setErrorFromServer(true);
         setErrorMessage('upload');
       });
   }, []);
@@ -75,8 +72,6 @@ export const App: React.FC = () => {
           </>
         )}
         <Notifications
-          errorFromServer={errorFromServer}
-          setErrorFromServer={setErrorFromServer}
           errorMessage={errorMessage}
         />
       </div>
