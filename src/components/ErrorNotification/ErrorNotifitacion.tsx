@@ -4,15 +4,15 @@ import { ErrorMessage } from '../../enums/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage;
-  onErrorClose: () => void;
+  setErrorMessage: (value: ErrorMessage) => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  onErrorClose,
+  setErrorMessage,
 }) => {
   useEffect(() => {
-    setTimeout(() => onErrorClose(), 3000);
+    setTimeout(() => setErrorMessage(ErrorMessage.NONE), 3000);
   }, []);
 
   return (
@@ -20,7 +20,7 @@ export const ErrorNotification: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={onErrorClose}
+        onClick={() => setErrorMessage(ErrorMessage.NONE)}
         aria-label="Close error message"
       />
       {errorMessage}

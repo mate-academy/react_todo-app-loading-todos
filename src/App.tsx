@@ -18,7 +18,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [selectedFilter, setSelectedFilter] = useState(TodoStatus.All);
   const [errorMessage, setErrorMessage] = useState(ErrorMessage.NONE);
-  const [isErrorShown, setIsErrorShown] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,10 +26,10 @@ export const App: React.FC = () => {
       setTodos(userTodos);
     };
 
-    fetchData().catch(() => {
-      setErrorMessage(ErrorMessage.DOWNLOAD);
-      setIsErrorShown(true);
-    });
+    fetchData()
+      .catch(() => {
+        setErrorMessage(ErrorMessage.DOWNLOAD);
+      });
   }, []);
 
   const activeTodosQuantity = useMemo(
@@ -62,10 +61,10 @@ export const App: React.FC = () => {
           />
         )}
 
-        {isErrorShown && (
+        {errorMessage !== ErrorMessage.NONE && (
           <ErrorNotification
             errorMessage={errorMessage}
-            onErrorClose={() => setIsErrorShown(false)}
+            setErrorMessage={setErrorMessage}
           />
         )}
       </div>
