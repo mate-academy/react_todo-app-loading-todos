@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Errors } from '../../types/Errors';
 
@@ -14,11 +14,13 @@ const Notification: React.FC<Props> = ({
   errorMessage,
   closeError,
 }) => {
-  if (isError) {
-    setTimeout(() => {
-      closeError();
-    }, 3000);
-  }
+  useEffect(() => {
+    if (isError) {
+      setTimeout(() => {
+        closeError();
+      }, 3000);
+    }
+  });
 
   return (
     <div

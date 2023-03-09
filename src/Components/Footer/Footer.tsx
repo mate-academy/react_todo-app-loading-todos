@@ -28,9 +28,9 @@ const Footer: React.FC<Props> = ({
       className="todoapp__clear-completed"
       style={
         {
-          visibility: `${completedTodosLength === 0
+          visibility: completedTodosLength === 0
             ? 'hidden'
-            : 'visible'}`,
+            : 'visible',
         }
       }
     >

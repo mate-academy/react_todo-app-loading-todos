@@ -9,16 +9,16 @@ type Props = {
 };
 
 const links = [
-  { id: 1, href: '/', type: Filters.All },
-  { id: 2, href: '/active', type: Filters.ACTIVE },
-  { id: 3, href: '/completed', type: Filters.COMPLETED },
+  { href: '/', type: Filters.All },
+  { href: '/active', type: Filters.ACTIVE },
+  { href: '/completed', type: Filters.COMPLETED },
 ];
 
 const Filter: React.FC<Props> = ({ filter: selectedTodo, changeFilter }) => (
   <nav className="filter">
-    {links.map(({ id, href, type }) => (
+    {links.map(({ href, type }) => (
       <a
-        key={id}
+        key={href}
         href={`#${href}`}
         className={classNames(
           'filter__link',

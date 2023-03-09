@@ -16,14 +16,14 @@ const USER_ID = 6535;
 function filteredTodos(filter: Filters, todos: TodoType[]) {
   switch (filter) {
     case Filters.All:
-
       return todos;
+
     case Filters.ACTIVE:
-
       return todos.filter((todo: TodoType) => !todo.completed);
-    case Filters.COMPLETED:
 
+    case Filters.COMPLETED:
       return todos.filter((todo: TodoType) => todo.completed);
+
     default:
       return todos;
   }
@@ -35,18 +35,24 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
   const [filter, setFilter] = useState(Filters.All);
 
+  const fetchingTodos = async () => {
+    try {
+      const response = await getTodos(USER_ID);
+
+      setTodos(response);
+    } catch (error) {
+      setError(true);
+      setErrorMessage(Errors.UPLOAD);
+    }
+  };
+
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(res => setTodos(res))
-      .catch(() => {
-        setError(true);
-        setErrorMessage(Errors.UPLOAD);
-      });
+    fetchingTodos();
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    return filteredTodos(filter, todos);
-  }, [todos, filter]);
+  const visibleTodos = useMemo(() => (
+    filteredTodos(filter, todos)
+  ), [todos, filter]);
 
   const closeError = () => {
     setError(false);
