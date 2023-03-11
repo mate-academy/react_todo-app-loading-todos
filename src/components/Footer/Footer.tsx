@@ -7,13 +7,17 @@ export enum SortType {
   Completed = 'Completed',
 }
 
+const sortTypes = [
+  { id: 1, type: SortType.All },
+  { id: 2, type: SortType.Active },
+  { id: 3, type: SortType.Completed },
+];
+
 type Props = {
   onSortType: (newSortType: SortType) => void;
   selectedSortType: SortType;
   itemsLeft: TodoType[];
 };
-
-const sortTypes = [SortType.All, SortType.Active, SortType.Completed];
 
 export const Footer: React.FC<Props> = ({
   onSortType,
@@ -27,16 +31,16 @@ export const Footer: React.FC<Props> = ({
       </span>
       <nav className="filter">
         {sortTypes.map(sortType => (
-          <li key={Math.random()} style={{ listStyle: 'none' }}>
+          <li key={sortType.id} style={{ listStyle: 'none' }}>
             <a
               href="#/"
               className={classNames(
                 'filter__link',
-                { selected: selectedSortType === sortType },
+                { selected: selectedSortType === sortType.type },
               )}
-              onClick={() => onSortType(sortType)}
+              onClick={() => onSortType(sortType.type)}
             >
-              {sortType}
+              {sortType.type}
             </a>
           </li>
         ))}

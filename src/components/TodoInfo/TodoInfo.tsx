@@ -7,6 +7,10 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const {
+    title,
+    completed,
+  } = todo;
   const [isEdited, setEdit] = useState(false);
 
   const handleDblClick = () => {
@@ -28,7 +32,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               type="text"
               className="todo__title-field"
               placeholder="Empty todo will be deleted"
-              value={todo.title}
+              value={title}
             />
           </form>
           <div className="modal overlay">
@@ -40,7 +44,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         <div
           className={classNames(
             'todo',
-            { completed: todo.completed },
+            { completed },
           )}
           onDoubleClick={handleDblClick}
         >
@@ -48,10 +52,10 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
             <input
               type="checkbox"
               className="todo__status"
-              defaultChecked={todo.completed}
+              defaultChecked={completed}
             />
           </label>
-          <span className="todo__title">{todo.title}</span>
+          <span className="todo__title">{title}</span>
           <button type="button" className="todo__remove">×</button>
           <div className="modal overlay">
             <div className="modal-background has-background-white-ter" />

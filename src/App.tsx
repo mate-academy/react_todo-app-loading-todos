@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [selectedSortType, setSortType] = useState(SortType.All);
   const [isError, setError] = useState(false);
+  const activeTodos = getReorderedList(SortType.Active, todos);
 
   const fetchTodos = async () => {
     try {
@@ -59,7 +60,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header
-          activeTodos={getReorderedList(SortType.Active, todos).length}
+          activeTodos={activeTodos.length}
           hasTodos={!!todos.length}
         />
         <Section
@@ -67,7 +68,7 @@ export const App: React.FC = () => {
         />
         {!!todos.length && (
           <Footer
-            itemsLeft={getReorderedList(SortType.Active, todos)}
+            itemsLeft={activeTodos}
             selectedSortType={selectedSortType}
             onSortType={getSortType}
           />

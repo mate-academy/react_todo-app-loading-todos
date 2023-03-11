@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 
 type Props = {
@@ -16,7 +15,9 @@ export const Header: React.FC<Props> = ({ activeTodos, hasTodos }) => {
             'todoapp__toggle-all',
             { active: activeTodos },
           )}
-        />
+        >
+          {}
+        </button>
       )}
       <form>
         <input
