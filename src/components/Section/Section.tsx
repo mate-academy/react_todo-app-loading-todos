@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { TodoType } from '../../types/TodoType';
 import { TodoInfo } from '../TodoInfo';

@@ -57,18 +57,15 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
         <Header
           activeTodos={getReorderedList(SortType.Active, todos).length}
           hasTodos={!!todos.length}
         />
-
         <Section
           todos={visibleList}
         />
-
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <Footer
             itemsLeft={getReorderedList(SortType.Active, todos)}
             selectedSortType={selectedSortType}
@@ -76,9 +73,6 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         className="notification is-danger is-light has-text-weight-normal"
         hidden={!isError}

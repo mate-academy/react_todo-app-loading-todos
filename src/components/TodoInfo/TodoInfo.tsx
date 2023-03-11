@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { TodoType } from '../../types/TodoType';
@@ -12,7 +11,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
   const handleDblClick = () => {
     setEdit(true);
-    console.log('was Clicked');
   };
 
   return (
@@ -25,8 +23,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               className="todo__status"
             />
           </label>
-
-          {/* This form is shown instead of the title and remove button */}
           <form>
             <input
               type="text"
@@ -35,7 +31,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               value={todo.title}
             />
           </form>
-
           <div className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
@@ -56,13 +51,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
               defaultChecked={todo.completed}
             />
           </label>
-
           <span className="todo__title">{todo.title}</span>
-
-          {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove">×</button>
-
-          {/* overlay will cover the todo while it is being updated */}
           <div className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />

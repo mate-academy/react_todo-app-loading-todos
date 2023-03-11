@@ -25,24 +25,22 @@ export const Footer: React.FC<Props> = ({
       <span className="todo-count">
         {`${itemsLeft.length} items left`}
       </span>
-
       <nav className="filter">
         {sortTypes.map(sortType => (
-          <a
-            key={Math.random()}
-            href="#/"
-            className={classNames(
-              'filter__link',
-              { selected: selectedSortType === sortType },
-            )}
-            onClick={() => onSortType(sortType)}
-          >
-            {sortType}
-          </a>
+          <li key={Math.random()} style={{ listStyle: 'none' }}>
+            <a
+              href="#/"
+              className={classNames(
+                'filter__link',
+                { selected: selectedSortType === sortType },
+              )}
+              onClick={() => onSortType(sortType)}
+            >
+              {sortType}
+            </a>
+          </li>
         ))}
       </nav>
-
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>
