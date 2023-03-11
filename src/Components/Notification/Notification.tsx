@@ -4,18 +4,16 @@ import React, { useEffect } from 'react';
 import { Errors } from '../../types/Errors';
 
 type Props = {
-  isError: boolean,
   errorMessage: Errors | null,
   closeError: () => void;
 };
 
 const Notification: React.FC<Props> = ({
-  isError,
   errorMessage,
   closeError,
 }) => {
   useEffect(() => {
-    if (isError) {
+    if (errorMessage) {
       setTimeout(() => {
         closeError();
       }, 3000);
@@ -30,7 +28,7 @@ const Notification: React.FC<Props> = ({
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: !isError },
+          { hidden: !errorMessage },
         )
       }
     >

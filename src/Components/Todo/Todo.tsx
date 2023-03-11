@@ -34,7 +34,9 @@ const Todo: React.FC<Props> = ({ completed, title }) => {
 
       {isEditTodo
         ? (
-          <form>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+          >
             <input
               type="text"
               className="todo__title-field"
@@ -49,7 +51,7 @@ const Todo: React.FC<Props> = ({ completed, title }) => {
             className="todo__title"
             onDoubleClick={onDoubleClickHandle}
           >
-            {value.length > 0
+            {value.length
               ? value
               : title}
           </span>

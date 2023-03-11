@@ -15,20 +15,23 @@ const links = [
 ];
 
 const Filter: React.FC<Props> = ({ filter: selectedTodo, changeFilter }) => (
-  <nav className="filter">
-    {links.map(({ href, type }) => (
-      <a
-        key={href}
-        href={`#${href}`}
-        className={classNames(
-          'filter__link',
-          { selected: selectedTodo === type },
-        )}
-        onClick={() => changeFilter(type)}
-      >
-        {type}
-      </a>
-    ))}
+  <nav>
+    <ul className="filter">
+      {links.map(({ href, type }) => (
+        <li key={href}>
+          <a
+            href={`#${href}`}
+            className={classNames(
+              'filter__link',
+              { selected: selectedTodo === type },
+            )}
+            onClick={() => changeFilter(type)}
+          >
+            {type}
+          </a>
+        </li>
+      ))}
+    </ul>
   </nav>
 );
 

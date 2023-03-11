@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 type Props = {
   todosLength: number;
@@ -9,25 +9,35 @@ type Props = {
 const Header: React.FC<Props> = ({
   completedTodosLength,
   todosLength,
-}) => (
-  <header className="todoapp__header">
-    <button
-      type="button"
-      className={classNames(
-        'todoapp__toggle-all',
-        { active: completedTodosLength === todosLength },
-      )}
-      aria-label="select all"
-    />
+}) => {
+  const [value, setValue] = useState('');
 
-    <form>
-      <input
-        type="text"
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
+  const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  return (
+    <header className="todoapp__header">
+      <button
+        type="button"
+        className={classNames(
+          'todoapp__toggle-all',
+          { active: completedTodosLength === todosLength },
+        )}
+        aria-label="select all"
       />
-    </form>
-  </header>
-);
+
+      <form>
+        <input
+          type="text"
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          value={value}
+          onChange={onChangeValue}
+        />
+      </form>
+    </header>
+  );
+};
 
 export default Header;

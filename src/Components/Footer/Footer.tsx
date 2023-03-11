@@ -6,16 +6,18 @@ type Props = {
   filter: Filters;
   changeFilter: (value: Filters) => void;
   completedTodosLength: number;
+  activeTodosLength: number;
 };
 
 const Footer: React.FC<Props> = ({
   filter,
   changeFilter,
   completedTodosLength,
+  activeTodosLength,
 }) => (
   <footer className="todoapp__footer">
     <span className="todo-count">
-      3 items left
+      {`${activeTodosLength} items left`}
     </span>
 
     <Filter
@@ -28,7 +30,7 @@ const Footer: React.FC<Props> = ({
       className="todoapp__clear-completed"
       style={
         {
-          visibility: completedTodosLength === 0
+          visibility: !completedTodosLength
             ? 'hidden'
             : 'visible',
         }
