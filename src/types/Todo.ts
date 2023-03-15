@@ -4,3 +4,9 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
+
+export enum Status {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
