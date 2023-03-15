@@ -28,7 +28,8 @@ function filteredTodos(todos:Todo[], filter:Filter) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.ALL);
-  const [errorMessage, setErrorMessage] = useState<ErrorAction>('');
+  const [errorMessage, setErrorMessage]
+    = useState<ErrorAction>(ErrorAction.NONE);
   const visibleTodos = filteredTodos(todos, filterBy);
   const todosLeft = todos.filter(todoLeft => !todoLeft.completed).length;
 
@@ -38,9 +39,9 @@ export const App: React.FC = () => {
         setTodos(result);
       })
       .catch(() => {
-        setErrorMessage('load');
+        setErrorMessage(ErrorAction.LOAD);
         setTimeout(() => {
-          setErrorMessage('');
+          setErrorMessage(ErrorAction.NONE);
         }, 3000);
       });
   }, []);
@@ -66,7 +67,7 @@ export const App: React.FC = () => {
       </div>
       <Notification
         errorMessage={errorMessage}
-        onClose={() => setErrorMessage('')}
+        onClose={() => setErrorMessage(ErrorAction.NONE)}
       />
 
     </div>

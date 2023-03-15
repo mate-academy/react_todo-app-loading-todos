@@ -1,9 +1,6 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-
-export type ErrorAction = '' | 'load' | 'add' | 'delete' | 'update';
+import { ErrorAction } from '../../types/ErrorAction';
 
 type Props = {
   errorMessage: ErrorAction;
@@ -15,10 +12,9 @@ export const Notification: React.FC<Props> = ({
   onClose,
 }) => {
   const [error, setError] = useState('');
-  const message = `Unable to ${error} a todo`;
 
   useEffect(() => {
-    if (errorMessage !== '') {
+    if (errorMessage !== ErrorAction.NONE) {
       setError(errorMessage);
     }
   }, [errorMessage]);
@@ -31,12 +27,13 @@ export const Notification: React.FC<Props> = ({
       )}
     >
       <button
+        aria-label="close"
         type="button"
         className="delete"
         onClick={onClose}
       />
 
-      {message}
+      {error}
     </div>
   );
 };
