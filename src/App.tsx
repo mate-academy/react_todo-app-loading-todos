@@ -16,6 +16,7 @@ const USER_ID = 6650;
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
+  const [errorType, setErrorType] = useState('');
   const [sortType, setSortType] = useState(SortType.ALL);
 
   let visibleTodoList = todosList;
@@ -38,6 +39,7 @@ export const App: React.FC = () => {
       setTodosList(todosData);
     } catch {
       setIsError(true);
+      setErrorType('loading error');
     }
   };
 
@@ -72,6 +74,7 @@ export const App: React.FC = () => {
       <ErrorNotification
         isError={isError}
         setIsError={setIsError}
+        errorType={errorType}
       />
     </div>
   );

@@ -4,11 +4,13 @@ import classNames from 'classnames';
 type Props = {
   isError: boolean;
   setIsError: (value: boolean) => void,
+  errorType: string,
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   isError,
   setIsError,
+  errorType,
 }) => {
   const closeErrorNotification = () => {
     setIsError(false);
@@ -27,11 +29,7 @@ export const ErrorNotification: React.FC<Props> = ({
         onClick={closeErrorNotification}
       />
 
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorType}
     </div>
   );
 };
