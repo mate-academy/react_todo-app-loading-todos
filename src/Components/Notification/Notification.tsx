@@ -10,7 +10,7 @@ const Notification: FC<Props> = ({
   errorMessage,
   closeError,
 }) => {
-  const closeErrorMessage = (): void => {
+  const closeErrorMessage = () => {
     closeError({
       status: false,
       message: ErrorMessage.NONE,

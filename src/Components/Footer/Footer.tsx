@@ -27,7 +27,7 @@ const Footer: FC<Props> = ({
           'filter__link',
           { selected: filterType === FilterType.All },
         )}
-        onClick={( ) => setFilterType(FilterType.All)}
+        onClick={() => setFilterType(FilterType.All)}
       >
         All
       </a>
@@ -39,7 +39,7 @@ const Footer: FC<Props> = ({
           'filter__link',
           { selected: filterType === FilterType.Active },
         )}
-        onClick={( ) => setFilterType(FilterType.Active)}
+        onClick={() => setFilterType(FilterType.Active)}
       >
         Active
       </a>
@@ -51,7 +51,7 @@ const Footer: FC<Props> = ({
           'filter__link',
           { selected: filterType === FilterType.Completed },
         )}
-        onClick={( ) => setFilterType(FilterType.Completed)}
+        onClick={() => setFilterType(FilterType.Completed)}
       >
         Completed
       </a>

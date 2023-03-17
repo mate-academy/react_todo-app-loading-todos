@@ -2,6 +2,7 @@
 import {
   FC,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { USER_ID as id, getTodos } from './api/todos';
@@ -17,36 +18,43 @@ import { filterTodoList, getMountCompletedTodos } from './utils/filterTodoList';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [amountCompletedTodos, setAmountCompletedTodos] = useState<number>(0);
+  const [amountCompletedTodos, setAmountCompletedTodos] = useState(0);
   const [error, setErrorLoadTodo] = useState<Error>({
     status: false,
     message: ErrorMessage.NONE,
   });
-  const [isLoader, setIsLoader] = useState<boolean>(true);
-  const [filterTodosBy, setFilterTodos] = useState<FilterType>(FilterType.All);
+  const [isLoader, setIsLoader] = useState(true);
+  const [filterTodosBy, setFilterTodos] = useState(FilterType.All);
 
-  const visibleTodoList = filterTodoList(todos, filterTodosBy);
+  const visibleTodoList = useMemo(() => (
+    filterTodoList(todos, filterTodosBy)
+  ), [todos, filterTodosBy]);
 
-  useEffect(() => {
-    getTodos(id)
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setAmountCompletedTodos(getMountCompletedTodos(todosFromServer));
+  const fetchTodos = async () => {
+    try {
+      const todosFromServer = await getTodos(id);
 
-        if (!todosFromServer.length) {
-          setErrorLoadTodo({
-            status: true,
-            message: ErrorMessage.LOAD,
-          });
-        }
-      })
-      .catch(() => {
+      setTodos(todosFromServer);
+      setAmountCompletedTodos(getMountCompletedTodos(todosFromServer));
+
+      if (!todosFromServer.length) {
         setErrorLoadTodo({
           status: true,
           message: ErrorMessage.LOAD,
         });
-      })
-      .finally(() => setIsLoader(false));
+      }
+    } catch {
+      setErrorLoadTodo({
+        status: true,
+        message: ErrorMessage.LOAD,
+      });
+    } finally {
+      setIsLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
   }, []);
 
   return (
