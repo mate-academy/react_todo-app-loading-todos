@@ -61,7 +61,7 @@ export const App: FC = () => {
           <TodoList todos={visibleTodos} />
         )}
 
-        {!visibleTodos.length || (
+        {!currentTodos.length || (
           <Footer
             mountComplitedTodos={mountCompletedTodos}
             filterTodos={filterTodos}
