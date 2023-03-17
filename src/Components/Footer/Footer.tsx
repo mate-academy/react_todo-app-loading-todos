@@ -1,82 +1,69 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import classNames from 'classnames';
-import { FilterStatus } from '../../types/filterStatus';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  mountComplitedTodos: number,
-  filterTodos: (value: string) => void,
+  amountCompletedTodos: number,
+  filterType: FilterType,
+  setFilterType: React.Dispatch<React.SetStateAction<FilterType>>,
 };
 
 const Footer: FC<Props> = ({
-  mountComplitedTodos: compitedTodos,
-  filterTodos,
-}) => {
-  const [activeLink, setActiveLink] = useState<string>(FilterStatus.All);
+  amountCompletedTodos: completedTodos,
+  filterType,
+  setFilterType,
+}) => (
+  <footer className="todoapp__footer">
+    <span className="todo-count">
+      {completedTodos}
+      {' items left'}
+    </span>
 
-  const hendlerLink = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-  ): void => {
-    const { select } = e.currentTarget.dataset;
-
-    setActiveLink(select || FilterStatus.All);
-    if (select) {
-      filterTodos(select);
-    }
-  };
-
-  return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
-        {compitedTodos}
-        {' items left'}
-      </span>
-
-      <nav className="filter">
-        <a
-          href="#/"
-          data-select={FilterStatus.All}
-          className={classNames(
-            'filter__link',
-            { selected: activeLink === FilterStatus.All },
-          )}
-          onClick={hendlerLink}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          data-select={FilterStatus.Active}
-          className={classNames(
-            'filter__link',
-            { selected: activeLink === FilterStatus.Active },
-          )}
-          onClick={hendlerLink}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          data-select={FilterStatus.Completed}
-          className={classNames(
-            'filter__link',
-            { selected: activeLink === FilterStatus.Completed },
-          )}
-          onClick={hendlerLink}
-        >
-          Completed
-        </a>
-      </nav>
-
-      <button
-        type="button"
-        className="todoapp__clear-completed"
+    <nav className="filter">
+      <a
+        href="#/"
+        data-select="all"
+        className={classNames(
+          'filter__link',
+          { selected: filterType === FilterType.All },
+        )}
+        onClick={( ) => setFilterType(FilterType.All)}
       >
-        Clear completed
-      </button>
-    </footer>
-  );
-};
+        All
+      </a>
+
+      <a
+        href="#/active"
+        data-select="active"
+        className={classNames(
+          'filter__link',
+          { selected: filterType === FilterType.Active },
+        )}
+        onClick={( ) => setFilterType(FilterType.Active)}
+      >
+        Active
+      </a>
+
+      <a
+        href="#/completed"
+        data-select="completed"
+        className={classNames(
+          'filter__link',
+          { selected: filterType === FilterType.Completed },
+        )}
+        onClick={( ) => setFilterType(FilterType.Completed)}
+      >
+        Completed
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      className="todoapp__clear-completed"
+    >
+      Clear completed
+    </button>
+  </footer>
+);
 
 export default Footer;

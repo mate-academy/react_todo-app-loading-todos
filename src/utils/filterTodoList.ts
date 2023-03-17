@@ -1,13 +1,13 @@
 import { Todo } from '../types/Todo';
-import { FilterStatus } from '../types/filterStatus';
+import { FilterType } from '../types/FilterType';
 
-export function filterTodoList(array: Todo[], filterBy: string): Todo[] {
-  if (filterBy === 'all') {
+export function filterTodoList(array: Todo[], filterBy: FilterType): Todo[] {
+  if (filterBy === FilterType.All) {
     return array;
   }
 
   return array.filter(({ completed }) => {
-    if (filterBy === FilterStatus.Active) {
+    if (filterBy === FilterType.Active) {
       return !completed;
     }
 

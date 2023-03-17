@@ -7,22 +7,20 @@ type Props = {
   todos: Todo[];
 };
 
-const TodoList: FC<Props> = ({ todos }) => {
-  return (
-    <section className="todoapp__main">
-      {todos.map(todo => (
-        <div
-          className={classNames(
-            'todo',
-            { completed: todo.completed },
-          )}
-          key={todo.id}
-        >
-          <TodoInfo {...todo} />
-        </div>
-      ))}
-    </section>
-  );
-};
+const TodoList: FC<Props> = ({ todos }) => (
+  <section className="todoapp__main">
+    {todos.map(todo => (
+      <div
+        className={classNames(
+          'todo',
+          { completed: todo.completed },
+        )}
+        key={todo.id}
+      >
+        <TodoInfo {...todo} />
+      </div>
+    ))}
+  </section>
+);
 
 export default TodoList;

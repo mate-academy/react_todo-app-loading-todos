@@ -1,5 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useEffect, useState, FC } from 'react';
+import {
+  FC,
+  useEffect,
+  useState,
+} from 'react';
 import { USER_ID as id, getTodos } from './api/todos';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
@@ -8,26 +12,28 @@ import Notification from './Components/Notification/Notification';
 import Loader from './Components/Loader/Loader';
 import { Todo } from './types/Todo';
 import { Error, ErrorMessage } from './types/Error';
+import { FilterType } from './types/FilterType';
 import { filterTodoList, getMountCompletedTodos } from './utils/filterTodoList';
 
 export const App: FC = () => {
-  const [currentTodos, setCurrentTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [mountCompletedTodos, setMountCompletedTodos] = useState<number>(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [amountCompletedTodos, setAmountCompletedTodos] = useState<number>(0);
   const [error, setErrorLoadTodo] = useState<Error>({
     status: false,
     message: ErrorMessage.NONE,
   });
   const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [filterTodosBy, setFilterTodos] = useState<FilterType>(FilterType.All);
+
+  const visibleTodoList = filterTodoList(todos, filterTodosBy);
 
   useEffect(() => {
     getTodos(id)
-      .then(todos => {
-        setVisibleTodos(todos);
-        setCurrentTodos(todos);
-        setMountCompletedTodos(getMountCompletedTodos(todos));
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setAmountCompletedTodos(getMountCompletedTodos(todosFromServer));
 
-        if (!todos.length) {
+        if (!todosFromServer.length) {
           setErrorLoadTodo({
             status: true,
             message: ErrorMessage.LOAD,
@@ -39,14 +45,9 @@ export const App: FC = () => {
           status: true,
           message: ErrorMessage.LOAD,
         });
-        setVisibleTodos([]);
       })
       .finally(() => setIsLoader(false));
   }, []);
-
-  const filterTodos = (filterBy: string): void => {
-    setVisibleTodos(filterTodoList(currentTodos, filterBy));
-  };
 
   return (
     <div className="todoapp">
@@ -58,13 +59,14 @@ export const App: FC = () => {
         {isLoader ? (
           <Loader />
         ) : (
-          <TodoList todos={visibleTodos} />
+          <TodoList todos={visibleTodoList} />
         )}
 
-        {!currentTodos.length || (
+        {!todos.length || (
           <Footer
-            mountComplitedTodos={mountCompletedTodos}
-            filterTodos={filterTodos}
+            amountCompletedTodos={amountCompletedTodos}
+            filterType={filterTodosBy}
+            setFilterType={setFilterTodos}
           />
         )}
       </div>
