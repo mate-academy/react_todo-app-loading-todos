@@ -18,6 +18,7 @@ export const App: FC = () => {
     status: false,
     message: ErrorMessage.NONE,
   });
+  const [isLoader, setIsLoader] = useState<boolean>(true);
 
   useEffect(() => {
     getTodos(id)
@@ -25,6 +26,13 @@ export const App: FC = () => {
         setVisibleTodos(todos);
         setCurrentTodos(todos);
         setMountCompletedTodos(getMountCompletedTodos(todos));
+
+        if (!todos.length) {
+          setErrorLoadTodo({
+            status: true,
+            message: ErrorMessage.LOAD,
+          });
+        }
       })
       .catch(() => {
         setErrorLoadTodo({
@@ -32,7 +40,8 @@ export const App: FC = () => {
           message: ErrorMessage.LOAD,
         });
         setVisibleTodos([]);
-      });
+      })
+      .finally(() => setIsLoader(false));
   }, []);
 
   const filterTodos = (filterBy: string): void => {
@@ -46,7 +55,7 @@ export const App: FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {!visibleTodos.length ? (
+        {isLoader ? (
           <Loader />
         ) : (
           <TodoList todos={visibleTodos} />

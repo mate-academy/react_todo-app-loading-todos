@@ -17,6 +17,11 @@ const Notification: FC<Props> = ({
     });
   };
 
+  setTimeout(() => closeError({
+    status: false,
+    message: ErrorMessage.NONE,
+  }), 2000)
+
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
       {/* eslint-disable-next-line */}
