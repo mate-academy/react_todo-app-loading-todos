@@ -4,7 +4,7 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { Header } from './Components/Header';
-import { Main } from './Components/Main';
+import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
 import { Notifications } from './Components/Notifications';
 import { FilterType } from './types/FilterType';
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <Main todos={visibleTodos} />
+        <TodoList todos={visibleTodos} />
 
         {todos.length > 0 && (
           <Footer
@@ -72,8 +72,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {error && (
         <Notifications setError={setError} />
       )}

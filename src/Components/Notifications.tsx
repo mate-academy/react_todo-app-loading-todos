@@ -36,8 +36,6 @@ export const Notifications: React.FC<Props> = ({ setError }) => {
         aria-label="deleteError"
         onClick={deleteError}
       />
-
-      {/* show only one message at a time */}
       Unable to add a todo
     </div>
   );
