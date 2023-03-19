@@ -13,15 +13,11 @@ export const Footer: React.FC<Props> = ({
   sortType,
   activeTodosLength,
 }) => {
-  const handleSortType = (value: SortType) => {
-    setSortType(value);
-  };
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        { activeTodosLength }
-        items left
+        {/* eslint-disable react/jsx-one-expression-per-line */}
+        { activeTodosLength } items left
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -31,7 +27,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: sortType === SortType.ALL,
           })}
-          onClick={() => handleSortType(SortType.ALL)}
+          onClick={() => setSortType(SortType.ALL)}
         >
           All
         </a>
@@ -41,7 +37,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: sortType === SortType.ACTIVE,
           })}
-          onClick={() => handleSortType(SortType.ACTIVE)}
+          onClick={() => setSortType(SortType.ACTIVE)}
         >
           Active
         </a>
@@ -51,7 +47,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: sortType === SortType.COMPLETE,
           })}
-          onClick={() => handleSortType(SortType.COMPLETE)}
+          onClick={() => setSortType(SortType.COMPLETE)}
         >
           Completed
         </a>
