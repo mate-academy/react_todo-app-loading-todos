@@ -70,7 +70,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length !== 0 && (
+          {todos.length && (
             <ToggleButton isActive={isAllTodosActive} />
           )}
 
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
           <TodoList todos={filteredArray} />
         </section>
 
-        {todos.length !== 0 && (
+        {todos.length && (
           <Footer
             amountOfItemsLeft={amountOfItemsLeft}
             amountOfItems={todos.length}
