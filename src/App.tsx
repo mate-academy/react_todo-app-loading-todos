@@ -1,17 +1,40 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 0;
+import { client } from './utils/fetchClient';
+
+const USER_ID = 6698;
 
 export const App: React.FC = () => {
+  const [todo, setTodo] = useState('');
+
+  const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTodo(event.target.value);
+  };
+
+  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (todo) {
+      client.post('/todos/1', { todo });
+    }
+
+    setTodo('');
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
+  if (!localStorage.getItem('email')) {
+    return <Login />;
+  }
+
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+      <h1 className="todoapp__title title is-2">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
@@ -19,11 +42,13 @@ export const App: React.FC = () => {
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              onChange={handleTodoChange}
+              value={todo}
             />
           </form>
         </header>
@@ -35,7 +60,7 @@ export const App: React.FC = () => {
               <input
                 type="checkbox"
                 className="todo__status"
-                checked
+              // checked
               />
             </label>
 
@@ -79,14 +104,14 @@ export const App: React.FC = () => {
             </label>
 
             {/* This form is shown instead of the title and remove button */}
-            <form>
+            {/* <form>
               <input
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
                 value="Todo is being edited now"
               />
-            </form>
+            </form> */}
 
             <div className="modal overlay">
               <div className="modal-background has-background-white-ter" />
