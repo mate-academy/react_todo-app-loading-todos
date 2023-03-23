@@ -7,7 +7,6 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
-// import collection from './api/collection.json';
 import { FilterType } from './types/FilterType';
 
 const USER_ID = 6704;

@@ -1,5 +1,0 @@
-[
-  { "id": 74, "completed": true, "userId": 4, "title": "lorem" },
-  { "id": 77, "completed": true, "userId": 4, "title": "lorem" },
-  { "id": 83, "completed": false, "userId": 5, "title": "lorem" }
-]
