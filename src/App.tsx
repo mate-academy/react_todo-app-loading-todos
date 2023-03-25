@@ -7,6 +7,7 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
 import { FilterType } from './types/FilterType';
 
 const USER_ID = 6704;
@@ -29,6 +30,10 @@ export const App: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
+
   const closeError = () => {
     setErrorText('');
   };
@@ -37,27 +42,17 @@ export const App: React.FC = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterType) {
-        case FilterType.All:
-          return todo;
+    switch (filterType) {
+      case FilterType.Completed:
+        return todos.filter(todo => todo.completed);
 
-        case FilterType.Completed:
-          return todo.completed;
+      case FilterType.Active:
+        return todos.filter(todo => !todo.completed);
 
-        case FilterType.Active:
-          return !todo.completed;
-
-        default:
-          return todos;
-      }
-    });
+      default:
+        return todos;
+    }
   }, [todos, filterType]);
-
-  useEffect(() => {
-    closeError();
-    fetchTodos();
-  }, [fetchTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -66,13 +61,24 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-      <TodoList
-        activeTodos={activeTodos}
-        todos={visibleTodos}
-        filterType={filterType}
-        setFilterType={setFilterType}
-        completedTodos={completedTodos}
-      />
+      <div className="todoapp__content">
+        <TodoList
+          activeTodos={activeTodos}
+          todos={visibleTodos}
+          filterType={filterType}
+          setFilterType={setFilterType}
+          completedTodos={completedTodos}
+        />
+
+        {todos.length > 0 && (
+          <Footer
+            activeTodos={activeTodos}
+            filterType={filterType}
+            setFilterType={setFilterType}
+            completedTodos={completedTodos}
+          />
+        )}
+      </div>
 
       <div
         className={classNames(
