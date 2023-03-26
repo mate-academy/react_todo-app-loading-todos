@@ -1,15 +1,33 @@
-import { ChangeEvent, FC, useState } from 'react';
+import cn from 'classnames';
+import {
+  ChangeEvent, FC, useEffect, useState,
+} from 'react';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
-  const handleSubmit = () => {
-    localStorage.setItem('email', email);
+  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setIsLoading(true);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem('email', email);
+
+      if (isLoading === true) {
+        window.location.reload();
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   return (
     <section className="login mt-5">
@@ -37,12 +55,17 @@ export const Login: FC = () => {
             </span>
           </p>
         </div>
-        <div className="field">
-          <input
+        <div className="field control">
+          <button
             type="submit"
-            value="Login"
-            className="button is-primary"
-          />
+            className={cn(
+              'button',
+              'is-primary',
+              { 'is-loading': isLoading },
+            )}
+          >
+            Login
+          </button>
         </div>
       </form>
     </section>
