@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
-// import { UserWarning } from './UserWarning';
+
 import { getTodos } from './api/todos';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
