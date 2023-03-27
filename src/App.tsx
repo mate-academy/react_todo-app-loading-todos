@@ -1,20 +1,27 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import cn from 'classnames';
 import { getTodos, addTodo } from './api/todos';
 import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 
-// import { client } from './utils/fetchClient';
-
 const USER_ID = 6698;
 
-export const App: React.FC = () => {
-  // we will get todoId based on todoLength(default will be 0)
+enum Filters {
+  All,
+  Active,
+  Completed,
+}
 
+export const App: React.FC = () => {
   const [task, setTask] = useState('');
 
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  const [filter, setFilter] = useState<Filters>(Filters.All);
+
+  const completedNumber = todos.filter(todo => !todo.completed).length;
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
@@ -23,6 +30,16 @@ export const App: React.FC = () => {
   const loadTodos = async () => {
     await getTodos(USER_ID).then(res => setTodos(res));
   };
+
+  const visibleTodos = todos.filter(todo => {
+    if (filter === Filters.All) {
+      return true;
+    }
+
+    return filter === Filters.Completed
+      ? todo.completed
+      : !todo.completed;
+  });
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -76,13 +93,26 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main">
           {
-            todos.map(todo => (
-              <div className="todo" data-cy="todo" key={todo.id}>
+            visibleTodos.map((
+              {
+                title,
+                completed,
+                id,
+              },
+            ) => (
+              <div
+                className={cn(
+                  'todo',
+                  { completed },
+                )}
+                data-cy="todo"
+                key={id}
+              >
                 <div className="todo__status-label">
                   <input type="checkbox" className="todo__status" />
                 </div>
 
-                <span className="todo__title">{todo.title}</span>
+                <span className="todo__title">{title}</span>
               </div>
             ))
           }
@@ -93,20 +123,41 @@ export const App: React.FC = () => {
           && (
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {`${todos.length} items left`}
+                {`${completedNumber} items left`}
               </span>
 
               {/* Active filter should have a 'selected' class */}
               <nav className="filter">
-                <a href="#/" className="filter__link selected">
+                <a
+                  href="#/"
+                  className={cn(
+                    'filter__link',
+                    { selected: filter === Filters.All },
+                  )}
+                  onClick={() => setFilter(Filters.All)}
+                >
                   All
                 </a>
 
-                <a href="#/active" className="filter__link">
+                <a
+                  href="#/active"
+                  className={cn(
+                    'filter__link',
+                    { selected: filter === Filters.Active },
+                  )}
+                  onClick={() => setFilter(Filters.Active)}
+                >
                   Active
                 </a>
 
-                <a href="#/completed" className="filter__link">
+                <a
+                  href="#/completed"
+                  className={cn(
+                    'filter__link',
+                    { selected: filter === Filters.Completed },
+                  )}
+                  onClick={() => setFilter(Filters.Completed)}
+                >
                   Completed
                 </a>
               </nav>
