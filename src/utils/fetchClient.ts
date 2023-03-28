@@ -1,32 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
-// повертає обіцянку, вирішену після заданої затримки
 function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });
 }
 
-// Щоб мати автозаповнення та уникнути помилок
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null, // ми можемо надсилати будь-які дані на сервер
+  data: any = null,
 ): Promise<T> {
   const options: RequestInit = { method };
 
   if (data) {
-    // Ми додаємо body і Content-Type тільки для запитів з даними
     options.body = JSON.stringify(data);
     options.headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
   }
 
-  // ми чекаємо тестування, щоб побачити завантажувачі
   return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
