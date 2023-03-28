@@ -45,7 +45,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const sendToServer2 = async (newTodoTitle: string) => {
+  const doPostTodo = async (newTodoTitle: string) => {
     setIsError(false);
 
     try {
@@ -98,7 +98,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          sendToServer2={sendToServer2}
+          doPostTodo={doPostTodo}
           handleChecker={handleChecker}
         />
         <Main

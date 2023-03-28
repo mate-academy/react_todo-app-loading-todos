@@ -5,14 +5,14 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  sendToServer2: (newTodoTitle: string) => Promise<void>,
+  doPostTodo: (newTodoTitle: string) => Promise<void>,
   // handleChecker: (id: number, completed: boolean) => Promise<void>,
   handleChecker: (id: number, data: unknown) => Promise<void>,
 };
 
 export const Header: React.FC<Props> = ({
   todos,
-  sendToServer2,
+  doPostTodo,
   handleChecker,
 }) => {
   const [newTodo, setNewTodo] = useState('');
@@ -22,7 +22,7 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
 
     if (newTodo.trim().length > 0) {
-      sendToServer2(newTodo);
+      doPostTodo(newTodo);
       setNewTodo('');
     }
   };

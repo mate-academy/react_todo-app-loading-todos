@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -61,6 +61,16 @@ export const Footer: React.FC<Props> = ({ todos, filterTodos, removeTodo }) => {
 
     return null;
   };
+
+  useEffect(() => {
+    if (activeFilter.active) {
+      loadFilteringTodos(false);
+    }
+
+    if (activeFilter.completed) {
+      loadFilteringTodos(true);
+    }
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer">
