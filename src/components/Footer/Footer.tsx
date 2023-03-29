@@ -2,18 +2,17 @@ import classNames from 'classnames';
 import React from 'react';
 import { filterLinks } from '../../helper/filterLinks';
 import { Filter } from '../../types/Filter';
-import { Todo } from '../../types/Todo';
 
 type Props = {
   filter: Filter,
   onFilter: (filter: Filter) => void,
-  completedTodos: Todo | undefined,
+  hasCompleted: boolean | undefined,
 };
 
 export const Footer: React.FC<Props> = ({
   filter,
   onFilter,
-  completedTodos,
+  hasCompleted,
 }) => {
   return (
     <footer className="todoapp__footer">
@@ -37,7 +36,7 @@ export const Footer: React.FC<Props> = ({
         ))}
       </nav>
 
-      {completedTodos && (
+      {hasCompleted && (
         <button
           type="button"
           className="todoapp__clear-completed"

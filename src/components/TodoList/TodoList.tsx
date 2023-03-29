@@ -9,7 +9,7 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {todos?.map(todo => (
+      {todos.map(todo => (
         <div
           key={todo.id}
           className={classNames('todo', { completed: todo.completed })}

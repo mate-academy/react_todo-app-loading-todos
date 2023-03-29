@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Notification } from './components/Notification';
@@ -8,11 +8,12 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotice } from './types/ErrorNotice';
 import { Filter } from './types/Filter';
+import { getVisibleTodos } from './helper/getVisibleTodos';
 
 const USER_ID = 6762;
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodos] = useState<Todo[] | null>(null);
+  const [todosFromServer, setTodos] = useState<Todo[]>([]);
   const [hasError, setError] = useState(false);
   const [errorMessage, setMessageError] = useState('');
   const [filter, setFilter] = useState(Filter.ALL);
@@ -37,19 +38,12 @@ export const App: React.FC = () => {
     loadingTodos();
   }, []);
 
-  const visibleTodos = todosFromServer?.filter(todo => {
-    switch (filter) {
-      case Filter.ACTIVE:
-        return !todo.completed;
+  const visibleTodos = useMemo(
+    () => getVisibleTodos(todosFromServer, filter),
+    [filter, todosFromServer],
+  );
 
-      case Filter.COMPLETED:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
-  const completedTodos = visibleTodos?.find(todo => (todo.completed));
+  const hasCompleted = visibleTodos.some(todo => (todo.completed));
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -62,20 +56,20 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {visibleTodos && <TodoList todos={visibleTodos} />}
+        <TodoList todos={visibleTodos} />
 
         {todosFromServer && (
           <Footer
             filter={filter}
             onFilter={setFilter}
-            completedTodos={completedTodos}
+            hasCompleted={hasCompleted}
           />
         )}
       </div>
       <Notification
         error={hasError}
         errorNotice={errorMessage}
-        hasError={setError}
+        setError={setError}
       />
     </div>
   );

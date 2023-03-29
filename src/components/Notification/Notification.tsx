@@ -4,13 +4,13 @@ import React from 'react';
 type Props = {
   error: boolean,
   errorNotice: string,
-  hasError: (state: boolean) => void,
+  setError: (state: boolean) => void,
 };
 
 export const Notification: React.FC<Props> = ({
   error,
   errorNotice,
-  hasError,
+  setError,
 }) => {
   return (
     <div
@@ -23,7 +23,7 @@ export const Notification: React.FC<Props> = ({
         aria-label="btn"
         type="button"
         className="delete"
-        onClick={() => hasError(false)}
+        onClick={() => setError(false)}
       />
 
       {errorNotice}
