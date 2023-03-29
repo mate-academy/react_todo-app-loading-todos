@@ -23,15 +23,19 @@ export const App: React.FC = () => {
     setTimeout(setError, 3000);
   };
 
-  useEffect(() => {
-    getTodos(USER_ID)
-      .then(setTodos)
-      .catch(() => showError(ErrorNotice.LOADING));
-  }, []);
+  const loadingTodos = async () => {
+    try {
+      const todos = await getTodos(USER_ID);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+      setTodos(todos);
+    } catch (error) {
+      showError(ErrorNotice.LOADING);
+    }
+  };
+
+  useEffect(() => {
+    loadingTodos();
+  }, []);
 
   const visibleTodos = todosFromServer?.filter(todo => {
     switch (filter) {
@@ -45,17 +49,11 @@ export const App: React.FC = () => {
         return todo;
     }
   });
-  //   try {
-  //     const todos = await getTodos(USER_ID);
+  const completedTodos = visibleTodos?.find(todo => (todo.completed));
 
-  //     console.log(todos);
-  //     // if (todos) {
-  //     //   setTodos(todos);
-  //     // }
-  //   } catch (error) {
-  //     console.warn(error);
-  //   }
-  // };
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
@@ -70,6 +68,7 @@ export const App: React.FC = () => {
           <Footer
             filter={filter}
             onFilter={setFilter}
+            completedTodos={completedTodos}
           />
         )}
       </div>
