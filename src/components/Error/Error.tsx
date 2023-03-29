@@ -1,17 +1,15 @@
 import { useEffect, FC } from 'react';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
   errorText: string,
   errorClear: () => void
 };
 export const Error: FC<Props> = ({ errorClear, errorText }) => {
   useEffect(() => {
-    const idTimer = setTimeout(errorClear, 3000);
+    let idTimer: NodeJS.Timeout;
 
     if (errorText) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      idTimer;
+      idTimer = setTimeout(errorClear, 3000);
     }
 
     return () => clearTimeout(idTimer);
@@ -19,7 +17,12 @@ export const Error: FC<Props> = ({ errorClear, errorText }) => {
 
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
-      <button type="button" className="delete" onClick={errorClear} />
+      <button
+        type="button"
+        className="delete"
+        onClick={errorClear}
+        aria-label="Закрити помилку"
+      />
       {errorText}
     </div>
   );

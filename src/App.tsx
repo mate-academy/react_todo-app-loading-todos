@@ -40,7 +40,10 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+          />
 
           {/* Add a todo on form submit */}
           <form>
@@ -53,26 +56,21 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {
-            listTodo.map((el: Todo) => <Item todo={el} key={el.id} />)
-          }
+          {listTodo.map((el: Todo) => <Item todo={el} key={el.id} />)}
         </section>
 
         {listTodo.length > 0
-          ? (
+          && (
             <footer className="todoapp__footer">
               <span className="todo-count">
                 {`${listTodo.length} items left`}
               </span>
-
               <Filter setFilter={getListTodo} />
-
-              {/* don't show this button if there are no completed todos */}
               <button type="button" className="todoapp__clear-completed">
                 Clear completed
               </button>
             </footer>
-          ) : ''}
+          )}
       </div>
 
       {error && <Error errorText={error} errorClear={clearError} />}

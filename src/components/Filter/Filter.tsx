@@ -6,17 +6,17 @@ type Props = {
 };
 
 enum TypeFilter {
-  'all',
-  'active',
-  'completed',
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
 }
 
 export const Filter: React.FC<Props> = ({ setFilter }) => {
-  const [typeFilter, setTypeFilter] = useState(TypeFilter[0]);
+  const [typeFilter, setTypeFilter] = useState(TypeFilter.ALL);
 
-  const chooseFilter = (type: string, filter?: boolean) => {
-    setFilter(filter);
+  const chooseFilter = (type: TypeFilter, filter?: boolean) => {
     setTypeFilter(type);
+    setFilter(filter);
   };
 
   return (
@@ -24,9 +24,9 @@ export const Filter: React.FC<Props> = ({ setFilter }) => {
       <a
         href="#/"
         className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter[0],
+          selected: typeFilter === TypeFilter.ALL,
         })}
-        onClick={() => chooseFilter(TypeFilter[0])}
+        onClick={() => chooseFilter(TypeFilter.ALL)}
       >
         All
       </a>
@@ -34,9 +34,9 @@ export const Filter: React.FC<Props> = ({ setFilter }) => {
       <a
         href="#/active"
         className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter[1],
+          selected: typeFilter === TypeFilter.ACTIVE,
         })}
-        onClick={() => chooseFilter(TypeFilter[1], false)}
+        onClick={() => chooseFilter(TypeFilter.ACTIVE, false)}
       >
         Active
       </a>
@@ -44,9 +44,9 @@ export const Filter: React.FC<Props> = ({ setFilter }) => {
       <a
         href="#/completed"
         className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter[2],
+          selected: typeFilter === TypeFilter.COMPLETED,
         })}
-        onClick={() => chooseFilter(TypeFilter[2], true)}
+        onClick={() => chooseFilter(TypeFilter.COMPLETED, true)}
       >
         Completed
       </a>
