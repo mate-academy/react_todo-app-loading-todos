@@ -13,44 +13,40 @@ enum TypeFilter {
 
 export const Filter: React.FC<Props> = ({ setFilter }) => {
   const [typeFilter, setTypeFilter] = useState(TypeFilter.ALL);
+  const filters = [TypeFilter.ALL, TypeFilter.ACTIVE, TypeFilter.COMPLETED];
 
-  const chooseFilter = (type: TypeFilter, filter?: boolean) => {
-    setTypeFilter(type);
-    setFilter(filter);
+  const typeFunc = (type: TypeFilter) => {
+    switch (type) {
+      case TypeFilter.ALL:
+        setTypeFilter(type);
+        setFilter(undefined);
+        break;
+      case TypeFilter.ACTIVE:
+        setTypeFilter(type);
+        setFilter(false);
+        break;
+      case TypeFilter.COMPLETED:
+        setTypeFilter(type);
+        setFilter(true);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
     <nav className="filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter.ALL,
-        })}
-        onClick={() => chooseFilter(TypeFilter.ALL)}
-      >
-        All
-      </a>
-
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter.ACTIVE,
-        })}
-        onClick={() => chooseFilter(TypeFilter.ACTIVE, false)}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: typeFilter === TypeFilter.COMPLETED,
-        })}
-        onClick={() => chooseFilter(TypeFilter.COMPLETED, true)}
-      >
-        Completed
-      </a>
+      {filters.map((type) => (
+        <a
+          href="#/"
+          className={classNames('filter__link', {
+            selected: typeFilter === type,
+          })}
+          onClick={() => typeFunc(type)}
+        >
+          {`${type.slice(0, 1).toUpperCase()}${type.slice(1)}`}
+        </a>
+      ))}
     </nav>
-
   );
 };
