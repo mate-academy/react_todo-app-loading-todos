@@ -9,7 +9,7 @@ type Props = {
 export const TodoErrorList: React.FC<Props> = ({ setError }) => {
   const [isErrorVisible, setIsErrorVisible] = useState(true);
 
-  const hidderError = () => {
+  const hideError = () => {
     setIsErrorVisible(false);
 
     setError(false);
@@ -36,7 +36,7 @@ export const TodoErrorList: React.FC<Props> = ({ setError }) => {
       <button
         type="button"
         className="delete"
-        onClick={hidderError}
+        onClick={hideError}
       />
 
       Unable to add a todo

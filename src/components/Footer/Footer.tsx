@@ -2,7 +2,10 @@ import classNames from 'classnames';
 import React from 'react';
 import { FilterParam } from '../../types/FilterParam';
 import { Todo } from '../../types/Todo';
-import { checkCompletedTodo, counterOfActiveTodos } from '../../api/todos';
+import {
+  checkCompletedTodo,
+  counterOfActiveTodos,
+} from '../../Helpers/helpers';
 
 type Props = {
   todos: Todo[],
@@ -16,22 +19,20 @@ export const Footer: React.FC<Props> = ({
   setFilterType,
 }) => {
   const changedFilter = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const href = event.currentTarget.getAttribute('href')?.replace('#/', '');
+    const href = event.currentTarget.text;
 
     switch (href) {
-      case 'all':
-        setFilterType(FilterParam.All);
-        break;
+      case 'All':
+        return setFilterType(FilterParam.All);
 
-      case 'active':
-        setFilterType(FilterParam.Active);
-        break;
+      case 'Active':
+        return setFilterType(FilterParam.Active);
 
-      case 'completed':
-        setFilterType(FilterParam.Completed);
-        break;
+      case 'Completed':
+        return setFilterType(FilterParam.Completed);
 
       default:
+        return setFilterType(FilterParam.All);
     }
   };
 
@@ -42,7 +43,7 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter">
-        {['All', 'Active', 'Completed'].map(link => (
+        {Object.values(FilterParam).map(link => (
           <a
             href={`#/${link.toLowerCase()}`}
             className={classNames(

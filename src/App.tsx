@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { filterTodos, getTodos } from './api/todos';
+import { getTodos } from './api/todos';
+import { filterTodos } from './Helpers/helpers';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoErrorList } from './components/TodoErrorList';
