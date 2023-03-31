@@ -18,17 +18,17 @@ export const Footer: React.FC<Props> = ({
   filterType,
   setFilterType,
 }) => {
-  const changedFilter = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleFilterChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const href = event.currentTarget.text;
 
     switch (href) {
-      case 'All':
+      case FilterParam.All:
         return setFilterType(FilterParam.All);
 
-      case 'Active':
+      case FilterParam.Active:
         return setFilterType(FilterParam.Active);
 
-      case 'Completed':
+      case FilterParam.Completed:
         return setFilterType(FilterParam.Completed);
 
       default:
@@ -52,7 +52,7 @@ export const Footer: React.FC<Props> = ({
                 selected: link === filterType,
               },
             )}
-            onClick={changedFilter}
+            onClick={handleFilterChange}
           >
             {link}
           </a>

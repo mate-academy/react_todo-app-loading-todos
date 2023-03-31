@@ -9,7 +9,7 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [completed, setCompleted] = useState(todo.completed);
 
-  const completedDealToggler = () => {
+  const toggleCompleted = () => {
     setCompleted(prev => !prev);
   };
 
@@ -25,7 +25,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onClick={completedDealToggler}
+          onClick={toggleCompleted}
         />
       </label>
 
@@ -37,6 +37,5 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <div className="loader" />
       </div>
     </div>
-
   );
 };
