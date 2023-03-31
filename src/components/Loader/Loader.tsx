@@ -18,9 +18,7 @@ export const Loader: React.FC<Props> = ({ isLoader, id, loaderId }) => {
 
   return (
     <div className={classNames('modal overlay', { 'is-active': isLoaderId })}>
-      <div className="modal-background
-            has-background-white-ter"
-      />
+      <div className="modal-background has-background-white-ter" />
       <div className="loader" />
     </div>
   );

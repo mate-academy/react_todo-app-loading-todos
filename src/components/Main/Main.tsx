@@ -20,23 +20,19 @@ export const Main: React.FC<Props> = ({
   loaderId,
   errorMessage,
 }) => {
-  const isMain = todos.length > 0;
-
   return (
     <section className="todoapp__main">
-      {isMain && (
-        todos.map((todo) => (
-          <TodoItem
-            todo={todo}
-            key={todo.id}
-            handleChecker={handleChecker}
-            removeTodo={removeTodo}
-            isLoader={isLoader}
-            loaderId={loaderId}
-            errorMessage={errorMessage}
-          />
-        ))
-      )}
+      {todos.map((todo) => (
+        <TodoItem
+          todo={todo}
+          key={todo.id}
+          handleChecker={handleChecker}
+          removeTodo={removeTodo}
+          isLoader={isLoader}
+          loaderId={loaderId}
+          errorMessage={errorMessage}
+        />
+      ))}
     </section>
   );
 };

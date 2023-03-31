@@ -32,7 +32,7 @@ export const App: React.FC = () => {
     setErrorMessage(title);
   };
 
-  const autoClosingErrorMessage = (message: ErrorsMessages) => {
+  const showErrorMessage = (message: ErrorsMessages) => {
     createErrorMessage(message);
     setTimeout(() => (removeMessage()), 3000);
   };
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
 
       setTodos(dataFromServer);
     } catch (error) {
-      autoClosingErrorMessage(ErrorsMessages.Load);
+      showErrorMessage(ErrorsMessages.Load);
     }
   };
 
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
     try {
       setTempTodo({
         id: 0,
-        userId: userId,
+        userId,
         title: newTodoTitle,
         completed: false,
       });
@@ -94,7 +94,7 @@ export const App: React.FC = () => {
 
       setTodos((items) => [...items, newTodoPost]);
     } catch (error) {
-      autoClosingErrorMessage(ErrorsMessages.Post);
+      showErrorMessage(ErrorsMessages.Post);
     }
 
     setTempTodo(undefined);
@@ -117,7 +117,7 @@ export const App: React.FC = () => {
         setTodos(findAndRemoveTodo(todos, id));
       }
     } catch (error) {
-      autoClosingErrorMessage(ErrorsMessages.Delete);
+      showErrorMessage(ErrorsMessages.Delete);
     }
 
     setIsLoader(false);
@@ -128,12 +128,12 @@ export const App: React.FC = () => {
     setLoaderId(-1);
 
     try {
+      const completedTodos = (
+        todos.filter(el => el.completed)
+          .map(item => item.id)
+      );
       const removed = await Promise.all([
-        todos.map((todo) => (
-          todo.completed
-            ? deleteTodo(todo.id)
-            : todo
-        )),
+        completedTodos.map(el => deleteTodo(el)),
       ]);
 
       if (removed) {
@@ -142,7 +142,7 @@ export const App: React.FC = () => {
         });
       }
     } catch (error) {
-      autoClosingErrorMessage(ErrorsMessages.Delete);
+      showErrorMessage(ErrorsMessages.Delete);
     }
 
     setIsLoader(false);
@@ -173,7 +173,7 @@ export const App: React.FC = () => {
         });
       }
     } catch (error) {
-      autoClosingErrorMessage(ErrorsMessages.Update);
+      showErrorMessage(ErrorsMessages.Update);
     }
 
     setIsLoader(false);
@@ -194,7 +194,7 @@ export const App: React.FC = () => {
           todos={todos}
           doPostTodo={doPostTodo}
           handleChecker={handleChecker}
-          errorMessage={autoClosingErrorMessage}
+          errorMessage={showErrorMessage}
           disabled={isHeaderDisabled}
         />
         <Main
@@ -203,13 +203,14 @@ export const App: React.FC = () => {
           removeTodo={removeTodo}
           isLoader={isLoader}
           loaderId={loaderId}
-          errorMessage={autoClosingErrorMessage}
+          errorMessage={showErrorMessage}
         />
         {tempTodo && <TodoItemLoader todo={tempTodo} />}
         {isFooterVisible && (
           <Footer
             todos={todos}
             filter={setFilter}
+            currentFilter={currentFilter}
             removeCompletedTodos={removeCompletedTodos}
           />
         )}

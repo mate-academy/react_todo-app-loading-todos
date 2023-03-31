@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
@@ -7,44 +7,25 @@ type Props = {
   todos: Todo[],
   filter: (filter: Filter) => void
   removeCompletedTodos: () => void,
+  currentFilter: Filter
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
   filter,
   removeCompletedTodos: removeAll,
+  currentFilter,
 }) => {
-  const [activeFilter, setActiveFilter] = useState({
-    all: true,
-    active: false,
-    completed: false,
-  });
-
   const loadFilteringTodos = (isActive: boolean) => {
     if (!isActive) {
       filter('active');
-      setActiveFilter({
-        all: false,
-        active: true,
-        completed: false,
-      });
     } else {
       filter('completed');
-      setActiveFilter({
-        all: false,
-        active: false,
-        completed: true,
-      });
     }
   };
 
   const allTodo = () => {
     filter('all');
-    setActiveFilter({
-      all: true,
-      active: false,
-      completed: false,
-    });
   };
 
   const isCompletedTodos = todos.some(todo => todo.completed);
@@ -66,7 +47,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={
-            classNames('filter__link', { selected: activeFilter.all })
+            classNames('filter__link', { selected: currentFilter === 'all' })
           }
           onClick={() => allTodo()}
         >
@@ -76,7 +57,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={
-            classNames('filter__link', { selected: activeFilter.active })
+            classNames('filter__link', { selected: currentFilter === 'active' })
           }
           onClick={() => loadFilteringTodos(false)}
         >
@@ -87,7 +68,7 @@ export const Footer: React.FC<Props> = ({
           href="#/completed"
           className={
             classNames(
-              'filter__link', { selected: activeFilter.completed },
+              'filter__link', { selected: currentFilter === 'completed' },
             )
           }
           onClick={() => loadFilteringTodos(true)}
@@ -96,7 +77,6 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       {isCompletedTodos && (
         <button
           type="button"

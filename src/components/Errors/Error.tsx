@@ -21,7 +21,7 @@ export const Error: React.FC<Props> = (
       <button
         type="button"
         className="delete"
-        onClick={() => removeMessage()}
+        onClick={removeMessage}
       />
       {errorMessage}
     </div>
