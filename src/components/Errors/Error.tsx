@@ -16,7 +16,6 @@ export const Error: React.FC<Props> = (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
       { hidden: !isError },
-      // { hidden: !isError },
     )}
     >
       <button

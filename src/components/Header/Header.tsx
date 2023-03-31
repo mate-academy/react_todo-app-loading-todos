@@ -25,11 +25,11 @@ export const Header: React.FC<Props> = ({
   const validateTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (newTodo.trim().length === 0) {
+    if (!newTodo.trim().length) {
       errorMessage(ErrorsMessages.Title);
     }
 
-    if (newTodo.trim().length > 0) {
+    if (newTodo.trim().length) {
       doPostTodo(newTodo);
       setNewTodo('');
     }

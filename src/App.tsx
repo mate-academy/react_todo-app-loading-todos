@@ -22,6 +22,7 @@ export const App: React.FC = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [loaderId, setLoaderId] = useState(-1);
   const [currentFilter, setCurrentFilter] = useState<Filter>('all');
+  const userId = 6725;
 
   const removeMessage = () => {
     setErrorMessage('');
@@ -81,7 +82,7 @@ export const App: React.FC = () => {
     try {
       setTempTodo({
         id: 0,
-        userId: 6725,
+        userId: userId,
         title: newTodoTitle,
         completed: false,
       });
@@ -182,7 +183,7 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const isFooterVisible = todos.length > 0;
+  const isFooterVisible = !!todos.length;
 
   return (
     <div className="todoapp">
@@ -198,7 +199,6 @@ export const App: React.FC = () => {
         />
         <Main
           todos={filteredTodos}
-          // todos={todosApp}
           handleChecker={handleChecker}
           removeTodo={removeTodo}
           isLoader={isLoader}

@@ -32,7 +32,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const validateTitle = () => {
-    if (inputValue.trim().length === 0) {
+    if (!inputValue.trim().length) {
       removeTodo(id);
       errorMessage(ErrorsMessages.Title);
 
