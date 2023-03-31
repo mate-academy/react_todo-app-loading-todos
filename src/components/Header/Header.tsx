@@ -6,7 +6,7 @@ import { ErrorsMessages } from '../../types/ErrorsMessages';
 
 type Props = {
   todos: Todo[],
-  doPostTodo: (newTodoTitle: string) => Promise<void>,
+  addTodo: (newTodoTitle: string) => Promise<void>,
   handleChecker: (id: number, data: unknown) => Promise<void>,
   errorMessage: (message: ErrorsMessages) => void
   disabled: boolean,
@@ -14,7 +14,7 @@ type Props = {
 
 export const Header: React.FC<Props> = ({
   todos,
-  doPostTodo,
+  addTodo,
   handleChecker,
   errorMessage,
   disabled,
@@ -30,7 +30,7 @@ export const Header: React.FC<Props> = ({
     }
 
     if (newTodo.trim().length) {
-      doPostTodo(newTodo);
+      addTodo(newTodo);
       setNewTodo('');
     }
   };

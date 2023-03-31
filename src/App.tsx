@@ -53,7 +53,7 @@ export const App: React.FC = () => {
     setCurrentFilter(filter);
   };
 
-  const doFilterTodos = (filteringProperty: Filter) => {
+  const filterTodos = (filteringProperty: Filter) => {
     return (
       filteringProperty === 'all'
         ? todos
@@ -71,11 +71,11 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos: Todo[] = useMemo(
-    () => doFilterTodos(currentFilter),
+    () => filterTodos(currentFilter),
     [todos, currentFilter],
   );
 
-  const doPostTodo = async (newTodoTitle: string) => {
+  const addTodo = async (newTodoTitle: string) => {
     setErrorMessage('');
     setIsHeaderDisabled(true);
 
@@ -101,7 +101,7 @@ export const App: React.FC = () => {
     setIsHeaderDisabled(false);
   };
 
-  const findAndRemoveTodo = (todoElements: Todo[], id: number) => {
+  const filterTodosById = (todoElements: Todo[], id: number) => {
     return todoElements.filter((item) => item.id !== id);
   };
 
@@ -114,7 +114,7 @@ export const App: React.FC = () => {
       const response = await deleteTodo(id);
 
       if (response) {
-        setTodos(findAndRemoveTodo(todos, id));
+        setTodos(filterTodosById(todos, id));
       }
     } catch (error) {
       showErrorMessage(ErrorsMessages.Delete);
@@ -192,7 +192,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          doPostTodo={doPostTodo}
+          addTodo={addTodo}
           handleChecker={handleChecker}
           errorMessage={showErrorMessage}
           disabled={isHeaderDisabled}

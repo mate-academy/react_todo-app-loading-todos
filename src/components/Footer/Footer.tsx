@@ -29,7 +29,10 @@ export const Footer: React.FC<Props> = ({
   };
 
   const isCompletedTodos = todos.some(todo => todo.completed);
-  const todosLeft = todos.length - todos.filter(item => item.completed).length;
+  const activeTodosCount = (
+    todos.length - todos.filter(
+      item => item.completed,
+    ).length);
   const removeCompletedTodos = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     removeAll();
@@ -40,7 +43,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosLeft} items left`}
+        {`${activeTodosCount} items left`}
       </span>
 
       <nav className="filter">
