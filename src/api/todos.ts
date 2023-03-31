@@ -12,11 +12,11 @@ export const getFilteredTodos = async (filteringProperty: boolean) => {
 };
 
 export const postTodo = (data: unknown) => {
-  return client.post<Todo[]>(`/todos?userId=${6725}`, data);
+  return client.post<Todo>(`/todos?userId=${6725}`, data);
 };
 
 export const patchTodo = (id: number, data: unknown) => {
-  return client.patch<Todo[]>(`/todos/${id}`, data);
+  return client.patch<Todo>(`/todos/${id}`, data);
 };
 
 export const deleteTodo = (id: number) => {

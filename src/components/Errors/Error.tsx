@@ -3,24 +3,26 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  isError: boolean,
   errorMessage: string,
-  handlerError: (checked: boolean) => void
+  removeMessage: () => void,
 };
 
 export const Error: React.FC<Props> = (
-  { isError, errorMessage, handlerError },
+  { errorMessage, removeMessage },
 ) => {
+  const isError = errorMessage !== '';
+
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
       { hidden: !isError },
+      // { hidden: !isError },
     )}
     >
       <button
         type="button"
         className="delete"
-        onClick={() => handlerError(false)}
+        onClick={() => removeMessage()}
       />
       {errorMessage}
     </div>

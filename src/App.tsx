@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   getTodos,
   postTodo,
@@ -8,81 +8,174 @@ import {
 import { Todo } from './types/Todo';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
+import { TodoItemLoader } from './components/TodoItemLoader';
 import { Footer } from './components/Footer';
 import { Error } from './components/Errors';
+import { Filter } from './types/Filter';
+import { ErrorsMessages } from './types/ErrorsMessages';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosApp, setTodosApp] = useState<Todo[]>(todos);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isError, setIsError] = useState(false);
+  const [isHeaderDisabled, setIsHeaderDisabled] = useState(false);
+  const [tempTodo, setTempTodo] = useState<Todo>();
+  const [isLoader, setIsLoader] = useState(false);
+  const [loaderId, setLoaderId] = useState(-1);
+  const [currentFilter, setCurrentFilter] = useState<Filter>('all');
 
-  const autoClosingErrorMessage = (message: string) => {
-    setIsError(true);
-    setErrorMessage(message);
-
-    setTimeout(() => (setIsError(false)), 3000);
+  const removeMessage = () => {
+    setErrorMessage('');
   };
 
-  const handlerError = (checked: boolean) => {
-    setIsError(checked);
+  const createErrorMessage = (title: ErrorsMessages) => {
+    setErrorMessage(title);
   };
 
-  const filterTodos = (todoFiltered: Todo[]) => {
-    setTodosApp(todoFiltered);
+  const autoClosingErrorMessage = (message: ErrorsMessages) => {
+    createErrorMessage(message);
+    setTimeout(() => (removeMessage()), 3000);
   };
 
   const loadTodos = async () => {
-    setIsError(false);
+    setErrorMessage('');
 
     try {
       const dataFromServer = await getTodos();
 
       setTodos(dataFromServer);
-      setTodosApp(dataFromServer);
     } catch (error) {
-      autoClosingErrorMessage('Unable to load a todos');
+      autoClosingErrorMessage(ErrorsMessages.Load);
     }
   };
 
+  const setFilter = (filter: Filter) => {
+    setCurrentFilter(filter);
+  };
+
+  const doFilterTodos = (filteringProperty: Filter) => {
+    return (
+      filteringProperty === 'all'
+        ? todos
+        : todos.filter(todo => {
+          switch (filteringProperty) {
+            case 'active':
+              return !todo.completed;
+            case 'completed':
+              return todo.completed;
+            default:
+              return null;
+          }
+        })
+    );
+  };
+
+  const filteredTodos: Todo[] = useMemo(
+    () => doFilterTodos(currentFilter),
+    [todos, currentFilter],
+  );
+
   const doPostTodo = async (newTodoTitle: string) => {
-    setIsError(false);
+    setErrorMessage('');
+    setIsHeaderDisabled(true);
 
     try {
-      await postTodo({
+      setTempTodo({
+        id: 0,
+        userId: 6725,
+        title: newTodoTitle,
+        completed: false,
+      });
+      const newTodoPost = await postTodo({
         title: newTodoTitle,
         userId: 6725,
         completed: false,
       });
 
-      loadTodos();
+      setTodos((items) => [...items, newTodoPost]);
     } catch (error) {
-      autoClosingErrorMessage("can't send post request");
+      autoClosingErrorMessage(ErrorsMessages.Post);
     }
+
+    setTempTodo(undefined);
+    setIsHeaderDisabled(false);
   };
 
-  const handleChecker = async (id: number, data: unknown) => {
-    setIsError(false);
-
-    try {
-      await patchTodo(id, data);
-
-      loadTodos();
-    } catch (error) {
-      autoClosingErrorMessage('Unable to update a todo');
-    }
+  const findAndRemoveTodo = (todoElements: Todo[], id: number) => {
+    return todoElements.filter((item) => item.id !== id);
   };
 
   const removeTodo = async (id: number) => {
-    setIsError(false);
+    setErrorMessage('');
+    setIsLoader(true);
+    setLoaderId(id);
 
     try {
-      await deleteTodo(id);
+      const response = await deleteTodo(id);
 
-      loadTodos();
+      if (response) {
+        setTodos(findAndRemoveTodo(todos, id));
+      }
     } catch (error) {
-      autoClosingErrorMessage('Unable to delete a todo');
+      autoClosingErrorMessage(ErrorsMessages.Delete);
     }
+
+    setIsLoader(false);
+  };
+
+  const removeCompletedTodos = async () => {
+    setIsLoader(true);
+    setLoaderId(-1);
+
+    try {
+      const removed = await Promise.all([
+        todos.map((todo) => (
+          todo.completed
+            ? deleteTodo(todo.id)
+            : todo
+        )),
+      ]);
+
+      if (removed) {
+        setTodos((prev) => {
+          return prev.filter((todo) => !todo.completed);
+        });
+      }
+    } catch (error) {
+      autoClosingErrorMessage(ErrorsMessages.Delete);
+    }
+
+    setIsLoader(false);
+  };
+
+  const handleChecker = async (id: number, data: unknown) => {
+    setErrorMessage('');
+    setIsLoader(true);
+    setLoaderId(id);
+
+    try {
+      const response = await patchTodo(id, data);
+      const todoEdited = todos.find((todo) => todo.id === id);
+      const isTitleChanged = response.title !== todoEdited?.title;
+      const isCompletedChanged = response.completed !== todoEdited?.completed;
+
+      if (isTitleChanged || isCompletedChanged) {
+        setTodos((oldTodos) => {
+          const newTodos = oldTodos.map((el) => ({
+            ...el,
+            completed: el.id === id ? response.completed : el.completed,
+            title: el.id === id ? response.title : el.title,
+          }));
+
+          return (
+            newTodos
+          );
+        });
+      }
+    } catch (error) {
+      autoClosingErrorMessage(ErrorsMessages.Update);
+    }
+
+    setIsLoader(false);
   };
 
   useEffect(() => {
@@ -100,27 +193,31 @@ export const App: React.FC = () => {
           todos={todos}
           doPostTodo={doPostTodo}
           handleChecker={handleChecker}
+          errorMessage={autoClosingErrorMessage}
+          disabled={isHeaderDisabled}
         />
         <Main
-          todos={todosApp}
+          todos={filteredTodos}
+          // todos={todosApp}
           handleChecker={handleChecker}
           removeTodo={removeTodo}
+          isLoader={isLoader}
+          loaderId={loaderId}
+          errorMessage={autoClosingErrorMessage}
         />
+        {tempTodo && <TodoItemLoader todo={tempTodo} />}
         {isFooterVisible && (
           <Footer
             todos={todos}
-            filterTodos={filterTodos}
-            removeTodo={removeTodo}
-          />
-        )}
-        {isError && (
-          <Error
-            isError={isError}
-            errorMessage={errorMessage}
-            handlerError={handlerError}
+            filter={setFilter}
+            removeCompletedTodos={removeCompletedTodos}
           />
         )}
       </div>
+      <Error
+        errorMessage={errorMessage}
+        removeMessage={removeMessage}
+      />
     </div>
   );
 };

@@ -1,46 +1,45 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   todos: Todo[],
-  filterTodos: (todoFiltered: Todo[]) => void,
-  removeTodo: (id: number) => void,
+  filter: (filter: Filter) => void
+  removeCompletedTodos: () => void,
 };
 
-export const Footer: React.FC<Props> = ({ todos, filterTodos, removeTodo }) => {
+export const Footer: React.FC<Props> = ({
+  todos,
+  filter,
+  removeCompletedTodos: removeAll,
+}) => {
   const [activeFilter, setActiveFilter] = useState({
     all: true,
     active: false,
     completed: false,
   });
 
-  const doFilterTodos = (filteringProperty: boolean) => {
-    return todos.filter(todo => todo.completed === filteringProperty);
-  };
-
   const loadFilteringTodos = (isActive: boolean) => {
-    const dataFiltered = doFilterTodos(isActive);
-
     if (!isActive) {
+      filter('active');
       setActiveFilter({
         all: false,
         active: true,
         completed: false,
       });
     } else {
+      filter('completed');
       setActiveFilter({
         all: false,
         active: false,
         completed: true,
       });
     }
-
-    filterTodos(dataFiltered);
   };
 
   const allTodo = () => {
-    filterTodos(todos);
+    filter('all');
     setActiveFilter({
       all: true,
       active: false,
@@ -52,25 +51,10 @@ export const Footer: React.FC<Props> = ({ todos, filterTodos, removeTodo }) => {
   const todosLeft = todos.length - todos.filter(item => item.completed).length;
   const removeCompletedTodos = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
-    todos.map((todo) => (
-      todo.completed
-        ? removeTodo(todo.id)
-        : null
-    ));
+    removeAll();
 
     return null;
   };
-
-  useEffect(() => {
-    if (activeFilter.active) {
-      loadFilteringTodos(false);
-    }
-
-    if (activeFilter.completed) {
-      loadFilteringTodos(true);
-    }
-  }, [todos]);
 
   return (
     <footer className="todoapp__footer">

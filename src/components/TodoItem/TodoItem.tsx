@@ -1,17 +1,25 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader';
+import { ErrorsMessages } from '../../types/ErrorsMessages';
 
 type Props = {
   todo: Todo,
   handleChecker: (id: number, data: unknown) => void,
   removeTodo: (id: number) => void,
+  isLoader: boolean,
+  loaderId: number,
+  errorMessage: (message: ErrorsMessages) => void
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   handleChecker,
   removeTodo,
+  isLoader,
+  loaderId,
+  errorMessage,
 }) => {
   const { id, completed, title } = todo;
   const [isFormActive, setIsFormActive] = useState(false);
@@ -26,6 +34,7 @@ export const TodoItem: React.FC<Props> = ({
   const validateTitle = () => {
     if (inputValue.trim().length === 0) {
       removeTodo(id);
+      errorMessage(ErrorsMessages.Title);
 
       return null;
     }
@@ -90,15 +99,7 @@ export const TodoItem: React.FC<Props> = ({
         </button>
       )}
 
-      {/* overlay will cover the todo while it is being updated */}
-      {!todo && (
-        <div className="modal overlay">
-          <div className="modal-background
-            has-background-white-ter"
-          />
-          <div className="loader" />
-        </div>
-      )}
+      <Loader isLoader={isLoader} id={id} loaderId={loaderId} />
     </div>
   );
 };
