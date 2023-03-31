@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Todo } from '../../types/Todo';
-import { Filters } from '../../utils/enums';
+import { Filters } from '../../types/enums';
 import { TodoItem } from '../TodoItem';
 
 interface Props {

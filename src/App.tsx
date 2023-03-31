@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
@@ -8,7 +6,8 @@ import { Loader } from './components/Loader';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
-import { Filters } from './utils/enums';
+import { Filters } from './types/enums';
+import { Notification } from './components/Notification';
 
 const USER_ID = 6816;
 
@@ -72,28 +71,16 @@ export const App: React.FC = () => {
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
             activeTodos={activeTodos}
+            completedTodos={todos.length - activeTodos}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        className={classNames(
-          'notification',
-          'is-danger',
-          'is-light',
-          'has-text-weight-normal',
-          { hidden: hideNotification },
-        )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setHideNotification(true)}
-        />
-        {error}
-      </div>
+      <Notification
+        error={error}
+        setHideNotification={setHideNotification}
+        hideNotification={hideNotification}
+      />
     </div>
   );
 };
