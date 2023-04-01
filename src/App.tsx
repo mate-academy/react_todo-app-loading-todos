@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent, useEffect, useRef, useState,
+} from 'react';
 import cn from 'classnames';
 import { getTodos, addTodo } from './api/todos';
 import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 
-const USER_ID = 6698;
+const USER_ID = 6846;
 
 enum Filters {
   All,
@@ -16,19 +18,28 @@ enum Filters {
 
 export const App: React.FC = () => {
   const [task, setTask] = useState('');
-
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const [filter, setFilter] = useState<Filters>(Filters.All);
 
-  const completedNumber = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.filter(todo => !todo.completed).length;
+
+  const [error, setError] = useState<string>();
+
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
   };
 
   const loadTodos = async () => {
-    await getTodos(USER_ID).then(res => setTodos(res));
+    try {
+      await getTodos(USER_ID).then(res => setTodos(res));
+    } catch {
+      setError('unable to get todos');
+    }
   };
 
   const visibleTodos = todos.filter(todo => {
@@ -42,7 +53,12 @@ export const App: React.FC = () => {
   });
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    setIsSubmit(true);
     event.preventDefault();
+
+    if (task === '') {
+      setError("Title can't be empty");
+    }
 
     if (task) {
       addTodo({
@@ -55,12 +71,26 @@ export const App: React.FC = () => {
 
     setTask('');
 
-    setTimeout(() => loadTodos(), 300);
+    const timer = setTimeout(() => loadTodos(), 300);
+
+    clearTimeout(timer);
   };
 
   useEffect(() => {
     loadTodos();
   }, [localStorage.getItem('email')]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      errorRef.current?.classList.add('hidden');
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+      errorRef.current?.classList.remove('hidden');
+      setIsSubmit(false);
+    };
+  }, [error, isSubmit]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -92,30 +122,42 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {
-            visibleTodos.map((
-              {
-                title,
-                completed,
-                id,
-              },
-            ) => (
-              <div
-                className={cn(
-                  'todo',
-                  { completed },
-                )}
-                data-cy="todo"
-                key={id}
-              >
-                <div className="todo__status-label">
-                  <input type="checkbox" className="todo__status" />
-                </div>
+          <div>
+            {
+              visibleTodos.map((
+                {
+                  title,
+                  completed,
+                  id,
+                },
+              ) => (
+                <div
+                  className={cn(
+                    'todo',
+                    'item-enter-done',
+                    { completed },
+                  )}
+                  data-cy="todo"
+                  key={id}
+                >
+                  <div className="todo__status-label">
+                    <input type="checkbox" className="todo__status" />
+                  </div>
 
-                <span className="todo__title">{title}</span>
-              </div>
-            ))
-          }
+                  <span className="todo__title">{title}</span>
+
+                  <button type="button" className="todo__remove">×</button>
+
+                  <div className="modal overlay">
+                    <div
+                      className="modal-background has-background-white-ter"
+                    />
+                    <div className="loader" />
+                  </div>
+                </div>
+              ))
+            }
+          </div>
         </section>
 
         {
@@ -123,7 +165,7 @@ export const App: React.FC = () => {
           && (
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {`${completedNumber} items left`}
+                {`${completedTodosCount} items left`}
               </span>
 
               {/* Active filter should have a 'selected' class */}
@@ -172,17 +214,30 @@ export const App: React.FC = () => {
       </div>
 
       {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
+      {
+        error
+        && (
+          <div
+            className={cn(
+              'notification',
+              'is-danger',
+              'is-light',
+              'has-text-weight-normal',
+            )}
+            ref={errorRef}
+          >
+            <button
+              type="button"
+              className="delete"
+              onClick={() => setError('')}
+            />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+            {
+              error
+            }
+          </div>
+        )
+      }
     </div>
   );
 };

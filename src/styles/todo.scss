@@ -100,3 +100,19 @@
     opacity: 0.5;
   }
 }
+
+.item-enter-done {
+  animation-duration: 0.3s;
+  max-height: 0;
+  animation-fill-mode: forwards;
+  animation-name: show-todos;
+}
+
+@keyframes show-todos {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 6.3rem;
+  }
+}
