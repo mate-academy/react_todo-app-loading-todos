@@ -40,7 +40,7 @@ export const Filter: React.FC<Props> = React.memo(
         <button
           type="button"
           className={classNames('todoapp__clear-completed', {
-            hidden: counterCompletedTodos === 0,
+            hidden: !counterCompletedTodos,
           })}
         >
           Clear completed

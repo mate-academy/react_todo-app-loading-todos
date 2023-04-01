@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((userTodos) => setTodos(userTodos))
+      .then(setTodos)
       .catch(() => {
         setErrorType(ErrorMessage.Download);
         setIsErrorShown(true);
