@@ -7,37 +7,41 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
-# ❗️❗️❗️</br>In this working example implemented all 3 parts of the task.</br>In this task you have to implement only the first part described below.</br>❗️❗️❗️
+# ❗️❗️❗️<br>Please implement ONLY todos loading, errors and filtering. <br><br>All the rest will be implemented in the next tasks<br>❗️❗️❗️
 
 ## General info
 
-You have an implemented simple login form. Enter your email to create a user
-or find an existing one in the API.
+- register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
+- save the received `userId` in the `App` and use to load load todos
+- log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
+- create some todos to see them later in your App
+- load your todos when the `App` is loaded (put your userId instead of `???`);
+    ```
+    https://mate.academy/students-api/todos?userId=???
+    ```
+- hide the list and the footer if there are no todos yet;
 
-- tests are NOT implemented yet.
-- load the user todos when the `App` is loaded;
-  - use [the working example](https://mate-academy.github.io/react_todo-app-with-api/) to create TODOs to have test data
-- hide everything except the `NewTodoField` if there are no todos yet;
+> The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
 
 ## Error messages
 
-In case of any error show the notification with an appropriate message at the bottom (just remove the `hidden` class).
+In case of any error show the notification with an appropriate message at the bottom
 
 - the notification can be closed with the `close` button (add the `hidden` class);
-- automatically hide the notification in 3 seconds;
+- automatically hide the notification after 3 seconds;
 - also hide the notification before any next request;
-- use a wrong todos URL to test the error.
+- use a wrong todos URL to test the error;
+- there are no tests yet.
 
 ## Filtering todos
 
 Filter todos by status `All` / `Active` / `Completed`:
 
-- an active filter link should be hightlighted;
-- don't hide everything if todos are just filtered out.
+- `all` is the default value;
+- use the `selected` class to highlight a selected link;
 
 ## Instructions
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Open one more terminal and run tests with `npm test` to ensure your solution is correct.
 - Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
