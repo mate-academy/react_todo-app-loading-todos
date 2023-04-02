@@ -2,13 +2,11 @@
 import { FC, ChangeEvent } from 'react';
 
 type Props = {
-  handleSubmit: (event: ChangeEvent<HTMLFormElement>) => void;
   handleTodoChange: (event: ChangeEvent<HTMLInputElement>) => void;
   task: string;
 };
 
 export const NewTodo: FC<Props> = ({
-  handleSubmit,
   handleTodoChange,
   task,
 }) => {
@@ -16,7 +14,7 @@ export const NewTodo: FC<Props> = ({
     <header className="todoapp__header">
       <button type="button" className="todoapp__toggle-all active" />
 
-      <form onSubmit={handleSubmit}>
+      <form>
         <input
           type="text"
           className="todoapp__new-todo"

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import cn from 'classnames';
-import { getTodos, addTodo } from './api/todos';
+import { getTodos } from './api/todos';
 import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
@@ -24,8 +24,6 @@ export const App: React.FC = () => {
 
   const errorElement = useRef<HTMLDivElement>(null);
 
-  const [isSubmit, setIsSubmit] = useState(false);
-
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
   };
@@ -36,28 +34,6 @@ export const App: React.FC = () => {
     } catch {
       setError('unable to get todos');
     }
-  };
-
-  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
-    setIsSubmit(true);
-    event.preventDefault();
-
-    if (task === '') {
-      setError("Title can't be empty");
-    }
-
-    if (task) {
-      addTodo({
-        id: 0,
-        userId: USER_ID,
-        title: task,
-        completed: false,
-      });
-    }
-
-    setTask('');
-
-    setTimeout(() => loadTodos(), 300);
   };
 
   useEffect(() => {
@@ -72,9 +48,8 @@ export const App: React.FC = () => {
     return () => {
       clearTimeout(timer);
       errorElement.current?.classList.remove('hidden');
-      setIsSubmit(false);
     };
-  }, [error, isSubmit]);
+  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -90,7 +65,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <NewTodo
-          handleSubmit={handleSubmit}
           handleTodoChange={handleTodoChange}
           task={task}
         />

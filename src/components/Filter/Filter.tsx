@@ -65,10 +65,10 @@ export const Filter: FC<Props> = ({
             LINKS.map(({ to, recentFilter }) => (
               <NavLink
                 to={to}
-                className={cn(
+                className={({ isActive }) => (cn(
                   'filter__link',
-                  { selected: filter === recentFilter },
-                )}
+                  { selected: isActive },
+                ))}
                 onClick={() => handleFilterChange(recentFilter)}
               >
                 {recentFilter}
