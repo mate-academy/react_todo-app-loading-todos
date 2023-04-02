@@ -10,12 +10,18 @@ import { client } from './utils/fetchClient';
 
 const USER_ID = '6757';
 
+enum SortType {
+  completed,
+  active,
+  all,
+}
+
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>();
-  const [selectedForm, setSelectedForm] = useState('all');
+  const [selectedForm, setSelectedForm] = useState(SortType.all);
   const [errorMessage, setErrorMessage] = useState('');
-  const [countComplited, setCountComplited] = useState(false); // есть ли хоть один елемент completed
-  const [countNotComplited, setCountNotComplited] = useState(false); // есть ли хоть один елемент active
+  const [countComplited, setCountComplited] = useState(false);
+  const [countNotComplited, setCountNotComplited] = useState(false);
 
   useEffect(() => {
   }, [todosFromServer]);
@@ -38,8 +44,6 @@ export const App: React.FC = () => {
     client
       .get(url)
       .then((todos) => {
-        // console.log(todos)
-
         setTodosFromServer(todos as Todo[]);
       })
       .catch(() => setErrorMessage('Unable to update a todo'));
@@ -84,23 +88,23 @@ export const App: React.FC = () => {
     }
   };
 
-  const sortTodos = (format: string) => {
+  const sortTodos = (format: SortType) => {
     const url = '/todos?userId=6757';
 
     switch (format) {
-      case 'active':
+      case SortType.active:
         askTodos(`${url}&completed=false`);
-        setSelectedForm('active');
+        setSelectedForm(SortType.active);
         break;
-      case 'completed':
+      case SortType.completed:
         askTodos(`${url}&completed=true`);
-        setSelectedForm('completed');
+        setSelectedForm(SortType.completed);
         break;
 
-      case 'all':
+      case SortType.all:
       default:
         askTodos(url);
-        setSelectedForm('all');
+        setSelectedForm(SortType.all);
         break;
     }
   };
@@ -138,10 +142,10 @@ export const App: React.FC = () => {
               href="#/"
               className={classNames(
                 'filter__link', {
-                  selected: selectedForm === 'all',
+                  selected: selectedForm === SortType.all,
                 },
               )}
-              onClick={() => sortTodos('all')}
+              onClick={() => sortTodos(SortType.all)}
             >
               All
             </a>
@@ -150,10 +154,10 @@ export const App: React.FC = () => {
               href="#/active"
               className={classNames(
                 'filter__link', {
-                  selected: selectedForm === 'active',
+                  selected: selectedForm === SortType.active,
                 },
               )}
-              onClick={() => sortTodos('active')}
+              onClick={() => sortTodos(SortType.active)}
             >
               Active
             </a>
@@ -162,10 +166,10 @@ export const App: React.FC = () => {
               href="#/completed"
               className={classNames(
                 'filter__link', {
-                  selected: selectedForm === 'completed',
+                  selected: selectedForm === SortType.completed,
                 },
               )}
-              onClick={() => sortTodos('completed')}
+              onClick={() => sortTodos(SortType.completed)}
             >
               Completed
             </a>
