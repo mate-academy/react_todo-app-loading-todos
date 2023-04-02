@@ -1,13 +1,29 @@
 import { FC, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
 import { TodoList } from '../TodoList/TodoList';
 import { Todo } from '../../types/Todo';
 
-export const FILTERS = {
+const FILTERS = {
   all: 'all',
   completed: 'completed',
   active: 'active',
 };
+
+const LINKS = [
+  {
+    to: '/',
+    recentFilter: FILTERS.all,
+  },
+  {
+    to: '/active',
+    recentFilter: FILTERS.active,
+  },
+  {
+    to: '/completed',
+    recentFilter: FILTERS.completed,
+  },
+];
 
 type Props = {
   todos: Todo[];
@@ -45,38 +61,20 @@ export const Filter: FC<Props> = ({
         </span>
 
         <nav className="filter">
-          <a
-            href="#/"
-            className={cn(
-              'filter__link',
-              { selected: filter === FILTERS.all },
-            )}
-            onClick={() => handleFilterChange(FILTERS.all)}
-          >
-            All
-          </a>
-
-          <a
-            href="#/active"
-            className={cn(
-              'filter__link',
-              { selected: filter === FILTERS.active },
-            )}
-            onClick={() => handleFilterChange(FILTERS.active)}
-          >
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            className={cn(
-              'filter__link',
-              { selected: filter === FILTERS.completed },
-            )}
-            onClick={() => handleFilterChange(FILTERS.completed)}
-          >
-            Completed
-          </a>
+          {
+            LINKS.map(({ to, recentFilter }) => (
+              <NavLink
+                to={to}
+                className={cn(
+                  'filter__link',
+                  { selected: filter === recentFilter },
+                )}
+                onClick={() => handleFilterChange(recentFilter)}
+              >
+                {recentFilter}
+              </NavLink>
+            ))
+          }
         </nav>
 
         <button

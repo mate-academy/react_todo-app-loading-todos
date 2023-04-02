@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  ChangeEvent, useEffect, useRef, useState,
+  ChangeEvent,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import cn from 'classnames';
 import { getTodos, addTodo } from './api/todos';
@@ -22,8 +25,6 @@ export const App: React.FC = () => {
   const errorElement = useRef<HTMLDivElement>(null);
 
   const [isSubmit, setIsSubmit] = useState(false);
-
-  // filter
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
