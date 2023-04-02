@@ -71,7 +71,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <TodoCreate
             setErrorMessage={setErrorMessage}
-            todosFromServer={todosFromServer}
+            clearCompleted={clearCompleted}
             askTodos={askTodos}
             countComplited={countComplited}
           />

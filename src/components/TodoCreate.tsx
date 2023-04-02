@@ -1,16 +1,16 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { client } from '../utils/fetchClient';
-import { Todo } from '../types/Todo';
+// import { Todo } from '../types/Todo';
 
 export const TodoCreate = ({
   setErrorMessage,
-  todosFromServer,
+  clearCompleted,
   askTodos,
   countComplited,
 }: {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>
-  todosFromServer: Todo[] | undefined
+  clearCompleted: () => void
   askTodos: (url: string) => void
   countComplited: boolean
 }) => {
@@ -37,17 +37,6 @@ export const TodoCreate = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputPlace(event.currentTarget.value);
-  };
-
-  const clearCompleted = () => {
-    if (countComplited) {
-      todosFromServer?.forEach((todo) => {
-        if (todo.completed === true) {
-          client.delete(`/todos/${todo.id}`)
-            .finally(() => askTodos('/todos?userId=6757'));
-        }
-      });
-    }
   };
 
   return (
