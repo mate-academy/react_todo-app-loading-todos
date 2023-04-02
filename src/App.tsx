@@ -129,15 +129,14 @@ export const App: React.FC = () => {
             </a>
           </nav>
 
-          {todosFromServer?.length && (
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              onClick={clearCompleted}
-            >
-              Clear completed
-            </button>
-          )}
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            onClick={clearCompleted}
+            hidden={!countComplited}
+          >
+            Clear completed
+          </button>
         </footer>
       </div>
 
