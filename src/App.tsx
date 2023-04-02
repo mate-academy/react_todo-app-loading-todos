@@ -7,28 +7,23 @@ import { getTodos, addTodo } from './api/todos';
 import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
+import { Filter } from './components/Filter/Filter';
+import { NewTodo } from './components/NewTodo/NewTodo';
 
 const USER_ID = 6846;
 
-enum Filters {
-  All,
-  Active,
-  Completed,
-}
-
 export const App: React.FC = () => {
   const [task, setTask] = useState('');
+
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [filter, setFilter] = useState<Filters>(Filters.All);
-
-  const completedTodosCount = todos.filter(todo => !todo.completed).length;
 
   const [error, setError] = useState<string>();
 
-  const errorRef = useRef<HTMLDivElement>(null);
+  const errorElement = useRef<HTMLDivElement>(null);
 
   const [isSubmit, setIsSubmit] = useState(false);
+
+  // filter
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
@@ -41,16 +36,6 @@ export const App: React.FC = () => {
       setError('unable to get todos');
     }
   };
-
-  const visibleTodos = todos.filter(todo => {
-    if (filter === Filters.All) {
-      return true;
-    }
-
-    return filter === Filters.Completed
-      ? todo.completed
-      : !todo.completed;
-  });
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     setIsSubmit(true);
@@ -71,9 +56,7 @@ export const App: React.FC = () => {
 
     setTask('');
 
-    const timer = setTimeout(() => loadTodos(), 300);
-
-    clearTimeout(timer);
+    setTimeout(() => loadTodos(), 300);
   };
 
   useEffect(() => {
@@ -82,12 +65,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      errorRef.current?.classList.add('hidden');
+      errorElement.current?.classList.add('hidden');
     }, 3000);
 
     return () => {
       clearTimeout(timer);
-      errorRef.current?.classList.remove('hidden');
+      errorElement.current?.classList.remove('hidden');
       setIsSubmit(false);
     };
   }, [error, isSubmit]);
@@ -105,115 +88,15 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title is-1">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+        <NewTodo
+          handleSubmit={handleSubmit}
+          handleTodoChange={handleTodoChange}
+          task={task}
+        />
 
-          {/* Add a todo on form submit */}
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              onChange={handleTodoChange}
-              value={task}
-            />
-          </form>
-        </header>
-
-        <section className="todoapp__main">
-          <div>
-            {
-              visibleTodos.map((
-                {
-                  title,
-                  completed,
-                  id,
-                },
-              ) => (
-                <div
-                  className={cn(
-                    'todo',
-                    'item-enter-done',
-                    { completed },
-                  )}
-                  data-cy="todo"
-                  key={id}
-                >
-                  <div className="todo__status-label">
-                    <input type="checkbox" className="todo__status" />
-                  </div>
-
-                  <span className="todo__title">{title}</span>
-
-                  <button type="button" className="todo__remove">×</button>
-
-                  <div className="modal overlay">
-                    <div
-                      className="modal-background has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-        </section>
-
-        {
-          todos.length > 0
-          && (
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${completedTodosCount} items left`}
-              </span>
-
-              {/* Active filter should have a 'selected' class */}
-              <nav className="filter">
-                <a
-                  href="#/"
-                  className={cn(
-                    'filter__link',
-                    { selected: filter === Filters.All },
-                  )}
-                  onClick={() => setFilter(Filters.All)}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={cn(
-                    'filter__link',
-                    { selected: filter === Filters.Active },
-                  )}
-                  onClick={() => setFilter(Filters.Active)}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={cn(
-                    'filter__link',
-                    { selected: filter === Filters.Completed },
-                  )}
-                  onClick={() => setFilter(Filters.Completed)}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              {/* don't show this button if there are no completed todos */}
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            </footer>
-          )
-        }
+        <Filter todos={todos} />
       </div>
 
-      {/* Notification is shown in case of any error */}
       {
         error
         && (
@@ -224,7 +107,7 @@ export const App: React.FC = () => {
               'is-light',
               'has-text-weight-normal',
             )}
-            ref={errorRef}
+            ref={errorElement}
           >
             <button
               type="button"

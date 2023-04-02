@@ -128,5 +128,11 @@
     &:active {
       text-decoration: none;
     }
+
+    &:disabled {
+      opacity: 0;
+    }
+
   }
+
 }
