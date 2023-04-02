@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import debounce from 'lodash.debounce';
 import { TodoCreate } from './components/TodoCreate';
 import { TodoInfo } from './components/TodoInfo';
 import { UserWarning } from './UserWarning';
@@ -13,30 +14,71 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>();
   const [selectedForm, setSelectedForm] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
-  const [countComplited, setCountComplited] = useState(false);
+  const [countComplited, setCountComplited] = useState(false); // есть ли хоть один елемент completed
+  const [countNotComplited, setCountNotComplited] = useState(false); // есть ли хоть один елемент active
+
+  useEffect(() => {
+  }, [todosFromServer]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const askTodos = (url: string) => {
+  const setBlock = {
+    setCountComplited,
+    setCountNotComplited,
+  };
+
+  const statusComplited = {
+    countComplited,
+    countNotComplited,
+  };
+
+  const askServer = (url: string) => {
     client
       .get(url)
       .then((todos) => {
+        // console.log(todos)
+
         setTodosFromServer(todos as Todo[]);
       })
       .catch(() => setErrorMessage('Unable to update a todo'));
   };
 
-  const clearCompleted = () => {
+  const askTodos = debounce((url) => askServer(url), 1000);
+
+  const clearCompleted = async (status: string) => {
     if (todosFromServer) {
       todosFromServer.forEach((todo => {
-        if (todo.completed) {
-          client
-            .delete(`/todos/${todo.id}`)
-            .finally(() => {
-              askTodos('/todos?userId=6757');
-            });
+        switch (status) {
+          case 'completed':
+            if (todo.completed) {
+              client
+                .delete(`/todos/${todo.id}`)
+                .finally(() => {
+                  askTodos('/todos?userId=6757');
+                });
+            }
+
+            break;
+
+          case 'invert':
+          default:
+            if (countComplited && !countNotComplited) {
+              client
+                .patch(`/todos/${todo.id}`, { completed: false })
+                .then(() => {
+                  askTodos('/todos?userId=6757');
+                });
+            } else if (countNotComplited) {
+              client
+                .patch(`/todos/${todo.id}`, { completed: true })
+                .then(() => {
+                  askTodos('/todos?userId=6757');
+                });
+            }
+
+            break;
         }
       }));
     }
@@ -73,7 +115,7 @@ export const App: React.FC = () => {
             setErrorMessage={setErrorMessage}
             clearCompleted={clearCompleted}
             askTodos={askTodos}
-            countComplited={countComplited}
+            statusComplited={statusComplited}
           />
         </header>
 
@@ -82,7 +124,7 @@ export const App: React.FC = () => {
             setErrorMessage={setErrorMessage}
             todosFromServer={todosFromServer}
             askTodos={askTodos}
-            setCountComplited={setCountComplited}
+            setBlock={setBlock}
           />
         </section>
 
@@ -132,7 +174,7 @@ export const App: React.FC = () => {
           <button
             type="button"
             className="todoapp__clear-completed"
-            onClick={clearCompleted}
+            onClick={() => clearCompleted('completed')}
             hidden={!countComplited}
           >
             Clear completed

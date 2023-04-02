@@ -3,16 +3,19 @@ import { useState } from 'react';
 import { client } from '../utils/fetchClient';
 // import { Todo } from '../types/Todo';
 
-export const TodoCreate = ({
+export const TodoCreate: React.FC<{
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  clearCompleted: (status: string) => void
+  askTodos: (url: string) => void
+  statusComplited: {
+    countComplited: boolean;
+    countNotComplited: boolean;
+  }
+}> = ({
   setErrorMessage,
   clearCompleted,
   askTodos,
-  countComplited,
-}: {
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
-  clearCompleted: () => void
-  askTodos: (url: string) => void
-  countComplited: boolean
+  statusComplited,
 }) => {
   const [inputPlace, setInputPlace] = useState('');
 
@@ -45,9 +48,9 @@ export const TodoCreate = ({
         type="button"
         className={classNames(
           'todoapp__toggle-all',
-          { active: countComplited },
+          { active: !statusComplited.countNotComplited },
         )}
-        onClick={clearCompleted}
+        onClick={() => clearCompleted('invert')}
       >
         {}
 
