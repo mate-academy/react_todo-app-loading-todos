@@ -1,28 +1,23 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
 import { FilterBy } from '../types/FilterBy';
 
 type Props = {
-  todos: Todo[];
+  activeTodos: number;
   todoFilterType: string;
   setTodoFilterType: (todoFilterType: FilterBy) => void;
 };
 
 const Footer: React.FC<Props> = ({
-  todos,
+  activeTodos,
   todoFilterType,
   setTodoFilterType,
 }) => {
-  const activeTodosLeft = useMemo(() => {
-    return todos.filter((todo) => !todo.completed);
-  }, [todos]);
-
   return (
     <>
       {/* Hide the footer if there are no todos */}
       <footer className="todoapp__footer">
-        <span className="todo-count">{`${activeTodosLeft.length} items left`}</span>
+        <span className="todo-count">{`${activeTodos} items left`}</span>
 
         {/* Active filter should have a 'selected' class */}
         <nav className="filter">
@@ -56,11 +51,10 @@ const Footer: React.FC<Props> = ({
             Completed
           </a>
         </nav>
-
-        {/* don't show this button if there are no completed todos */}
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>
+        {/* )} */}
       </footer>
     </>
   );

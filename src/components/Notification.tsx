@@ -1,30 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 type Props = {
   errorMessage: string;
+  closeError: () => void;
 };
 
-const Notification:React.FC<Props> = ({ errorMessage }) => {
-  const [isHidden, setIsHidden] = useState(true);
-
+const Notification:React.FC<Props> = ({ errorMessage, closeError }) => {
   useEffect(() => {
-    const closeErrorNotification = () => {
-      const timerId = window.setTimeout(() => {
-        setIsHidden(true);
-      }, 3000);
-
-      return () => clearTimeout(timerId);
-    };
-
-    if (errorMessage.length > 0) {
-      setIsHidden(false);
-      closeErrorNotification();
-    } else {
-      setIsHidden(true);
-    }
-  }, [errorMessage]);
+    setTimeout(() => {
+      closeError();
+    }, 3000);
+  }, []);
 
   return (
     <>
@@ -34,15 +22,16 @@ const Notification:React.FC<Props> = ({ errorMessage }) => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: isHidden },
+          { hidden: !errorMessage },
         )}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => setIsHidden(true)}
+          onClick={closeError}
+          aria-label="Close error message"
         />
-        {`Unable to ${errorMessage} a todo`}
+        {errorMessage}
       </div>
     </>
   );

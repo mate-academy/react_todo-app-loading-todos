@@ -1,9 +1,10 @@
 import React,
 {
-  useState, useEffect, useMemo, useCallback,
+  useState, useEffect, useMemo,
 } from 'react';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
+import { Errors } from './types/Errors';
 import { getTodos } from './api/todos';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -16,8 +17,7 @@ const USER_ID = 6511;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoFilterType, setTodoFilterType] = useState<FilterBy>(FilterBy.all);
-  const [query, setQuery] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.none);
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
@@ -44,23 +44,24 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch {
-        setErrorMessage('upload');
+        setErrorMessage(Errors.load);
       }
     };
 
     getTodosFromServer();
   }, []);
 
-  const handleFormInputChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
-    },
-    [],
-  );
+  const activeTodos = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const handleErrorMessage = () => {
+    setErrorMessage(Errors.none);
+  };
 
   return (
     <div className="todoapp">
@@ -68,18 +69,14 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          todos={todos}
-          query={query}
-          onFormInputChange={handleFormInputChange}
+          activeTodos={activeTodos}
         />
 
         {todos && (
           <>
-            <TodoList
-              todos={filteredTodos}
-            />
+            <TodoList todos={filteredTodos} />
             <Footer
-              todos={filteredTodos}
+              activeTodos={activeTodos}
               todoFilterType={todoFilterType}
               setTodoFilterType={setTodoFilterType}
             />
@@ -89,9 +86,12 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Notification
-        errorMessage={errorMessage}
-      />
+      {errorMessage && (
+        <Notification
+          errorMessage={errorMessage}
+          closeError={handleErrorMessage}
+        />
+      )}
     </div>
   );
 };

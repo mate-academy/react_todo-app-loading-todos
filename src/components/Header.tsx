@@ -1,25 +1,19 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
+// import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[];
-  query: string;
-  onFormInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  activeTodos: number;
 };
 
-const Header: React.FC<Props> = ({ todos, query, onFormInputChange }) => {
-  const activeTodos = useMemo(() => {
-    return todos.filter(todo => !todo.completed);
-  }, [todos]);
-
+const Header: React.FC<Props> = ({ activeTodos }) => {
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames(
           'todoapp__toggle-all',
-          { active: activeTodos },
+          { active: !!activeTodos },
         )}
         aria-label="Add todo"
       />
@@ -29,8 +23,6 @@ const Header: React.FC<Props> = ({ todos, query, onFormInputChange }) => {
           className="todoapp__new-todo"
           type="text"
           placeholder="What needs to be done?"
-          value={query}
-          onChange={onFormInputChange}
         />
       </form>
     </header>
