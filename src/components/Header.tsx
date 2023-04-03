@@ -3,25 +3,25 @@ import classNames from 'classnames';
 // import { Todo } from '../types/Todo';
 
 type Props = {
-  activeTodos: number;
+  activeTodosNum: number;
 };
 
-const Header: React.FC<Props> = ({ activeTodos }) => {
+const Header: React.FC<Props> = ({ activeTodosNum }) => {
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames(
           'todoapp__toggle-all',
-          { active: !!activeTodos },
+          { active: activeTodosNum === 0 },
         )}
-        aria-label="Add todo"
+        aria-label="Toggle all todos"
       />
 
       <form>
         <input
-          className="todoapp__new-todo"
           type="text"
+          className="todoapp__new-todo"
           placeholder="What needs to be done?"
         />
       </form>

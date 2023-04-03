@@ -1,17 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { Errors } from '../types/Errors';
 
 type Props = {
-  errorMessage: string;
-  closeError: () => void;
+  errorType: Errors;
+  isErrorShown: boolean;
+  onCloseError: () => void;
 };
 
-const Notification:React.FC<Props> = ({ errorMessage, closeError }) => {
+const Notification:React.FC<Props> = ({
+  errorType,
+  isErrorShown,
+  onCloseError,
+}) => {
+  const errorMessage = `Unable to ${errorType} a todo`;
+
   useEffect(() => {
-    setTimeout(() => {
-      closeError();
-    }, 3000);
+    setTimeout(() => onCloseError(), 3000);
   }, []);
 
   return (
@@ -22,14 +28,14 @@ const Notification:React.FC<Props> = ({ errorMessage, closeError }) => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: !errorMessage },
+          { hidden: !isErrorShown },
         )}
       >
         <button
           type="button"
           className="delete"
-          onClick={closeError}
-          aria-label="Close error message"
+          onClick={onCloseError}
+          aria-label="Close notification about an error"
         />
         {errorMessage}
       </div>

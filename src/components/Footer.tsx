@@ -3,13 +3,15 @@ import classNames from 'classnames';
 import { FilterBy } from '../types/FilterBy';
 
 type Props = {
-  activeTodos: number;
+  activeTodosNum: number;
+  completedTodosNum: number;
   todoFilterType: string;
   setTodoFilterType: (todoFilterType: FilterBy) => void;
 };
 
 const Footer: React.FC<Props> = ({
-  activeTodos,
+  activeTodosNum,
+  completedTodosNum,
   todoFilterType,
   setTodoFilterType,
 }) => {
@@ -17,7 +19,7 @@ const Footer: React.FC<Props> = ({
     <>
       {/* Hide the footer if there are no todos */}
       <footer className="todoapp__footer">
-        <span className="todo-count">{`${activeTodos} items left`}</span>
+        <span className="todo-count">{`${activeTodosNum} items left`}</span>
 
         {/* Active filter should have a 'selected' class */}
         <nav className="filter">
@@ -51,10 +53,14 @@ const Footer: React.FC<Props> = ({
             Completed
           </a>
         </nav>
-        <button type="button" className="todoapp__clear-completed">
+        <button
+          type="button"
+          className={classNames('todoapp__clear-completed', {
+            hidden: completedTodosNum === 0,
+          })}
+        >
           Clear completed
         </button>
-        {/* )} */}
       </footer>
     </>
   );

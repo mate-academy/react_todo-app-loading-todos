@@ -17,7 +17,8 @@ const USER_ID = 6511;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoFilterType, setTodoFilterType] = useState<FilterBy>(FilterBy.all);
-  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.none);
+  const [errorType, setErrorType] = useState<Errors>(Errors.none);
+  const [isErrorShow, setIsErrorShow] = useState(false);
 
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
@@ -44,24 +45,26 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch {
-        setErrorMessage(Errors.load);
+        setErrorType(Errors.load);
+        setIsErrorShow(true);
       }
     };
 
     getTodosFromServer();
   }, []);
 
-  const activeTodos = useMemo(() => {
-    return todos.filter(todo => !todo.completed).length;
-  }, [todos]);
+  const activeTodosNum = useMemo(
+    () => todos.reduce((num, todo) => {
+      return todo.completed ? num : num + 1;
+    }, 0),
+    [todos],
+  );
+
+  const completedTodosNum = todos.length - activeTodosNum;
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const handleErrorMessage = () => {
-    setErrorMessage(Errors.none);
-  };
 
   return (
     <div className="todoapp">
@@ -69,14 +72,15 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          activeTodos={activeTodos}
+          activeTodosNum={activeTodosNum}
         />
 
         {todos && (
           <>
             <TodoList todos={filteredTodos} />
             <Footer
-              activeTodos={activeTodos}
+              activeTodosNum={activeTodosNum}
+              completedTodosNum={completedTodosNum}
               todoFilterType={todoFilterType}
               setTodoFilterType={setTodoFilterType}
             />
@@ -86,12 +90,12 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {errorMessage && (
-        <Notification
-          errorMessage={errorMessage}
-          closeError={handleErrorMessage}
-        />
-      )}
+      <Notification
+        errorType={errorType}
+        isErrorShown={isErrorShow}
+        onCloseError={() => setIsErrorShow(false)}
+      />
+
     </div>
   );
 };
