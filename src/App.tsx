@@ -86,7 +86,14 @@ export const App: FC = () => {
           />
         </header>
 
-        {allTodos.length === 0
+        {errorMessage.length > 0
+        && (
+          <span style={{ color: 'red' }}>
+            {errorMessage}
+          </span>
+        )}
+
+        {allTodos.length === 0 && errorMessage.length === 0
           ? (
             <Loader />
           ) : (
