@@ -16,6 +16,7 @@ import { TodoFilter } from './components/TodoFilter/TodoFilter';
 const USER_ID = 6861;
 
 enum Error {
+  download = 'download',
   add = 'add',
   update = 'update',
   delete = 'delete',
@@ -25,11 +26,9 @@ export const App: React.FC = () => {
   const [todosOriginal, setTodosOriginal] = useState<Todo[] | undefined>();
   const [todos, setTodos] = useState<Todo[] | undefined>();
   const [activeTodo, setActiveTodo] = useState(0);
-  const [statusTodo, setStatus] = useState('All');
-  const [all, setAll] = useState(true);
-  const [active, setActive] = useState(false);
-  const [completedTodo, setCompletedTodo] = useState(false);
+  const [selected, setSelected] = useState('all');
   const [query, setQuery] = useState('');
+  const [errorFailed, setErrorFailed] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [idTodo, setIdTodo] = useState(0);
 
@@ -37,14 +36,25 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const notificationsHandler = (value: Error) => {
+    setError(value);
+    setErrorFailed(true);
+    setTimeout(() => [setError(null), setErrorFailed(false)], 3000);
+  };
+
   const fetchTodos = async () => {
-    const todosArr: Todo[] = await getTodos(USER_ID);
+    try {
+      const todosArr: Todo[] = await getTodos(USER_ID);
 
-    const activeCount = todosArr.filter(el => !el.completed).length;
+      const activeCount = todosArr.filter(el => !el.completed).length;
 
-    setTodosOriginal(todosArr);
-    setTodos(todosArr);
-    setActiveTodo(activeCount);
+      setTodosOriginal(todosArr);
+      setTodos(todosArr);
+      setActiveTodo(activeCount);
+    } catch {
+      notificationsHandler(Error.download);
+    }
+
     setIdTodo(0);
   };
 
@@ -75,8 +85,7 @@ export const App: React.FC = () => {
       }
 
       setIdTodo(0);
-      setError(Error.add);
-      setTimeout(() => setError(null), 3000);
+      notificationsHandler(Error.add);
     }
 
     setQuery('');
@@ -97,8 +106,7 @@ export const App: React.FC = () => {
       fetchTodos();
     } catch {
       setIdTodo(0);
-      setError(Error.update);
-      setTimeout(() => setError(null), 3000);
+      notificationsHandler(Error.update);
     }
   };
 
@@ -110,8 +118,7 @@ export const App: React.FC = () => {
       fetchTodos();
     } catch {
       setIdTodo(0);
-      setError(Error.delete);
-      setTimeout(() => setError(null), 3000);
+      notificationsHandler(Error.delete);
     }
   };
 
@@ -124,26 +131,17 @@ export const App: React.FC = () => {
     let newTodos: Todo[] | undefined = [];
 
     switch (value) {
-      case 'Active':
+      case 'active':
         newTodos = todosOriginal?.filter((ele: Todo) => !ele.completed);
-        setAll(false);
-        setActive(true);
-        setCompletedTodo(false);
         setTodos(newTodos);
 
         return;
-      case 'Completed':
+      case 'completed':
         newTodos = todosOriginal?.filter((ele: Todo) => ele.completed);
-        setAll(false);
-        setActive(false);
-        setCompletedTodo(true);
         setTodos(newTodos);
 
         return;
       default:
-        setAll(true);
-        setActive(false);
-        setCompletedTodo(false);
         setTodos(todosOriginal);
     }
   };
@@ -154,12 +152,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {(todos && todos.length > 0) && (
+          {(todos && !!todos.length) && (
             <button
               type="button"
               className={classNames(
                 'todoapp__toggle-all',
-                { active: (activeTodo === 0) },
+                { active: (!activeTodo) },
               )}
             />
           )}
@@ -175,6 +173,7 @@ export const App: React.FC = () => {
               onChange={(event) => {
                 setQuery(event.target.value);
                 setError(null);
+                setErrorFailed(false);
               }}
             />
           </form>
@@ -196,12 +195,9 @@ export const App: React.FC = () => {
             </span>
 
             <TodoFilter
-              all={all}
-              active={active}
-              completedTodo={completedTodo}
               statusTodosHandler={statusTodosHandler}
-              statusTodo={statusTodo}
-              setStatus={setStatus}
+              selected={selected}
+              setSelected={setSelected}
             />
 
             {activeTodo !== todosOriginal.length && (
@@ -218,38 +214,17 @@ export const App: React.FC = () => {
 
       <div
         className="notification is-danger is-light has-text-weight-normal"
-        hidden={error !== Error.add}
+        hidden={!errorFailed}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => setError(null)}
+          onClick={() => {
+            setError(null);
+            setErrorFailed(false);
+          }}
         />
-        Unable to add a todo
-      </div>
-
-      <div
-        className="notification is-danger is-light has-text-weight-normal"
-        hidden={error !== Error.update}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setError(null)}
-        />
-        Unable to update a todo
-      </div>
-
-      <div
-        className="notification is-danger is-light has-text-weight-normal"
-        hidden={error !== Error.delete}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setError(null)}
-        />
-        Unable to delete a todo
+        {`Unable to ${error} a todo`}
       </div>
     </div>
   );

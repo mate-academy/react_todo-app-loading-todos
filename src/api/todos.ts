@@ -12,7 +12,7 @@ export const addTodos = (url: string, data: any) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const changeTodo = (url: string, data: any) => {
-  return client.patch <Todo>(url, data);
+  return client.patch<Todo>(url, data);
 };
 
 export const deleteTodos = (url: string) => {
