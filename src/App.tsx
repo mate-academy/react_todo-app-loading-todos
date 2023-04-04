@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -12,14 +12,13 @@ const USER_ID = 6342;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosToShow, setTodosToShow] = useState<Todo[]>(todos);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
   const [hasErrorFromServer, setHasErrorFromServer] = useState(false);
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
       switch (selectedStatus) {
         case 'all':
           return true;
@@ -31,8 +30,6 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-
-    setTodosToShow(filteredTodos);
   }, [selectedStatus, todos]);
 
   const fetchTodos = async () => {
@@ -66,11 +63,11 @@ export const App: React.FC = () => {
           setSearchQuery={setSearchQuery}
         />
         <TodoList
-          todosToShow={todosToShow}
+          todosToShow={filteredTodos}
         />
         {todos.length > 0 && (
           <Footer
-            todosToShow={todosToShow}
+            todosToShow={filteredTodos}
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
           />
