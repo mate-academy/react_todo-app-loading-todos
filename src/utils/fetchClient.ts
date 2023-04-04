@@ -31,7 +31,7 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
-        throw new Error();
+        return Promise.reject(new Error('Wrong way or API does not working'));
       }
 
       return response.json();
