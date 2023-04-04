@@ -24,7 +24,7 @@ export const App: React.FC = () => {
       .then((result) => setTodos(result))
       .catch(() => setErrors((prevErrors) => [
         ...prevErrors,
-        'Unable to get todo list'
+        'Unable to get todo list',
       ]));
   }, []);
 
