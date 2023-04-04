@@ -2,18 +2,12 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 
 type Props = {
-  // all: boolean,
-  // active: boolean,
-  // completedTodo: boolean,
   statusTodosHandler: (value: string) => void,
   selected: string,
   setSelected: (value: string) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  // all,
-  // active,
-  // completedTodo,
   statusTodosHandler,
   selected,
   setSelected,
