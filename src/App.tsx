@@ -4,8 +4,8 @@ import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import { Error } from './types/Error';
 
-import { filter } from './utils/filter';
-import { getTodos } from './api/todos';
+import { filterTodos } from './utils/filterTodos';
+import { deleteTodo, getTodos } from './api/todos';
 
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList';
@@ -18,6 +18,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [filterType, setFilterType] = useState<Filter>(Filter.All);
   const [errorType, setErrorType] = useState(Error.None);
+  const [containsCompleted, setContainsCompleted] = useState(true);
 
   const handleError = (err: Error) => {
     if (err !== Error.None) {
@@ -27,19 +28,32 @@ export const App: React.FC = () => {
     setErrorType(err);
   };
 
+  const clearCompleted = () => {
+    setContainsCompleted(false);
+
+    todos?.forEach(todo => {
+      if (todo.completed) {
+        deleteTodo(todo.id)
+          .then(() => { })
+          .catch(() => setErrorType(Error.Delete))
+      }
+    });
+  };
+
   useEffect(() => {
     getTodos(USER_ID)
       .then(result => {
         setTodos(result);
+        setContainsCompleted(result.some(todo => todo.completed === true));
       })
       .catch(() => handleError(Error.Load));
-  }, []);
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const filteredTodos = todos ? filter(todos, filterType) : null;
+  const filteredTodos = todos ? filterTodos(todos, filterType) : null;
 
   return (
     <div className="todoapp">
@@ -66,7 +80,12 @@ export const App: React.FC = () => {
               <TodoList todos={filteredTodos} />
             </section>
 
-            <Footer onfilter={setFilterType} filterType={filterType} />
+            <Footer
+              onFilter={setFilterType}
+              filterType={filterType}
+              containsCompleted={containsCompleted}
+              onClearCompleted={clearCompleted}
+            />
           </>
         )}
       </div>

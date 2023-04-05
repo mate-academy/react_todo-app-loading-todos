@@ -1,7 +1,7 @@
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
 
-export const filter = (todos: Todo[], type: Filter) => {
+export const filterTodos = (todos: Todo[], type: Filter) => {
   switch (type) {
     case Filter.Completed:
       return todos.filter(todo => todo.completed === true);
