@@ -12,23 +12,17 @@ import {
 } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { Filter } from './enums/Filter';
+import { Error } from './enums/Error';
 
 const USER_ID = 6861;
-
-enum Error {
-  download = 'download',
-  add = 'add',
-  update = 'update',
-  delete = 'delete',
-}
 
 export const App: React.FC = () => {
   const [todosOriginal, setTodosOriginal] = useState<Todo[] | undefined>();
   const [todos, setTodos] = useState<Todo[] | undefined>();
   const [activeTodo, setActiveTodo] = useState(0);
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
-  const [errorFailed, setErrorFailed] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [idTodo, setIdTodo] = useState(0);
 
@@ -38,8 +32,7 @@ export const App: React.FC = () => {
 
   const notificationsHandler = (value: Error) => {
     setError(value);
-    setErrorFailed(true);
-    setTimeout(() => [setError(null), setErrorFailed(false)], 3000);
+    setTimeout(() => setError(null), 3000);
   };
 
   const fetchTodos = async () => {
@@ -59,7 +52,7 @@ export const App: React.FC = () => {
   };
 
   const createTodo = async (value: string) => {
-    const deal = {
+    const temporaryTodo = {
       id: 1,
       userId: USER_ID,
       title: value,
@@ -69,7 +62,7 @@ export const App: React.FC = () => {
     setIdTodo(1);
 
     if (todosOriginal) {
-      setTodos([...todosOriginal, deal]);
+      setTodos([...todosOriginal, temporaryTodo]);
     }
 
     try {
@@ -131,12 +124,12 @@ export const App: React.FC = () => {
     let newTodos: Todo[] | undefined = [];
 
     switch (value) {
-      case 'active':
+      case Filter.Active:
         newTodos = todosOriginal?.filter((ele: Todo) => !ele.completed);
         setTodos(newTodos);
 
         return;
-      case 'completed':
+      case Filter.Completed:
         newTodos = todosOriginal?.filter((ele: Todo) => ele.completed);
         setTodos(newTodos);
 
@@ -173,7 +166,6 @@ export const App: React.FC = () => {
               onChange={(event) => {
                 setQuery(event.target.value);
                 setError(null);
-                setErrorFailed(false);
               }}
             />
           </form>
@@ -195,6 +187,7 @@ export const App: React.FC = () => {
             </span>
 
             <TodoFilter
+              todos={todosOriginal}
               statusTodosHandler={statusTodosHandler}
               selected={selected}
               setSelected={setSelected}
@@ -214,15 +207,12 @@ export const App: React.FC = () => {
 
       <div
         className="notification is-danger is-light has-text-weight-normal"
-        hidden={!errorFailed}
+        hidden={!error}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => {
-            setError(null);
-            setErrorFailed(false);
-          }}
+          onClick={() => setError(null)}
         />
         {`Unable to ${error} a todo`}
       </div>
