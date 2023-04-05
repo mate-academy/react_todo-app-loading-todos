@@ -30,15 +30,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const newActiveTodos = todos.filter((todo) => {
-      if (filter === FilterTodoStatus.ACTIVE) {
-        return !todo.completed;
-      }
+      switch (filter) {
+        case FilterTodoStatus.ACTIVE:
+          return !todo.completed;
 
-      if (filter === FilterTodoStatus.COMPLETED) {
-        return todo.completed;
+        case FilterTodoStatus.COMPLETED:
+          return todo.completed;
+      
+        default:
+          return true;
       }
-
-      return true;
     });
 
     setActiveTodos(newActiveTodos);
@@ -54,10 +55,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -70,7 +69,6 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <>
             <section className="todoapp__main">
-              {/* This is a completed todo */}
               <TodoList todos={activeTodos} />
             </section>
 
@@ -79,10 +77,8 @@ export const App: React.FC = () => {
                 {`${todos.filter((todo) => !todo.completed).length} items left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <TodoFilter filter={filter} onFilterChange={setFilter} />
 
-              {/* don't show this button if there are no completed todos */}
               <button type="button" className="todoapp__clear-completed">
                 Clear completed
               </button>
@@ -90,11 +86,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {/* Hide the footer if there are no todos */}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
 
       <ErrorList errors={errors} onClear={() => setErrors([])} />
     </div>

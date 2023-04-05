@@ -8,7 +8,7 @@ interface Props {
 
 export const ErrorList: React.FC<Props> = ({ errors, onClear }) => {
   useEffect(() => {
-    if (errors.length !== 0) {
+    if (errors.length > 0) {
       setTimeout(onClear, 3000);
     }
   }, [errors, onClear]);
@@ -28,7 +28,6 @@ export const ErrorList: React.FC<Props> = ({ errors, onClear }) => {
         onClick={onClear}
       />
 
-      {/* show only one message at a time */}
       {errors.map((error) => (
         <React.Fragment key={error}>
           {error}
