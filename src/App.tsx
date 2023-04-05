@@ -1,62 +1,64 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   ChangeEvent,
   useEffect,
-  useRef,
   useState,
 } from 'react';
-import cn from 'classnames';
+
+import { getUsers } from './api/users';
 import { getTodos } from './api/todos';
 import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { Filter } from './components/Filter/Filter';
 import { NewTodo } from './components/NewTodo/NewTodo';
-
-const USER_ID = 6846;
+import NotificationError from
+  './components/NotificationError/NotificationError';
 
 export const App: React.FC = () => {
   const [task, setTask] = useState('');
 
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [error, setError] = useState<string>();
-
-  const errorElement = useRef<HTMLDivElement>(null);
+  const [error, setError] = useState<string>('');
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
   };
 
+  const [userId, setUserId] = useState(NaN);
+
   const loadTodos = async () => {
     try {
-      await getTodos(USER_ID).then(res => setTodos(res));
+      await getTodos(userId).then(res => setTodos(res));
     } catch {
       setError('unable to get todos');
     }
   };
 
   useEffect(() => {
-    loadTodos();
-  }, [localStorage.getItem('email')]);
+    getUsers();
+  }, [localStorage.getItem('userId')]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      errorElement.current?.classList.add('hidden');
-    }, 3000);
+    if (localStorage.getItem('userId')) {
+      setUserId(Number(localStorage.getItem('userId')));
+    }
+  }, [localStorage.getItem('userId')]);
 
-    return () => {
-      clearTimeout(timer);
-      errorElement.current?.classList.remove('hidden');
-    };
-  }, [error]);
+  useEffect(() => {
+    if (userId) {
+      loadTodos();
+    }
+  }, [userId]);
 
-  if (!USER_ID) {
-    return <UserWarning />;
+  const resetError = () => setError('');
+
+  if (!localStorage.getItem('userId')) {
+    return <Login />;
   }
 
-  if (!localStorage.getItem('email')) {
-    return <Login />;
+  if (!userId) {
+    return <UserWarning />;
   }
 
   return (
@@ -75,25 +77,10 @@ export const App: React.FC = () => {
       {
         error
         && (
-          <div
-            className={cn(
-              'notification',
-              'is-danger',
-              'is-light',
-              'has-text-weight-normal',
-            )}
-            ref={errorElement}
-          >
-            <button
-              type="button"
-              className="delete"
-              onClick={() => setError('')}
-            />
-
-            {
-              error
-            }
-          </div>
+          <NotificationError
+            error={error}
+            resetError={resetError}
+          />
         )
       }
     </div>

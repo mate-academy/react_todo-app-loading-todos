@@ -4,11 +4,11 @@ import cn from 'classnames';
 import { TodoList } from '../TodoList/TodoList';
 import { Todo } from '../../types/Todo';
 
-const FILTERS = {
-  all: 'all',
-  completed: 'completed',
-  active: 'active',
-};
+enum FILTERS {
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
+}
 
 const LINKS = [
   {
@@ -32,7 +32,7 @@ type Props = {
 export const Filter: FC<Props> = ({
   todos,
 }) => {
-  const [filter, setFilter] = useState(FILTERS.all);
+  const [filter, setFilter] = useState<FILTERS>(FILTERS.all);
 
   const visibleTodos = todos.filter(todo => {
     if (filter === FILTERS.all) {
@@ -44,7 +44,7 @@ export const Filter: FC<Props> = ({
       : !todo.completed;
   });
 
-  const handleFilterChange = (selectedFilter: string) => {
+  const handleFilterChange = (selectedFilter: FILTERS) => {
     setFilter(selectedFilter);
   };
 
@@ -64,6 +64,7 @@ export const Filter: FC<Props> = ({
           {
             LINKS.map(({ to, recentFilter }) => (
               <NavLink
+                key={to}
                 to={to}
                 className={({ isActive }) => (cn(
                   'filter__link',

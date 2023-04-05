@@ -1,32 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import cn from 'classnames';
 import {
-  ChangeEvent, FC, useEffect, useState,
+  ChangeEvent,
+  FC,
+  useEffect,
+  useState,
 } from 'react';
+import { getUsers } from './api/users';
+import { User } from './types/User';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [isLoading, setIsloading] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    setIsLoading(true);
+    if (email) {
+      event.preventDefault();
+      setIsloading(true);
+    }
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      localStorage.setItem('email', email);
+    if (isLoading) {
+      setTimeout(() => {
+        getUsers()
+          .then((users: any) => {
+            const { id } = users.find((user: User) => user.email === email);
 
-      if (isLoading === true) {
-        window.location.reload();
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
+            localStorage.setItem('userId', id);
+          })
+          .then(() => window.location.reload());
+      }, 300);
+    }
   }, [isLoading]);
 
   return (
