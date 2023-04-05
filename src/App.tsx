@@ -9,11 +9,13 @@ import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 import { ErrorMessage } from './components/ErrorMessage';
 import { NewTodoForm } from './components/NewTodoForm';
+import { Loader } from './components/Loader';
 
 const USER_ID = 6826;
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
   const [shouldShowError, setShouldShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [
@@ -34,14 +36,17 @@ export const App: React.FC = () => {
   };
 
   const loadTodosFromServer = async () => {
+    setIsLoadingTodos(true);
     setShouldShowError(false);
 
     try {
       const todosFromServer = await getTodos(USER_ID);
 
       setAllTodos(todosFromServer);
-    } catch (error) {
+    } catch {
       showError('Unable to load todos');
+    } finally {
+      setIsLoadingTodos(false);
     }
   };
 
@@ -93,6 +98,10 @@ export const App: React.FC = () => {
 
           <NewTodoForm />
         </header>
+
+        {isLoadingTodos && (
+          <Loader />
+        )}
 
         {allTodos.length > 0 && (
           <>
