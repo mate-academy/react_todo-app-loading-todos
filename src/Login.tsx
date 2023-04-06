@@ -19,8 +19,9 @@ export const Login: FC = () => {
   };
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     if (email) {
-      event.preventDefault();
       setIsloading(true);
     }
   };

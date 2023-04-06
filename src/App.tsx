@@ -14,6 +14,8 @@ import { NewTodo } from './components/NewTodo/NewTodo';
 import NotificationError from
   './components/NotificationError/NotificationError';
 
+const USER_ID = localStorage.getItem('userId');
+
 export const App: React.FC = () => {
   const [task, setTask] = useState('');
 
@@ -25,11 +27,9 @@ export const App: React.FC = () => {
     setTask(event.target.value);
   };
 
-  const [userId, setUserId] = useState(NaN);
-
   const loadTodos = async () => {
     try {
-      await getTodos(userId).then(res => setTodos(res));
+      await getTodos(Number(USER_ID)).then(res => setTodos(res));
     } catch {
       setError('unable to get todos');
     }
@@ -37,27 +37,21 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getUsers();
-  }, [localStorage.getItem('userId')]);
+  }, [USER_ID]);
 
   useEffect(() => {
-    if (localStorage.getItem('userId')) {
-      setUserId(Number(localStorage.getItem('userId')));
-    }
-  }, [localStorage.getItem('userId')]);
-
-  useEffect(() => {
-    if (userId) {
+    if (USER_ID) {
       loadTodos();
     }
-  }, [userId]);
+  }, [USER_ID]);
 
   const resetError = () => setError('');
 
-  if (!localStorage.getItem('userId')) {
+  if (!USER_ID) {
     return <Login />;
   }
 
-  if (!userId) {
+  if (!USER_ID) {
     return <UserWarning />;
   }
 

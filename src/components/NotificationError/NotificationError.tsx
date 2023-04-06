@@ -40,7 +40,6 @@ const NotificationError: FC<Props> = ({ error, resetError }) => {
         type="button"
         className="delete"
         onClick={resetError}
-      // there should be seterror to ''
       />
 
       {
