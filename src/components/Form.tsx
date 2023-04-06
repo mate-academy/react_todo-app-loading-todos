@@ -1,0 +1,27 @@
+type Props = {
+  title: string,
+  placeholder: string;
+  className: string;
+  setTitle: (event: string) => void,
+  onSubmit: () => void;
+};
+
+export const Form: React.FC<Props> = ({
+  title,
+  placeholder,
+  className,
+  setTitle,
+  onSubmit,
+}) => (
+  <form onSubmit={onSubmit}>
+    <input
+      type="text"
+      className={className}
+      placeholder={placeholder}
+      value={title}
+      onChange={(event) => {
+        setTitle(event.target.value);
+      }}
+    />
+  </form>
+);
