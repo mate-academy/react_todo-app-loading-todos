@@ -1,0 +1,10 @@
+.Error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.Error-message {
+  margin-bottom: 20px;
+}
