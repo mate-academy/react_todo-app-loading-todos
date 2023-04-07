@@ -3,6 +3,7 @@ type Props = {
   placeholder: string;
   className: string;
   setTitle: (event: string) => void,
+  onSubmit: () => void,
 };
 
 export const Form: React.FC<Props> = ({

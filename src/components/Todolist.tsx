@@ -41,6 +41,7 @@ export const TodoList: React.FC<Props> = ({
           {editing
             ? (
               <Form
+                onSubmit={() => {}}
                 title={title}
                 setTitle={setTitle}
                 className="top__title-field"
