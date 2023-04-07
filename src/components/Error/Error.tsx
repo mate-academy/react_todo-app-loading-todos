@@ -1,5 +1,4 @@
 import React from 'react';
-import './Error.scss';
 import classNames from 'classnames';
 
 type ErrorProps = {
