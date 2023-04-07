@@ -6,17 +6,18 @@ import { Form } from './components/Form';
 import { TodoList } from './components/Todolist';
 import { Footer } from './components/Footer';
 import { getTodos } from './api/todos';
+import { ErrorNotification } from './components/ErrorNotification';
+
 
 const USER_ID = 6910;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState<string>('');
-  const [completed] = useState<boolean>(false);
   const [filter, setFilter] = useState('all');
   const [error, setError] = useState('');
-  const [showError, setShowError] = useState(false);
   const [completedTodos, setCompletedTodos] = useState<number[]>([]);
+  const showError = !!error || error !== '';
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -25,11 +26,11 @@ export const App: React.FC = () => {
         setError('');
       })
       .catch(() => {
-        setShowError(true);
+        showError;
         setError('Unable to load todos');
 
         setTimeout(() => {
-          setShowError(false);
+          showError;
         }, 3000);
       });
   }, []);
@@ -65,13 +66,14 @@ export const App: React.FC = () => {
       }
     });
 
-  const newTodo = {
-    title,
-    id: Math.max(...todos.map(todo => todo.id)) + 1,
-    completed,
-  };
 
   const addTodo = () => {
+    const newTodo = {
+      title,
+      id: Math.max(...todos.map(todo => todo.id)) + 1,
+      completed: false,
+    };
+
     return [...todos, newTodo];
   };
 
@@ -101,7 +103,7 @@ export const App: React.FC = () => {
           />
         </header>
 
-        {todos.length !== 0 && (
+        {todos && (
           <>
             <TodoList
               title={title}
@@ -117,21 +119,11 @@ export const App: React.FC = () => {
           </>
         )}
         {showError && (
-          <div
-            className={classNames(
-              'notification is-danger is-light has-text-weight-normal',
-              { hidden: !showError },
-            )}
-          >
-            <button
-              type="button"
-              className="delete"
-              onClick={() => {
-                setShowError(false);
-              }}
-            />
-            {error}
-          </div>
+          <ErrorNotification
+            error={error}
+            showError={showError}
+            onErrorClose={() => setError('')}
+          />
         )}
       </div>
     </div>
