@@ -26,6 +26,7 @@ export const ListFilter: React.FC<Props> = ({
 
           return (
             <a
+              key={type}
               href={type !== 'all'
                 ? `#/${type}`
                 : '#/'}
