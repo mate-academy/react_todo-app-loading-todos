@@ -12,7 +12,10 @@ export const NotificationError: FC<Props> = ({
 }) => {
   return (
     <div className={classNames(
-      'notification is-danger is-light has-text-weight-normal',
+      'notification',
+      'is-danger',
+      'is-light',
+      'has-text-weight-normal',
       {
         hidden: !error,
       },

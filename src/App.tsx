@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { getTodos } from './api/todos';
 
 import { Todo } from './types/Todo';
@@ -8,10 +14,11 @@ import { filterTodos } from './utils/helpers';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { NotificationError } from './components/NotificationError';
+import { AddingForm } from './components/AddingForm';
 
 const USER_ID = 6922;
 
-export const App: React.FC = () => {
+export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.ALL);
   const [error, setError] = useState('');
@@ -33,28 +40,16 @@ export const App: React.FC = () => {
     loadTodos();
   }, [todos]);
 
-  const visibleTodos = filterTodos(todos, todoStatus);
+  const visibleTodos = useMemo(() => {
+    return filterTodos(todos, todoStatus);
+  }, [todos, todoStatus]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            aria-label="make all todos active"
-          />
-
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <AddingForm />
 
         <TodoList todos={visibleTodos} />
 
