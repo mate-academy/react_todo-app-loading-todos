@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 
@@ -32,7 +31,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodos();
-  }, []);
+  }, [todos]);
 
   const visibleTodos = filterTodos(todos, todoStatus);
 
@@ -42,7 +41,11 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+            aria-label="make all todos active"
+          />
 
           <form>
             <input
