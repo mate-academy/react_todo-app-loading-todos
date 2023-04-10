@@ -56,7 +56,7 @@ export const App: React.FC = () => {
     setSortType(typeOfSort);
   };
 
-  const visibleTodos = filterTodos(todos, sortType, newTitle);
+  const visibleTodos = filterTodos(todos, sortType);
 
   return (
     <div className="todoapp">

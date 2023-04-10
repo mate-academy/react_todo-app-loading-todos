@@ -4,12 +4,9 @@ import { Todo } from '../types/Todo';
 export const filterTodos = (
   todos: Todo[],
   sortType: SortType,
-  titleQuery: string,
 ): Todo[] => {
   return todos.filter(todo => {
     let isSortType = true;
-    const normalizedTodoTitle = todo.title.toLowerCase();
-    const normalizedQuery = titleQuery.toLowerCase();
 
     switch (sortType) {
       case SortType.ACTIVE:
@@ -24,6 +21,6 @@ export const filterTodos = (
         break;
     }
 
-    return isSortType && normalizedTodoTitle.includes(normalizedQuery);
+    return isSortType;
   });
 };
