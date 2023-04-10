@@ -18,9 +18,17 @@ enum ErrorMessage {
 export const ErrorShow: React.FC<Props> = ({ errorToShow, setErrorToShow }) => {
   const [hasHiddenClass, setHasHiddenClass] = useState<boolean>(false);
 
+  const hideError = () => {
+    setHasHiddenClass(true);
+    setTimeout(() => setErrorToShow('none'), 300);
+  };
+
+  const handleHideError = () => {
+    hideError();
+  };
+
   useEffect(() => {
-    setTimeout(() => setHasHiddenClass(true), 3000);
-    setTimeout(() => setErrorToShow('none'), 3300);
+    setTimeout(() => hideError(), 3000);
   }, []);
 
   return (
@@ -39,7 +47,7 @@ export const ErrorShow: React.FC<Props> = ({ errorToShow, setErrorToShow }) => {
           <button
             type="button"
             className="delete"
-            onClick={() => setErrorToShow('none')}
+            onClick={handleHideError}
           />
           { ErrorMessage[errorToShow] }
           {/* show only one message at a time */}
