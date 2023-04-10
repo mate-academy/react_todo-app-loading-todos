@@ -48,7 +48,7 @@ export const App: React.FC = () => {
     setError('');
   };
 
-  const handleQuery = (title: string) => {
+  const handleTitle = (title: string) => {
     setNewTitle(title);
   };
 
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
           <AddingTodo
             todos={visibleTodos}
             value={newTitle}
-            onInput={handleQuery}
+            onInput={handleTitle}
           />
         </header>
 

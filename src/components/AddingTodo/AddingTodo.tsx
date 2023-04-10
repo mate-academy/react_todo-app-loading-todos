@@ -18,7 +18,7 @@ export const AddingTodo: React.FC<Props> = (props) => {
   const isTodos = todos.length > 0;
   const hasCompletedTodo = todos.some((todo: Todo) => todo.completed);
 
-  const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const title = event.target.value;
 
     onInput(title);
@@ -45,7 +45,7 @@ export const AddingTodo: React.FC<Props> = (props) => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={value}
-          onChange={handleQuery}
+          onChange={handleTitle}
         />
       </form>
     </>
