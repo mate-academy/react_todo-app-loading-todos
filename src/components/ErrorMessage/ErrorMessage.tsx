@@ -2,10 +2,11 @@ import React from 'react';
 import { ApiError } from '../../types/ApiError';
 
 interface Props {
+  setHasError: React.Dispatch<React.SetStateAction<boolean>>;
   errorType: ApiError;
 }
 
-export const ErrorMessage: React.FC<Props> = ({ errorType }) => {
+export const ErrorMessage: React.FC<Props> = ({ setHasError, errorType }) => {
   let message = '';
 
   switch (errorType) {
@@ -37,6 +38,7 @@ export const ErrorMessage: React.FC<Props> = ({ errorType }) => {
         type="button"
         className="delete"
         aria-label={' '}
+        onClick={() => setHasError(false)}
       />
       {message}
     </div>
