@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-export const NewTodo: FC = () => {
+export const AddTodo: FC = () => {
   return (
     <header className="todoapp__header">
       <button

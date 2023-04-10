@@ -8,7 +8,7 @@ import { UserWarning } from './UserWarning';
 import { Filter } from './components/Filter';
 import { TodoList } from './components/TodoList';
 import { Notification } from './components/Notification';
-import { NewTodo } from './components/NewTodo';
+import { AddTodo } from './components/AddTodo';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { ErrorType } from './types/Error';
@@ -56,7 +56,7 @@ export const App: FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <NewTodo />
+        <AddTodo />
 
         <TodoList todos={filteredTodos} />
 

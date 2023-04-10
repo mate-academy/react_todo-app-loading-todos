@@ -15,7 +15,6 @@ export const Filter: FC<FilterProps> = ({
   onChangeSortType,
 }) => {
   const active = todos.filter(todo => !todo.completed);
-  const completed = todos.filter(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer">
@@ -55,12 +54,15 @@ export const Filter: FC<FilterProps> = ({
         </a>
       </nav>
 
-      {completed.length > 0
-      && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed', {
+          'is-invisible': todos.every(todo => !todo.completed),
+        })}
+      >
+        Clear completed
+      </button>
+
     </footer>
   );
 };

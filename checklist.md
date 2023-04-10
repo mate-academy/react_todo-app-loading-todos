@@ -14,13 +14,13 @@
 ## Task checklist.
 1. `App.js` code should be split into several components.
 1. Callbacks that work with the main state should take prepared data instead of the whole child's state.
-1. Code should be split into small, reusable components if it possible (`Filter`, `TodoList`, `TodoItem`, `NewTodo`)
+1. Code should be split into small, reusable components if it possible (`Filter`, `TodoList`, `TodoItem`, `AddTodo`)
 1. ID for new todos should be unique, you can use an internal ID counter for this, and increment it.
 1. “Toggle all” should be active only in case when all todos are completed.
 1. If you manually toggle all todos to completed state, “Toggle all” should stay active.
 1. "Toggle all" should stay inactive if at least one todo is not completed.
-1. `NewTodo` form shouldn’t create empty todos.
-1. `NewTodo` form should trim redundant spaces.
+1. `AddTodo` form shouldn’t create empty todos.
+1. `AddTodo` form should trim redundant spaces.
 1. Do not rely on the unknown string, make constants for this.
     ```
     const FILTERS = {
@@ -29,4 +29,4 @@
       active: ‘active’,
     };
     ```
-1. Show only `NewTodo` form if todos array is empty.
+1. Show only `AddTodo` form if todos array is empty.
