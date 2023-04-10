@@ -5,4 +5,14 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+export const sendNewTodo = async (title: string, userId: number) => {
+  await client.post<Todo>('/todos', {
+    title,
+    userId,
+    completed: false,
+  });
+};
+
+export const getTodosByStatus = (userId: number, status: boolean) => {
+  return client.get<Todo[]>(`/todos?userId=${userId}&completed=${status}`);
+};
