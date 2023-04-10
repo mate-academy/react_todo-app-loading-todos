@@ -1,13 +1,107 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
+import { TodoItem } from './components/TodoItem';
+import { Todo } from './types/Todo';
 
-const USER_ID = 0;
+import { getTodos, addTodo } from './api/todos';
+import { BASE_URL } from './utils/fetchClient';
+
+import { ErrorType } from './types/ErrorType';
+import { ErrorShow } from './components/ErrorShow';
+
+const USER_ID = 6980;
+
+// type FilterType = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [addingTodoTitle, setAddingTodoTitle] = useState('');
+  const [errorToShow, setErrorToShow] = useState<ErrorType>('add');
+  const [todosToShow, setTodosToShow] = useState(todos);
+  const [chosenFilter, setChosenFilter] = useState<string>('all');
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then((todosFromServer: Todo[]) => setTodos([...todosFromServer]));
+  }, []);
+
+  useEffect(() => {
+    const filteredTodos = todos.filter(todo => {
+      switch (chosenFilter) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        case 'all':
+        default:
+          return todo;
+      }
+    });
+
+    setTodosToShow(filteredTodos);
+  }, [todos, chosenFilter]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const handleSetNewTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { target: { value } } = event;
+
+    return setAddingTodoTitle(value);
+  };
+
+  const getNewTodoId = () => {
+    return Math.max(...todos.map(todo => todo.id)) + 1;
+  };
+
+  const handleSubmitNewTodo = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newTodoId = getNewTodoId();
+
+    const newTodo = {
+      id: newTodoId,
+      userId: USER_ID,
+      title: addingTodoTitle,
+      completed: false,
+    };
+
+    addTodo(USER_ID, newTodo)
+      .then((todo) => {
+        // eslint-disable-next-line no-console
+        console.log(todo);
+        // setTodos((prevTodos) => ([
+        //   ...prevTodos,
+        //   todo,
+        // ]));
+        const error = new Error('adding error');
+
+        return error;
+      })
+      .catch(() => setErrorToShow('add'));
+  };
+
+  const handleFilterTodo = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+
+    const target = event.target as HTMLAnchorElement;
+    const { href } = target;
+    const hashIndex = href.indexOf('#');
+    const tail = href.slice(hashIndex + 2);
+
+    // eslint-disable-next-line no-console
+    console.log(tail);
+
+    const filter = tail !== ''
+      ? tail
+      : 'all';
+
+    setChosenFilter(filter);
+  };
 
   return (
     <div className="todoapp">
@@ -19,11 +113,17 @@ export const App: React.FC = () => {
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form
+            action={BASE_URL}
+            method="POST"
+            onSubmit={handleSubmitNewTodo}
+          >
             <input
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={addingTodoTitle}
+              onChange={handleSetNewTitle}
             />
           </form>
         </header>
@@ -109,6 +209,7 @@ export const App: React.FC = () => {
               <div className="loader" />
             </div>
           </div>
+          {todosToShow.map(todo => <TodoItem key={todo.id} todo={todo} />)}
         </section>
 
         {/* Hide the footer if there are no todos */}
@@ -119,15 +220,27 @@ export const App: React.FC = () => {
 
           {/* Active filter should have a 'selected' class */}
           <nav className="filter">
-            <a href="#/" className="filter__link selected">
+            <a
+              href="#/"
+              className="filter__link selected"
+              onClick={handleFilterTodo}
+            >
               All
             </a>
 
-            <a href="#/active" className="filter__link">
+            <a
+              href="#/active"
+              className="filter__link"
+              onClick={handleFilterTodo}
+            >
               Active
             </a>
 
-            <a href="#/completed" className="filter__link">
+            <a
+              href="#/completed"
+              className="filter__link"
+              onClick={handleFilterTodo}
+            >
               Completed
             </a>
           </nav>
@@ -141,16 +254,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorShow errorToShow={errorToShow} setErrorToShow={setErrorToShow} />
     </div>
   );
 };
