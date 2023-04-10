@@ -75,7 +75,7 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       {hasError && (
         <ErrorMessage
-          setHasError={setHasError}
+          removeErrorMessage={() => setHasError(false)}
           errorType={errorType}
         />
       )}
