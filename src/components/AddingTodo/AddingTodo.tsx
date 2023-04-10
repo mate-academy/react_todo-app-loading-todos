@@ -8,7 +8,7 @@ interface Props {
   onInput: (title: string) => void,
 }
 
-export const SearchBar: React.FC<Props> = (props) => {
+export const AddingTodo: React.FC<Props> = (props) => {
   const {
     todos,
     value,

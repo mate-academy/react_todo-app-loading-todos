@@ -11,14 +11,14 @@ import { UserWarning } from './UserWarning';
 import { filterTodos } from './utils/helpers';
 
 import { TodoList } from './components/TodoList';
-import { SearchBar } from './components/SearchBar';
+import { AddingTodo } from './components/AddingTodo';
 import { TodoFooter } from './components/TodoFooter';
 
 const USER_ID = 6749;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
+  const [newTitle, setNewTitle] = useState('');
   const [sortType, setSortType] = useState<SortType>(SortType.ALL);
   const [error, setError] = useState('');
 
@@ -49,14 +49,14 @@ export const App: React.FC = () => {
   };
 
   const handleQuery = (title: string) => {
-    setQuery(title);
+    setNewTitle(title);
   };
 
   const handlerSortType = (typeOfSort: SortType) => {
     setSortType(typeOfSort);
   };
 
-  const visibleTodos = filterTodos(todos, sortType, query);
+  const visibleTodos = filterTodos(todos, sortType, newTitle);
 
   return (
     <div className="todoapp">
@@ -64,9 +64,9 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <SearchBar
+          <AddingTodo
             todos={visibleTodos}
-            value={query}
+            value={newTitle}
             onInput={handleQuery}
           />
         </header>
