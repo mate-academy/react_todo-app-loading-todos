@@ -24,11 +24,11 @@ export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [errorMessage, setEerrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [filterType, setFilterType] = useState(FilterType.All);
 
   const showError = (errorName: string) => {
-    setEerrorMessage(errorName);
+    setErrorMessage(errorName);
     setHasError(true);
 
     setTimeout(() => {
