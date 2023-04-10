@@ -14,8 +14,7 @@ import { getTodos } from './api/todos';
 import { ErrorType } from './types/Error';
 import { getFilteredTodos } from './utils/helpers';
 import { TaskStatus } from './types/Sort';
-
-const USER_ID = 6972;
+import { USER_ID } from './utils/constants';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
