@@ -9,7 +9,10 @@ type Props = {
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <div
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames(
+        'todo',
+        { completed: todo.completed },
+      )}
     >
       <label className="todo__status-label">
         <input type="checkbox" className="todo__status" />

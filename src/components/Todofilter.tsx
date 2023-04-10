@@ -5,23 +5,24 @@ import { FilterType } from '../types/FilterType';
 type Props = {
   filterType: FilterType;
   onFilterChange: (filter: FilterType) => void;
-  todosLeftActive: number,
+  remainingTodos: number,
+  completedTodosCount: number,
 };
 
 export const TodoFilter: React.FC<Props> = (props) => {
   const {
     filterType,
     onFilterChange,
-    todosLeftActive,
+    remainingTodos,
+    completedTodosCount,
   } = props;
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosLeftActive} items left`}
+        {`${remainingTodos} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -54,10 +55,11 @@ export const TodoFilter: React.FC<Props> = (props) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      { completedTodosCount > 0 && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

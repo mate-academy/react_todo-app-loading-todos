@@ -16,9 +16,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isListLoading, setListLoading] = useState(false);
   const [filterType, setFilterType] = useState(FilterType.All);
-  const [activeTodos] = useMemo(
+  const [activeTodos, completedTodosCount] = useMemo(
     () => [
       todos.filter(({ completed }) => !completed).length,
+      todos.filter(({ completed }) => completed).length,
     ],
     [todos],
   );
@@ -80,7 +81,8 @@ export const App: React.FC = () => {
           <TodoFilter
             filterType={filterType}
             onFilterChange={setFilterType}
-            todosLeftActive={activeTodos}
+            remainingTodos={activeTodos}
+            completedTodosCount={completedTodosCount}
           />
         )}
       </div>
