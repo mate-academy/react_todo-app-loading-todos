@@ -2,11 +2,16 @@ import classNames from 'classnames';
 import { FilterType } from '../../helpers/filterTodos';
 
 interface Props {
+  hasCompletedTodo: boolean,
   filterType: FilterType;
   setFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 }
 
-export const Footer: React.FC<Props> = ({ filterType, setFilter }) => {
+export const Footer: React.FC<Props> = ({
+  hasCompletedTodo,
+  filterType,
+  setFilter,
+}) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -49,10 +54,19 @@ export const Footer: React.FC<Props> = ({ filterType, setFilter }) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{
+          opacity: hasCompletedTodo
+            ? 1
+            : 0,
+        }}
+        disabled={!hasCompletedTodo}
+      >
         Clear completed
       </button>
+
     </footer>
   );
 };

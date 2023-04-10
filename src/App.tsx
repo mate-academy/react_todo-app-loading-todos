@@ -38,6 +38,10 @@ export const App: React.FC = () => {
     [filterType, todos],
   );
 
+  const getHasCompletedTodos = () => {
+    return todos.some(({ completed }) => completed);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -55,6 +59,7 @@ export const App: React.FC = () => {
         {!todos.length
           || (
             <Footer
+              hasCompletedTodo={getHasCompletedTodos()}
               setFilter={setFilterType}
               filterType={filterType}
             />
