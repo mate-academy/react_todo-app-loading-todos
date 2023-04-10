@@ -42,6 +42,10 @@ export const App: React.FC = () => {
     return todos.some(({ completed }) => completed);
   };
 
+  const getActiveTodosCount = () => {
+    return todos.filter(({ completed }) => !completed).length;
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -59,6 +63,7 @@ export const App: React.FC = () => {
         {!todos.length
           || (
             <Footer
+              activeTodosCount={getActiveTodosCount()}
               hasCompletedTodo={getHasCompletedTodos()}
               setFilter={setFilterType}
               filterType={filterType}

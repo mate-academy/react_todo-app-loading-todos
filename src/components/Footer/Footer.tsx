@@ -2,12 +2,14 @@ import classNames from 'classnames';
 import { FilterType } from '../../helpers/filterTodos';
 
 interface Props {
+  activeTodosCount: number,
   hasCompletedTodo: boolean,
   filterType: FilterType;
   setFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 }
 
 export const Footer: React.FC<Props> = ({
+  activeTodosCount,
   hasCompletedTodo,
   filterType,
   setFilter,
@@ -15,7 +17,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${activeTodosCount} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
