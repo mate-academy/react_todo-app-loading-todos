@@ -8,6 +8,7 @@ import { Todo } from './types/Todo';
 import { ErrorMessage } from './components/ErrorMesage/ErrorMesage';
 import { FormTodo } from './components/FormTodo/FormTodo';
 import { TodoList } from './components/TodoList/TodoList';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
 
 const USER_ID = 6926;
 
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [errorMesage, setErrorMessage] = useState('');
   const [todoTitle, setTodoTitle] = useState('');
+  const [filteredTodos, setFilteredTodos] = useState<Todo[] | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -53,7 +55,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          <TodoList todos={todos} />
+          <TodoList todos={filteredTodos} />
         </section>
 
         {/* Hide the footer if there are no todos */}
@@ -63,19 +65,7 @@ export const App: React.FC = () => {
           </span>
 
           {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
-
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
-
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
+          <TodoFilter todos={todos} setFilteredTodos={setFilteredTodos} />
 
           {/* don't show this button if there are no completed todos */}
           <button type="button" className="todoapp__clear-completed">
