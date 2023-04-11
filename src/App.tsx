@@ -30,7 +30,12 @@ export const App: React.FC = () => {
 
     getTodos(userId)
       .then(loadedTodos => setTodos(loadedTodos))
-      .catch(() => handleShowError('Unable to load todos!'))
+      .catch(() => {
+        handleShowError('Failed to load goods due to a network error!');
+        setTimeout(() => {
+          setLoadingError(false);
+        }, 3000);
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -82,6 +87,7 @@ export const App: React.FC = () => {
         <ErrorMessage
           text={errorText}
           onClose={handleCloseError}
+          showError={loadingError}
         />
       )}
     </div>
