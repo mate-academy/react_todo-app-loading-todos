@@ -10,31 +10,25 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
   const [activeFilter, setActiveFilter] = useState('all');
 
   const filteredTodos = todos && todos.filter((todo) => {
-    if (todos) {
-      switch (activeFilter) {
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        default:
-          return true;
-      }
+    switch (activeFilter) {
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return true;
     }
-
-    return true;
   });
 
   useEffect(() => {
     setFilteredTodos(filteredTodos);
-  }, []);
+  });
 
   return (
     <nav className="filter">
       <a
         href="#/"
-        className={`filter__link ${
-          activeFilter === 'all' ? 'selected' : ''
-        }`}
+        className="filter__link all"
         onClick={() => setActiveFilter('all')}
       >
         All
@@ -42,9 +36,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
 
       <a
         href="#/active"
-        className={`filter__link ${
-          activeFilter === 'active' ? 'selected' : ''
-        }`}
+        className="filter__link active"
         onClick={() => setActiveFilter('active')}
       >
         Active
@@ -52,9 +44,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, setFilteredTodos }) => {
 
       <a
         href="#/completed"
-        className={`filter__link ${
-          activeFilter === 'completed' ? 'selected' : ''
-        }`}
+        className="filter__link completed"
         onClick={() => setActiveFilter('completed')}
       >
         Completed
