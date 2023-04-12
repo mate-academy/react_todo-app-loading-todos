@@ -72,5 +72,3 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
-// const [status, setStatus] = useState<Status>(Status.all);
