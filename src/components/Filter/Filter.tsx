@@ -1,13 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import cn from 'classnames';
 import { TodoList } from '../TodoList/TodoList';
 import { Todo } from '../../types/Todo';
 
 enum FILTERS {
-  all = 'all',
-  completed = 'completed',
-  active = 'active',
+  all = 'All',
+  completed = 'Completed',
+  active = 'Active',
 }
 
 const LINKS = [
@@ -48,8 +48,13 @@ export const Filter: FC<Props> = ({
     setFilter(selectedFilter);
   };
 
-  const completedTodosCount = todos.filter(todo => todo.completed).length;
-  const incompletedTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = useMemo(() => (
+    todos.filter(todo => todo.completed).length
+  ), [todos]);
+
+  const incompletedTodosCount = useMemo(() => (
+    todos.filter(todo => !todo.completed).length
+  ), [todos]);
 
   return (
     <>

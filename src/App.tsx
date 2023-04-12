@@ -4,9 +4,7 @@ import React, {
   useState,
 } from 'react';
 
-import { getUsers } from './api/users';
 import { getTodos } from './api/todos';
-import { Login } from './Login';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { Filter } from './components/Filter/Filter';
@@ -14,14 +12,12 @@ import { NewTodo } from './components/NewTodo/NewTodo';
 import NotificationError from
   './components/NotificationError/NotificationError';
 
-const USER_ID = localStorage.getItem('userId');
+const USER_ID = 6846;
 
 export const App: React.FC = () => {
   const [task, setTask] = useState('');
-
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
 
   const handleTodoChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTask(event.target.value);
@@ -36,20 +32,10 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    getUsers();
-  }, [USER_ID]);
-
-  useEffect(() => {
-    if (USER_ID) {
-      loadTodos();
-    }
-  }, [USER_ID]);
+    loadTodos();
+  }, []);
 
   const resetError = () => setError('');
-
-  if (!USER_ID) {
-    return <Login />;
-  }
 
   if (!USER_ID) {
     return <UserWarning />;
