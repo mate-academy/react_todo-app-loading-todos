@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserWarning } from "./UserWarning";
-// import { getTodos } from "./api/todos";
+import { getTodos } from "./api/todos";
 import { Todo } from "./types/Todo";
 import { ListofTodo } from "./Components/ListofTodo/ListofTodo";
 import { Error } from "./Components/Error/Error";
@@ -10,36 +10,17 @@ import { FilterStatus } from "./types/FilterStatus";
 const USER_ID = 6429;
 
 export const App: React.FC = () => {
-  const [todos] = useState<Todo[]>([
-    {
-      id: 1,
-      userId: 2,
-      title: "hello",
-      completed: true,
-    },
-    {
-      id: 2,
-      userId: 2,
-      title: "hellsso",
-      completed: false,
-    },
-    {
-      id: 3,
-      userId: 2,
-      title: "hedsfgdllo",
-      completed: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const unfinishedTodos = todos.filter((todo) => !todo.completed);
 
-  // useEffect(() => {
-  //   getTodos(USER_ID)
-  //     .then((result) => setTodos(result))
-  //     .catch(() => setError("Unable to load the todos"));
-  // }, []);
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then((result) => setTodos(result))
+      .catch(() => setError("Unable to load the todos"));
+  }, []);
 
   useEffect(() => {
     const currentTodos = todos.filter((todo) => {
