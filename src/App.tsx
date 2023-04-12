@@ -31,13 +31,10 @@ function getVisibleTodos(todos: Todo[], filterBy: string) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
   const [errorMessage, setErrorMessage] = useState('');
 
   const loadTodos = async () => {
-    // setIsLoading(true);
-
     try {
       const todosFromServer = await getTodos(USER_ID);
 
@@ -49,9 +46,6 @@ export const App: React.FC = () => {
         setErrorMessage('');
       }, 3000);
     }
-    //   finally {
-    //   setIsLoading(false);
-    // }
   };
 
   const visibleTodos = getVisibleTodos(todos, filterBy);
