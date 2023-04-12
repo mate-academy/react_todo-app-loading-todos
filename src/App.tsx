@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserWarning } from "./UserWarning";
 // import { getTodos } from "./api/todos";
 import { Todo } from "./types/Todo";
@@ -13,9 +11,24 @@ const USER_ID = 6429;
 
 export const App: React.FC = () => {
   const [todos] = useState<Todo[]>([
-    { id: 1, userId: 2, title: "hello", completed: true },
-    { id: 2, userId: 2, title: "hellsso", completed: false },
-    { id: 3, userId: 2, title: "hedsfgdllo", completed: false },
+    {
+      id: 1,
+      userId: 2,
+      title: "hello",
+      completed: true,
+    },
+    {
+      id: 2,
+      userId: 2,
+      title: "hellsso",
+      completed: false,
+    },
+    {
+      id: 3,
+      userId: 2,
+      title: "hedsfgdllo",
+      completed: false,
+    },
   ]);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
@@ -54,7 +67,9 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button type="button" className="todoapp__toggle-all active" />
+          <button type="button" className="todoapp__toggle-all active">
+            {" "}
+          </button>
           <form>
             <input
               type="text"
