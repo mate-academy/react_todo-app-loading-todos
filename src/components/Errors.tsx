@@ -9,9 +9,11 @@ type Props = {
 
 export const Errors: React.FC<Props> = ({ errorMessage, closeError }) => {
   useEffect(() => {
-    setTimeout(() => {
-      closeError();
-    }, 3000);
+    return () => {
+      setTimeout(() => {
+        closeError();
+      }, 3000);
+    }
   }, []);
 
   return (

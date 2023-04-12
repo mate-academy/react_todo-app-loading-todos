@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { SortType } from './types/SortType';
@@ -53,13 +52,13 @@ export const App: React.FC = () => {
         <Header activeTodosLength={visibleTodos.length} />
         <TodoList todos={visibleTodos} />
 
-        {TodoList.length > 0 ? (
+        {todos.length && (
           <Footer
             setSortType={setSortType}
             sortType={sortType}
             activeTodosLength={visibleTodos.length}
           />
-        ) : null}
+        )}
       </div>
 
       {
