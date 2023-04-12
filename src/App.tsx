@@ -64,10 +64,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -102,17 +100,14 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {/* Hide the footer if there are no todos */}
         <footer
           className="todoapp__footer"
           hidden={!todos}
         >
           <span className="todo-count">
-            {filterTodos(FilterType.Active).length}
-            {' items left'}
+            {`${filterTodos(FilterType.Active).length} items left`}
           </span>
 
-          {/* Active filter should have a 'selected' class */}
           <nav className="filter">
             <a
               href="#/"
@@ -145,15 +140,12 @@ export const App: React.FC = () => {
             </a>
           </nav>
 
-          {/* don't show this button if there are no completed todos */}
           <button type="button" className="todoapp__clear-completed">
             Clear completed
           </button>
         </footer>
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         className={loadingError
           ? 'notification is-danger is-light has-text-weight-normal'
@@ -165,7 +157,6 @@ export const App: React.FC = () => {
           onClick={deleteNotificationHandler}
         />
 
-        {/* show only one message at a time */}
         Unable to load a todo
       </div>
     </div>
