@@ -52,10 +52,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -78,7 +76,6 @@ export const App: React.FC = () => {
 
               <FilterForTodos filter={filter} onFilterChange={setFilter} />
 
-              {/* don't show this button if there are no completed todos */}
               <button type="button" className="todoapp__clear-completed">
                 Clear completed
               </button>
