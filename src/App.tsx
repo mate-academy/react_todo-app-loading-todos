@@ -21,7 +21,7 @@ export const App: React.FC = () => {
       setTodos([]);
     });
 
-  const filterTodos = (filter:FilterType) => {
+  const filterTodos = (filter: FilterType) => {
     switch (filter) {
       case FilterType.Active:
         return (todos.filter(todo => !todo.completed));
@@ -38,21 +38,15 @@ export const App: React.FC = () => {
     () => filterTodos(statusFilter), [statusFilter, todos],
   );
 
-  const clickAllHandler = () => {
-    setStatusFilter(FilterType.All);
-  };
-
-  const clickActiveHandler = () => {
-    setStatusFilter(FilterType.Active);
-  };
-
-  const clickCompletedHandler = () => {
-    setStatusFilter(FilterType.Completed);
+  const clickFilterHandler = (filter: FilterType) => {
+    setStatusFilter(filter);
   };
 
   const deleteNotificationHandler = () => {
     setLoadingError(false);
   };
+
+  const numActiveTodos = filterTodos(FilterType.Active).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -88,10 +82,8 @@ export const App: React.FC = () => {
 
               <span className="todo__title">{todo.title}</span>
 
-              {/* Remove button appears only on hover */}
               <button type="button" className="todo__remove">×</button>
 
-              {/* overlay will cover the todo while it is being updated */}
               <div className="modal overlay">
                 <div className="modal-background has-background-white-ter" />
                 <div className="loader" />
@@ -105,36 +97,30 @@ export const App: React.FC = () => {
           hidden={!todos}
         >
           <span className="todo-count">
-            {`${filterTodos(FilterType.Active).length} items left`}
+            {`${numActiveTodos} items left`}
           </span>
 
           <nav className="filter">
             <a
               href="#/"
-              className={statusFilter === FilterType.All
-                ? 'filter__link selected'
-                : 'filter__link'}
-              onClick={clickAllHandler}
+              className={`filter__link ${statusFilter === FilterType.All && 'selected'}`}
+              onClick={() => clickFilterHandler(FilterType.All)}
             >
               All
             </a>
 
             <a
               href="#/active"
-              className={statusFilter === FilterType.Active
-                ? 'filter__link selected'
-                : 'filter__link'}
-              onClick={clickActiveHandler}
+              className={`filter__link ${statusFilter === FilterType.Active && 'selected'}`}
+              onClick={() => clickFilterHandler(FilterType.Active)}
             >
               Active
             </a>
 
             <a
               href="#/completed"
-              className={statusFilter === FilterType.Completed
-                ? 'filter__link selected'
-                : 'filter__link'}
-              onClick={clickCompletedHandler}
+              className={`filter__link ${statusFilter === FilterType.Completed && 'selected'}`}
+              onClick={() => clickFilterHandler(FilterType.Completed)}
             >
               Completed
             </a>
@@ -147,9 +133,7 @@ export const App: React.FC = () => {
       </div>
 
       <div
-        className={loadingError
-          ? 'notification is-danger is-light has-text-weight-normal'
-          : 'notification is-danger is-light has-text-weight-normal hidden'}
+        className={`notification is-danger is-light has-text-weight-normal ${!loadingError && 'hidden'}`}
       >
         <button
           type="button"
