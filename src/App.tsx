@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -12,14 +12,16 @@ export const App: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<FilterType>(FilterType.All);
   const [loadingError, setLoadingError] = useState(false);
 
-  getTodos(USER_ID)
-    .then(res => {
-      setTodos(res);
-    })
-    .catch(() => {
-      setLoadingError(true);
-      setTodos([]);
-    });
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(res => {
+        setTodos(res);
+      })
+      .catch(() => {
+        setLoadingError(true);
+        setTodos([]);
+      });
+  }, []);
 
   const filterTodos = (filter: FilterType) => {
     switch (filter) {
