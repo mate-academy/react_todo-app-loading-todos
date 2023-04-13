@@ -10,12 +10,12 @@ import { Filter } from './types/Filter';
 
 const USER_ID = 7033;
 
-function getVisibleTodos(todos: Todo[], filterBy: string) {
+function getVisibleTodos(todos: Todo[], currentFilter: string) {
   let visibleTodos = [...todos];
 
-  if (filterBy !== Filter.All) {
+  if (currentFilter !== Filter.All) {
     visibleTodos = visibleTodos.filter(({ completed }) => {
-      switch (filterBy) {
+      switch (currentFilter) {
         case Filter.Active:
           return !completed;
         case Filter.Completed:
@@ -66,15 +66,14 @@ export const App: React.FC = () => {
         <Header />
 
         {todos.length > 0 && (
-          <TodoList todos={visibleTodos} />
-        )}
-
-        {todos.length > 0 && (
-          <Footer
-            todos={todos}
-            filterBy={filterBy}
-            onChangeFilter={setFilterBy}
-          />
+          <>
+            <TodoList todos={visibleTodos} />
+            <Footer
+              todos={todos}
+              filterBy={filterBy}
+              onChangeFilter={setFilterBy}
+            />
+          </>
         )}
       </div>
 

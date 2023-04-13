@@ -15,6 +15,7 @@ export const Footer: React.FC<Props> = ({
   onChangeFilter,
 }) => {
   const activeTodos = [...todos].filter(todo => !todo.completed).length;
+  const completedTodos = [...todos].filter(todo => todo.completed).length;
 
   return (
     <footer className="todoapp__footer">
@@ -69,10 +70,24 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {completedTodos ? (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+        >
+          Clear completed
+        </button>
+
+      ) : (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          style={{ opacity: 0, cursor: 'auto' }}
+          disabled
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };
