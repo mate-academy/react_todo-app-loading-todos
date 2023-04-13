@@ -8,9 +8,7 @@ type Props = {
 
 export const Error: React.FC<Props> = ({ error, onClear }) => {
   useEffect(() => {
-    const timeoutID = setTimeout(() => {
-      onClear;
-    }, 3000);
+    const timeoutID = setTimeout(onClear, 3000);
 
     return () => {
       clearTimeout(timeoutID);
@@ -21,11 +19,11 @@ export const Error: React.FC<Props> = ({ error, onClear }) => {
     <div
       className={classNames(
         "notification is-danger is-light has-text-weight-normal",
-        { hidden: error.length === 0 }
+        { hidden: !error.length }
       )}
     >
       <button type="button" className="delete" onClick={onClear} hidden={false}>
-        {"delete "}
+        delete
       </button>
 
       {error}
