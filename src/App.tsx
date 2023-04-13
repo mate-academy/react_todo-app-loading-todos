@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { UserWarning } from "./UserWarning";
 import { getTodos } from "./api/todos";
 import { Todo } from "./types/Todo";
@@ -13,8 +13,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const unfinishedTodos = todos.filter((todo) => !todo.completed);
+  const activeTodos = useMemo(() => {
+    return todos.filter(({ completed }) => !completed).length;
+  }, [todos]);
+  const completedTodos = useMemo(() => {
+    return todos.filter(({ completed }) => completed).length;
+  }, [todos]);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -22,8 +26,8 @@ export const App: React.FC = () => {
       .catch(() => setError("Unable to load the todos"));
   }, []);
 
-  useEffect(() => {
-    const currentTodos = todos.filter((todo) => {
+  const currentTodos = useMemo(() => {
+    return todos.filter((todo) => {
       switch (filter) {
         case FilterStatus.active:
           return !todo.completed;
@@ -35,9 +39,8 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-
-    setFilteredTodos(currentTodos);
   }, [todos, filter]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -63,25 +66,25 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <section className="todoapp__main">
-              <ListofTodo todos={filteredTodos} />
+              <ListofTodo todos={currentTodos} />
             </section>
 
             <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${unfinishedTodos.length} items left`}
-              </span>
+              <span className="todo-count">{`${activeTodos} items left`}</span>
 
               <FilterTodo filter={filter} onFilterChange={setFilter} />
 
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
+              {completedTodos !== 0 && (
+                <button type="button" className="todoapp__clear-completed">
+                  Clear completed
+                </button>
+              )}
             </footer>
           </>
         )}
       </div>
 
-      <Error error={error} onClear={() => setError("")} />
+      <Error error={error} onClear={() => setError(" ")} />
     </div>
   );
 };

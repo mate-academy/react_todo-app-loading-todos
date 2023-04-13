@@ -8,9 +8,13 @@ type Props = {
 
 export const Error: React.FC<Props> = ({ error, onClear }) => {
   useEffect(() => {
-    if (error.length > 0) {
-      setTimeout(onClear, 3000);
-    }
+    const timeoutID = setTimeout(() => {
+      onClear;
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
   }, [error]);
 
   return (
