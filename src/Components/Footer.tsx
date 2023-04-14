@@ -5,7 +5,7 @@ import { Status } from '../types/Status';
 
 type Props = {
   todosToShow: Todo[],
-  selectedStatus: string,
+  selectedStatus: Status,
   setSelectedStatus: (value:Status) => void,
 };
 

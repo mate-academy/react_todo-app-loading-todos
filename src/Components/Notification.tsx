@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 export const Notification: React.FC = () => {
-  const [isButtonDelete, setIsButtonDelete] = useState(true);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
 
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !isButtonDelete },
+      { hidden: !isNotificationVisible },
     )}
     >
       {/* eslint-disable-next-line */}
       <button
         type="button"
         className="delete"
-        onClick={() => setIsButtonDelete(false)}
+        onClick={() => setIsNotificationVisible(false)}
       />
-      Unabale to add a todo
+      Unable to add a todo
     </div>
   );
 };

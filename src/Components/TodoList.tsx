@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-interface TodoListPropsType {
+type Props = {
   todosToShow: Todo[],
-}
+};
 
-export const TodoList: React.FC<TodoListPropsType> = ({ todosToShow }) => {
+export const TodoList: React.FC<Props> = ({ todosToShow }) => {
   return (
     <section className="todoapp__main">
       {todosToShow.map(todo => (
@@ -20,7 +20,7 @@ export const TodoList: React.FC<TodoListPropsType> = ({ todosToShow }) => {
             <input
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed}
             />
           </label>
           <span className="todo__title">{todo.title}</span>

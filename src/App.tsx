@@ -12,9 +12,13 @@ const USER_ID = 7011;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [title, setTitle] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<Status>(Status.All);
   const [isError, setIsError] = useState(false);
+
+  const handleNewTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -40,7 +44,7 @@ export const App: React.FC = () => {
           setIsError(false);
         }, 3000);
       });
-  }, [todos]);
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -53,8 +57,8 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          title={title}
+          setTitle={handleNewTitle}
         />
         <TodoList
           todosToShow={filteredTodos}

@@ -2,18 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-interface HeaderPropsType {
+type Props = {
   todos: Todo[],
-  searchQuery: string,
-  setSearchQuery: (searchQuery: string) => void,
-}
+  title: string,
+  setTitle: (event: React.ChangeEvent<HTMLInputElement>) => void,
+};
 
-export const Header: React.FC<HeaderPropsType> = ({
+export const Header: React.FC<Props> = ({
   todos,
-  searchQuery,
-  setSearchQuery,
+  title,
+  setTitle,
 }) => {
-  const isActicve = todos.filter(todo => !todo.completed);
+  const isActive = todos.filter(todo => !todo.completed);
 
   return (
     <header className="todoapp__header">
@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderPropsType> = ({
         type="button"
         className={classNames(
           'todoapp__toggle-all',
-          { active: isActicve },
+          { active: isActive },
         )}
         aria-label="Add todo"
       />
@@ -30,8 +30,8 @@ export const Header: React.FC<HeaderPropsType> = ({
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
+          value={title}
+          onChange={setTitle}
         />
       </form>
     </header>
