@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -33,20 +34,23 @@ export const App: React.FC = () => {
     () => todos.filter(todo => todo.completed), [todos],
   );
 
-  const filteredTodos = useMemo(() => {
+  const filteredTodos = () => {
     switch (filterType) {
       case FilterType.Completed:
-        return todos.filter(todo => todo.completed);
+        return completedTodos;
 
       case FilterType.Active:
-        return todos.filter(todo => !todo.completed);
+        return activeTodos;
 
       default:
         return todos;
     }
-  }, [todos, filterType]);
+  };
 
-  const handleChangeFilter = (filter: FilterType) => {
+  const handleChangeFilter = (filter: FilterType) => (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    event.preventDefault();
     setFilterType(filter);
   };
 
@@ -62,7 +66,7 @@ export const App: React.FC = () => {
         <TodoInput isActiveButton={activeTodos.length > 0} />
 
         <section className="todoapp__main">
-          <TodoList todos={filteredTodos} />
+          <TodoList todos={filteredTodos()} />
         </section>
 
         {todos.length > 0 && (
@@ -74,24 +78,33 @@ export const App: React.FC = () => {
             <nav className="filter">
               <a
                 href="#/"
-                className={`filter__link ${filterType === FilterType.All ? 'selected' : ''}`}
-                onClick={() => handleChangeFilter(FilterType.All)}
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.All },
+                )}
+                onClick={handleChangeFilter(FilterType.All)}
               >
                 {FilterType.All}
               </a>
 
               <a
                 href="#/active"
-                className={`filter__link ${filterType === FilterType.Active ? 'selected' : ''}`}
-                onClick={() => handleChangeFilter(FilterType.Active)}
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.Active },
+                )}
+                onClick={handleChangeFilter(FilterType.Active)}
               >
                 {FilterType.Active}
               </a>
 
               <a
                 href="#/completed"
-                className={`filter__link ${filterType === FilterType.Completed ? 'selected' : ''}`}
-                onClick={() => handleChangeFilter(FilterType.Completed)}
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.Completed },
+                )}
+                onClick={handleChangeFilter(FilterType.Completed)}
               >
                 {FilterType.Completed}
               </a>
