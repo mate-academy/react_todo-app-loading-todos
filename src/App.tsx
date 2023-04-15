@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { UserWarning } from './UserWarning';
-import { getTodos } from './api/todos';
-import { Todo } from './types/Todo';
-import { ListofTodo } from './Components/ListofTodo/ListofTodo';
-import { Error } from './Components/Error/Error';
-import { FilterTodo } from './Components/FilterTodo/FilterTodo';
-import { FilterStatus } from './types/FilterStatus';
+import React, { useEffect, useMemo, useState } from "react";
+import { UserWarning } from "./UserWarning";
+import { getTodos } from "./api/todos";
+import { Todo } from "./types/Todo";
+import { ListofTodo } from "./Components/ListofTodo/ListofTodo";
+import { Error } from "./Components/Error/Error";
+import { FilterTodo } from "./Components/FilterTodo/FilterTodo";
+import { FilterStatus } from "./types/FilterStatus";
 
 const USER_ID = 6429;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
-  const activeTodos = useMemo(() => {
+  const activeTodosСount = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
   }, [todos]);
   const completedTodos = useMemo(() => {
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then((result) => setTodos(result))
-      .catch(() => setError('Unable to load the todos'));
+      .catch(() => setError("Unable to load the todos"));
   }, []);
 
   const currentTodos = useMemo(() => {
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           <button type="button" className="todoapp__toggle-all active">
-            {' '}
+            {" "}
           </button>
           <form>
             <input
@@ -70,7 +70,7 @@ export const App: React.FC = () => {
             </section>
 
             <footer className="todoapp__footer">
-              <span className="todo-count">{`${activeTodos} items left`}</span>
+              <span className="todo-count">{`${activeTodosСount} items left`}</span>
 
               <FilterTodo filter={filter} onFilterChange={setFilter} />
 
@@ -83,8 +83,7 @@ export const App: React.FC = () => {
           </>
         )}
       </div>
-
-      <Error error={error} onClear={() => setError(' ')} />
+      {error && <Error error={error} onClear={() => setError(" ")} />}
     </div>
   );
 };
