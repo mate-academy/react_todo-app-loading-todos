@@ -1,17 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
+import { TodoStatus } from '../../types/TodoStatus/TodoStatus';
 
 type Props = {
-  activeFilter: string,
-  handleFilterAll: () => void,
-  handleFilterActive: () => void,
-  handleFilterCompleted: () => void,
+  handleFilter: (value: TodoStatus) => void,
+  activeFilter: TodoStatus,
 };
 
 export const TodoFooter: React.FC<Props> = ({
-  handleFilterAll,
-  handleFilterActive,
-  handleFilterCompleted,
+  handleFilter,
   activeFilter,
 }) => {
   return (
@@ -21,33 +18,33 @@ export const TodoFooter: React.FC<Props> = ({
       </span>
       <nav className="filter">
         <a
-          href="#/all"
+          href={`#/${TodoStatus.All}`}
           className={classNames('filter__link', {
-            selected: activeFilter === 'all',
+            selected: activeFilter === 'All',
           })}
-          onClick={handleFilterAll}
+          onClick={() => handleFilter(TodoStatus.All)}
         >
-          All
+          {TodoStatus.All}
         </a>
 
         <a
-          href="#/active"
+          href={`#/${TodoStatus.Active}`}
           className={classNames('filter__link', {
-            selected: activeFilter === 'active',
+            selected: activeFilter === 'Active',
           })}
-          onClick={handleFilterActive}
+          onClick={() => handleFilter(TodoStatus.Active)}
         >
-          Active
+          {TodoStatus.Active}
         </a>
 
         <a
-          href="#/completed"
+          href={`#/${TodoStatus.Completed}`}
           className={classNames('filter__link', {
-            selected: activeFilter === 'completed',
+            selected: activeFilter === 'Completed',
           })}
-          onClick={handleFilterCompleted}
+          onClick={() => handleFilter(TodoStatus.Completed)}
         >
-          Completed
+          {TodoStatus.Completed}
         </a>
       </nav>
 

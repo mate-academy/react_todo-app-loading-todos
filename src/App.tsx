@@ -7,16 +7,21 @@ import { TodosList } from './components/TodoList/TodoList';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoError } from './components/TodoError/TodoError';
+import { TodoStatus } from './types/TodoStatus/TodoStatus';
 
-const statusTodos = (todos: Todo[], status: string) => {
+const statusTodos = (todos: Todo[], filterBy: TodoStatus) => {
   let filteredTodos = todos;
 
-  if (status === 'active') {
-    filteredTodos = todos.filter(item => !item.completed);
-  } else if (status === 'completed') {
-    filteredTodos = todos.filter(item => item.completed);
-  } else {
-    filteredTodos = todos;
+  switch (filterBy) {
+    case TodoStatus.Active:
+      filteredTodos = todos.filter(item => !item.completed);
+      break;
+    case TodoStatus.Completed:
+      filteredTodos = todos.filter(item => item.completed);
+      break;
+    case TodoStatus.All:
+    default:
+      break;
   }
 
   return filteredTodos;
@@ -27,7 +32,7 @@ const USER_ID = 6709;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isActive, setIsActive] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState<TodoStatus>(TodoStatus.All);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -37,6 +42,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setError('Unable to add a todo');
+
         setTimeout(() => {
           setError('');
         }, 3000);
@@ -44,16 +50,14 @@ export const App: React.FC = () => {
   }, [todos]);
 
   const handleChangeCompleted = (id: number) => {
-    const completed = todos.map(item => {
-      if (item.id === id) {
-        return {
+    const completed = todos.map(item => (
+      item.id === id
+        ? {
           ...item,
           completed: !item.completed,
-        };
-      }
-
-      return item;
-    });
+        }
+        : item
+    ));
 
     setTodos(completed);
   };
@@ -62,25 +66,9 @@ export const App: React.FC = () => {
     setIsActive(!isActive);
   };
 
-  const handleFilterAll = () => {
-    setActiveFilter('all');
-  };
-
-  const handleFilterActive = () => {
-    setActiveFilter('active');
-  };
-
-  const handleFilterCompleted = () => {
-    setActiveFilter('completed');
-  };
-
   useEffect(() => {
     const result = todos.map(item => {
-      if (isActive) {
-        return { ...item, completed: true };
-      }
-
-      return { ...item, completed: false };
+      return { ...item, completed: isActive };
     });
 
     setTodos(result);
@@ -105,20 +93,17 @@ export const App: React.FC = () => {
             handleChangeCompleted={handleChangeCompleted}
           />
         </section>
-
-        <footer className="todoapp__footer">
-          {todos.length !== 0 && (
+        {todos.length !== 0 && (
+          <footer className="todoapp__footer">
             <TodoFooter
-              handleFilterAll={handleFilterAll}
-              handleFilterActive={handleFilterActive}
-              handleFilterCompleted={handleFilterCompleted}
+              handleFilter={setActiveFilter}
               activeFilter={activeFilter}
             />
-          )}
-        </footer>
+          </footer>
+        )}
       </div>
 
-      <TodoError error={error} setError={setError} />
+      {error && (<TodoError error={error} setError={setError} />) }
     </div>
   );
 };

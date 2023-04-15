@@ -7,20 +7,22 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ handleChangeCompleted, todo }) => {
+  const { id, title, completed } = todo;
+
   return (
     <>
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          onChange={() => handleChangeCompleted(todo.id)}
+          checked={completed}
+          onChange={() => handleChangeCompleted(id)}
         />
       </label>
       <span
         className="todo__title"
       >
-        {todo.title}
+        {title}
       </span>
 
       <button

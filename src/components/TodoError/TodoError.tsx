@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import classNames from 'classnames';
 
@@ -15,6 +14,7 @@ export const TodoError: React.FC<Props> = ({ error, setError }) => (
   )}
   >
 
+    {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
     <button
       type="button"
       className="delete"
