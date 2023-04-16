@@ -6,7 +6,7 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-export const todosFilter = (todos: Todo[], filter: FilterBy) => {
+export const filterTodos = (todos: Todo[], filter: FilterBy) => {
   const filtredTodos = todos.filter(todo => {
     switch (filter) {
       case FilterBy.All:

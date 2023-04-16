@@ -2,34 +2,39 @@
 import { useState, useEffect, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
-import { getTodos, todosFilter } from './api/todos';
+import { getTodos, filterTodos } from './api/todos';
 import { FilterBy } from './types/FilterBy';
 import { NewTodoInput } from './components/NewTodoInput';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 import { ErrorMessage } from './types/ErrorMessage';
 import { NotificationError } from './components/NotificationError';
+import { Loader } from './components/Loader';
 
 const USER_ID = 6986;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
   const [error, setError] = useState<ErrorMessage | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const activeTodosCount = todosFilter(todos, FilterBy.ACTIVE).length;
-  const completedTodosCount = todosFilter(todos, FilterBy.COMPLETED).length;
-  const isThereAreActiveTodos = todos.length === completedTodosCount;
+  const activeTodosCount = filterTodos(todos, FilterBy.ACTIVE).length;
+  const completedTodosCount = filterTodos(todos, FilterBy.COMPLETED).length;
+  const isAllCompleted = todos.length === completedTodosCount;
 
   const getTodosFromServer = async () => {
     try {
+      setIsLoading(true);
       const todosFromServer = await getTodos(USER_ID);
 
       setTodos(todosFromServer);
-      setVisibleTodos([...todosFromServer]);
     } catch {
       setError(ErrorMessage.DOWNLOAD);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,17 +42,17 @@ export const App: React.FC = () => {
     getTodosFromServer();
   }, []);
 
-  useMemo(() => {
-    const filteredTodos = todosFilter(todos, filterBy);
-
-    setVisibleTodos([...filteredTodos]);
-  }, [filterBy]);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, filterBy);
+  }, [todos, filterBy]);
 
   const errorReset = () => {
     setTimeout(() => {
       setError(null);
     }, 3000);
   };
+
+  const shouldDisplayTodos = !isLoading && !isError && todos;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -57,20 +62,24 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <div className="todoapp__content">
-        <NewTodoInput isButtonActive={isThereAreActiveTodos} />
+      {isLoading && (
+        <Loader />)}
+      {shouldDisplayTodos && (
+        <div className="todoapp__content">
+          <NewTodoInput isButtonActive={isAllCompleted} />
 
-        <TodoList todos={visibleTodos} />
+          <TodoList todos={filteredTodos} />
 
-        {todos.length !== 0 && (
-          <TodosFilter
-            todosLeft={activeTodosCount}
-            completedLeft={completedTodosCount}
-            filterBy={filterBy}
-            setFilterBy={setFilterBy}
-          />
-        )}
-      </div>
+          {!!todos.length && (
+            <TodosFilter
+              todosLeft={activeTodosCount}
+              todosCompleted={completedTodosCount}
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+            />
+          )}
+        </div>
+      )}
 
       {error && (
         <NotificationError

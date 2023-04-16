@@ -4,14 +4,14 @@ import { FilterBy } from '../../types/FilterBy';
 
 type Props = {
   todosLeft: number,
-  completedLeft: number,
+  todosCompleted: number,
   filterBy: FilterBy,
   setFilterBy: (filter: FilterBy) => void,
 };
 
 export const TodosFilter: React.FC<Props> = React.memo(({
   todosLeft,
-  completedLeft,
+  todosCompleted,
   filterBy,
   setFilterBy,
 }) => {
@@ -50,7 +50,7 @@ export const TodosFilter: React.FC<Props> = React.memo(({
       <button
         type="button"
         className="todoapp__clear-completed"
-        disabled={!completedLeft}
+        disabled={!todosCompleted}
       >
         Clear completed
       </button>
