@@ -43,9 +43,13 @@ export const App: React.FC = () => {
       .catch(() => {
         setError('Unable to add a todo');
 
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setError('');
         }, 3000);
+
+        return () => {
+          clearTimeout(timer);
+        };
       });
   }, [todos]);
 
