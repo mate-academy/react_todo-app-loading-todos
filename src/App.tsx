@@ -5,7 +5,7 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 
-const USER_ID = 1;
+const USER_ID = 7094;
 
 enum Filter {
   All = 'all',
@@ -162,13 +162,19 @@ export const App: React.FC = () => {
                   <button type="button" className="todo__remove">×</button>
                 </>
               ) : (
-                <form>
+                <form onSubmit={
+                  (event) => {
+                    event.preventDefault(); setActiveTodoId(0);
+                  }
+                }
+                >
                   <input
                     type="text"
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
                     value={todo.title}
                     onChange={handleTodoTitleChange}
+                    onBlur={() => setActiveTodoId(0)}
                   />
                 </form>
               )}
@@ -311,7 +317,7 @@ export const App: React.FC = () => {
             <button
               type="button"
               className="delete"
-              onClick={() => handleCloseNotification}
+              onClick={handleCloseNotification}
             />
           </div>
         )

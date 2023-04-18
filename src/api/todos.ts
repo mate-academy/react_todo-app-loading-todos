@@ -7,8 +7,8 @@ export const getTodos = async (userId: number) => {
   return response;
 };
 
-export const postTodos = async (userId: number) => {
-  const response = await client.post<Todo[]>(`/todos?userId=${userId}`, { userId });
+export const postTodos = async (userId: number, todo: Todo) => {
+  const response = await client.post<Todo[]>(`/todos?userId=${userId}`, todo);
 
   return response;
 };
