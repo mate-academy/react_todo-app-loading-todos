@@ -6,7 +6,7 @@ import { TodoStatus } from './types/TodoStatus';
 import { ErrorMessage } from './types/ErrorMessage';
 import { getTodos, USER_ID } from './api/todos';
 import { Header } from './components/Header';
-import { TodoList } from './components/TodoList.tsx';
+import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 

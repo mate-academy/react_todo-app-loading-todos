@@ -12,9 +12,13 @@ export const ErrorNotification: React.FC<Props> = ({
   onCloseError,
 }) => {
   useEffect(() => {
-    setTimeout(() => {
+    const timer1 = setTimeout(() => {
       onCloseError();
     }, 3000);
+
+    return () => {
+      clearTimeout(timer1);
+    };
   }, [onCloseError]);
 
   return (
@@ -35,7 +39,7 @@ export const ErrorNotification: React.FC<Props> = ({
         ×
       </button>
 
-      <>{errorMessage}</>
+      {errorMessage}
     </div>
   );
 };
