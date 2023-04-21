@@ -17,6 +17,10 @@ export const Footer: React.FC<Props> = ({
   const itemsLeft = todos.filter(todo => !todo.completed).length;
   const completedItems = todos.filter(todo => todo.completed).length;
 
+  const onFilterChange = (filter: TodoStatus) => () => {
+    setTodoStatus(filter);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -30,7 +34,7 @@ export const Footer: React.FC<Props> = ({
             'filter__link',
             { selected: todoStatus === TodoStatus.ALL },
           )}
-          onClick={() => setTodoStatus(TodoStatus.ALL)}
+          onClick={onFilterChange(TodoStatus.ALL)}
         >
           All
         </a>
@@ -41,7 +45,7 @@ export const Footer: React.FC<Props> = ({
             'filter__link',
             { selected: todoStatus === TodoStatus.ACTIVE },
           )}
-          onClick={() => setTodoStatus(TodoStatus.ACTIVE)}
+          onClick={onFilterChange(TodoStatus.ACTIVE)}
         >
           Active
         </a>
@@ -52,7 +56,7 @@ export const Footer: React.FC<Props> = ({
             'filter__link',
             { selected: todoStatus === TodoStatus.COMPLETED },
           )}
-          onClick={() => setTodoStatus(TodoStatus.COMPLETED)}
+          onClick={onFilterChange(TodoStatus.COMPLETED)}
         >
           Completed
         </a>

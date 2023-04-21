@@ -30,6 +30,8 @@ export const App: React.FC = () => {
     }));
   }, [todoStatus, todos]);
 
+  const onCloseError = () => setHasError(ErrorMessage.NONE);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,7 +72,7 @@ export const App: React.FC = () => {
       {hasError && (
         <ErrorNotification
           errorMessage={hasError}
-          closeError={() => setHasError(ErrorMessage.NONE)}
+          onCloseError={onCloseError}
         />
       )}
     </div>

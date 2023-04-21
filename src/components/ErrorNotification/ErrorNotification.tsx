@@ -4,18 +4,18 @@ import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage;
-  closeError: () => void;
+  onCloseError: () => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
-  closeError,
+  onCloseError,
 }) => {
   useEffect(() => {
     setTimeout(() => {
-      closeError();
+      onCloseError();
     }, 3000);
-  }, [closeError]);
+  }, [onCloseError]);
 
   return (
     <div
@@ -30,7 +30,7 @@ export const ErrorNotification: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={closeError}
+        onClick={onCloseError}
       >
         ×
       </button>
