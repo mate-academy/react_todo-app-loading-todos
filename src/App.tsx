@@ -1,10 +1,52 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { useState, useEffect, useMemo } from 'react';
 import React from 'react';
+import { ErrorMessage } from './types/ErrorMessage';
 import { UserWarning } from './UserWarning';
+import {getTodos} from './api/todos';
+import { Footer } from './components/Footer/Footer';
+import { Todo } from './types/Todo';
+import { ToDoList } from './components/ToDoList/ToDoList';
+import { TodoStatus } from './types/TodoStatus';
+import { ErrorNotification } from './components/ErrorMessage/ErrorNotification';
 
-const USER_ID = 0;
+const USER_ID = 7035;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [ todoStatus, setTodoStatus ] = useState(TodoStatus.ALL);
+  const [errorMessage, setErrorMessage]
+  = useState<ErrorMessage>(ErrorMessage.NONE);
+
+  const visibleTodos = useMemo(() => {
+    return (todos.filter((todo) => {
+      switch (todoStatus) {
+        case TodoStatus.ACTIVE:
+          return !todo.completed;
+        case TodoStatus.COMPLETED:
+          return todo.completed;
+        default:
+          return true;
+      }
+    })
+    );
+  }, [todoStatus, todos]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const todosFromServer = await getTodos(USER_ID);
+
+        setTodos(todosFromServer);
+      } catch (error) {
+        console.log('122112');
+      }
+    };
+
+    fetchData();
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -29,128 +71,22 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {/* This is a completed todo */}
-          <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span className="todo__title">Completed Todo</span>
-
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
-
-            {/* overlay will cover the todo while it is being updated */}
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is not completed */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input type="checkbox" className="todo__status" />
-            </label>
-
-            <span className="todo__title">Todo is being saved now</span>
-            <button type="button" className="todo__remove">×</button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+          <ToDoList todos={visibleTodos}/>
         </section>
-
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
-
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
-
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
+        {todos && (
+          <Footer
+          todos={todos}
+          setTodoStatus={setTodoStatus}
+        />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorNotification
+          errorMessage={errorMessage}
+          closeError={() => setErrorMessage(ErrorMessage.NONE)}
+        />
     </div>
   );
 };
