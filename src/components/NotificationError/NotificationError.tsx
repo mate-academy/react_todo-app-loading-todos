@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { ErrorAction } from '../../types/ErrorAction';
 
@@ -9,11 +9,8 @@ type Props = {
 };
 
 export const NotificationError: React.FC<Props> = ({ action, resetError }) => {
-  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
-
   useEffect(() => {
     setTimeout(() => {
-      setIsNotificationVisible(false);
       resetError();
     }, 3000);
   }, []);
@@ -26,15 +23,12 @@ export const NotificationError: React.FC<Props> = ({ action, resetError }) => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: !isNotificationVisible },
         )}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => {
-            setIsNotificationVisible(false);
-          }}
+          onClick={resetError}
         />
 
         {`Unable to ${action} a todo`}
