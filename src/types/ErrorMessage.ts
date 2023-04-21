@@ -3,5 +3,5 @@ export enum ErrorMessage {
   LOAD = 'Unable to load a todo',
   ADD = 'Unable to add a todo',
   DELETE = 'Unable to delete a todo',
-  UPDATE = 'Unable to apdate a todo',
+  UPDATE = 'Unable to update a todo',
 }

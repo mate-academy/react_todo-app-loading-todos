@@ -15,7 +15,7 @@ export const ErrorNotification: React.FC<Props> = ({
     setTimeout(() => {
       closeError();
     }, 3000);
-  }, []);
+  }, [closeError]);
 
   return (
     <div
