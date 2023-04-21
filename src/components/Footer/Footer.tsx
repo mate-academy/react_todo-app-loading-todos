@@ -62,7 +62,6 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       {completedItems > 0 && (
         <button
           type="button"
