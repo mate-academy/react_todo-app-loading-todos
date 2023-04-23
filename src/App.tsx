@@ -51,7 +51,7 @@ export const App: React.FC = () => {
             }
           }}
         />
-        {isEnterPressed && (
+        {todos.length > 0 && (
           <TodoList
             todos={todos}
             selectedTodoId={selectedTodoId}
@@ -62,7 +62,7 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-      {todos.length && <Footer count={count} />}
+      {todos.length > 0 && <Footer count={count} />}
     </div>
   );
 };
