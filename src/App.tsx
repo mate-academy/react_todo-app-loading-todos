@@ -15,21 +15,20 @@ const USER_ID = 9937;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState(ErrorType.None);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
+  const getTodosFromServer = async () => {
+    try {
+      setErrorMessage(ErrorType.None);
+      const todosFromServer = await getTodos(USER_ID);
+
+      setTodos(todosFromServer);
+    } catch (error) {
+      setErrorMessage(ErrorType.Load);
+    }
+  };
+
   useEffect(() => {
-    const getTodosFromServer = async () => {
-      try {
-        setErrorMessage(ErrorType.None);
-        const todosFromServer = await getTodos(USER_ID);
-
-        setTodos(todosFromServer);
-      } catch (error) {
-        setErrorMessage(ErrorType.Load);
-      }
-    };
-
     getTodosFromServer();
   }, []);
 
@@ -40,21 +39,17 @@ export const App: React.FC = () => {
     [todos],
   );
 
-  useEffect(() => {
-    const filteredTodos = (() => {
-      switch (filterBy) {
-        case FilterBy.All:
-          return todos;
-        case FilterBy.Active:
-          return todos.filter(todo => !todo.completed);
-        case FilterBy.Completed:
-          return todos.filter(todo => todo.completed);
-        default:
-          return todos;
-      }
-    });
+  const visibleTodos = useMemo(() => {
+    switch (filterBy) {
+      case FilterBy.Active:
+        return todos.filter(todo => !todo.completed);
 
-    setVisibleTodos(filteredTodos);
+      case FilterBy.Completed:
+        return todos.filter(todo => todo.completed);
+
+      default:
+        return todos;
+    }
   }, [filterBy, todos]);
 
   if (!USER_ID) {
