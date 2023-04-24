@@ -7,18 +7,13 @@ import { getTodos } from './api/todos';
 import { Todo as TodoType } from './types/Todo';
 import { Todo } from './components/Todo';
 import { Filter } from './components/Filter';
+import { FilterParams } from './components/Filter/FilterParams';
 
 const USER_ID = 9925;
 
-export enum FilterParams {
-  all = 'all',
-  completed = 'completed',
-  active = 'active',
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
-  const [filterParam, setFilterParam] = useState('all');
+  const [filterParam, setFilterParam] = useState(FilterParams.all);
   const [error, setError] = useState(false);
   const [activeTodos, setActiveTodos] = useState(0);
   const [completedTodos, setCompletedTodos] = useState(0);
@@ -84,21 +79,26 @@ export const App: React.FC = () => {
                 <Todo todoItem={todo} key={todo.id} />
               ))}
             </section>
-
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${activeTodos} items left`}
-              </span>
-
-              <Filter setFilterParamHandler={setFilterParam} />
-
-              {!!completedTodos && (
-                <button type="button" className="todoapp__clear-completed">
-                  Clear completed
-                </button>
-              )}
-            </footer>
           </>
+        )}
+
+        {!!todos.length && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodos} items left`}
+            </span>
+
+            <Filter
+              setFilterParamHandler={setFilterParam}
+              filterParam={filterParam}
+            />
+
+            {!!completedTodos && (
+              <button type="button" className="todoapp__clear-completed">
+                Clear completed
+              </button>
+            )}
+          </footer>
         )}
       </div>
 
