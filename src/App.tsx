@@ -1,9 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState, useEffect, useMemo } from 'react';
-import React from 'react';
 import { ErrorMessage } from './types/ErrorMessage';
 import { UserWarning } from './UserWarning';
-import {getTodos} from './api/todos';
+import { getTodos } from './api/todos';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
 import { ToDoList } from './components/ToDoList/ToDoList';
@@ -14,7 +12,7 @@ const USER_ID = 7035;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [ todoStatus, setTodoStatus ] = useState(TodoStatus.ALL);
+  const [todoStatus, setTodoStatus] = useState(TodoStatus.ALL);
   const [errorMessage, setErrorMessage]
   = useState<ErrorMessage>(ErrorMessage.NONE);
 
@@ -32,15 +30,18 @@ export const App: React.FC = () => {
     );
   }, [todoStatus, todos]);
 
-
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const todosFromServer = await getTodos(USER_ID);
+      const todosFromServer = await getTodos(USER_ID);
 
+      try {
         setTodos(todosFromServer);
-      } catch (error) {
-        console.log('122112');
+      } catch {
+        setErrorMessage(ErrorMessage.LOAD);
+
+        setTimeout(() => {
+          setErrorMessage(ErrorMessage.NONE);
+        }, 2000);
       }
     };
 
@@ -57,10 +58,13 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
-
-          {/* Add a todo on form submit */}
+          {todos && (
+            <button
+              type="button"
+              className="todoapp__toggle-all active"
+              aria-label="button"
+            />
+          )}
           <form>
             <input
               type="text"
@@ -71,22 +75,19 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          <ToDoList todos={visibleTodos}/>
+          <ToDoList todos={visibleTodos} />
         </section>
         {todos && (
           <Footer
-          todos={todos}
-          setTodoStatus={setTodoStatus}
-        />
+            todos={todos}
+            setTodoStatus={setTodoStatus}
+          />
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification
-          errorMessage={errorMessage}
-          closeError={() => setErrorMessage(ErrorMessage.NONE)}
-        />
+        errorMessage={errorMessage}
+        closeError={() => setErrorMessage(ErrorMessage.NONE)}
+      />
     </div>
   );
 };

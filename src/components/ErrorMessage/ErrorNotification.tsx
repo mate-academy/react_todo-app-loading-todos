@@ -1,14 +1,16 @@
 import React from 'react';
-import { ErrorMessage } from '../../types/ErrorMessage';
 import classNames from 'classnames';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage,
   closeError: () => void,
 };
 
-export const ErrorNotification: React.FC<Props> = ({errorMessage,
-  closeError,}) => {
+export const ErrorNotification: React.FC<Props> = ({
+  errorMessage,
+  closeError,
+}) => {
   return (
     <div
       className={classNames(
@@ -30,4 +32,4 @@ export const ErrorNotification: React.FC<Props> = ({errorMessage,
       <>{errorMessage}</>
     </div>
   );
-}
+};

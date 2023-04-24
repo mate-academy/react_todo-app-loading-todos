@@ -1,29 +1,20 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { ToDoInfo } from '../ToDoInfo/ToDoInfo';
 
 type Props = {
   todos: Todo[];
-}
+};
 
-export const ToDoList: React.FC<Props> = ({todos}) => {
+export const ToDoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
       {todos.map((todo) => (
-      <div className="todo">
-      <label className="todo__status-label">
-        <input type="checkbox" className="todo__status" />
-      </label>
-
-      <span className="todo__title">{todo.title}</span>
-      <button type="button" className="todo__remove">×</button>
-
-      {/* 'is-active' class puts this modal on top of the todo */}
-      <div className="modal overlay is-active">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
-    </div>
-    ))}      
+        <ToDoInfo
+          key={todo.id}
+          todo={todo}
+        />
+      ))}
     </section>
   );
 };
