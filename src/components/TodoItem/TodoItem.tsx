@@ -6,9 +6,11 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { completed, title } = todo;
+
   return (
     <div
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed })}
     >
       <label className="todo__status-label">
         <input
@@ -17,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      <span className="todo__title">{title}</span>
 
       <button type="button" className="todo__remove">×</button>
 

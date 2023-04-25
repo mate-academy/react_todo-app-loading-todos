@@ -17,7 +17,7 @@ export const Notification: React.FC = () => {
         onClick={() => setOnButtonDelete(false)}
       />
 
-      Unable to add a todo
+      Unable to load a todo
     </div>
   );
 };
