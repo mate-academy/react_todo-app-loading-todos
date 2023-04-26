@@ -4,10 +4,16 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
+  handleDeleteTodo: (id: number) => void,
 };
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { title, completed } = todo;
+export const TodoItem: React.FC<Props> = ({ todo, handleDeleteTodo }) => {
+  const { title, completed, id } = todo;
+  const removeTodo = () => {
+    if (handleDeleteTodo) {
+      handleDeleteTodo(id);
+    }
+  };
 
   return (
     <div className={cn('todo', { completed })}>
@@ -21,7 +27,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       <span className="todo__title">{title}</span>
 
-      <button type="button" className="todo__remove">
+      <button
+        type="button"
+        className="todo__remove"
+        onClick={removeTodo}
+      >
         ×
       </button>
 

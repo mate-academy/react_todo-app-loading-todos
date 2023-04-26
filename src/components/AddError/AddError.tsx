@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-export const AddError: React.FC = () => {
+type Props = {
+  error: string,
+};
+
+export const AddError: React.FC<Props> = ({ error }) => {
   const [closeError, setCloseError] = useState(false);
 
   return (
@@ -20,7 +24,7 @@ export const AddError: React.FC = () => {
         onClick={() => setCloseError(true)}
       />
 
-      Unable to add a todo
+      {error}
     </div>
   );
 };
