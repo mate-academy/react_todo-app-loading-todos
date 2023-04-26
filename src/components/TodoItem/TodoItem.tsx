@@ -9,7 +9,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { completed, title } = todo;
 
   return (
-    <div
+    <li
       className={classNames('todo', { completed })}
     >
       <label className="todo__status-label">
@@ -27,6 +27,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
-    </div>
+    </li>
   );
 };

@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(todosFromServer => setTodos(todosFromServer))
+      .then(setTodos)
       .catch(() => {
         setError(true);
         setTimeout(() => {
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
       });
   }, [todos]);
 
-  const filteredTodos = () => {
+  const filterTodos = () => {
     switch (filterType) {
       case Status.Active:
         return todos.filter(todo => !todo.completed);
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          <TodoList todos={filteredTodos()} />
+          <TodoList todos={filterTodos()} />
         </section>
 
         {todos.length > 0 && (

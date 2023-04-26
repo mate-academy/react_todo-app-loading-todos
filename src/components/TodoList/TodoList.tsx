@@ -8,9 +8,7 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos }) => (
   <ul style={{ listStyleType: 'none' }}>
     {todos.map((todo: Todo) => (
-      <li key={todo.id}>
-        <TodoItem todo={todo} />
-      </li>
+      <TodoItem key={todo.id} todo={todo} />
     ))}
   </ul>
 );
