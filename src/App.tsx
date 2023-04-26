@@ -19,13 +19,13 @@ export const App: React.FC = () => {
 
   const filterTodos = () => {
     switch (filter) {
-      case Filter.ALL:
-      default:
-        return [...todos];
       case Filter.ACTIVE:
         return todos.filter(todo => !todo.completed);
       case Filter.COMPLETED:
         return todos.filter(todo => todo.completed);
+      case Filter.ALL:
+      default:
+        return [...todos];
     }
   };
 
