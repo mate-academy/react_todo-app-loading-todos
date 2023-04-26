@@ -32,8 +32,8 @@ export const Header: FC<Props> = ({ setError, setLoading }) => {
         setLoading(true);
         createNewTodo(USER_ID, newTodoQuery);
         setNewTodoQuery('');
-      } catch (err: any) {
-        setError(err?.message);
+      } catch (err) {
+        setError(ErrorType.ADD);
       } finally {
         setLoading(false);
       }

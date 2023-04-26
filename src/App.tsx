@@ -37,7 +37,7 @@ export const App: React.FC = () => {
 
         setTodos(uploadedTodos);
       } catch (err) {
-        setError(ErrorType.ADD);
+        setError(ErrorType.LOAD);
       } finally {
         setLoading(false);
       }
