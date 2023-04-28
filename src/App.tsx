@@ -4,51 +4,34 @@ import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
-
-enum TypeFilterin {
-  All = 'all',
-  Completed = 'comleted',
-  Active = 'active',
-}
+import { TodoList } from './components/TodoList';
+import { TypeFilterin } from './types/FilterTypes';
+import { Footer } from './components/Footer';
+import { ErrorType } from './types/ErrorType';
 
 const USER_ID = 9940;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [typeOfFiltering, setTypeOfFiltering] = useState('all');
-  const [dataError, setError] = useState<Error | null>(null);
-  const [closeErrorButton, setCloseErrorButton] = useState(false);
-  const [hideError, setHideError] = useState(false);
+  const [
+    typeOfFiltering,
+    setTypeOfFiltering,
+  ] = useState<TypeFilterin>(TypeFilterin.All);
+  const [dataError, setError] = useState<string>('');
 
   const getTodos = () => {
     return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
   };
-
-  useEffect(() => {
-    switch (typeOfFiltering) {
-      case TypeFilterin.Active:
-        return setVisibleTodos([...todos]
-          .filter(todo => !todo.completed));
-      case TypeFilterin.Completed:
-        return setVisibleTodos([...todos]
-          .filter(todo => todo.completed));
-      case TypeFilterin.All:
-      default:
-        return setVisibleTodos([...todos]);
-    }
-  }, [typeOfFiltering]);
 
   const fetchData = async () => {
     try {
       const todosFromServer = await getTodos();
 
       setTodos(todosFromServer);
-      setVisibleTodos(todosFromServer);
     } catch (error) {
-      setError(new Error());
+      setError(ErrorType.Load);
       setTimeout(() => {
-        setHideError(true);
+        setError('');
       }, 3000);
     }
   };
@@ -80,122 +63,35 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {visibleTodos && (
-          <section className="todoapp__main">
-            {visibleTodos.map((todo:Todo) => (
-              <div
-                key={todo.id}
-                className={
-                  classNames('todo', { completed: todo.completed })
-                }
-              >
-                <label className="todo__status-label">
-                  <input
-                    type="checkbox"
-                    className="todo__status"
-                    name="complete"
-                    id={todo.id.toString()}
-                  />
-                </label>
-
-                <span className="todo__title">{todo.title}</span>
-
-                {/* Remove button appears only on hover */}
-                <button
-                  type="button"
-                  className="todo__remove"
-                >
-                  ×
-                </button>
-
-                {/* overlay will cover the todo while it is being updated */}
-                <div className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
+        {todos && <TodoList todos={todos} typeOfFiltering={typeOfFiltering} />}
 
         {/* Hide the footer if there are no todos */}
-        {visibleTodos.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${visibleTodos.filter(todo => todo.completed === false).length} items left`}
-            </span>
-
-            {/* Active filter should have a 'selected' class */}
-            <nav className="filter">
-              <a
-                href="#/"
-                className={
-                  classNames(
-                    'filter__link',
-                    { selected: typeOfFiltering === TypeFilterin.All },
-                  )
-                }
-                onClick={() => setTypeOfFiltering(TypeFilterin.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={
-                  classNames(
-                    'filter__link',
-                    { selected: typeOfFiltering === TypeFilterin.Active },
-                  )
-                }
-                onClick={() => setTypeOfFiltering(TypeFilterin.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={
-                  classNames(
-                    'filter__link',
-                    { selected: typeOfFiltering === TypeFilterin.Completed },
-                  )
-                }
-                onClick={() => setTypeOfFiltering(TypeFilterin.Completed)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* don't show this button if there are no completed todos */}
-            <button type="button" className="todoapp__clear-completed">
-              Clear completed
-            </button>
-          </footer>
+        {todos && (
+          <Footer
+            todos={todos}
+            setTypeOfFiltering={setTypeOfFiltering}
+            typeOfFiltering={typeOfFiltering}
+          />
         )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {(dataError && !hideError) && (
+      {(dataError.length > 0) && (
         <div className={classNames(
           'notification',
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: closeErrorButton },
+          { hidden: !dataError },
         )}
         >
           <button
             type="button"
             className="delete"
-            onClick={() => setCloseErrorButton(!closeErrorButton)}
+            onClick={() => setError('')}
           />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
+          {dataError}
         </div>
       )}
     </div>
