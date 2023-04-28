@@ -1,25 +1,39 @@
 import React from 'react';
 import classNames from 'classnames';
-import { StatusOfTodos } from '../types/StatusOfTodos';
+import { TodoStatus } from '../types/TodoStatus';
+import { Todo } from '../types/Todo';
 
 type Props = {
-  status: StatusOfTodos,
-  setStatus: (value: StatusOfTodos) => void,
+  status: TodoStatus,
+  setStatus: (value: TodoStatus) => void,
+  todos: Todo[],
 };
 
-export const Footer: React.FC<Props> = ({ status, setStatus }) => {
+export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
+  const getActiveTodo = () => {
+    return (
+      todos.filter(todo => !todo.completed).length
+    );
+  };
+
+  const getCompletedTodo = () => {
+    return (
+      todos.filter(todo => todo.completed).length
+    );
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${getActiveTodo()} items left`}
       </span>
       <nav className="filter">
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: status === StatusOfTodos.All,
+            selected: status === TodoStatus.All,
           })}
-          onClick={() => setStatus(StatusOfTodos.All)}
+          onClick={() => setStatus(TodoStatus.All)}
         >
           All
         </a>
@@ -27,9 +41,9 @@ export const Footer: React.FC<Props> = ({ status, setStatus }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: status === StatusOfTodos.Active,
+            selected: status === TodoStatus.Active,
           })}
-          onClick={() => setStatus(StatusOfTodos.Active)}
+          onClick={() => setStatus(TodoStatus.Active)}
         >
           Active
         </a>
@@ -37,16 +51,21 @@ export const Footer: React.FC<Props> = ({ status, setStatus }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: status === StatusOfTodos.Completed,
+            selected: status === TodoStatus.Completed,
           })}
-          onClick={() => setStatus(StatusOfTodos.Completed)}
+          onClick={() => setStatus(TodoStatus.Completed)}
         >
           Completed
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed', {
+          'todoapp__clear-completed--hidden': getCompletedTodo() < 1,
+        })}
+
+      >
         Clear completed
       </button>
     </footer>

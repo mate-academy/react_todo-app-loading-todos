@@ -34,7 +34,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           </div>
         </div>
       ))}
-
     </section>
   );
 };
