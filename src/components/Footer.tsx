@@ -55,8 +55,8 @@ export const Footer: React.FC<Props> = ({
           className="todoapp__clear-completed"
           onClick={() => setSelectedFilter(Filter.Active)}
           style={{
-            display: visibleTodos.some(todo => todo.completed)
-              ? 'block' : 'none',
+            visibility: visibleTodos.some(todo => todo.completed)
+              ? 'visible' : 'hidden',
           }}
         >
           Clear completed
