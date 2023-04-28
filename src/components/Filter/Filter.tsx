@@ -1,45 +1,24 @@
 import classNames from 'classnames';
-import React, { MouseEvent, useContext, useState } from 'react';
+import React, { MouseEvent, useContext } from 'react';
 
 import { FilterContext } from '../../context/FilterContext';
-import { SortType } from '../../types/SortType';
+import { FilterType } from '../../types/SortType';
 
 export const Filter: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState({
-    all: true,
-    active: false,
-    completed: false,
-  });
-
-  const { setFilter } = useContext(FilterContext);
+  const { filter, setFilter } = useContext(FilterContext);
 
   const onFilterChange = (value: string) => {
     switch (value) {
-      case SortType.ACTIVE:
-        setFilter(SortType.ACTIVE);
-        setActiveFilter({
-          all: false,
-          active: true,
-          completed: false,
-        });
+      case FilterType.ACTIVE:
+        setFilter(FilterType.ACTIVE);
         break;
 
-      case SortType.COMPLETED:
-        setFilter(SortType.COMPLETED);
-        setActiveFilter({
-          all: false,
-          active: false,
-          completed: true,
-        });
+      case FilterType.COMPLETED:
+        setFilter(FilterType.COMPLETED);
         break;
 
       default:
-        setFilter(SortType.ALL);
-        setActiveFilter({
-          all: true,
-          active: false,
-          completed: false,
-        });
+        setFilter(FilterType.ALL);
     }
   };
 
@@ -55,7 +34,7 @@ export const Filter: React.FC = () => {
       <a
         href="#/"
         className={classNames('filter__link', {
-          selected: activeFilter.all,
+          selected: filter === FilterType.ALL,
         })}
         onClick={handlerOnClick}
       >
@@ -65,7 +44,7 @@ export const Filter: React.FC = () => {
       <a
         href="#/active"
         className={classNames('filter__link', {
-          selected: activeFilter.active,
+          selected: filter === FilterType.ACTIVE,
         })}
         onClick={handlerOnClick}
       >
@@ -75,7 +54,7 @@ export const Filter: React.FC = () => {
       <a
         href="#/completed"
         className={classNames('filter__link', {
-          selected: activeFilter.completed,
+          selected: filter === FilterType.COMPLETED,
         })}
         onClick={handlerOnClick}
       >

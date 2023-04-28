@@ -17,13 +17,12 @@ export const App: React.FC = () => {
   const [hasLoadingError, setHasLoadingError] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos(USER_ID)
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setIsLoading(true);
-      })
-      .catch(() => setHasLoadingError(true));
-    setIsLoading(false);
+      .then(setTodos)
+      .catch(() => setHasLoadingError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (!USER_ID) {

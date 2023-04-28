@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { SortType } from '../../types/SortType';
+import { FilterType } from '../../types/SortType';
 import { FilterContext } from '../../context/FilterContext';
 
 type Props = {
@@ -9,12 +9,12 @@ type Props = {
   isLoading: boolean,
 };
 
-const getVisibleTodos = (filter: SortType, allTodos: Todo[]) => {
+const getVisibleTodos = (filter: FilterType, allTodos: Todo[]) => {
   switch (filter) {
-    case SortType.ACTIVE:
+    case FilterType.ACTIVE:
       return allTodos.filter(todo => todo.completed === false);
 
-    case SortType.COMPLETED:
+    case FilterType.COMPLETED:
       return allTodos.filter(todo => todo.completed === true);
 
     default:
@@ -52,7 +52,7 @@ export const TodoMain: React.FC<Props> = ({ todos, isLoading }) => {
           <div
             className="modal overlay"
             style={{
-              display: !isLoading ? 'block' : 'none',
+              display: isLoading ? 'flex' : 'none',
             }}
           >
             <div className="modal-background has-background-white-ter" />

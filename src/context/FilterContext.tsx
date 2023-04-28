@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { SortType } from '../types/SortType';
+import { FilterType } from '../types/SortType';
 
 type FilterContextType = {
-  filter: SortType,
-  setFilter: React.Dispatch<React.SetStateAction<SortType>>,
+  filter: FilterType,
+  setFilter: React.Dispatch<React.SetStateAction<FilterType>>,
 };
 
 type Props = {
@@ -11,12 +11,12 @@ type Props = {
 };
 
 export const FilterContext = React.createContext<FilterContextType>({
-  filter: SortType.ALL,
+  filter: FilterType.ALL,
   setFilter: () => {},
 });
 
 export const FilterContextProvider = ({ children }: Props) => {
-  const [filter, setFilter] = useState(SortType.ALL);
+  const [filter, setFilter] = useState(FilterType.ALL);
 
   const contextValue = useMemo(() => (
     {
