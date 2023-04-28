@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 export const Notification: React.FC = () => {
   const [isButtonHidden, setIsButtonHidden] = useState(false);
-  const handlerNotification = () => {
+  const handleNotification = () => {
     setIsButtonHidden(true);
   };
 
@@ -20,7 +20,7 @@ export const Notification: React.FC = () => {
       <button
         type="button"
         className="delete"
-        onClick={handlerNotification}
+        onClick={handleNotification}
       >
         x
       </button>

@@ -68,7 +68,6 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
         className={classNames('todoapp__clear-completed', {
           'todoapp__clear-completed--hidden': completedTodoCount < 1,
         })}
-
       >
         Clear completed
       </button>
