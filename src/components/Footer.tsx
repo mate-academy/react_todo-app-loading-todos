@@ -10,22 +10,26 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
-  const getActiveTodo = () => {
-    return (
-      todos.filter(todo => !todo.completed).length
-    );
+  const activeTodoCount = todos.filter(todo => !todo.completed).length;
+
+  const completedTodoCount = todos.filter(todo => todo.completed).length;
+
+  const handlerStatusAll = () => {
+    setStatus(TodoStatus.All);
   };
 
-  const getCompletedTodo = () => {
-    return (
-      todos.filter(todo => todo.completed).length
-    );
+  const handlerStatusActive = () => {
+    setStatus(TodoStatus.Active);
+  };
+
+  const handlerStatusCompleted = () => {
+    setStatus(TodoStatus.Completed);
   };
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${getActiveTodo()} items left`}
+        {`${activeTodoCount} items left`}
       </span>
       <nav className="filter">
         <a
@@ -33,7 +37,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
           className={classNames('filter__link', {
             selected: status === TodoStatus.All,
           })}
-          onClick={() => setStatus(TodoStatus.All)}
+          onClick={handlerStatusAll}
         >
           All
         </a>
@@ -43,7 +47,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
           className={classNames('filter__link', {
             selected: status === TodoStatus.Active,
           })}
-          onClick={() => setStatus(TodoStatus.Active)}
+          onClick={handlerStatusActive}
         >
           Active
         </a>
@@ -53,7 +57,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
           className={classNames('filter__link', {
             selected: status === TodoStatus.Completed,
           })}
-          onClick={() => setStatus(TodoStatus.Completed)}
+          onClick={handlerStatusCompleted}
         >
           Completed
         </a>
@@ -62,7 +66,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
       <button
         type="button"
         className={classNames('todoapp__clear-completed', {
-          'todoapp__clear-completed--hidden': getCompletedTodo() < 1,
+          'todoapp__clear-completed--hidden': completedTodoCount < 1,
         })}
 
       >
