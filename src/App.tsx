@@ -13,21 +13,14 @@ import { Error } from './utils/Error';
 const USER_ID = 9934;
 
 const visibleTodos = (todos: Todo[], selectedFilter: Filter) => {
-  return todos.filter((todo) => {
-    if (selectedFilter === Filter.All) {
+  switch (selectedFilter) {
+    case Filter.Active:
+      return todos.filter((todo) => !todo.completed);
+    case Filter.Completed:
+      return todos.filter((todo) => todo.completed);
+    default:
       return todos;
-    }
-
-    if (selectedFilter === Filter.Active) {
-      return !todo.completed;
-    }
-
-    if (selectedFilter === Filter.Completed) {
-      return todo.completed;
-    }
-
-    return false;
-  });
+  }
 };
 
 export const App: React.FC = () => {
@@ -37,7 +30,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(data => setTodos(data))
+      .then(setTodos)
       .catch(() => setError(Error.Updating));
   }, []);
 
