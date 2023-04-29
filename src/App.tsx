@@ -37,15 +37,14 @@ export const App: React.FC = () => {
   };
 
   const getFilteredTodos = (filter: MainFilter, someTodos: Todo[]) => {
-    if (filter === MainFilter.Active) {
-      return someTodos.filter((todo) => !todo.completed);
+    switch (filter) {
+      case MainFilter.Active:
+        return someTodos.filter((todo) => !todo.completed);
+      case MainFilter.Completed:
+        return someTodos.filter((todo) => todo.completed);
+      default:
+        return someTodos;
     }
-
-    if (filter === MainFilter.Completed) {
-      return someTodos.filter((todo) => todo.completed);
-    }
-
-    return someTodos;
   };
 
   useEffect(() => {
