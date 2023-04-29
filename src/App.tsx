@@ -9,6 +9,7 @@ import { Filter } from './utils/Filter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Error } from './utils/Error';
+import { Loader } from './components/Loader';
 
 const USER_ID = 9934;
 
@@ -27,11 +28,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.All);
   const [error, setError] = useState(Error.NoError);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setError(Error.Updating));
+      .catch(() => setError(Error.Updating))
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (!USER_ID) {
@@ -47,9 +51,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList todos={visibleTodoItems} />
+        {isLoading ? <Loader /> : <TodoList todos={visibleTodoItems} />}
 
-        {(todos.length > 0) && (
+        {(!!todos.length) && (
           <Footer
             visibleTodos={visibleTodoItems}
             selectedFilter={selectedFilter}
