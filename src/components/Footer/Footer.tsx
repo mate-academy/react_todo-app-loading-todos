@@ -9,7 +9,6 @@ type Props = {
   filteredBy: FilteredBy;
   todoAmount: number;
   isCompletedPresent: boolean;
-  // clearCompleted: () => void;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -17,7 +16,6 @@ export const Footer: React.FC<Props> = ({
   filteredBy,
   todoAmount,
   isCompletedPresent,
-  // clearCompleted,
 }) => {
   const filterOptions = [
     FilteredBy.All, FilteredBy.Active, FilteredBy.Completed,
@@ -49,7 +47,6 @@ export const Footer: React.FC<Props> = ({
       <button
         type="button"
         className="todoapp__clear-completed"
-        // onClick={clearCompleted}
         style={{
           visibility: `${isCompletedPresent ? 'visible' : 'hidden'}`,
         }}

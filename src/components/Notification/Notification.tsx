@@ -25,14 +25,7 @@ export const Notification: React.FC<Props> = ({
         className="delete"
         onClick={removeNotification}
       />
-
       Unable to load todos
-
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };

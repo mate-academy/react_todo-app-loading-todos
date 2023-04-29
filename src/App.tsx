@@ -18,7 +18,6 @@ export const App: React.FC = () => {
   const [isDataLoaded, setDataLoaded] = useState(false);
   const [filteredBy, setFilteredBy] = useState<FilteredBy>(FilteredBy.All);
   const [isCompletedPresent, setCompletedPresent] = useState(false);
-  // const [editedTodoId, setEditedTodoId] = useState(0);
   const [isLoadingError, setLoadingError] = useState(false);
   let timerId = 0;
 
@@ -67,27 +66,6 @@ export const App: React.FC = () => {
     setFilteredBy(value);
   };
 
-  /* const clearCompleted = () => {
-    setTodos(todos?.filter(todo => !todo.completed) || null);
-    setCompletedPresent(false);
-  };
-
-  const removeTodo = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const targetId = event.currentTarget.parentElement?.id || 0;
-
-    setTodos(todos?.filter(todo => todo.id !== +targetId) || null);
-  };
-
-  const callEditeMode = (event: React.MouseEvent<HTMLSpanElement>) => {
-    const targetId = event.currentTarget.parentElement?.id || 0;
-
-    setEditedTodoId(+targetId);
-  };
-
-  const submitInput = () => {
-    setEditedTodoId(0);
-  }; */
-
   const removeNotification = () => {
     setLoadingError(false);
     window.clearTimeout(timerId);
@@ -109,10 +87,6 @@ export const App: React.FC = () => {
             <section className="todoapp__main">
               <Todos
                 todos={visibleTodos}
-                // removeTodo={removeTodo}
-                // editedTodoId={editedTodoId}
-                // callEditeMode={callEditeMode}
-                // submitInput={submitInput}
               />
             </section>
 
@@ -121,7 +95,6 @@ export const App: React.FC = () => {
               filteredBy={filteredBy}
               todoAmount={todos?.length}
               isCompletedPresent={isCompletedPresent}
-              // clearCompleted={clearCompleted}
             />
           </>
         )}

@@ -5,18 +5,10 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[] | null;
-  /* removeTodo: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  editedTodoId: number;
-  callEditeMode: (event: React.MouseEvent<HTMLSpanElement>) => void;
-  submitInput: () => void; */
 };
 
 export const Todos: React.FC<Props> = ({
   todos,
-  /* removeTodo,
-  editedTodoId,
-  callEditeMode,
-  submitInput, */
 }) => {
   return (
     <div>
@@ -34,22 +26,13 @@ export const Todos: React.FC<Props> = ({
               readOnly
             />
           </label>
-          {/* editedTodoId === todo.id  */ false ? (
+          {false ? (
             <form>
               <input
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
                 value={todo.title}
-                onChange={() => {}}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    // submitInput();
-                  }
-                }}
-                // onBlur={submitInput}
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus
               />
             </form>
           )
@@ -57,14 +40,12 @@ export const Todos: React.FC<Props> = ({
               <>
                 <span
                   className="todo__title"
-                  // onDoubleClick={callEditeMode}
                 >
                   {todo.title}
                 </span>
                 <button
                   type="button"
                   className="todo__remove"
-                  // onClick={removeTodo}
                 >
                   ×
                 </button>
@@ -73,7 +54,6 @@ export const Todos: React.FC<Props> = ({
           <div className={classNames(
             'modal',
             'overlay',
-            { /* 'is-active': todoStatus === '' */ },
           )}
           >
             <div className="modal-background has-background-white-ter" />
