@@ -1,25 +1,30 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TypeFilterin } from '../../types/FilterTypes';
+import { TypeOfFiltering } from '../../types/TypeOfFiltering';
 
 type Props = {
   todos: Todo[],
-  typeOfFiltering: TypeFilterin,
+  filterType: TypeOfFiltering,
 };
 
-export const TodoList:React.FC<Props> = ({ todos, typeOfFiltering }) => {
+export const TodoList:React.FC<Props> = ({
+  todos,
+  filterType: typeOfFiltering,
+}) => {
   const visibleColors = useMemo<Todo[]>(() => {
     return todos.filter(todo => {
-      if (typeOfFiltering === TypeFilterin.Active) {
-        return !todo.completed;
-      }
+      switch (typeOfFiltering) {
+        case TypeOfFiltering.Active:
+          return !todo.completed;
 
-      if (typeOfFiltering === TypeFilterin.Completed) {
-        return todo.completed;
-      }
+        case TypeOfFiltering.Completed:
+          return todo.completed;
 
-      return todo;
+        case TypeOfFiltering.All:
+        default:
+          return todo;
+      }
     });
   }, [todos, typeOfFiltering]);
 
@@ -43,7 +48,6 @@ export const TodoList:React.FC<Props> = ({ todos, typeOfFiltering }) => {
 
           <span className="todo__title">{todo.title}</span>
 
-          {/* Remove button appears only on hover */}
           <button
             type="button"
             className="todo__remove"
@@ -51,7 +55,6 @@ export const TodoList:React.FC<Props> = ({ todos, typeOfFiltering }) => {
             ×
           </button>
 
-          {/* overlay will cover the todo while it is being updated */}
           <div className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />

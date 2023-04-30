@@ -5,7 +5,7 @@ import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
-import { TypeFilterin } from './types/FilterTypes';
+import { TypeOfFiltering } from './types/TypeOfFiltering';
 import { Footer } from './components/Footer';
 import { ErrorType } from './types/ErrorType';
 
@@ -13,15 +13,16 @@ const USER_ID = 9940;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [
-    typeOfFiltering,
-    setTypeOfFiltering,
-  ] = useState<TypeFilterin>(TypeFilterin.All);
+  const [filterType, setFilterType] = useState<TypeOfFiltering>(
+    TypeOfFiltering.All,
+  );
   const [dataError, setError] = useState<string>('');
 
   const getTodos = () => {
     return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
   };
+
+  let timeoutId: ReturnType<typeof setTimeout>;
 
   const fetchData = async () => {
     try {
@@ -30,7 +31,7 @@ export const App: React.FC = () => {
       setTodos(todosFromServer);
     } catch (error) {
       setError(ErrorType.Load);
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setError('');
       }, 3000);
     }
@@ -38,6 +39,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   if (!USER_ID) {
@@ -50,10 +55,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -63,20 +66,17 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos && <TodoList todos={todos} typeOfFiltering={typeOfFiltering} />}
+        {todos && <TodoList todos={todos} filterType={filterType} />}
 
-        {/* Hide the footer if there are no todos */}
         {todos && (
           <Footer
             todos={todos}
-            setTypeOfFiltering={setTypeOfFiltering}
-            typeOfFiltering={typeOfFiltering}
+            setFilterType={setFilterType}
+            filterType={filterType}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {(dataError.length > 0) && (
         <div className={classNames(
           'notification',

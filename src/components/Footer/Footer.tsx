@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import { TypeFilterin } from '../../types/FilterTypes';
+import { TypeOfFiltering } from '../../types/TypeOfFiltering';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  setTypeOfFiltering: (x:TypeFilterin) => void;
-  typeOfFiltering: TypeFilterin;
+  setFilterType: (x:TypeOfFiltering) => void;
+  filterType: TypeOfFiltering;
 };
 
 export const Footer:React.FC<Props> = ({
   todos,
-  setTypeOfFiltering,
-  typeOfFiltering,
+  setFilterType: setTypeOfFiltering,
+  filterType: typeOfFiltering,
 }) => {
+  const notCompletedTodosCount = todos.filter(todo => !todo.completed).length;
+
+  const isDisabled = useCallback(() => {
+    return todos.find(todo => todo.completed) === undefined;
+  }, [todos]);
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todos.filter(todo => todo.completed === false).length} items left`}
+        {`${notCompletedTodosCount} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -27,12 +33,12 @@ export const Footer:React.FC<Props> = ({
           className={
             classNames(
               'filter__link',
-              { selected: typeOfFiltering === TypeFilterin.All },
+              { selected: typeOfFiltering === TypeOfFiltering.All },
             )
           }
-          onClick={() => setTypeOfFiltering(TypeFilterin.All)}
+          onClick={() => setTypeOfFiltering(TypeOfFiltering.All)}
         >
-          {TypeFilterin.All}
+          {TypeOfFiltering.All}
         </a>
 
         <a
@@ -40,12 +46,12 @@ export const Footer:React.FC<Props> = ({
           className={
             classNames(
               'filter__link',
-              { selected: typeOfFiltering === TypeFilterin.Active },
+              { selected: typeOfFiltering === TypeOfFiltering.Active },
             )
           }
-          onClick={() => setTypeOfFiltering(TypeFilterin.Active)}
+          onClick={() => setTypeOfFiltering(TypeOfFiltering.Active)}
         >
-          {TypeFilterin.Active}
+          {TypeOfFiltering.Active}
         </a>
 
         <a
@@ -53,17 +59,20 @@ export const Footer:React.FC<Props> = ({
           className={
             classNames(
               'filter__link',
-              { selected: typeOfFiltering === TypeFilterin.Completed },
+              { selected: typeOfFiltering === TypeOfFiltering.Completed },
             )
           }
-          onClick={() => setTypeOfFiltering(TypeFilterin.Completed)}
+          onClick={() => setTypeOfFiltering(TypeOfFiltering.Completed)}
         >
-          {TypeFilterin.Completed}
+          {TypeOfFiltering.Completed}
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        disabled={isDisabled()}
+      >
         Clear completed
       </button>
     </footer>
