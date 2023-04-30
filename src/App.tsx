@@ -68,7 +68,7 @@ export const App: React.FC = () => {
 
         {todos && <TodoList todos={todos} filterType={filterType} />}
 
-        {todos && (
+        {(todos.length !== 0) && (
           <Footer
             todos={todos}
             setFilterType={setFilterType}
