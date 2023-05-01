@@ -26,7 +26,6 @@ export const Footer:React.FC<Props> = ({
         {`${notCompletedTodosCount} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
