@@ -4,9 +4,14 @@ import { Filter } from '../../types/Filter';
 type Props = {
   filter: Filter,
   setFilter: (value: Filter) => void,
+  hasCompletedTodos: boolean,
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => (
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  setFilter,
+  hasCompletedTodos,
+}) => (
   <footer className="todoapp__footer">
     <span className="todo-count">
       3 items left
@@ -53,9 +58,10 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => (
       </a>
     </nav>
 
-    {/* don't show this button if there are no completed todos */}
-    <button type="button" className="todoapp__clear-completed">
-      Clear completed
-    </button>
+    {hasCompletedTodos && (
+      <button type="button" className="todoapp__clear-completed" disabled>
+        Clear completed
+      </button>
+    )}
   </footer>
 );

@@ -1,9 +1,22 @@
-export const TodoForm = () => (
-  <header className="todoapp__header">
-    {/* this buttons is active only if there are some active todos */}
-    {/* <button type="button" className="todoapp__toggle-all active" /> */}
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
 
-    {/* Add a todo on form submit */}
+type Props = {
+  activeAllTodos: boolean,
+};
+
+export const TodoForm: React.FC<Props> = ({ activeAllTodos }) => (
+  <header className="todoapp__header">
+    <button
+      type="button"
+      className={classNames(
+        'todoapp__toggle-all',
+        {
+          active: activeAllTodos,
+        },
+      )}
+    />
+
     <form>
       <input
         type="text"

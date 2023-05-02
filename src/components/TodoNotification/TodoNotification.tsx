@@ -23,7 +23,9 @@ export const TodoNotification: React.FC<Props> = ({ error, setError }) => (
     />
 
     {error && (
-      `Unable to ${error} a todo`
+      <p>
+        {`Unable to ${error} a todo`}
+      </p>
     )}
   </div>
 );

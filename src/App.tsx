@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
-import { UserWarning } from './UserWarning';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -50,26 +49,25 @@ export const App: React.FC = () => {
     }
   };
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const visibleTodos = getFilteredTodos();
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const activeAllTodos = todos.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoForm />
+        <TodoForm activeAllTodos={activeAllTodos} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <TodoList todos={visibleTodos} />
 
             <TodoFilter
               filter={filter}
               setFilter={setFilter}
+              hasCompletedTodos={hasCompletedTodos}
             />
           </>
         )}
