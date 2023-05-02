@@ -51,14 +51,14 @@ export const App: React.FC = () => {
 
   const visibleTodos = getFilteredTodos();
   const hasCompletedTodos = todos.some(todo => todo.completed);
-  const activeAllTodos = todos.every(todo => todo.completed);
+  const amountActiveTodos = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoForm activeAllTodos={activeAllTodos} />
+        <TodoForm amountActiveTodos={amountActiveTodos} />
 
         {!!todos.length && (
           <>
@@ -68,6 +68,7 @@ export const App: React.FC = () => {
               filter={filter}
               setFilter={setFilter}
               hasCompletedTodos={hasCompletedTodos}
+              amountActiveTodos={amountActiveTodos}
             />
           </>
         )}

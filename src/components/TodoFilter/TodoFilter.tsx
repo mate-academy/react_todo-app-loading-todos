@@ -5,16 +5,18 @@ type Props = {
   filter: Filter,
   setFilter: (value: Filter) => void,
   hasCompletedTodos: boolean,
+  amountActiveTodos: number,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
   setFilter,
   hasCompletedTodos,
+  amountActiveTodos,
 }) => (
   <footer className="todoapp__footer">
     <span className="todo-count">
-      3 items left
+      {`${amountActiveTodos} items left`}
     </span>
 
     <nav className="filter">

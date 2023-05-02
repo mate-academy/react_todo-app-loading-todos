@@ -2,17 +2,17 @@
 import classNames from 'classnames';
 
 type Props = {
-  activeAllTodos: boolean,
+  amountActiveTodos: number,
 };
 
-export const TodoForm: React.FC<Props> = ({ activeAllTodos }) => (
+export const TodoForm: React.FC<Props> = ({ amountActiveTodos }) => (
   <header className="todoapp__header">
     <button
       type="button"
       className={classNames(
         'todoapp__toggle-all',
         {
-          active: activeAllTodos,
+          active: !amountActiveTodos,
         },
       )}
     />
