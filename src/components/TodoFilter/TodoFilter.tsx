@@ -5,7 +5,7 @@ import { StatusTodos } from '../../types/StatusTodo';
 type Props = {
   visibleTodos: Todo[];
   status: string,
-  onStatusChanges: (e: string) => void;
+  onStatusChanges: (value: StatusTodos) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,10 +13,12 @@ export const TodoFilter: React.FC<Props> = ({
   status,
   onStatusChanges,
 }) => {
+  const activeTodos = visibleTodos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${visibleTodos.filter(todo => !todo.completed).length} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <nav className="filter">

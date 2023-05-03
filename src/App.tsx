@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
@@ -13,7 +12,7 @@ const USER_ID = 9946;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(StatusTodos.ALL);
   const [isError, setIsError] = useState(false);
 
   const filteredTodos = useMemo(() => {
@@ -40,16 +39,22 @@ export const App: React.FC = () => {
       }
     } catch (error) {
       setIsError(true);
-
-      setTimeout(() => {
-        setIsError(false);
-      }, 3000);
       throw new Error('Error');
     }
   };
 
   useEffect(() => {
     loadTodos();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsError(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   if (!USER_ID) {
@@ -69,9 +74,9 @@ export const App: React.FC = () => {
           />
         </section>
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <TodoFilter
-            visibleTodos={filteredTodos}
+            visibleTodos={todos}
             status={status}
             onStatusChanges={setStatus}
           />
