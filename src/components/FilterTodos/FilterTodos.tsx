@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  todosCount: number[];
+  todosCount: [number, number];
   filterType: FilterType;
   onFilter: (filterType: FilterType) => void;
 };

@@ -43,7 +43,7 @@ export const App: React.FC = () => {
     });
   }, [todos, filterType]);
 
-  const todosCount = useMemo(() => (
+  const todosCount: [number, number] = useMemo(() => (
     [
       todos.filter(todo => !todo.completed).length,
       todos.filter(todo => todo.completed).length,
