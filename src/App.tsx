@@ -25,11 +25,6 @@ export const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    getTodosFromServer();
-    setTimeout(() => setErrorType(''), 3000);
-  }, []);
-
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filterType) {
@@ -54,6 +49,17 @@ export const App: React.FC = () => {
       todos.filter(todo => todo.completed).length,
     ]
   ), [todos]);
+
+  useEffect(() => {
+    getTodosFromServer();
+    const timer = setTimeout(() => {
+      setErrorType('');
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className="todoapp">
