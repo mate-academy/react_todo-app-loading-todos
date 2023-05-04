@@ -46,16 +46,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  if (filter === FilterStatus.all) {
-    visibleTodos = [...todos];
-  }
-
-  if (filter === FilterStatus.active) {
-    visibleTodos = [...todos].filter(todo => todo.completed === false);
-  }
-
-  if (filter === FilterStatus.completed) {
-    visibleTodos = [...todos].filter(todo => todo.completed);
+  switch (filter) {
+    case FilterStatus.all:
+      visibleTodos = [...todos];
+      break;
+    case FilterStatus.active:
+      visibleTodos = [...todos].filter(todo => todo.completed === false);
+      break;
+    case FilterStatus.completed:
+      visibleTodos = [...todos].filter(todo => todo.completed);
+      break;
+    default:
+      break;
   }
 
   if (!USER_ID) {

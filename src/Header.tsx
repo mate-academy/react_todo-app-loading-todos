@@ -33,7 +33,6 @@ export const Header: React.FC<Props> = ({
       }}
     />
 
-    {/* Add a todo on form submit */}
     <form>
       <input
         type="text"
