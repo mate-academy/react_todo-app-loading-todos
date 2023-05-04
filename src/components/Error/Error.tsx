@@ -3,16 +3,16 @@ import { ErrorType } from '../../utils/Enums/ErrorType';
 
 interface Props {
   error: ErrorType;
-  setError: (error: ErrorType) => void;
+  handleErrorHide: () => void;
 }
 
 export const Error: React.FC<Props>
-  = ({ error, setError }) => {
+  = ({ error, handleErrorHide }) => {
     useEffect(() => {
       setTimeout(() => {
-        setError(ErrorType.INITIAL);
+        handleErrorHide();
       }, 3000);
-    }, [error, setError]);
+    }, [error]);
 
     return (
       <>
@@ -20,7 +20,7 @@ export const Error: React.FC<Props>
           type="button"
           className="delete"
           aria-label="Delete"
-          onClick={() => setError(ErrorType.INITIAL)}
+          onClick={handleErrorHide}
         />
         {error}
       </>

@@ -6,22 +6,20 @@ import { FilterBy } from '../../utils/Enums/FilterBy';
 
 interface Props {
   filterBy: FilterByType;
-  setFilterBy: (filterBy: FilterBy) => void;
+  handleFilterButtonClick: (filterBy: FilterBy) => void;
   isTodoCompleted: boolean;
   counter: number;
 }
 
 export const Footer: React.FC<Props>
   = ({
-    filterBy, setFilterBy, isTodoCompleted, counter,
+    filterBy, handleFilterButtonClick, isTodoCompleted, counter,
   }) => {
     return (
       <div>
         <footer className="todoapp__footer">
           <span className="todo-count">
-            {counter}
-            {' '}
-            items left
+            {`${counter} items left`}
           </span>
 
           <nav className="filter">
@@ -31,7 +29,7 @@ export const Footer: React.FC<Props>
                 filter__link: filterBy !== FilterBy.ALL,
                 'filter__link selected': filterBy === FilterBy.ALL,
               })}
-              onClick={() => setFilterBy(FilterBy.ALL)}
+              onClick={() => handleFilterButtonClick(FilterBy.ALL)}
             >
               All
             </a>
@@ -42,7 +40,7 @@ export const Footer: React.FC<Props>
                 filter__link: filterBy !== FilterBy.ACTIVE,
                 'filter__link selected': filterBy === FilterBy.ACTIVE,
               })}
-              onClick={() => setFilterBy(FilterBy.ACTIVE)}
+              onClick={() => handleFilterButtonClick(FilterBy.ACTIVE)}
             >
               Active
             </a>
@@ -53,7 +51,7 @@ export const Footer: React.FC<Props>
                 filter__link: filterBy !== FilterBy.COMPLETED,
                 'filter__link selected': filterBy === FilterBy.COMPLETED,
               })}
-              onClick={() => setFilterBy(FilterBy.COMPLETED)}
+              onClick={() => handleFilterButtonClick(FilterBy.COMPLETED)}
             >
               Completed
             </a>

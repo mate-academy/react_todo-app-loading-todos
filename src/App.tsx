@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { FilterBy } from './utils/Enums/FilterBy';
 import { Header } from './components/Header';
 import { ErrorType } from './utils/Enums/ErrorType';
+import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { FilterByType } from './types/FilterBy';
@@ -16,7 +17,7 @@ import { getTodos, post } from './api/todos';
 const USER_ID = 10217;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>('');
   const [filterBy, setFilterBy] = useState<FilterByType>(FilterBy.ALL);
   const [error, setError] = useState<ErrorType>(ErrorType.INITIAL);
@@ -34,7 +35,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => (
-    todos?.filter(todo => {
+    todos.filter(todo => {
       switch (filterBy) {
         case FilterBy.ACTIVE:
           return !todo.completed;
@@ -43,21 +44,21 @@ export const App: React.FC = () => {
           return todo.completed;
 
         default:
-          return todo;
+          return true;
       }
     })
   ), [todos, filterBy]);
 
   const isTodoCompleted = useMemo(() => (
-    filteredTodos?.some(todo => todo.completed) || false
+    filteredTodos.some(todo => todo.completed) || false
   ), [filteredTodos]);
 
   const isEveryTodoCompleted = useMemo(() => (
-    filteredTodos?.every(todo => todo.completed) || false
+    filteredTodos.every(todo => todo.completed) || false
   ), [filteredTodos]);
 
   const counter = useMemo(() => (
-    filteredTodos?.filter(todo => !todo.completed).length || 0
+    filteredTodos.filter(todo => !todo.completed).length || 0
   ), [filteredTodos]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,34 +78,48 @@ export const App: React.FC = () => {
     setQuery('');
   };
 
+  const handleErrorHide = () => {
+    setError(ErrorType.INITIAL);
+  };
+
+  const handleFilterButtonClick = (filterByType: FilterByType) => {
+    setFilterBy(filterByType);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
-      <div className="todoapp__content">
-        <Header
-          query={query}
-          setQuery={setQuery}
-          isEveryTodoCompleted={isEveryTodoCompleted}
-          handleSubmit={handleSubmit}
-        />
+      <h1 className="todoapp__title">todos</h1>  
+        <div className="todoapp__content">
+          <Header
+            query={query}
+            handleQueryChange={handleQueryChange}
+            isEveryTodoCompleted={isEveryTodoCompleted}
+            handleSubmit={handleSubmit}
+          />
 
-        <section className="todoapp__main">
-          {filteredTodos && (
+        {!filteredTodos.length ? (
+          <Loader />
+        ) : (
+          <section className="todoapp__main">
             <TodosList todos={filteredTodos} />
-          )}
-        </section>
+          </section>
+        )}
 
-        <Footer
-          filterBy={filterBy}
-          setFilterBy={setFilterBy}
-          isTodoCompleted={isTodoCompleted}
-          counter={counter}
-        />
-      </div>
+          <Footer
+            filterBy={filterBy}
+            handleFilterButtonClick={handleFilterButtonClick}
+            isTodoCompleted={isTodoCompleted}
+            counter={counter}
+          />
+        </div>
 
       <div className={
         classNames('notification is-danger is-light has-text-weight-normal',
@@ -113,7 +128,7 @@ export const App: React.FC = () => {
       >
         <Error
           error={error}
-          setError={setError}
+          handleErrorHide={handleErrorHide}
         />
       </div>
     </div>

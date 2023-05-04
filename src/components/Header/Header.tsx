@@ -3,13 +3,13 @@ import classNames from 'classnames';
 
 interface Props {
   query: string;
-  setQuery: (query: string) => void;
+  handleQueryChange: (value: string) => void;
   isEveryTodoCompleted: boolean;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export const Header: React.FC<Props> = ({
-  query, setQuery, isEveryTodoCompleted, handleSubmit,
+  query, handleQueryChange, isEveryTodoCompleted, handleSubmit,
 }) => {
   return (
     <header className="todoapp__header">
@@ -21,13 +21,13 @@ export const Header: React.FC<Props> = ({
         })}
       />
 
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleQueryChange(e.target.value)}
         />
       </form>
     </header>

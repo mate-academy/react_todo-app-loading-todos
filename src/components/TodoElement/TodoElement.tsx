@@ -18,8 +18,6 @@ export const TodoElement: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="todo__status"
-          checked={completed}
-          onChange={() => {}}
         />
       </label>
 
