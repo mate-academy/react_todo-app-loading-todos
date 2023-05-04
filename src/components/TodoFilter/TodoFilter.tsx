@@ -4,7 +4,8 @@ import classnames from 'classnames';
 interface Props {
   onStatusChanged: (newStatus: string) => void
   status: string
-  items: number
+  itemsLeft: number
+  itemsCompeted: number
 }
 
 enum TodoStatus {
@@ -16,12 +17,14 @@ enum TodoStatus {
 export const TodoFilter: React.FC<Props> = ({
   onStatusChanged,
   status,
-  items,
+  itemsLeft,
+  itemsCompeted,
 }) => {
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${items} items left`}
+        {`${itemsLeft} items left`}
       </span>
 
       <nav className="filter">
@@ -65,10 +68,12 @@ export const TodoFilter: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {
+        itemsCompeted !== 0 &&
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      }
     </footer>
   );
 };

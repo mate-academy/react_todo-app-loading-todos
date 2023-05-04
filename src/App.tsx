@@ -17,6 +17,11 @@ export const App: React.FC = () => {
 
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<string>('all');
+  const [itemsLeft, setItemsLeft] = useState<number>(0);
+  const [itemsCompleted, setitemsCompleted] = useState<number>(0);
+
+  const countItemsLeft = todos.filter(todo => !todo.completed).length
+  const countItemsCompleted = todos.filter(todo => todo.completed).length
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -60,6 +65,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     filteredByStatus(todos, status);
+    setItemsLeft(countItemsLeft);
+    setitemsCompleted(countItemsCompleted);
   }, [status, todos]);
 
   if (!USER_ID) {
@@ -77,12 +84,13 @@ export const App: React.FC = () => {
           todos={filteredTodos}
         />
 
-        {filteredTodos.length !== 0
+        {todos.length !== 0
           && (
             <TodoFilter
               onStatusChanged={(newStatus) => setStatus(newStatus)}
               status={status}
-              items={filteredTodos.length}
+              itemsLeft={itemsLeft}
+              itemsCompeted={itemsCompleted}
             />
           )}
       </div>
