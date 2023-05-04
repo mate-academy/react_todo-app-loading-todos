@@ -9,7 +9,10 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({
-  query, handleQueryChange, isEveryTodoCompleted, handleSubmit,
+  query,
+  handleQueryChange,
+  isEveryTodoCompleted,
+  handleSubmit,
 }) => {
   return (
     <header className="todoapp__header">

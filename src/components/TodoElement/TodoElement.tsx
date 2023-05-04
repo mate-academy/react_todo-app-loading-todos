@@ -10,7 +10,7 @@ export const TodoElement: React.FC<Props> = ({ todo }) => {
   const { completed, title, id } = todo;
 
   return (
-    <div
+    <li
       className={classNames('todo', { completed })}
       key={id}
     >
@@ -29,6 +29,6 @@ export const TodoElement: React.FC<Props> = ({ todo }) => {
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
-    </div>
+    </li>
   );
 };

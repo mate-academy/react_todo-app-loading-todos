@@ -49,10 +49,6 @@ export const App: React.FC = () => {
     })
   ), [todos, filterBy]);
 
-  const isTodoCompleted = useMemo(() => (
-    filteredTodos.some(todo => todo.completed) || false
-  ), [filteredTodos]);
-
   const isEveryTodoCompleted = useMemo(() => (
     filteredTodos.every(todo => todo.completed) || false
   ), [filteredTodos]);
@@ -79,7 +75,9 @@ export const App: React.FC = () => {
   };
 
   const handleErrorHide = () => {
-    setError(ErrorType.INITIAL);
+    if (error !== ErrorType.GET && error !== ErrorType.INITIAL) {
+      setError(ErrorType.INITIAL);
+    }
   };
 
   const handleFilterButtonClick = (filterByType: FilterByType) => {
@@ -96,30 +94,29 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>  
-        <div className="todoapp__content">
-          <Header
-            query={query}
-            handleQueryChange={handleQueryChange}
-            isEveryTodoCompleted={isEveryTodoCompleted}
-            handleSubmit={handleSubmit}
-          />
+      <h1 className="todoapp__title">todos</h1>
+      <div className="todoapp__content">
+        <Header
+          query={query}
+          handleQueryChange={handleQueryChange}
+          isEveryTodoCompleted={isEveryTodoCompleted}
+          handleSubmit={handleSubmit}
+        />
 
         {!filteredTodos.length ? (
-          <Loader />
+          !error && (
+            <Loader />
+          )
         ) : (
-          <section className="todoapp__main">
-            <TodosList todos={filteredTodos} />
-          </section>
+          <TodosList todos={filteredTodos} />
         )}
 
-          <Footer
-            filterBy={filterBy}
-            handleFilterButtonClick={handleFilterButtonClick}
-            isTodoCompleted={isTodoCompleted}
-            counter={counter}
-          />
-        </div>
+        <Footer
+          filterBy={filterBy}
+          handleFilterButtonClick={handleFilterButtonClick}
+          counter={counter}
+        />
+      </div>
 
       <div className={
         classNames('notification is-danger is-light has-text-weight-normal',

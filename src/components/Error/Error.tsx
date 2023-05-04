@@ -6,23 +6,25 @@ interface Props {
   handleErrorHide: () => void;
 }
 
-export const Error: React.FC<Props>
-  = ({ error, handleErrorHide }) => {
-    useEffect(() => {
-      setTimeout(() => {
-        handleErrorHide();
-      }, 3000);
-    }, [error]);
+export const Error: React.FC<Props> = ({
+  error,
+  handleErrorHide,
+}) => {
+  useEffect(() => {
+    setTimeout(() => {
+      handleErrorHide();
+    }, 3000);
+  }, [error]);
 
-    return (
-      <>
-        <button
-          type="button"
-          className="delete"
-          aria-label="Delete"
-          onClick={handleErrorHide}
-        />
-        {error}
-      </>
-    );
-  };
+  return (
+    <>
+      <button
+        type="button"
+        className="delete"
+        aria-label="Delete"
+        onClick={handleErrorHide}
+      />
+      {error}
+    </>
+  );
+};

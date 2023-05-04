@@ -9,10 +9,10 @@ interface Props {
 
 export const TodosList: React.FC<Props> = ({ todos }) => {
   return (
-    <>
+    <ul className="todoapp__main">
       {todos?.map(todo => (
         <TodoElement todo={todo} key={todo.id} />
       ))}
-    </>
+    </ul>
   );
 };
