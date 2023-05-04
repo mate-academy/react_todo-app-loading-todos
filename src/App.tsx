@@ -20,7 +20,7 @@ export const App: React.FC = () => {
       const todosFromServer = await getTodos(USER_ID);
 
       setTodos(todosFromServer);
-    } catch (error) {
+    } catch {
       setErrorType(ErrorType.LOAD);
     }
   };
@@ -43,11 +43,12 @@ export const App: React.FC = () => {
     });
   }, [todos, filterType]);
 
-  const todosCount: [number, number] = useMemo(() => (
-    [
-      todos.filter(todo => !todo.completed).length,
-      todos.filter(todo => todo.completed).length,
-    ]
+  const uncompletedTodosCount = useMemo(() => (
+    filteredTodos.filter(todo => !todo.completed).length
+  ), [filteredTodos]);
+
+  const completedTodosCount = useMemo(() => (
+    todos.filter(todo => todo.completed).length
   ), [todos]);
 
   useEffect(() => {
@@ -88,7 +89,8 @@ export const App: React.FC = () => {
 
         {!!todos.length && (
           <FilterTodos
-            todosCount={todosCount}
+            uncompletedCount={uncompletedTodosCount}
+            completedCount={completedTodosCount}
             filterType={filterType}
             onFilter={setFilterType}
           />

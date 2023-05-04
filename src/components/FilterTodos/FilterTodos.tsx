@@ -3,22 +3,19 @@ import classNames from 'classnames';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
-  todosCount: [number, number];
+  uncompletedCount: number;
+  completedCount: number;
   filterType: FilterType;
   onFilter: (filterType: FilterType) => void;
 };
 
 export const FilterTodos: React.FC<Props> = ({
-  todosCount, onFilter, filterType,
+  uncompletedCount, completedCount, onFilter, filterType,
 }) => {
-  const [numOfActive, numOfCompleted] = todosCount;
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {filterType === FilterType.COMPLETED
-          ? '0 items left'
-          : `${numOfActive} items left`}
+        {`${uncompletedCount} items left`}
       </span>
 
       <nav className="filter">
@@ -56,7 +53,7 @@ export const FilterTodos: React.FC<Props> = ({
         </a>
       </nav>
 
-      {!!numOfCompleted && (
+      {!!completedCount && (
         <button
           type="button"
           className="todoapp__clear-completed"
