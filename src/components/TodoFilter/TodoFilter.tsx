@@ -1,17 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
+import { TodoStatus } from '../../types/TodoStatus';
 
 interface Props {
-  onStatusChanged: (newStatus: string) => void
-  status: string
+  onStatusChanged: (newStatus: TodoStatus) => void
+  status: TodoStatus
   itemsLeft: number
   itemsCompleted: number
-}
-
-enum TodoStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
 }
 
 export const TodoFilter: React.FC<Props> = ({

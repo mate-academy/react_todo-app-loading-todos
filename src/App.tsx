@@ -8,6 +8,7 @@ import { Notification } from './components/Notification/Notification';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { TodoStatus } from './types/TodoStatus';
 
 const USER_ID = 10140;
 
@@ -15,9 +16,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const [status, setStatus] = useState<string>('all');
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.All);
   const [itemsLeft, setItemsLeft] = useState<number>(0);
-  const [itemsCompleted, setitemsCompleted] = useState<number>(0);
+  const [itemsCompleted, setItemsCompleted] = useState<number>(0);
 
   const countItemsLeft = todos.filter(todo => !todo.completed).length;
   const countItemsCompleted = todos.filter(todo => todo.completed).length;
@@ -61,8 +62,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setItemsLeft(countItemsLeft);
-    setitemsCompleted(countItemsCompleted);
-  }, [status, todos]);
+    setItemsCompleted(countItemsCompleted);
+  }, [countItemsLeft, countItemsCompleted]);
 
   if (!USER_ID) {
     return <UserWarning />;
