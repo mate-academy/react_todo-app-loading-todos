@@ -21,10 +21,10 @@ export const App: React.FC = () => {
       .then((fetchedTodos: Todo[]) => {
         setTodos(fetchedTodos);
       })
-      .catch((fetchedError) => {
+      .catch((err) => {
         setError(
-          fetchedError?.message
-            ? fetchedError.message
+          err?.message
+            ? err.message
             : 'Something went wrong',
         );
       });
@@ -57,7 +57,9 @@ export const App: React.FC = () => {
         {todos.length ? (
           <>
             <TodoList
-              todos={todos.filter(getFilterCallback(filterBy))}
+              todos={filterBy === FilterBy.ALL
+                ? todos
+                : todos.filter(getFilterCallback(filterBy))}
             />
             <TodoFooter
               setFilterBy={setFilterBy}

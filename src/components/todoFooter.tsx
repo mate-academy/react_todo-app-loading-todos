@@ -11,17 +11,17 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy, itemsQuantity }) => {
   const navItems = [
     {
       title: 'All',
-      id: 'ALL',
+      id: FilterBy.ALL,
     },
     {
       title: 'Active',
-      id: 'ACTIVE',
+      id: FilterBy.ACTIVE,
     },
     {
       title: 'Completed',
-      id: 'COMPLETED',
+      id: FilterBy.COMPLETED,
     }];
-  const [selectedType, setSelectedType] = useState('ALL');
+  const [selectedType, setSelectedType] = useState(FilterBy.ALL);
 
   return (
     <footer className="todoapp__footer">
