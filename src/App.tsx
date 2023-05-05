@@ -67,8 +67,6 @@ export const App: React.FC = () => {
         ) : null}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <Notification
         onClose={(value: string | null) => setError(value)}
         error={error}

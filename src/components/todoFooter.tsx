@@ -29,7 +29,6 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy, itemsQuantity }) => {
         {`${itemsQuantity} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         {navItems.map((navItem) => (
           <a
@@ -65,7 +64,6 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy, itemsQuantity }) => {
         ))}
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>
