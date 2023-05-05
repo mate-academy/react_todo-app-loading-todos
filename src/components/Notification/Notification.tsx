@@ -1,9 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import { TodoErrors } from '../../types/TodoErrors';
+
 interface Props {
-  error: string | null
-  onClose: (value: string | null) => void
+  error: TodoErrors | null
+  onClose: (value: TodoErrors | null) => void
 
 }
 
