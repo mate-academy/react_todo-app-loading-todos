@@ -7,7 +7,7 @@ import { getTodos } from './api/todos';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notification';
-import { Erorrs } from './types/Erorrs';
+import { Errors } from './types/Erorrs';
 import { Header } from './components/Header';
 
 const USER_ID = 9960;
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodoList)
       .catch(() => {
-        setTypeError(Erorrs.update);
+        setTypeError(Errors.UPDATE);
       });
   }, []);
 

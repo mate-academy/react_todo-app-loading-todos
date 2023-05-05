@@ -1,5 +1,5 @@
-export enum Erorrs {
-  add = 'add',
-  remove = 'delete',
-  update = 'update',
+export enum Errors {
+  ADD = 'add',
+  REMOVE = 'delete',
+  UPDATE = 'update',
 }

@@ -1,14 +1,14 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { Select } from '../types/Select';
-import { Erorrs } from '../types/Erorrs';
+import { Errors } from '../types/Erorrs';
 
 type Props = {
   countItemLeft: () => number;
   selectedFilter: Select
   setSelectedFilter: (selectedFilter: Select) => void;
   todoList: Todo [] | null;
-  setTypeError: (typeError: Erorrs) => void
+  setTypeError: (typeError: Errors) => void
   setNotificationError: (notificationError: boolean) => void
 };
 
@@ -71,7 +71,7 @@ export const Footer: React.FC<Props> = ({
       <button
         type="button"
         onClick={() => {
-          setTypeError(Erorrs.remove);
+          setTypeError(Errors.REMOVE);
           setNotificationError(true);
         }}
         className={classNames(

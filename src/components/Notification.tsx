@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Erorrs } from '../types/Erorrs';
+import { Errors } from '../types/Erorrs';
 
 type Props = {
   typeError: string | null
@@ -12,7 +12,7 @@ export const Notification: React.FC<Props> = ({
   setNotificationError,
   notificationError,
 }) => {
-  const { add, remove, update } = Erorrs;
+  const { ADD: add, REMOVE: remove, UPDATE: update } = Errors;
 
   if (notificationError) {
     setTimeout(() => {

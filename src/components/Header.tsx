@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { Erorrs } from '../types/Erorrs';
+import { Errors } from '../types/Erorrs';
 
 type Props = {
   counterItemLeft: () => number;
-  setTypeError: (typeError: Erorrs) => void;
+  setTypeError: (typeError: Errors) => void;
   setNotificationError: (notificationError: boolean) => void;
 };
 
@@ -26,7 +26,7 @@ export const Header: React.FC<Props> = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setTypeError(Erorrs.add);
+          setTypeError(Errors.ADD);
           setNotificationError(true);
         }}
       >

@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { Erorrs } from '../types/Erorrs';
+import { Errors } from '../types/Erorrs';
 
 type Props = {
   filteringList: Todo[] | null
-  setTypeError: (typeError: Erorrs) => void
+  setTypeError: (typeError: Errors) => void
   setNotificationError: (notificationError: boolean) => void
 };
 
@@ -37,7 +37,7 @@ export const Main: React.FC<Props> = ({
             type="button"
             className="todo__remove"
             onClick={() => {
-              setTypeError(Erorrs.remove);
+              setTypeError(Errors.REMOVE);
               setNotificationError(true);
             }}
           >
