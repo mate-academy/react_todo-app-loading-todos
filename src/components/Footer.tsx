@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = ({
   setTypeError,
   setNotificationError,
 }) => {
-  const { all, active, completed } = Select;
+  const { ALL: all, ACTIVE: active, COMPLETED: completed } = Select;
 
   return (
     <footer className="todoapp__footer">

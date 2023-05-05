@@ -14,7 +14,7 @@ const USER_ID = 9960;
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState(Select.all);
+  const [selectedFilter, setSelectedFilter] = useState(Select.ALL);
   const [typeError, setTypeError] = useState<string | null>(null);
   const [notificationError, setNotificationError] = useState(false);
 
