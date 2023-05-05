@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [notificationError, setNotificationError] = useState(false);
 
   const filteringList = useMemo(() => {
-    const filter = todoList && [...todoList].filter((todo) => {
+    const filter = todoList && todoList.filter((todo) => {
       switch (selectedFilter) {
         case 'active':
           return !todo.completed;
@@ -49,9 +49,9 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodoList)
       .catch(() => {
-        setTypeError(Erorrs.add);
+        setTypeError(Erorrs.update);
       });
-  }, [todoList]);
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
