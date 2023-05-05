@@ -5,17 +5,11 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/todoList';
 import { TodoForm } from './components/todoForm';
-// eslint-disable-next-line import/no-cycle
 import { TodoFooter } from './components/todoFooter';
 import { Notification } from './components/notification';
+import { FilterBy } from './types/FilterBy';
 
 const USER_ID = 10221;
-
-export enum FilterBy {
-  ALL = 'ALL',
-  ACTIVE = 'ACTIVE',
-  COMPLETED = 'COMPLETED',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -27,10 +21,10 @@ export const App: React.FC = () => {
       .then((fetchedTodos: Todo[]) => {
         setTodos(fetchedTodos);
       })
-      .catch((fetchedTodos) => {
+      .catch((fetchedError) => {
         setError(
-          fetchedTodos?.message
-            ? fetchedTodos?.message
+          fetchedError?.message
+            ? fetchedError.message
             : 'Something went wrong',
         );
       });
@@ -65,7 +59,10 @@ export const App: React.FC = () => {
             <TodoList
               todos={todos.filter(getFilterCallback(filterBy))}
             />
-            <TodoFooter setFilterBy={setFilterBy} />
+            <TodoFooter
+              setFilterBy={setFilterBy}
+              itemsQuantity={todos.filter(getFilterCallback(filterBy)).length}
+            />
           </>
         ) : null}
       </div>

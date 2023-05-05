@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import classNames from 'classnames';
-// eslint-disable-next-line import/no-cycle
-import { FilterBy } from '../App';
+import { FilterBy } from '../types/FilterBy';
 
 interface Props {
   setFilterBy: Dispatch<SetStateAction<FilterBy>>,
+  itemsQuantity: number,
 }
 
-export const TodoFooter: React.FC<Props> = ({ setFilterBy }) => {
+export const TodoFooter: React.FC<Props> = ({ setFilterBy, itemsQuantity }) => {
   const navItems = [
     {
       title: 'All',
@@ -21,12 +21,12 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy }) => {
       title: 'Completed',
       id: 'COMPLETED',
     }];
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedType, setSelectedType] = useState('ALL');
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${itemsQuantity} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -38,7 +38,7 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy }) => {
             className={classNames(
               'filter__link',
               {
-                selected: selectedType === navItem.title,
+                selected: selectedType === navItem.id,
               },
             )}
             key={navItem.id}
@@ -57,7 +57,7 @@ export const TodoFooter: React.FC<Props> = ({ setFilterBy }) => {
                   break;
               }
 
-              setSelectedType(navItem.title);
+              setSelectedType(navItem.id);
             }}
           >
             {navItem.title}
