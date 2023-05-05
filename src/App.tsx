@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
@@ -15,13 +15,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<string>('all');
   const [itemsLeft, setItemsLeft] = useState<number>(0);
   const [itemsCompleted, setitemsCompleted] = useState<number>(0);
 
-  const countItemsLeft = todos.filter(todo => !todo.completed).length
-  const countItemsCompleted = todos.filter(todo => todo.completed).length
+  const countItemsLeft = todos.filter(todo => !todo.completed).length;
+  const countItemsCompleted = todos.filter(todo => todo.completed).length;
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -47,24 +46,20 @@ export const App: React.FC = () => {
     };
   }, [error]);
 
-  const filteredByStatus = (todosFromServer: Todo[], StateStatus: string) => {
-    switch (StateStatus) {
+  const filtredTodos = useMemo(() => {
+    switch (status) {
       case 'all':
-        setFilteredTodos(todosFromServer);
-        break;
+        return todos;
       case 'active':
-        setFilteredTodos(todosFromServer.filter((todo) => !todo.completed));
-        break;
+        return todos.filter((todo) => !todo.completed);
       case 'completed':
-        setFilteredTodos(todosFromServer.filter((todo) => todo.completed));
-        break;
+        return todos.filter((todo) => todo.completed);
       default:
-        break;
+        return todos;
     }
-  };
+  }, [todos, status]);
 
   useEffect(() => {
-    filteredByStatus(todos, status);
     setItemsLeft(countItemsLeft);
     setitemsCompleted(countItemsCompleted);
   }, [status, todos]);
@@ -81,7 +76,7 @@ export const App: React.FC = () => {
         <TodoHeader />
 
         <TodoList
-          todos={filteredTodos}
+          todos={filtredTodos}
         />
 
         {todos.length !== 0
@@ -90,7 +85,7 @@ export const App: React.FC = () => {
               onStatusChanged={(newStatus) => setStatus(newStatus)}
               status={status}
               itemsLeft={itemsLeft}
-              itemsCompeted={itemsCompleted}
+              itemsCompleted={itemsCompleted}
             />
           )}
       </div>

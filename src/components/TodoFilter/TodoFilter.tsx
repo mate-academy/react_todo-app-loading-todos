@@ -5,7 +5,7 @@ interface Props {
   onStatusChanged: (newStatus: string) => void
   status: string
   itemsLeft: number
-  itemsCompeted: number
+  itemsCompleted: number
 }
 
 enum TodoStatus {
@@ -18,9 +18,8 @@ export const TodoFilter: React.FC<Props> = ({
   onStatusChanged,
   status,
   itemsLeft,
-  itemsCompeted,
+  itemsCompleted,
 }) => {
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -69,10 +68,12 @@ export const TodoFilter: React.FC<Props> = ({
       </nav>
 
       {
-        itemsCompeted !== 0 &&
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
+        itemsCompleted !== 0
+        && (
+          <button type="button" className="todoapp__clear-completed">
+            Clear completed
+          </button>
+        )
       }
     </footer>
   );
