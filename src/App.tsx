@@ -15,15 +15,15 @@ const USER_ID = 9960;
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
   const [selectedFilter, setSelectedFilter] = useState(Select.ALL);
-  const [typeError, setTypeError] = useState<string | null>(null);
+  const [typeError, setTypeError] = useState<Errors | null>(null);
   const [notificationError, setNotificationError] = useState(false);
 
   const filteringList = useMemo(() => {
     const filter = todoList && todoList.filter((todo) => {
       switch (selectedFilter) {
-        case 'active':
+        case Select.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case Select.COMPLETED:
           return todo.completed;
         default:
           return true;
@@ -50,6 +50,7 @@ export const App: React.FC = () => {
       .then(setTodoList)
       .catch(() => {
         setTypeError(Errors.UPDATE);
+        setNotificationError(true);
       });
   }, []);
 

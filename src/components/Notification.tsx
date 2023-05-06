@@ -12,13 +12,24 @@ export const Notification: React.FC<Props> = ({
   setNotificationError,
   notificationError,
 }) => {
-  const { ADD: add, REMOVE: remove, UPDATE: update } = Errors;
+  const { ADD: add, REMOVE: remove } = Errors;
 
   if (notificationError) {
     setTimeout(() => {
       setNotificationError(false);
     }, 3000);
   }
+
+  const returnTextError = (value: string | null) => {
+    switch (value) {
+      case add:
+        return 'Unable to add a todo';
+      case remove:
+        return 'Unable to delete a todo';
+      default:
+        return 'Unable to update a todo';
+    }
+  };
 
   return (
     <div className={classNames(
@@ -37,9 +48,7 @@ export const Notification: React.FC<Props> = ({
           setNotificationError(false);
         }}
       />
-      {(typeError === add) && 'Unable to add a todo'}
-      {(typeError === remove) && 'Unable to delete a todo'}
-      {(typeError === update) && 'Unable to update a todo'}
+      {returnTextError(typeError)}
     </div>
   );
 };
