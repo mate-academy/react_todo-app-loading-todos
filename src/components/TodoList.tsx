@@ -1,19 +1,18 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
-import { deleteTodo } from '../api/todos';
 
 type Props = {
   todos: Todo[],
-  selectTodo: (todoId: number) => void,
-  selectedTodoId: number | null,
+  removeTodo: (id: number) => void,
+  changeTodo: (todoId: number, changingPart: Partial<Todo>) => void;
 };
 
 export const TodoList: React.FC<Props> = (
   {
     todos,
-    selectedTodoId,
-    selectTodo,
+    removeTodo,
+    changeTodo,
   },
 ) => {
   return (
@@ -23,13 +22,8 @@ export const TodoList: React.FC<Props> = (
           <TodoItem
             todo={todo}
             key={todo.id}
-            handleClickRemoveTodo={(event) => {
-              event.preventDefault();
-              selectTodo(todo.id);
-              if (selectedTodoId === todo.id) {
-                deleteTodo(selectedTodoId);
-              }
-            }}
+            removeTodo={removeTodo}
+            changeTodo={changeTodo}
           />
         );
       })}

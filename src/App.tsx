@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
 import { Todo } from './types/Todo';
-import { createTodo, getTodos } from './api/todos';
+import {
+  createTodo,
+  deleteTodo, getTodos, updateTodo,
+} from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 
@@ -12,19 +15,67 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
   const [isEnterPressed, setIsEnterPressed] = useState(false);
-  const [selectedTodoId, setSelectTodoId] = useState<null | number>(null);
-
+  const [selectFilter, setSelectFilter] = useState('all');
   const count = todos.length;
 
   useEffect(() => {
     getTodos(USER_ID).then(todosFromServer => {
       setTodos(todosFromServer);
     });
-  }, [isEnterPressed, selectedTodoId]);
+  }, [isEnterPressed,
+  ]);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (selectFilter) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return todos;
+      }
+    });
+  }, [
+    todos,
+    selectFilter,
+  ]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const handleDeleteTodo = (todoId: number) => {
+    deleteTodo(todoId);
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
+
+  const handleChangeTodo = async (
+    todoId: number,
+    updatedFields: { title?: string; completed?: boolean },
+  ) => {
+    await updateTodo(todoId, updatedFields);
+
+    setTodos(state => state.map(todo => {
+      if (todo.id === todoId) {
+        return { ...todo, ...updatedFields };
+      }
+
+      return todo;
+    }));
+  };
+
+  const clearCompleted = () => {
+    todos
+      .filter(todo => todo.completed)
+      .forEach(async todo => {
+        await deleteTodo(todo.id);
+        setTodos(prevTodos => prevTodos
+          .filter(prevTodo => prevTodo.id !== todo.id));
+      });
+  };
+
+  const isCompleted = todos.some(todo => todo.completed === true);
 
   return (
 
@@ -53,16 +104,20 @@ export const App: React.FC = () => {
         />
         {todos.length > 0 && (
           <TodoList
-            todos={todos}
-            selectedTodoId={selectedTodoId}
-            selectTodo={(todoIDfromServer:
-            React.SetStateAction<number | null>) => {
-              setSelectTodoId(todoIDfromServer);
-            }}
+            todos={visibleTodos}
+            removeTodo={handleDeleteTodo}
+            changeTodo={handleChangeTodo}
           />
         )}
       </div>
-      {todos.length > 0 && <Footer count={count} />}
+      {todos.length > 0 && (
+        <Footer
+          count={count}
+          setFilter={setSelectFilter}
+          clearCompleted={clearCompleted}
+          isCompleted={isCompleted}
+        />
+      )}
     </div>
   );
 };
