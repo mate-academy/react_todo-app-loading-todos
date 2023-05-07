@@ -1,14 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import classNames from 'classnames';
 
-import { Status } from '../types/Status';
+import { Status } from '../../types/Status';
+import { TodosContext } from '../TodosContext/TodosContext';
 
-interface Props {
-  filterStatus: Status
-  setFilterStatus: (status: Status) => void
-}
+export const FilterTodo: FC = () => {
+  const { filterStatus, setFilterStatus } = useContext(TodosContext);
 
-export const FilterTodo: FC<Props> = ({ filterStatus, setFilterStatus }) => {
   return (
     <>
       <nav className="filter">

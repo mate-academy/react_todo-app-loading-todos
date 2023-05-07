@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import classNames from 'classnames';
 
-import { Todo } from '../types/Todo';
+import { Todo } from '../../types';
 
 interface Props {
   visibleTodos: Todo[]
