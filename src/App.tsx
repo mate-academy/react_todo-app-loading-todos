@@ -54,7 +54,6 @@ export const App: React.FC = () => {
     });
   }, [todos, filterStatus]);
 
-  const activeTodos = visibleTodos.some(todo => !todo.completed);
   const activeTodosCount = visibleTodos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
@@ -71,7 +70,7 @@ export const App: React.FC = () => {
           <button
             type="button"
             className={classnames('todoapp__toggle-all', {
-              active: activeTodos,
+              active: activeTodosCount,
             })}
           />
 
