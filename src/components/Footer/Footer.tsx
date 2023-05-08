@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Todo } from '../../types/Todo';
 import { FILTER_OPTIONS } from '../../utils/constants';
 
@@ -14,12 +14,15 @@ export const Footer: React.FC<Props> = ({
   setTodosToRender,
 }) => {
   const [selectedButton, setSelectedButton] = useState('All');
-  const itemsLeft
-  = todos.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
+  const itemsLeft = useMemo(() => {
+    return todos.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
+  }, [todos]);
 
-  const filterTodos = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  // console.log(itemsLeft);
+
+  const filterTodos = (value: string) => {
     setTodosToRender(todos.filter(({ completed }) => {
-      switch (e.currentTarget.innerText) {
+      switch (value) {
         case 'All':
           return true;
         case 'Active':
@@ -31,7 +34,7 @@ export const Footer: React.FC<Props> = ({
 
       return false;
     }));
-    setSelectedButton(e.currentTarget.innerText);
+    setSelectedButton(value);
   };
 
   return (
@@ -43,9 +46,9 @@ export const Footer: React.FC<Props> = ({
       <nav className="filter">
         {FILTER_OPTIONS.map(item => (
           <a
-            href={`"#/${item !== 'All' ? item.toLowerCase() : ''}"`}
+            href={`#/${item !== 'All' ? item.toLowerCase() : ''}`}
             className={`filter__link${selectedButton === item ? ' selected' : ''}`}
-            onClick={filterTodos}
+            onClick={() => filterTodos(item)}
             key={item}
           >
             {item}

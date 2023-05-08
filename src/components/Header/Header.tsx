@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todosToRender: Todo[] | undefined;
+  todosToRender: Todo[];
   setTodosToRender: (arr: Todo[]) => void;
 };
 

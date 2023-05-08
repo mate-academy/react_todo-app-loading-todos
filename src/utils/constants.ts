@@ -1,1 +1,1 @@
-export const FILTER_OPTIONS = ['All', 'Active', 'Completed'];
+export const FILTER_OPTIONS: string[] = ['All', 'Active', 'Completed'];

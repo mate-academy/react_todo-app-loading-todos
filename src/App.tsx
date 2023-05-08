@@ -13,7 +13,7 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>();
   const [errors, setErrors] = useState<Error[]>([{
-    title: 'test',
+    title: 'test error',
     isDanger: false,
   }]);
   const [todosToRender, setTodosToRender] = useState<Todo[]>();
@@ -40,7 +40,9 @@ export const App: React.FC = () => {
       })));
     })
       .catch(() => pushError())
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -52,10 +54,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
-          todosToRender={todosToRender}
-          setTodosToRender={setTodosToRender}
-        />
+        {todosToRender && (
+          <Header
+            todosToRender={todosToRender}
+            setTodosToRender={setTodosToRender}
+          />
+        )}
         {todos && !isLoading
           ? (
             <>

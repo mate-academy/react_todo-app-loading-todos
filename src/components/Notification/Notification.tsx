@@ -20,7 +20,11 @@ export const Notification: React.FC<Props> = ({ errors, setErrors }) => {
   };
 
   useEffect(() => {
-    setInterval(closeError, 3000);
+    const intervalId = setInterval(closeError, 3000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
@@ -28,8 +32,8 @@ export const Notification: React.FC<Props> = ({ errors, setErrors }) => {
       <button
         type="button"
         className="delete"
-        onClick={() => closeError()}
-        aria-label="Close"
+        onClick={closeError}
+        aria-label="Close all"
       />
       {title}
     </div>
