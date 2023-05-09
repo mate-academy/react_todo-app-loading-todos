@@ -92,7 +92,6 @@ export const App: React.FC = () => {
               onClick={() => setError(Errors.NONE)}
             />
             {error}
-
           </div>
         )}
     </div>
