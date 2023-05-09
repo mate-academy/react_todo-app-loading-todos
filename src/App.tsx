@@ -8,7 +8,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Errors } from './types/Errors';
-import { FilterType } from './types/Filter';
+import { FilterType } from './types/FilterType';
 
 const USER_ID = 10209;
 
