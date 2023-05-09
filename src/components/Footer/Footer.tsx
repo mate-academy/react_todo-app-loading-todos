@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/Filter';
 
 type Props = {
   todos: Todo[],
-  filterType: string,
-  setFilterType: (option: string) => void,
+  filterType: FilterType,
+  setFilterType: (option: FilterType) => void,
 };
 
 export const Footer: React.FC<Props> = ({
@@ -23,8 +24,8 @@ export const Footer: React.FC<Props> = ({
           <a
             href="#/"
             className={classNames('filter__link',
-              { selected: filterType === 'all' })}
-            onClick={() => setFilterType('all')}
+              { selected: filterType === FilterType.ALL })}
+            onClick={() => setFilterType(FilterType.ALL)}
           >
             All
           </a>
@@ -32,8 +33,8 @@ export const Footer: React.FC<Props> = ({
           <a
             href="#/active"
             className={classNames('filter__link',
-              { selected: filterType === 'active' })}
-            onClick={() => setFilterType('active')}
+              { selected: filterType === FilterType.ACTIVE })}
+            onClick={() => setFilterType(FilterType.ACTIVE)}
           >
             Active
           </a>
@@ -41,8 +42,8 @@ export const Footer: React.FC<Props> = ({
           <a
             href="#/completed"
             className={classNames('filter__link',
-              { selected: filterType === 'completed' })}
-            onClick={() => setFilterType('completed')}
+              { selected: filterType === FilterType.COMPLETED })}
+            onClick={() => setFilterType(FilterType.COMPLETED)}
           >
             Completed
           </a>
@@ -51,10 +52,10 @@ export const Footer: React.FC<Props> = ({
         <button
           type="button"
           className="todoapp__clear-completed"
-          onClick={() => setFilterType('active')}
+          onClick={() => setFilterType(FilterType.ACTIVE)}
           style={{
-            display: todos.some(todo => todo.completed)
-              ? 'block' : 'none',
+            visibility: todos.some(todo => todo.completed)
+              ? 'visible' : 'hidden',
           }}
         >
           Clear completed

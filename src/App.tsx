@@ -8,18 +8,19 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Errors } from './types/Errors';
+import { FilterType } from './types/Filter';
 
 const USER_ID = 10209;
 
 const todosFromServer = (todos: Todo[], filterType: string) => {
   switch (filterType) {
-    case 'all':
+    case FilterType.ALL:
       return todos;
 
-    case 'active':
+    case FilterType.ACTIVE:
       return todos.filter((todo) => !todo.completed);
 
-    case 'completed':
+    case FilterType.COMPLETED:
       return todos.filter((todo) => todo.completed);
 
     default:
@@ -30,7 +31,7 @@ const todosFromServer = (todos: Todo[], filterType: string) => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<Errors>(Errors.NONE);
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
