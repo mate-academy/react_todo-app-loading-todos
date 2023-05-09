@@ -26,6 +26,7 @@ export const NewTodo: React.FC<Props> = ({ maxId }) => {
 
     setIdCounter(currentId => currentId + 1);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const preparedTodo = {
       id: idCounter,
       userId: USER_ID,

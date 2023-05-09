@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
