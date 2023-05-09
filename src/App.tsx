@@ -91,7 +91,6 @@ export const App: React.FC = () => {
               className="delete"
               onClick={() => setError(Errors.NONE)}
             />
-
             {error}
 
           </div>
