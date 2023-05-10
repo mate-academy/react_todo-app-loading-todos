@@ -1,13 +1,50 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import cn from 'classnames';
+import {
+  getAllTodos,
+  getActiveTodos,
+  getCompletedTodos,
+} from './api/todos';
+import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 0;
+const USER_ID = 1;
 
 export const App: React.FC = () => {
+  const [, setTodos] = useState<Todo[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [hasErrorMessage, setHasErrorMessage] = useState(true);
+  const [addError, setAddError] = useState(false);
+  const [deleteError] = useState(false);
+  const [updateError] = useState(false);
+
   if (!USER_ID) {
+    setAddError(true);
+    setTimeout(() => {
+      setAddError(false);
+    }, 3000);
+    setHasErrorMessage(true);
+
     return <UserWarning />;
   }
+
+  const isAnyError = addError || deleteError || updateError;
+
+  const showAllTodos = async () => {
+    setSelectedFilter('All');
+    setTodos(await getAllTodos(USER_ID));
+  };
+
+  const showActiveTodos = async () => {
+    setSelectedFilter('Active');
+    setTodos(await getActiveTodos(USER_ID));
+  };
+
+  const showCompletedTodos = async () => {
+    setSelectedFilter('Completed');
+    setTodos(await getCompletedTodos(USER_ID));
+  };
 
   return (
     <div className="todoapp">
@@ -119,15 +156,36 @@ export const App: React.FC = () => {
 
           {/* Active filter should have a 'selected' class */}
           <nav className="filter">
-            <a href="#/" className="filter__link selected">
+            <a
+              href="#/"
+              className={cn(
+                'filter__link',
+                { selected: selectedFilter === 'All' },
+              )}
+              onClick={showAllTodos}
+            >
               All
             </a>
 
-            <a href="#/active" className="filter__link">
+            <a
+              href="#/active"
+              className={cn(
+                'filter__link',
+                { selected: selectedFilter === 'Active' },
+              )}
+              onClick={showActiveTodos}
+            >
               Active
             </a>
 
-            <a href="#/completed" className="filter__link">
+            <a
+              href="#/completed"
+              className={cn(
+                'filter__link',
+                { selected: selectedFilter === 'Completed' },
+              )}
+              onClick={showCompletedTodos}
+            >
               Completed
             </a>
           </nav>
@@ -141,16 +199,27 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
+      {isAnyError && (
+        <div className={cn(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: hasErrorMessage },
+        )}
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setHasErrorMessage(false)}
+          />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+          {/* show only one message at a time */}
+          {(addError && 'Unable to add a todo')
+          || (deleteError && 'Unable to delete a todo')
+          || (updateError && 'Unable to update a todo')}
+        </div>
+      )}
     </div>
   );
 };
