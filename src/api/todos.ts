@@ -3,7 +3,7 @@ import { client } from '../utils/fetchClient';
 
 export const getTodos = (userId: number) => {
   return client
-    .get<Todo[]>(`/todos?userqId=${userId}`)
+    .get<Todo[]>(`/todos?userId=${userId}`)
     .catch(() => {
       throw new Error();
     });
