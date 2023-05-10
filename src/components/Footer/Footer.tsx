@@ -18,8 +18,6 @@ export const Footer: React.FC<Props> = ({
     return todos.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
   }, [todos]);
 
-  // console.log(itemsLeft);
-
   const filterTodos = (value: string) => {
     setTodosToRender(todos.filter(({ completed }) => {
       switch (value) {

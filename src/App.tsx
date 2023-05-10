@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>();
   const [errors, setErrors] = useState<Error[]>([{
     title: 'test error',
-    isDanger: false,
+    isImportant: false,
   }]);
   const [todosToRender, setTodosToRender] = useState<Todo[]>();
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
     setErrors((prev: Error[] | undefined) => {
       const newError = { // error obj can be adjusted if needed
         title,
-        isDanger: true,
+        isImportant: true,
       };
 
       return prev ? [...prev, newError] : [newError];
