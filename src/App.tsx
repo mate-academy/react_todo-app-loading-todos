@@ -146,7 +146,7 @@ export const App: React.FC = () => {
               </a>
             </nav>
 
-            {!comletedTodos.length && (
+            {comletedTodos.length > 0 && (
               <button
                 type="button"
                 className="todoapp__clear-completed"
