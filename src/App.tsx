@@ -76,7 +76,7 @@ export const App: React.FC = () => {
             <TodoList todos={getFilteringTodos()} />
 
           </section>
-          {todos.length === 0 ? ''
+          {!todos.length ? ''
             : (
               <Footer
                 setFilterValue={setFilterValue}
