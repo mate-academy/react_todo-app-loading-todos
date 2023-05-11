@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
-import {
-  getAllTodos,
-} from './api/todos';
+import { getAllTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
+import { Filters } from './utils/enums';
 
 const USER_ID = 10306;
 
@@ -22,6 +21,10 @@ export const App: React.FC = () => {
       .then(setTodos);
   }, []);
 
+  const handleFilterSelection = useCallback((value: string) => {
+    setSelectedFilter(value);
+  }, []);
+
   if (!USER_ID) {
     setAddError(true);
     setTimeout(() => {
@@ -34,19 +37,15 @@ export const App: React.FC = () => {
 
   const isAnyError = addError || deleteError || updateError;
 
-  const handleFilterSelection = (value: string) => {
-    setSelectedFilter(value);
-  };
-
   const visibleTodos = todos.filter(({ completed }) => {
     switch (selectedFilter) {
-      case 'All':
+      case Filters.All:
         return true;
 
-      case 'Active':
+      case Filters.Active:
         return !completed;
 
-      case 'Completed':
+      case Filters.Completed:
         return completed;
 
       default:
@@ -191,9 +190,9 @@ export const App: React.FC = () => {
               href="#/"
               className={cn(
                 'filter__link',
-                { selected: selectedFilter === 'All' },
+                { selected: selectedFilter === Filters.All },
               )}
-              onClick={() => handleFilterSelection('All')}
+              onClick={() => handleFilterSelection(Filters.All)}
             >
               All
             </a>
@@ -202,9 +201,9 @@ export const App: React.FC = () => {
               href="#/active"
               className={cn(
                 'filter__link',
-                { selected: selectedFilter === 'Active' },
+                { selected: selectedFilter === Filters.Active },
               )}
-              onClick={() => handleFilterSelection('Active')}
+              onClick={() => handleFilterSelection(Filters.Active)}
             >
               Active
             </a>
@@ -213,9 +212,9 @@ export const App: React.FC = () => {
               href="#/completed"
               className={cn(
                 'filter__link',
-                { selected: selectedFilter === 'Completed' },
+                { selected: selectedFilter === Filters.Completed },
               )}
-              onClick={() => handleFilterSelection('Completed')}
+              onClick={() => handleFilterSelection(Filters.Completed)}
             >
               Completed
             </a>
