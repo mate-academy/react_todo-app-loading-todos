@@ -1,10 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import {
   getAllTodos,
-  getActiveTodos,
-  getCompletedTodos,
 } from './api/todos';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
@@ -19,6 +17,11 @@ export const App: React.FC = () => {
   const [deleteError] = useState(false);
   const [updateError] = useState(false);
 
+  useEffect(() => {
+    getAllTodos(USER_ID)
+      .then(setTodos);
+  }, []);
+
   if (!USER_ID) {
     setAddError(true);
     setTimeout(() => {
@@ -31,20 +34,25 @@ export const App: React.FC = () => {
 
   const isAnyError = addError || deleteError || updateError;
 
-  const showAllTodos = async () => {
-    setSelectedFilter('All');
-    setTodos(await getAllTodos(USER_ID));
+  const handleFilterSelection = (value: string) => {
+    setSelectedFilter(value);
   };
 
-  const showActiveTodos = async () => {
-    setSelectedFilter('Active');
-    setTodos(await getActiveTodos(USER_ID));
-  };
+  const visibleTodos = todos.filter(({ completed }) => {
+    switch (selectedFilter) {
+      case 'All':
+        return true;
 
-  const showCompletedTodos = async () => {
-    setSelectedFilter('Completed');
-    setTodos(await getCompletedTodos(USER_ID));
-  };
+      case 'Active':
+        return !completed;
+
+      case 'Completed':
+        return completed;
+
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="todoapp">
@@ -89,7 +97,7 @@ export const App: React.FC = () => {
         </div> */}
 
           {/* This todo is not completed */}
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             <div className={cn(
               'todo',
               { completed: todo.completed },
@@ -185,7 +193,7 @@ export const App: React.FC = () => {
                 'filter__link',
                 { selected: selectedFilter === 'All' },
               )}
-              onClick={showAllTodos}
+              onClick={() => handleFilterSelection('All')}
             >
               All
             </a>
@@ -196,7 +204,7 @@ export const App: React.FC = () => {
                 'filter__link',
                 { selected: selectedFilter === 'Active' },
               )}
-              onClick={showActiveTodos}
+              onClick={() => handleFilterSelection('Active')}
             >
               Active
             </a>
@@ -207,7 +215,7 @@ export const App: React.FC = () => {
                 'filter__link',
                 { selected: selectedFilter === 'Completed' },
               )}
-              onClick={showCompletedTodos}
+              onClick={() => handleFilterSelection('Completed')}
             >
               Completed
             </a>
