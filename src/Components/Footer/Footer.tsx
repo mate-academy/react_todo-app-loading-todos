@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import classNames from 'classnames';
-import { Filter } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
 
 type Props = {
   filter: Filter;

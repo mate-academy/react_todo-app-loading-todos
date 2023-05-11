@@ -4,7 +4,8 @@ import { getTodos } from './api/todos';
 import { Header } from './Components/Header';
 import { Main } from './Components/Main';
 import { Footer } from './Components/Footer';
-import { Filter, Todo } from './types/Todo';
+import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 const USER_ID = 10307;
 
