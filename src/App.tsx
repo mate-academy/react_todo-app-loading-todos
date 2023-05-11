@@ -17,8 +17,6 @@ export const App: React.FC = () => {
   const [todoValue, setTodoValue] = useState('');
   const [typeFilter, setTypeFilter] = useState<FilterTodoBy>(FilterTodoBy.ALL);
 
-  const handleChangeFilter = (type: FilterTodoBy) => setTypeFilter(type);
-
   const numberOfItemsLeft = todos
     .filter(({ completed }) => !completed).length;
 
@@ -115,7 +113,7 @@ export const App: React.FC = () => {
 
             <TodoFilter
               typeFilter={typeFilter}
-              onChangeFilter={handleChangeFilter}
+              onChangeFilter={setTypeFilter}
             />
 
             <button
