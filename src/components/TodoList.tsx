@@ -11,7 +11,10 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <>
       {todos.map(todo => (
-        <div className={classNames(`todo ${todo.completed ? 'completed' : ''}`)} key={todo.id}>
+        <div
+          className={classNames('todo', { completed: todo.completed })}
+          key={todo.id}
+        >
           <label className="todo__status-label">
             <input
               type="checkbox"

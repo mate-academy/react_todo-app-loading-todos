@@ -52,6 +52,14 @@ export const App: React.FC = () => {
     return visibleTodos;
   };
 
+  const completedTodos = todos.filter(
+    (todo) => todo.completed,
+  );
+
+  const activeTodos = todos.filter(
+    (todo) => !todo.completed,
+  );
+
   return (
     <>
 
@@ -76,13 +84,14 @@ export const App: React.FC = () => {
             <TodoList todos={getFilteringTodos()} />
 
           </section>
-          {!todos.length ? ''
-            : (
-              <Footer
-                setFilterValue={setFilterValue}
-                filterValue={filterValue}
-              />
-            )}
+          {todos.length ? (
+            <Footer
+              setFilterValue={setFilterValue}
+              filterValue={filterValue}
+              completedTodos={completedTodos}
+              activeTodos={activeTodos}
+            />
+          ) : null}
         </div>
 
         {errorMessage && <Notification errorMessage={errorMessage} />}
