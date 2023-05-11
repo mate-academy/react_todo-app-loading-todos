@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { HeaderTodoApp } from './components/HeaderTodoApp';
 import { MainTodoApp } from './components/MainTodoApp';
@@ -19,9 +19,7 @@ export const App: React.FC = () => {
     setTodos(todosFromServer);
   };
 
-  useEffect(() => {
-    loadTodos();
-  }, []);
+  loadTodos();
 
   if (!USER_ID) {
     return <UserWarning />;
