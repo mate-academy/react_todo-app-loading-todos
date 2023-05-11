@@ -9,6 +9,11 @@ import { TodoFilter, StatusOfFilter } from './components/TodoFilter';
 
 const USER_ID = 9948;
 
+enum ErrorType {
+  Server = 'Unable to fetch todos',
+  Validation = "Title can't be empty",
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(StatusOfFilter.All);
@@ -24,7 +29,7 @@ export const App: React.FC = () => {
 
         setTodos(data);
       } catch (error) {
-        setErrorMessage('Unable to fetch todos');
+        setErrorMessage(ErrorType.Server);
       }
     }
 
@@ -55,7 +60,7 @@ export const App: React.FC = () => {
           completed: false,
         });
       } else {
-        setErrorMessage("Title can't be empty");
+        setErrorMessage(ErrorType.Validation);
       }
 
       setValue('');
@@ -83,7 +88,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           {todos.length > 0 && (
             <button
               type="button"
@@ -96,7 +100,6 @@ export const App: React.FC = () => {
             />
           )}
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -104,9 +107,7 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={value}
               onChange={(event) => setValue(event.target.value)}
-              onKeyDown={(event) => {
-                handleKeyDown(event);
-              }}
+              onKeyDown={handleKeyDown}
             />
           </form>
         </header>
@@ -117,16 +118,13 @@ export const App: React.FC = () => {
               <TodoList todos={filteredTodos} />
             </section>
 
-            {/* Hide the footer if there are no todos */}
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {notCompletedTodos.length === 1 ? `${notCompletedTodos.length} item left` : `${notCompletedTodos.length} items left`}
+                {notCompletedTodos.length === 1 ? '1 item left' : `${notCompletedTodos.length} items left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <TodoFilter filter={filter} setFilter={setFilter} />
 
-              {/* don't show this button if there are no completed todos */}
               {completedTodos.length > 0 ? (
                 <button
                   type="button"
@@ -148,8 +146,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div className={classNames(
         'notification',
         'is-danger',
