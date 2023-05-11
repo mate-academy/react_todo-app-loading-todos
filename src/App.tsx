@@ -1,34 +1,79 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { BottomPanel } from './components/BottomPanel';
-import { Status } from './types/StatusEnum';
+import { Filter } from './types/FilterEnum';
+import { UserWarning } from './UserWarning';
+import { ErrorMessage } from './components/ErrorMessage';
 
 const USER_ID = 10268;
 
 export const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [statusOfTodo, setStatusOfTodo] = useState<string>(Status.ALL);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [statusOfTodo, setStatusOfTodo] = useState(Filter.ALL);
+  const [hasError, setHasError] = useState(false);
 
-  const changeStatusOfTodo = (status: string) => {
+  const changeStatusOfTodo = useCallback((status: Filter) => {
     setStatusOfTodo(status);
-  };
+  }, []);
 
-  // const filterTodos = () => {};
+  const closeErrorMessage = useCallback(() => {
+    setHasError(false);
+  }, []);
+
+  const filterTodos = (currentTodos: Todo[], filter: Filter) => {
+    const copyTodos = [...currentTodos];
+
+    switch (filter) {
+      case Filter.ACTIVE:
+        return copyTodos.filter(({ completed }) => !completed);
+      case Filter.COMPLETED:
+        return copyTodos.filter(({ completed }) => completed);
+      default:
+        return copyTodos;
+    }
+  };
 
   useEffect(() => {
     const loadTodoFromServer = async () => {
-      const todosFromServer = await getTodos(USER_ID);
+      try {
+        const todosFromServer = await getTodos(USER_ID);
 
-      setTodos(todosFromServer);
+        setTodos(todosFromServer);
+      } catch {
+        setHasError(true);
+      }
     };
 
     loadTodoFromServer();
   }, []);
 
-  // const visibleTodos = filterTodos(todos , statusOfTodo);
+  useEffect(() => {
+    let timeoutID: ReturnType<typeof setTimeout>;
+
+    if (hasError) {
+      timeoutID = setTimeout(() => {
+        setHasError(false);
+      }, 3000);
+    }
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [hasError]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
+  const visibleTodos = filterTodos(todos, statusOfTodo);
 
   return (
     <div className="todoapp">
@@ -36,10 +81,8 @@ export const App: FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -48,13 +91,13 @@ export const App: FC = () => {
             />
           </form>
         </header>
-        {todos
+        {visibleTodos.length !== 0
           && (
             <>
-              <TodoList todos={todos} />
+              <TodoList todos={visibleTodos} />
               <BottomPanel
-                countOfItems={todos.length}
-                selectedStatus={statusOfTodo}
+                countOfItems={visibleTodos.length}
+                selectedFilter={statusOfTodo}
                 changeStatusOfTodo={changeStatusOfTodo}
               />
             </>
@@ -62,18 +105,13 @@ export const App: FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {hasError
+        && (
+          <ErrorMessage
+            hasError={hasError}
+            closeErrorMessage={closeErrorMessage}
+          />
+        )}
     </div>
   );
 };

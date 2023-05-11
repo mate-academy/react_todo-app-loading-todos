@@ -1,22 +1,22 @@
 import classNames from 'classnames';
-import { FC } from 'react';
-import { Status } from '../types/StatusEnum';
+import { FC, memo } from 'react';
+import { Filter } from '../types/FilterEnum';
 
 interface BottomPanelProps {
   countOfItems: number;
-  selectedStatus: string;
-  changeStatusOfTodo: (status: string) => void;
+  selectedFilter: Filter;
+  changeStatusOfTodo: (filter: Filter) => void;
 }
 
-export const BottomPanel: FC<BottomPanelProps> = (
-  { countOfItems, changeStatusOfTodo, selectedStatus },
+export const BottomPanel: FC<BottomPanelProps> = memo((
+  { countOfItems, changeStatusOfTodo, selectedFilter },
 ) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
-    const text = (event.target as HTMLInputElement).value;// text
+    const target = event.target as HTMLAnchorElement;
 
-    changeStatusOfTodo(text);
+    changeStatusOfTodo(target.text as Filter);
   };
 
   return (
@@ -30,7 +30,7 @@ export const BottomPanel: FC<BottomPanelProps> = (
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: selectedStatus === Status.ALL,
+            selected: selectedFilter === Filter.ALL,
           })}
           onClick={handleClick}
         >
@@ -40,7 +40,7 @@ export const BottomPanel: FC<BottomPanelProps> = (
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: selectedStatus === Status.ACTIVE,
+            selected: selectedFilter === Filter.ACTIVE,
           })}
           onClick={handleClick}
         >
@@ -50,7 +50,7 @@ export const BottomPanel: FC<BottomPanelProps> = (
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: selectedStatus === Status.COMPLETED,
+            selected: selectedFilter === Filter.COMPLETED,
           })}
           onClick={handleClick}
         >
@@ -64,4 +64,4 @@ export const BottomPanel: FC<BottomPanelProps> = (
       </button>
     </footer>
   );
-};
+});

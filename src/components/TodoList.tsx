@@ -10,10 +10,12 @@ export const TodoList: FC<TodoListProps> = ({ todos }) => {
   return (
     <section className="todoapp__main">
       {/* This is a completed todo */}
-      {todos.map(todo => (
-        <div className={classNames('todo', {
-          completed: todo.completed,
-        })}
+      {todos.map(({ id, completed, title }) => (
+        <div
+          className={classNames('todo', {
+            completed,
+          })}
+          key={id}
         >
           <label className="todo__status-label">
             <input
@@ -23,7 +25,7 @@ export const TodoList: FC<TodoListProps> = ({ todos }) => {
             />
           </label>
 
-          <span className="todo__title">{todo.title}</span>
+          <span className="todo__title">{title}</span>
 
           {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove">×</button>
