@@ -84,7 +84,7 @@ export const App: React.FC = () => {
             onClick={() => setErrorMessage('')}
           />
 
-          <p>Error</p>
+          <p>Unable to load data</p>
         </div>
       )}
     </div>
