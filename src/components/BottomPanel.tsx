@@ -24,8 +24,6 @@ export const BottomPanel: FC<BottomPanelProps> = memo((
       <span className="todo-count">
         {`${countOfItems} items left`}
       </span>
-
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -58,7 +56,6 @@ export const BottomPanel: FC<BottomPanelProps> = memo((
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>
