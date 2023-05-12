@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -15,6 +17,8 @@ export const App: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState(Filter.All);
   const [hasError, setHasError] = useState(false);
 
+  let timeoutId: ReturnType<typeof setTimeout>;
+
   const loadTodos = async () => {
     try {
       const response = await getTodos(USER_ID);
@@ -23,29 +27,43 @@ export const App: React.FC = () => {
     } catch (error) {
       console.log(error); // eslint-disable-line no-console
       setHasError(true);
+
+      timeoutId = setTimeout(() => {
+        setHasError(false);
+      }, 3000);
     }
   };
 
   useEffect(() => {
     loadTodos();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
-  const handleFilterChange = (filter: Filter) => {
+  const handleFilterChange = useCallback((filter: Filter) => {
     setSelectedFilter(filter);
-  };
+  }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (selectedFilter) {
-      case Filter.All:
-        return true;
-      case Filter.Active:
-        return !todo.completed;
-      case Filter.Completed:
-        return todo.completed;
-      default:
-        return false;
-    }
-  });
+  const handleCloseError = useCallback(() => {
+    setHasError(false);
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      switch (selectedFilter) {
+        case Filter.All:
+          return true;
+        case Filter.Active:
+          return !todo.completed;
+        case Filter.Completed:
+          return todo.completed;
+        default:
+          return false;
+      }
+    });
+  }, [todos, selectedFilter]);
 
   const activeTodosCount = todos.filter((todo) => !todo.completed).length;
 
@@ -72,9 +90,9 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && (
+        {!hasError && todos.length > 0 && (
           <>
-            <TodoList todos={visibleTodos} />
+            <TodoList visibleTodos={visibleTodos} />
             <Footer
               onFilterChange={handleFilterChange}
               selectedFilter={selectedFilter}
@@ -84,7 +102,10 @@ export const App: React.FC = () => {
         )}
 
         {hasError && (
-          <Error />
+          <Error
+            hasError={hasError}
+            onCloseError={handleCloseError}
+          />
         )}
         {/* <section className="todoapp__main"> */}
         {/* This is a completed todo */}

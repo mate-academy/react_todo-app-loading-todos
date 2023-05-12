@@ -1,15 +1,36 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const Error = () => {
+import cn from 'classnames';
+
+interface Props {
+  hasError: boolean;
+  onCloseError: () => void;
+}
+
+export const Error: React.FC<Props> = ({
+  hasError,
+  onCloseError,
+}) => {
   return (
-    <div className="notification is-danger is-light has-text-weight-normal">
-      <button type="button" className="delete" />
+    <div className={cn(
+      'notification', 'is-danger', 'is-light',
+      'has-text-weight-normal', {
+        'is-hidden': !hasError,
+      },
+    )}
+    >
+      <button
+        type="button"
+        className="delete"
+        onClick={onCloseError}
+      />
 
       {/* show only one message at a time */}
-      Unable to add a todo
+      Failed to connect to server
+      {/* Unable to add a todo
       <br />
       Unable to delete a todo
       <br />
-      Unable to update a todo
+      Unable to update a todo */}
     </div>
   );
 };
