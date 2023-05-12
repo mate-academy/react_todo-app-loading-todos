@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
 import { TodoList } from './components/TodoList';
 import { FilterBy } from './enums/FilterBy';
 import { TodoFilter } from './components/TodoFilter';
+import { getTodos } from './api/todos';
+import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 
 const USER_ID = 10321;
 
@@ -13,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const activeTodosNumber = todos
     .filter(todo => todo.completed === false).length;
@@ -31,11 +33,15 @@ export const App: React.FC = () => {
     }
   };
 
+  const deleteErrorMessage = () => setErrorMessage('');
+
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-        setFilteredTodos(todosFromServer);
+    getTodos(USER_ID).then(todosFromServer => {
+      setTodos(todosFromServer);
+      setFilteredTodos(todosFromServer);
+    })
+      .catch(error => {
+        setErrorMessage(error.message);
       });
   }, []);
 
@@ -86,18 +92,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {/* <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" /> */}
-
-      {/* show only one message at a time */}
-      {/* Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div> */}
+      <ErrorMessage message={errorMessage} onDelete={deleteErrorMessage} />
     </div>
   );
 };
