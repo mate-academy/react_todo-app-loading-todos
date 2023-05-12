@@ -10,6 +10,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
+import { NewTodo } from './components/NewTodo';
 
 const USER_ID = 10358;
 
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const completedCount = todos.filter(todo => todo.completed).length;
+  const activeCount = todos.filter(todo => !todo.completed).length;
 
   const filteredTodos = todos.filter(todo => {
     switch (filterBy) {
@@ -59,33 +60,32 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          { todos.length && (
-            <button type="button" className="todoapp__toggle-all active" />
-          )}
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
+          { todos.length ? (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                hidden: !todos.length,
+                active: activeCount,
+              })}
             />
-          </form>
+          ) : null}
+
+          <NewTodo />
         </header>
 
-        <TodoList todos={filteredTodos} />
-
-        {/* Hide the footer if there are no todos */}
-        <Footer
-          filterBy={filterBy}
-          setFilterBy={setFilterBy}
-          completedCount={completedCount}
-        />
+        {todos.length
+          ? (
+            <>
+              <TodoList todos={filteredTodos} />
+              <Footer
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                activeCount={activeCount}
+              />
+            </>
+          ) : null}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         className={classNames(
           'notification is-danger is-light has-text-weight-normal', {
