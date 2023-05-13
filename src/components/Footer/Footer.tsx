@@ -1,26 +1,37 @@
-import { FC } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { Status } from '../../enum/Status';
+import { Todo } from '../../types/Todo';
 
 interface FooterProps {
+  todos: Todo[],
   onStatusSelect: (status: string) => void;
   todoStatus: string;
 }
 
-export const Footer: FC<FooterProps> = ({ onStatusSelect, todoStatus }) => {
-  const handleClick = (
+export const Footer: FC<FooterProps> = ({
+  todos,
+  onStatusSelect,
+  todoStatus,
+}) => {
+  const handleClick = useCallback((
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     onStatusSelect(event.currentTarget.text.toLowerCase());
-  };
+  }, []);
+
+  const calcNotCompletedTodosLength = useCallback(() => {
+    return todos.filter(({ completed }) => !completed).length;
+  }, [todos]);
+
+  const notCompletedTodosLength = useMemo(calcNotCompletedTodosLength, [todos]);
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${notCompletedTodosLength} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"

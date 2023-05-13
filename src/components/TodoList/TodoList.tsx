@@ -9,7 +9,6 @@ interface TodoListProps {
 export const TodoList: FC<TodoListProps> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {/* This is a completed todo */}
       {todos.map((todo) => (
         <TodoItem
           todo={todo}

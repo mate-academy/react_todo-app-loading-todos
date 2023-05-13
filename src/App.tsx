@@ -55,7 +55,7 @@ export const App: FC = () => {
 
   const visibleTodos = useMemo(filterTodos, [todos, todoStatus]);
 
-  const handleStatus = useCallback((status: string) => {
+  const handleStatus = useCallback((status: string): void => {
     setTodoStatus(status);
   }, []);
 
@@ -69,6 +69,7 @@ export const App: FC = () => {
         <TodoList todos={visibleTodos} />
 
         <Footer
+          todos={todos}
           onStatusSelect={handleStatus}
           todoStatus={todoStatus}
         />
