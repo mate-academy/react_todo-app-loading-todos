@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -36,27 +37,23 @@ export const App: FC = () => {
     }
   }, []);
 
-  const filteredTodos = () => {
-    let preparedTodos = [...todos];
+  const filterTodos = useCallback(() => {
+    return todos.filter(({ completed }) => {
+      switch (todoStatus) {
+        case Status.Active:
+          return !completed;
 
-    switch (todoStatus) {
-      case Status.Active:
-        preparedTodos = preparedTodos.filter((todo) => (!todo.completed));
-        break;
+        case Status.Completed:
+          return completed;
 
-      case Status.Completed:
-        preparedTodos = preparedTodos.filter((todo) => (todo.completed));
-        break;
+        case Status.All:
+        default:
+          return todos;
+      }
+    });
+  }, [todos, todoStatus]);
 
-      case Status.All:
-      default:
-        return preparedTodos;
-    }
-
-    return preparedTodos;
-  };
-
-  const visibleTodos = filteredTodos();
+  const visibleTodos = useMemo(filterTodos, [todos, todoStatus]);
 
   const handleStatus = useCallback((status: string) => {
     setTodoStatus(status);
@@ -71,15 +68,12 @@ export const App: FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {/* Hide the footer if there are no todos */}
         <Footer
           onStatusSelect={handleStatus}
           todoStatus={todoStatus}
         />
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
         <div className="notification is-danger is-light has-text-weight-normal">
           <button
