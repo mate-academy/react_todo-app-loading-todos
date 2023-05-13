@@ -1,12 +1,12 @@
-import React from 'react';
+import { FC } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-interface Props {
+interface TodoListProps {
   todos: Todo[]
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: FC<TodoListProps> = ({ todos }) => {
   return (
     <section className="todoapp__main">
       {/* This is a completed todo */}

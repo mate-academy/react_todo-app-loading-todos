@@ -1,6 +1,6 @@
-import React from 'react';
+import { FC } from 'react';
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}

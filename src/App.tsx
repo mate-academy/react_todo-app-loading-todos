@@ -1,6 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useCallback } from 'react';
-// import { UserWarning } from './UserWarning';
+import {
+  FC,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { getTodos } from './api/todos';
@@ -10,7 +14,7 @@ import { Status } from './enum/Status';
 
 const USER_ID = 10303;
 
-export const App: React.FC = () => {
+export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoStatus, setTodoStatus] = useState<string>(Status.All);
   const [errorMessage, setErrorMessage] = useState('');

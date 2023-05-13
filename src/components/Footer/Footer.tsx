@@ -1,13 +1,13 @@
-import React from 'react';
+import { FC } from 'react';
 import classNames from 'classnames';
 import { Status } from '../../enum/Status';
 
-interface Props {
+interface FooterProps {
   onStatusSelect: (status: string) => void;
   todoStatus: string;
 }
 
-export const Footer: React.FC<Props> = ({ onStatusSelect, todoStatus }) => {
+export const Footer: FC<FooterProps> = ({ onStatusSelect, todoStatus }) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
