@@ -9,6 +9,7 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './component/TodoList';
 import { Footer } from './component/Footer';
+import { Error } from './component/Error';
 import { FilterBy } from './types/typedefs';
 import { getTodosByFilter } from './helpers';
 
@@ -17,9 +18,14 @@ const USER_ID = 10303; // 10363
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterTodos, setFilterTodos] = useState(FilterBy.ALL);
+  const [hasError, setHasError] = useState(true);
 
   const handleFilterTodos = useCallback((userFilter: FilterBy) => {
     setFilterTodos(userFilter);
+  }, []);
+
+  const handleHasError = useCallback(() => {
+    setHasError(false);
   }, []);
 
   const prepareTodos = useMemo(() => {
@@ -69,18 +75,10 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Error
+        error={hasError}
+        onError={handleHasError}
+      />
     </div>
   );
 };
