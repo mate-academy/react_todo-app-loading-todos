@@ -1,11 +1,10 @@
-import { Todo } from '../../types/Todo';
+import { useContext } from 'react';
 import { TodoInfo } from '../Todo/TodoInfo';
+import { TodosContext } from '../../contexts/TodosContext';
 
-interface Props{
-  todos: Todo[];
-}
+export const TodoList:React.FC = () => {
+  const { todos } = useContext(TodosContext);
 
-export const TodoList:React.FC<Props> = ({ todos }) => {
   return (
     <>
       {todos.map(todo => (

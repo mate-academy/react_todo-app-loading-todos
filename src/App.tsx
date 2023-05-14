@@ -3,12 +3,32 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { TodoList } from './components/TodoList';
 import { FilterType } from './types/FilterType';
-import { Filter } from './components/Filter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { Footer } from './components/Footer';
+import { FilterContext } from './contexts/FilterContext';
+import { TodosContext } from './contexts/TodosContext';
 
 const USER_ID = 10314;
+
+const getFilteredTodos = (todos: Todo[], filterType: FilterType) => {
+  return todos.filter(todo => {
+    switch (filterType) {
+      case FilterType.All:
+        return todo;
+
+      case FilterType.Active:
+        return !todo.completed;
+
+      case FilterType.Completed:
+        return todo.completed;
+
+      default: throw new Error('Wrong filter type!');
+    }
+  });
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,70 +53,33 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  switch (filterType) {
-    case FilterType.All:
-      filteredTodos = todos;
-      break;
+  filteredTodos = getFilteredTodos(todos, filterType);
 
-    case FilterType.Active:
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
-
-    case FilterType.Completed:
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
-
-    default: throw new Error('Wrong filter type!');
-  }
-
-  const activeTodosCount = todos.length
-    ? todos.filter(todo => todo.completed).length
-    : [];
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {todos.length > 0 && (
-            <button type="button" className="todoapp__toggle-all active" />
-          )}
+        <Header todosCount={filteredTodos.length} />
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-        {todos.length > 0 && (
+        {filteredTodos.length > 0 && (
           <>
-            <section className="todoapp__main">
-              <TodoList todos={filteredTodos} />
-            </section>
+            <TodosContext.Provider value={{ todos: filteredTodos }}>
+              <Main />
+            </TodosContext.Provider>
 
-            <footer className="todoapp__footer">
-              {activeTodosCount && (
-                <span className="todo-count">
-                  {`${activeTodosCount} items left`}
-                </span>
-              )}
-
-              <Filter
-                currentFilterType={filterType}
-                setFilterType={setFilterType}
+            <FilterContext.Provider value={{
+              filter: filterType,
+              setFilter: setFilterType,
+            }}
+            >
+              <Footer
+                todosCount={filteredTodos.length}
+                activeTodosCount={activeTodosCount}
               />
-
-              {activeTodosCount === filterType.length && (
-                <button type="button" className="todoapp__clear-completed">
-                  Clear completed
-                </button>
-              )}
-
-            </footer>
+            </FilterContext.Provider>
           </>
         )}
 

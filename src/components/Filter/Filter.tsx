@@ -1,15 +1,11 @@
 import cn from 'classnames';
+import { useContext } from 'react';
 import { FilterType } from '../../types/FilterType';
+import { FilterContext } from '../../contexts/FilterContext';
 
-interface Props {
-  currentFilterType: FilterType;
-  setFilterType: (filter: FilterType) => void;
-}
+export const Filter: React.FC = () => {
+  const { filter: filterType, setFilter } = useContext(FilterContext);
 
-export const Filter: React.FC<Props> = ({
-  currentFilterType,
-  setFilterType,
-}) => {
   return (
     <nav className="filter">
       {Object.values(FilterType).map(filter => (
@@ -19,8 +15,8 @@ export const Filter: React.FC<Props> = ({
             ? ''
             : filter[0].toLowerCase() + filter.slice(1)}`}
           className={cn('filter__link',
-            { selected: currentFilterType === filter })}
-          onClick={() => setFilterType(filter)}
+            { selected: filterType === filter })}
+          onClick={() => setFilter(filter)}
         >
           {filter}
         </a>
