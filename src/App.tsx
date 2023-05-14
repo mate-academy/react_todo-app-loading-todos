@@ -8,16 +8,15 @@ import { FilteredBy } from './types/FilteredBy';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 10382;
+const USER_ID = 10348;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filteredBy, setfilteredBy] = useState(FilteredBy.ALL);
 
-  const activeTodosCount = todos
-    .filter(todo => todo.completed === false).length;
-  const completedTodosCount = todos.length - activeTodosCount;
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
 
   const getFilteredTodos = (filter: FilteredBy) => {
     switch (filter) {

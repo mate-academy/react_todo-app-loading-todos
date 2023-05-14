@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import { FilteredBy } from '../../types/FilteredBy';
 
 type Props = {
@@ -13,7 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
   <nav className="filter">
     <a
       href="#/"
-      className={classNames('filter__link', {
+      className={cn('filter__link', {
         selected: filter === FilteredBy.ALL,
       })}
       onClick={() => setFilter(FilteredBy.ALL)}
@@ -23,7 +23,7 @@ export const TodoFilter: React.FC<Props> = ({
 
     <a
       href="#/active"
-      className={classNames('filter__link', {
+      className={cn('filter__link', {
         selected: filter === FilteredBy.ACTIVE,
       })}
       onClick={() => setFilter(FilteredBy.ACTIVE)}
@@ -33,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
 
     <a
       href="#/completed"
-      className={classNames('filter__link', {
+      className={cn('filter__link', {
         selected: filter === FilteredBy.COMPLETED,
       })}
       onClick={() => setFilter(FilteredBy.COMPLETED)}
