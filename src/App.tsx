@@ -7,39 +7,38 @@ import {
 } from 'react';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { TodoList } from './components/TodoList';
-import { BottomPanel } from './components/BottomPanel';
+
 import { Filter } from './types/FilterEnum';
 import { UserWarning } from './UserWarning';
 import { ErrorMessage } from './components/ErrorMessage';
+import { BottomPanel } from './components/BottomPanel';
+import { TodoList } from './components/TodoList';
 
 const USER_ID = 10268;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [statusOfTodo, setStatusOfTodo] = useState(Filter.ALL);
+  const [filterOfTodo, setFilterOfTodo] = useState(Filter.ALL);
   const [hasError, setHasError] = useState(false);
 
-  const changeStatusOfTodo = useCallback((status: Filter) => {
-    setStatusOfTodo(status);
+  const changeFilterOfTodo = useCallback((status: Filter) => {
+    setFilterOfTodo(status);
   }, []);
 
   const closeErrorMessage = useCallback(() => {
     setHasError(false);
   }, []);
 
-  const filterTodos = (currentTodos: Todo[], filter: Filter) => {
-    const copyTodos = [...currentTodos];
-
-    switch (filter) {
+  const filterTodos = useCallback(() => {
+    switch (filterOfTodo) {
       case Filter.ACTIVE:
-        return copyTodos.filter(({ completed }) => !completed);
+        return todos.filter(({ completed }) => !completed);
       case Filter.COMPLETED:
-        return copyTodos.filter(({ completed }) => completed);
+        return todos.filter(({ completed }) => completed);
       default:
-        return copyTodos;
+        return todos;
     }
-  };
+  }, [todos, filterOfTodo]);
 
   useEffect(() => {
     const loadTodoFromServer = async () => {
@@ -73,7 +72,7 @@ export const App: FC = () => {
     return <UserWarning />;
   }
 
-  const visibleTodos = filterTodos(todos, statusOfTodo);
+  const visibleTodos = filterTodos();
 
   return (
     <div className="todoapp">
@@ -91,18 +90,20 @@ export const App: FC = () => {
             />
           </form>
         </header>
+
         {visibleTodos.length !== 0
           && (
-            <>
-              <TodoList todos={visibleTodos} />
-              <BottomPanel
-                countOfItems={visibleTodos.length}
-                selectedFilter={statusOfTodo}
-                changeStatusOfTodo={changeStatusOfTodo}
-              />
-            </>
+            <TodoList todos={visibleTodos} />
           ) }
 
+        {todos.length !== 0
+          && (
+            <BottomPanel
+              countOfItems={visibleTodos.length}
+              selectedFilter={filterOfTodo}
+              changeFilterOfTodo={changeFilterOfTodo}
+            />
+          ) }
       </div>
 
       {hasError

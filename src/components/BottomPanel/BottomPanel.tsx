@@ -1,22 +1,22 @@
 import classNames from 'classnames';
 import { FC, memo } from 'react';
-import { Filter } from '../types/FilterEnum';
+import { Filter } from '../../types/FilterEnum';
 
 interface BottomPanelProps {
   countOfItems: number;
   selectedFilter: Filter;
-  changeStatusOfTodo: (filter: Filter) => void;
+  changeFilterOfTodo: (filter: Filter) => void;
 }
 
 export const BottomPanel: FC<BottomPanelProps> = memo((
-  { countOfItems, changeStatusOfTodo, selectedFilter },
+  { countOfItems, changeFilterOfTodo, selectedFilter },
 ) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const target = event.target as HTMLAnchorElement;
 
-    changeStatusOfTodo(target.text as Filter);
+    changeFilterOfTodo(target.text as Filter);
   };
 
   return (
