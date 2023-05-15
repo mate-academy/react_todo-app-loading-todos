@@ -67,7 +67,11 @@ export const App: React.FC = () => {
         <Header createTodo={createTodo} handleError={setErrorMessage} />
         <TodoList todos={handleSelectedTodos} />
         {/* Hide the footer if there are no todos */}
-        <Footer onSelect={setSelect} />
+        <Footer
+          onSelect={setSelect}
+          todos={handleSelectedTodos}
+          select={select}
+        />
       </div>
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}

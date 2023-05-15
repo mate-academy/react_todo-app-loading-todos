@@ -1,22 +1,30 @@
 import React from 'react';
+import classNames from 'classnames';
+
 import { Select } from '../../types/Select';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   onSelect: (value: Select) => void;
+  todos: Todo[];
+  select: Select;
 }
 
-export const Footer: React.FC<Props> = ({ onSelect }) => {
+export const Footer: React.FC<Props> = ({ onSelect, todos, select }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${todos.length} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
-          className="filter__link selected"
+          className={classNames(
+            'filter__link',
+            { selected: select === Select.All },
+          )}
           onClick={() => onSelect(Select.All)}
         >
           All
@@ -24,7 +32,10 @@ export const Footer: React.FC<Props> = ({ onSelect }) => {
 
         <a
           href="#/active"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { selected: select === Select.Active },
+          )}
           onClick={() => onSelect(Select.Active)}
         >
           Active
@@ -32,7 +43,10 @@ export const Footer: React.FC<Props> = ({ onSelect }) => {
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={classNames(
+            'filter__link',
+            { selected: select === Select.Completed },
+          )}
           onClick={() => onSelect(Select.Completed)}
         >
           Completed
