@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -35,27 +35,30 @@ export const App: React.FC = () => {
   const [filterType, setFilterType] = useState(FilterType.All);
   const [errorNotification, setErrorNotification] = useState('');
 
-  let filteredTodos: Todo[] = [];
+  const filteredTodos: Todo[] = useMemo(() => (
+    getFilteredTodos(todos, filterType)), [todos, filterType]);
+
+  const activeTodosCount = useMemo(() => (
+    todos.filter(todo => !todo.completed).length), [todos]);
+
+  const loadTodos = async () => {
+    setErrorNotification('');
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
+      setTodos(todosFromServer);
+    } catch {
+      setErrorNotification('Error on loading');
+    }
+  };
 
   useEffect(() => {
-    setErrorNotification('');
-
-    getTodos(USER_ID)
-      .then(todosFromServer => {
-        if (todosFromServer) {
-          setTodos(todosFromServer);
-        }
-      })
-      .catch(() => setErrorNotification('Error on loading'));
+    loadTodos();
   }, [filterType]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  filteredTodos = getFilteredTodos(todos, filterType);
-
-  const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -64,7 +67,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header todosCount={filteredTodos.length} />
 
-        {filteredTodos.length > 0 && (
+        {!!filteredTodos.length && (
           <>
             <TodosContext.Provider value={{ todos: filteredTodos }}>
               <Main />
@@ -88,7 +91,6 @@ export const App: React.FC = () => {
       {errorNotification && (
         <ErrorNotification errorNotification={errorNotification} />
       )}
-
     </div>
   );
 };

@@ -6,10 +6,10 @@ export const TodoList:React.FC = () => {
   const { todos } = useContext(TodosContext);
 
   return (
-    <>
+    <div className="todos_list">
       {todos.map(todo => (
         <TodoInfo key={todo.id} todo={todo} />
       )) }
-    </>
+    </div>
   );
 };

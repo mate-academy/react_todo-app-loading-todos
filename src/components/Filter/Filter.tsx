@@ -8,19 +8,23 @@ export const Filter: React.FC = () => {
 
   return (
     <nav className="filter">
-      {Object.values(FilterType).map(filter => (
-        <a
-          key={filter}
-          href={`#/${filter === FilterType.All
-            ? ''
-            : filter[0].toLowerCase() + filter.slice(1)}`}
-          className={cn('filter__link',
-            { selected: filterType === filter })}
-          onClick={() => setFilter(filter)}
-        >
-          {filter}
-        </a>
-      ))}
+      {Object.values(FilterType).map(filter => {
+        const isDefalutFilter = filter === FilterType.All;
+
+        return (
+          <a
+            key={filter}
+            href={`#/${isDefalutFilter
+              ? ''
+              : filter[0].toLowerCase() + filter.slice(1)}`}
+            className={cn('filter__link',
+              { selected: filterType === filter })}
+            onClick={() => setFilter(filter)}
+          >
+            {filter}
+          </a>
+        );
+      })}
     </nav>
   );
 };

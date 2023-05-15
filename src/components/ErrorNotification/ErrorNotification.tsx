@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 
 interface Props {
@@ -12,7 +12,9 @@ export const ErrorNotification: React.FC<Props> = ({ errorNotification }) => {
     setHidden(true);
   };
 
-  setTimeout(hadleHidding, 3000);
+  useEffect(() => {
+    setTimeout(hadleHidding, 3000);
+  }, []);
 
   return (
     <div className={cn(
