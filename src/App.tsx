@@ -1,7 +1,11 @@
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { client } from './utils/fetchClient';
@@ -15,34 +19,37 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (filterBy) {
-      case FilterBy.Active:
-        return !todo.completed;
+  const visibleTodos = useMemo(() => (
+    todos.filter((todo) => {
+      switch (filterBy) {
+        case FilterBy.Active:
+          return !todo.completed;
 
-      case FilterBy.Completed:
-        return todo.completed;
+        case FilterBy.Completed:
+          return todo.completed;
 
-      default:
-        return true;
-    }
-  });
+        default:
+          return true;
+      }
+    })
+  ), [todos, filterBy]);
+
+  const getTodos = async () => {
+    const todosFromServer = await client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+
+    setTodos(todosFromServer);
+  };
 
   const itemsLeft = todos.filter((todo) => !todo.completed).length;
   const isTodosNoEmpty = todos.length > 0;
 
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
-      .then((response) => {
-        setTodos(response);
-      });
+    getTodos();
   }, []);
 
-  console.log(todos);
-
-  const handleFilterChange = (newFilter: FilterBy) => {
+  const handleFilterChange = useCallback((newFilter: FilterBy) => {
     setFilterBy(newFilter);
-  };
+  }, []);
 
   return (
     <div className="todoapp">
