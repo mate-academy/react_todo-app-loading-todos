@@ -8,17 +8,27 @@ import { getTodos } from './api/todos';
 
 import { Todo } from './types/Todo';
 import { Filter } from './types/FilterEnum';
+import { ErrorMessage } from './components/ErrorMesage';
 
 const USER_ID = 10336;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
+  const [isError, setIsError] = useState(false);
 
-  const loadTodos = useCallback(() => {
-    getTodos(USER_ID).then((loadedTodos) => {
-      setTodos(loadedTodos);
-    });
+  const loadTodos = useCallback(async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
+      setTodos(todosFromServer);
+    } catch (error) {
+      setIsError(true);
+    }
+  }, []);
+
+  const closeError = useCallback(() => {
+    setIsError(false);
   }, []);
 
   const filteredTodos = (currentTodos: Todo[], option: string) => {
@@ -72,24 +82,14 @@ export const App: React.FC = () => {
             />
           </>
         )}
-
-        {/* Notification is shown in case of any error
-          Add the 'hidden' class to hide the message smoothly
-        <div className="notification is-danger is-light has-text-weight-normal">
-          <button
-            type="button"
-            className="delete"
-            onClick={handleResetErrors}
-          />
-
-           show only one message at a time
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div> */}
       </div>
+
+      {isError && (
+        <ErrorMessage
+          isError={isError}
+          onClose={closeError}
+        />
+      )}
     </div>
   );
 };
