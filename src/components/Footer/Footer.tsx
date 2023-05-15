@@ -10,17 +10,25 @@ interface Props {
 }
 
 export const Footer: FC<Props> = ({ todos, onChangeFilter, activeFilter }) => {
-  return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
-        {`${todos.length} items left`}
-      </span>
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
-      {/* Active filter should have a 'selected' class */}
-      <Nav
-        onChangeFilter={onChangeFilter}
-        activeFilter={activeFilter}
-      />
-    </footer>
+  return (
+    <>
+      {
+        todos.length > 0 && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodos} items left`}
+            </span>
+
+            {/* Active filter should have a 'selected' class */}
+            <Nav
+              onChangeFilter={onChangeFilter}
+              activeFilter={activeFilter}
+            />
+          </footer>
+        )
+      }
+    </>
   );
 };

@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -8,39 +13,41 @@ import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Notification } from './components/Notification';
 import { SortTypes } from './types/SortTypes';
-import { Error } from './types/Error';
+import { TodoError } from './types/TodoError';
 
 const USER_ID = 10320;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeFilter, setActiveFilter] = useState<SortTypes>(SortTypes.All);
-  const [errorMessage, setErrorMessage] = useState<Error | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsloading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isEditedTodo, setIsEditet] = useState(false);
 
   const handleError = () => {
-    setErrorMessage(Error.LOAD);
+    setErrorMessage(TodoError.LOAD);
     setTimeout(() => {
-      setErrorMessage(null);
+      setErrorMessage('');
     }, 3000);
   };
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     try {
+      setIsloading(true);
       const response = await getTodos(USER_ID);
 
       setTodos(response);
+      setIsloading(false);
     } catch (error: unknown) {
       handleError();
     }
-  };
-
-  useEffect(() => {
-    loadTodos();
   }, []);
 
   const vissibleTodos = todos.filter((todo) => {
     switch (activeFilter) {
       case SortTypes.Active:
+      case SortTypes.AllCompleted:
         return !todo.completed;
 
       case SortTypes.Completed:
@@ -49,6 +56,10 @@ export const App: FC = () => {
       default: return true;
     }
   });
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -61,23 +72,25 @@ export const App: FC = () => {
       <div className="todoapp__content">
 
         <Header />
-        <TodoList todos={vissibleTodos} />
+        <TodoList
+          todos={vissibleTodos}
+          isLoading={isLoading}
+          isEdited={isEditedTodo}
+        />
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
-          <Footer
-            todos={vissibleTodos}
-            onChangeFilter={setActiveFilter}
-            activeFilter={activeFilter}
-          />
-        )}
+        <Footer
+          todos={vissibleTodos}
+          onChangeFilter={setActiveFilter}
+          activeFilter={activeFilter}
+        />
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
-        <Notification errorMessage={errorMessage} />
+        <Notification
+          message={errorMessage}
+        />
       )}
+
     </div>
   );
 };

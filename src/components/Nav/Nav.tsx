@@ -11,6 +11,10 @@ export const Nav: FC<Props> = ({
   onChangeFilter,
   activeFilter,
 }) => {
+  const handleFilter = (filter: SortTypes) => {
+    onChangeFilter(filter);
+  };
+
   return (
     <>
       <nav className="filter">
@@ -18,7 +22,7 @@ export const Nav: FC<Props> = ({
           href="#/"
           className={cn('filter__link',
             { selected: activeFilter === SortTypes.All })}
-          onClick={() => onChangeFilter(SortTypes.All)}
+          onClick={() => handleFilter(SortTypes.All)}
         >
           All
         </a>
@@ -27,7 +31,7 @@ export const Nav: FC<Props> = ({
           href="#/active"
           className={cn('filter__link',
             { selected: activeFilter === SortTypes.Active })}
-          onClick={() => onChangeFilter(SortTypes.Active)}
+          onClick={() => handleFilter(SortTypes.Active)}
         >
           Active
         </a>
@@ -36,13 +40,17 @@ export const Nav: FC<Props> = ({
           href="#/completed"
           className={cn('filter__link',
             { selected: activeFilter === SortTypes.Completed })}
-          onClick={() => onChangeFilter(SortTypes.Completed)}
+          onClick={() => handleFilter(SortTypes.Completed)}
         >
           Completed
         </a>
       </nav>
 
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        onClick={() => handleFilter(SortTypes.AllCompleted)}
+      >
         Clear completed
       </button>
 

@@ -4,9 +4,10 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
+  isLoading: boolean;
 }
 
-export const TodoItem: FC<Props> = ({ todo }) => {
+export const TodoItem: FC<Props> = ({ todo, isLoading }) => {
   const { id, title, completed } = todo;
 
   return (
@@ -18,14 +19,14 @@ export const TodoItem: FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="todo__status"
-          // checked
+          checked={completed}
         />
       </label>
 
       <span className="todo__title">{title}</span>
       <button type="button" className="todo__remove">×</button>
 
-      <div className="modal overlay">
+      <div className={cn('modal overlay', { 'is-active': isLoading })}>
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

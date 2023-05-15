@@ -1,22 +1,32 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 interface Props {
-  errorMessage: string
+  message: string;
 }
 
-export const Notification: FC<Props> = ({ errorMessage }) => {
-  return (
-    <div className="notification is-danger is-light has-text-weight-normal">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="delete" />
+export const Notification: FC<Props> = ({ message }) => {
+  const [isHidden, setIsHidden] = useState(true);
 
-      {/* show only one message at a time */}
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
-      {errorMessage}
-    </div>
+  const handleNotificationClose = () => {
+    setIsHidden(!isHidden);
+  };
+
+  return (
+    <>
+      {isHidden && (
+        <div
+          className="notification is-danger is-light has-text-weight-normal"
+          hidden={message === ''}
+        >
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            type="button"
+            className="delete"
+            onClick={handleNotificationClose}
+          />
+          {message}
+        </div>
+      )}
+    </>
   );
 };
