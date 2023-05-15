@@ -35,14 +35,19 @@ export const App: React.FC = () => {
 
   const deleteErrorMessage = () => setErrorMessage('');
 
-  useEffect(() => {
-    getTodos(USER_ID).then(todosFromServer => {
+  const loadData = async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
       setTodos(todosFromServer);
       setFilteredTodos(todosFromServer);
-    })
-      .catch(error => {
-        setErrorMessage(error.message);
-      });
+    } catch {
+      setErrorMessage('Failed to load data');
+    }
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   useEffect(() => setFilteredTodos(getFilteredTodos(filterBy)), [filterBy]);
@@ -72,7 +77,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && (
+        {todos && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               {`${activeTodosNumber} items left`}
