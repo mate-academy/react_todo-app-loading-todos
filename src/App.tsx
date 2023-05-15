@@ -4,8 +4,8 @@ import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo, TodoStatus } from './types/Todo';
 import { ErrorNotification } from './ErrorNotification';
-import { TodosList } from './TodosList';
 import { TodosHeader } from './TodosHeader';
+import { TodosList } from './TodosList';
 import { TodosFooter } from './TodosFooter';
 
 const USER_ID = 10332;
