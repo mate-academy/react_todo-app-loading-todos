@@ -14,8 +14,6 @@ export const Notifications: React.FC<Props> = ({ errorType }) => (
     )}
   >
     <button type="button" className="delete" />
-    {errorType === ErrorType.ADD && 'Unable to add a todo'}
-    {errorType === ErrorType.DELETE && 'Unable to delete a todo'}
-    {errorType === ErrorType.UPDATE && 'Unable to update a todo'}
+    {`Unable to ${errorType} a todo`}
   </div>
 );

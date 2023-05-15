@@ -23,10 +23,9 @@ export const TodoAppFooter: React.FC<Props> = ({
       <nav className="filter">
         <a
           href="#/"
-          className={classNames(
-            'filter__link',
-            { selected: filterType === FilterType.ALL },
-          )}
+          className={classNames('filter__link', {
+            selected: filterType === FilterType.ALL,
+          })}
           onClick={() => onFilterChange(FilterType.ALL)}
         >
           All
@@ -34,10 +33,9 @@ export const TodoAppFooter: React.FC<Props> = ({
 
         <a
           href="#/active"
-          className={classNames(
-            'filter__link',
-            { selected: filterType === FilterType.ACTIVE },
-          )}
+          className={classNames('filter__link', {
+            selected: filterType === FilterType.ACTIVE,
+          })}
           onClick={() => onFilterChange(FilterType.ACTIVE)}
         >
           Active
@@ -45,10 +43,9 @@ export const TodoAppFooter: React.FC<Props> = ({
 
         <a
           href="#/completed"
-          className={classNames(
-            'filter__link',
-            { selected: filterType === FilterType.COMPLETED },
-          )}
+          className={classNames('filter__link', {
+            selected: filterType === FilterType.COMPLETED,
+          })}
           onClick={() => onFilterChange(FilterType.COMPLETED)}
         >
           Completed

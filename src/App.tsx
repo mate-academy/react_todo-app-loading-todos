@@ -16,8 +16,10 @@ import { ErrorType } from './types/ErrorType';
 
 const USER_ID = 10308;
 
-const prepareTodos = (todoList: Todo[] | null, filterType: FilterType) => (
-  todoList?.filter(todo => {
+const getTodos = () => client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+
+const prepareTodos = (todoList: Todo[], filterType: FilterType) => (
+  todoList.filter(todo => {
     switch (filterType) {
       case FilterType.ACTIVE:
         return !todo.completed;
@@ -31,8 +33,8 @@ const prepareTodos = (todoList: Todo[] | null, filterType: FilterType) => (
   })
 );
 
-const getActiveTodosCount = (todoList: Todo[] | null) => (
-  todoList?.filter(todo => !todo.completed).length || 0
+const getActiveTodosCount = (todoList: Todo[]) => (
+  todoList.filter(todo => !todo.completed).length || 0
 );
 
 export const App: React.FC = () => {
@@ -41,17 +43,17 @@ export const App: React.FC = () => {
   const [errorType] = useState(ErrorType.NONE);
 
   const getTodoList = useCallback(async () => {
-    const todos = await client.get<Todo[]>('/todos?userId=10308');
+    const todos = await getTodos();
 
     setTodoList(todos);
   }, []);
 
   const preparedTodos = useMemo(() => (
-    prepareTodos(todoList, filterType)
+    prepareTodos(todoList || [], filterType)
   ), [todoList, filterType]);
 
   const activeTodosCount = useMemo(() => (
-    getActiveTodosCount(todoList)
+    getActiveTodosCount(todoList || [])
   ), [todoList]);
 
   const areCompletedTodos = todoList
@@ -78,9 +80,7 @@ export const App: React.FC = () => {
 
         {preparedTodos && (
           <>
-            <TodoAppContent
-              todoList={preparedTodos}
-            />
+            <TodoAppContent todoList={preparedTodos} />
 
             <TodoAppFooter
               filterType={filterType}

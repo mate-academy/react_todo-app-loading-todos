@@ -1,6 +1,6 @@
 export enum ErrorType {
-  NONE,
-  ADD,
-  DELETE,
-  UPDATE,
+  NONE = 'none',
+  ADD = 'add',
+  DELETE = 'delete',
+  UPDATE = 'update',
 }
