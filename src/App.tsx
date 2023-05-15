@@ -2,36 +2,42 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
-
 import { Todo } from './types/Todo';
-
 import { getTodos } from './api/todos';
 
 const USER_ID = 10329;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hidden, setHidden] = useState(false);
+  const [isWrongUrl, setIsWrongUrl] = useState(false);
+  const [isAbleToAddTodo, setIsAbleToAddTodo] = useState(false);
+  const [isAbleToDeleteTodo, setIsAbleToDeleteTodo] = useState(false);
+  const [isAbleToUpdateTodo, setIsAbleToUpdateTodo] = useState(false);
+
   const [newTodo, setNewTodo] = useState('');
   const [allFilter, setAllFilter] = useState(true);
   const [activeFilter, setActiveFilter] = useState(false);
   const [completedFilter, setCompletedFilter] = useState(false);
 
-  const fetchTodos = async () => {
-    const newTodos = await getTodos(USER_ID);
-
-    setTodos(newTodos);
-  };
-
   const hideNotifications = () => {
     setTimeout(() => {
-      setHidden(true);
+      setIsWrongUrl(false);
     }, 3000);
+  };
+
+  const fetchTodos = async () => {
+    try {
+      const newTodos = await getTodos(USER_ID);
+
+      setTodos(newTodos);
+    } catch (error) {
+      setIsWrongUrl(true);
+      hideNotifications();
+    }
   };
 
   useEffect(() => {
     fetchTodos();
-    hideNotifications();
   }, []);
 
   let visibleTodos: Todo[] = JSON.parse(JSON.stringify(todos));
@@ -64,12 +70,12 @@ export const App: React.FC = () => {
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
               value={newTodo}
-              onChange={(event) => {
+              onChange={event => {
                 setNewTodo(event.target.value);
               }}
-              onKeyDown={(event) => {
+              onKeyDown={event => {
                 if (event.key === 'Enter') {
-                  setHidden(true);
+                  setIsWrongUrl(false);
                 }
               }}
             />
@@ -111,7 +117,8 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              3 items left
+              {todos.length}
+              items left
             </span>
 
             {/* Active filter should have a 'selected' class */}
@@ -166,23 +173,59 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: hidden }, // eslint-disable-line
-        )}
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !isWrongUrl },
+      )}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => setHidden(true)}
+          onClick={() => setIsWrongUrl(false)}
         />
 
-        {/* show only one message at a time */}
+        Unable to show todos
+      </div>
+
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !isAbleToAddTodo },
+      )}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setIsAbleToAddTodo(false)}
+        />
+
         Unable to add a todo
-        <br />
+      </div>
+
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !isAbleToDeleteTodo },
+      )}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setIsAbleToDeleteTodo(false)}
+        />
+
         Unable to delete a todo
-        <br />
+      </div>
+
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !isAbleToUpdateTodo },
+      )}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setIsAbleToUpdateTodo(false)}
+        />
+
         Unable to update a todo
       </div>
     </div>
