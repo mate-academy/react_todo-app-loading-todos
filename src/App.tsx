@@ -7,6 +7,7 @@ import {
   getTodos, postTodos, deleteTodo, patchTodo,
 } from './api/todos';
 import { Todo } from './types/Todo';
+// import { todoFilter } from './components/FilterTodos';
 
 const USER_ID = 10327;
 
