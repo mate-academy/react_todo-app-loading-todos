@@ -3,26 +3,28 @@ import { FC, memo } from 'react';
 import { Filter } from '../../types/FilterEnum';
 
 interface BottomPanelProps {
-  countOfItems: number;
+  itemsCount: number;
   selectedFilter: Filter;
-  changeFilterOfTodo: (filter: Filter) => void;
+  onChange: (filter: Filter) => void;
 }
 
-export const BottomPanel: FC<BottomPanelProps> = memo((
-  { countOfItems, changeFilterOfTodo, selectedFilter },
-) => {
+export const BottomPanel: FC<BottomPanelProps> = memo(({
+  itemsCount,
+  onChange,
+  selectedFilter,
+}) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const target = event.target as HTMLAnchorElement;
 
-    changeFilterOfTodo(target.text as Filter);
+    onChange(target.text as Filter);
   };
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${countOfItems} items left`}
+        {`${itemsCount} items left`}
       </span>
       <nav className="filter">
         <a

@@ -4,12 +4,13 @@ import { FC } from 'react';
 
 interface ErrorMessageProps {
   hasError: boolean;
-  closeErrorMessage: () => void;
+  onClose: () => void;
 }
 
-export const ErrorMessage: FC<ErrorMessageProps> = (
-  { hasError, closeErrorMessage },
-) => {
+export const ErrorMessage: FC<ErrorMessageProps> = ({
+  hasError,
+  onClose,
+}) => {
   return (
     <div className={
       classNames('notification is-danger is-light has-text-weight-normal', {
@@ -20,7 +21,7 @@ export const ErrorMessage: FC<ErrorMessageProps> = (
       <button
         type="button"
         className="delete"
-        onClick={() => closeErrorMessage()}
+        onClick={onClose}
       />
       Unable to connect to server
     </div>
