@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, postTodos, deleteTodo } from './api/todos';
+import { getTodos, postTodos, deleteTodo, patchTodo } from './api/todos';
 import { Todo } from './types/Todo';
 
 const USER_ID = 10327;
@@ -9,6 +11,7 @@ const USER_ID = 10327;
 export const App: React.FC = () => {
   const [todoItem, setTodoItem] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+  // const [isActive, setIsActive] = useState(false);
 
   const fetchTodos = () => getTodos(USER_ID).then(setTodos);
 
@@ -37,6 +40,13 @@ export const App: React.FC = () => {
     fetchTodos();
   };
 
+  const handleChangeTodo = (id: number, isCompleted: boolean) => {
+    patchTodo(id, { completed: !isCompleted });
+    fetchTodos();
+  };
+
+  console.log(todos);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -62,12 +72,18 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main">
           {todos.map((todo) => (
-            <div key={todo.id} className="todo">
+            <div
+              key={todo.id}
+              className={classNames('todo', {
+                completed: todo.completed,
+              })}
+            >
               <label className="todo__status-label">
                 <input
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
+                  onClick={() => handleChangeTodo(todo.id, todo.completed)}
                 />
               </label>
 
