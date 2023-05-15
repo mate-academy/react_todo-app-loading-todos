@@ -1,6 +1,7 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
@@ -10,7 +11,7 @@ import { Notification } from './components/Notification';
 
 import { Select } from './types/Select';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
+import { client, todoUrlEnd } from './utils/fetchClient';
 
 const USER_ID = 10364;
 
@@ -19,25 +20,21 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState(Select.All);
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
-  const todoUrlEnd = '/todos?userId=10364';
-
   const createTodo = (data: Todo) => {
     client.post(todoUrlEnd, data);
   };
 
-  const getTodo = async () => {
-    const data: Todo[] = await client.get(todoUrlEnd);
+  const getTodos = useCallback(
+    async () => {
+      const data: Todo[] = await client.get(todoUrlEnd);
 
-    setTodos(data);
-  };
+      setTodos(data);
+    }, [],
+  );
 
   useEffect(() => {
-    getTodo();
-  }, [todos]);
+    getTodos();
+  }, []);
 
   const handleSelectedTodos = useMemo(() => {
     let visibleTodos: Todo[] = [...todos];
@@ -58,6 +55,10 @@ export const App: React.FC = () => {
 
     return visibleTodos;
   }, [todos, select]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">

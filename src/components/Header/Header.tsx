@@ -8,7 +8,8 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ createTodo, handleError }) => {
   const [todoTitle, setTodoTitle] = useState('');
-  const HandleSubmit = (title: string) => {
+
+  const handleSubmit = (title: string) => {
     if (!title) {
       handleError("Title can't be empty");
 
@@ -27,12 +28,10 @@ export const Header: React.FC<Props> = ({ createTodo, handleError }) => {
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label  */}
       <button type="button" className="todoapp__toggle-all active" />
 
-      {/* Add a todo on form submit */}
-      <form onSubmit={() => HandleSubmit(todoTitle)}>
+      <form onSubmit={() => handleSubmit(todoTitle)}>
         <input
           type="text"
           className="todoapp__new-todo"
