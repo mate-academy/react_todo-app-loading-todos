@@ -5,4 +5,6 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+export const getAllTodos = async (userId: number) => {
+  return getTodos(userId);
+};
