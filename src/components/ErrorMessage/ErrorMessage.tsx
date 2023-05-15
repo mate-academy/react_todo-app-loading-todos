@@ -2,12 +2,12 @@
 import classNames from 'classnames';
 import { FC } from 'react';
 
-interface ErrorMessageProps {
+interface Props {
   hasError: boolean;
   onClose: () => void;
 }
 
-export const ErrorMessage: FC<ErrorMessageProps> = ({
+export const ErrorMessage: FC<Props> = ({
   hasError,
   onClose,
 }) => {

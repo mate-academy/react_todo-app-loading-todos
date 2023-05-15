@@ -2,11 +2,11 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-interface TodoItemProps {
+interface Props {
   todo: Todo;
 }
 
-export const TodoItem: FC<TodoItemProps> = ({ todo }) => {
+export const TodoItem: FC<Props> = ({ todo }) => {
   const { completed, title } = todo;
 
   return (

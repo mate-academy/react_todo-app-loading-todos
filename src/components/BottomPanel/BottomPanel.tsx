@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { FC, memo } from 'react';
 import { Filter } from '../../types/FilterEnum';
 
-interface BottomPanelProps {
+interface Props {
   itemsCount: number;
   selectedFilter: Filter;
   onChange: (filter: Filter) => void;
 }
 
-export const BottomPanel: FC<BottomPanelProps> = memo(({
+export const BottomPanel: FC<Props> = memo(({
   itemsCount,
   onChange,
   selectedFilter,
