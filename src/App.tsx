@@ -3,7 +3,9 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, postTodos, deleteTodo, patchTodo } from './api/todos';
+import {
+  getTodos, postTodos, deleteTodo, patchTodo,
+} from './api/todos';
 import { Todo } from './types/Todo';
 
 const USER_ID = 10327;
