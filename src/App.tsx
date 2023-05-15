@@ -47,7 +47,9 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => setFilteredTodos(getFilteredTodos(filteredBy)), [filteredBy]);
+  useEffect(() => {
+    setFilteredTodos(getFilteredTodos(filteredBy));
+  }, [filteredBy]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -111,13 +113,6 @@ export const App: React.FC = () => {
             onClick={() => setErrorMessage('')}
           />
           {errorMessage}
-          {
-            /* Unable to add a todo
-            <br />
-            Unable to delete a todo
-            <br />
-            Unable to update a todo */
-          }
         </div>
       )}
     </div>

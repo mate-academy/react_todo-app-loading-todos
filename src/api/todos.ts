@@ -8,5 +8,5 @@ export const getTodos = (userId: number) => {
 // Add more methods here
 
 export const postTodo = (userId: number, todo: Todo) => {
-  return client.post<Todo[]>(`/todos?userId=${userId}`, todo);
+  return client.post<Todo>(`/todos?userId=${userId}`, todo);
 };
