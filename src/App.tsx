@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, postTodos } from './api/todos';
+import { getTodos, postTodos, deleteTodo } from './api/todos';
 import { Todo } from './types/Todo';
 
 const USER_ID = 10327;
@@ -16,6 +16,8 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const clearTodoField = () => setTodoItem('');
+
   const createTodo = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
 
@@ -26,6 +28,12 @@ export const App: React.FC = () => {
     };
 
     postTodos(USER_ID, newTodo);
+    fetchTodos();
+    clearTodoField();
+  };
+
+  const handleDeleteTodo = (id: number) => {
+    deleteTodo(id);
     fetchTodos();
   };
 
@@ -54,9 +62,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main">
           {todos.map((todo) => (
-            <div
-              key={todo.id}
-            >
+            <div key={todo.id} className="todo">
               <label className="todo__status-label">
                 <input
                   type="checkbox"
@@ -70,80 +76,12 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 className="todo__remove"
+                onClick={() => handleDeleteTodo(todo.id)}
               >
                 ×
               </button>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
             </div>
           ))}
-          {/* This is a completed todo */}
-          {/* <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label> */}
-
-          {/* <span className="todo__title">Completed Todo</span> */}
-
-          {/* Remove button appears only on hover */}
-          {/* <button type="button" className="todo__remove">×</button> */}
-
-          {/* overlay will cover the todo while it is being updated */}
-          {/* <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div> */}
-          {/* </div> */}
-
-          {/* This todo is not completed */}
-          {/* <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label> */}
-
-          {/* <span className="todo__title">Not Completed Todo</span>
-          <button type="button" className="todo__remove">×</button>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div> */}
-          {/* </div> */}
-
-          {/* This todo is being edited */}
-          {/* <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label> */}
-
-          {/* This form is shown instead of the title and remove button */}
-          {/* <form>
-            <input
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              value="Todo is being edited now"
-            />
-          </form>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-          </div> */}
         </section>
 
         {/* Hide the footer if there are no todos */}
