@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
@@ -12,7 +17,6 @@ const USER_ID = 10321;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -33,14 +37,13 @@ export const App: React.FC = () => {
     }
   };
 
-  const deleteErrorMessage = () => setErrorMessage('');
+  const deleteErrorMessage = useCallback(() => setErrorMessage(''), []);
 
   const loadData = async () => {
     try {
       const todosFromServer = await getTodos(USER_ID);
 
       setTodos(todosFromServer);
-      setFilteredTodos(todosFromServer);
     } catch {
       setErrorMessage('Failed to load data');
     }
@@ -50,7 +53,9 @@ export const App: React.FC = () => {
     loadData();
   }, []);
 
-  useEffect(() => setFilteredTodos(getFilteredTodos(filterBy)), [filterBy]);
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(filterBy);
+  }, [filterBy, todos]);
 
   return (
     <div className="todoapp">
@@ -64,8 +69,6 @@ export const App: React.FC = () => {
               active: activeTodosNumber > 0,
             })}
           />
-
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -85,7 +88,7 @@ export const App: React.FC = () => {
 
             <TodoFilter
               filter={filterBy}
-              setFilter={setFilterBy}
+              onChange={setFilterBy}
             />
 
             {completedTodosNumber > 0 && (

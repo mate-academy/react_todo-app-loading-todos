@@ -3,12 +3,12 @@ import { FilterBy } from '../../enums/FilterBy';
 
 type Props = {
   filter: FilterBy;
-  setFilter: (newFilter: FilterBy) => void;
+  onChange: (newFilter: FilterBy) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
-  setFilter,
+  onChange,
 }) => (
   <nav className="filter">
     <a
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
       className={classNames('filter__link', {
         selected: filter === FilterBy.All,
       })}
-      onClick={() => setFilter(FilterBy.All)}
+      onClick={() => onChange(FilterBy.All)}
     >
       All
     </a>
@@ -26,7 +26,7 @@ export const TodoFilter: React.FC<Props> = ({
       className={classNames('filter__link', {
         selected: filter === FilterBy.Active,
       })}
-      onClick={() => setFilter(FilterBy.Active)}
+      onClick={() => onChange(FilterBy.Active)}
     >
       Active
     </a>
@@ -36,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
       className={classNames('filter__link', {
         selected: filter === FilterBy.Completed,
       })}
-      onClick={() => setFilter(FilterBy.Completed)}
+      onClick={() => onChange(FilterBy.Completed)}
     >
       Completed
     </a>
