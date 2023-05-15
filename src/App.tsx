@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { request } from './utils/fetchClient';
+import { client } from './utils/fetchClient';
 import { Todo, TodoStatus } from './types/Todo';
 import { ErrorNotification } from './ErrorNotification';
-import { TodosMain } from './TodosMain';
+import { TodosList } from './TodosList';
 import { TodosHeader } from './TodosHeader';
 import { TodosFooter } from './TodosFooter';
 
@@ -13,19 +13,15 @@ const USER_ID = 10332;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
-  const [statusFileter, setStatusFilter] = useState<
-  TodoStatus.All
-  | TodoStatus.Completed
-  | TodoStatus.Uncompleted
-  >(TodoStatus.All);
+  const [statusFilter, setStatusFilter] = useState<TodoStatus>(TodoStatus.All);
 
   const loadTodos = async () => {
     try {
-      const response = await request<Todo[]>('/todos?userId=10332');
+      const response = await client.get<Todo[]>('/todos?userId=10332');
 
-      setTodos([...todos, ...response]);
+      setTodos(response);
     } catch {
-      setError('server response error');
+      setError('Unable to load todos');
     }
   };
 
@@ -34,18 +30,16 @@ export const App: React.FC = () => {
   }, []);
 
   const handleStatusFilter = useCallback(
-    (status: TodoStatus.All
-    | TodoStatus.Completed
-    | TodoStatus.Uncompleted) => {
+    (status: TodoStatus) => {
       setStatusFilter(status);
     }, [],
   );
 
   let preparedTodos = todos;
 
-  if (statusFileter) {
+  if (statusFilter) {
     preparedTodos = preparedTodos.filter(todo => {
-      switch (statusFileter) {
+      switch (statusFilter) {
         case TodoStatus.Uncompleted:
           return !todo.completed;
         case TodoStatus.Completed:
@@ -75,15 +69,15 @@ export const App: React.FC = () => {
           uncompletedTodosLength={uncompletedTodosLength}
         />
 
-        <TodosMain
+        <TodosList
           todos={preparedTodos}
         />
 
-        {todos && (
+        {todos.length > 0 && (
           <TodosFooter
             onStatusFilter={handleStatusFilter}
             todosQuantity={todos.length}
-            statusFileter={statusFileter}
+            statusFilter={statusFilter}
             completedTodosLength={completedTodosLength}
           />
         )}
