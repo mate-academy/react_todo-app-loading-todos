@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
+import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilteredBy } from './types/FilteredBy';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filteredBy, setfilteredBy] = useState(FilteredBy.ALL);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
@@ -32,11 +33,18 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
-      .then(todosFromServer => {
+    const fetchData = async () => {
+      try {
+        const todosFromServer: Todo[] = await getTodos(USER_ID);
+
         setTodos(todosFromServer);
         setFilteredTodos(todosFromServer);
-      });
+      } catch (error) {
+        setErrorMessage('Unable to load todos');
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => setFilteredTodos(getFilteredTodos(filteredBy)), [filteredBy]);
@@ -94,17 +102,24 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        {/* <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div> */}
-      </div>
+      {errorMessage && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setErrorMessage('')}
+          />
+          {errorMessage}
+          {
+            /* Unable to add a todo
+            <br />
+            Unable to delete a todo
+            <br />
+            Unable to update a todo */
+          }
+        </div>
+      )}
     </div>
   );
 };

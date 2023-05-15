@@ -1,10 +1,10 @@
 import cn from 'classnames';
 import { FilteredBy } from '../../types/FilteredBy';
 
-type Props = {
+interface Props {
   filter: FilteredBy;
   setFilter: (newFilter: FilteredBy) => void;
-};
+}
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
