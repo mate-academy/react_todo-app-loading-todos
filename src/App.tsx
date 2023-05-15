@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import {
-  FC, useEffect, useMemo, useState,
+  FC, useCallback, useEffect, useMemo, useState,
 } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
@@ -16,25 +16,24 @@ const USER_ID = 10304;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<ErrorType>(ErrorType.None);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, seterror] = useState<ErrorType>(ErrorType.None);
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [isEdited] = useState(false);
+
+  const uploadTodos = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const uploadedTodos = await getTodos(USER_ID);
+
+      setTodos(uploadedTodos);
+    } catch (err) {
+      seterror(ErrorType.Load);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const uploadTodos = async () => {
-      setIsLoading(true);
-      try {
-        const uploadedTodos = await getTodos(USER_ID);
-
-        setTodos(uploadedTodos);
-      } catch (error) {
-        setIsError(ErrorType.Load);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     uploadTodos();
   }, []);
 
@@ -51,16 +50,16 @@ export const App: FC = () => {
   }, [todos, filter]);
 
   useEffect(() => {
-    const timerId = setTimeout(() => setIsError(ErrorType.None), 3000);
+    const timerId = setTimeout(() => seterror(ErrorType.None), 3000);
 
     return () => {
       clearTimeout(timerId);
     };
-  }, [isError]);
+  }, [error]);
 
-  const handleErrorNotification = () => {
-    setIsError(ErrorType.None);
-  };
+  const handleErrorNotification = useCallback(() => {
+    seterror(ErrorType.None);
+  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -76,14 +75,13 @@ export const App: FC = () => {
         <TodoList
           todos={filteredTodos}
           isLoading={isLoading}
-          isEdited={isEdited}
         />
 
         {todos.length > 0 && (
           <Footer
             todos={todos}
             filter={filter}
-            setFilter={setFilter}
+            onChangeFilter={setFilter}
           />
         )}
       </div>
@@ -91,7 +89,7 @@ export const App: FC = () => {
       <div className={classNames(
         'notification is-danger is-light has-text-weight-normal',
         {
-          hidden: isError === ErrorType.None,
+          hidden: error === ErrorType.None,
         },
       )}
       >
@@ -100,7 +98,7 @@ export const App: FC = () => {
           className="delete"
           onClick={handleErrorNotification}
         />
-        {isError}
+        {error}
       </div>
     </div>
   );

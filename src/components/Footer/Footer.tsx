@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import classNames from 'classnames';
 import { Filter } from '../../types/FilterConditions';
 import { Todo } from '../../types/Todo';
@@ -6,17 +6,17 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   filter: Filter;
-  setFilter: (filter: Filter) => void;
+  onChangeFilter: (filter: Filter) => void;
 }
 
-export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {
+export const Footer: FC<Props> = ({ todos, filter, onChangeFilter }) => {
   const handleFilterClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
     const target = event.target as HTMLAnchorElement;
     const currentFilter = target.textContent as Filter;
 
-    setFilter(currentFilter);
+    onChangeFilter(currentFilter);
   };
 
   return (
@@ -25,7 +25,6 @@ export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {
         {`${todos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -58,7 +57,6 @@ export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       {todos.some(todo => todo.completed) && (
         <button type="button" className="todoapp__clear-completed">
           Clear completed

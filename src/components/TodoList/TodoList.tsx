@@ -5,10 +5,9 @@ import { TodoInfo } from '../TodoInfo';
 interface Props {
   todos: Todo[];
   isLoading: boolean;
-  isEdited: boolean;
 }
 
-export const TodoList: FC<Props> = ({ todos, isLoading, isEdited }) => {
+export const TodoList: FC<Props> = ({ todos, isLoading }) => {
   return (
     <section className="todoapp__main">
       {todos.map(todo => (
@@ -16,7 +15,6 @@ export const TodoList: FC<Props> = ({ todos, isLoading, isEdited }) => {
           key={todo.id}
           todo={todo}
           isLoading={isLoading}
-          isEdited={isEdited}
         />
       ))}
     </section>
