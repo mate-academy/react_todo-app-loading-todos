@@ -26,7 +26,7 @@ export enum ErrorType {
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[] | null>([]);
   const [error, setError] = useState<ErrorType | null>(null);
   const [filterStatus, setFilterStatus] = useState<Filter>(Filter.All);
 

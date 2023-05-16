@@ -13,7 +13,7 @@ type Props = {
 export const ErrorNotification: React.FC<Props> = ({ error, onError }) => {
   useEffect(() => {
     setTimeout(() => onError(null), 3000);
-  });
+  }, [onError]);
 
   return (
     <div className={classNames(
