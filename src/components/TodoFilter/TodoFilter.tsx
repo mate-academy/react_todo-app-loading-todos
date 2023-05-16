@@ -12,7 +12,6 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   return (
     <nav className="filter">
-      {/* Active filter should have a 'selected' class */}
       <a
         href="#/"
         className={cn('filter__link', {
