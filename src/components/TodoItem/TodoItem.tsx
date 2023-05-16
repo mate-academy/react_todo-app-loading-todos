@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -6,9 +6,8 @@ interface Props {
   todo: Todo;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = memo(({ todo }) => {
   const {
-    id,
     title,
     completed,
   } = todo;
@@ -18,13 +17,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       className={classNames('todo', {
         completed,
       })}
-      key={id}
     >
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
-          checked
+          checked={completed}
         />
       </label>
 
@@ -40,4 +38,4 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </div>
     </div>
   );
-};
+});

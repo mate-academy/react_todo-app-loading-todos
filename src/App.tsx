@@ -11,13 +11,14 @@ import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { NewTodo } from './components/NewTodo';
+import { Filter } from './types/Filter';
 
 const USER_ID = 10358;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [filterBy, setFilterBy] = useState<string>('All');
+  const [hasError, setHasError] = useState(false);
+  const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
 
   const loadTodos = useCallback(async () => {
     try {
@@ -34,19 +35,19 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const activeCount = todos.filter(todo => !todo.completed).length;
+  const completedCount = todos.filter(todo => todo.completed).length;
 
   const filteredTodos = todos.filter(todo => {
     switch (filterBy) {
-      case 'Completed':
+      case Filter.Completed:
         return todo.completed;
 
-      case 'Active':
+      case Filter.Active:
         return !todo.completed;
 
-      case 'All':
+      case Filter.All:
       default:
-        return todos;
+        return true;
     }
   });
 
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
               type="button"
               className={classNames('todoapp__toggle-all', {
                 hidden: !todos.length,
-                active: activeCount,
+                active: completedCount,
               })}
             />
           ) : null}
@@ -80,7 +81,7 @@ export const App: React.FC = () => {
               <Footer
                 filterBy={filterBy}
                 setFilterBy={setFilterBy}
-                activeCount={activeCount}
+                completedCount={completedCount}
               />
             </>
           ) : null}

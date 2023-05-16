@@ -1,22 +1,23 @@
 import React from 'react';
 import classNames from 'classnames';
 import { TodoFilter } from '../TodoFilter';
+import { Filter } from '../../types/Filter';
 
 interface Props {
-  filterBy: string;
-  setFilterBy: (filter: string) => void;
-  activeCount: number;
+  filterBy: Filter;
+  setFilterBy: (filter: Filter) => void;
+  completedCount: number;
 }
 
 export const Footer: React.FC<Props> = ({
   filterBy,
   setFilterBy,
-  activeCount,
+  completedCount,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${activeCount} items left`}
+        {`${completedCount} items left`}
       </span>
 
       <TodoFilter
@@ -27,9 +28,8 @@ export const Footer: React.FC<Props> = ({
       <button
         type="button"
         className={classNames('todoapp__clear-completed', {
-          hidden: activeCount,
+          hidden: completedCount === 0,
         })}
-        onClick={() => setFilterBy('Active')}
       >
         Clear completed
       </button>
