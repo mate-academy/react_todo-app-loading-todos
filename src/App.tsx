@@ -33,14 +33,6 @@ export const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    loadTodos();
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
   const handleFilterChange = useCallback((filter: Filter) => {
     setSelectedFilter(filter);
   }, []);
@@ -67,6 +59,14 @@ export const App: React.FC = () => {
   const activeTodosCount = useMemo(() => {
     return todos.filter((todo) => !todo.completed).length;
   }, [todos]);
+
+  useEffect(() => {
+    loadTodos();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
