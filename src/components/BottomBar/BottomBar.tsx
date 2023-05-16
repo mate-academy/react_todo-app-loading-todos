@@ -9,7 +9,11 @@ interface Props {
 }
 
 export const BottomBar: FC<Props> = memo((
-  { countOfItems, onSelect, selectedFilter },
+  {
+    countOfItems,
+    onSelect,
+    selectedFilter,
+  },
 ) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -24,6 +28,7 @@ export const BottomBar: FC<Props> = memo((
       <span className="todo-count">
         {`${countOfItems} items left`}
       </span>
+
       <nav className="filter">
         <a
           href="#/"

@@ -30,7 +30,7 @@ export const App: FC = () => {
     setHasError(false);
   }, []);
 
-  const filterTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     switch (filterOfTodo) {
       case Filter.Active:
         return todos.filter(({ completed }) => !completed);
@@ -73,8 +73,6 @@ export const App: FC = () => {
     return <UserWarning />;
   }
 
-  const visibleTodos = filterTodos;
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -92,18 +90,17 @@ export const App: FC = () => {
           </form>
         </header>
 
-        {!!visibleTodos.length && (
-          <TodoList todos={visibleTodos} />
+        {!!filteredTodos.length && (
+          <TodoList todos={filteredTodos} />
         )}
 
-        {todos.length !== 0
-          && (
-            <BottomBar
-              countOfItems={visibleTodos.length}
-              selectedFilter={filterOfTodo}
-              onSelect={handleSelectFilter}
-            />
-          ) }
+        {!!todos.length && (
+          <BottomBar
+            countOfItems={filteredTodos.length}
+            selectedFilter={filterOfTodo}
+            onSelect={handleSelectFilter}
+          />
+        ) }
       </div>
 
       {hasError && (
