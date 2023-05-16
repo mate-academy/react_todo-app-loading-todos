@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 
 interface FooterProps {
   todos: Todo[],
-  onStatusSelect: (status: string) => void;
+  onStatusSelect: (status: Status) => void;
   todoStatus: string;
 }
 
@@ -17,28 +17,25 @@ export const Footer: FC<FooterProps> = ({
   const handleClick = useCallback((
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
-    onStatusSelect(event.currentTarget.text.toLowerCase());
+    onStatusSelect(event.currentTarget.text as Status);
   }, []);
 
-  const calcNotCompletedTodosLength = useCallback(() => {
+  const notCompletedCount = useMemo(() => {
     return todos.filter(({ completed }) => !completed).length;
   }, [todos]);
-
-  const notCompletedTodosLength = useMemo(calcNotCompletedTodosLength, [todos]);
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${notCompletedTodosLength} items left`}
+        {`${notCompletedCount} items left`}
       </span>
 
       <nav className="filter">
         <a
           href="#/"
-          className={classNames(
-            'filter__link',
-            { selected: todoStatus === Status.All },
-          )}
+          className={classNames('filter__link', {
+            selected: todoStatus === Status.All,
+          })}
           onClick={handleClick}
         >
           All
@@ -67,7 +64,6 @@ export const Footer: FC<FooterProps> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>

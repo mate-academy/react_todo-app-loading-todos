@@ -17,15 +17,15 @@ const USER_ID = 10303;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoStatus, setTodoStatus] = useState<string>(Status.All);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [todoStatus, setTodoStatus] = useState<Status>(Status.All);
+  const [errorMessage, setErrorMessage] = useState(false);
 
-  const showError = (message: string) => {
-    setErrorMessage(message);
+  const showError = useCallback(() => {
+    setErrorMessage(true);
     window.setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(false);
     }, 3000);
-  };
+  }, []);
 
   useEffect(() => {
     try {
@@ -33,11 +33,11 @@ export const App: FC = () => {
         setTodos(data);
       });
     } catch {
-      showError('Error');
+      showError();
     }
   }, []);
 
-  const filterTodos = useCallback(() => {
+  const filteredTodos = useMemo(() => {
     return todos.filter(({ completed }) => {
       switch (todoStatus) {
         case Status.Active:
@@ -53,9 +53,7 @@ export const App: FC = () => {
     });
   }, [todos, todoStatus]);
 
-  const visibleTodos = useMemo(filterTodos, [todos, todoStatus]);
-
-  const handleStatus = useCallback((status: string): void => {
+  const handleStatus = useCallback((status: Status) => {
     setTodoStatus(status);
   }, []);
 
@@ -66,7 +64,7 @@ export const App: FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList todos={visibleTodos} />
+        <TodoList todos={filteredTodos} />
 
         <Footer
           todos={todos}
@@ -80,7 +78,7 @@ export const App: FC = () => {
           <button
             type="button"
             className="delete"
-            onClick={() => setErrorMessage('')}
+            onClick={() => setErrorMessage(false)}
           />
 
           <p>Unable to load data</p>
