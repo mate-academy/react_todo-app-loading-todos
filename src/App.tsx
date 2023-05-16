@@ -58,7 +58,6 @@ export const App: React.FC = () => {
       // eslint-disable-next-line no-console
       .catch(() => {
         setError(ErrorType.Get);
-        setTimeout(() => setError(null), 3000);
       });
   }, []);
 

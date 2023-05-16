@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 // eslint-disable-next-line import/no-cycle
+import { useEffect } from 'react';
+// eslint-disable-next-line import/no-cycle
 import { ErrorType } from '../App';
 
 type Props = {
@@ -9,6 +11,10 @@ type Props = {
 };
 
 export const ErrorNotification: React.FC<Props> = ({ error, onError }) => {
+  useEffect(() => {
+    setTimeout(() => onError(null), 3000);
+  });
+
   return (
     <div className={classNames(
       'notification',
