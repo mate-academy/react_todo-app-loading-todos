@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Triangle } from 'react-loader-spinner';
 import { UserWarning } from './UserWarning';
-import { getTodos } from './api/todos';
+import { addTodo, deleteTodo, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
 const USER_ID = 10413;
@@ -14,6 +14,46 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [filter, setFilter] = useState('all');
+
+  const [title, setTitle] = useState('');
+
+  const visibleTodos = todos.filter(todo => {
+    switch (filter) {
+      case 'all':
+        return true;
+      case 'active':
+        return !todo.completed;
+      default:
+        return todo.completed;
+    }
+  });
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const newTodo = {
+      id: 0, userId: USER_ID, title, completed: false,
+    };
+
+    try {
+      const addedTodo: Todo = await addTodo(USER_ID, newTodo);
+
+      setTodos([...todos, addedTodo]);
+      setTitle('');
+    } catch (e) {
+      setHasError(true);
+    }
+  };
+
+  const handleDeleteTodo = async (todoId: number) => {
+    try {
+      await deleteTodo(todoId);
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
+      setHasError(false);
+    } catch (error) {
+      setHasError(true);
+    }
+  };
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -30,17 +70,6 @@ export const App: React.FC = () => {
 
     fetchTodos();
   }, []);
-
-  const visibleTodos = todos.filter(todo => {
-    switch (filter) {
-      case 'all':
-        return true;
-      case 'active':
-        return !todo.completed;
-      default:
-        return todo.completed;
-    }
-  });
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -65,11 +94,13 @@ export const App: React.FC = () => {
             <button type="button" className="todoapp__toggle-all active" />
 
             {/* Add a todo on form submit */}
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <input
                 type="text"
                 className="todoapp__new-todo"
                 placeholder="What needs to be done?"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </form>
           </header>
@@ -92,7 +123,14 @@ export const App: React.FC = () => {
                   <span className="todo__title">{todo.title}</span>
 
                   {/* Remove button appears only on hover */}
-                  <button type="button" className="todo__remove">×</button>
+                  <button
+                    type="button"
+                    className="todo__remove"
+                    onClick={() => handleDeleteTodo(todo.id)}
+                  >
+                    ×
+
+                  </button>
 
                   {/* overlay will cover the todo while it is being updated */}
                   <div className="modal overlay">
