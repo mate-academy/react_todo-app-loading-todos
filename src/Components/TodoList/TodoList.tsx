@@ -9,7 +9,6 @@ interface Props {
 }
 
 export const TodoList: FC<Props> = memo(({ todos, category }) => {
-
   const filteredTodos = todos.filter(todo => {
     switch (category) {
       case Category.Active:
