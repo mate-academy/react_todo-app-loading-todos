@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -21,15 +22,15 @@ export const App: FC = () => {
   const [filterOfTodo, setFilterOfTodo] = useState(Filter.All);
   const [hasError, setHasError] = useState(false);
 
-  const changeFilterOfTodo = useCallback((status: Filter) => {
+  const handleSelectFilter = useCallback((status: Filter) => {
     setFilterOfTodo(status);
   }, []);
 
-  const closeErrorMessage = useCallback(() => {
+  const handleCloseError = useCallback(() => {
     setHasError(false);
   }, []);
 
-  const filterTodos = useCallback(() => {
+  const filterTodos = useMemo(() => {
     switch (filterOfTodo) {
       case Filter.Active:
         return todos.filter(({ completed }) => !completed);
@@ -72,7 +73,7 @@ export const App: FC = () => {
     return <UserWarning />;
   }
 
-  const visibleTodos = filterTodos();
+  const visibleTodos = filterTodos;
 
   return (
     <div className="todoapp">
@@ -91,28 +92,26 @@ export const App: FC = () => {
           </form>
         </header>
 
-        {visibleTodos.length !== 0
-          && (
-            <TodoList todos={visibleTodos} />
-          ) }
+        {!!visibleTodos.length && (
+          <TodoList todos={visibleTodos} />
+        )}
 
         {todos.length !== 0
           && (
             <BottomBar
               countOfItems={visibleTodos.length}
               selectedFilter={filterOfTodo}
-              changeFilterOfTodo={changeFilterOfTodo}
+              onSelect={handleSelectFilter}
             />
           ) }
       </div>
 
-      {hasError
-        && (
-          <Error
-            hasError={hasError}
-            closeErrorMessage={closeErrorMessage}
-          />
-        )}
+      {hasError && (
+        <Error
+          hasError={hasError}
+          onClose={handleCloseError}
+        />
+      )}
     </div>
   );
 };

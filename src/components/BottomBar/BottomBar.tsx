@@ -5,18 +5,18 @@ import { Filter } from '../../types/FilterEnum';
 interface Props {
   countOfItems: number;
   selectedFilter: Filter;
-  changeFilterOfTodo: (filter: Filter) => void;
+  onSelect: (filter: Filter) => void;
 }
 
 export const BottomBar: FC<Props> = memo((
-  { countOfItems, changeFilterOfTodo, selectedFilter },
+  { countOfItems, onSelect, selectedFilter },
 ) => {
   const handleClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const target = event.target as HTMLAnchorElement;
 
-    changeFilterOfTodo(target.text as Filter);
+    onSelect(target.text as Filter);
   };
 
   return (

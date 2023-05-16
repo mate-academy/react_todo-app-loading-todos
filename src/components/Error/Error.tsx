@@ -4,11 +4,11 @@ import { FC } from 'react';
 
 interface Props {
   hasError: boolean;
-  closeErrorMessage: () => void;
+  onClose: () => void;
 }
 
 export const Error: FC<Props> = (
-  { hasError, closeErrorMessage },
+  { hasError, onClose },
 ) => {
   return (
     <div className={
@@ -20,7 +20,7 @@ export const Error: FC<Props> = (
       <button
         type="button"
         className="delete"
-        onClick={() => closeErrorMessage()}
+        onClick={onClose}
       />
       Unable to connect to server
     </div>
