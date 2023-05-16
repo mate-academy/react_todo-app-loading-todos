@@ -4,13 +4,13 @@ import classNames from 'classnames';
 import { Todo } from '../../types';
 
 interface Props {
-  visibleTodos: Todo[]
+  todos: Todo[]
 }
 
-export const TodoList: FC<Props> = ({ visibleTodos }) => {
+export const TodoList: FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {visibleTodos.map(todo => {
+      {todos.map(todo => {
         const { title, id, completed } = todo;
 
         return (
@@ -22,13 +22,11 @@ export const TodoList: FC<Props> = ({ visibleTodos }) => {
               <input
                 type="checkbox"
                 className="todo__status"
-                // checked
               />
             </label>
 
             <span className="todo__title">{ title }</span>
 
-            {/* Remove button appears only on hover */}
             <button
               type="button"
               className="todo__remove"
@@ -36,7 +34,6 @@ export const TodoList: FC<Props> = ({ visibleTodos }) => {
               ×
             </button>
 
-            {/* overlay will cover the todo while it is being updated */}
             <div className="modal overlay">
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />

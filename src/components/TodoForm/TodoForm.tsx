@@ -3,25 +3,23 @@ import classnames from 'classnames';
 import { FC, useState } from 'react';
 
 interface Props {
-  activeTodosCount: number;
+  count: number;
 }
 
 export const TodoForm: FC<Props> = ({
-  activeTodosCount,
+  count,
 }) => {
   const [queryTodo, setQueryTodo] = useState('');
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       <button
         type="button"
         className={classnames('todoapp__toggle-all', {
-          active: activeTodosCount,
+          active: count,
         })}
       />
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"

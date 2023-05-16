@@ -2,21 +2,20 @@ import { FC } from 'react';
 import { FilterTodo } from '../FilterTodo';
 
 interface Props {
-  activeTodosCount: number
+  count: number
 }
 
 export const TodoFooter: FC<Props> = ({
-  activeTodosCount,
+  count,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${activeTodosCount} items left`}
+        {`${count} items left`}
       </span>
 
       <FilterTodo />
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>

@@ -28,19 +28,6 @@ export const App: FC = () => {
   } = useContext(TodosContext);
 
   useEffect(() => {
-    setError(null);
-
-    getTodos(USER_ID)
-      .then(response => {
-        setTodos(response);
-      })
-      .catch((fetchingError: Error) => {
-        setError(ErrorMessage.Load);
-        throw new Error(fetchingError.message);
-      });
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
     }, 3000);
@@ -64,7 +51,26 @@ export const App: FC = () => {
     });
   }, [todos, filterStatus]);
 
-  const activeTodosCount = visibleTodos.filter(todo => !todo.completed).length;
+  const activeTodosCount = useMemo(() => {
+    return visibleTodos
+      .filter(todo => !todo.completed).length;
+  }, [visibleTodos]);
+
+  const fetchData = async () => {
+    try {
+      const response = await getTodos(USER_ID);
+
+      setTodos(response);
+    } catch (fetchingError) {
+      setError(ErrorMessage.Load);
+    } finally {
+      setError(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -75,12 +81,12 @@ export const App: FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoForm activeTodosCount={activeTodosCount} />
+        <TodoForm count={activeTodosCount} />
 
         {todos.length > 0 && (
           <>
-            <TodoList visibleTodos={visibleTodos} />
-            <TodoFooter activeTodosCount={activeTodosCount} />
+            <TodoList todos={visibleTodos} />
+            <TodoFooter count={activeTodosCount} />
           </>
         )}
       </div>
