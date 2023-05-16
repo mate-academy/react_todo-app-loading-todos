@@ -4,13 +4,13 @@ import { FilterBy } from '../../types/typedefs';
 
 interface Props {
   todos: FilterBy,
-  items: number,
+  itemsCount: number,
   onSelect: (filterTodos: FilterBy) => void;
 }
 
 export const Footer: React.FC<Props> = ({
   todos: filterTodos,
-  items: itemsLeft,
+  itemsCount: itemsLeft,
   onSelect: onfilterTodos,
 }) => {
   return (
@@ -52,7 +52,6 @@ export const Footer: React.FC<Props> = ({
           </a>
         </nav>
 
-        {/* don't show this button if there are no completed todos */}
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>

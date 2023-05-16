@@ -13,19 +13,19 @@ import { Error } from './component/Error';
 import { FilterBy } from './types/typedefs';
 import { getTodosByFilter } from './helpers';
 
-const USER_ID = 10303; // 10363
+const USER_ID = 10363;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterTodos, setFilterTodos] = useState(FilterBy.ALL);
-  const [hasError, setHasError] = useState(true);
+  const [hasError, setIsError] = useState(false);
 
   const handleFilterTodos = useCallback((userFilter: FilterBy) => {
     setFilterTodos(userFilter);
   }, []);
 
-  const handleHasError = useCallback(() => {
-    setHasError(false);
+  const handleIsError = useCallback(() => {
+    setIsError(false);
   }, []);
 
   const prepareTodos = useMemo(() => {
@@ -35,15 +35,21 @@ export const App: React.FC = () => {
       visibleTodos = getTodosByFilter(visibleTodos, filterTodos);
     }
 
-    // if (query) {
-    //   visibleTodos = visibleTodos.filter(({ title }) => title.toLowerCase().includes(query.toLowerCase()));
-    // }
-
     return visibleTodos;
   }, [filterTodos, todos]);
 
   useEffect(() => {
-    getTodos(USER_ID).then(setTodos);
+    const loadTodosFromServer = async () => {
+      try {
+        const todosFromServer = await getTodos(USER_ID);
+
+        setTodos(todosFromServer);
+      } catch {
+        setIsError(true);
+      }
+    };
+
+    loadTodosFromServer();
   }, []);
 
   return (
@@ -52,10 +58,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -69,7 +73,7 @@ export const App: React.FC = () => {
 
         <Footer
           todos={filterTodos}
-          items={prepareTodos.length}
+          itemsCount={prepareTodos.length}
           onSelect={handleFilterTodos}
         />
 
@@ -77,7 +81,7 @@ export const App: React.FC = () => {
 
       <Error
         error={hasError}
-        onError={handleHasError}
+        onError={handleIsError}
       />
     </div>
   );
