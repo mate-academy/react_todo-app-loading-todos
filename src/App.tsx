@@ -1,51 +1,48 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { Footer } from './components/Footer';
-import { TodoItem } from './components/TodoItem';
-import { Error } from './components/Error';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { SortType } from './types/SortType';
+import { Error } from './components/Error/Error';
 
 const USER_ID = 11050;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading] = useState(true);
-  const [isEditing] = useState(false);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [sort, setSort] = useState(SortType.All);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const filteredTodos = useMemo(() => todos.filter((todo) => {
+  const completedTodo = todos.filter(todo => todo.completed === true);
+  const activeTodo = todos.length - completedTodo.length;
+
+  const getFiltered = (filter: SortType) => {
     switch (filter) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
+      case SortType.Active:
+        return todos.filter(todo => !todo.completed);
+
+      case SortType.Completed:
+        return todos.filter(todo => todo.completed);
+
       default:
-        return todo;
+        return todos;
     }
-  }), [todos, filter]);
+  };
+
+  const onDeleteError = () => setErrorMessage('');
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (error) {
-      timeout = setTimeout(() => setError(null), 3000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [error]);
-
-  const activeTodos = useMemo(() => (
-    todos.filter((todo) => !todo.completed)
-  ), [todos]);
-
-  useEffect(() => {
-    getTodos(USER_ID).then((response) => setTodos(response));
+    getTodos(USER_ID).then(todosFromServer => {
+      setTodos(todosFromServer);
+      setFilteredTodos(todosFromServer);
+    })
+      .catch(error => setErrorMessage(error.message));
   }, []);
+
+  useEffect(() => setFilteredTodos(getFiltered(sort)), [sort]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -57,7 +54,19 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+
+          {/*
+          <button
+            type="button"
+            className={classNames(
+              'todoapp__toggle-all', {
+                active: getFiltered(SortType.Completed)
+                && filteredTodos.length === todos.length,
+              },
+            )}
+          />
+        */}
+
           {/* Add a todo on form submit */}
           <form>
             <input
@@ -68,29 +77,27 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main">
-          {filteredTodos.map((todo: Todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              isEditing={isEditing}
-              isLoading={isLoading}
-            />
-          ))}
-        </section>
+        <TodoList todosFromServer={filteredTodos} />
 
-        {todos.length > 0 && (
-          <Footer
-            activeTodos={activeTodos.length}
-            filter={filter}
-            setFilter={setFilter}
-          />
+        {todos.length > 0
+        && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodo} items left`}
+            </span>
+            <TodoFilter sort={sort} setSort={setSort} />
+
+            {/* don't show this button if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+            >
+              Clear completed
+            </button>
+          </footer>
         )}
       </div>
-
-      {error && (
-        <Error error={error} setError={setError} />
-      )}
+      <Error message={errorMessage} onDelete={onDeleteError} />
     </div>
   );
 };
