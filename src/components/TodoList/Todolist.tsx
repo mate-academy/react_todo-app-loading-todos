@@ -1,38 +1,17 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
-  visibleTodos: Todo[];
+  todos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {visibleTodos.map(todo => {
-        const { title, id, completed } = todo;
-
-        return (
-          <div
-            className={classNames('todo', { completed })}
-            key={id}
-          >
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span className="todo__title">{title}</span>
-
-            <button type="button" className="todo__remove">
-              ×
-            </button>
-          </div>
-        );
-      })}
+      {todos.map((todo) => (
+        <TodoItem todo={todo} key={todo.id} />
+      ))}
     </section>
   );
 };

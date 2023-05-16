@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useEffect,
   useState,
@@ -7,7 +8,7 @@ import React, {
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { TodoList } from './components/TodoList/Todolist';
+import { TodoList } from './components/TodoList/TodoList';
 import { Error } from './components/Error/Error';
 import { Footer } from './components/TodoFooter/TodoFooter';
 import { Filter } from './types/Filter';
@@ -21,7 +22,7 @@ export const App: React.FC = () => {
 
   let timeoutId: ReturnType<typeof setTimeout>;
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     try {
       const response = await getTodos(USER_ID);
 
@@ -32,8 +33,12 @@ export const App: React.FC = () => {
       timeoutId = setTimeout(() => {
         setHasError(false);
       }, 3000);
+
+      return () => clearTimeout(timeoutId);
     }
-  };
+
+    return () => {};
+  }, [USER_ID, setTodos, setHasError]);
 
   useEffect(() => {
     loadTodos();
@@ -88,9 +93,9 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {!hasError && todos.length && (
+        {!hasError && !!todos.length && (
           <>
-            <TodoList visibleTodos={visibleTodos} />
+            <TodoList todos={visibleTodos} />
             <Footer
               onFilterChange={handleFilterChange}
               selectedFilter={selectedFilter}
@@ -99,9 +104,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {hasError && (
-          <Error hasError={hasError} onCloseError={handleCloseError} />
-        )}
+        {hasError && <Error hasError={hasError} onClose={handleCloseError} />}
       </div>
     </div>
   );

@@ -3,10 +3,10 @@ import classNames from 'classnames';
 
 interface Props {
   hasError: boolean;
-  onCloseError: () => void;
+  onClose: () => void;
 }
 
-export const Error: React.FC<Props> = ({ hasError, onCloseError }) => {
+export const Error: React.FC<Props> = ({ hasError, onClose }) => {
   return (
     <div
       className={classNames(
@@ -22,7 +22,7 @@ export const Error: React.FC<Props> = ({ hasError, onCloseError }) => {
       <button
         type="button"
         className="delete"
-        onClick={onCloseError}
+        onClick={onClose}
       />
       Failed to connect to server
     </div>
