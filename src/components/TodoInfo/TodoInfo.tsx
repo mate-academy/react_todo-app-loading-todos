@@ -5,11 +5,11 @@ interface P {
   todo: Todo;
 }
 
-export const TodoList: React.FC<P> = ({ todo }) => {
-  const { completed, title, id } = todo;
+export const TodoInfo: React.FC<P> = ({ todo }) => {
+  const { completed, title } = todo;
 
   return (
-    <div className={classNames('todo', { completed })} key={id}>
+    <div className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           type="checkbox"
