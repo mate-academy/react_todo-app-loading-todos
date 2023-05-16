@@ -1,25 +1,42 @@
-import React, { useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { HeaderTodoApp } from './components/HeaderTodoApp';
 import { MainTodoApp } from './components/MainTodoApp';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { FooterTodoApp } from './components/FooterTodoApp';
-import { Category } from './types/Category';
+import { FILTERS } from './types/FILTERS';
+import { ErrorComponent } from './components/ErrorComponent';
 
 const USER_ID = 10299;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [category, setCategory] = useState<Category>('all');
+  const [category, setCategory] = useState<FILTERS>(FILTERS.all);
+  const [error, setError] = useState('');
 
-  const loadTodos = async () => {
+  const loadTodos = useCallback(async () => {
     const todosFromServer = await getTodos(USER_ID);
 
     setTodos(todosFromServer);
-  };
+  }, []);
 
-  loadTodos();
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  const visibleTodos = useMemo(() => todos.filter(({ completed }) => {
+    switch (category) {
+      case FILTERS.completed:
+        return completed === true;
+      case FILTERS.active:
+        return completed === false;
+      default:
+        return true;
+    }
+  }), [todos, category]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -32,38 +49,24 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <HeaderTodoApp
           todos={todos}
-          USER_ID={USER_ID}
+          setError={setError}
         />
-        {todos.length > 0 && (
-          <MainTodoApp
-            todos={todos}
-            category={category}
-          />
-        )}
+
+        <MainTodoApp
+          todos={visibleTodos}
+        />
+
         {todos.length > 0 && (
           <FooterTodoApp
+            todos={todos}
             category={category}
-            setCategory={setCategory}
+            onChange={setCategory}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {false && (
-        <div className="notification is-danger is-light has-text-weight-normal">
-          {/* eslint-disable jsx-a11y/control-has-associated-label */}
-          <button
-            type="button"
-            className="delete"
-            // onClick={() => }
-          />
-
-          {/* show only one message at a time */}
-          {false && 'Unable to add a todo'}
-          {false && 'Unable to delete a todo'}
-          {false && 'Unable to update a todo'}
-        </div>
+      {error && (
+        <ErrorComponent error={error} setError={setError} />
       )}
     </div>
   );

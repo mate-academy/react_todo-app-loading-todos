@@ -1,29 +1,34 @@
 import classNames from 'classnames';
-import { FC } from 'react';
-import { Category } from '../../types/Category';
-
-/* Hide the footer if there are no todos */
+import React, { FC } from 'react';
+import { FILTERS } from '../../types/FILTERS';
+import { Todo } from '../../types/Todo';
 
 interface Props {
-  category: Category;
-  setCategory: (category: Category) => void;
+  todos: Todo[];
+  category: FILTERS;
+  onChange: (category: FILTERS) => void;
 }
 
-export const FooterTodoApp: FC<Props> = ({ category, setCategory }) => {
+export const FooterTodoApp: FC<Props> = React.memo(({
+  todos,
+  category,
+  onChange,
+}) => {
+  const leftItems = todos.filter(({ completed }) => completed === false).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${leftItems} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: category === 'all',
+            selected: category === FILTERS.all,
           })}
-          onClick={() => setCategory('all')}
+          onClick={() => onChange(FILTERS.all)}
         >
           All
         </a>
@@ -31,9 +36,9 @@ export const FooterTodoApp: FC<Props> = ({ category, setCategory }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: category === 'active',
+            selected: category === FILTERS.active,
           })}
-          onClick={() => setCategory('active')}
+          onClick={() => onChange(FILTERS.active)}
         >
           Active
         </a>
@@ -41,18 +46,23 @@ export const FooterTodoApp: FC<Props> = ({ category, setCategory }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: category === 'completed',
+            selected: category === FILTERS.completed,
           })}
-          onClick={() => setCategory('completed')}
+          onClick={() => onChange(FILTERS.completed)}
         >
           Completed
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed', {
+          notification: todos.length - leftItems <= 0,
+          hidden: todos.length - leftItems <= 0,
+        })}
+      >
         Clear completed
       </button>
     </footer>
   );
-};
+});

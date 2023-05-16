@@ -1,12 +1,18 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
-  title: string;
+  todo: Todo;
 }
 
-export const ActiveTodo: FC<Props> = ({ title }) => {
+export const TodoComponent: FC<Props> = React.memo(({
+  todo,
+}) => {
+  const { title, completed } = todo;
+
   return (
-    <div className="todo">
+    <div className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           type="checkbox"
@@ -15,7 +21,12 @@ export const ActiveTodo: FC<Props> = ({ title }) => {
       </label>
 
       <span className="todo__title">{title}</span>
-      <button type="button" className="todo__remove">×</button>
+      <button
+        type="button"
+        className="todo__remove"
+      >
+        ×
+      </button>
 
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />
@@ -23,4 +34,4 @@ export const ActiveTodo: FC<Props> = ({ title }) => {
       </div>
     </div>
   );
-};
+});

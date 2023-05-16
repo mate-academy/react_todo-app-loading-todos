@@ -1,19 +1,34 @@
-import { FC, useState } from 'react';
-import { addTodo } from '../../api/todos';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, {
+  FC, FormEvent, useState,
+} from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  USER_ID: number;
+  setError: (error: string) => void;
 }
 
-export const HeaderTodoApp: FC<Props> = ({ todos, USER_ID }) => {
+export const HeaderTodoApp: FC<Props> = React.memo(({
+  todos,
+  setError,
+}) => {
   const [query, setQuery] = useState('');
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!query) {
+      setError("Title can't be empty");
+
+      return;
+    }
+
+    setQuery('');
+  };
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
-      {/* eslint-disable jsx-a11y/control-has-associated-label */}
       {todos.length > 0 && (
         <button
           type="button"
@@ -21,28 +36,8 @@ export const HeaderTodoApp: FC<Props> = ({ todos, USER_ID }) => {
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-
-          const maxId = todos.reduce((acum, { id }) => {
-            if (acum < id) {
-              return id;
-            }
-
-            return acum;
-          }, 0) + 1;
-
-          addTodo(USER_ID, {
-            id: maxId,
-            userId: USER_ID,
-            title: query,
-            completed: false,
-          });
-
-          setQuery('');
-        }}
+        onSubmit={handleSubmit}
       >
         <input
           type="text"
@@ -54,4 +49,4 @@ export const HeaderTodoApp: FC<Props> = ({ todos, USER_ID }) => {
       </form>
     </header>
   );
-};
+});
