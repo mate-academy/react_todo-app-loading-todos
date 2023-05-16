@@ -29,7 +29,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [error, setError] = useState<ErrorType | null>(null);
   const [filterStatus, setFilterStatus] = useState<Filter>(Filter.All);
-  let visibleTodos: Todo[] | null | undefined = todos;
 
   const activeTodos = todos?.filter(
     todo => todo.completed === false,
@@ -40,15 +39,15 @@ export const App: React.FC = () => {
       case Filter.All:
         return todos;
       case Filter.Completed:
-        return todos?.filter(todo => todo.completed === true);
+        return todos?.filter(todo => todo.completed);
       case Filter.Active:
-        return todos?.filter(todo => todo.completed === false);
+        return todos?.filter(todo => !todo.completed);
       default:
         return todos;
     }
   }
 
-  visibleTodos = useMemo(
+  const visibleTodos = useMemo(
     filterTodos,
     [todos, filterStatus],
   );
