@@ -9,10 +9,12 @@ interface Props {
 export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {todos.map(({ title, completed }) => (
-        <div className={classNames('todo', {
-          completed,
-        })}
+      {todos.map(({ id, title, completed }) => (
+        <div
+          key={id}
+          className={classNames('todo', {
+            completed,
+          })}
         >
           <label className="todo__status-label">
             <input

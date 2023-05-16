@@ -1,21 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
+import { ErrorMessage } from './components/ErrorMessage';
 
 import { getTodos } from './api/todos';
 
 import { Todo } from './types/Todo';
 import { Filter } from './types/FilterEnum';
-import { ErrorMessage } from './components/ErrorMesage';
 
 const USER_ID = 10336;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
-  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const loadTodos = useCallback(async () => {
     try {
@@ -23,18 +28,18 @@ export const App: React.FC = () => {
 
       setTodos(todosFromServer);
     } catch (error) {
-      setIsError(true);
+      setErrorMessage('Unable to load todos');
     }
   }, []);
 
   const closeError = useCallback(() => {
-    setIsError(false);
+    setErrorMessage('');
   }, []);
 
-  const filteredTodos = (currentTodos: Todo[], option: string) => {
-    const visibleTodos = [...currentTodos];
+  const filteredTodos = useMemo(() => {
+    const visibleTodos = [...todos];
 
-    switch (option) {
+    switch (filter) {
       case Filter.ACTIVE:
         return visibleTodos.filter((todo) => !todo.completed);
       case Filter.COMPLETED:
@@ -42,13 +47,11 @@ export const App: React.FC = () => {
       default:
         return visibleTodos;
     }
-  };
+  }, [filter, todos]);
 
   useEffect(() => {
     loadTodos();
   }, []);
-
-  const visibleTodos = filteredTodos(todos, filter);
 
   return (
     <div className="todoapp">
@@ -73,7 +76,7 @@ export const App: React.FC = () => {
 
         {todos.length !== 0 && (
           <>
-            <TodoList todos={visibleTodos} />
+            <TodoList todos={filteredTodos} />
 
             <TodoFooter
               todoCounter={todos.length}
@@ -84,9 +87,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {isError && (
+      {errorMessage && (
         <ErrorMessage
-          isError={isError}
+          errorMessage={errorMessage}
           onClose={closeError}
         />
       )}

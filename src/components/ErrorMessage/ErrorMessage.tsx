@@ -1,20 +1,30 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
-  isError: boolean;
+  errorMessage: string;
   onClose: () => void;
 }
 
 export const ErrorMessage: React.FC<Props> = ({
-  isError,
+  errorMessage,
   onClose,
 }) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onClose();
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [errorMessage]);
+
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal', {
-        hidden: !isError,
+        hidden: !errorMessage,
       },
     )}
     >
@@ -23,7 +33,7 @@ export const ErrorMessage: React.FC<Props> = ({
         className="delete"
         onClick={onClose}
       />
-      Unable to load todos
+      {errorMessage}
     </div>
   );
 };
