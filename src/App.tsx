@@ -1,10 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-// import { UserWarning } from './UserWarning';
-// if (!USER_ID) {
-//   return <UserWarning />;
-// }
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import cn from 'classnames';
 import { TodoList } from './components/TodoList';
 import { getTodos } from './api/todos';
@@ -19,12 +15,12 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
 
-  const addError = (error: Error) => {
+  const addError = useCallback((error: Error) => {
     setErrorMessage(error);
     window.setTimeout(() => {
       setErrorMessage(null);
     }, 3000);
-  };
+  }, []);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -71,55 +67,63 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={filteredTodos} />
-
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${todos.length} items left`}
-            </span>
+          <>
+            <TodoList todos={filteredTodos} />
+            <footer className="todoapp__footer">
+              <span className="todo-count">
+                {`${todos.length} items left`}
+              </span>
 
-            {/* Active filter should have a 'selected' class */}
-            <nav className="filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filter === Filter.ALL,
-                })}
-                onClick={() => setFilter(Filter.ALL)}
-              >
-                All
-              </a>
+              <nav className="filter">
+                <a
+                  href="#/"
+                  className={cn('filter__link', {
+                    selected: filter === Filter.ALL,
+                  })}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setFilter(Filter.ALL);
+                  }}
+                >
+                  All
+                </a>
 
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filter === Filter.ACTIVE,
-                })}
-                onClick={() => setFilter(Filter.ACTIVE)}
-              >
-                Active
-              </a>
+                <a
+                  href="#/active"
+                  className={cn('filter__link', {
+                    selected: filter === Filter.ACTIVE,
+                  })}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setFilter(Filter.ACTIVE);
+                  }}
+                >
+                  Active
+                </a>
 
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filter === Filter.COMPLETED,
-                })}
-                onClick={() => setFilter(Filter.COMPLETED)}
-              >
-                Completed
-              </a>
-            </nav>
+                <a
+                  href="#/completed"
+                  className={cn('filter__link', {
+                    selected: filter === Filter.COMPLETED,
+                  })}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setFilter(Filter.COMPLETED);
+                  }}
+                >
+                  Completed
+                </a>
+              </nav>
 
-            {/* don't show this button if there are no completed todos */}
-            {filteredTodos.some((todo) => todo.completed) && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
-          </footer>
+              {/* don't show this button if there are no completed todos */}
+              {filteredTodos.some((todo) => todo.completed) && (
+                <button type="button" className="todoapp__clear-completed">
+                  Clear completed
+                </button>
+              )}
+            </footer>
+          </>
         )}
       </div>
 
