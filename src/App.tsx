@@ -9,7 +9,7 @@ import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Sort } from './utils/Sort';
-import { Errors } from './utils/Errors';
+import { ErrorType } from './utils/ErrorType';
 import { TodosList } from './components/TodosList';
 import { Footer } from './components/Footer';
 import { Error } from './components/Error';
@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const [newTodo, setNewTodo] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortType, setSortType] = useState<Sort>(Sort.All);
-  const [errorType, setErrorType] = useState<Errors>(Errors.None);
+  const [errorType, setErrorType] = useState<ErrorType>(ErrorType.None);
 
   const loadTodos = async () => {
     try {
@@ -28,9 +28,9 @@ export const App: React.FC = () => {
 
       setTodos(todosFromServer);
     } catch {
-      setErrorType(Errors.Add);
+      setErrorType(ErrorType.Add);
       setTimeout(() => {
-        setErrorType(Errors.None);
+        setErrorType(ErrorType.None);
       }, 3000);
     }
   };
@@ -53,11 +53,11 @@ export const App: React.FC = () => {
 
   const setErrorMessage = useCallback(() => {
     switch (errorType) {
-      case Errors.Add:
+      case ErrorType.Add:
         return 'Unable to add a todo';
-      case Errors.Delete:
+      case ErrorType.Delete:
         return 'Unable to delete a todo';
-      case Errors.Update:
+      case ErrorType.Update:
         return 'Unable to update a todo';
       default:
         return 'Unpredictable error';
@@ -114,7 +114,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorType !== Errors.None && (
+      {errorType !== ErrorType.None && (
         <Error
           setHasError={setErrorType}
           setErrorMessage={setErrorMessage}
