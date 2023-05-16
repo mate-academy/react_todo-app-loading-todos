@@ -5,7 +5,7 @@ interface Props {
   onChangeTitle: (title: string) => void;
 }
 
-export const TodoForm: FC<Props> = memo(({title, onChangeTitle}) => {
+export const TodoForm: FC<Props> = memo(({ title, onChangeTitle }) => {
   return (
     <form>
       <input

@@ -11,43 +11,27 @@ import { TodoList } from './Components/TodoList';
 const USER_ID = 10156;
 
 export const App: React.FC = () => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
-  const [isError, setIsError] = useState<Error | string>('');
+  const [isError, setIsError] = useState(false);
+  const [todoError, setTodoError] = useState<Error | string>('');
   const [filterCategory, setFilterCategory] = useState(Category.All);
-  const filterTodos = async (category: Category) => {
-    const allTodos = await getTodos(USER_ID);
-
-    const filteredTodos = allTodos.filter(todo => {
-      switch (category) {
-        case Category.Active:
-          return !todo.completed;
-        case Category.Completed:
-          return todo.completed;
-        default:
-          return true;
-      }
-    });
-
-    setVisibleTodos(filteredTodos);
-  };
-
-  useEffect(() => {
-    filterTodos(filterCategory);
-  }, [filterCategory]);
 
   const handleError = (error: Error) => {
-    setIsError(error);
+    setIsError(true);
+    setTodoError(error);
+
     window.setTimeout(() => {
-      setIsError('');
+      setIsError(false);
+      setTodoError('');
     }, 3000);
   };
 
   const loadTodos = async () => {
     try {
-      const todos = await getTodos(USER_ID);
+      const todosFromServer = await getTodos(USER_ID);
 
-      setVisibleTodos(todos);
+      setTodos(todosFromServer);
     } catch {
       handleError(Error.LOAD);
     }
@@ -80,11 +64,14 @@ export const App: React.FC = () => {
           />
         </header>
 
-        <TodoList todos={visibleTodos} />
+        <TodoList
+          todos={todos}
+          category={filterCategory}
+        />
 
         <footer className="todoapp__footer">
           <span className="todo-count">
-            {`${visibleTodos.length} items left`}
+            {`${todos.length} items left`}
           </span>
 
           <nav className="filter">
@@ -133,9 +120,9 @@ export const App: React.FC = () => {
           <button
             type="button"
             className="delete"
-            onClick={() => setIsError('')}
+            onClick={() => setTodoError('')}
           />
-          {isError}
+          {todoError}
         </div>
       )}
     </div>
