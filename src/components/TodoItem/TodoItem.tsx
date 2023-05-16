@@ -24,6 +24,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </label>
 
       <span className="todo__title">{todo.title}</span>
+
       {isHovered && (
         <button type="button" className="todo__remove">×</button>
       )}

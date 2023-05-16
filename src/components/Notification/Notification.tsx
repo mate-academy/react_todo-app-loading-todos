@@ -1,5 +1,6 @@
 import classNanes from 'classnames';
 import { useState } from 'react';
+import { Error } from '../../types/Errors';
 
 export const Notification = () => {
   const [hasError, setHasError] = useState(false);
@@ -26,11 +27,7 @@ export const Notification = () => {
         onClick={handleError}
       />
 
-      Unable to add a todo
-      {/* <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
+      {Error.ADD}
     </div>
   );
 };
