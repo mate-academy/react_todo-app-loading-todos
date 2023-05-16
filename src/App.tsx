@@ -1,20 +1,19 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import {
   getTodos, postTodos, deleteTodo, patchTodo,
 } from './api/todos';
 import { Todo } from './types/Todo';
-// import { todoFilter } from './components/FilterTodos';
+import { TodoFilter } from './components/FilterTodos';
 
 const USER_ID = 10327;
 
 export const App: React.FC = () => {
   const [todoItem, setTodoItem] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [isActive, setIsActive] = useState(false);
 
   const fetchTodos = () => getTodos(USER_ID).then(setTodos);
 
@@ -24,7 +23,7 @@ export const App: React.FC = () => {
 
   const clearTodoField = () => setTodoItem('');
 
-  const createTodo = (event: { preventDefault: () => void; }) => {
+  const createTodo = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const newTodo = {
@@ -33,22 +32,34 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    postTodos(USER_ID, newTodo);
+    await postTodos(USER_ID, newTodo);
     fetchTodos();
     clearTodoField();
   };
 
-  const handleDeleteTodo = (id: number) => {
-    deleteTodo(id);
+  const handleDeleteTodo = async (id: number) => {
+    await deleteTodo(id);
     fetchTodos();
   };
 
-  const handleChangeTodo = (id: number, isCompleted: boolean) => {
-    patchTodo(id, { completed: !isCompleted });
+  const handleChangeTodo = async (id: number, isCompleted: boolean) => {
+    await patchTodo(id, { completed: !isCompleted });
     fetchTodos();
   };
 
   console.log(todos);
+
+  const activeFilter = () => {
+    setTodos(todos.filter((todo) => todo.completed === false));
+  };
+
+  const completedFilter = () => {
+    setTodos(todos.filter((todo) => todo.completed === true));
+  };
+
+  const deleteFilter = () => {
+    fetchTodos();
+  };
 
   return (
     <div className="todoapp">
@@ -109,20 +120,38 @@ export const App: React.FC = () => {
             3 items left
           </span>
 
+          <TodoFilter
+            onAll={deleteFilter}
+            onActive={activeFilter}
+            onCompleted={completedFilter}
+          />
+
           {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
+          {/* <nav className="filter">
+            <a
+              href="#/"
+              className="filter__link selected"
+              onClick={}
+            >
               All
             </a>
 
-            <a href="#/active" className="filter__link">
+            <a
+              href="#/active"
+              className="filter__link"
+              onClick={}
+            >
               Active
             </a>
 
-            <a href="#/completed" className="filter__link">
+            <a
+              href="#/completed"
+              className="filter__link"
+              onClick={}
+            >
               Completed
             </a>
-          </nav>
+          </nav> */}
 
           {/* don't show this button if there are no completed todos */}
           <button type="button" className="todoapp__clear-completed">
