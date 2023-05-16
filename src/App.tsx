@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { FallingLines } from 'react-loader-spinner';
+import { Triangle } from 'react-loader-spinner';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -50,11 +50,13 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
       {isLoading ? (
-        <FallingLines
+        <Triangle
+          height="80"
+          width="80"
           color="orange"
-          width="100"
+          ariaLabel="triangle-loading"
+          wrapperStyle={{}}
           visible
-          ariaLabel="falling-lines-loading"
         />
       ) : (
         <div className="todoapp__content">
