@@ -7,6 +7,7 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notification';
 import { Error } from './utils/Error';
+import { FilterValue } from './utils/FilterValue';
 
 const USER_ID = 6752;
 
@@ -37,11 +38,11 @@ export const App: React.FC = () => {
     let visibleTodos = [...todos];
 
     switch (filterValue) {
-      case 'active': visibleTodos = visibleTodos.filter(
+      case FilterValue.Active: visibleTodos = visibleTodos.filter(
         (todo) => !todo.completed,
       );
         break;
-      case 'completed': visibleTodos = visibleTodos.filter(
+      case FilterValue.Completed: visibleTodos = visibleTodos.filter(
         (todo) => todo.completed,
       );
         break;
