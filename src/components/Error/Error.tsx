@@ -4,20 +4,24 @@ import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage;
-  isErrorShown: boolean;
-  onErrorClose: () => void;
+  isError: boolean;
+  onClose: () => void;
 };
 
 export const Error: React.FC<Props> = ({
   errorMessage,
-  isErrorShown,
-  onErrorClose,
+  isError,
+  onClose,
 }) => {
   const errorString = `Unable to ${errorMessage} a todo`;
 
   useEffect(() => {
-    setTimeout(() => onErrorClose(), 3000);
-  }, []);
+    const errorTimeOut = setTimeout(() => onClose(), 3000);
+
+    return () => {
+      clearTimeout(errorTimeOut);
+    };
+  }, [isError]);
 
   return (
     <div
@@ -26,15 +30,13 @@ export const Error: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        {
-          hidden: !isErrorShown,
-        },
       )}
+      hidden={!isError}
     >
       <button
         type="button"
         className="delete"
-        onClick={onErrorClose}
+        onClick={onClose}
         aria-label="Close error message"
       />
 

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
 import { TodoStatus } from './types/TodoStatus';
@@ -35,13 +34,19 @@ export const App: React.FC = () => {
   const [errorType, setErrorType] = useState(ErrorMessage.None);
   const [isErrorShown, setIsErrorShown] = useState(false);
 
+  const loadTodos = async () => {
+    const todosFromServer = await getTodos(USER_ID);
+
+    try {
+      setTodos(todosFromServer);
+    } catch {
+      setErrorType(ErrorMessage.Download);
+      setIsErrorShown(true);
+    }
+  };
+
   useEffect(() => {
-    getTodos(USER_ID)
-      .then((userTodos) => setTodos(userTodos))
-      .catch(() => {
-        setErrorType(ErrorMessage.Download);
-        setIsErrorShown(true);
-      });
+    loadTodos();
   }, []);
 
   const counterActiveTodos = useMemo(
@@ -53,24 +58,23 @@ export const App: React.FC = () => {
 
   const counterCompletedTodos = todos.length - counterActiveTodos;
 
-  const filteredTodos = useMemo(
-    () => filterTodos(todos, selectedFilter),
-    [selectedFilter, todos],
-  );
+  const filteredTodos = useMemo(() => (
+    filterTodos(todos, selectedFilter)
+  ), [selectedFilter, todos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header counterActiveTodos={counterActiveTodos} />
+        <Header countActiveTodos={counterActiveTodos} />
 
         <TodoList todos={filteredTodos} />
 
         {todos.length > 0 && (
           <Filter
-            counterActiveTodos={counterActiveTodos}
-            counterCompletedTodos={counterCompletedTodos}
+            countActiveTodos={counterActiveTodos}
+            countCompletedTodos={counterCompletedTodos}
             selectedFilter={selectedFilter}
             onFilterSelect={setSelectedFilter}
           />
@@ -78,8 +82,8 @@ export const App: React.FC = () => {
 
         <Error
           errorMessage={errorType}
-          isErrorShown={isErrorShown}
-          onErrorClose={() => setIsErrorShown(false)}
+          isError={isErrorShown}
+          onClose={() => setIsErrorShown(false)}
         />
       </div>
     </div>
