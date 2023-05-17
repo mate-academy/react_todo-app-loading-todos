@@ -12,16 +12,16 @@ const USER_ID = 9953;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
   const [status, setStatus] = useState<Statuses>(Statuses.ALL);
 
-  const visibleTodos = todos.filter((todo) => {
+  const visibleTodos = todos.filter(({ completed }) => {
     switch (status) {
       case Statuses.ACTIVE:
-        return !todo.completed;
+        return completed;
 
       case Statuses.COMPLETED:
-        return todo.completed;
+        return completed;
 
       default:
         return true;
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
 
     if (error) {
       timeout = setTimeout(() => {
-        setError(null);
+        setError('');
       }, 3000);
     }
 
@@ -102,7 +102,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="delete"
-          onClick={() => setError(null)}
+          onClick={() => setError('')}
         />
         {error}
       </div>
