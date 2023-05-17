@@ -1,9 +1,9 @@
-# React Todo App Load Todos
+# React TodoItem App Load Todos
 
-It is the first part of the React Todo App with API. You will implement the
+It is the first part of the React TodoItem App with API. You will implement the
 final app step by step and use the result of this task in the next tasks.
 
-You are given the markup of the Todo App. Split it into components and
+You are given the markup of the TodoItem App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
@@ -12,7 +12,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 ## General info
 
 - register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-- save the received `userId` in the `App` and use to load load todos
+- save the received `userId` in the `App` and use to load todos
 - log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
@@ -25,7 +25,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 ## Error messages
 
-In case of any error show the notification with an appropriate message at the bottom
+In case of any error show the notification with an appro priate message at the bottom
 
 - the notification can be closed with the `close` button (add the `hidden` class);
 - automatically hide the notification after 3 seconds;
@@ -44,4 +44,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://sergey-vorobei.github.io/react_todo-app-loading-todos/) and add it to the PR description.
