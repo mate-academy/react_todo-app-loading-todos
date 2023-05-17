@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { client } from './utils/fetchClient';
 import { Todo, TodoStatus } from './types/Todo';
 import { ErrorNotification } from './ErrorNotification';
 import { TodosHeader } from './TodosHeader';
 import { TodosList } from './TodosList';
 import { TodosFooter } from './TodosFooter';
+import { getTodos } from './api/todos';
 
 const USER_ID = 10332;
 
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   const loadTodos = async () => {
     try {
-      const response = await client.get<Todo[]>('/todos?userId=10332');
+      const response = await getTodos(USER_ID);
 
       setTodos(response);
     } catch {
