@@ -1,31 +1,35 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './Components/TodoList';
 import { TodoFilter } from './Components/TodoFilter';
-import { SortType } from './types/SortType';
+import { FilterType } from './types/FilterType';
 import { Error } from './Components/Error';
 
 const USER_ID = 10390;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [sort, setSort] = useState(SortType.All);
+  const [filterBy, setFilterBy] = useState(FilterType.All);
   const [errorMessage, setErrorMessage] = useState('');
 
   const completedTodo = todos.filter(todo => todo.completed === true);
   const activeTodo = todos.length - completedTodo.length;
 
-  const getFiltered = (filter: SortType) => {
+  const getFiltered = (filter: FilterType) => {
     switch (filter) {
-      case SortType.Active:
+      case FilterType.Active:
         return todos.filter(todo => !todo.completed);
 
-      case SortType.Completed:
+      case FilterType.Completed:
         return todos.filter(todo => todo.completed);
 
       default:
@@ -33,17 +37,25 @@ export const App: React.FC = () => {
     }
   };
 
-  const onDeleteError = () => setErrorMessage('');
+  const onDeleteError = useCallback(
+    async () => setErrorMessage(''), [errorMessage],
+  );
 
-  useEffect(() => {
-    getTodos(USER_ID).then(todosFromServer => {
+  const loadTodos = useCallback(async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
       setTodos(todosFromServer);
-      setFilteredTodos(todosFromServer);
-    })
-      .catch(error => setErrorMessage(error.message));
+    } catch (error) {
+      setErrorMessage('Unable to Load todos');
+    }
   }, []);
 
-  useEffect(() => setFilteredTodos(getFiltered(sort)), [sort]);
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  const filteredTodo = useMemo(() => getFiltered(filterBy), [todos, filterBy]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -55,18 +67,15 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className={classNames(
               'todoapp__toggle-all', {
-                active: getFiltered(SortType.Completed)
-                && filteredTodos.length === todos.length,
+                active: filteredTodo.length === completedTodo.length,
               },
             )}
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -75,15 +84,14 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-        <TodoList todosFromServer={filteredTodos} />
+        <TodoList todos={filteredTodo} />
 
-        {todos.length > 0
-        && (
+        {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               {`${activeTodo} items left`}
             </span>
-            <TodoFilter sort={sort} setSort={setSort} />
+            <TodoFilter filter={filterBy} setFilter={setFilterBy} />
 
             {/* don't show this button if there are no completed todos */}
             <button
