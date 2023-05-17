@@ -8,14 +8,12 @@ interface TodoItemProps {
 
 export const TodoItem: FC<TodoItemProps> = ({ todo }) => {
   const {
-    id,
     completed,
     title,
   } = todo;
 
   return (
     <div
-      key={id}
       className={classNames(
         'todo',
         { completed },

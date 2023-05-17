@@ -11,50 +11,60 @@ import { TodoList } from './components/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Footer } from './components/Footer';
-import { Status } from './enum/Status';
+import { FilterType } from './enum/FilterType';
 
 const USER_ID = 10303;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoStatus, setTodoStatus] = useState<Status>(Status.All);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [todoStatus, setTodoStatus] = useState<FilterType>(FilterType.All);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
+
+  let timeout: ReturnType<typeof setTimeout>;
 
   const showError = useCallback(() => {
-    setErrorMessage(true);
-    window.setTimeout(() => {
-      setErrorMessage(false);
+    setIsErrorMessage(true);
+    timeout = setTimeout(() => {
+      setIsErrorMessage(false);
     }, 3000);
+  }, []);
+
+  const loadTodos = useCallback(async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
+      setTodos(todosFromServer);
+    } catch {
+      showError();
+    }
   }, []);
 
   useEffect(() => {
     try {
-      getTodos(USER_ID).then((data) => {
-        setTodos(data);
-      });
+      loadTodos();
     } catch {
-      showError();
+      clearTimeout(timeout);
     }
   }, []);
 
   const filteredTodos = useMemo(() => {
     return todos.filter(({ completed }) => {
       switch (todoStatus) {
-        case Status.Active:
+        case FilterType.Active:
           return !completed;
 
-        case Status.Completed:
+        case FilterType.Completed:
           return completed;
 
-        case Status.All:
+        case FilterType.All:
         default:
           return todos;
       }
     });
   }, [todos, todoStatus]);
 
-  const handleStatus = useCallback((status: Status) => {
-    setTodoStatus(status);
+  const handleFilter = useCallback((filter: FilterType) => {
+    setTodoStatus(filter);
   }, []);
 
   return (
@@ -68,17 +78,17 @@ export const App: FC = () => {
 
         <Footer
           todos={todos}
-          onStatusSelect={handleStatus}
+          onStatusSelect={handleFilter}
           todoStatus={todoStatus}
         />
       </div>
 
-      {errorMessage && (
+      {isErrorMessage && (
         <div className="notification is-danger is-light has-text-weight-normal">
           <button
             type="button"
             className="delete"
-            onClick={() => setErrorMessage(false)}
+            onClick={() => setIsErrorMessage(false)}
           />
 
           <p>Unable to load data</p>
