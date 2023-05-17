@@ -6,40 +6,37 @@ interface Props {
   todos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
-  return (
-    <section className="todoapp__main">
-      {todos.map(({ id, title, completed }) => (
-        <div
-          key={id}
-          className={classNames('todo', {
-            completed,
-          })}
+export const TodoList: React.FC<Props> = ({ todos }) => (
+  <section className="todoapp__main">
+    {todos.map(({ id, title, completed }) => (
+      <div
+        key={id}
+        className={classNames('todo', {
+          completed,
+        })}
+      >
+        <label className="todo__status-label">
+          <input
+            type="checkbox"
+            className="todo__status"
+            checked
+          />
+        </label>
+
+        <span className="todo__title">{title}</span>
+
+        <button
+          type="button"
+          className="todo__remove"
         >
-          <label className="todo__status-label">
-            <input
-              type="checkbox"
-              className="todo__status"
-              checked
-            />
-          </label>
+          ×
+        </button>
 
-          <span className="todo__title">{title}</span>
-
-          <button
-            type="button"
-            className="todo__remove"
-          >
-            ×
-          </button>
-
-          {/* overlay will cover the todo while it is being updated */}
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
+        <div className="modal overlay">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
         </div>
-      ))}
-    </section>
-  );
-};
+      </div>
+    ))}
+  </section>
+);

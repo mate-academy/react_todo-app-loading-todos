@@ -9,9 +9,7 @@ import React, {
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorMessage } from './components/ErrorMessage';
-
 import { getTodos } from './api/todos';
-
 import { Todo } from './types/Todo';
 import { Filter } from './types/FilterEnum';
 
@@ -37,15 +35,13 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    const visibleTodos = [...todos];
-
     switch (filter) {
       case Filter.ACTIVE:
-        return visibleTodos.filter((todo) => !todo.completed);
+        return todos.filter((todo) => !todo.completed);
       case Filter.COMPLETED:
-        return visibleTodos.filter((todo) => todo.completed);
+        return todos.filter((todo) => todo.completed);
       default:
-        return visibleTodos;
+        return todos;
     }
   }, [filter, todos]);
 
@@ -60,11 +56,8 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
 
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -74,14 +67,14 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length !== 0 && (
+        {todos.length > 0 && (
           <>
             <TodoList todos={filteredTodos} />
 
             <TodoFooter
-              todoCounter={todos.length}
-              filterTodos={filter}
-              setFilterTodos={setFilter}
+              itemCounter={filteredTodos.length}
+              selectedFilter={filter}
+              onFilterSelect={setFilter}
             />
           </>
         )}
