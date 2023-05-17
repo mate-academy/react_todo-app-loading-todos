@@ -93,7 +93,6 @@ export const App: React.FC = () => {
             </span>
             <TodoFilter filter={filterBy} setFilter={setFilterBy} />
 
-            {/* don't show this button if there are no completed todos */}
             <button
               type="button"
               className="todoapp__clear-completed"
