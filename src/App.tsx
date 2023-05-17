@@ -45,6 +45,10 @@ export const App: React.FC = () => {
     }
   }, [filter, todos]);
 
+  const activeTodosCounter = useMemo(() => {
+    return todos.filter((todo) => !todo.completed).length;
+  }, [todos]);
+
   useEffect(() => {
     loadTodos();
   }, []);
@@ -72,7 +76,7 @@ export const App: React.FC = () => {
             <TodoList todos={filteredTodos} />
 
             <TodoFooter
-              itemCounter={filteredTodos.length}
+              itemCounter={activeTodosCounter}
               selectedFilter={filter}
               onFilterSelect={setFilter}
             />
