@@ -20,10 +20,6 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState(Select.All);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const createTodo = (data: Todo) => {
-    client.post(todoUrlEnd, data);
-  };
-
   const getTodos = useCallback(
     async () => {
       const data: Todo[] = await client.get(todoUrlEnd);
@@ -65,7 +61,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header createTodo={createTodo} handleError={setErrorMessage} />
+        <Header />
         <TodoList todos={handleSelectedTodos} />
         {/* Hide the footer if there are no todos */}
         <Footer
