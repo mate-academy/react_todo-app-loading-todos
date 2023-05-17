@@ -1,5 +1,5 @@
-export const FilterStatus = {
-  ALL: 'all',
-  COMPLETED: 'completed',
-  ACTIVE: 'active',
-};
+export enum FilterStatus {
+  ALL,
+  COMPLETED,
+  ACTIVE,
+}

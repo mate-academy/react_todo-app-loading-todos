@@ -3,15 +3,15 @@ import React from 'react';
 import classNames from 'classnames';
 
 interface Props {
-  hasActiveTodos: boolean;
+  activeTodosCount: number;
 }
 
-export const Header: React.FC<Props> = ({ hasActiveTodos }) => (
+export const Header: React.FC<Props> = ({ activeTodosCount }) => (
   <header className="todoapp__header">
     <button
       type="button"
       className={classNames('todoapp__toggle-all', {
-        active: hasActiveTodos,
+        active: activeTodosCount > 0,
       })}
     />
 

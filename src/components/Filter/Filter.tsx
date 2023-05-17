@@ -3,18 +3,21 @@ import classNames from 'classnames';
 import { FilterStatus } from '../../types/FilterStatus';
 
 interface Props {
-  filter: string;
-  setFilter: (filter: string) => void;
+  filter: FilterStatus;
+  onChangeFilter: (filter: FilterStatus) => void;
 }
 
-export const Filter: React.FC<Props> = ({ filter, setFilter }) => (
+export const Filter: React.FC<Props> = ({ filter, onChangeFilter }) => (
   <nav className="filter">
     <a
       href="#/"
       className={classNames('filter__link', {
         selected: filter === FilterStatus.ALL,
       })}
-      onClick={() => setFilter(FilterStatus.ALL)}
+      onClick={(event) => {
+        event.preventDefault();
+        onChangeFilter(FilterStatus.ALL);
+      }}
     >
       All
     </a>
@@ -24,7 +27,10 @@ export const Filter: React.FC<Props> = ({ filter, setFilter }) => (
       className={classNames('filter__link', {
         selected: filter === FilterStatus.ACTIVE,
       })}
-      onClick={() => setFilter(FilterStatus.ACTIVE)}
+      onClick={(event) => {
+        event.preventDefault();
+        onChangeFilter(FilterStatus.ACTIVE);
+      }}
     >
       Active
     </a>
@@ -34,7 +40,10 @@ export const Filter: React.FC<Props> = ({ filter, setFilter }) => (
       className={classNames('filter__link', {
         selected: filter === FilterStatus.COMPLETED,
       })}
-      onClick={() => setFilter(FilterStatus.COMPLETED)}
+      onClick={(event) => {
+        event.preventDefault();
+        onChangeFilter(FilterStatus.COMPLETED);
+      }}
     >
       Completed
     </a>

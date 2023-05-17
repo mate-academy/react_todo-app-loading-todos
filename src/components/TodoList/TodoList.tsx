@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -9,7 +10,9 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
   <section className="todoapp__main">
     {todos.map((todo) => (
       <div
-        className="todo"
+        className={classNames('todo', {
+          completed: todo.completed,
+        })}
         key={todo.id}
       >
         <label className="todo__status-label">
