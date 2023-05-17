@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -15,11 +15,16 @@ export const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.ALL);
 
+  const activeTodosCount = todos.filter((todo) => !todo.completed).length;
+  const hasCompletedTodos = useMemo(() => {
+    return todos.some((todo) => todo.completed);
+  }, [todos]);
+
   const handleCloseError = () => {
     setError(null);
   };
 
-  const filteredTodos = todos.filter(({ completed }) => {
+  const filteredTodos = useMemo(() => todos.filter(({ completed }) => {
     switch (filter) {
       case FilterStatus.ACTIVE:
         return !completed;
@@ -28,7 +33,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), [todos, filter]);
 
   useEffect(() => {
     async function fetchTodos() {
@@ -48,9 +53,6 @@ export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const hasCompletedTodos = todos.some((todo) => todo.completed);
-  const activeTodosCount = todos.filter((todo) => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -73,8 +75,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {error && (
         <ErrorBlock
           onClose={handleCloseError}

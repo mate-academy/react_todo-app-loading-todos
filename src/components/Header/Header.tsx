@@ -14,8 +14,6 @@ export const Header: React.FC<Props> = ({ activeTodosCount }) => (
         active: activeTodosCount > 0,
       })}
     />
-
-    {/* Add a todo on form submit */}
     <form>
       <input
         type="text"
