@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 import { TodoList } from './Components/TodoList';
 import { TodoFilter } from './Components/TodoFilter';
 import { FilterType } from './types/FilterType';
-import { Error } from './Components/Error';
+import { ErrorMessage } from './Components/ErrorMessage';
 
 const USER_ID = 10390;
 
@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const completedTodo = todos.filter(todo => todo.completed === true);
-  const activeTodo = todos.length - completedTodo.length;
+  const countActiveTodos = todos.length - completedTodo.length;
 
   const getFiltered = (filter: FilterType) => {
     switch (filter) {
@@ -89,7 +89,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              {`${activeTodo} items left`}
+              {`${countActiveTodos} items left`}
             </span>
             <TodoFilter filter={filterBy} setFilter={setFilterBy} />
 
@@ -102,7 +102,7 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-      <Error message={errorMessage} onDelete={onDeleteError} />
+      <ErrorMessage message={errorMessage} onDelete={onDeleteError} />
     </div>
   );
 };
