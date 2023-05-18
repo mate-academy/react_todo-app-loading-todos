@@ -21,14 +21,18 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
 
   const loadTodos = useCallback(async () => {
+    let timeoutId: NodeJS.Timeout;
+
     try {
       const todosFromServer = await getTodos(USER_ID);
 
       setTodos(todosFromServer);
     } catch {
       setHasError(true);
-      setTimeout(() => setHasError(false), 3000);
+      timeoutId = setTimeout(() => setHasError(false), 3000);
     }
+
+    return () => (timeoutId && clearTimeout(timeoutId));
   }, []);
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          { todos.length ? (
+          { todos.length > 0 && (
             <button
               type="button"
               className={classNames('todoapp__toggle-all', {
@@ -69,22 +73,21 @@ export const App: React.FC = () => {
                 active: completedCount,
               })}
             />
-          ) : null}
+          )}
 
           <NewTodo />
         </header>
 
-        {todos.length
-          ? (
-            <>
-              <TodoList todos={filteredTodos} />
-              <Footer
-                filterBy={filterBy}
-                setFilterBy={setFilterBy}
-                completedCount={completedCount}
-              />
-            </>
-          ) : null}
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={filteredTodos} />
+            <Footer
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+              completedCount={completedCount}
+            />
+          </>
+        )}
       </div>
 
       <div
