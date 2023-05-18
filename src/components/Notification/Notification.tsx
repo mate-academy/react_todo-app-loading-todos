@@ -1,4 +1,4 @@
-// import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Notification.scss';
 import classNames from 'classnames';
 
@@ -15,12 +15,6 @@ export const Notification: React.FC<Props> = ({
   isConnection,
   title,
 }) => {
-  // const [isVisible, setIsVisible] = useState(false);
-  //
-  // useEffect(() => {
-  //   setIsVisible(isErrorMessage);
-  // }, [isErrorMessage]);
-
   return (
     <div
       className={classNames(

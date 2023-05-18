@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -10,7 +9,7 @@ import { Notification } from './components/Notification';
 const USER_ID = 10354;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState<string>('');
   const [sortType, setSortType] = useState(SortType.All);
   const [isErrorMessage, setIsErrorMessage] = useState(false);
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
     if (!title) {
       setIsErrorMessage(true);
 
-      if (timeoutId !== null) {
+      if (timeoutId) {
         clearTimeout(timeoutId);
       }
     } else {
@@ -69,16 +68,18 @@ export const App: React.FC = () => {
     setSortType(SortType.Completed);
   };
 
-  const visibleTodos = todos?.filter((todo: Todo) => {
-    switch (sortType) {
-      case SortType.Active:
-        return !todo.completed;
-      case SortType.Completed:
-        return todo.completed;
-      default:
-        return todos;
-    }
-  });
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo: Todo) => {
+      switch (sortType) {
+        case SortType.Active:
+          return !todo.completed;
+        case SortType.Completed:
+          return todo.completed;
+        default:
+          return todos;
+      }
+    });
+  }, [todos, sortType]);
 
   useEffect(() => {
     if (!USER_ID) {
@@ -97,7 +98,11 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            aria-label="toggleAllButton"
+            type="button"
+            className="todoapp__toggle-all active"
+          />
 
           <form>
             <input
@@ -117,14 +122,12 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        {!!todos?.length && (
+        {!!todos.length && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               3 items left
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter">
               <a
                 href="#/"
@@ -157,7 +160,6 @@ export const App: React.FC = () => {
               </a>
             </nav>
 
-            {/* don't show this button if there are no completed todos */}
             <button type="button" className="todoapp__clear-completed">
               Clear completed
             </button>
@@ -165,7 +167,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <Notification
         isConnection={isConnection}
         title={title}
