@@ -8,14 +8,13 @@ interface Props {
 
 export const MainTodoApp: FC<Props> = React.memo(({
   todos,
-}) => {
-  return (
-    <section className="todoapp__main">
-      {todos.map((todo) => {
-        const { id } = todo;
-
-        return <TodoComponent key={id} todo={todo} />;
-      })}
-    </section>
-  );
-});
+}) => (
+  <section className="todoapp__main">
+    {todos.map((todo) => (
+      <TodoComponent
+        key={todo.id}
+        todo={todo}
+      />
+    ))}
+  </section>
+));
