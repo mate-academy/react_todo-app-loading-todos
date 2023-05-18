@@ -1,0 +1,43 @@
+import React from 'react';
+import './Notification.scss';
+import classNames from 'classnames';
+
+type Props = {
+  title: string
+  isConnection: boolean
+  isErrorMessage: boolean
+  closeErrorMessage: () => void;
+};
+
+export const Notification: React.FC<Props> = ({
+  isErrorMessage,
+  closeErrorMessage,
+  isConnection,
+  title,
+}) => {
+  return (
+    <div
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal', {
+          hidden: !isErrorMessage,
+        },
+      )}
+    >
+      <button
+        aria-label="deleteButton"
+        type="button"
+        className="delete"
+        onClick={closeErrorMessage}
+      />
+      {!title && isConnection && (
+        "Title can't be empty"
+      )}
+      {title && !isConnection && (
+        "Can't create a todo"
+      )}
+    </div>
+  );
+};
