@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const [isConnection, setIsConnection] = useState(true);
 
+  const isActiveTodos = todos.filter((todo) => !todo.completed);
   const handleError = () => {
     setIsConnection(false);
     setIsErrorMessage(true);
@@ -122,10 +123,10 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {!!todos.length && (
+        {!!visibleTodos.length && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              3 items left
+              {`${isActiveTodos.length} items left`}
             </span>
 
             <nav className="filter">
