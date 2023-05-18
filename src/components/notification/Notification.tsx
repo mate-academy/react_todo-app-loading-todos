@@ -1,6 +1,6 @@
 interface Props {
-  setError: (errVal: string | boolean) => void;
-  errorText: string | true;
+  setError: (errVal: string | null) => void;
+  errorText: string | null;
 }
 
 export const Notification: React.FC<Props> = ({ errorText, setError }) => {
@@ -13,7 +13,7 @@ export const Notification: React.FC<Props> = ({ errorText, setError }) => {
         type="button"
         className="delete"
         onClick={() => {
-          setError(false);
+          setError(null);
         }}
       />
       {`Unable to ${errorText} a todo`}

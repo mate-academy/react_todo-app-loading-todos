@@ -14,10 +14,12 @@ const USER_ID = 10283;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [error, setError] = useState<boolean | string>(false);
+  const [error, setError] = useState<null | string>(null);
   const [filter, setFilter] = useState<string>('all');
+  const itemsLeft: number = todos?.filter(todo => !todo.completed).length || 0;
+  const completedTodos = todos?.filter(todo => todo.completed).length || 0;
 
-  const handleSetError = (errVal: string | boolean) => {
+  const handleSetError = (errVal: string | null) => {
     setError(errVal);
   };
 
@@ -25,9 +27,8 @@ export const App: React.FC = () => {
     try {
       await getTodos(USER_ID)
         .then(res => setTodos(res));
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
+    } catch {
+      setError('load');
     }
   };
 
@@ -35,7 +36,7 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  const HandleSelectFilter = (filterValue: string) => {
+  const handleSelectFilter = (filterValue: string) => {
     setFilter(filterValue);
   };
 
@@ -54,11 +55,20 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header setError={handleSetError} userId={USER_ID} />
+        <Header
+          setError={handleSetError}
+          userId={USER_ID}
+          updateTodos={loadTodos}
+        />
         {todos && (
           <>
             <Main todos={visibleTodos} showError={handleSetError} />
-            <Footer setFilter={HandleSelectFilter} selectedFilter={filter} />
+            <Footer
+              setFilter={handleSelectFilter}
+              selectedFilter={filter}
+              itemsLeft={itemsLeft}
+              completedTodos={completedTodos}
+            />
           </>
         )}
       </div>

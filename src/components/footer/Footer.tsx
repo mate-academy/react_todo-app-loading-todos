@@ -3,24 +3,28 @@ import cn from 'classnames';
 interface Props {
   setFilter: (filter: string) => void;
   selectedFilter: string;
+  itemsLeft: number;
+  completedTodos: number;
 }
 
-export const Footer: React.FC<Props> = ({ setFilter, selectedFilter }) => {
+export const Footer: React.FC<Props> = ({
+  setFilter,
+  selectedFilter,
+  itemsLeft,
+  completedTodos,
+}) => {
   return (
     <footer className="todoapp__footer">
-      {/* Hide the footer if there are no todos */}
 
       <span className="todo-count">
-        3 items left
+        {`${itemsLeft} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
           className={cn('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': selectedFilter === 'all',
+            selected: selectedFilter === 'all',
           })}
           onClick={() => {
             setFilter('all');
@@ -32,8 +36,7 @@ export const Footer: React.FC<Props> = ({ setFilter, selectedFilter }) => {
         <a
           href="#/active"
           className={cn('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': selectedFilter === 'active',
+            selected: selectedFilter === 'active',
           })}
           onClick={() => {
             setFilter('active');
@@ -45,8 +48,7 @@ export const Footer: React.FC<Props> = ({ setFilter, selectedFilter }) => {
         <a
           href="#/completed"
           className={cn('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': selectedFilter === 'completed',
+            selected: selectedFilter === 'completed',
           })}
           onClick={() => {
             setFilter('completed');
@@ -56,10 +58,11 @@ export const Footer: React.FC<Props> = ({ setFilter, selectedFilter }) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {completedTodos !== 0 && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

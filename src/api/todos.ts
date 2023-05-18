@@ -13,7 +13,7 @@ export const deleteTodo = (todoId: number) => {
   return client.delete(`/todos/${todoId}`);
 };
 
-export const updateTodoComplited = (
+export const updateTodoCompleted = (
   todoId: number,
   data: Omit<Todo, 'id' | 'title' | 'userId'>,
 ) => {

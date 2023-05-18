@@ -4,9 +4,14 @@ import { addTodo } from '../../api/todos';
 interface Props {
   setError: (errText: string) => void;
   userId: number;
+  updateTodos: () => void;
 }
 
-export const Header: React.FC<Props> = ({ userId, setError }) => {
+export const Header: React.FC<Props> = ({
+  userId,
+  setError,
+  updateTodos,
+}) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleAddTodo = async (event: FormEvent) => {
@@ -18,6 +23,7 @@ export const Header: React.FC<Props> = ({ userId, setError }) => {
         userId,
         completed: false,
       });
+      updateTodos();
     } catch {
       setError('add');
     }
@@ -31,7 +37,6 @@ export const Header: React.FC<Props> = ({ userId, setError }) => {
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button type="button" className="todoapp__toggle-all active" />
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleAddTodo}>
         <input
           value={inputValue}
