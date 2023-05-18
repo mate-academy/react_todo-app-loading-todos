@@ -1,27 +1,49 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 
 const USER_ID = 10329;
 
+enum FilterTypes {
+  All,
+  Active,
+  Complited,
+}
+
+enum ErrorTypes {
+  NoError,
+  UnableToShowTodos = 'Unable to show todos',
+  UnableToAddTodo = 'Unable to add a todo',
+  UnableToDeleteTodo = 'Unable to delete a todo',
+  UnableToUpdateTodo = 'Unable to update a todo',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isWrongUrl, setIsWrongUrl] = useState(false);
-  const [isAbleToAddTodo, setIsAbleToAddTodo] = useState(false);
-  const [isAbleToDeleteTodo, setIsAbleToDeleteTodo] = useState(false);
-  const [isAbleToUpdateTodo, setIsAbleToUpdateTodo] = useState(false);
+  const [error, setError] = useState<ErrorTypes>(ErrorTypes.NoError);
+  const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.All);
 
-  const [newTodo, setNewTodo] = useState('');
-  const [allFilter, setAllFilter] = useState(true);
-  const [activeFilter, setActiveFilter] = useState(false);
-  const [completedFilter, setCompletedFilter] = useState(false);
+  const visibleTodos = useMemo(() => {
+    const preperedTodos = [...todos];
+
+    switch (filterType) {
+      case FilterTypes.Active:
+        return preperedTodos.filter(todo => !todo.completed);
+
+      case FilterTypes.Complited:
+        return preperedTodos.filter(todo => todo.completed);
+
+      default:
+        return preperedTodos;
+    }
+  }, [todos, filterType]);
 
   const hideNotifications = () => {
     setTimeout(() => {
-      setIsWrongUrl(false);
+      setError(ErrorTypes.NoError);
     }, 3000);
   };
 
@@ -30,8 +52,8 @@ export const App: React.FC = () => {
       const newTodos = await getTodos(USER_ID);
 
       setTodos(newTodos);
-    } catch (error) {
-      setIsWrongUrl(true);
+    } catch (error1) {
+      setError(ErrorTypes.UnableToShowTodos);
       hideNotifications();
     }
   };
@@ -40,98 +62,74 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
-  let visibleTodos: Todo[] = JSON.parse(JSON.stringify(todos));
-
-  if (activeFilter) {
-    visibleTodos = visibleTodos.filter(todo => !todo.completed);
-  }
-
-  if (completedFilter) {
-    visibleTodos = visibleTodos.filter(todo => todo.completed);
-  }
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className={classNames('todoapp__toggle-all',
+              { active: !todos.some(todo => todo.completed === false) },
+              { 'is-invisible': !todos.length })}
+          />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
-              className="todoapp__new-todo"
+              className="todoapp__new-todo disabled"
               placeholder="What needs to be done?"
-              value={newTodo}
-              onChange={event => {
-                setNewTodo(event.target.value);
-              }}
-              onKeyDown={event => {
-                if (event.key === 'Enter') {
-                  setIsWrongUrl(false);
-                }
-              }}
             />
           </form>
         </header>
 
         <section className="todoapp__main">
-          {visibleTodos.map(todo => {
-            return (
-              <div
-                className={classNames(
-                  'todo',
-                  { completed: todo.completed },
-                )}
+          {visibleTodos.map(todo => (
+            <div
+              key={todo.id}
+              className={classNames(
+                'todo',
+                { completed: todo.completed },
+              )}
+            >
+              <label className="todo__status-label">
+                <input
+                  type="checkbox"
+                  className="todo__status"
+                />
+              </label>
+
+              <span className="todo__title">{todo.title}</span>
+
+              <button
+                type="button"
+                className="todo__remove"
               >
-                <label className="todo__status-label">
-                  <input
-                    type="checkbox"
-                    className="todo__status"
-                    checked
-                  />
-                </label>
+                ×
+              </button>
 
-                <span className="todo__title">{todo.title}</span>
-
-                {/* Remove button appears only on hover */}
-                <button type="button" className="todo__remove">×</button>
-
-                {/* overlay will cover the todo while it is being updated */}
-                <div className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
+              <div className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
               </div>
-            );
-          })}
+            </div>
+          ))}
         </section>
 
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               {todos.length}
-              items left
+              {' items left'}
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter">
               <a
                 href="#/"
                 className={classNames('filter__link',
-                  { selected: allFilter })}
-                onClick={() => {
-                  setAllFilter(true);
-                  setActiveFilter(false);
-                  setCompletedFilter(false);
-                }}
+                  { selected: filterType === FilterTypes.All })}
+                onClick={() => setFilterType(FilterTypes.All)}
               >
                 All
               </a>
@@ -139,12 +137,8 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link',
-                  { selected: activeFilter })}
-                onClick={() => {
-                  setAllFilter(false);
-                  setActiveFilter(true);
-                  setCompletedFilter(false);
-                }}
+                  { selected: filterType === FilterTypes.Active })}
+                onClick={() => setFilterType(FilterTypes.Active)}
               >
                 Active
               </a>
@@ -152,82 +146,34 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link',
-                  { selected: completedFilter })}
-                onClick={() => {
-                  setAllFilter(false);
-                  setActiveFilter(false);
-                  setCompletedFilter(true);
-                }}
+                  { selected: filterType === FilterTypes.Complited })}
+                onClick={() => setFilterType(FilterTypes.Complited)}
               >
                 Completed
               </a>
             </nav>
 
-            {/* don't show this button if there are no completed todos */}
-            <button type="button" className="todoapp__clear-completed">
+            <button
+              type="button"
+              className={classNames('todoapp__clear-completed',
+                { 'is-invisible': !todos.some(todo => todo.completed === true) })}
+            >
               Clear completed
             </button>
           </footer>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: !isWrongUrl },
+      {error !== ErrorTypes.NoError && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setError(ErrorTypes.NoError)}
+          />
+          {error}
+        </div>
       )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setIsWrongUrl(false)}
-        />
-
-        Unable to show todos
-      </div>
-
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: !isAbleToAddTodo },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setIsAbleToAddTodo(false)}
-        />
-
-        Unable to add a todo
-      </div>
-
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: !isAbleToDeleteTodo },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setIsAbleToDeleteTodo(false)}
-        />
-
-        Unable to delete a todo
-      </div>
-
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: !isAbleToUpdateTodo },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setIsAbleToUpdateTodo(false)}
-        />
-
-        Unable to update a todo
-      </div>
     </div>
   );
 };
