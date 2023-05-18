@@ -29,10 +29,10 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => todos.filter(({ completed }) => {
     switch (category) {
-      case Filters.completed:
-        return completed === true;
+      case Filters.Completed:
+        return completed;
       case Filters.Active:
-        return completed === false;
+        return !completed;
       default:
         return true;
     }

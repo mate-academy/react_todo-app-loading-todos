@@ -46,9 +46,9 @@ export const FooterTodoApp: FC<Props> = React.memo(({
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: category === Filters.completed,
+            selected: category === Filters.Completed,
           })}
-          onClick={() => onChange(Filters.completed)}
+          onClick={() => onChange(Filters.Completed)}
         >
           Completed
         </a>
