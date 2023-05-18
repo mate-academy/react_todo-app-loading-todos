@@ -1,14 +1,15 @@
 import cn from 'classnames';
+import { Filter } from '../../types/Filter';
 
 interface Props {
-  setFilter: (filter: string) => void;
+  onSelect: (filter: string) => void;
   selectedFilter: string;
   itemsLeft: number;
   completedTodos: number;
 }
 
 export const Footer: React.FC<Props> = ({
-  setFilter,
+  onSelect,
   selectedFilter,
   itemsLeft,
   completedTodos,
@@ -27,7 +28,7 @@ export const Footer: React.FC<Props> = ({
             selected: selectedFilter === 'all',
           })}
           onClick={() => {
-            setFilter('all');
+            onSelect(Filter.ALL);
           }}
         >
           All
@@ -39,7 +40,7 @@ export const Footer: React.FC<Props> = ({
             selected: selectedFilter === 'active',
           })}
           onClick={() => {
-            setFilter('active');
+            onSelect(Filter.ACTIVE);
           }}
         >
           Active
@@ -51,7 +52,7 @@ export const Footer: React.FC<Props> = ({
             selected: selectedFilter === 'completed',
           })}
           onClick={() => {
-            setFilter('completed');
+            onSelect(Filter.COMPLETED);
           }}
         >
           Completed

@@ -1,25 +1,20 @@
 interface Props {
-  setError: (errVal: string | null) => void;
-  errorText: string | null;
+  onError: (errVal: string | null) => void;
+  error: string | null;
 }
 
-export const Notification: React.FC<Props> = ({ errorText, setError }) => {
+export const Notification: React.FC<Props> = ({ error, onError }) => {
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className="delete"
         onClick={() => {
-          setError(null);
+          onError(null);
         }}
       />
-      {`Unable to ${errorText} a todo`}
-      {/* Unable to delete a todo
-      <br />
-      Unable to update a todo */}
+      {`Unable to ${error} a todo`}
     </div>
   );
 };
