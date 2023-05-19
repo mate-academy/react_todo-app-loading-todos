@@ -32,9 +32,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(data => {
-        setInitialTodos(data);
-      })
+      .then(setInitialTodos)
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
