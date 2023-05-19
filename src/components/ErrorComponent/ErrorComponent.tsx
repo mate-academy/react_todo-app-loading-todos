@@ -11,9 +11,11 @@ export const ErrorComponent: FC<Props> = React.memo(({
   onChangeError,
 }) => {
   useEffect(() => {
-    setTimeout(() => {
+    const timoutId = setTimeout(() => {
       onChangeError('');
     }, 3000);
+
+    return clearTimeout(timoutId);
   }, [error]);
 
   return (
