@@ -1,11 +1,6 @@
 import React from 'react';
-import CN from 'classnames';
-
-enum Options {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMLETED = 'comleted',
-}
+import cn from 'classnames';
+import { Options } from '../../types/Options';
 
 type Props = {
   onFilterChange: (value: Options) => void;
@@ -20,7 +15,7 @@ export const Filter: React.FC<Props> = ({
     <nav className="filter">
       <a
         href="#/"
-        className={CN(
+        className={cn(
           'filter__link',
           { selected: option === Options.ALL },
         )}
@@ -31,7 +26,7 @@ export const Filter: React.FC<Props> = ({
 
       <a
         href="#/active"
-        className={CN(
+        className={cn(
           'filter__link',
           { selected: option === Options.ACTIVE },
         )}
@@ -42,7 +37,7 @@ export const Filter: React.FC<Props> = ({
 
       <a
         href="#/completed"
-        className={CN(
+        className={cn(
           'filter__link',
           { selected: option === Options.ALL },
         )}

@@ -4,19 +4,16 @@ import { TodoItem } from '../TodoItem/TodoItem';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  visibleTodos: Todo[];
+  todos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
 
     <section className="todoapp__main">
-
-      {visibleTodos.map(todo => {
-        const { title } = todo;
-
-        return <TodoItem title={title} key={uuid()} />;
-      })}
+      {todos.map(({ title }) => (
+        <TodoItem title={title} key={uuid()} />
+      ))}
     </section>
   );
 };
