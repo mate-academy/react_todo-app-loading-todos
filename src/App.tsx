@@ -42,12 +42,14 @@ export const App: React.FC = () => {
     }
   };
 
-  const completedTodos = useMemo(
+  const activeTodos = useMemo(
     () => todos.reduce((num, todo) => {
-      return todo.completed ? num + 1 : num;
+      return todo.completed ? num : num + 1;
     }, 0),
     [todos],
   );
+
+  const completedTodos = visibleTodos.length - activeTodos;
 
   const hideErrorMessage = useCallback(() => {
     setIsError(false);
@@ -67,7 +69,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length && (
+          {todos.length > 0 && (
             <button type="button" className="todoapp__toggle-all active" />
 
           )}
@@ -85,9 +87,10 @@ export const App: React.FC = () => {
           <TodoList todos={visibleTodos} />
         )}
 
-        {!!todos.length && (
+        {todos.length > 0 && (
           <Footer
-            activeTodos={visibleTodos.length}
+            todos={todos}
+            activeTodos={activeTodos}
             filter={filterBy}
             completedTodos={completedTodos}
             setFilter={setFilterBy}
