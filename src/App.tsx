@@ -7,14 +7,14 @@ import { MainTodoApp } from './components/MainTodoApp';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { FooterTodoApp } from './components/FooterTodoApp';
-import { Filters } from './types/Filters';
+import { Filter } from './types/Filter';
 import { ErrorComponent } from './components/ErrorComponent';
 
 const USER_ID = 10299;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [category, setCategory] = useState<Filters>(Filters.All);
+  const [category, setCategory] = useState<Filter>(Filter.All);
   const [error, setError] = useState('');
 
   const loadTodos = useCallback(async () => {
@@ -29,9 +29,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => todos.filter(({ completed }) => {
     switch (category) {
-      case Filters.Completed:
+      case Filter.Completed:
         return completed;
-      case Filters.Active:
+      case Filter.Active:
         return !completed;
       default:
         return true;
