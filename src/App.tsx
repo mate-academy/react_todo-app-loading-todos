@@ -1,30 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
-import { FilteredBy } from './types/FilteredBy';
+import { TodoFilterEnum, Todo } from './types/types';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
-import { UserWarning } from './UserWarning';
 
 const USER_ID = 10348;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [filteredBy, setfilteredBy] = useState(FilteredBy.ALL);
+  const [filteredBy, setFilteredBy] = useState(TodoFilterEnum.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
 
-  const getFilteredTodos = (filter: FilteredBy) => {
+  const getFilteredTodos = (filter: TodoFilterEnum) => {
     switch (filter) {
-      case FilteredBy.ACTIVE:
+      case TodoFilterEnum.ACTIVE:
         return todos.filter(todo => !todo.completed);
 
-      case FilteredBy.COMPLETED:
+      case TodoFilterEnum.COMPLETED:
         return todos.filter(todo => todo.completed);
 
       default:
@@ -50,10 +48,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     setFilteredTodos(getFilteredTodos(filteredBy));
   }, [filteredBy]);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <div className="todoapp">
@@ -90,7 +84,7 @@ export const App: React.FC = () => {
 
             <TodoFilter
               filter={filteredBy}
-              setFilter={setfilteredBy}
+              setFilter={setFilteredBy}
             />
 
             {completedTodosCount > 0 && (
@@ -101,9 +95,6 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
 
       {errorMessage && (
         <div className="notification is-danger is-light has-text-weight-normal">

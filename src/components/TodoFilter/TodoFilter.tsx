@@ -1,9 +1,9 @@
 import cn from 'classnames';
-import { FilteredBy } from '../../types/FilteredBy';
+import { TodoFilterEnum } from '../../types/types';
 
 interface Props {
-  filter: FilteredBy;
-  setFilter: (newFilter: FilteredBy) => void;
+  filter: TodoFilterEnum;
+  setFilter: (newFilter: TodoFilterEnum) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,9 +14,12 @@ export const TodoFilter: React.FC<Props> = ({
     <a
       href="#/"
       className={cn('filter__link', {
-        selected: filter === FilteredBy.ALL,
+        selected: filter === TodoFilterEnum.ALL,
       })}
-      onClick={() => setFilter(FilteredBy.ALL)}
+      onClick={(e) => {
+        e.preventDefault();
+        setFilter(TodoFilterEnum.ALL);
+      }}
     >
       All
     </a>
@@ -24,9 +27,12 @@ export const TodoFilter: React.FC<Props> = ({
     <a
       href="#/active"
       className={cn('filter__link', {
-        selected: filter === FilteredBy.ACTIVE,
+        selected: filter === TodoFilterEnum.ACTIVE,
       })}
-      onClick={() => setFilter(FilteredBy.ACTIVE)}
+      onClick={(e) => {
+        e.preventDefault();
+        setFilter(TodoFilterEnum.ACTIVE);
+      }}
     >
       Active
     </a>
@@ -34,9 +40,12 @@ export const TodoFilter: React.FC<Props> = ({
     <a
       href="#/completed"
       className={cn('filter__link', {
-        selected: filter === FilteredBy.COMPLETED,
+        selected: filter === TodoFilterEnum.COMPLETED,
       })}
-      onClick={() => setFilter(FilteredBy.COMPLETED)}
+      onClick={(e) => {
+        e.preventDefault();
+        setFilter(TodoFilterEnum.COMPLETED);
+      }}
     >
       Completed
     </a>
