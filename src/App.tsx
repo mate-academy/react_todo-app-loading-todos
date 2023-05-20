@@ -1,156 +1,125 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
+import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
+import { getTodos } from './api/todos';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Notifications } from './components/Notifications/Notifications';
 
-const USER_ID = 0;
+const USER_ID = 10513;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [hasError, setHasError] = useState(false);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
+
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed), [todos],
+  );
+
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed), [todos],
+  );
+
+  const filterTodos = () => {
+    switch (filterType) {
+      case FilterType.Completed:
+        return completedTodos;
+
+      case FilterType.Active:
+        return activeTodos;
+
+      default:
+        return todos;
+    }
+  };
+
+  useEffect(() => {
+    getTodos(USER_ID).then(data => setTodos(data))
+      .catch(() => {
+        setHasError(true);
+        setTimeout(() => {
+          setHasError(false);
+        }, 3000);
+      });
+  });
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const handleFilter = (filter: FilterType) => (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    event.preventDefault();
+    setFilterType(filter);
+  };
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+        <Header isActive={activeTodos.length > 0} />
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <TodoList todos={filterTodos()} />
 
-        <section className="todoapp__main">
-          {/* This is a completed todo */}
-          <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodos.length} items left`}
+            </span>
 
-            <span className="todo__title">Completed Todo</span>
+            <nav className="filter">
+              <a
+                href="#/"
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.All },
+                )}
+                onClick={handleFilter(FilterType.All)}
+              >
+                {FilterType.All}
+              </a>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
+              <a
+                href="#/active"
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.Active },
+                )}
+                onClick={handleFilter(FilterType.Active)}
+              >
+                {FilterType.Active}
+              </a>
 
-            {/* overlay will cover the todo while it is being updated */}
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+              <a
+                href="#/completed"
+                className={classNames(
+                  'filter__link',
+                  { selected: filterType === FilterType.Completed },
+                )}
+                onClick={handleFilter(FilterType.Completed)}
+              >
+                {FilterType.Completed}
+              </a>
+            </nav>
 
-          {/* This todo is not completed */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+            {completedTodos.length > 0 && (
+              <button type="button" className="todoapp__clear-completed">
+                Clear completed
+              </button>
+            )}
 
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input type="checkbox" className="todo__status" />
-            </label>
-
-            <span className="todo__title">Todo is being saved now</span>
-            <button type="button" className="todo__remove">×</button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
-
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
-
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
-
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
+          </footer>
+        )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {hasError && (
+        <Notifications />
+      )}
     </div>
   );
 };
