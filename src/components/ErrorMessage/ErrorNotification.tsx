@@ -1,6 +1,6 @@
-import React from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
-import { ErrorMessage } from '../../types/ErrorMessage';
+import { ErrorMessage } from '../../types/types/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage,
@@ -11,6 +11,10 @@ export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   closeError,
 }) => {
+  useEffect(() => {
+    setInterval(closeError, 3000);
+  }, [errorMessage]);
+
   return (
     <div
       className={classNames(
@@ -29,7 +33,7 @@ export const ErrorNotification: React.FC<Props> = ({
         ×
       </button>
 
-      <>{errorMessage}</>
+      {errorMessage}
     </div>
   );
 };
