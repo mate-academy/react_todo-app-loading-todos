@@ -1,7 +1,11 @@
 export enum ErrorType {
-  get = 'Unable get response from the server',
-  post = 'Unable to add a todo',
-  delete = 'Unable to delete a todo',
-  patch = 'Unable to update a todo',
-  success = '',
+  GetError = 'Unable to get response from the server',
+  PostError = 'Unable to add a todo',
+  DeleteError = 'Unable to delete a todo',
+  PatchError = 'Unable to update a todo',
+  success = "success"
+}
+
+export enum SuccessType {
+  Success = 'Success',
 }

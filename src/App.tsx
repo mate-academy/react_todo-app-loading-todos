@@ -11,7 +11,7 @@ import { ErrorType } from './types/ErrorType';
 import { Filter } from './types/Filter';
 
 import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodosList/TodosList';
+import { TodosList } from './components/TodosList/TodosList';
 import { Footer } from './components/Footer/Footer';
 import { Error } from './components/Error/Error';
 
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
             onHandleInput={handleInput}
             inputValue={title}
           />
-          <TodoList todos={todosFiltered} />
+          <TodosList todos={todosFiltered} />
           {!!todos.length && (
             <Footer
               onSetFilterType={setFilterType}
@@ -96,7 +96,7 @@ export const App: React.FC = () => {
 
         <Error
           error={typeOfError}
-          onHandleErrorRemove={handleErrorRemove}
+          onErrorRemove={handleErrorRemove}
         />
       </div>
     </AuthProvider>

@@ -4,13 +4,17 @@ import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
   error: ErrorType,
-  onHandleErrorRemove: React.MouseEventHandler
+  onErrorRemove: React.MouseEventHandler
 };
 
 export const Error: React.FC<Props> = ({
   error,
-  onHandleErrorRemove,
+  onErrorRemove,
 }) => {
+  if (error === ErrorType.success) {
+    return null;
+  }
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -19,7 +23,6 @@ export const Error: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: error === ErrorType.success },
       )}
     >
       <button
@@ -27,7 +30,7 @@ export const Error: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={onHandleErrorRemove}
+        onClick={onErrorRemove}
       />
       {error}
     </div>

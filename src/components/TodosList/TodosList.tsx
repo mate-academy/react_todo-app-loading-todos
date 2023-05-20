@@ -6,7 +6,7 @@ type Props = {
   todos: Todo[],
 };
 
-export const TodoList: React.FC<Props> = ({
+export const TodosList: React.FC<Props> = ({
   todos,
 }) => {
   return (
@@ -26,7 +26,6 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                defaultChecked
                 checked={todo.completed}
               />
             </label>
