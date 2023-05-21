@@ -3,8 +3,8 @@ export enum ErrorType {
   PostError = 'Unable to add a todo',
   DeleteError = 'Unable to delete a todo',
   PatchError = 'Unable to update a todo',
-  success = 'success',
-  get = "get"
+  Success = 'success',
+  Get = 'get',
 }
 
 export enum SuccessType {

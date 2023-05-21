@@ -11,7 +11,7 @@ export const Error: React.FC<Props> = ({
   error,
   onErrorRemove,
 }) => {
-  if (error === ErrorType.success) {
+  if (error === ErrorType.Success) {
     return null;
   }
 

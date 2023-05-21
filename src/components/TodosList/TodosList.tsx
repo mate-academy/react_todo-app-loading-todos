@@ -51,7 +51,6 @@ export const TodosList: React.FC<Props> = ({
             </div>
           </li>
         ))}
-
       </ul>
     </section>
   );
