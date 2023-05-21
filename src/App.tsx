@@ -21,12 +21,12 @@ export const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
-  const [typeOfError, setTypeOfError] = useState(ErrorType.success);
-  const [filterType, setFilterType] = useState(Filter.all);
+  const [typeOfError, setTypeOfError] = useState(ErrorType.Success);
+  const [filterType, setFilterType] = useState(Filter.All);
 
   const handleGetRequest = (todoList: Todo[]) => {
     setTodos(todoList);
-    setTypeOfError(ErrorType.success);
+    setTypeOfError(ErrorType.Success);
   };
 
   useEffect(() => {
@@ -37,10 +37,10 @@ export const App: React.FC = () => {
     if (user) {
       getTodos(user.id)
         .then(list => handleGetRequest(list))
-        .catch(() => setTypeOfError(ErrorType.get));
+        .catch(() => setTypeOfError(ErrorType.Get));
     }
 
-    const timeoutID = setTimeout(() => setTypeOfError(ErrorType.success), 3000);
+    const timeoutID = setTimeout(() => setTypeOfError(ErrorType.Success), 3000);
 
     return () => {
       clearTimeout(timeoutID);
@@ -54,22 +54,22 @@ export const App: React.FC = () => {
   };
 
   const handleErrorRemove = () => {
-    setTypeOfError(ErrorType.success);
+    setTypeOfError(ErrorType.Success);
   };
 
   const listModified = (type: Filter) => {
     switch (type) {
-      case Filter.active:
+      case Filter.Active:
         return todos.filter(item => !item.completed);
-      case Filter.completed:
+      case Filter.Completed:
         return todos.filter(item => item.completed);
       default:
         return todos;
     }
   };
 
-  const activeTodos = listModified(Filter.active).length;
-  const completedTodos = listModified(Filter.completed).length;
+  const activeTodos = listModified(Filter.Active).length;
+  const completedTodos = listModified(Filter.Completed).length;
   const todosFiltered = listModified(filterType);
 
   return (
