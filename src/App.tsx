@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { SelectedFiltering } from './types/SelectedType';
+import { TodoFilter } from './types/TodoFilter';
 import { TodoList } from './TodoMain/TodoList';
 import { TodoLoadingError } from './TodoLoadingError';
 
@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  const [filteringBy, setFilteringBy] = useState(SelectedFiltering.All);
+  const [filteringBy, setFilteringBy] = useState(TodoFilter.All);
 
   const loadTodos = useCallback(async () => {
     setIsLoadingError(false);
@@ -40,10 +40,10 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter(({ completed }) => {
     switch (filteringBy) {
-      case SelectedFiltering.Active:
+      case TodoFilter.Active:
         return !completed;
 
-      case SelectedFiltering.Completed:
+      case TodoFilter.Completed:
         return completed;
 
       default:
@@ -61,10 +61,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -84,23 +82,21 @@ export const App: React.FC = () => {
 
         {isLoadingError && <TodoLoadingError />}
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              3 items left
+              {`${todos.length} items left`}
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter">
               <a
                 href="#/"
                 className={classNames(
                   'filter__link', {
-                    selected: filteringBy === SelectedFiltering.All,
+                    selected: filteringBy === TodoFilter.All,
                   },
                 )}
-                onClick={() => setFilteringBy(SelectedFiltering.All)}
+                onClick={() => setFilteringBy(TodoFilter.All)}
               >
                 All
               </a>
@@ -109,10 +105,10 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={classNames(
                   'filter__link', {
-                    selected: filteringBy === SelectedFiltering.Active,
+                    selected: filteringBy === TodoFilter.Active,
                   },
                 )}
-                onClick={() => setFilteringBy(SelectedFiltering.Active)}
+                onClick={() => setFilteringBy(TodoFilter.Active)}
               >
                 Active
               </a>
@@ -121,16 +117,15 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={classNames(
                   'filter__link', {
-                    selected: filteringBy === SelectedFiltering.Completed,
+                    selected: filteringBy === TodoFilter.Completed,
                   },
                 )}
-                onClick={() => setFilteringBy(SelectedFiltering.Completed)}
+                onClick={() => setFilteringBy(TodoFilter.Completed)}
               >
                 Completed
               </a>
             </nav>
 
-            {/* don't show this button if there are no completed todos */}
             <button type="button" className="todoapp__clear-completed">
               Clear completed
             </button>

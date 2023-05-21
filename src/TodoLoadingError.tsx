@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable linebreak-style */
 import React from 'react';
 
 export const TodoLoadingError: React.FC = () => {
