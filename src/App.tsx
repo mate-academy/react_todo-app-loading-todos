@@ -13,7 +13,7 @@ const USER_ID = 10377;
 
 function getRandomNumber(): number {
   const generatedNumbers: number[] = [];
-  const maxAttempts = 1000;
+  const maxAttempts = 1001;
 
   for (let i = 0; i < maxAttempts; i += 1) {
     const randomNumber = Math.floor(Math.random() * 1001);
