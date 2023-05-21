@@ -24,37 +24,37 @@ export const Footer: React.FC<Props> = ({
       <nav className="filter" data-cy="Filter">
         <a
           data-cy="FilterLinkAll"
-          href={`#/${Filter.all}`}
+          href={`#/${Filter.All}`}
           className={classNames(
             'filter__link',
-            { selected: filterType === Filter.all },
+            { selected: filterType === Filter.All },
           )}
-          onClick={() => onSetFilterType(Filter.all)}
+          onClick={() => onSetFilterType(Filter.All)}
         >
-          {Filter.all}
+          {Filter.All}
         </a>
 
         <a
           data-cy="FilterLinkActive"
-          href={`#/${Filter.active}`}
+          href={`#/${Filter.Active}`}
           className={classNames(
             'filter__link',
-            { selected: filterType === Filter.active },
+            { selected: filterType === Filter.Active },
           )}
-          onClick={() => onSetFilterType(Filter.active)}
+          onClick={() => onSetFilterType(Filter.Active)}
         >
-          {Filter.active}
+          {Filter.Active}
         </a>
         <a
           data-cy="FilterLinkCompleted"
-          href={`#/${Filter.completed}`}
+          href={`#/${Filter.Completed}`}
           className={classNames(
             'filter__link',
-            { selected: filterType === Filter.completed },
+            { selected: filterType === Filter.Completed },
           )}
-          onClick={() => onSetFilterType(Filter.completed)}
+          onClick={() => onSetFilterType(Filter.Completed)}
         >
-          {Filter.completed}
+          {Filter.Completed}
         </a>
       </nav>
 
