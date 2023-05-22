@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -35,15 +35,16 @@ export const App: React.FC = () => {
     loadTodosFromServer();
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    todos.filter(todo => {
-      switch (filterCategory) {
-        case 'Completed': return todo.completed;
-        case 'Active': return !todo.completed;
-        default: return todos;
-      }
-    });
-  }, [todos, filterCategory]);
+  const filteredTodos = todos.filter(todo => {
+    switch (filterCategory) {
+      case 'Completed':
+        return todo.completed;
+      case 'Active':
+        return !todo.completed;
+      default:
+        return todos;
+    }
+  });
 
   if (!USER_ID) {
     return <UserWarning />;
