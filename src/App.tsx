@@ -14,13 +14,13 @@ import { Filter } from './types/Filter';
 import { USER_ID } from './utils/constants';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [error, setError] = useState<null | string>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<string>('');
   const [filter, setFilter] = useState<string>(Filter.ALL);
-  const itemsLeft: number = todos?.filter(todo => !todo.completed).length || 0;
-  const completedTodos = todos?.filter(todo => todo.completed).length || 0;
+  const itemsLeft: number = todos.filter(todo => !todo.completed).length;
+  const completedTodos = todos.filter(todo => todo.completed).length;
 
-  const handleSetError = (errVal: string | null) => {
+  const handleSetError = (errVal: string) => {
     setError(errVal);
   };
 
@@ -42,14 +42,14 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = useMemo(() => {
-    let filteredTodos: Todo[] | null = todos;
+    let filteredTodos: Todo[] = todos;
 
     if (filter === Filter.ACTIVE) {
-      filteredTodos = todos ? todos.filter(todo => !todo.completed) : null;
+      filteredTodos = todos.filter(todo => !todo.completed);
     }
 
     if (filter === Filter.COMPLETED) {
-      filteredTodos = todos ? todos.filter(todo => todo.completed) : null;
+      filteredTodos = todos.filter(todo => todo.completed);
     }
 
     return filteredTodos || [];
@@ -62,7 +62,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header onError={handleSetError} />
 
-        {todos && (
+        {todos.length > 0 && (
           <>
             <Main todos={visibleTodos} />
             <Footer

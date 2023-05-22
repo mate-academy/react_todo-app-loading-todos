@@ -15,14 +15,14 @@ export const deleteTodo = (todoId: number) => {
 
 export const updateTodoCompleted = (
   todoId: number,
-  data: Omit<Todo, 'id' | 'title' | 'userId'>,
+  data: { complited: boolean },
 ) => {
   return client.patch(`/todos/${todoId}`, data);
 };
 
 export const updateTodoTitle = (
   todoId: number,
-  data: Omit<Todo, 'id' | 'completed' | 'userId'>,
+  data: { title: string },
 ) => {
   return client.patch(`/todos/${todoId}`, data);
 };
