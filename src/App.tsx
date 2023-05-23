@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable no-console */
 import React, {
   useEffect, useState, FormEvent, useMemo,
 } from 'react';
@@ -12,20 +11,13 @@ import { client } from './utils/client';
 const USER_ID = 10377;
 
 function getRandomNumber(): number {
-  const generatedNumbers: number[] = [];
-  const maxAttempts = 1001;
+  return Math.floor(Math.random() * 1001);
+}
 
-  for (let i = 0; i < maxAttempts; i += 1) {
-    const randomNumber = Math.floor(Math.random() * 1001);
-
-    if (!generatedNumbers.includes(randomNumber)) {
-      generatedNumbers.push(randomNumber);
-
-      return randomNumber;
-    }
-  }
-
-  return 0;
+enum SortType {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
 }
 
 export const App: React.FC = () => {
@@ -47,7 +39,8 @@ export const App: React.FC = () => {
     id: getRandomNumber(),
   });
 
-  const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress
+  = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && event.target.value.trim() !== '') {
       event.preventDefault();
 
@@ -144,7 +137,12 @@ export const App: React.FC = () => {
       const todoToUpdate = todo.find((elem) => elem.id === id);
 
       if (todoToUpdate) {
-        await client.patch(`/todos/${id}`, { completed: !todoToUpdate.completed });
+        await client.patch(`/todos/${id}`, {
+          completed: !todoToUpdate.completed,
+          title: todoToUpdate.title,
+          userId: USER_ID,
+          id,
+        });
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -160,21 +158,23 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    async function getTodo() {
+    const fetchTodos = async () => {
       try {
         setIsLoading(true);
+        const response = await getTodos(123);
 
-        const fetchedData = await getTodos(10377);
-
-        setTodo(fetchedData);
+        setTodo(response);
       } catch (error) {
-        console.error('Error occurred:', error);
-        throw error;
+        console.error('Error fetching todos:', error);
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
+    fetchTodos();
+  }, []);
+
+  useEffect(() => {
     const isActive = todo.some((obj) => obj.completed === false);
     const isFalse = todo.some((obj) => obj.completed === true);
     const todoLength = todo.filter((obj) => {
@@ -184,22 +184,20 @@ export const App: React.FC = () => {
     setIsThereActiveTodo(isActive);
     setIsThereCompletedTodos(isFalse);
     setNumberOfActivTodos(todoLength.length);
-
-    getTodo();
-  }, [newTodo, todo]);
+  }, [todo]);
 
   const visibleTodos: Todo[] = useMemo(() => todo.filter((element) => {
     switch (selectedTab) {
-      case 'Completed':
-        return element.completed === true;
-      case 'Active':
-        return element.completed === false;
-      case 'All':
+      case SortType.Completed:
+        return element.completed;
+      case SortType.Active:
+        return !element.completed;
+      case SortType.All:
         return todo;
       default:
         return todo;
     }
-  }), [todo, newTodo.completed, selectedTab]);
+  }), [todo, selectedTab]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -212,13 +210,16 @@ export const App: React.FC = () => {
 
         <div className="todoapp__content">
           <header className="todoapp__header">
-            <button
-              type="button"
-              className={isThereActiveTodo
-                ? 'todoapp__toggle-all active'
-                : 'todoapp__toggle-all'}
-              onClick={changeAll}
-            />
+            <label htmlFor="nameInput">
+              <button
+                id="nameInput"
+                type="button"
+                className={isThereActiveTodo
+                  ? 'todoapp__toggle-all active'
+                  : 'todoapp__toggle-all'}
+                onClick={changeAll}
+              />
+            </label>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -230,7 +231,6 @@ export const App: React.FC = () => {
               />
             </form>
           </header>
-          {newTodo.title}
           <section className="todoapp__main">
             {todo.length > 0 && (
               <>
@@ -249,7 +249,7 @@ export const App: React.FC = () => {
                             className="todo__status todo__title-field"
                             value={newTodo.title}
                             checked={task.completed}
-                            onClick={() => {
+                            onChange={() => {
                               searchTodo(task.id);
                             }}
                           />
@@ -265,95 +265,35 @@ export const App: React.FC = () => {
                           ×
                         </button>
                         <div className="modal overlay">
-                          <div className="modal-background has-background-white-ter" />
+                          <div
+                            className="modal-background
+                             has-background-white-ter"
+                          />
                         </div>
-
                       </div>
-
                     );
                   }
 
-                  return <div className="loader" />;
+                  return <div className="loader" key={task.id} />;
                 })}
               </>
             )}
 
-            {/* This todo is not completed
-            <div className="todo">
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  onClick={() => setIsCompleted(false)}
-                />
-              </label>
-
-              <span className="todo__title">Not Completed Todo</span>
-              <button type="button" className="todo__remove">×</button>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div> */}
-            {/*
-            This todo is being edited
-            <div className="todo">
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                />
-              </label>
-
-              {/* This form is shown instead of the title and remove button */}
-            {/* <form>
-                <input
-                  type="text"
-                  className="todo__title-field"
-                  placeholder="Empty todo will be deleted"
-                  value="Todo is being edited now"
-                />
-              </form>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-
-            {/* This todo is in loadind state */}
-            {/* <div className="todo">
-              <label className="todo__status-label">
-                <input type="checkbox" className="todo__status" />
-              </label>
-
-              <span className="todo__title">Todo is being saved now</span>
-              <button type="button" className="todo__remove">×</button>
-
-              {/* 'is-active' class puts this modal on top of the todo */}
-            {/* <div className="modal overlay is-active">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div> */}
           </section>
 
-          {/* Hide the footer if there are no todos */}
           {todo.length > 0 && (
             <footer className="todoapp__footer">
               <span className="todo-count">
                 {`${numberOfActiveTodos} items left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <nav className="filter">
                 <a
                   href="#/"
                   className={selectedTab === 'All'
                     ? 'filter__link selected'
                     : 'filter__link'}
-                  onClick={() => setSelectedTab('All')}
+                  onClick={() => setSelectedTab(SortType.All)}
                   role="button"
                 >
                   All
@@ -364,7 +304,7 @@ export const App: React.FC = () => {
                   className={selectedTab === 'Active'
                     ? 'filter__link selected'
                     : 'filter__link'}
-                  onClick={() => setSelectedTab('Active')}
+                  onClick={() => setSelectedTab(SortType.Active)}
                   role="button"
                 >
                   Active
@@ -375,14 +315,14 @@ export const App: React.FC = () => {
                   className={selectedTab === 'Completed'
                     ? 'filter__link selected'
                     : 'filter__link'}
-                  onClick={() => setSelectedTab('Completed')}
+                  onClick={() => setSelectedTab(SortType.Completed)}
                   role="button"
                 >
                   Completed
                 </a>
               </nav>
 
-              {isThereCompletedTodos && (
+              {isThereCompletedTodos ? (
                 <button
                   type="button"
                   className="todoapp__clear-completed"
@@ -390,14 +330,16 @@ export const App: React.FC = () => {
                 >
                   Clear completed
                 </button>
-              )}
+              ) : <div className="todoapp__filler-div" />}
             </footer>
           )}
 
         </div>
 
         {errorMessageField && (
-          <div className="notification is-danger is-light has-text-weight-normal">
+          <div
+            className="notification is-danger is-light has-text-weight-normal"
+          >
             <button
               type="button"
               className="delete"
