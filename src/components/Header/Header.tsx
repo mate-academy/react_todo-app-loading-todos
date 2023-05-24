@@ -9,8 +9,11 @@ export const Header: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
       {todos.length > 0 && (
-        // eslint-disable-next-line jsx-a11y/control-has-associated-label
-        <button type="button" className="todoapp__toggle-all active" />
+        <button
+          type="button"
+          aria-label="Toggle all todos"
+          className="todoapp__toggle-all active"
+        />
       )}
 
       {/* @TODO: Add a todo on form submit */}

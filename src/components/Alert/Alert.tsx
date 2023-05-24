@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
-import { ErrorOption } from '../../types/ErrorOption';
 
-export const Alert: React.FC = () => {
+type Props = {
+  errorMessage: string;
+};
+
+export const Alert: React.FC<Props> = ({ errorMessage }) => {
   const [hasAlert, setHasAlert] = useState(false);
 
   const closeAlert = () => {
     setHasAlert(true);
-
-    setTimeout(closeAlert, 3000);
   };
+
+  useEffect(() => {
+    const timerID = setTimeout(closeAlert, 3000);
+
+    return () => clearTimeout(timerID);
+  }, []);
 
   return (
     <div
@@ -23,7 +30,6 @@ export const Alert: React.FC = () => {
         },
       )}
     >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         aria-label="Close"
@@ -31,7 +37,7 @@ export const Alert: React.FC = () => {
         onClick={closeAlert}
       />
 
-      {ErrorOption.ADD}
+      {errorMessage}
     </div>
   );
 };

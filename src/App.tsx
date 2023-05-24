@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(FilterOption.ALL);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage] = useState('');
 
   const loadTodos = async () => {
     try {
@@ -69,7 +70,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {hasError && <Alert />}
+      {hasError && <Alert errorMessage={errorMessage} />}
     </div>
   );
 };
