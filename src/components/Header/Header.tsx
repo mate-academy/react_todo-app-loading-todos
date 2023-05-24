@@ -24,5 +24,3 @@ export const Header: React.FC<Props> = ({ todos }) => {
     </header>
   );
 };
-
-export default Header;

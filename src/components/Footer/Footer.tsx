@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -56,5 +55,3 @@ export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
     </footer>
   );
 };
-
-export default Footer;

@@ -40,5 +40,3 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     </div>
   );
 };
-
-export default TodoItem;
