@@ -33,9 +33,6 @@ export const App: React.FC = () => {
   const visibleTodos: Todo[] = useMemo(() => {
     return todos.filter((todo) => {
       switch (filter) {
-        case FilterOption.ALL:
-          return true;
-
         case FilterOption.COMPLETED:
           return todo.completed;
 
@@ -63,10 +60,11 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header todos={todos} />
 
-        {todos.length > 0 && <TodoList todos={visibleTodos} />}
-
         {todos.length > 0 && (
-          <Footer todos={todos} filter={filter} setFilter={setFilter} />
+          <>
+            <TodoList todos={visibleTodos} />
+            <Footer todos={todos} filter={filter} setFilter={setFilter} />
+          </>
         )}
       </div>
 
