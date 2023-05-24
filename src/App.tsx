@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable no-console */
+import classNames from 'classnames';
 import React, {
   useEffect, useState, FormEvent, useMemo,
 } from 'react';
@@ -66,7 +65,7 @@ export const App: React.FC = () => {
       try {
         await client.post('/todos', updatedObjectTitle);
       } catch (error) {
-        console.error('Error occurred:', error);
+        throw Error('There is an issue.');
       }
     }
 
@@ -91,7 +90,7 @@ export const App: React.FC = () => {
     try {
       await client.delete(`/todos/${id}`);
     } catch (error) {
-      console.error('Error occurred:', error);
+      throw Error('There is an issue.');
     }
   };
 
@@ -145,7 +144,7 @@ export const App: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error('Error occurred:', error);
+      throw Error('There is an issue.');
     }
   };
 
@@ -165,7 +164,7 @@ export const App: React.FC = () => {
 
         setTodo(response);
       } catch (error) {
-        console.error('Error fetching todos:', error);
+        throw Error('There is an issue.');
       } finally {
         setIsLoading(false);
       }
@@ -214,11 +213,13 @@ export const App: React.FC = () => {
               <button
                 id="nameInput"
                 type="button"
-                className={isThereActiveTodo
-                  ? 'todoapp__toggle-all active'
-                  : 'todoapp__toggle-all'}
+                className={classNames('todoapp__toggle-all', {
+                  active: isThereActiveTodo,
+                })}
                 onClick={changeAll}
-              />
+              >
+                {null}
+              </button>
             </label>
             <form onSubmit={handleSubmit}>
               <input
@@ -238,9 +239,9 @@ export const App: React.FC = () => {
                   if (!isLoading) {
                     return (
                       <div
-                        className={task.completed
-                          ? 'todo completed'
-                          : 'todo'}
+                        className={classNames('todo', {
+                          completed: task.completed,
+                        })}
                         key={task.id}
                       >
                         <label className="todo__status-label" key={task.id}>
@@ -290,9 +291,9 @@ export const App: React.FC = () => {
               <nav className="filter">
                 <a
                   href="#/"
-                  className={selectedTab === 'All'
-                    ? 'filter__link selected'
-                    : 'filter__link'}
+                  className={classNames('filter__link', {
+                    selected: selectedTab === 'All',
+                  })}
                   onClick={() => setSelectedTab(SortType.All)}
                   role="button"
                 >
@@ -301,9 +302,9 @@ export const App: React.FC = () => {
 
                 <a
                   href="#/active"
-                  className={selectedTab === 'Active'
-                    ? 'filter__link selected'
-                    : 'filter__link'}
+                  className={classNames('filter__link', {
+                    selected: selectedTab === 'Active',
+                  })}
                   onClick={() => setSelectedTab(SortType.Active)}
                   role="button"
                 >
@@ -312,9 +313,9 @@ export const App: React.FC = () => {
 
                 <a
                   href="#/completed"
-                  className={selectedTab === 'Completed'
-                    ? 'filter__link selected'
-                    : 'filter__link'}
+                  className={classNames('filter__link', {
+                    selected: selectedTab === 'Completed',
+                  })}
                   onClick={() => setSelectedTab(SortType.Completed)}
                   role="button"
                 >
@@ -349,7 +350,9 @@ export const App: React.FC = () => {
                 setIsEditingTodoAllowed(false);
                 setErrorMessageField(false);
               }}
-            />
+            >
+              {null}
+            </button>
 
             {isAddingTodoAllowed && (
               'Unable to add a todo'
