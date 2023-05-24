@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 // Types
 import { Todo } from './types/Todo';
 import { FilterOption } from './types/FilterOption';
@@ -13,6 +12,7 @@ import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList';
 
 const USER_ID = 10527;
+// TODO endpoint: https://mate.academy/students-api/todos?userId=10527
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,21 +33,23 @@ export const App: React.FC = () => {
     }
   };
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (filter) {
-      case FilterOption.ALL:
-        return true;
+  const visibleTodos: Todo[] = useMemo(() => {
+    return todos.filter((todo) => {
+      switch (filter) {
+        case FilterOption.ALL:
+          return true;
 
-      case FilterOption.COMPLETED:
-        return todo.completed;
+        case FilterOption.COMPLETED:
+          return todo.completed;
 
-      case FilterOption.ACTIVE:
-        return !todo.completed;
+        case FilterOption.ACTIVE:
+          return !todo.completed;
 
-      default:
-        return true;
-    }
-  });
+        default:
+          return true;
+      }
+    });
+  }, [todos, filter]);
 
   useEffect(() => {
     loadTodos();

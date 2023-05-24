@@ -8,7 +8,6 @@ interface Props {
 export const Header: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
-      {/* This buttons is active only if there are some active todos */}
       {todos.length > 0 && (
         // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <button type="button" className="todoapp__toggle-all active" />

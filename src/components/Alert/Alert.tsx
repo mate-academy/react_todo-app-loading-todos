@@ -3,13 +3,13 @@ import cn from 'classnames';
 import { ErrorOption } from '../../types/ErrorOption';
 
 export const Alert = () => {
-  const [hasAlertError, setHasAlertError] = useState(false);
+  const [hasAlert, setHasAlert] = useState(false);
 
-  const handleAlertError = () => {
-    setHasAlertError(true);
+  const closeAlert = () => {
+    setHasAlert(true);
+
+    setTimeout(closeAlert, 3000);
   };
-
-  setTimeout(handleAlertError, 3000);
 
   return (
     <div
@@ -19,7 +19,7 @@ export const Alert = () => {
         'is-light',
         'has-text-weight-normal',
         {
-          hidden: hasAlertError,
+          hidden: hasAlert,
         },
       )}
     >
@@ -28,7 +28,7 @@ export const Alert = () => {
         type="button"
         aria-label="Close"
         className="delete"
-        onClick={handleAlertError}
+        onClick={closeAlert}
       />
 
       {ErrorOption.ADD}
