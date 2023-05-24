@@ -5,4 +5,18 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+export const postTodos = (userId: number, title: string) => {
+  return client.post<Todo>(`/todos?userId=${userId}`, {
+    userId,
+    title,
+    completed: false,
+  });
+};
+
+export const deleteTodos = (id: number) => {
+  return client.delete(`/todos/${id}`);
+};
+
+export const patchTodos = (id: number, data: Partial<Todo>) => {
+  return client.patch<Todo>(`/todos/${id}`, data);
+};
