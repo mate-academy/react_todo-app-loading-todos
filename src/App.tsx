@@ -4,39 +4,40 @@ import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { Sorting } from './types/Sorting';
 
 const USER_ID = 10404;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(Sorting.ALL);
   const [error, setError] = useState(false);
- 
+
+  const activeTodos = todos.filter((todo) => !todo.completed);
 
   const fetchTodos = async () => {
     const newTodos = await getTodos(USER_ID);
+
     setTodos(newTodos);
   };
-
 
   useEffect(() => {
     fetchTodos();
   }, []);
 
   const sortedTodos = todos.filter(todo => {
-    switch(filter) {
-      case 'Active' : return !todo.completed;
-      case 'Completed' : return todo.completed;
+    switch (filter) {
+      case Sorting.ACTIVE: return !todo.completed;
+      case Sorting.COMPLETED: return todo.completed;
       default: return todos;
     }
   });
 
   const visibleTodos = sortedTodos;
 
-  if(!USER_ID) {
-    return <UserWarning />
+  if (!USER_ID) {
+    return <UserWarning />;
   }
-
 
   return (
     <div className="todoapp">
@@ -46,7 +47,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
           {todos.length > 0 && (
-          <button type="button" className="todoapp__toggle-all active" />
+            <button type="button" className="todoapp__toggle-all active" />
           )}
           {/* Add a todo on form submit */}
           <form>
@@ -54,45 +55,45 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-             />
+            />
           </form>
         </header>
 
         <section className="todoapp__main">
           {visibleTodos.map(todo => (
-              <div
-                className={cn(
-                  'todo',
-                  { completed: todo.completed },
-                )}
-                key={todo.id}
-              >
-                <label className="todo__status-label">
-                  <input
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                  />
-                </label>
+            <div
+              className={cn(
+                'todo',
+                { completed: todo.completed },
+              )}
+              key={todo.id}
+            >
+              <label className="todo__status-label">
+                <input
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                />
+              </label>
 
-                <span className="todo__title">{todo.title}</span>
+              <span className="todo__title">{todo.title}</span>
 
-                {/* Remove button appears only on hover */}
-                <button type="button" className="todo__remove">×</button>
+              {/* Remove button appears only on hover */}
+              <button type="button" className="todo__remove">×</button>
 
-                {/* overlay will cover the todo while it is being updated */}
-                <div className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
+              {/* overlay will cover the todo while it is being updated */}
+              <div className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
               </div>
+            </div>
           ))}
         </section>
 
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              3 items left
+             {`${activeTodos.length} items left`}
             </span>
 
             {/* Active filter should have a 'selected' class */}
@@ -100,8 +101,8 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={cn('filter__link',
-                  { selected: filter === 'All' })}
-                onClick={() => setFilter('All')}
+                  { selected: filter === Sorting.ALL })}
+                onClick={() => setFilter(Sorting.ALL)}
               >
                 All
               </a>
@@ -109,8 +110,8 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={cn('filter__link',
-                  { selected: filter === 'Active' })}
-                onClick={() => setFilter('Active')}
+                  { selected: filter === Sorting.ACTIVE })}
+                onClick={() => setFilter(Sorting.ACTIVE)}
               >
                 Active
               </a>
@@ -118,8 +119,8 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={cn('filter__link',
-                  { selected: filter === 'Complited'  })}
-                onClick={() => setFilter('Completed')}
+                  { selected: filter === Sorting.COMPLETED })}
+                onClick={() => setFilter(Sorting.COMPLETED)}
               >
                 Completed
               </a>
@@ -136,19 +137,19 @@ export const App: React.FC = () => {
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       {error && (
-      <div
-        className='notification is-danger is-light has-text-weight-normal'
+        <div
+          className="notification is-danger is-light has-text-weight-normal"
           // eslint-disable-line
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setError(false)}
-        />
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setError(false)}
+          />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-      </div>
+          {/* show only one message at a time */}
+          Unable to add a todo
+        </div>
       )}
     </div>
   );
