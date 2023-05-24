@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { ErrorOption } from '../../types/ErrorOption';
 
-export const Alert = () => {
+export const Alert: React.FC = () => {
   const [hasAlert, setHasAlert] = useState(false);
 
   const closeAlert = () => {
