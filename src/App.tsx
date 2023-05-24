@@ -19,15 +19,21 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState(All);
   const [error, setError] = useState('');
 
-  function todoLoading() {
+  const loadTodos = () => {
     getTodos(USER_ID)
       .then(todos => setTodoList(todos))
       .catch(() => setError(Error.Get));
-  }
+  };
 
   useEffect(() => {
-    todoLoading();
+    loadTodos();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => setError(''), 3000);
+    }
+  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -44,10 +50,6 @@ export const App: React.FC = () => {
       default:
         return todoList;
     }
-  }
-
-  if (error) {
-    setTimeout(() => setError(''), 3000);
   }
 
   return (

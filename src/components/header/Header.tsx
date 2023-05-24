@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState } from 'react';
+import cn from 'classnames';
+import { useEffect, useState } from 'react';
+import { patchTodos } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -9,16 +11,31 @@ type Props = {
 };
 
 export const Header:React.FC<Props> = ({
+  setTodoList,
   todoList,
 }) => {
   const [inputValue, setInputValue] = useState('');
+  const [allActiveButton, setAllActiveButton] = useState(false);
+
+  useEffect(() => setAllActiveButton(
+    todoList.some(item => !item.completed),
+  ));
 
   return (
     <header className="todoapp__header">
       {todoList.length !== 0 && (
         <button
           type="button"
-          className="todoapp__toggle-all active"
+          className={cn('todoapp__toggle-all',
+            { active: !allActiveButton })}
+          onClick={() => setTodoList(todoList.map(todo => {
+            patchTodos(
+              todo.id,
+              { ...todo, completed: allActiveButton },
+            );
+
+            return { ...todo, completed: allActiveButton };
+          }))}
         />
       )}
 
