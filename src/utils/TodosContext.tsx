@@ -1,5 +1,5 @@
 import {
-  FC,
+  ReactNode,
   createContext, useContext, useEffect, useState,
 } from 'react';
 import { Todo } from '../types/Todo';
@@ -21,7 +21,11 @@ export const TodosContext = createContext<TodosContextInterface>(
   },
 );
 
-export const TodosConstextProvider: FC = ({ children }) => {
+export const TodosConstextProvider = (
+  { children }: {
+    children: ReactNode
+  },
+) => {
   const [error, setError] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const USER_ID = 10529;

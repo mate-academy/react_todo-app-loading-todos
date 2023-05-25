@@ -10,20 +10,6 @@ import { TodosError } from './components/TodoErrors';
 const USER_ID = 10529;
 
 export const App: React.FC = () => {
-  // const [error, setError] = useState(false);
-  // const [todos, setTodos] = useState<Todo[]>([]);
-  // const url = `/todos?userId=${USER_ID}`;
-
-  // if (error === true) {
-  //   setTimeout(() => setError(false), 3000);
-  // }
-
-  // useEffect(() => {
-  //   client.get<Todo[]>(url).then(response => {
-  //     return setTodos(response);
-  //   }).catch(() => setError(true));
-  // }, []);
-
   if (!USER_ID) {
     return <UserWarning />;
   }

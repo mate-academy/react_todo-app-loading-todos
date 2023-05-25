@@ -20,6 +20,7 @@ export const TodosError = () => {
         className="delete"
         onClick={() => setError(false)}
       />
+      Unable to load a todo
       {/* Unable to add a todo
         <br />
         Unable to delete a todo
