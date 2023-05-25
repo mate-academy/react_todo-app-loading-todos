@@ -1,14 +1,18 @@
 import cn from 'classnames';
 import { useState } from 'react';
-import { Todo } from '../../types/Todo';
+// import { Todo } from '../../types/Todo';
 import { NewTodo } from './NewTodo';
+import { useTodosContext } from '../../utils/TodosContext';
 
-interface PropsTodoAppHeader {
-  todos: Todo[];
-}
+// interface PropsTodoAppHeader {
+//   todos: Todo[];
+// }
+// { todos }: PropsTodoAppHeader
 
-export const TodoAppHeader = ({ todos }: PropsTodoAppHeader) => {
+export const TodoAppHeader = () => {
   const [value, setValue] = useState('');
+
+  const { todos } = useTodosContext();
 
   return (
     <header className="todoapp__header">
@@ -25,7 +29,6 @@ export const TodoAppHeader = ({ todos }: PropsTodoAppHeader) => {
         />
       }
 
-      {/* Add a todo on form submit */}
       <NewTodo value={value} setValue={setValue} />
     </header>
   );

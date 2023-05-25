@@ -1,25 +1,27 @@
-import { Todo } from '../../types/Todo';
 import { TodoFilter } from '../TodoFilter';
+import { useTodosContext } from '../../utils/TodosContext';
+import { Filters } from '../../types/Filters';
 
 interface PropsTodoAppFooter {
-  todos: Todo[];
   filtered: string,
-  setFiltered(type: string): void;
+  setFiltered(filter: Filters): void;
 }
 
 export const TodoAppFooter = ({
-  todos, filtered, setFiltered,
+  filtered, setFiltered,
 }: PropsTodoAppFooter) => {
+  const { todos } = useTodosContext();
+
+  const numberItems = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${numberItems} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <TodoFilter filtered={filtered} setFiltered={setFiltered} />
 
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

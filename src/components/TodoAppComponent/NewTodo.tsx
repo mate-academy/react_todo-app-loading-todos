@@ -3,8 +3,14 @@ interface PropsNewTodo {
   setValue(val: string): void;
 }
 export const NewTodo = ({ value, setValue }: PropsNewTodo) => {
+  const createNewTodo = () => {
+
+  };
+
   return (
-    <form>
+    <form
+      onSubmit={createNewTodo}
+    >
       <input
         type="text"
         className="todoapp__new-todo"

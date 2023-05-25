@@ -1,10 +1,9 @@
 import cn from 'classnames';
+import { useTodosContext } from '../utils/TodosContext';
 
-interface PropsTodoError {
-  error: boolean;
-  setError(err: boolean): void;
-}
-export const TodosError = ({ error, setError }: PropsTodoError) => {
+export const TodosError = () => {
+  const { error, setError } = useTodosContext();
+
   return (
     <div
       className={cn(

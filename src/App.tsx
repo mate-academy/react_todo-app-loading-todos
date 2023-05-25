@@ -1,27 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { UserWarning } from './UserWarning';
-import { client } from './utils/fetchClient';
-import { Todo } from './types/Todo';
+// import { client } from './utils/fetchClient';
+// import { Todo } from './types/Todo';
 import { TodoApp } from './components/TodoApp';
 import { TodosError } from './components/TodoErrors';
+// import { useTodosContext } from './utils/TodosContext';
 
 const USER_ID = 10529;
 
 export const App: React.FC = () => {
-  const [error, setError] = useState(false);
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const url = `/todos?userId=${USER_ID}`;
+  // const [error, setError] = useState(false);
+  // const [todos, setTodos] = useState<Todo[]>([]);
+  // const url = `/todos?userId=${USER_ID}`;
 
-  if (error === true) {
-    setTimeout(() => setError(false), 3000);
-  }
+  // if (error === true) {
+  //   setTimeout(() => setError(false), 3000);
+  // }
 
-  useEffect(() => {
-    client.get<Todo[]>(url).then(response => {
-      return setTodos(response);
-    }).catch(() => setError(true));
-  }, []);
+  // useEffect(() => {
+  //   client.get<Todo[]>(url).then(response => {
+  //     return setTodos(response);
+  //   }).catch(() => setError(true));
+  // }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -30,11 +31,8 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
-      <TodoApp todos={todos} />
-
-      <TodosError error={error} setError={setError} />
-
+      <TodoApp />
+      <TodosError />
     </div>
   );
 };

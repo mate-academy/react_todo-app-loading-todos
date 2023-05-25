@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { Todo } from '../types/Todo';
 import { TodoAppHeader } from './TodoAppComponent/TodoAppHeader';
 import { TodoList } from './TodoAppComponent/TodoList';
+import { useTodosContext } from '../utils/TodosContext';
+import { Filters } from '../types/Filters';
 import { TodoAppFooter } from './TodoAppComponent/TodoAppFooter';
 
-interface PropsTodoApp {
-  todos: Todo[];
-}
-
-export const TodoApp = ({ todos }: PropsTodoApp) => {
-  const [filtered, setFiltered] = useState('');
+export const TodoApp = () => {
+  const [filtered, setFiltered] = useState<Filters>(Filters.All);
+  const { todos } = useTodosContext();
 
   let filteredTodos = todos;
 
@@ -25,13 +23,12 @@ export const TodoApp = ({ todos }: PropsTodoApp) => {
 
   return (
     <div className="todoapp__content">
-      <TodoAppHeader todos={todos} />
+      <TodoAppHeader />
 
       <TodoList filteredTodos={filteredTodos} />
 
       {isFooter && (
         <TodoAppFooter
-          todos={todos}
           filtered={filtered}
           setFiltered={setFiltered}
         />

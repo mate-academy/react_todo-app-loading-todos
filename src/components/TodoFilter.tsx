@@ -1,16 +1,19 @@
 import '../styles/filter.scss';
+import { Filters } from '../types/Filters';
 
 interface PropsTodoFilter {
   filtered: string;
-  setFiltered(type: string): void;
+  setFiltered(filter: Filters): void;
 }
 export const TodoFilter = ({ filtered, setFiltered }: PropsTodoFilter) => {
   return (
     <nav className="filter">
       <a
         href="#/"
-        className={!filtered ? 'filter__link selected' : 'filter__link'}
-        onClick={() => setFiltered('')}
+        className={filtered === Filters.All
+          ? 'filter__link selected'
+          : 'filter__link'}
+        onClick={() => setFiltered(Filters.All)}
       >
         All
       </a>
@@ -20,7 +23,7 @@ export const TodoFilter = ({ filtered, setFiltered }: PropsTodoFilter) => {
         className={filtered === 'Active'
           ? 'filter__link selected'
           : 'filter__link'}
-        onClick={() => setFiltered('Active')}
+        onClick={() => setFiltered(Filters.Active)}
       >
         Active
       </a>
@@ -30,7 +33,7 @@ export const TodoFilter = ({ filtered, setFiltered }: PropsTodoFilter) => {
         className={filtered === 'Completed'
           ? 'filter__link selected'
           : 'filter__link'}
-        onClick={() => setFiltered('Completed')}
+        onClick={() => setFiltered(Filters.Completed)}
       >
         Completed
       </a>
