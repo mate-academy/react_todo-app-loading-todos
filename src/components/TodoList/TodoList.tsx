@@ -1,16 +1,16 @@
+import { TodoType } from '../../types/Todo';
 import { Todo } from '../Todo/Todo';
 
-export const TodoList = () => {
+type TodoListProps = {
+  todos: TodoType[];
+};
+
+export const TodoList = ({ todos }: TodoListProps) => {
   return (
     <section className="todoapp__main">
-      {/* This is a completed todo */}
-      <Todo completed title="complete" />
-
-      {/* This todo is not completed */}
-      <Todo title="not complete" />
-
-      <Todo title="not complete" loading />
-
+      {
+        todos.map(todo => <Todo key={todo.id} todo={todo} />)
+      }
     </section>
   );
 };
