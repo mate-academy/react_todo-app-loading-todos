@@ -1,21 +1,20 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { TodoType } from '../../types/Todo';
 
 type TodoProps = {
-  title: string;
-  completed?: boolean;
+  todo: TodoType;
   loading?: boolean;
 };
 
-type TodoStatus = 'idle' | 'edited';
-
-export const Todo = ({ completed, title, loading }: TodoProps) => {
-  const [status] = useState<TodoStatus>('idle');
+export const Todo = ({ todo: { completed, title }, loading }: TodoProps) => {
+  const [editing] = useState(false);
 
   return (
-    <div className={
-      classNames('todo', { completed })
-    }
+    <div
+      className={
+        classNames('todo', { completed })
+      }
     >
       <label className="todo__status-label">
         <input
@@ -26,7 +25,7 @@ export const Todo = ({ completed, title, loading }: TodoProps) => {
       </label>
 
       {
-        status === 'edited'
+        editing
           ? (
             <form>
               <input
@@ -38,7 +37,11 @@ export const Todo = ({ completed, title, loading }: TodoProps) => {
             </form>
           ) : (
             <>
-              <span className="todo__title">{ title }</span>
+              <span
+                className="todo__title"
+              >
+                { title }
+              </span>
               <button type="button" className="todo__remove">×</button>
             </>
           )
