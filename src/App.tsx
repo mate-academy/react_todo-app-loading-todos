@@ -1,17 +1,40 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
 
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
-import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { Filters, TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoForm } from './components/TodoForm/TodoForm';
+import { TodoError } from './components/TodoError/TodoError';
+
+import { useTodos } from './hooks/useTodos';
 
 const USER_ID = 10538;
 
 export const App: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<Filters>('all');
+
+  const { todos, error } = useTodos(USER_ID);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
+  const filterTodos = () => {
+    switch (activeFilter) {
+      case 'active':
+        return activeTodos;
+      case 'completed':
+        return completedTodos;
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = filterTodos();
 
   return (
     <div className="todoapp">
@@ -19,35 +42,33 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
+          {
+            activeTodos.length > 0
+              && <button type="button" className="todoapp__toggle-all active" />
+          }
+
           <TodoForm />
         </header>
 
-        <TodoList />
+        <TodoList todos={filteredTodos} />
 
-        {/* Hide the footer if there are no todos */}
-        <TodoFilter />
+        {
+          todos.length > 0
+            && (
+              <TodoFilter
+                activeFilter={activeFilter}
+                changeFilter={setActiveFilter}
+                activeTodos={activeTodos}
+                completedTodos={completedTodos}
+              />
+            )
+        }
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        className="
-        notification is-danger is-light has-text-weight-normal hidden
-        "
-      >
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {
+        error && (<TodoError errorMsg={error} />)
+      }
     </div>
   );
 };
