@@ -25,31 +25,31 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: filter === FilterOption.ALL,
+            selected: filter === FilterOption.All,
           })}
-          onClick={() => setFilter(FilterOption.ALL)}
+          onClick={() => setFilter(FilterOption.All)}
         >
-          {FilterOption.ALL}
+          {FilterOption.All}
         </a>
 
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filter === FilterOption.ACTIVE,
+            selected: filter === FilterOption.Active,
           })}
-          onClick={() => setFilter(FilterOption.ACTIVE)}
+          onClick={() => setFilter(FilterOption.Active)}
         >
-          {FilterOption.ACTIVE}
+          {FilterOption.Active}
         </a>
 
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filter === FilterOption.COMPLETED,
+            selected: filter === FilterOption.Completed,
           })}
-          onClick={() => setFilter(FilterOption.COMPLETED)}
+          onClick={() => setFilter(FilterOption.Completed)}
         >
-          {FilterOption.COMPLETED}
+          {FilterOption.Completed}
         </a>
       </nav>
 
