@@ -9,10 +9,6 @@ import { client } from './utils/client';
 
 const USER_ID = 10377;
 
-function getRandomNumber(): number {
-  return Math.floor(Math.random() * 1001);
-}
-
 enum SortType {
   All = 'All',
   Active = 'Active',
@@ -21,8 +17,7 @@ enum SortType {
 
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo[]>([]);
-  const [selectedTab, setSelectedTab] = useState('All');
-  const [inputValue, setInputValue] = useState('');
+  const [selectedTab, setSelectedTab] = useState(SortType.All);
   const [isLoading, setIsLoading] = useState(false);
   const [isThereActiveTodo, setIsThereActiveTodo] = useState(false);
   const [isThereCompletedTodos, setIsThereCompletedTodos] = useState(false);
@@ -31,68 +26,6 @@ export const App: React.FC = () => {
   const [isEditingTodoAllowed, setIsEditingTodoAllowed] = useState(false);
   const [numberOfActiveTodos, setNumberOfActivTodos] = useState(0);
   const [errorMessageField, setErrorMessageField] = useState(false);
-  const [newTodo, setNewTodo] = useState({
-    title: '',
-    userId: 10377,
-    completed: false,
-    id: getRandomNumber(),
-  });
-
-  const handleKeyPress
-  = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && event.target.value.trim() !== '') {
-      event.preventDefault();
-
-      const updatedObjectTitle = {
-        ...newTodo,
-        title: event.target.value,
-        id: getRandomNumber(),
-      };
-
-      setNewTodo(updatedObjectTitle);
-      setTodo([...todo, updatedObjectTitle]);
-
-      const resetedTitle = {
-        ...newTodo,
-        title: '',
-        id: 0,
-      };
-
-      setNewTodo(resetedTitle);
-
-      setInputValue(resetedTitle.title);
-
-      try {
-        await client.post('/todos', updatedObjectTitle);
-      } catch (error) {
-        throw Error('There is an issue.');
-      }
-    }
-
-    if (event.key === 'Enter' && inputValue.trim() === '') {
-      setIsAddingTodoAllowed(true);
-      setErrorMessageField(true);
-    }
-  };
-
-  const deleteTodo = async (id: number) => {
-    const newTodos = todo.filter((element) => {
-      return element.id !== id;
-    });
-
-    if (newTodos === todo) {
-      setIsDeleteingTodoAllowed(true);
-      setErrorMessageField(true);
-    }
-
-    setTodo(newTodos);
-
-    try {
-      await client.delete(`/todos/${id}`);
-    } catch (error) {
-      throw Error('There is an issue.');
-    }
-  };
 
   const changeAll = () => {
     const chnagedArr = todo.map((element) => {
@@ -226,9 +159,6 @@ export const App: React.FC = () => {
                 type="text"
                 className="todoapp__new-todo"
                 placeholder="What needs to be done?"
-                value={inputValue}
-                onChange={(event) => setInputValue(event.target.value)}
-                onKeyPress={handleKeyPress}
               />
             </form>
           </header>
@@ -248,7 +178,6 @@ export const App: React.FC = () => {
                           <input
                             type="checkbox"
                             className="todo__status todo__title-field"
-                            value={newTodo.title}
                             checked={task.completed}
                             onChange={() => {
                               searchTodo(task.id);
@@ -261,7 +190,6 @@ export const App: React.FC = () => {
                         <button
                           type="button"
                           className="todo__remove"
-                          onClick={() => deleteTodo(task.id)}
                         >
                           ×
                         </button>
