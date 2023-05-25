@@ -4,6 +4,7 @@ import { Todo } from './Components/Todo';
 import { Todo as TodoType } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Notification } from './Components/Notification';
+import { Filter } from './Components/Filter';
 
 const USER_ID = 10539;
 
@@ -86,43 +87,11 @@ export const App: React.FC = () => {
 
         {todos.length > 0
           && (
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${countNotCompletedtodos} items left`}
-              </span>
-
-              {/* Active filter should have a 'selected' class */}
-              <nav className="filter">
-                <a
-                  href="#/"
-                  className={`filter__link ${filter === 'All' && 'selected'}`}
-                  onClick={() => handleFilter('All')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={`filter__link ${filter === 'Active' && 'selected'}`}
-                  onClick={() => handleFilter('Active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={`filter__link ${filter === 'Completed' && 'selected'}`}
-                  onClick={() => handleFilter('Completed')}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              {/* don't show this button if there are no completed todos */}
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            </footer>
+            <Filter
+              countNotCompletedtodos={countNotCompletedtodos}
+              handleFilter={handleFilter}
+              filter={filter}
+            />
           )}
       </div>
 
