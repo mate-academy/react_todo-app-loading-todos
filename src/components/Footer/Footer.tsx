@@ -9,9 +9,13 @@ interface Props {
   setFilter: (filter: FilterOption) => void;
 }
 
-export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
+export const Footer: React.FC<Props> = ({
+  todos,
+  filter,
+  setFilter,
+}) => {
   const completedTodos = todos.filter((todo) => todo.completed);
-  const hasCompletedTodo = todos.find((todo) => todo.completed);
+  const hasCompletedTodo = completedTodos.length > 0;
 
   return (
     <footer className="todoapp__footer">
