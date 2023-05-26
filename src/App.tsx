@@ -1,17 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
-
+import { useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
 import { Filters, TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoForm } from './components/TodoForm/TodoForm';
 import { TodoError } from './components/TodoError/TodoError';
-
 import { useTodos } from './hooks/useTodos';
+import { TodoType } from './types/Todo';
 
 const USER_ID = 10538;
 
-export const App: React.FC = () => {
+type TodosMap = {
+  all: TodoType[];
+  completed: TodoType[];
+  active: TodoType[];
+};
+
+export const App = () => {
   const [activeFilter, setActiveFilter] = useState<Filters>('all');
 
   const { todos, error } = useTodos(USER_ID);
@@ -20,21 +25,28 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const todosMap: TodosMap = useMemo(
+    () => todos.reduce(
+      (acc, nextTodo) => {
+        const todoMapKey = nextTodo.completed ? 'completed' : 'active';
 
-  const filterTodos = () => {
-    switch (activeFilter) {
-      case 'active':
-        return activeTodos;
-      case 'completed':
-        return completedTodos;
-      default:
-        return todos;
-    }
-  };
+        return {
+          ...acc,
+          [todoMapKey]: [...acc[todoMapKey], nextTodo],
+        };
+      },
+      {
+        all: todos,
+        completed: [],
+        active: [],
+      },
+    ),
+    [todos],
+  );
 
-  const filteredTodos = filterTodos();
+  const filteredTodos = todosMap[activeFilter];
+  const { completed, active } = todosMap;
 
   return (
     <div className="todoapp">
@@ -42,33 +54,26 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-
-          {
-            activeTodos.length > 0
-              && <button type="button" className="todoapp__toggle-all active" />
-          }
+          {active.length > 0 && (
+            <button type="button" className="todoapp__toggle-all active" />
+          )}
 
           <TodoForm />
         </header>
 
         <TodoList todos={filteredTodos} />
 
-        {
-          todos.length > 0
-            && (
-              <TodoFilter
-                activeFilter={activeFilter}
-                changeFilter={setActiveFilter}
-                activeTodos={activeTodos}
-                completedTodos={completedTodos}
-              />
-            )
-        }
+        {todos.length > 0 && (
+          <TodoFilter
+            activeFilter={activeFilter}
+            changeFilter={setActiveFilter}
+            activeTodos={active}
+            completedTodos={completed}
+          />
+        )}
       </div>
 
-      {
-        error && (<TodoError errorMsg={error} />)
-      }
+      {error && <TodoError errorMsg={error} />}
     </div>
   );
 };
