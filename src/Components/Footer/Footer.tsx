@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Filter } from '../../types/Filter';
 
 type Props = {
@@ -16,7 +16,7 @@ export const Footer: FC<Props> = ({ filter, onSelect }) => {
         <a
           href="#/"
           onClick={() => onSelect(Filter.All)}
-          className={classNames('filter__link', {
+          className={cn('filter__link', {
             selected: filter === Filter.All,
           })}
         >
@@ -26,7 +26,7 @@ export const Footer: FC<Props> = ({ filter, onSelect }) => {
         <a
           href="#/active"
           onClick={() => onSelect(Filter.Active)}
-          className={classNames('filter__link', {
+          className={cn('filter__link', {
             selected: filter === Filter.Active,
           })}
         >
@@ -36,7 +36,7 @@ export const Footer: FC<Props> = ({ filter, onSelect }) => {
         <a
           href="#/completed"
           onClick={() => onSelect(Filter.Completed)}
-          className={classNames('filter__link', {
+          className={cn('filter__link', {
             selected: filter === Filter.Completed,
           })}
         >
