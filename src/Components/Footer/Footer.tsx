@@ -12,7 +12,6 @@ export const Footer: FC<Props> = ({ filter, setFilter }) => {
     <footer className="todoapp__footer">
       <span className="todo-count">3 items left</span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -45,7 +44,6 @@ export const Footer: FC<Props> = ({ filter, setFilter }) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>

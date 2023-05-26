@@ -17,10 +17,6 @@ type Errors = {
 };
 
 export const App: React.FC = () => {
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
-
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.All);
@@ -60,12 +56,9 @@ export const App: React.FC = () => {
 
         {todos?.length && <Main filteredTodos={filterTodos} />}
 
-        {/* Hide the footer if there are no todos */}
         {todos?.length && <Footer filter={filter} setFilter={setFilter} />}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errors && (
         <div className="notification is-danger is-light has-text-weight-normal">
           <button
@@ -73,7 +66,6 @@ export const App: React.FC = () => {
             onClick={() => setErrors(null)}
             className="delete"
           />
-          {/* show only one message at a time */}
           {errors?.loading && 'Unable to load todos'}
           {errors?.posting && 'Unable to add a todo'}
           {errors?.editing && 'Unable to update a todo'}
