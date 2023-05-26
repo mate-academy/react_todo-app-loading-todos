@@ -21,11 +21,6 @@ export const App = () => {
 
   const { todos, error } = useTodos(USER_ID);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const todosMap: TodosMap = useMemo(
     () => todos.reduce(
       (acc, nextTodo) => {
@@ -47,6 +42,10 @@ export const App = () => {
 
   const filteredTodos = todosMap[activeFilter];
   const { completed, active } = todosMap;
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
