@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Header } from './Components/Header';
 import { Main } from './Components/Main';
@@ -9,17 +9,36 @@ import { Filter } from './types/Filter';
 
 const USER_ID = 10307;
 
-type Errors = {
-  loading?: boolean;
-  posting?: boolean;
-  editing?: boolean;
-  deleting?: boolean;
-};
+enum Errors {
+  Loading = 'Unable to load todos',
+  Posting = 'Unable to add a todo',
+  Editing = 'Unable to update a todo',
+  Deleting = 'Unable to delete a todo',
+  None = '',
+}
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [errors, setErrors] = useState<Errors | null>(null);
-  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<Errors>(Errors.None);
+  const [filter, setFilter] = useState(Filter.All);
+
+  const filterTodos = useMemo(() => {
+    return todos?.filter((todo) => {
+      switch (filter) {
+        case Filter.All:
+          return todo;
+
+        case Filter.Active:
+          return !todo.completed;
+
+        case Filter.Completed:
+          return todo.completed;
+
+        default:
+          return todo;
+      }
+    });
+  }, [todos, filter]);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -27,25 +46,9 @@ export const App: React.FC = () => {
         setTodos(todosList);
       })
       .catch(() => {
-        setErrors({ loading: true });
+        setError(Errors.Loading);
       });
   }, []);
-
-  const filterTodos = todos?.filter((todo) => {
-    switch (filter) {
-      case Filter.All:
-        return todo;
-
-      case Filter.Active:
-        return !todo.completed;
-
-      case Filter.Completed:
-        return todo.completed;
-
-      default:
-        return todo;
-    }
-  });
 
   return (
     <div className="todoapp">
@@ -54,22 +57,20 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {todos?.length && <Main filteredTodos={filterTodos} />}
+        {todos.length > 0 && <Main todos={filterTodos} />}
 
-        {todos?.length && <Footer filter={filter} setFilter={setFilter} />}
+        {todos.length > 0 && <Footer filter={filter} onSelect={setFilter} />}
       </div>
 
-      {errors && (
+      {error && (
         <div className="notification is-danger is-light has-text-weight-normal">
           <button
             type="button"
-            onClick={() => setErrors(null)}
+            onClick={() => setError(Errors.None)}
             className="delete"
           />
-          {errors?.loading && 'Unable to load todos'}
-          {errors?.posting && 'Unable to add a todo'}
-          {errors?.editing && 'Unable to update a todo'}
-          {errors?.deleting && 'Unable to delete a todo'}
+
+          {error}
         </div>
       )}
     </div>

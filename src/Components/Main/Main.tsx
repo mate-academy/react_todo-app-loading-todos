@@ -1,18 +1,18 @@
 import { FC } from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  filteredTodos?: Todo[];
+  todos: Todo[];
 };
 
-export const Main: FC<Props> = ({ filteredTodos }) => {
+export const Main: FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {filteredTodos?.map((todo) => (
+      {todos?.map((todo) => (
         <div
           key={todo.id}
-          className={classNames('todo', { completed: todo.completed })}
+          className={cn('todo', { completed: todo.completed })}
         >
           <label className="todo__status-label">
             <input type="checkbox" className="todo__status" checked />

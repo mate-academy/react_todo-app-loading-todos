@@ -4,10 +4,10 @@ import { Filter } from '../../types/Filter';
 
 type Props = {
   filter: Filter;
-  setFilter: (filter: Filter) => void;
+  onSelect: (filter: Filter) => void;
 };
 
-export const Footer: FC<Props> = ({ filter, setFilter }) => {
+export const Footer: FC<Props> = ({ filter, onSelect }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">3 items left</span>
@@ -15,7 +15,7 @@ export const Footer: FC<Props> = ({ filter, setFilter }) => {
       <nav className="filter">
         <a
           href="#/"
-          onClick={() => setFilter(Filter.All)}
+          onClick={() => onSelect(Filter.All)}
           className={classNames('filter__link', {
             selected: filter === Filter.All,
           })}
@@ -25,7 +25,7 @@ export const Footer: FC<Props> = ({ filter, setFilter }) => {
 
         <a
           href="#/active"
-          onClick={() => setFilter(Filter.Active)}
+          onClick={() => onSelect(Filter.Active)}
           className={classNames('filter__link', {
             selected: filter === Filter.Active,
           })}
@@ -35,7 +35,7 @@ export const Footer: FC<Props> = ({ filter, setFilter }) => {
 
         <a
           href="#/completed"
-          onClick={() => setFilter(Filter.Completed)}
+          onClick={() => onSelect(Filter.Completed)}
           className={classNames('filter__link', {
             selected: filter === Filter.Completed,
           })}
