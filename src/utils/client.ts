@@ -1,6 +1,6 @@
 import { Todo } from '../types/Todo';
 
-const BASE_URL = 'https://mate.academy/students-apiffffff';
+const BASE_URL = 'https://mate.academy/students-api';
 
 function wait(delay: number) {
   return new Promise(resolve => {
