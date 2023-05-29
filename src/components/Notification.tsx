@@ -3,19 +3,17 @@ import cn from 'classnames';
 
 interface NotificationProps {
   onCleanErrorMessage: () => void,
-  hasError: boolean,
   errorMessage: string,
 }
 
 export const Notification: React.FC<NotificationProps> = ({
   onCleanErrorMessage,
-  hasError,
   errorMessage,
 }) => {
   return (
     <div
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: !hasError,
+        hidden: !errorMessage,
       })}
     >
 

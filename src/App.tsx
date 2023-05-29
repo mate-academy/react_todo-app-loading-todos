@@ -3,16 +3,15 @@ import React, {
 } from 'react';
 import { getTodos } from './api/todos';
 import { Todo as TodoType } from './types/Todo';
-import { Todo } from './components/Todo';
-import { Filter } from './components/Filter';
 import { Notification } from './components/Notification';
 import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
 
 const USER_ID = 10542;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[] | []>([]);
-  const [hasError, setHasError] = useState(false);
   const [filter, setFilter] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -22,10 +21,8 @@ export const App: React.FC = () => {
 
       setTodos(data);
     } catch (error) {
-      setHasError(true);
       setErrorMessage('Failed to load todos');
       setTimeout(() => {
-        setHasError(false);
         setErrorMessage('');
       }, 3000);
     }
@@ -41,10 +38,18 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     let filteredTodos = todos;
 
-    if (filter === 'completed') {
-      filteredTodos = filteredTodos.filter(todo => todo.completed);
-    } else if (filter === 'active') {
-      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    switch (filter) {
+      case 'completed':
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        break;
+      case 'active':
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        break;
+      case 'all':
+        filteredTodos = todos;
+        break;
+      default:
+        break;
     }
 
     return filteredTodos;
@@ -63,7 +68,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleCleanErrorMessage = useCallback(() => {
-    setHasError(false);
+    setErrorMessage('');
   }, []);
 
   return (
@@ -72,46 +77,21 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header hasActive={hasActive} />
-        <section className="todoapp__main">
-          {visibleTodos.map(todo => {
-            return (
-              <Todo
-                todo={todo}
-                key={todo.id}
-              />
-            );
-          })}
-        </section>
-
-        {todos.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${todos.length} items left`}
-            </span>
-
-            <Filter
-              filter={filter}
-              filterActive={filterActive}
-              filterAll={filterAll}
-              filterCompleted={filterCompleted}
-            />
-
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              style={{ visibility: hasCompleted ? 'visible' : 'hidden' }}
-            >
-              Clear completed
-            </button>
-          </footer>
-        )}
+        <TodoList visibleTodos={visibleTodos} />
+        <Footer
+          filter={filter}
+          filterAll={filterAll}
+          filterActive={filterActive}
+          filterCompleted={filterCompleted}
+          hasCompleted={hasCompleted}
+          todosLength={todos.length}
+        />
       </div>
 
-      {hasError
+      {errorMessage
       && (
         <Notification
           onCleanErrorMessage={handleCleanErrorMessage}
-          hasError={hasError}
           errorMessage={errorMessage}
         />
       )}
