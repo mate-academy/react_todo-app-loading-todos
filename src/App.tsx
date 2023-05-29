@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { Footer } from './components/footer_filter/footer_filter';
-import { Header } from './components/header_filter/header_filter';
-import { Main } from './components/main_todos-list/main_todos-list';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+import { Main } from './components/Main/Main';
+import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 
 const USER_ID = 10548;
 
@@ -14,15 +15,23 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('all');
+  const [hasError, setHasError] = useState(false);
+  const [typeError, setTypeError] = useState('');
 
-  async function loadedTodos(f: (USER_ID: number) => Promise<Todo[]>) {
-    const result = await f(USER_ID);
+  async function loadedTodos() {
+    try {
+      const result = await getTodos(USER_ID);
 
-    setTodos(result);
+      setTodos(result);
+      setHasError(false);
+    } catch (error) {
+      setTypeError('Unable to load a todo');
+      setHasError(true);
+    }
   }
 
   useEffect(() => {
-    loadedTodos(getTodos);
+    loadedTodos();
   }, []);
 
   const handleChangeInput = (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +44,7 @@ export const App: React.FC = () => {
     setStatus(event.currentTarget.type);
   };
 
-  let visibleTodos = todos.filter((todo) => (todo.title.includes(input)));
-
-  visibleTodos = visibleTodos.filter((todo) => {
+  const visibleTodos = todos.filter((todo) => {
     switch (status) {
       case 'active':
         return !todo.completed;
@@ -55,7 +62,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const itemsLeftCount = visibleTodos.filter(todo => !todo.completed).length;
+  const itemsLeftCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -71,24 +78,21 @@ export const App: React.FC = () => {
         <Main visibleTodos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer
-          selectedStatus={status}
-          onHandleStatus={handleStatus}
-          itemsLeftCount={itemsLeftCount}
-        />
-      </div>
+        {!!todos.length && (
+          <Footer
+            selectedStatus={status}
+            onHandleStatus={handleStatus}
+            itemsLeftCount={itemsLeftCount}
+          />
+        )}
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {hasError
+        && (
+          <ErrorMessages
+            typeError={typeError}
+            setHasError={setHasError}
+          />
+        )}
       </div>
     </div>
   );
