@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, {
   useEffect, useState, FormEvent, useMemo,
@@ -6,6 +7,7 @@ import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { client } from './utils/client';
+import { Error } from './errorMessage';
 
 const USER_ID = 10377;
 
@@ -21,11 +23,10 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isThereActiveTodo, setIsThereActiveTodo] = useState(false);
   const [isThereCompletedTodos, setIsThereCompletedTodos] = useState(false);
-  const [isAddingTodoAllowed, setIsAddingTodoAllowed] = useState(false);
-  const [isDeleteingTodoAllowed, setIsDeleteingTodoAllowed] = useState(false);
-  const [isEditingTodoAllowed, setIsEditingTodoAllowed] = useState(false);
-  const [numberOfActiveTodos, setNumberOfActivTodos] = useState(0);
-  const [errorMessageField, setErrorMessageField] = useState(false);
+  const [isHidden, setIsHidden] = useState('');
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
+  const [editTodo, setEditTodo] = useState('');
+  const [isThereIssue, setIsThereIssue] = useState(false);
 
   const changeAll = () => {
     const chnagedArr = todo.map((element) => {
@@ -43,29 +44,20 @@ export const App: React.FC = () => {
   };
 
   const searchTodo = async (id: number) => {
-    const updatedTodo = todo.map((obj) => {
-      if (obj.id === id) {
-        return {
-          ...obj,
-          completed: !obj.completed,
-        };
-      }
-
-      return obj;
-    });
-
-    const none = todo.some((element) => {
-      return element.id === id;
-    });
-
-    if (!none) {
-      setIsEditingTodoAllowed(true);
-      setErrorMessageField(true);
-    }
-
-    setTodo(updatedTodo);
-
     try {
+      const updatedTodo = todo.map((obj) => {
+        if (obj.id === id) {
+          return {
+            ...obj,
+            completed: !obj.completed,
+          };
+        }
+
+        return obj;
+      });
+
+      setTodo(updatedTodo);
+
       const todoToUpdate = todo.find((elem) => elem.id === id);
 
       if (todoToUpdate) {
@@ -77,7 +69,11 @@ export const App: React.FC = () => {
         });
       }
     } catch (error) {
-      throw Error('There is an issue.');
+      // eslint-disable-next-line no-console
+      console.log('There is an issue deleting the todo.');
+      setDeleteErrorMessage('Unable to delete a todo');
+      setEditTodo('Unable to update a todo');
+      setIsThereIssue(true);
     }
   };
 
@@ -89,33 +85,41 @@ export const App: React.FC = () => {
     setTodo(onlyActives);
   };
 
+  let timeoutId: NodeJS.Timeout;
+
+  const fetchTodos = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getTodos(123);
+
+      setTodo(response);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('Unable to add a todo');
+      setIsHidden('Unable to add a todo');
+      setIsThereIssue(true);
+      timeoutId = setTimeout(() => {
+        setIsThereIssue(false);
+      }, 3000);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getTodos(123);
-
-        setTodo(response);
-      } catch (error) {
-        throw Error('There is an issue.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchTodos();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   useEffect(() => {
     const isActive = todo.some((obj) => obj.completed === false);
     const isFalse = todo.some((obj) => obj.completed === true);
-    const todoLength = todo.filter((obj) => {
-      return obj.completed === false;
-    });
 
     setIsThereActiveTodo(isActive);
     setIsThereCompletedTodos(isFalse);
-    setNumberOfActivTodos(todoLength.length);
   }, [todo]);
 
   const visibleTodos: Todo[] = useMemo(() => todo.filter((element) => {
@@ -150,9 +154,7 @@ export const App: React.FC = () => {
                   active: isThereActiveTodo,
                 })}
                 onClick={changeAll}
-              >
-                {null}
-              </button>
+              />
             </label>
             <form onSubmit={handleSubmit}>
               <input
@@ -210,17 +212,17 @@ export const App: React.FC = () => {
 
           </section>
 
-          {todo.length > 0 && (
+          {!todo.length && (
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {`${numberOfActiveTodos} items left`}
+                0 items left
               </span>
 
               <nav className="filter">
                 <a
                   href="#/"
                   className={classNames('filter__link', {
-                    selected: selectedTab === 'All',
+                    selected: selectedTab === SortType.All,
                   })}
                   onClick={() => setSelectedTab(SortType.All)}
                   role="button"
@@ -231,7 +233,7 @@ export const App: React.FC = () => {
                 <a
                   href="#/active"
                   className={classNames('filter__link', {
-                    selected: selectedTab === 'Active',
+                    selected: selectedTab === SortType.Active,
                   })}
                   onClick={() => setSelectedTab(SortType.Active)}
                   role="button"
@@ -242,7 +244,7 @@ export const App: React.FC = () => {
                 <a
                   href="#/completed"
                   className={classNames('filter__link', {
-                    selected: selectedTab === 'Completed',
+                    selected: selectedTab === SortType.Completed,
                   })}
                   onClick={() => setSelectedTab(SortType.Completed)}
                   role="button"
@@ -264,39 +266,15 @@ export const App: React.FC = () => {
           )}
 
         </div>
-
-        {errorMessageField && (
-          <div
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            <button
-              type="button"
-              className="delete"
-              onClick={() => {
-                setIsDeleteingTodoAllowed(false);
-                setIsAddingTodoAllowed(false);
-                setIsEditingTodoAllowed(false);
-                setErrorMessageField(false);
-              }}
-            >
-              {null}
-            </button>
-
-            {isAddingTodoAllowed && (
-              'Unable to add a todo'
-            )}
-
-            <br />
-            {isDeleteingTodoAllowed && (
-              'Unable to delete a todo'
-            )}
-            <br />
-            {isEditingTodoAllowed && (
-              'Unable to update a todo'
-            )}
-          </div>
-        )}
+        <Error
+          message={isHidden}
+          deleteErrorMessage={deleteErrorMessage}
+          isThereIssue={isThereIssue}
+          editTodo={editTodo}
+          setIsThereIssue={setIsThereIssue}
+        />
       </div>
+
     </>
   );
 };
