@@ -44,19 +44,18 @@ export const App: React.FC = () => {
     setStatus(event.currentTarget.type);
   };
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (status) {
+  const getVisibleTodos = (statusTodo: string, todosArr: Todo[]) => {
+    switch (statusTodo) {
       case 'active':
-        return !todo.completed;
-
+        return todosArr.filter(todo => !todo.completed);
       case 'completed':
-        return !!todo.completed;
-
-      case 'all':
+        return todosArr.filter(todo => todo.completed);
       default:
-        return todo;
+        return todosArr;
     }
-  });
+  };
+
+  const visibleTodos = getVisibleTodos(status, todos);
 
   if (!USER_ID) {
     return <UserWarning />;
