@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   todos: Todo[];
@@ -7,30 +7,8 @@ interface Props {
 
 export const TodoList: React.FC<Props> = ({ todos }) => (
   <section className="todoapp__main">
-    {todos.map((todo) => {
-      return (
-        <div
-          className={cn('todo', {
-            completed: todo.completed,
-          })}
-          key={todo.id}
-        >
-          <label className="todo__status-label">
-            <input type="checkbox" className="todo__status" checked />
-          </label>
-
-          <span className="todo__title">{todo.title}</span>
-
-          <button type="button" className="todo__remove">
-            ×
-          </button>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div>
-      );
-    })}
+    {todos.map((todo) => (
+      <TodoItem todo={todo} />
+    ))}
   </section>
 );

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { FilteredTodo } from './components/FilteredTodo';
@@ -43,18 +43,21 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const visibleTodos = todos.filter((todo) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const visibleTodos = useMemo(() => {
     switch (filter) {
       case Filter.ACTIVE:
-        return !todo.completed;
+        return todos.filter(todo => !todo.completed);
 
       case Filter.COMPLETED:
-        return todo.completed;
+        return todos.filter(todo => todo.completed);
 
       default:
-        return true;
+        return todos;
     }
-  });
+  }, [todos, filter]);
+
+  const itemsLeft = todos.filter((todo) => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -76,7 +79,7 @@ export const App: React.FC = () => {
         <TodoList todos={visibleTodos} />
 
         <footer className="todoapp__footer">
-          <span className="todo-count">3 items left</span>
+          <span className="todo-count">{`${itemsLeft} items left`}</span>
 
           <FilteredTodo status={filter} onStatusChange={setFilter} />
           <button type="button" className="todoapp__clear-completed">
