@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Prop = {
@@ -12,10 +13,12 @@ export const TodoList:React.FC<Prop> = React.memo(
         {todos.map(todo => (
           <li
             key={todo.id}
-            className={`todo ${
-              todo.completed
-                ? 'completed'
-                : ''}`}
+            className={classNames(
+              'todo',
+              {
+                completed: todo.completed,
+              },
+            )}
           >
             <label
               id={todo.id.toString(10)}

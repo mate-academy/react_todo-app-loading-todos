@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
@@ -147,10 +148,12 @@ export const App: React.FC = () => {
             <nav className="filter">
               <a
                 href="#/"
-                className={`filter__link ${
-                  selectedTodos === ShowTodos.All
-                    ? 'selected'
-                    : ''}`}
+                className={classNames(
+                  'filter__link',
+                  {
+                    selected: selectedTodos === ShowTodos.All,
+                  },
+                )}
                 onClick={handleFilterSelect}
               >
                 All
@@ -158,10 +161,12 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className={`filter__link ${
-                  selectedTodos === ShowTodos.Active
-                    ? 'selected'
-                    : ''}`}
+                className={classNames(
+                  'filter__link',
+                  {
+                    selected: selectedTodos === ShowTodos.Active,
+                  },
+                )}
                 onClick={handleFilterSelect}
               >
                 Active
@@ -169,10 +174,12 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className={`filter__link ${
-                  selectedTodos === ShowTodos.Completed
-                    ? 'selected'
-                    : ''}`}
+                className={classNames(
+                  'filter__link',
+                  {
+                    selected: selectedTodos === ShowTodos.Completed,
+                  },
+                )}
                 onClick={handleFilterSelect}
               >
                 Completed
@@ -188,10 +195,12 @@ export const App: React.FC = () => {
 
       </div>
 
-      <div className={`notification is-danger is-light has-text-weight-normal ${
-        error === null
-          ? 'hidden'
-          : ''}`}
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        {
+          hidden: error === null,
+        },
+      )}
       >
         <button
           type="button"
