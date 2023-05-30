@@ -3,14 +3,14 @@ import { Filter } from './Filter';
 
 interface FooterProps {
   filter: string,
-  hasCompleted: boolean,
+  hasCompletedTodos: boolean,
   todosLength: number,
   onFilterChange: (filterType: FilterType) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   filter,
-  hasCompleted,
+  hasCompletedTodos,
   todosLength,
   onFilterChange,
 }) => {
@@ -29,7 +29,7 @@ export const Footer: React.FC<FooterProps> = ({
         <button
           type="button"
           className="todoapp__clear-completed"
-          style={{ visibility: hasCompleted ? 'visible' : 'hidden' }}
+          style={{ visibility: hasCompletedTodos ? 'visible' : 'hidden' }}
         >
           Clear completed
         </button>

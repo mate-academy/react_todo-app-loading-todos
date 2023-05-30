@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const loadTodos = useCallback(async () => {
+  const handleLoadTodos = useCallback(async () => {
     try {
       const data = await getTodos(USER_ID);
 
@@ -30,11 +30,11 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    loadTodos();
+    handleLoadTodos();
   }, []);
 
-  const hasCompleted = todos.filter(todo => todo.completed).length > 0;
-  const hasActive = todos.filter(todo => !todo.completed).length > 0;
+  const hasCompletedTodos = todos.filter(todo => todo.completed).length > 0;
+  const hasActiveTodos = todos.filter(todo => !todo.completed).length > 0;
 
   const filterVisibleTodos
     = (filterList: FilterType, todoList: TodoType[]) => {
@@ -72,12 +72,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header hasActive={hasActive} />
+        <Header hasActiveTodos={hasActiveTodos} />
         <TodoList visibleTodos={visibleTodos} />
         <Footer
           filter={filter}
           onFilterChange={handleFilterChange}
-          hasCompleted={hasCompleted}
+          hasCompletedTodos={hasCompletedTodos}
           todosLength={todos.length}
         />
       </div>
