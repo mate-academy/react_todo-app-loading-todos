@@ -18,16 +18,17 @@ const todosFromServer = client
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [selectedTodos, setSelectedTodos] = useState<ShowTodos>(ShowTodos.All);
 
   const clearError = () => {
     setTimeout(() => {
-      setError('');
+      setError(null);
     }, 3000);
   };
 
   useEffect(() => {
+    setError(null);
     todosFromServer
       .then(fetchTodos => setTodos(fetchTodos))
       .catch(() => {
@@ -135,7 +136,6 @@ export const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Hide the footer if there are no todos */}
         {filteredTodos
         && filteredTodos.length > 0
         && (
@@ -144,13 +144,9 @@ export const App: React.FC = () => {
               3 items left
             </span>
 
-            {/* Active filter should have a 'selected' class */}
-            <nav
-              className="filter"
-            >
+            <nav className="filter">
               <a
                 href="#/"
-                // className="filter__link selected"
                 className={`filter__link ${
                   selectedTodos === ShowTodos.All
                     ? 'selected'
@@ -192,17 +188,16 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {/* <div className="notification is-danger is-light has-text-weight-normal"> */}
-      <div className={`notification is-danger is-light has-text-weight-normal ${error === '' ? 'hidden' : ''}`}>
+      <div className={`notification is-danger is-light has-text-weight-normal ${
+        error === null
+          ? 'hidden'
+          : ''}`}
+      >
         <button
           type="button"
           title="delete"
           className="delete"
-          onClick={() => {
-            setError('');
-          }}
+          onClick={() => setError(null)}
         />
         {error}
         {/* show only one message at a time */}

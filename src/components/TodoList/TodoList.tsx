@@ -12,7 +12,10 @@ export const TodoList:React.FC<Prop> = React.memo(
         {todos.map(todo => (
           <li
             key={todo.id}
-            className={`todo ${todo.completed ? 'completed' : ''}`}
+            className={`todo ${
+              todo.completed
+                ? 'completed'
+                : ''}`}
           >
             <label
               id={todo.id.toString(10)}
@@ -28,10 +31,8 @@ export const TodoList:React.FC<Prop> = React.memo(
 
             <span className="todo__title">{todo.title}</span>
 
-            {/* Remove button appears only on hover */}
             <button type="button" className="todo__remove">×</button>
 
-            {/* overlay will cover the todo while it is being updated */}
             <div className="modal overlay">
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
