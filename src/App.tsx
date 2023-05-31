@@ -27,6 +27,14 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    }
+  }, [errorMessage]);
+
   const handleFilterStatusChange = useCallback((filter: Status) => {
     switch (filter) {
       case 'all':
