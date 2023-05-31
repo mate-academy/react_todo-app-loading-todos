@@ -1,51 +1,47 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { Todo } from './types/Todo';
+import React, { useCallback, useEffect, useState } from 'react';
+// import classNames from 'classnames';
+import { TodoData } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Notification } from './components/Notification';
-import { TodoField } from './components/TodoField';
 import { Status } from './types/Status';
+import { TodoList } from './components/TodoList';
+import { Filter } from './components/Filter';
+import { ActionError } from './types/ActionError';
+import { NewTodo } from './components/NewTodo';
 
 const USER_ID = 10524;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(true);
-  const [filter, setFilter] = useState<Status>('all');
+  const [todos, setTodos] = useState<TodoData[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<TodoData[]>([]);
+  const [errorMessage, setErrorMessage] = useState<ActionError | string>('');
 
   useEffect(() => {
     getTodos(USER_ID)
       .then((downloadedTodos) => {
         setTodos(downloadedTodos);
         setFilteredTodos(downloadedTodos);
+      }).catch(() => {
+        setErrorMessage(ActionError.read);
       });
   }, []);
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
-    }
-  }, [error]);
-
-  useEffect(() => {
+  const handleFilterStatusChange = useCallback((filter: Status) => {
     switch (filter) {
       case 'all':
         setFilteredTodos([...todos]);
         break;
       case 'completed':
-        setFilteredTodos(todos.filter(todo => todo.completed === true));
+        setFilteredTodos(todos.filter(todo => todo.completed));
         break;
       case 'active':
-        setFilteredTodos(todos.filter(todo => todo.completed === false));
+        setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
       default:
         break;
     }
-  }, [filter]);
+  }, [todos]);
 
   return (
     <div className="todoapp">
@@ -54,60 +50,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           <button type="button" className="todoapp__toggle-all active" />
-
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <NewTodo />
         </header>
 
         <section className="todoapp__main">
-          {filteredTodos.map((todo) => (
-            <TodoField key={todo.id} todo={todo} />
-          ))}
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
+          <TodoList todos={filteredTodos} />
         </section>
       </div>
-      {/* <div className="todo">
-          <label className="todo__status-label">
-            <input type="checkbox" className="todo__status" />
-          </label>
-
-          <span className="todo__title">Not Completed Todo</span>
-          <button type="button" className="todo__remove">×</button>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div>
-
-        <div className="todo">
-          <label className="todo__status-label">
-            <input type="checkbox" className="todo__status" />
-          </label>
-
-          <form>
-            <input
-              type="text"
-              className="todo__title-field"
-              placeholder="Empty todo will be deleted"
-              value="Todo is being edited now"
-            />
-          </form>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div> */}
 
       {/* <div className="todo">
           <label className="todo__status-label">
@@ -126,45 +75,13 @@ export const App: React.FC = () => {
 
       <footer className="todoapp__footer">
         <span className="todo-count">3 items left</span>
-
-        <nav className="filter">
-          <a
-            href="#/"
-            className={classNames('filter__link', {
-              selected: filter === 'all',
-            })}
-            onClick={() => setFilter('all')}
-          >
-            All
-          </a>
-
-          <a
-            href="#/active"
-            className={classNames('filter__link', {
-              selected: filter === 'active',
-            })}
-            onClick={() => setFilter('active')}
-          >
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            className={classNames('filter__link', {
-              selected: filter === 'completed',
-            })}
-            onClick={() => setFilter('completed')}
-          >
-            Completed
-          </a>
-        </nav>
-
+        <Filter onFilterStatusChange={handleFilterStatusChange} />
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>
       </footer>
 
-      <Notification error={error} action="delete" />
+      <Notification message={errorMessage} />
     </div>
   );
 };
