@@ -8,6 +8,11 @@ import { Filter } from './Components/Filter';
 
 const USER_ID = 10539;
 
+enum FilterType {
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [error, setError] = useState('');
@@ -31,12 +36,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     switch (filter) {
-      case 'Active': {
+      case FilterType.Active: {
         setFilteredTodos(todos.filter(todo => todo.completed === false));
         break;
       }
 
-      case 'Completed': {
+      case FilterType.Completed: {
         setFilteredTodos(todos.filter(todo => todo.completed === true));
         break;
       }
@@ -55,7 +60,7 @@ export const App: React.FC = () => {
     <Todo todo={todo} key={todo.id} />
   ));
   const countNotCompletedtodos = todos.filter(todo => (
-    todo.completed === false
+    !todo.completed
   )).length;
 
   const handleClose = () => {
