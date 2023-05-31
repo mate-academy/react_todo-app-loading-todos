@@ -1,18 +1,13 @@
 import cn from 'classnames';
 import { useState } from 'react';
-// import { Todo } from '../../types/Todo';
 import { NewTodo } from './NewTodo';
 import { useTodosContext } from '../../utils/TodosContext';
-
-// interface PropsTodoAppHeader {
-//   todos: Todo[];
-// }
-// { todos }: PropsTodoAppHeader
 
 export const TodoAppHeader = () => {
   const [value, setValue] = useState('');
 
   const { todos } = useTodosContext();
+  const isActive = todos.filter(todo => !todo.completed).length > 0;
 
   return (
     <header className="todoapp__header">
@@ -21,10 +16,8 @@ export const TodoAppHeader = () => {
         <button
           type="button"
           className={cn({
-            'todoapp__toggle-all active': todos
-              .filter(todo => !todo.completed).length,
-            'todoapp__toggle-all': !todos
-              .filter(todo => !todo.completed).length,
+            'todoapp__toggle-all active': isActive,
+            'todoapp__toggle-all': !isActive,
           })}
         />
       }

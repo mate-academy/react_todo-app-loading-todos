@@ -31,7 +31,7 @@ export const TodosConstextProvider = (
   const USER_ID = 10529;
   const url = `/todos?userId=${USER_ID}`;
 
-  if (error === true) {
+  if (error) {
     setTimeout(() => setError(false), 3000);
   }
 

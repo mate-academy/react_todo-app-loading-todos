@@ -8,10 +8,11 @@ interface PropsTodoList {
 export const TodoList = ({ filteredTodos }: PropsTodoList) => {
   const [isEdit] = useState(false);
   const [loadind] = useState(false);
+  const isShowTodos = filteredTodos.length > 0;
 
   return (
     <section className="todoapp__main">
-      {filteredTodos.length && filteredTodos.map(todo => {
+      { isShowTodos && filteredTodos.map(todo => {
         const { id, title, completed } = todo;
 
         return (

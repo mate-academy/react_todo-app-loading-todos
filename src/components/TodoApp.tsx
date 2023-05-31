@@ -11,12 +11,17 @@ export const TodoApp = () => {
 
   let filteredTodos = todos;
 
-  if (filtered === 'Active') {
-    filteredTodos = filteredTodos.filter(todo => !todo.completed);
-  }
-
-  if (filtered === 'Completed') {
-    filteredTodos = filteredTodos.filter(todo => todo.completed);
+  switch (filtered) {
+    case 'Active':
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+      break;
+    case 'Completed':
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      break;
+    case 'All':
+      filteredTodos = todos;
+      break;
+    default: throw new Error('wrong filters');
   }
 
   const isFooter = todos.length > 0;
