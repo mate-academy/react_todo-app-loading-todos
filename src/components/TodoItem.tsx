@@ -8,8 +8,6 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
-    // id,
-    // userId,
     title,
     completed,
   } = todo;

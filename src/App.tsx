@@ -16,14 +16,10 @@ import { ErrorContext } from './context/ErrorContextProvider';
 const USER_ID = 10544;
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[] | null>(null);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState(FilterValues.All);
 
-  const filteringTodos = (todos: Todo[] | null, value: FilterValues) => {
-    if (!todos) {
-      return todos;
-    }
-
+  const filteredTodos = (todos: Todo[], value: FilterValues) => {
     return todos.filter(todo => {
       switch (value as FilterValues) {
         case FilterValues.Completed:
@@ -50,7 +46,7 @@ export const App: React.FC = () => {
   }, []);
 
   const todosAfterFilter = useMemo(() => {
-    return filteringTodos(todosFromServer, filterValue);
+    return filteredTodos(todosFromServer, filterValue);
   }, [todosFromServer, filterValue]);
   const countOfTodos = todosFromServer?.filter(todo => !todo.completed).length
     || 0;

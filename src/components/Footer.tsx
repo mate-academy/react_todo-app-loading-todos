@@ -10,17 +10,15 @@ export const Footer: React.FC<Props> = ({ countOfTodos, setFilterValue }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {countOfTodos}
-        {' '}
-        items left
+        {`${countOfTodos} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         {
           Object.entries(FilterValues).map(([key, value]) => (
             <button
               style={{ all: 'unset' }}
+              type="button"
               key={value}
               value={value}
               onClick={() => setFilterValue(value)}
