@@ -15,11 +15,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [selected, setSelected] = useState<string>('All');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hideError, setHideError] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      setHideError(false);
+      setError(null);
     }, 3000);
 
     return () => {
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
 
   const loadTodos = async () => {
     try {
-      setHideError(false);
+      setError(null);
 
       const data = await getTodos(USER_ID);
 
@@ -56,9 +56,7 @@ export const App: React.FC = () => {
         setTodos(data);
       }
     } catch {
-      setHideError(true);
-
-      throw new Error('Error 404 no connection to the server');
+      setError(new Error('Error 404 no connection to the server'));
     }
   };
 
@@ -82,20 +80,20 @@ export const App: React.FC = () => {
           setQuery={setQuery}
         />
 
-        {todos?.length > 0 && (
+        {!!todos && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer
-              todoCount={todos.length}
+              todoCount={visibleTodos.length}
               selectTodo={setSelected}
               selected={selected}
             />
           </>
         )}
-        {hideError && (
+        {error && (
           <Notification
-            setIsHideError={setHideError}
-            isHideError={hideError}
+            setIsHideError={setError}
+            isHideError={error}
           />
         )}
       </div>

@@ -2,8 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  setIsHideError: (hide: boolean) => void;
-  isHideError: boolean
+  setIsHideError: (hide: Error | null) => void;
+  isHideError: Error | null
 };
 
 export const Notification: React.FC<Props> = React.memo(({
@@ -20,7 +20,7 @@ export const Notification: React.FC<Props> = React.memo(({
         type="button"
         className="delete hidden"
         id="delete"
-        onClick={() => setIsHideError(false)}
+        onClick={() => setIsHideError(null)}
       >
         Delete
       </button>
