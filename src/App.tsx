@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [select, setSelect] = useState('all');
   const [isError, setIsError] = useState(false);
   // const [isDeleteError, setDeleteIsError] = useState(false);
-  const lengTodos = todos.filter(todo => todo.completed === false).length;
+  const lengTodos = todos.filter(todo => !todo.completed).length;
 
   const getTodosAll = async () => {
     try {
@@ -28,21 +28,19 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(({ completed }) => {
-      switch (select) {
-        case SortEnum.ACTIVE:
-          return !completed;
+    switch (select) {
+      case SortEnum.ACTIVE:
+        return todos.filter(({ completed }) => !completed);
 
-        case SortEnum.ALL:
-          return !completed || completed;
+      case SortEnum.ALL:
+        return todos;
 
-        case SortEnum.COMPLETED:
-          return completed;
+      case SortEnum.COMPLETED:
+        return todos.filter(({ completed }) => completed);
 
-        default:
-          return !completed || completed;
-      }
-    });
+      default:
+        return todos;
+    }
   }, [todos, select]);
 
   useEffect(() => {
