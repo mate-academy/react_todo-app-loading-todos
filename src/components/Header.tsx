@@ -10,6 +10,17 @@ type Props = {
 export const Header: React.FC<Props> = ({ countOfTodos }) => {
   const [inputValue, setInputValue] = useState('');
   const errorContext = useContext(ErrorContext);
+  const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (inputValue.trim().length === 0) {
+      errorContext.setErrorMessage(ErrorValues.Validation);
+    }
+  };
+
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    errorContext.setHideError(true);
+  };
 
   return (
     <header className="todoapp__header">
@@ -20,22 +31,14 @@ export const Header: React.FC<Props> = ({ countOfTodos }) => {
           { active: countOfTodos > 0 })}
       />
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (inputValue.trim().length === 0) {
-            errorContext.setErrorMessage(ErrorValues.Validation);
-          }
-        }}
+        onSubmit={handleSubmitForm}
       >
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-            errorContext.setHideError(true);
-          }}
+          onChange={handleOnChange}
         />
       </form>
     </header>
