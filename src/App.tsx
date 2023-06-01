@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
@@ -8,6 +7,7 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notification';
+import { SelectTodo } from './types/SelectTodo';
 
 const USER_ID = 10586;
 
@@ -17,29 +17,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hideError, setHideError] = useState<boolean>(false);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
-  const loadTodos = async () => {
-    try {
-      setHideError(false);
-
-      const data = await getTodos(USER_ID);
-
-      if ('Error' in data) {
-        throw new Error('Error1');
-      } else {
-        setTodos(data);
-      }
-    } catch {
-      setHideError(true);
-
-      throw new Error('Error2');
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const timerId = setTimeout(() => {
       setHideError(false);
@@ -50,28 +27,48 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    loadTodos();
-  }, []);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const filterTodo = useCallback(() => {
     switch (selected) {
-      case 'All':
+      case SelectTodo.All:
 
         return todos;
 
-      case 'Active':
-        return [...todos].filter(todo => !todo.completed);
+      case SelectTodo.Active:
+        return todos.filter(todo => !todo.completed);
 
-      case 'Completed':
-        return [...todos].filter(todo => todo.completed);
+      case SelectTodo.Completed:
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
   }, [selected, todos]);
+
+  const loadTodos = async () => {
+    try {
+      setHideError(false);
+
+      const data = await getTodos(USER_ID);
+
+      if ('Error' in data) {
+        throw new Error('Error - impossible load todo');
+      } else {
+        setTodos(data);
+      }
+    } catch {
+      setHideError(true);
+
+      throw new Error('Error 404 no connection to the server');
+    }
+  };
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   const visibleTodos = filterTodo();
 
@@ -89,6 +86,7 @@ export const App: React.FC = () => {
           <>
             <TodoList todos={visibleTodos} />
             <Footer
+              todoCount={todos.length}
               selectTodo={setSelected}
               selected={selected}
             />
@@ -96,8 +94,8 @@ export const App: React.FC = () => {
         )}
         {hideError && (
           <Notification
-            setHideErrorBtn={setHideError}
-            hideError={hideError}
+            setIsHideError={setHideError}
+            isHideError={hideError}
           />
         )}
       </div>

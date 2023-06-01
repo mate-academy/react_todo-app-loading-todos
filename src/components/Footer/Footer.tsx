@@ -6,16 +6,18 @@ import { SelectTodo } from '../../types/SelectTodo';
 type Props = {
   selectTodo: (selectTodo: string) => void;
   selected: string;
+  todoCount: number;
 };
 
 export const Footer: React.FC<Props> = React.memo(({
   selectTodo,
   selected,
+  todoCount,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${todoCount} items left`}
       </span>
 
       <nav className="filter">

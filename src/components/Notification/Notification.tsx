@@ -2,27 +2,25 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  setHideErrorBtn: (hide: boolean) => void;
-  hideError: boolean
+  setIsHideError: (hide: boolean) => void;
+  isHideError: boolean
 };
 
 export const Notification: React.FC<Props> = React.memo(({
-  setHideErrorBtn,
-  hideError,
+  setIsHideError,
+  isHideError,
 }) => {
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !hideError },
+      { hidden: !isHideError },
     )}
     >
-
-      {/* <label htmlFor="delete">{}</label> */}
       <button
         type="button"
         className="delete hidden"
         id="delete"
-        onClick={() => setHideErrorBtn(false)}
+        onClick={() => setIsHideError(false)}
       >
         Delete
       </button>
