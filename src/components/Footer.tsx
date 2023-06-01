@@ -14,7 +14,9 @@ export const Footer: React.FC <Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {activeTodos.length} items left
+        {activeTodos.length}
+        {' '}
+        items left
       </span>
 
       <TodoFilter setFilterValue={setFilterValue} filterValue={filterValue} />
