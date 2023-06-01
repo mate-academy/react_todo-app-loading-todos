@@ -17,7 +17,6 @@ export const Todo: React.FC<TodoProps> = ({
   const [inProgress] = useState(false);
 
   const {
-    // title,
     completed,
   } = todo;
 
@@ -51,7 +50,7 @@ export const Todo: React.FC<TodoProps> = ({
               placeholder="Empty todo will be deleted"
               value={titleState}
               onChange={(event) => setTitleState(event?.target.value)}
-              onKeyDown={(event) => handleEnter(event)}
+              onKeyDown={handleEnter}
               onBlur={() => {
                 setEditable(false);
                 setCurrentAction('update');
@@ -76,8 +75,6 @@ export const Todo: React.FC<TodoProps> = ({
             </button>
           </>
         )}
-
-      {/* overlay will cover the todo while it is being updated */}
       <div className={`modal overlay ${inProgress ? 'is-active' : ''}`}>
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

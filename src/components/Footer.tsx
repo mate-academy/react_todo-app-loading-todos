@@ -14,8 +14,6 @@ export const Footer: React.FC<FooterProps> = ({ setFilter, filter, todos }) => {
       <span className="todo-count">
         {`${todos.filter(todo => todo.completed).length} item${todos.length > 1 ? 's' : ''} left`}
       </span>
-
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -41,8 +39,6 @@ export const Footer: React.FC<FooterProps> = ({ setFilter, filter, todos }) => {
           Completed
         </a>
       </nav>
-
-      {/* don't show this button if there are no completed todos */}
       {todos.some(todo => todo.completed)
        && (
          <button type="button" className="todoapp__clear-completed">
