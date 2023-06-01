@@ -2,8 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
+import ErrorMessage from './components/ErrorMessage';
+import NewTodoInputField from './components/NewTodoInputField';
+import TodosList from './components/TodosList';
 
-type TodoStatus = 'all' | 'active' | 'completed';
+import { TodoStatus } from './types/TodoStatus';
+import FooterMenu from './components/FooterMenu';
 
 const USER_ID = 10595;
 
@@ -49,110 +53,24 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {todosList.length > 0
-            && <button type="button" className="todoapp__toggle-all" />}
-
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
+        <NewTodoInputField hasTodos={todosList.length > 0} />
         {todosList.length > 0 && (
           <>
             <section className="todoapp__main">
-              {visibleTodos.map(todo => {
-                const { completed, id, title } = todo;
-
-                return (
-                  <div className={`todo ${completed ? 'completed' : ''}`} key={id}>
-                    <label className="todo__status-label">
-                      <input
-                        type="checkbox"
-                        className="todo__status"
-                        checked={completed}
-                      />
-                    </label>
-
-                    <span className="todo__title">{title}</span>
-
-                    <button type="button" className="todo__remove">×</button>
-
-                    <div className="modal overlay">
-                      <div className="modal-background
-                      has-background-white-ter"
-                      />
-                      <div className="loader" />
-                    </div>
-                  </div>
-                );
-              })}
+              <TodosList
+                visibleTodos={visibleTodos}
+              />
             </section>
 
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${itemsLeft} items left`}
-              </span>
-
-              <nav className="filter">
-                <a
-                  href="#/"
-                  className={`filter__link ${status === 'all' ? 'selected' : ''}`}
-                  onClick={
-                    () => handleFilterTodos('all')
-                  }
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={`filter__link ${status === 'active' ? 'selected' : ''}`}
-                  onClick={
-                    () => handleFilterTodos('active')
-                  }
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={`filter__link ${status === 'completed' ? 'selected' : ''}`}
-                  onClick={
-                    () => handleFilterTodos('completed')
-                  }
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            </footer>
+            <FooterMenu
+              handleFilterTodos={handleFilterTodos}
+              status={status}
+              itemsLeft={itemsLeft}
+            />
           </>
         )}
       </div>
-
-      {isError && (
-        <div className="notification is-danger is-light has-text-weight-normal">
-          <button
-            type="button"
-            className="delete"
-            onClick={() => setIsError(false)}
-          />
-
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
-      )}
+      {isError && <ErrorMessage handleSetError={setIsError} />}
     </div>
   );
 };
