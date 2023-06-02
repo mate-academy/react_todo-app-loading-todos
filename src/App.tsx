@@ -13,10 +13,10 @@ const USER_ID = 10594;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [remainingTodos, setRemainingTodos] = useState(0);
   const [areAllTodosCompleted, setAreAllTodosCompleted] = useState(false);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState('all');
 
   const handleCompletedTodosChange = (isChecked: boolean, id: number) => {
     setTodos(todos.map(todo => {
@@ -90,9 +90,7 @@ export const App: React.FC = () => {
         setTodos(loadedTodos);
         setRemainingTodos(loadedTodos.filter(todo => !todo.completed).length);
       } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(error.message);
-        }
+        setErrorMessage('Failed to load todos');
       }
     };
 
