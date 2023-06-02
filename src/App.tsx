@@ -25,7 +25,7 @@ export const App: React.FC = () => {
       .then(response => {
         setTodosList(response);
         setVisibleTodos(response);
-        setItemsLeft(response.filter(todo => todo.completed === false).length);
+        setItemsLeft(response.filter(todo => !todo.completed).length);
       })
       .catch(() => setIsError(true));
   }, []);
@@ -35,10 +35,10 @@ export const App: React.FC = () => {
 
     switch (newStatus) {
       case 'completed':
-        setVisibleTodos(todosList.filter(todo => todo.completed === true));
+        setVisibleTodos(todosList.filter(todo => todo.completed));
         break;
       case 'active':
-        setVisibleTodos(todosList.filter(todo => todo.completed === false));
+        setVisibleTodos(todosList.filter(todo => !todo.completed));
         break;
       default:
         setVisibleTodos(todosList);
