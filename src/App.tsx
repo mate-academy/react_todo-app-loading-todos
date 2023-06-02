@@ -8,12 +8,13 @@ import TodosList from './components/TodosList';
 
 import { TodoStatus } from './types/TodoStatus';
 import FooterMenu from './components/FooterMenu';
+import { Todo } from './types/Todo';
 
 const USER_ID = 10595;
 
 export const App: React.FC = () => {
-  const [todosList, setTodosList] = useState([]);
-  const [visibleTodos, setVisibleTodos] = useState([]);
+  const [todosList, setTodosList] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<TodoStatus>('all');
   const [itemsLeft, setItemsLeft] = useState(0);
 
