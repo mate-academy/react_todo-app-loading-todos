@@ -1,0 +1,62 @@
+import React from 'react';
+import classNames from 'classnames';
+import { Todo } from '../types/Todo';
+
+type Props = {
+  todos: Todo[],
+  setFilter: React.Dispatch<React.SetStateAction<string>>,
+  filter: string
+};
+
+export const TodoFooter: React.FC<Props> = ({ todos, setFilter, filter }) => {
+  const activeTodosCount = todos.reduce(
+    (acc, cur) => {
+      if (!cur.completed) {
+        return acc + 1;
+      }
+
+      return acc;
+    },
+    0,
+  );
+
+  return (
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${activeTodosCount} items left`}
+      </span>
+
+      <nav className="filter">
+        <a
+          href="#/"
+          className={classNames('filter__link', { selected: !filter })}
+          onClick={() => setFilter('')}
+        >
+          All
+        </a>
+
+        <a
+          href="#/active"
+          className={classNames('filter__link',
+            { selected: filter === 'active' })}
+          onClick={() => setFilter('active')}
+        >
+          Active
+        </a>
+
+        <a
+          href="#/completed"
+          className={classNames('filter__link',
+            { selected: filter === 'completed' })}
+          onClick={() => setFilter('completed')}
+        >
+          Completed
+        </a>
+      </nav>
+
+      <button type="button" className="todoapp__clear-completed">
+        Clear completed
+      </button>
+    </footer>
+  );
+};
