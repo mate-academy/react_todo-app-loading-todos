@@ -7,13 +7,14 @@ import { Header } from './component/Header/Header';
 import { Footer } from './component/Footer/Footer';
 import { TodoApp } from './component/TodoApp/TodoApp';
 import { getTodos } from './api/todos';
-import { FilteredBy } from './types/FilteredBy';
+import { TodoFilter } from './types/TodoFilter';
 
 const USER_ID = 10610;
+const timeDelay = 3000;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredBy, setFilteredBy] = useState<FilteredBy>(FilteredBy.ALL);
+  const [filteredBy, setFilteredBy] = useState<TodoFilter>(TodoFilter.ALL);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -25,18 +26,18 @@ export const App: React.FC = () => {
         setIsError(true);
         setTimeout(() => {
           setIsError(false);
-        }, 3000);
+        }, timeDelay);
       });
   }, []);
 
-  const showFilteredBy = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
       switch (filteredBy) {
-        case FilteredBy.ALL:
+        case TodoFilter.ALL:
           return true;
-        case FilteredBy.ACTIVE:
+        case TodoFilter.ACTIVE:
           return !todo.completed;
-        case FilteredBy.COMPLETED:
+        case TodoFilter.COMPLETED:
           return todo.completed;
         default:
           return false;
@@ -58,7 +59,7 @@ export const App: React.FC = () => {
         <Footer
           filteredBy={filteredBy}
           setFilteredBy={setFilteredBy}
-          todos={showFilteredBy}
+          todos={filteredTodos}
         />
       </div>
 
