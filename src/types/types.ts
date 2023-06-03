@@ -5,7 +5,7 @@ export interface Todo {
   completed: boolean;
 }
 
-export enum TodoFilterEnum {
+export enum FilterBy {
   ALL = 'all',
   ACTIVE = 'active',
   COMPLETED = 'completed',

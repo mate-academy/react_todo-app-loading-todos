@@ -1,34 +1,35 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/TodoList';
-import { TodoFilterEnum, Todo } from './types/types';
-import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { FilterBy, Todo } from './types/types';
+import { Header } from './components/Header/Header';
+import { Footer } from './components/Footer/Footer';
+import { ErrorMessage } from './components/ErrorMessage';
 
 const USER_ID = 10348;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [filteredBy, setFilteredBy] = useState(TodoFilterEnum.ALL);
+  const [filteredBy, setFilteredBy] = useState(FilterBy.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
 
-  const getFilteredTodos = (filter: TodoFilterEnum) => {
-    switch (filter) {
-      case TodoFilterEnum.ACTIVE:
+  const getFilteredTodos = useMemo(() => {
+    switch (filteredBy) {
+      case FilterBy.ACTIVE:
         return todos.filter(todo => !todo.completed);
 
-      case TodoFilterEnum.COMPLETED:
+      case FilterBy.COMPLETED:
         return todos.filter(todo => todo.completed);
 
       default:
         return todos;
     }
-  };
+  }, [filteredBy, todos]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,65 +47,37 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredTodos(getFilteredTodos(filteredBy));
-  }, [filteredBy]);
+    setFilteredTodos(getFilteredTodos);
+  }, [filteredBy, getFilteredTodos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button
-            type="button"
-            className={cn('todoapp__toggle-all', {
-              active: activeTodosCount > 0,
-            })}
+        <Header
+          activeTodosCount={activeTodosCount}
+        />
 
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
-        <TodoList todos={filteredTodos} />
+        <TodoList
+          todos={filteredTodos}
+        />
 
         {todos.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${activeTodosCount} items left`}
-            </span>
-
-            <TodoFilter
-              filter={filteredBy}
-              setFilter={setFilteredBy}
-            />
-
-            {completedTodosCount > 0 && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
-          </footer>
+          <Footer
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
+            filteredBy={filteredBy}
+            setFilteredBy={setFilteredBy}
+          />
         )}
       </div>
 
       {errorMessage && (
-        <div className="notification is-danger is-light has-text-weight-normal">
-          <button
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
-          {errorMessage}
-        </div>
+        <ErrorMessage
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
       )}
     </div>
   );
