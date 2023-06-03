@@ -1,18 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useMemo, useEffect } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { Header } from './component/Header/Header';
 import { Footer } from './component/Footer/Footer';
 import { TodoApp } from './component/TodoApp/TodoApp';
 import { getTodos } from './api/todos';
+import { FilteredBy } from './types/FilteredBy';
 
 const USER_ID = 10610;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredBy, setFilteredBy] = useState('all');
-  const [error, setError] = useState(false);
+  const [filteredBy, setFilteredBy] = useState<FilteredBy>(FilteredBy.ALL);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -20,21 +22,21 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       })
       .catch(() => {
-        setError(true);
+        setIsError(true);
         setTimeout(() => {
-          setError(false);
+          setIsError(false);
         }, 3000);
       });
-  }, [todos]);
+  }, []);
 
   const showFilteredBy = useMemo(() => {
     return todos.filter((todo) => {
       switch (filteredBy) {
-        case 'all':
+        case FilteredBy.ALL:
           return true;
-        case 'active':
+        case FilteredBy.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case FilteredBy.COMPLETED:
           return todo.completed;
         default:
           return false;
@@ -61,11 +63,10 @@ export const App: React.FC = () => {
       </div>
 
       <div
-        className={`notification is-danger is-light has-text-weight-normal
-      ${error
-      ? ''
-      : 'hidden'
-    }`}
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !isError },
+        )}
       >
         <button type="button" className="delete" />
 
