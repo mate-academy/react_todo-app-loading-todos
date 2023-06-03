@@ -9,7 +9,7 @@ interface TodoListProps {
 export const TodoList: React.FC<TodoListProps> = ({ visibleTodos }) => {
   return (
     <section className="todoapp__main">
-      {visibleTodos?.map(todo => (
+      {visibleTodos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}

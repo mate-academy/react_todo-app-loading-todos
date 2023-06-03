@@ -3,22 +3,22 @@ import { FilterType } from '../../types/FilterType';
 
 interface FilterProps {
   filter: string,
-  filterSelected: (filter: FilterType) => void,
+  setFilter(filter: FilterType): void,
 
 }
 
 export const Filter: React.FC<FilterProps> = ({
   filter,
-  filterSelected,
+  setFilter,
 }) => {
   return (
     <nav className="filter">
       <a
         href="#/"
         className={classNames('filter__link', {
-          selected: filter === FilterType.Completed,
+          selected: filter === FilterType.All,
         })}
-        onClick={() => filterSelected(FilterType.All)}
+        onClick={() => setFilter(FilterType.All)}
       >
         All
       </a>
@@ -26,9 +26,9 @@ export const Filter: React.FC<FilterProps> = ({
       <a
         href="#/active"
         className={classNames('filter__link', {
-          selected: filter === FilterType.Completed,
+          selected: filter === FilterType.Active,
         })}
-        onClick={() => filterSelected(FilterType.Active)}
+        onClick={() => setFilter(FilterType.Active)}
       >
         Active
       </a>
@@ -38,7 +38,7 @@ export const Filter: React.FC<FilterProps> = ({
         className={classNames('filter__link', {
           selected: filter === FilterType.Completed,
         })}
-        onClick={() => filterSelected(FilterType.Completed)}
+        onClick={() => setFilter(FilterType.Completed)}
       >
         Completed
       </a>

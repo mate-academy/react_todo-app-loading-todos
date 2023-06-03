@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -14,12 +15,11 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Notification } from './components/Notification/Notification';
 
 const USER_ID = 10587;
-// https://mate.academy/students-api/todos?userId=10587
 
 export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const handleCloseErrorMessage = useCallback(() => {
     setErrorMessage('');
@@ -42,14 +42,10 @@ export const App: React.FC = () => {
     handleLoadTodos();
   }, []);
 
-  const handleFilterSelected = () => {
-    setFilter(filter);
-  };
+  const completedTodos = useMemo(() => todos.filter(todo => todo.completed), [todos]);
+  const activeTodos = useMemo(() => todos.filter(todo => !todo.completed), [todos]);
 
-  const completedTodos = todos.filter(todo => todo.completed);
-  const activeTodos = todos.filter(todo => !todo.completed);
-
-  const filterTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     return todos.filter((todo: Todo) => {
       switch (filter) {
         case FilterType.Completed:
@@ -60,7 +56,7 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-  }, [todos, FilterType]);
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -73,12 +69,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header hasActiveTodos={activeTodos.length > 0} />
 
-        <TodoList visibleTodos={filterTodos} />
+        <TodoList visibleTodos={filteredTodos} />
 
-        {filterTodos && (
+        {(filteredTodos.length
+        || (filteredTodos.length === 0 && filter === FilterType.Completed)) && (
           <Footer
             filter={filter}
-            filterSelected={handleFilterSelected}
+            setFilter={setFilter}
             todosLength={todos.length}
             hasCompletedTodos={completedTodos.length > 0}
           />
@@ -91,6 +88,11 @@ export const App: React.FC = () => {
           closeErrorMessage={handleCloseErrorMessage}
         />
       )}
+
+      <div className="modal overlay">
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
   );
 };
