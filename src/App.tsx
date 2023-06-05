@@ -17,17 +17,21 @@ export const App: React.FC = () => {
   const [filteredBy, setFilteredBy] = useState<TodoFilter>(TodoFilter.ALL);
   const [isError, setIsError] = useState(false);
 
+  const getAllTodos = async () => {
+    try {
+      const todosFromServer = await getTodos(USER_ID);
+
+      setTodos(todosFromServer);
+    } catch {
+      setIsError(true);
+      setTimeout(() => {
+        setIsError(false);
+      }, timeDelay);
+    }
+  };
+
   useEffect(() => {
-    getTodos(USER_ID)
-      .then((todosFromServer) => {
-        setTodos(todosFromServer);
-      })
-      .catch(() => {
-        setIsError(true);
-        setTimeout(() => {
-          setIsError(false);
-        }, timeDelay);
-      });
+    getAllTodos();
   }, []);
 
   const filteredTodos = useMemo(() => {
