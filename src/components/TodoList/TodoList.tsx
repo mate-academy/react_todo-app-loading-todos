@@ -19,16 +19,16 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => (
               checked
               readOnly
             />
-
-            <span className="todo__title">{title}</span>
-
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
           </label>
+
+          <span className="todo__title">{title}</span>
+
+          <button type="button" className="todo__remove">×</button>
+
+          <div className="modal overlay">
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
+          </div>
         </div>
       );
     })}
