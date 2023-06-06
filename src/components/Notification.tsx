@@ -15,7 +15,7 @@ export const Notification: React.FC<ErrorProps> = ({
         className="delete"
         onClick={handleErrorReset}
       />
-      Unable to load a todo
+      {message}
     </div>
   );
 };

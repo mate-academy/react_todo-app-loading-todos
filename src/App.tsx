@@ -9,6 +9,11 @@ import { Notification } from './components/Notification';
 
 const USER_ID = 10607;
 
+enum FilterType {
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<TypeTodo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<TypeTodo[]>([]);
@@ -26,17 +31,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     switch (filter) {
-      case 'All': {
-        setFilteredTodos(todosList);
-        break;
-      }
-
-      case 'Active': {
+      case FilterType.Active: {
         setFilteredTodos(todosList.filter(todo => !todo.completed));
         break;
       }
 
-      case 'Completed': {
+      case FilterType.Completed: {
         setFilteredTodos(todosList.filter(todo => todo.completed));
         break;
       }
