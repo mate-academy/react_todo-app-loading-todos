@@ -1,17 +1,22 @@
 import classNames from 'classnames';
+import { FilterTypes } from '../../types/FilterTypes';
 
 interface FilterProps {
   currentFilter: string;
-  onSelectFilter: (filterType: string) => void;
+  onSelectFilter: (filterType: FilterTypes) => void;
 }
 
 export const Filter: React.FC<FilterProps> = ({
   currentFilter,
   onSelectFilter,
 }) => {
-  const filterTypes = ['all', 'active', 'completed'];
+  const filterTypes = [
+    FilterTypes.ALL,
+    FilterTypes.ACTIVE,
+    FilterTypes.COMPLETED,
+  ];
 
-  const handleSelectFilter = (filterType: string) => {
+  const handleSelectFilter = (filterType: FilterTypes) => {
     if (currentFilter !== filterType && filterTypes.includes(filterType)) {
       onSelectFilter(filterType);
     }
@@ -20,16 +25,12 @@ export const Filter: React.FC<FilterProps> = ({
   return (
     <nav className="filter">
       {filterTypes.map((filter) => {
-        let title: string | string[] = filter.split('');
-
-        title[0] = title[0].toUpperCase();
-
-        title = title.join('');
+        const title = filter.charAt(0).toUpperCase() + filter.slice(1);
 
         return (
           <a
             key={filter}
-            href={filter === 'all' ? '#/' : `#/${filter}`}
+            href={filter === FilterTypes.ALL ? '#/' : `#/${filter}`}
             className={classNames('filter__link',
               { selected: currentFilter === 'all' })}
             onClick={() => handleSelectFilter(filter)}

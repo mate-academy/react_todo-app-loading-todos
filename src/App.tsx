@@ -1,18 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
-import { Filter } from './components/Filter/Filter';
 import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import { Notification } from './components/Notification/Notification';
 import { Todo } from './types/Todo';
+import { FilterTypes } from './types/FilterTypes';
+import { Footer } from './components/Footer/Footer';
 
 const USER_ID = 10596;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodos, setCurrentTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState<FilterTypes>(FilterTypes.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleErrorMessage = (type: string) => {
@@ -46,7 +47,7 @@ export const App: React.FC = () => {
       }
 
       default: {
-        setCurrentTodos([...todos]);
+        setCurrentTodos(todos);
       }
     }
   }, [todos, filterType]);
@@ -65,19 +66,12 @@ export const App: React.FC = () => {
         <TodoList todos={currentTodos} />
 
         {todos.length && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${currentTodos.filter((todo) => !todo.completed).length} items left`}
-            </span>
-
-            <Filter currentFilter={filterType} onSelectFilter={setFilterType} />
-
-            {todos.filter((todo) => todo.completed).length && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
-          </footer>
+          <Footer
+            allTodos={todos}
+            currentTodos={currentTodos}
+            currentFilter={filterType}
+            onSelectFilter={setFilterType}
+          />
         )}
       </div>
 
