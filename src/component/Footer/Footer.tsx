@@ -4,10 +4,13 @@ import { FilterByWords } from '../../types/enums';
 
 type Props = {
   setFilterHandler: (param: FilterByWords) => void;
-  TodoCounter: number;
+  todoCounter: number;
 };
 
-export const Footer: React.FC<Props> = ({ setFilterHandler, TodoCounter }) => {
+export const Footer: React.FC<Props> = ({
+  setFilterHandler,
+  todoCounter: TodoCounter,
+}) => {
   const [selectedFilter, setSelectedFilter] = useState(FilterByWords.All);
 
   const handleFilterClick = (filter: FilterByWords) => {
@@ -17,14 +20,14 @@ export const Footer: React.FC<Props> = ({ setFilterHandler, TodoCounter }) => {
 
   return (
     <>
-      <span className="todo-count">
-        {`${TodoCounter} items left`}
-      </span>
+      <span className="todo-count">{`${TodoCounter} items left`}</span>
 
       <nav className="filter">
         <a
           href="#/"
-          className={`filter__link ${selectedFilter === 'All' ? 'selected' : ''}`}
+          className={`filter__link ${
+            selectedFilter === 'All' ? 'selected' : ''
+          }`}
           onClick={() => handleFilterClick(FilterByWords.All)}
         >
           All
@@ -32,7 +35,9 @@ export const Footer: React.FC<Props> = ({ setFilterHandler, TodoCounter }) => {
 
         <a
           href="#/active"
-          className={`filter__link ${selectedFilter === 'Active' ? 'selected' : ''}`}
+          className={`filter__link ${
+            selectedFilter === 'Active' ? 'selected' : ''
+          }`}
           onClick={() => handleFilterClick(FilterByWords.Active)}
         >
           Active
@@ -40,7 +45,9 @@ export const Footer: React.FC<Props> = ({ setFilterHandler, TodoCounter }) => {
 
         <a
           href="#/completed"
-          className={`filter__link ${selectedFilter === 'Completed' ? 'selected' : ''}`}
+          className={`filter__link ${
+            selectedFilter === 'Completed' ? 'selected' : ''
+          }`}
           onClick={() => handleFilterClick(FilterByWords.Completed)}
         >
           Completed
@@ -50,7 +57,7 @@ export const Footer: React.FC<Props> = ({ setFilterHandler, TodoCounter }) => {
       <button
         type="button"
         className="todoapp__clear-completed"
-        onClick={() => setFilterHandler(FilterByWords.Clear)}
+        /* onClick={() => setFilterHandler()} */
       >
         Clear completed
       </button>

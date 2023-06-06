@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { FormTodo } from './component/FormTodo/FormTodo';
-import { MainTodo } from './component/MainTodo/MainTodo';
+import { MainTodo } from './component/MainTodo/MainList';
 import { Footer } from './component/Footer/Footer';
 import { Error } from './component/Error/Error';
 import { Todo } from './types/Todo';
@@ -12,33 +11,32 @@ import { FilterByWords } from './types/enums';
 const USER_ID = 10599;
 
 export const App: React.FC = () => {
-  const [formValue, setFormValue] = useState<Todo[]>([]);
-  const [sortArray, setFilterHandler] = useState(FilterByWords.All);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterStatus, setFilterStatus] = useState(FilterByWords.All);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setFormValue)
+      .then(setTodos)
       .catch((err) => {
         setError(err.message);
       });
   }, []);
 
-  let copyTodoArray = formValue;
+  const copyTodoArray = useMemo(() => {
+    switch (filterStatus) {
+      case FilterByWords.Active:
+        return todos.filter((elem) => !elem.completed);
+      case FilterByWords.Completed:
+        return todos.filter((elem) => elem.completed);
+      default:
+        return todos;
+    }
+  }, [filterStatus, todos]);
 
-  switch (sortArray) {
-    case FilterByWords.All:
-      copyTodoArray = formValue;
-      break;
-    case FilterByWords.Active:
-      copyTodoArray = copyTodoArray.filter((elem) => !elem.completed);
-      break;
-    case FilterByWords.Completed:
-      copyTodoArray = copyTodoArray.filter((elem) => elem.completed);
-      break;
-    default:
-      break;
-  }
+  const closeErrorBanner = (value: string) => {
+    setError(value);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -54,13 +52,13 @@ export const App: React.FC = () => {
         <MainTodo formValue={copyTodoArray} />
         <footer className="todoapp__footer">
           <Footer
-            setFilterHandler={setFilterHandler}
-            TodoCounter={copyTodoArray.length}
+            setFilterHandler={setFilterStatus}
+            todoCounter={copyTodoArray.length}
           />
         </footer>
       </div>
 
-      <Error error={error} />
+      <Error error={error} closeErrorBanner={closeErrorBanner} />
     </div>
   );
 };

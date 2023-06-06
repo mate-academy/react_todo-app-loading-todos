@@ -1,47 +1,20 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { MainList } from './MainElem';
 
 interface Props {
-  formList: Todo;
+  formValue: Todo[];
 }
 
-export const MainList: React.FC<Props> = ({ formList }) => {
-  const { title, completed } = formList;
-
+export const MainTodo: React.FC<Props> = ({ formValue }) => {
   return (
-    <>
-      <div className={`todo ${completed ? 'completed' : ''}`}>
-
-        <label
-          className="todo__status-label"
-        >
-          <input type="checkbox" className="todo__status" checked />
-        </label>
-
-        <span className="todo__title">{title}</span>
-        <button type="button" className="todo__remove">
-          ×
-        </button>
-
-        <div className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
-
-      {/*  <div className="todo">
-        <label className="todo__status-label">
-          <input type="checkbox" className="todo__status" />
-        </label>
-
-       { <span className="todo__title">Todo is being saved now</span>
-        <button type="button" className="todo__remove">×</button>
-
-        <div className="modal overlay is-active">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>}
-      </div> */}
-    </>
+    <section className="todoapp__main">
+      {formValue.map((formList) => (
+        <MainList
+          formList={formList}
+          key={formList.id}
+        />
+      ))}
+    </section>
   );
 };
