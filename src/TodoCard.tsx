@@ -3,17 +3,15 @@ import { Todo } from './types/Todo';
 
 interface TodoCardProps {
   todo: Todo;
-  key: number;
 }
 
-export const TodoCard = ({ todo, key }: TodoCardProps) => {
+export const TodoCard = ({ todo }: TodoCardProps) => {
   const isCompleted = todo.completed === true;
   const [isShown, setIsShown] = useState(false);
 
   return (
     <div
       className={`todo ${isCompleted ? 'completed' : ''}`}
-      key={key}
     >
       <label className="todo__status-label">
         <input

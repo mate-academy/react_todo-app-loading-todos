@@ -1,6 +1,8 @@
+import { FilterType } from './types/Filters';
+
 type TodoFilterProps = {
   filterType: string,
-  setFilterType: (arg: string) => void,
+  setFilterType(filterType: FilterType): void,
 };
 
 export const TodoFilter = ({ filterType, setFilterType }: TodoFilterProps) => {
@@ -9,7 +11,7 @@ export const TodoFilter = ({ filterType, setFilterType }: TodoFilterProps) => {
       <a
         href="#/"
         className={`filter__link ${filterType === 'all' ? 'selected' : ''}`}
-        onClick={() => setFilterType('all')}
+        onClick={() => setFilterType(FilterType.All)}
       >
         All
       </a>
@@ -17,7 +19,7 @@ export const TodoFilter = ({ filterType, setFilterType }: TodoFilterProps) => {
       <a
         href="#/active"
         className={`filter__link ${filterType === 'active' ? 'selected' : ''}`}
-        onClick={() => setFilterType('active')}
+        onClick={() => setFilterType(FilterType.Active)}
       >
         Active
       </a>
@@ -25,7 +27,7 @@ export const TodoFilter = ({ filterType, setFilterType }: TodoFilterProps) => {
       <a
         href="#/completed"
         className={`filter__link ${filterType === 'completed' ? 'selected' : ''}`}
-        onClick={() => setFilterType('completed')}
+        onClick={() => setFilterType(FilterType.Completed)}
       >
         Completed
       </a>
