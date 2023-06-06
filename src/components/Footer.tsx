@@ -1,9 +1,10 @@
+import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 interface FooterProps {
   todos: Todo[],
-  filter: string,
-  handleFilter: (filter: string) => void,
+  filter: Filter,
+  handleFilter: (filter: Filter) => void,
 }
 
 export const Footer = ({ todos, filter, handleFilter }: FooterProps) => {
@@ -18,24 +19,24 @@ export const Footer = ({ todos, filter, handleFilter }: FooterProps) => {
       <nav className="filter">
         <a
           href="#/"
-          className={`filter__link ${filter === 'All' ? 'selected' : ''}`}
-          onClick={() => handleFilter('All')}
+          className={`filter__link ${filter === Filter.All ? 'selected' : ''}`}
+          onClick={() => handleFilter(Filter.All)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link ${filter === 'Active' ? 'selected' : ''}`}
-          onClick={() => handleFilter('Active')}
+          className={`filter__link ${filter === Filter.Active ? 'selected' : ''}`}
+          onClick={() => handleFilter(Filter.Active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${filter === 'Completed' ? 'selected' : ''}`}
-          onClick={() => handleFilter('Completed')}
+          className={`filter__link ${filter === Filter.Completed ? 'selected' : ''}`}
+          onClick={() => handleFilter(Filter.Completed)}
         >
           Completed
         </a>

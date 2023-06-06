@@ -1,18 +1,19 @@
+import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 interface TodoListProps {
   todos: Todo[],
-  filter: string,
+  filter: Filter,
 }
 
 export const TodoList: React.FC<TodoListProps> = ({ todos, filter }) => {
   const filteredTodos = todos.filter(todo => {
     switch (filter) {
-      case 'All':
+      case Filter.All:
         return true;
-      case 'Active':
+      case Filter.Active:
         return !todo.completed;
-      case 'Completed':
+      case Filter.Completed:
         return todo.completed;
       default:
         throw new Error('wrong filter selected');
