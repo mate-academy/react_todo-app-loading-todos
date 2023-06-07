@@ -1,4 +1,11 @@
-type TodoStatus = 'all' | 'active' | 'completed';
+// type TodoStatus = 'all' | 'active' | 'completed';
+
+enum TodoStatus {
+  all,
+  active,
+  completed,
+}
+
 
 interface Props {
   handleFilterTodos:(status: TodoStatus) => void,
@@ -22,9 +29,9 @@ export const Footer: React.FC<Props> = (
       <nav className="filter">
         <a
           href="#/"
-          className={`filter__link ${status === 'all' ? 'selected' : ''}`}
+          className={`filter__link ${status === TodoStatus.all ? 'selected' : ''}`}
           onClick={
-            () => handleFilterTodos('all')
+            () => handleFilterTodos(TodoStatus.all)
           }
         >
           All
@@ -32,9 +39,9 @@ export const Footer: React.FC<Props> = (
 
         <a
           href="#/active"
-          className={`filter__link ${status === 'active' ? 'selected' : ''}`}
+          className={`filter__link ${status === TodoStatus.active ? 'selected' : ''}`}
           onClick={
-            () => handleFilterTodos('active')
+            () => handleFilterTodos(TodoStatus.active)
           }
         >
           Active
@@ -42,9 +49,9 @@ export const Footer: React.FC<Props> = (
 
         <a
           href="#/completed"
-          className={`filter__link ${status === 'completed' ? 'selected' : ''}`}
+          className={`filter__link ${status === TodoStatus.completed ? 'selected' : ''}`}
           onClick={
-            () => handleFilterTodos('completed')
+            () => handleFilterTodos(TodoStatus.completed)
           }
         >
           Completed

@@ -8,17 +8,23 @@ import { InputField } from './InputField';
 import { ErrorMessage } from './handleError';
 import { Footer } from './Footer';
 
-type TodoStatus = 'all' | 'active' | 'completed';
+// type TodoStatus = 'all' | 'active' | 'completed';
+
+enum TodoStatus {
+  all,
+  active,
+  completed,
+}
 
 const USER_ID = 10627;
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<TodoStatus>('all');
+  const [status, setStatus] = useState(TodoStatus.all);
   const [itemsLeft, setItemsLeft] = useState(0);
 
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -27,17 +33,17 @@ export const App: React.FC = () => {
         setVisibleTodos(response);
         setItemsLeft(response.filter(todo => !todo.completed).length);
       })
-      .catch(() => setIsError(true));
+      .catch((errorType) => setIsError(errorType));
   }, []);
 
   const handleFilterTodos = (newStatus: TodoStatus) => {
     setStatus(newStatus);
 
     switch (newStatus) {
-      case 'completed':
+      case TodoStatus.completed:
         setVisibleTodos(todosList.filter(todo => todo.completed));
         break;
-      case 'active':
+      case TodoStatus.active:
         setVisibleTodos(todosList.filter(todo => !todo.completed));
         break;
       default:
@@ -70,7 +76,8 @@ export const App: React.FC = () => {
           </>
         )}
       </div>
-      {isError && <ErrorMessage handleSetError={setIsError} />}
+      {isError !== ''
+      && <ErrorMessage handleSetError={setIsError} errorMess={isError} />}
     </div>
   );
 };
