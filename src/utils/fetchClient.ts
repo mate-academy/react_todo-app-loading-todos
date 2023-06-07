@@ -26,7 +26,9 @@ function request<T>(
     };
   }
 
-  // we wait for testing purpose to see loaders
+  /* we wait for testing purpose to see loaders
+  https://mate.academy/students-api/todos?userId=10599 */
+
   return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
