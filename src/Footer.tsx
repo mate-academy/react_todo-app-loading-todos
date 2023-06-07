@@ -6,7 +6,6 @@ enum TodoStatus {
   completed,
 }
 
-
 interface Props {
   handleFilterTodos:(status: TodoStatus) => void,
   status: TodoStatus,
