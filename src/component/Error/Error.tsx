@@ -2,12 +2,12 @@ import React from 'react';
 
 interface Props {
   error: string;
-  closeErrorBaner: (value: string) => void;
+  closeErrorBanner: (value: string) => void;
 }
 
-export const Error: React.FC<Props> = ({ error, closeErrorBaner }) => {
+export const Error: React.FC<Props> = ({ error, closeErrorBanner }) => {
   const handlerClick = (value: string) => {
-    closeErrorBaner(value);
+    closeErrorBanner(value);
   };
 
   return (

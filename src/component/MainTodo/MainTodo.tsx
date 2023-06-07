@@ -3,16 +3,16 @@ import { Todo } from '../../types/Todo';
 import { MainList } from './MainList';
 
 interface Props {
-  formValue: Todo[];
+  todos: Todo[];
 }
 
-export const MainTodo: React.FC<Props> = ({ formValue }) => {
+export const MainTodo: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {formValue.map((formList) => (
+      {todos.map((todo) => (
         <MainList
-          formList={formList}
-          key={formList.id}
+          todo={todo}
+          key={todo.id}
         />
       ))}
     </section>

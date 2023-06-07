@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { FormTodo } from './component/FormTodo/FormTodo';
-import { MainTodo } from './component/MainTodo/MainList';
+import { MainTodo } from './component/MainTodo/MainTodo';
 import { Footer } from './component/Footer/Footer';
 import { Error } from './component/Error/Error';
 import { Todo } from './types/Todo';
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <FormTodo />
 
-        <MainTodo formValue={copyTodoArray} />
+        <MainTodo todos={copyTodoArray} />
         <footer className="todoapp__footer">
           <Footer
             setFilterHandler={setFilterStatus}
@@ -58,7 +58,10 @@ export const App: React.FC = () => {
         </footer>
       </div>
 
-      <Error error={error} closeErrorBanner={closeErrorBanner} />
+      <Error
+        error={error}
+        closeErrorBanner={closeErrorBanner}
+      />
     </div>
   );
 };
