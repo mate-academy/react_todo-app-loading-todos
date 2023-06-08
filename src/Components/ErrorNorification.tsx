@@ -9,14 +9,16 @@ type ErrorComponent = {
 };
 
 export const ErrorNorification: React.FC<ErrorComponent> = ({ errorType }) => {
-  const [isErrorHidden, setIsErrorHidden] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   let timeOutId: NodeJS.Timeout;
 
   useEffect(() => {
-    timeOutId = setTimeout(() => {
-      setIsErrorHidden(true);
-    }, 3000);
+    if (!isError) {
+      timeOutId = setTimeout(() => {
+        setIsError(true);
+      }, 3000);
+    }
 
     return () => {
       clearTimeout(timeOutId);
@@ -24,7 +26,7 @@ export const ErrorNorification: React.FC<ErrorComponent> = ({ errorType }) => {
   }, []);
 
   const handleCLearErrorBtn = () => {
-    setIsErrorHidden(true);
+    setIsError(true);
   };
 
   return (
@@ -34,7 +36,7 @@ export const ErrorNorification: React.FC<ErrorComponent> = ({ errorType }) => {
       'is-light',
       'has-text-weight-normal',
       {
-        hidden: isErrorHidden,
+        hidden: isError,
       },
     )}
     >

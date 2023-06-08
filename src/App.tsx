@@ -1,12 +1,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { ErrorType } from './types/ErrorType';
 import { ErrorNorification } from './Components/ErrorNorification';
 import { TodosList } from './Components/TodosList';
-import { getCurrentTime, getTodoId } from './utils/functionsHelper';
+import { getTodoId } from './utils/functionsHelper';
 import { SortBy } from './types/SortBy';
 import { TodoFooter } from './Components/TodoFooter';
 
@@ -17,9 +22,8 @@ export const App: React.FC = () => {
   const [typeOfError, setTypeOfError] = useState<ErrorType>(ErrorType.none);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [filterBy, setFilterBY] = useState(SortBy.all);
-  const [countActiveTodos, setCountActiveTodos] = useState(0);
 
-  useEffect(() => {
+  const countActiveTodos = useMemo(() => {
     const activeTodosCount = todos.reduce((count, cur) => {
       if (!cur.completed) {
         return count + 1;
@@ -28,7 +32,7 @@ export const App: React.FC = () => {
       return count;
     }, 0);
 
-    setCountActiveTodos(activeTodosCount);
+    return activeTodosCount;
   }, [todos]);
 
   useEffect(() => {
@@ -60,8 +64,6 @@ export const App: React.FC = () => {
       } else {
         const newTodo = {
           completed: false,
-          createdAt: getCurrentTime(),
-          updatedAt: getCurrentTime(),
           id: getTodoId(),
           userId: USER_ID,
           title: newTodoTitle,
@@ -85,16 +87,16 @@ export const App: React.FC = () => {
     setFilterBY(SortBy.completed);
   };
 
-  const updateTodoStatus = (todo: Todo) => {
-    const updatedTodos = todos.map((t) => {
-      if (t.id === todo.id) {
+  const updateTodoStatus = (currentTodo: Todo) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === currentTodo.id) {
         return {
-          ...t,
-          completed: !t.completed,
+          ...todo,
+          completed: !todo.completed,
         };
       }
 
-      return t;
+      return todo;
     });
 
     setTodos(updatedTodos);
@@ -102,7 +104,7 @@ export const App: React.FC = () => {
 
   const handleClearCompletedTodos = () => {
     const clearedTodos = todos.filter(
-      todo => todo.completed === false,
+      todo => !todo.completed,
     );
 
     setTodos(clearedTodos);
@@ -116,11 +118,11 @@ export const App: React.FC = () => {
 
   const visibleTodosList = [...todos].filter(todo => {
     if (filterBy === SortBy.active) {
-      return todo.completed === false;
+      return !todo.completed;
     }
 
     if (filterBy === SortBy.completed) {
-      return todo.completed === true;
+      return todo.completed;
     }
 
     return todo;
@@ -136,7 +138,7 @@ export const App: React.FC = () => {
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
               className="todoapp__new-todo"
