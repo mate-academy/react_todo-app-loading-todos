@@ -17,7 +17,7 @@ export const TodoFooter: React.FC<Props> = ({
 }) => {
   const leftTodos = todos.filter(todo => !todo.completed).length;
 
-  const normalizeHref = (href: string) => href.toLowerCase();
+  const normalizeHref = (href: string) => `#/${href.toLowerCase()}`;
 
   return (
     <footer className="todoapp__footer">
