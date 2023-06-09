@@ -17,7 +17,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
     ```
-    https://mate.academy/students-api/todos?userId=???
+    https://mate.academy/students-api/todos?userId=10392
     ```
 - hide the list and the footer if there are no todos yet;
 
@@ -44,4 +44,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Nikoramo.github.io/react_todo-app-loading-todos/) and add it to the PR description.
