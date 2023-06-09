@@ -6,13 +6,9 @@ import { Todo as TypeTodo } from './types/Todo';
 import { Todo } from './components/Todo';
 import { Filter } from './components/Filter';
 import { Notification } from './components/Notification';
+import { FilterType } from './types/filterType';
 
 const USER_ID = 10607;
-
-enum FilterType {
-  Active = 'Active',
-  Completed = 'Completed',
-}
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<TypeTodo[]>([]);
