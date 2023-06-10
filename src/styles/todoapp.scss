@@ -108,6 +108,8 @@
     margin: 0;
     padding: 0;
     border: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 
     font-family: inherit;
     font-weight: inherit;
@@ -128,6 +130,10 @@
 
     &:active {
       text-decoration: none;
+    }
+
+    &-active {
+      opacity: 1;
     }
   }
 }
