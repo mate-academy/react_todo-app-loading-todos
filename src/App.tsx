@@ -134,10 +134,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
@@ -156,8 +154,7 @@ export const App: React.FC = () => {
           onDeleteTodo={handleDeleteTodo}
         />
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && (
+        {todos.length > 0 && (
           <TodoFooter
             onFilterAllTodos={handleFilterAllTodos}
             onFilterActiveTodos={handleFilterActiveTodos}
@@ -169,8 +166,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {typeOfError && (
         <ErrorNorification
           errorType={typeOfError}

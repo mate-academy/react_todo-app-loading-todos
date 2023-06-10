@@ -6,13 +6,9 @@ import { ErrorType } from '../types/ErrorType';
 
 type ErrorComponent = {
   errorType: ErrorType,
-  errorReset: () => void,
 };
 
-export const ErrorNorification: React.FC<ErrorComponent> = ({
-  errorType,
-  errorReset,
-}) => {
+export const ErrorNorification: React.FC<ErrorComponent> = ({ errorType }) => {
   const [isError, setIsError] = useState(false);
 
   let timeOutId: NodeJS.Timeout;
@@ -33,18 +29,17 @@ export const ErrorNorification: React.FC<ErrorComponent> = ({
     setIsError(true);
   };
 
-  errorReset();
-
   return (
-    <div className={classNames(
-      'notification',
-      'is-danger',
-      'is-light',
-      'has-text-weight-normal',
-      {
-        hidden: isError,
-      },
-    )}
+    <div
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        {
+          hidden: isError,
+        },
+      )}
     >
       <button
         type="button"

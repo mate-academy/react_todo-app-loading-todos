@@ -24,7 +24,6 @@ export const TodoFooter: React.FC<Footer> = ({
         {`${activeTodos} item${activeTodos > 1 ? 'es' : ''} left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -66,7 +65,6 @@ export const TodoFooter: React.FC<Footer> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
