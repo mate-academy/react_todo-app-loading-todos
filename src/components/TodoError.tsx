@@ -1,4 +1,4 @@
-import { ErrorMessage } from '../App';
+import { ErrorMessage } from '../utils/ErrorMessage';
 
 interface Props {
   error: string | null;

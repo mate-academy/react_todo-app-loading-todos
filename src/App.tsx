@@ -4,16 +4,9 @@ import { UserWarning } from './UserWarning';
 import { TodoError, TodoFooter, TodoList } from './components';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { ErrorMessage } from './utils/ErrorMessage';
 
 const USER_ID = 10624;
-
-export enum ErrorMessage {
-  NoError = '',
-  CantFetch = 'Unable to fetch todos',
-  CantAdd = 'Unable to add a todo',
-  CantDelete = 'Unable to delete a todo',
-  CantUpdate = 'Unable to update a todo',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
