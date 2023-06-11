@@ -7,6 +7,7 @@ import { getTodos } from './api/todos';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
+import { getVisibleTodos } from './utils/utils';
 
 const USER_ID = 10631;
 
@@ -18,43 +19,35 @@ export const App: React.FC = () => {
   const [isError, setIsError] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
-  const loadTodos = async () => {
-    setIsError(false);
-    try {
-      const todos = await getTodos(USER_ID);
-
-      setTodosFromServer(todos);
-    } catch {
-      setIsError(true);
-      setTimeout(() => setIsError(false), 3000);
-    }
-  };
-
-  useEffect(() => {
-    loadTodos();
-  }, []);
-
-  const getVisibleTodos = () => {
-    switch (filter) {
-      case 'Active':
-        return todosFromServer.filter(todo => !todo.completed);
-
-      case 'Completed':
-        return todosFromServer.filter(todo => todo.completed);
-
-      default:
-        return todosFromServer;
-    }
-  };
-
-  const visibleTodos = useMemo(
-    getVisibleTodos,
-    [filter, todosFromServer],
-  );
+  const visibleTodos = useMemo(() => {
+    return getVisibleTodos(todosFromServer, filter);
+  }, [filter, todosFromServer]);
 
   const changeFilter = (value: string) => setFilter(value);
 
   const hideNotification = () => setIsHidden(true);
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const todos = await getTodos(USER_ID);
+
+        setTodosFromServer(todos);
+      } catch {
+        setIsError(true);
+      }
+    };
+
+    if (!isError) {
+      loadTodos();
+    }
+
+    const errorTimer = setTimeout(() => setIsError(false), 3000);
+
+    return () => {
+      clearTimeout(errorTimer);
+    };
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
