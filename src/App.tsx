@@ -7,14 +7,7 @@ import { TodosList } from './TodosList';
 import { InputField } from './InputField';
 import { ErrorMessage } from './handleError';
 import { Footer } from './Footer';
-
-// type TodoStatus = 'all' | 'active' | 'completed';
-
-enum TodoStatus {
-  all,
-  active,
-  completed,
-}
+import { TodoStatus } from './types/TodoStatus';
 
 const USER_ID = 10627;
 
@@ -24,7 +17,7 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(TodoStatus.all);
   const [itemsLeft, setItemsLeft] = useState(0);
 
-  const [isError, setIsError] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -33,7 +26,7 @@ export const App: React.FC = () => {
         setVisibleTodos(response);
         setItemsLeft(response.filter(todo => !todo.completed).length);
       })
-      .catch((errorType) => setIsError(errorType));
+      .catch((errorType) => setError(errorType));
   }, []);
 
   const handleFilterTodos = (newStatus: TodoStatus) => {
@@ -76,8 +69,8 @@ export const App: React.FC = () => {
           </>
         )}
       </div>
-      {isError !== ''
-      && <ErrorMessage handleSetError={setIsError} errorMess={isError} />}
+      {error !== ''
+      && <ErrorMessage handleSetError={setError} errorMess={error} />}
     </div>
   );
 };

@@ -1,10 +1,4 @@
-// type TodoStatus = 'all' | 'active' | 'completed';
-
-enum TodoStatus {
-  all,
-  active,
-  completed,
-}
+import { TodoStatus } from './types/TodoStatus';
 
 interface Props {
   handleFilterTodos:(status: TodoStatus) => void,
