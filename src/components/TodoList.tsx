@@ -2,11 +2,11 @@ import cn from 'classnames';
 import { Todo } from '../types/Todo';
 
 interface Props {
-  todos: Todo[] | null,
+  todos: Todo[],
   filteringMode: string;
 }
 
-let filteredTodos: Todo[] | null = [];
+let filteredTodos: Todo[] = [];
 
 export const TodoList: React.FC<Props> = ({ todos, filteringMode }) => {
   if (filteringMode !== 'all' && todos !== null) {
