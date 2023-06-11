@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   error: string | null;
-  setError: (arg0: string | null) => void,
+  setError: (arg0: string) => void,
 }
 
 export const TodoError: React.FC<Props> = ({ error, setError }) => {
@@ -32,7 +32,7 @@ export const TodoError: React.FC<Props> = ({ error, setError }) => {
         type="button"
         className="delete"
         aria-label="Close error"
-        onClick={() => setError(null)}
+        onClick={() => setError('')}
       />
       {errorMessage}
     </div>

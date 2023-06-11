@@ -9,8 +9,8 @@ const USER_ID = 10624;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [filteringMode, setFilteringMode] = useState<string>('all');
-  const [error, setError] = useState<string | null>(null);
+  const [filteringMode, setFilteringMode] = useState('all');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
