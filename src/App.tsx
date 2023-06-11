@@ -7,15 +7,23 @@ import { Todo } from './types/Todo';
 
 const USER_ID = 10624;
 
+export enum ErrorMessage {
+  NoError = '',
+  CantFetch = 'Unable to fetch todos',
+  CantAdd = 'Unable to add a todo',
+  CantDelete = 'Unable to delete a todo',
+  CantUpdate = 'Unable to update a todo',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [filteringMode, setFilteringMode] = useState('all');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<ErrorMessage>(ErrorMessage.NoError);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(response => setTodos(response))
-      .catch(() => setError('cantfetch'));
+      .catch(() => setError(ErrorMessage.CantFetch));
   }, []);
 
   if (!USER_ID) {
