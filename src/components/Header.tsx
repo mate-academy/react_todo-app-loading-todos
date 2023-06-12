@@ -2,7 +2,7 @@ import React from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[] | undefined;
+  todos: Todo[];
 };
 
 export const Header: React.FC<Props> = ({ todos }) => {

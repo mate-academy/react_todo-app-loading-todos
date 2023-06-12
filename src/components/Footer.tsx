@@ -18,45 +18,49 @@ export const Footer: React.FC<Props> = ({
   onActive,
   onAll,
   onCompleted,
-}) => (
-  <footer className="todoapp__footer">
-    <span className="todo-count">
-      {`${todos.length} items left`}
-    </span>
+}) => {
+  const itemsLeft = todos.filter((todo) => !todo.completed).length;
 
-    {/* Active filter should have a 'selected' class */}
-    <nav className="filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: filterValue === Filter.All,
-        })}
-        onClick={onAll}
-      >
-        All
-      </a>
+  return (
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${itemsLeft} items left`}
+      </span>
 
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: filterValue === Filter.Active,
-        })}
-        onClick={onActive}
-      >
-        Active
-      </a>
+      {/* Active filter should have a 'selected' class */}
+      <nav className="filter">
+        <a
+          href="#/"
+          className={classNames('filter__link', {
+            selected: filterValue === Filter.All,
+          })}
+          onClick={onAll}
+        >
+          All
+        </a>
 
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: filterValue === Filter.Completed,
-        })}
-        onClick={onCompleted}
-      >
-        Completed
-      </a>
-    </nav>
+        <a
+          href="#/active"
+          className={classNames('filter__link', {
+            selected: filterValue === Filter.Active,
+          })}
+          onClick={onActive}
+        >
+          Active
+        </a>
 
-    <ClearCompleted todos={todos} />
-  </footer>
-);
+        <a
+          href="#/completed"
+          className={classNames('filter__link', {
+            selected: filterValue === Filter.Completed,
+          })}
+          onClick={onCompleted}
+        >
+          Completed
+        </a>
+      </nav>
+
+      <ClearCompleted todos={todos} />
+    </footer>
+  );
+};

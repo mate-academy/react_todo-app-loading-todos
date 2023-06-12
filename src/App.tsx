@@ -14,7 +14,7 @@ const USER_ID = 10567;
 const URL = `/todos?userId=${USER_ID}`;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<null | Todo[]>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState(Filter.All);
   const [isAddError, setIsAddError] = useState(false);
   const [isDeleteError, setIsDeleteError] = useState(false);
@@ -27,9 +27,6 @@ export const App: React.FC = () => {
         const todosData = response as Todo[];
 
         setTodos(todosData);
-        setIsAddError(false);
-        setIsDeleteError(false);
-        setIsUpdateError(false);
       } catch (error) {
         setIsAddError(true);
         setIsDeleteError(true);

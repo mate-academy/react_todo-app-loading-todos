@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 type Props = {
@@ -8,9 +8,11 @@ type Props = {
 export const Error: React.FC<Props> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  setTimeout(() => {
-    setIsVisible(false);
-  }, 3000);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+  }, []);
 
   const handleClick = () => {
     setIsVisible(false);
@@ -18,9 +20,8 @@ export const Error: React.FC<Props> = ({ children }) => {
 
   return (
     <div
-      className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: !isVisible,
-      })}
+      className={cn('notification is-danger is-light has-text-weight-normal',
+        { hidden: !isVisible })}
     >
       <button
         aria-label="none"
