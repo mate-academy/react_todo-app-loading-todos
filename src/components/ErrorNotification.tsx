@@ -4,12 +4,10 @@ import classNames from 'classnames';
 
 type Props = {
   errorType: string;
-  onError: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   errorType,
-  onError,
 }) => {
   const [isHidden, setIsHidden] = useState(true);
   const errorMessage = `Unable to ${errorType} a todo`;
@@ -17,13 +15,11 @@ export const ErrorNotification: React.FC<Props> = ({
   const removeNotification = () => {
     window.setTimeout(() => {
       setIsHidden(true);
-      onError(false);
     }, 3000);
   };
 
   const handleHideNotification = () => {
     setIsHidden(true);
-    onError(false);
   };
 
   useEffect(() => {

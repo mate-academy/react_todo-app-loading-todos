@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { FilterValues } from './components/constants';
+import { FilterValues, filteredTodos } from './constants';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
@@ -14,23 +14,13 @@ const USER_ID = 10641;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorType, setErrorType] = useState('');
-  const [hasError, setHasError] = useState(false);
-  const [hasCompleted, setHasCompleted] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(FilterValues.ALL);
 
+  const visibleTodos = useMemo(() => {
+    return filteredTodos(todos, selectedFilter);
+  }, [todos, selectedFilter]);
+
   const hasActive = todos.some(todoItem => !todoItem.completed);
-
-  const filteredTodos = todos.filter(todo => {
-    switch (selectedFilter) {
-      case FilterValues.COMPLITED:
-        return todo.completed;
-
-      case FilterValues.ACTIVE:
-        return !todo.completed;
-
-      default: return true;
-    }
-  });
 
   const getTodosFromServer = async () => {
     try {
@@ -38,7 +28,6 @@ export const App: React.FC = () => {
 
       setTodos(response);
     } catch (error) {
-      setHasError(true);
       setErrorType('upload');
     }
   };
@@ -57,29 +46,25 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header hasActive={hasActive} />
-
         {!!todos.length && (
           <>
             <TodoList
-              todos={filteredTodos}
-              setHasCompleted={setHasCompleted}
+              todos={visibleTodos}
             />
 
             <Footer
               todos={todos}
-              hasCompleted={hasCompleted}
               selectedFilter={selectedFilter}
               onChange={setSelectedFilter}
             />
           </>
         )}
       </div>
-      {hasError && (
+      {errorType ? (
         <ErrorNotification
           errorType={errorType}
-          onError={setHasError}
         />
-      )}
+      ) : null}
     </div>
   );
 };

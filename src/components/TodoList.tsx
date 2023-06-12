@@ -4,17 +4,12 @@ import { TodoInfo } from './TodoInfo';
 
 type Props = {
   todos: Todo[];
-  setHasCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, setHasCompleted }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
       {todos.map(todo => {
-        if (todo.completed) {
-          setHasCompleted(true);
-        }
-
         return (
           <TodoInfo
             todo={todo}
