@@ -24,8 +24,8 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBY] = useState(SortBy.all);
 
   const countActiveTodos = useMemo(() => {
-    const activeTodosCount = todos.reduce((count, cur) => {
-      if (!cur.completed) {
+    const activeTodosCount = todos.reduce((count, current) => {
+      if (!current.completed) {
         return count + 1;
       }
 
