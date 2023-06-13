@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
@@ -39,17 +44,17 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const selectAll = () => {
+  const handleSelectAll = useCallback(() => {
     setFilterValue(FilterEnum.All);
-  };
+  }, [filterValue]);
 
-  const selectCompleted = () => {
+  const handleSelectCompleted = useCallback(() => {
     setFilterValue(FilterEnum.Completed);
-  };
+  }, [filterValue]);
 
-  const selectActive = () => {
+  const handleSelectActive = useCallback(() => {
     setFilterValue(FilterEnum.Active);
-  };
+  }, [filterValue]);
 
   const filteredTodos = useMemo(() => {
     return todos?.filter(todo => {
@@ -85,13 +90,13 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {filteredTodos && (
+        {filteredTodos?.length && (
           <Filter
             todos={filteredTodos}
             filterValue={filterValue}
-            onActive={selectActive}
-            onAll={selectAll}
-            onCompleted={selectCompleted}
+            onSelectActive={handleSelectActive}
+            onSelectAll={handleSelectAll}
+            onSelectCompleted={handleSelectCompleted}
           />
         )}
       </div>

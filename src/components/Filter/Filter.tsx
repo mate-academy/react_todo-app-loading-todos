@@ -10,17 +10,17 @@ enum FilterEnum {
 interface FilterProps {
   todos: Todo[];
   filterValue: FilterEnum;
-  onCompleted: () => void;
-  onAll: () => void;
-  onActive: () => void;
+  onSelectCompleted: () => void;
+  onSelectAll: () => void;
+  onSelectActive: () => void;
 }
 
 export const Filter: React.FC<FilterProps> = ({
   todos,
   filterValue,
-  onCompleted,
-  onAll,
-  onActive,
+  onSelectCompleted,
+  onSelectAll,
+  onSelectActive,
 }) => (
   <footer className="todoapp__footer">
     <span className="todo-count">
@@ -33,7 +33,7 @@ export const Filter: React.FC<FilterProps> = ({
         className={classNames('filter__link', {
           selected: filterValue === FilterEnum.All,
         })}
-        onClick={onAll}
+        onClick={onSelectAll}
       >
         All
       </a>
@@ -43,7 +43,7 @@ export const Filter: React.FC<FilterProps> = ({
         className={classNames('filter__link', {
           selected: filterValue === FilterEnum.Active,
         })}
-        onClick={onActive}
+        onClick={onSelectActive}
       >
         Active
       </a>
@@ -53,7 +53,7 @@ export const Filter: React.FC<FilterProps> = ({
         className={classNames('filter__link', {
           selected: filterValue === FilterEnum.Completed,
         })}
-        onClick={onCompleted}
+        onClick={onSelectCompleted}
       >
         Completed
       </a>
