@@ -2,12 +2,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoInfo } from './components/TodoInfo';
-import { Error } from './components/Error';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
-import { Filter } from './enums/enums';
+import { Filter } from './enums/filter';
+import { ErrorMessage } from './enums/error';
+import { Error } from './components/Error';
 
 const USER_ID = 10567;
 
@@ -16,9 +17,8 @@ const URL = `/todos?userId=${USER_ID}`;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState(Filter.All);
-  const [isAddError, setIsAddError] = useState(false);
-  const [isDeleteError, setIsDeleteError] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
+  const [errorMessage, setErrorMessage]
+  = useState<ErrorMessage>(ErrorMessage.NONE);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +28,7 @@ export const App: React.FC = () => {
 
         setTodos(todosData);
       } catch (error) {
-        setIsAddError(true);
-        setIsDeleteError(true);
-        setIsUpdateError(true);
+        setErrorMessage(ErrorMessage.LOAD);
       }
     };
 
@@ -94,22 +92,11 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {isAddError && (
-        <Error>
-          Unable to add a todo
-        </Error>
-      )}
-
-      {isDeleteError && (
-        <Error>
-          Unable to delete a todo
-        </Error>
-      )}
-
-      {isUpdateError && (
-        <Error>
-          Unable to update a todo
-        </Error>
+      {!!errorMessage && (
+        <Error
+          errorMessage={errorMessage}
+          onCloseError={() => setErrorMessage(ErrorMessage.NONE)}
+        />
       )}
     </div>
   );

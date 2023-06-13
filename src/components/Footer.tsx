@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { ClearCompleted } from './ClearCompleted';
-import { Filter } from '../enums/enums';
+import { Filter } from '../enums/filter';
 import { Todo } from '../types/Todo';
 
 type Props = {

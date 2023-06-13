@@ -1,35 +1,42 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import cn from 'classnames';
+import React, { useEffect } from 'react';
+import classNames from 'classnames';
+import { ErrorMessage } from '../enums/error';
 
 type Props = {
-  children: ReactNode
+  errorMessage: ErrorMessage,
+  onCloseError: () => void,
 };
 
-export const Error: React.FC<Props> = ({ children }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
+export const Error: React.FC<Props> = ({
+  errorMessage,
+  onCloseError,
+}) => {
   useEffect(() => {
     setTimeout(() => {
-      setIsVisible(false);
+      onCloseError();
     }, 3000);
   }, []);
 
-  const handleClick = () => {
-    setIsVisible(false);
-  };
-
   return (
     <div
-      className={cn('notification is-danger is-light has-text-weight-normal',
-        { hidden: !isVisible })}
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        { hidden: !errorMessage },
+      )}
     >
       <button
         aria-label="none"
         type="button"
         className="delete"
-        onClick={handleClick}
-      />
-      {children}
+        onClick={onCloseError}
+      >
+        x
+      </button>
+
+      <>{errorMessage}</>
     </div>
   );
 };
