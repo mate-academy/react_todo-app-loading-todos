@@ -19,7 +19,6 @@ export const Header: React.FC<Props> = ({ hasActive }) => {
         disabled={!hasActive}
       />
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"
