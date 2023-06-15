@@ -52,4 +52,4 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
       </button>
     </footer>
   );
-}
+};
