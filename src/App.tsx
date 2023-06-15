@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { FilterPanel } from './FilterPanel';
 import { InputForm } from './InputForm';
 import { Notifications } from './Notifications';
@@ -22,7 +23,7 @@ export const App: React.FC = () => {
     || addTodoIsClicked || editTodoIsClicked;
 
   const getTodos = async () => {
-    const data = await client.get('/todos?userId=10592') as Todo[];
+    const data = await client.get(`/todos?userId=${USER_ID}`) as Todo[];
 
     setTodos(data);
   };
@@ -41,7 +42,7 @@ export const App: React.FC = () => {
         return todo.completed;
       }
 
-      return todos;
+      return todo;
     });
   }, [todos, filterMode]);
 
@@ -57,7 +58,14 @@ export const App: React.FC = () => {
         <div className="todoapp__content">
           <header className="todoapp__header">
             {/* this buttons is active only if there are some active todos */}
-            <button type="button" className="todoapp__toggle-all active" />
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: filteredTodos.every((todo) => todo.completed),
+                inactive: filteredTodos.some((todo) => todo.completed),
+
+              })}
+            />
 
             {/* Add a todo on form submit */}
             <InputForm
@@ -77,6 +85,7 @@ export const App: React.FC = () => {
             <FilterPanel
               setFilterMode={setFilterMode}
               filteredTodos={filteredTodos}
+              setFilteredTodos={setFilteredTodos}
             />
           )}
         </div>

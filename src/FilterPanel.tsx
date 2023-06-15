@@ -5,14 +5,25 @@ import { Todo } from './types/Todo';
 interface FilterPanelProps {
   setFilterMode: React.Dispatch<React.SetStateAction<string>>,
   filteredTodos: Todo[];
+  setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
 export const FilterPanel: React.FC<FilterPanelProps> = ({
-  setFilterMode, filteredTodos,
+  setFilterMode, filteredTodos, setFilteredTodos,
 }) => {
   const [activeButton, setActiveButton] = useState<string>('All');
 
   const hasCompletedTasks = filteredTodos.some((todo) => todo.completed);
+  const leftTodoCounter = filteredTodos.reduce((counter, todo) => {
+    if (!todo.completed) {
+      // eslint-disable-next-line no-param-reassign
+      counter += 1;
+    }
+
+    return counter;
+  }, 0);
+
+  const leftTodosText = (leftTodoCounter === 1) ? '1 item left' : `${leftTodoCounter} items left`;
 
   const showActiveTodos = (filterName: string) => {
     setFilterMode('Active');
@@ -29,10 +40,16 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     setActiveButton(filterName);
   };
 
+  const clearCompletedTodos = () => {
+    const activeTodos = filteredTodos.filter((todo) => !todo.completed);
+
+    setFilteredTodos(activeTodos);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {leftTodosText}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -70,7 +87,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {/* don't show this button if there are no completed todos */}
       {hasCompletedTasks && (
-        <button type="button" className="todoapp__clear-completed">
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          onClick={clearCompletedTodos}
+        >
           Clear completed
         </button>
       )}
