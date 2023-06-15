@@ -14,7 +14,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const [activeButton, setActiveButton] = useState<string>('All');
 
   const hasCompletedTasks = filteredTodos.some((todo) => todo.completed);
-  const leftTodoCounter = filteredTodos.reduce((counter, todo) => {
+  const activeTodoCounter = filteredTodos.reduce((counter, todo) => {
     if (!todo.completed) {
       // eslint-disable-next-line no-param-reassign
       counter += 1;
@@ -23,7 +23,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     return counter;
   }, 0);
 
-  const leftTodosText = (leftTodoCounter === 1) ? '1 item left' : `${leftTodoCounter} items left`;
+  const leftTodosText = (activeTodoCounter === 1) ? '1 item left' : `${activeTodoCounter} items left`;
 
   const showActiveTodos = (filterName: string) => {
     setFilterMode('Active');

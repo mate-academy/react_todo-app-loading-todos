@@ -11,21 +11,33 @@ import { Todo } from './types/Todo';
 
 const USER_ID = 10592;
 
+enum FilterType {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [removeTodoIsClicked, setRemoveTodoIsClicked] = useState(false);
   const [addTodoIsClicked, setAddTodoIsClicked] = useState(false);
   const [editTodoIsClicked, setEditTodoIsClicked] = useState(false);
-  const [filterMode, setFilterMode] = useState<string>('All');
+  const [filterMode, setFilterMode] = useState<string>(FilterType.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [fetchTodosStatus, setFetchTodosStatus] = useState(false);
 
   const showNotification = removeTodoIsClicked
     || addTodoIsClicked || editTodoIsClicked;
 
   const getTodos = async () => {
-    const data = await client.get(`/todos?userId=${USER_ID}`) as Todo[];
+    try {
+      const data = await client.get(`/todos?userId=${USER_ID}`) as Todo[];
 
-    setTodos(data);
+      setTodos(data);
+      setFetchTodosStatus(true);
+    } catch {
+      setFetchTodosStatus(false);
+    }
   };
 
   useEffect(() => {
@@ -34,11 +46,11 @@ export const App: React.FC = () => {
 
   const filteredTodosArr = useMemo(() => {
     return todos.filter((todo) => {
-      if (filterMode === 'Active') {
+      if (filterMode === FilterType.Active) {
         return !todo.completed;
       }
 
-      if (filterMode === 'Completed') {
+      if (filterMode === FilterType.Completed) {
         return todo.completed;
       }
 
@@ -103,6 +115,12 @@ export const App: React.FC = () => {
             setAddTodoIsClicked={setAddTodoIsClicked}
           />
         ) }
+        {!fetchTodosStatus
+          && (
+            <p>
+              We failed to load todos. Try again.
+            </p>
+          )}
       </div>
     )
     : <UserWarning />;
