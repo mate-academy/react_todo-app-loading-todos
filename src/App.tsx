@@ -10,9 +10,9 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorMesage } from './components/ErrorMessage/ErrorMesage';
-import { client } from './utils/fetchClient';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
+import { fetchTodos } from './api/todos';
 
 const USER_ID = 10777;
 
@@ -24,9 +24,9 @@ export const App: FC = () => {
   // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchData = async () => {
       try {
-        const arrTodos = await client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+        const arrTodos = await fetchTodos(USER_ID.toString());
 
         setTodos(arrTodos);
         setErrorNotification(false);
@@ -36,7 +36,7 @@ export const App: FC = () => {
     };
 
     if (USER_ID) {
-      fetchTodos();
+      fetchData();
     }
   }, [USER_ID, setTodos]);
 
@@ -47,11 +47,11 @@ export const App: FC = () => {
           return !todo.completed;
         case Filter.COMPLETED:
           return todo.completed;
-        case Filter.ALL:
-          return true;
         default:
-          return todo;
+          break;
       }
+
+      return true;
     });
   }, [Filter, todos]);
 
