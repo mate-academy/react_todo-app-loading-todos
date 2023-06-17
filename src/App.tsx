@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import {
-  FC,
+import React, {
   useState,
   useEffect,
   useMemo,
@@ -16,12 +15,12 @@ import { fetchTodos } from './api/todos';
 
 const USER_ID = 10777;
 
-export const App: FC = () => {
+export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.ALL);
   const [errorNotification, setErrorNotification] = useState(false);
+  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
-  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +31,7 @@ export const App: FC = () => {
         setErrorNotification(false);
       } catch {
         setErrorNotification(true);
+        setError('Unable to fetch todos');
       }
     };
 
@@ -64,6 +64,7 @@ export const App: FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
+
         <Header
           todos={todos}
           search={search}
@@ -82,9 +83,7 @@ export const App: FC = () => {
       </div>
 
       {errorNotification && (
-        <ErrorMesage
-          errorString="Unable to perform the action"
-        />
+        <ErrorMesage errorString={error} />
       )}
     </div>
   );
