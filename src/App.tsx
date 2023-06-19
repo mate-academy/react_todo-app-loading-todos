@@ -7,76 +7,28 @@ import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { TodosList } from './components/TodosList/TodosList';
 import { Todo } from './types/Todo';
-
-enum FilterForTodo {
-  ALL,
-  ACTIVE,
-  COMPLETED,
-}
+import { ErrorInfo } from './components/ErrorInfo/ErrorInfo';
+import { StatusValue } from './types/StatusValue';
+import { visibleTodos } from './utils/todoUtils';
 
 const USER_ID = 10725;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterTodo, setFilterTodo] = useState<FilterForTodo>(FilterForTodo.ALL);
-  const [isVisibleError, setIsVisibleError] = useState(false);
-  const [isValidData, setIsValidData] = useState({
-    isAddError: false,
-    isDeleteError: false,
-    isUpdateError: false,
-    isLoadError: false,
-  });
+  const [statusTodo, setStatusTodo] = useState<StatusValue>(StatusValue.ALL);
+  const [visibleError, setVisibleError] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(todo => (setTodos(todo as Todo[])))
       .catch(() => {
-        setIsValidData((prevData) => ({
-          ...prevData,
-          isLoadError: true,
-        }));
-        setIsVisibleError(true);
+        setVisibleError('Unable to load a todos');
       });
   }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const handleRemoveError = () => {
-    setIsVisibleError(false);
-  };
-
-  setTimeout(() => {
-    if (isVisibleError) {
-      handleRemoveError();
-    }
-  }, 3000);
-
-  const visibleTodos = todos.filter(todo => {
-    switch (filterTodo) {
-      case FilterForTodo.ALL:
-        return todo;
-
-      case FilterForTodo.ACTIVE:
-        return todo.completed === false;
-
-      case FilterForTodo.COMPLETED:
-        return todo.completed === true;
-
-      default:
-        throw new Error(`Wrong filter, ${filterTodo} is not defined`);
-    }
-  });
-
-  const isCompleted = Boolean(visibleTodos.find(todo => todo.completed));
-
-  const {
-    isAddError,
-    isDeleteError,
-    isUpdateError,
-    isLoadError,
-  } = isValidData;
 
   return (
     <div className="todoapp">
@@ -101,7 +53,7 @@ export const App: React.FC = () => {
         </header>
 
         <TodosList
-          todos={visibleTodos}
+          todos={visibleTodos(todos, statusTodo)}
         />
 
         {todos.length > 0 && (
@@ -114,10 +66,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={cn('filter__link', {
-                  selected: filterTodo === FilterForTodo.ALL,
+                  selected: statusTodo === StatusValue.ALL,
                 })}
                 defaultValue="all"
-                onClick={() => setFilterTodo(FilterForTodo.ALL)}
+                onClick={() => setStatusTodo(StatusValue.ALL)}
               >
                 All
               </a>
@@ -125,9 +77,9 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={cn('filter__link', {
-                  selected: filterTodo === FilterForTodo.ACTIVE,
+                  selected: statusTodo === StatusValue.ACTIVE,
                 })}
-                onClick={() => setFilterTodo(FilterForTodo.ACTIVE)}
+                onClick={() => setStatusTodo(StatusValue.ACTIVE)}
               >
                 Active
               </a>
@@ -135,9 +87,9 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={cn('filter__link', {
-                  selected: filterTodo === FilterForTodo.COMPLETED,
+                  selected: statusTodo === StatusValue.COMPLETED,
                 })}
-                onClick={() => setFilterTodo(FilterForTodo.COMPLETED)}
+                onClick={() => setStatusTodo(StatusValue.COMPLETED)}
               >
                 Completed
               </a>
@@ -146,7 +98,6 @@ export const App: React.FC = () => {
             <button
               type="button"
               className="todoapp__clear-completed"
-              disabled={!isCompleted}
             >
               Clear completed
             </button>
@@ -154,50 +105,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div className={cn(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        {
-          hidden: !isVisibleError,
-        },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={handleRemoveError}
-        />
-
-        {isAddError && (
-          <>
-            Unable to add a todo
-            <br />
-          </>
-        )}
-
-        {isDeleteError && (
-          <>
-            Unable to delete a todo
-            <br />
-          </>
-        )}
-
-        {isUpdateError && (
-          <>
-            Unable to update a todo
-            <br />
-          </>
-        )}
-
-        {isLoadError && (
-          <>
-            Unable to load a todos
-            <br />
-          </>
-        )}
-      </div>
+      <ErrorInfo
+        visibleError={visibleError}
+        setVisibleError={setVisibleError}
+      />
     </div>
   );
 };
