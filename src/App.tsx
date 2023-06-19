@@ -5,13 +5,15 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Notification } from './components/Notification';
 import { Footer } from './components/Footer';
+import { FilterBy } from './types/FilterBy';
 import { TodoList } from './components/TodoList';
+import { getFilteredTodos } from './helpers/getFilteredTodos';
 
 const USER_ID = 10775;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState(FilterBy.ALL);
   const [isError, setIsError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,20 +30,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const getFilteredTodos = () => {
-    return todos.filter(todo => {
-      switch (filterBy) {
-        case 'Completed':
-          return todo.completed ? todo : 0;
-        case 'Active':
-          return todo.completed ? 0 : todo;
-        case 'All':
-          return todo;
-        default:
-          return 0;
-      }
-    });
-  };
+  const filteredTodos = getFilteredTodos(todos, filterBy);
 
   return (
     <div className="todoapp">
@@ -65,7 +54,7 @@ export const App: React.FC = () => {
         </header>
 
         {todos.length > 0 && (
-          <TodoList todos={getFilteredTodos()} />
+          <TodoList todos={filteredTodos} />
         )}
 
         {(todos.length > 0) && (
@@ -79,7 +68,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {isError && (<Notification />)}
+      {isError && <Notification />}
     </div>
   );
 };
