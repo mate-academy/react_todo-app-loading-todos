@@ -8,6 +8,11 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ todos, onError }) => {
+  const clickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    onError(Error.ADD);
+  };
+
   return (
     <header className="todoapp__header">
       {todos.some(todo => !todo.completed) && (
@@ -15,10 +20,7 @@ export const Header: React.FC<Props> = ({ todos, onError }) => {
         <button
           type="button"
           className="todoapp__toggle-all active"
-          onClick={(event) => {
-            event.preventDefault();
-            onError(Error.ADD);
-          }}
+          onClick={clickHandler}
         />
       )}
 

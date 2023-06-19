@@ -12,10 +12,6 @@ import { Type } from './types/TodoTypes';
 
 const USER_ID = 10788;
 
-if (!USER_ID) {
-  <UserWarning />;
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedType, setSelectedType] = useState(Type.All);
@@ -59,6 +55,10 @@ export const App: React.FC = () => {
       }, 3000);
     }
   }, [isError]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
