@@ -12,6 +12,12 @@ import { Todo } from './types/Todo';
 
 const USER_ID = '10682';
 
+const TODO_ERRORS = {
+  add: ' Unable to add a todo',
+  delete: 'Unable to delete a todo',
+  update: 'Unable to update a todo',
+};
+
 export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
@@ -21,26 +27,36 @@ export const App: React.FC = () => {
   const [createTodo, setCreateTodo] = useState<string>('');
   const [filter, setFilter] = useState(FilterTypes.All);
   const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     setIsLoader(true);
 
-    client.get(USER_ID);
+    client.get((USER_ID)).then(
+      fetchedTodos => {
+        setTodos(fetchedTodos as Todo[]);
+        setIsLoader(false);
+      },
+    );
   }, []);
 
   const handleAddTodo = (
     e: React.KeyboardEvent<HTMLElement>,
   ) => {
     if (createTodo.trim() !== '' && e.key === 'Enter') {
-      const newTodo: Todo = {
-        id: Date.now(),
-        userId: Date.now(),
+      const newTodo: Omit<Todo, 'id'> = {
+        userId: Number(USER_ID),
         title: createTodo,
         completed: false,
       };
 
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-      setCreateTodo('');
+      client.post(USER_ID, newTodo).then((todo) => {
+        setTodos((prevTodos) => [...prevTodos, todo as Todo]);
+        setCreateTodo('');
+        if (error && error === TODO_ERRORS.add) {
+          setError('');
+        }
+      }).catch(() => setError(TODO_ERRORS.add));
     }
   };
 
@@ -65,10 +81,10 @@ export const App: React.FC = () => {
     });
 
   const filterTodos = (
-    e: any,
+    type: FilterTypes,
   ) => {
-    e.preventDefault();
-    setFilter(e.target.value as FilterTypes);
+    // e.preventDefault();
+    setFilter(type);
   };
 
   const preventSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,7 +115,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {!isLoader
+        {isLoader
           ? <Loader />
           : (
             <Todos
@@ -108,24 +124,23 @@ export const App: React.FC = () => {
             />
           )}
         {/* Hide the footer if there are no todos */}
-        <TodoFilter
-          todos={todos}
-          onFilterType={filterTodos}
-        />
+        {todos.length ? (
+          <TodoFilter
+            todos={todos}
+            onFilterType={filterTodos}
+          />
+        ) : undefined}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
+      {error && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button type="button" className="delete" />
 
-        {/* show only one message at a time */}
-        Unable to add a todo
-        {/* <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-      </div>
+          {error}
+        </div>
+      )}
     </div>
   );
 };

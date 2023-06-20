@@ -10,7 +10,7 @@ export enum FilterTypes {
 
 type Props = {
   todos: Todo[]
-  onFilterType: (e: any) => void
+  onFilterType: (type: FilterTypes) => void
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -25,35 +25,32 @@ export const TodoFilter: React.FC<Props> = ({
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
-        <button
-          type="button"
-          // href="#/"
+        <a
+          href="#/"
           className="filter__link"
-          onClick={onFilterType}
-          value={FilterTypes.All}
+          onClick={() => onFilterType(FilterTypes.All)}
+          // value={FilterTypes.All}
         >
           All
-        </button>
+        </a>
 
-        <button
-          type="button"
-          // href="#/active"
+        <a
+          href="#/active"
           className="filter__link"
-          onClick={onFilterType}
-          value={FilterTypes.Active}
+          onClick={() => onFilterType(FilterTypes.Active)}
+          // value={FilterTypes.Active}
         >
           Active
-        </button>
+        </a>
 
-        <button
-          type="button"
-          // href="#/completed"
+        <a
+          href="#/completed"
           className="filter__link"
-          onClick={onFilterType}
-          value={FilterTypes.Completed}
+          onClick={() => onFilterType(FilterTypes.Completed)}
+          // value={FilterTypes.Completed}
         >
           Completed
-        </button>
+        </a>
       </nav>
 
       {/* don't show this button if there are no completed todos */}
