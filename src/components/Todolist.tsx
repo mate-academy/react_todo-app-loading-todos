@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
@@ -5,20 +6,19 @@ interface TodoListProps {
   todos: Todo[],
   filter: Filter,
 }
-
 export const TodoList: React.FC<TodoListProps> = ({ todos, filter }) => {
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case Filter.All:
-        return true;
+        return todos;
       case Filter.Active:
-        return !todo.completed;
+        return todos.filter(todo => !todo.completed);
       case Filter.Completed:
-        return todo.completed;
+        return todos.filter(todo => todo.completed);
       default:
-        throw new Error('wrong filter selected');
+        throw new Error('Wrong filter selected');
     }
-  });
+  }, [todos, filter]);
 
   return (
     <section className="todoapp__main">

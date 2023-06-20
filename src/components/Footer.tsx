@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
@@ -8,7 +9,9 @@ interface FooterProps {
 }
 
 export const Footer = ({ todos, filter, handleFilter }: FooterProps) => {
-  const hasCompleted = todos.some(todo => todo.completed);
+  const hasCompleted = useMemo(() => {
+    return todos.some(todo => todo.completed);
+  }, [todos]);
 
   return (
     <footer className="todoapp__footer">

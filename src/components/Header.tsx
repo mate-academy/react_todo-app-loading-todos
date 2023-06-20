@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { useMemo } from 'react';
 import { Todo } from '../types/Todo';
 
 interface HeaderProps {
@@ -6,7 +7,9 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ todos }) => {
-  const hasActive = todos.some(todo => !todo.completed);
+  const hasActive = useMemo(() => {
+    return todos.some(todo => !todo.completed);
+  }, [todos]);
 
   return (
     <header className="todoapp__header">
@@ -14,7 +17,6 @@ export const Header: React.FC<HeaderProps> = ({ todos }) => {
         <button type="button" className="todoapp__toggle-all active" />
       )}
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"
