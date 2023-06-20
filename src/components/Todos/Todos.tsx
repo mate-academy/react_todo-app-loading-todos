@@ -4,10 +4,12 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[]
+  onRemove: (todoId: number) => void
 };
 
 export const Todos: React.FC<Props> = ({
   todos,
+  onRemove,
 }) => {
   return (
     <section className="todoapp__main">
@@ -17,14 +19,19 @@ export const Todos: React.FC<Props> = ({
             <input
               type="checkbox"
               className="todo__status"
-              checked
             />
           </label>
 
           <span className="todo__title">{todo.title}</span>
 
           {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove">×</button>
+          <button
+            type="button"
+            className="todo__remove"
+            onClick={() => onRemove(todo.id)}
+          >
+            ×
+          </button>
 
           {/* overlay will cover the todo while it is being updated */}
           <div className="modal overlay">
