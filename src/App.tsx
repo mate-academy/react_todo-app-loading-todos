@@ -24,18 +24,18 @@ export const App: React.FC = () => {
   }
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [createTodo, setCreateTodo] = useState<string>('');
+  const [input, setInput] = useState<string>('');
   const [filter, setFilter] = useState(FilterTypes.All);
-  const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    setIsLoader(true);
+    setIsLoading(true);
 
     client.get((USER_ID)).then(
       fetchedTodos => {
         setTodos(fetchedTodos as Todo[]);
-        setIsLoader(false);
+        setIsLoading(false);
       },
     );
   }, []);
@@ -43,16 +43,16 @@ export const App: React.FC = () => {
   const handleAddTodo = (
     e: React.KeyboardEvent<HTMLElement>,
   ) => {
-    if (createTodo.trim() !== '' && e.key === 'Enter') {
+    if (input.trim() !== '' && e.key === 'Enter') {
       const newTodo: Omit<Todo, 'id'> = {
         userId: Number(USER_ID),
-        title: createTodo,
+        title: input,
         completed: false,
       };
 
       client.post(USER_ID, newTodo).then((todo) => {
         setTodos((prevTodos) => [...prevTodos, todo as Todo]);
-        setCreateTodo('');
+        setInput('');
         if (error && error === TODO_ERRORS.add) {
           setError('');
         }
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
   const handleCreateTodo = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setCreateTodo(e.target.value);
+    setInput(e.target.value);
   };
 
   const removeTodo = (todoId: number) => {
@@ -83,15 +83,12 @@ export const App: React.FC = () => {
   const filterTodos = (
     type: FilterTypes,
   ) => {
-    // e.preventDefault();
     setFilter(type);
   };
 
   const preventSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-
-  // console.log(todos);
 
   return (
     <div className="todoapp">
@@ -108,14 +105,14 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={createTodo}
+              value={input}
               onChange={handleCreateTodo}
               onKeyDown={handleAddTodo}
             />
           </form>
         </header>
 
-        {isLoader
+        {isLoading
           ? <Loader />
           : (
             <Todos
