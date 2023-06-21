@@ -1,23 +1,47 @@
-import classNames from 'classnames';
+import { useState } from 'react';
 import { Todo } from './types/Todo';
+import { TodoItem } from './utils/TodoItem';
 
 interface TodoListProps {
-  todos: Todo[],
-  removeTodo: React.Dispatch<React.SetStateAction<boolean>>,
-  editTodo: React.Dispatch<React.SetStateAction<boolean>>,
+  todos: Todo[];
+  setRemoveTodoIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditTodoIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  tempTodo: Todo | null;
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  removeTodo,
-  editTodo,
+  setRemoveTodoIsClicked,
+  setEditTodoIsClicked,
+  tempTodo,
+  setTodos,
 }) => {
-  const handleTodoRemoval = () => {
-    removeTodo(true);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+
+  const remove = (url: string) => {
+    return fetch(url, {
+      method: 'DELETE',
+    });
+  };
+
+  const deleteTodo = (todoId: number) => {
+    return remove(`https://mate.academy/students-api/todos/${todoId}`);
+  };
+
+  const handleTodoRemoval = async (todoId: number) => {
+    setItemToDelete(todoId);
+    try {
+      await deleteTodo(todoId);
+      setTodos(todos.filter(todo => todo.id !== todoId));
+      setItemToDelete(null);
+    } catch {
+      setRemoveTodoIsClicked(true);
+    }
   };
 
   const handleTodoTitleChange = () => {
-    editTodo(true);
+    setEditTodoIsClicked(true);
   };
 
   return (
@@ -25,39 +49,23 @@ export const TodoList: React.FC<TodoListProps> = ({
       {/* This is a completed todo */}
 
       {todos.map((todo) => (
-        <div
-          className={classNames('todo', {
-            completed: todo.completed,
-          })}
+        <TodoItem
           key={todo.id}
+          todo={todo}
           onDoubleClick={handleTodoTitleChange}
-        >
-          <label className="todo__status-label">
-            <input
-              type="checkbox"
-              className="todo__status"
-              checked
-            />
-          </label>
+          onClick={handleTodoRemoval}
+          isLoading={todo.id === itemToDelete}
+        />
 
-          <span className="todo__title">{todo.title}</span>
-
-          {/* Remove button appears only on hover */}
-          <button
-            type="button"
-            className="todo__remove"
-            onClick={handleTodoRemoval}
-          >
-            ×
-          </button>
-
-          {/* overlay will cover the todo while it is being updated */}
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div>
       ))}
+
+      {tempTodo
+          && (
+            <TodoItem
+              todo={tempTodo}
+              isLoading
+            />
+          )}
 
       {/* This todo is not completed */}
 

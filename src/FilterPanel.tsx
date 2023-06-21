@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { FilterType } from './types/FilterTypeEnum';
 import { Todo } from './types/Todo';
 
 interface FilterPanelProps {
-  setFilterMode: React.Dispatch<React.SetStateAction<string>>,
+  setFilterMode: React.Dispatch<React.SetStateAction<FilterType>>,
   filteredTodos: Todo[];
   setFilteredTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
@@ -11,7 +12,7 @@ interface FilterPanelProps {
 export const FilterPanel: React.FC<FilterPanelProps> = ({
   setFilterMode, filteredTodos, setFilteredTodos,
 }) => {
-  const [activeButton, setActiveButton] = useState<string>('All');
+  const [activeButton, setActiveButton] = useState<FilterType>(FilterType.All);
 
   const hasCompletedTasks = filteredTodos.some((todo) => todo.completed);
   const activeTodoCounter = filteredTodos.reduce((counter, todo) => {
@@ -25,18 +26,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
   const leftTodosText = (activeTodoCounter === 1) ? '1 item left' : `${activeTodoCounter} items left`;
 
-  const showActiveTodos = (filterName: string) => {
-    setFilterMode('Active');
-    setActiveButton(filterName);
-  };
-
-  const showAllTodos = (filterName: string) => {
-    setFilterMode('All');
-    setActiveButton(filterName);
-  };
-
-  const showCompletedTodos = (filterName: string) => {
-    setFilterMode('Completed');
+  const handleTodoMode = (filterName: FilterType) => {
+    setFilterMode(filterName);
     setActiveButton(filterName);
   };
 
@@ -59,7 +50,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           className={classNames('filter__link', {
             selected: activeButton === 'All',
           })}
-          onClick={() => showAllTodos('All')}
+          onClick={() => handleTodoMode(FilterType.All)}
         >
           All
         </a>
@@ -69,7 +60,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           className={classNames('filter__link', {
             selected: activeButton === 'Active',
           })}
-          onClick={() => showActiveTodos('Active')}
+          // onClick={() => showActiveTodos(FilterType.Active)}
+          onClick={() => handleTodoMode(FilterType.Active)}
+
         >
           Active
         </a>
@@ -79,7 +72,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           className={classNames('filter__link', {
             selected: activeButton === 'Completed',
           })}
-          onClick={() => showCompletedTodos('Completed')}
+          onClick={() => handleTodoMode(FilterType.Completed)}
         >
           Completed
         </a>

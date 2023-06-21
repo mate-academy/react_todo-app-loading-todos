@@ -8,26 +8,24 @@ import { TodoList } from './TodoList';
 import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterTypeEnum';
 
 const USER_ID = 10592;
-
-enum FilterType {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [removeTodoIsClicked, setRemoveTodoIsClicked] = useState(false);
-  const [addTodoIsClicked, setAddTodoIsClicked] = useState(false);
   const [editTodoIsClicked, setEditTodoIsClicked] = useState(false);
-  const [filterMode, setFilterMode] = useState<string>(FilterType.All);
+  const [filterMode, setFilterMode] = useState<FilterType>(FilterType.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [fetchTodosStatus, setFetchTodosStatus] = useState(false);
+  const [onEmptyFormSubmit, setOnEmptyFormSubmit] = useState(false);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+
 
   const showNotification = removeTodoIsClicked
-    || addTodoIsClicked || editTodoIsClicked;
+  || editTodoIsClicked
+  || onEmptyFormSubmit;
 
   const getTodos = async () => {
     try {
@@ -81,14 +79,18 @@ export const App: React.FC = () => {
 
             {/* Add a todo on form submit */}
             <InputForm
-              setAddTodoIsClicked={setAddTodoIsClicked}
+              setFilteredTodos={setFilteredTodos}
+              setOnEmptyFormSubmit={setOnEmptyFormSubmit}
+              setTempTodo={setTempTodo}
             />
           </header>
 
           <TodoList
             todos={filteredTodos}
-            removeTodo={setRemoveTodoIsClicked}
-            editTodo={setEditTodoIsClicked}
+            setRemoveTodoIsClicked={setRemoveTodoIsClicked}
+            setEditTodoIsClicked={setEditTodoIsClicked}
+            tempTodo={tempTodo}
+            setTodos={setTodos}
           />
 
           {/* Hide the footer if there are no todos */}
@@ -109,10 +111,10 @@ export const App: React.FC = () => {
           <Notifications
             removeTodoIsClicked={removeTodoIsClicked}
             setRemoveTodoIsClicked={setRemoveTodoIsClicked}
-            addTodoIsClicked={addTodoIsClicked}
             editTodoIsClicked={editTodoIsClicked}
             setEditTodoIsClicked={setEditTodoIsClicked}
-            setAddTodoIsClicked={setAddTodoIsClicked}
+            onEmptyFormSubmit={onEmptyFormSubmit}
+            setOnEmptyFormSubmit={setOnEmptyFormSubmit}
           />
         ) }
         {!fetchTodosStatus
