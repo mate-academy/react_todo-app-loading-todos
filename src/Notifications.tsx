@@ -17,28 +17,34 @@ export const Notifications: React.FC<NotificationsProps> = ({
   onEmptyFormSubmit,
   setOnEmptyFormSubmit,
 }) => {
-  const [hideNotificationIsClicked,
-    setHideNotificationIsClicked] = useState(false);
+  const [isNotificationHidden,
+    setIsNotificationHidden] = useState(false);
 
   const hideNotification = () => {
-    setHideNotificationIsClicked(true);
+    setIsNotificationHidden(true);
     setRemoveTodoIsClicked(false);
     setEditTodoIsClicked(false);
     setOnEmptyFormSubmit(false);
   };
 
-  let notificationText = '';
+  const showErrorText = () => {
+    if (removeTodoIsClicked) {
+      return 'Unable to delete a todo';
+    }
 
-  if (removeTodoIsClicked) {
-    notificationText = 'Unable to delete a todo';
-  } else if (editTodoIsClicked) {
-    notificationText = 'Unable to edit a todo';
-  } else if (onEmptyFormSubmit) {
-    notificationText = 'Title can\'t be empty';
-  }
+    if (editTodoIsClicked) {
+      return 'Unable to edit a todo';
+    }
+
+    if (onEmptyFormSubmit) {
+      return 'Title can\'t be empty';
+    }
+
+    return null;
+  };
 
   useEffect(() => {
-    if (!hideNotificationIsClicked) {
+    if (!isNotificationHidden) {
       const timer = setTimeout(() => {
         hideNotification();
       }, 3000);
@@ -47,7 +53,7 @@ export const Notifications: React.FC<NotificationsProps> = ({
     }
 
     return undefined;
-  }, [hideNotificationIsClicked]);
+  }, [isNotificationHidden]);
 
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
@@ -57,7 +63,7 @@ export const Notifications: React.FC<NotificationsProps> = ({
         onClick={hideNotification}
         aria-label="Hide Notification"
       />
-      <span>{notificationText}</span>
+      <span>{showErrorText()}</span>
     </div>
   );
 };

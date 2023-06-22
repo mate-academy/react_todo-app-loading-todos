@@ -22,6 +22,13 @@ export const App: React.FC = () => {
   const [onEmptyFormSubmit, setOnEmptyFormSubmit] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
+  const allTodosCompleted = useMemo(() => {
+    return filteredTodos.every((todo) => todo.completed);
+  }, [filteredTodos]);
+
+  const notAllTodosCompleted = useMemo(() => {
+    return filteredTodos.every((todo) => todo.completed);
+  }, [filteredTodos]);
 
   const showNotification = removeTodoIsClicked
   || editTodoIsClicked
@@ -71,9 +78,8 @@ export const App: React.FC = () => {
             <button
               type="button"
               className={classNames('todoapp__toggle-all', {
-                active: filteredTodos.every((todo) => todo.completed),
-                inactive: filteredTodos.some((todo) => todo.completed),
-
+                active: allTodosCompleted,
+                inactive: notAllTodosCompleted,
               })}
             />
 
@@ -106,8 +112,7 @@ export const App: React.FC = () => {
 
         {/* Notification is shown in case of any error */}
         {/* Add the 'hidden' class to hide the message smoothly */}
-        {showNotification
-        && (
+        {showNotification && (
           <Notifications
             removeTodoIsClicked={removeTodoIsClicked}
             setRemoveTodoIsClicked={setRemoveTodoIsClicked}
