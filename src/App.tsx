@@ -25,9 +25,12 @@ export const App: React.FC = () => {
         setTodos(newTodos);
       } catch (error) {
         setErrorType('Unable to load todos');
-        setHasError(true);
       }
     };
+
+    if (errorType !== '') {
+      setHasError(true);
+    }
 
     fetchData();
   }, [todos]);
