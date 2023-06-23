@@ -7,6 +7,7 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { FilterType } from './types/FilterTypes';
 
 const USER_ID = 10824;
 
@@ -14,7 +15,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [errorType, setErrorType] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState(FilterType.ALL);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +29,7 @@ export const App: React.FC = () => {
     };
 
     fetchData();
-  }, [todos]);
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -46,13 +47,13 @@ export const App: React.FC = () => {
     setQuery(event.currentTarget.value);
   };
 
-  const itemsLeft = todos.filter(todo => !todo.completed);
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
 
-  const getVisibleTodo = (filter: string, todosArr: Todo[]) => {
+  const getVisibleTodo = (filter: FilterType, todosArr: Todo[]) => {
     switch (filter) {
-      case 'active':
+      case FilterType.ACTIVE:
         return todosArr.filter(todo => !todo.completed);
-      case 'completed':
+      case FilterType.COMPLETED:
         return todosArr.filter(todo => todo.completed);
       default:
         return todosArr;
@@ -64,11 +65,6 @@ export const App: React.FC = () => {
   };
 
   const visibleTodos = getVisibleTodo(filterType, todos);
-
-  const handleSelectedType = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    setFilterType(event.currentTarget.type);
-  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -92,12 +88,12 @@ export const App: React.FC = () => {
           <Footer
             itemsLeft={itemsLeft}
             filterType={filterType}
-            handleSelectedType={handleSelectedType}
+            setFilterType={setFilterType}
           />
         )}
       </div>
 
-      {errorType.length !== 0 && (
+      {!!errorType.length && (
         <div className={classNames(
           'notification',
           'is-danger',

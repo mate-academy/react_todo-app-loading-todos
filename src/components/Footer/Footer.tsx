@@ -1,31 +1,42 @@
 import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/FilterTypes';
 
 type Props = {
-  itemsLeft: Todo[],
+  itemsLeft: number,
   filterType: string,
-  handleSelectedType: (event:React.MouseEvent<HTMLAnchorElement>) => void,
+  setFilterType: React.Dispatch<React.SetStateAction<FilterType>>,
 };
 
 export const Footer: React.FC<Props> = ({
   itemsLeft,
   filterType,
-  handleSelectedType,
+  setFilterType,
 }) => {
+  const handleClickAll = () => {
+    setFilterType(FilterType.ALL);
+  };
+
+  const handleClickActive = () => {
+    setFilterType(FilterType.ACTIVE);
+  };
+
+  const handleClickCompleted = () => {
+    setFilterType(FilterType.COMPLETED);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${itemsLeft.length} items left`}
+        {`${itemsLeft} items left`}
       </span>
 
       <nav className="filter">
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: filterType === 'all',
+            selected: filterType === FilterType.ALL,
           })}
-          type="all"
-          onClick={handleSelectedType}
+          onClick={handleClickAll}
         >
           All
         </a>
@@ -33,10 +44,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: filterType === 'active',
+            selected: filterType === FilterType.ACTIVE,
           })}
-          type="active"
-          onClick={handleSelectedType}
+          onClick={handleClickActive}
         >
           Active
         </a>
@@ -44,10 +54,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filterType === 'completed',
+            selected: filterType === FilterType.COMPLETED,
           })}
-          type="completed"
-          onClick={handleSelectedType}
+          onClick={handleClickCompleted}
         >
           Completed
         </a>
