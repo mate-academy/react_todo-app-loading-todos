@@ -13,7 +13,7 @@ const USER_ID = 10824;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [hasError, setHasError] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -99,7 +99,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {hasError && (
         <div className={classNames(
           'notification',
@@ -115,9 +114,7 @@ export const App: React.FC = () => {
             className="delete"
             onClick={deleteErrorMessage}
           />
-
           {errorType}
-
         </div>
       )}
     </div>
