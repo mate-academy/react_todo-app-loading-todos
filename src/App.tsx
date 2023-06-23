@@ -13,7 +13,6 @@ const USER_ID = 10824;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -28,24 +27,20 @@ export const App: React.FC = () => {
       }
     };
 
-    if (errorType !== '') {
-      setHasError(true);
-    }
-
     fetchData();
   }, [todos]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    if (hasError) {
+    if (errorType !== '') {
       timer = setTimeout(() => {
-        setHasError(false);
+        setErrorType('');
       }, 3000);
     }
 
     return () => clearTimeout(timer);
-  }, [hasError]);
+  }, [errorType]);
 
   const onChangeQuery = (event: React.FormEvent<HTMLInputElement>) => {
     setQuery(event.currentTarget.value);
@@ -65,7 +60,7 @@ export const App: React.FC = () => {
   };
 
   const deleteErrorMessage = () => {
-    setHasError(false);
+    setErrorType('');
   };
 
   const visibleTodos = getVisibleTodo(filterType, todos);
@@ -102,13 +97,13 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {hasError && (
+      {errorType.length !== 0 && (
         <div className={classNames(
           'notification',
           'is-danger',
           'is-light',
           'has-text-weight-normal', {
-            hidden: !hasError,
+            hidden: errorType.length === 0,
           },
         )}
         >
