@@ -7,7 +7,7 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { FilterType } from './types/FilterTypes';
+import { FilterType } from './types/FilterType';
 
 const USER_ID = 10824;
 

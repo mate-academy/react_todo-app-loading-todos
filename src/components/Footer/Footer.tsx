@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { FilterType } from '../../types/FilterTypes';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   itemsLeft: number,
