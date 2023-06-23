@@ -156,13 +156,13 @@ export const App: React.FC = () => {
               onCheckedTodo={handleCheckBoxTodo}
             />
           )}
-        {todos.length ? (
+        {todos.length && (
           <Footer
             todos={todos}
             onFilterType={filterTodos}
             onRemoveTodos={removeCompletedTodos}
           />
-        ) : undefined}
+        )}
       </div>
 
       {error && (

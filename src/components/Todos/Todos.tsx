@@ -19,6 +19,7 @@ export const Todos: React.FC<Props> = ({
       {todos.map(todo => (
         <TodoItem
           todo={todo}
+          key={todo.id}
           onRemoveTodo={onRemoveTodo}
           onCheckedTodo={onCheckedTodo}
         />
