@@ -32,15 +32,11 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
     if (errorType !== '') {
-      timer = setTimeout(() => {
+      setTimeout(() => {
         setErrorType('');
       }, 3000);
     }
-
-    return () => clearTimeout(timer);
   }, [errorType]);
 
   const onChangeQuery = (event: React.FormEvent<HTMLInputElement>) => {

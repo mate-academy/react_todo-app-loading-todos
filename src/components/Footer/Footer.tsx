@@ -3,7 +3,7 @@ import { FilterType } from '../../types/FilterType';
 
 type Props = {
   itemsLeft: number,
-  filterType: string,
+  filterType: FilterType,
   setFilterType: React.Dispatch<React.SetStateAction<FilterType>>,
 };
 
