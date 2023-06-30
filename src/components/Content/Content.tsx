@@ -6,24 +6,26 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[],
   filter: string,
-  inFilterChange: (arg: string) => void,
+  onFilterChange: (arg: string) => void,
 }
 export const Content: React.FC<Props> = ({
   todos,
   filter,
-  inFilterChange,
+  onFilterChange,
 }) => {
   const handleShowAllTodo = () => {
-    inFilterChange('all');
+    onFilterChange('all');
   };
 
   const handleShowActiveTodo = () => {
-    inFilterChange('active');
+    onFilterChange('active');
   };
 
   const handleShowCompletedTodo = () => {
-    inFilterChange('completed');
+    onFilterChange('completed');
   };
+
+  const activeTodo = todos.filter(todo => !todo.completed);
 
   return (
     <div className="todoapp__content">
@@ -46,100 +48,90 @@ export const Content: React.FC<Props> = ({
       </header>
 
       {todos.length > 0 && (
-        <section className="todoapp__main">
-          {/* This is a completed todo */}
-          {todos.map(todo => (
-            <div
-              key={todo.id}
-              className={classNames('todo', {
-                completed: todo.completed,
-              })}
-            >
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  checked
-                />
-              </label>
+        <>
+          <section className="todoapp__main">
+            {/* This is a completed todo */}
+            {todos.map(todo => {
+              const { id, completed, title } = todo;
 
-              <span className="todo__title">{todo.title}</span>
+              return (
+                <div
+                  key={id}
+                  className={classNames('todo', {
+                    completed,
+                  })}
+                >
+                  <label className="todo__status-label">
+                    <input
+                      type="checkbox"
+                      className="todo__status"
+                      checked
+                    />
+                  </label>
 
-              {/* Remove button appears only on hover */}
-              <button type="button" className="todo__remove">×</button>
+                  <span className="todo__title">{title}</span>
 
-              {/* overlay will cover the todo while it is being updated */}
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
+                  {/* Remove button appears only on hover */}
+                  <button type="button" className="todo__remove">×</button>
 
-          {/* This todo is not completed */}
-          {/* <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                  {/* overlay will cover the todo while it is being updated */}
+                  <div className="modal overlay">
+                    <div
+                      className="modal-background has-background-white-ter"
+                    />
+                    <div className="loader" />
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodo.length} items left`}
+            </span>
 
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
+            {/* Active filter should have a 'selected' class */}
+            <nav className="filter">
+              <a
+                href="#/"
+                className={classNames('filter__link', {
+                  selected: filter === 'all',
+                })}
+                onClick={handleShowAllTodo}
+              >
+                All
+              </a>
 
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div> */}
-        </section>
+              <a
+                href="#/active"
+                className={classNames('filter__link', {
+                  selected: filter === 'active',
+                })}
+                onClick={handleShowActiveTodo}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={classNames('filter__link', {
+                  selected: filter === 'completed',
+                })}
+                onClick={handleShowCompletedTodo}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* don't show this button if there are no completed todos */}
+            <button type="button" className="todoapp__clear-completed">
+              Clear completed
+            </button>
+          </footer>
+
+        </>
       )}
 
-      {/* Hide the footer if there are no todos */}
-      <footer className="todoapp__footer">
-        <span className="todo-count">
-          {`${todos.length} items left`}
-        </span>
-
-        {/* Active filter should have a 'selected' class */}
-        <nav className="filter">
-          <a
-            href="#/"
-            className={classNames('filter__link', {
-              selected: filter === 'all',
-            })}
-            onClick={handleShowAllTodo}
-          >
-            All
-          </a>
-
-          <a
-            href="#/active"
-            className={classNames('filter__link', {
-              selected: filter === 'active',
-            })}
-            onClick={handleShowActiveTodo}
-          >
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            className={classNames('filter__link', {
-              selected: filter === 'completed',
-            })}
-            onClick={handleShowCompletedTodo}
-          >
-            Completed
-          </a>
-        </nav>
-
-        {/* don't show this button if there are no completed todos */}
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      </footer>
     </div>
   );
 };

@@ -49,18 +49,6 @@ export const App: React.FC = () => {
     });
   }, [todos, filterCondition]);
 
-  // const handleShowAllTodo = () => {
-  //   setFilterCondition('all');
-  // };
-
-  // const handleShowActiveTodo = () => {
-  //   setFilterCondition('active');
-  // };
-
-  // const handleShowCompletedTodo = () => {
-  //   setFilterCondition('completed');
-  // };
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -72,11 +60,9 @@ export const App: React.FC = () => {
       <Content
         todos={filteredTodos}
         filter={filterCondition}
-        inFilterChange={setFilterCondition}
+        onFilterChange={setFilterCondition}
       />
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {isAnyError && (
         <Notification
           error={isErrorMessage}
