@@ -1,18 +1,33 @@
-export const ErrorNotification = () => {
+import cn from 'classnames';
+import { FC, useEffect } from 'react';
+import { LoadError } from '../types/LoadError';
+
+interface Props {
+  loadError: LoadError,
+  setLoadError: React.Dispatch<React.SetStateAction<LoadError>>,
+}
+
+export const ErrorNotification:FC<Props> = ({ loadError, setLoadError }) => {
+  useEffect(() => {
+    setTimeout(() => setLoadError((current) => ({
+      ...current,
+      status: false,
+    })), 3000);
+  }, []);
+
   return (
-    <div className="notification is-danger is-light has-text-weight-normal">
+    <div
+      className={cn('notification is-danger is-light has-text-weight-normal', {
+        hidden: !loadError.status,
+      })}
+    >
       <button
         aria-label="Close notification"
         type="button"
         className="delete"
       />
 
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {loadError.message}
     </div>
   );
 };

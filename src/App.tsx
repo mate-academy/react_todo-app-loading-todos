@@ -5,29 +5,39 @@ import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
+import { LoadError } from './types/LoadError';
 
 const USER_ID = 10895;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [loadError, setLoadError] = useState<LoadError>({
+    status: false,
+    message: '',
+  });
 
   const fetchTodos = useCallback(async () => {
     try {
       const responce = await getTodos(USER_ID);
 
       if ('Error' in responce) {
-        setErrorMsg('Unable to load a todos, pleace retry');
+        setLoadError({
+          status: true,
+          message: 'Unable to load a todos, pleace retry',
+        });
 
         return;
       }
 
       setTodos(responce);
     } catch (error) {
-      setErrorMsg('Unable to load a todos, check your internet connection');
+      setLoadError({
+        status: true,
+        message: 'Unable to load a todos, check your internet connection',
+      });
     } finally {
       console.log('ended fething');
-    };
+    }
   }, []);
 
   useEffect(() => {
@@ -61,7 +71,10 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <ErrorNotification />
+      <ErrorNotification
+        loadError={loadError}
+        setLoadError={setLoadError}
+      />
     </div>
   );
 };
