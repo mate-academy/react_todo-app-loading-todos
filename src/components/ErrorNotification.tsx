@@ -8,11 +8,15 @@ interface Props {
 }
 
 export const ErrorNotification:FC<Props> = ({ loadError, setLoadError }) => {
-  useEffect(() => {
-    setTimeout(() => setLoadError((current) => ({
+  const disableError = () => {
+    setLoadError((current) => ({
       ...current,
       status: false,
-    })), 3000);
+    }));
+  };
+
+  useEffect(() => {
+    setTimeout(disableError, 3000);
   }, []);
 
   return (
@@ -25,6 +29,7 @@ export const ErrorNotification:FC<Props> = ({ loadError, setLoadError }) => {
         aria-label="Close notification"
         type="button"
         className="delete"
+        onClick={disableError}
       />
 
       {loadError.message}

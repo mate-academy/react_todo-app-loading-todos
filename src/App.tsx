@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 import { LoadError } from './types/LoadError';
 import { FilterType } from './Enums/FilterType';
+import { filterTodos } from './utils/filterTodos';
 
 const USER_ID = 10895;
 
@@ -17,13 +18,15 @@ export const App: React.FC = () => {
     status: false,
     message: '',
   });
+  const preparedTodos = filterTodos(todos, filterType);
+
   const isTodosExists = todos.length > 0;
 
   const fetchTodos = useCallback(async () => {
     try {
       const responce = await getTodos(USER_ID);
 
-      if ('Error' in responce) {
+      if ('error' in responce) {
         setLoadError({
           status: true,
           message: 'Unable to load a todos, pleace retry',
@@ -66,7 +69,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={todos} />
+        {isTodosExists && <TodoList todos={preparedTodos} />}
 
         {isTodosExists && (
           <Footer
