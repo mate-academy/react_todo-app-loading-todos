@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
-  const itemsLeft = todos.filter(todo => todo.completed).length;
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   return (
     <footer className="todoapp__footer">
