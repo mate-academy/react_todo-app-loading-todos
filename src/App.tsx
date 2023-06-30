@@ -5,7 +5,7 @@ import { getTodos } from './api/todos';
 import { USER_ID } from './consts/consts';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { Notification } from './components/Notification';
 import { getFilteredTodos } from './helpers/getFilteredTodos';
 import { FilterStatus } from './types/FilterStatus';
