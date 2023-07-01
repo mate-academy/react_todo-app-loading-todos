@@ -1,66 +1,41 @@
 import { useEffect } from 'react';
+import cn from 'classnames';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
-  isAddError: boolean,
-  isDeleteError: boolean,
-  isUpdateError: boolean,
+  isError: ErrorMessage,
   handleCloseError: () => void,
 };
 
 export const Error: React.FC<Props> = ({
-  isAddError,
-  isDeleteError,
-  isUpdateError,
+  isError,
   handleCloseError,
 }) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const delay = setTimeout(() => {
       handleCloseError();
     }, 3000);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(delay);
     };
   }, [handleCloseError]);
 
   return (
-    <div className="notification is-danger is-light has-text-weight-normal">
-
-      {isAddError && (
-        <>
-          <button
-            type="button"
-            className="delete"
-            aria-label="delete"
-            onClick={handleCloseError}
-          />
-          <p>Unable to add a todo</p>
-        </>
-      )}
-
-      {isDeleteError && (
-        <>
-          <button
-            type="button"
-            className="delete hidden"
-            aria-label="delete"
-            onClick={handleCloseError}
-          />
-          <p>Unable to add a todo</p>
-        </>
-      )}
-
-      {isUpdateError && (
-        <>
-          <button
-            type="button"
-            className="delete"
-            aria-label="delete"
-            onClick={handleCloseError}
-          />
-          <p>Unable to update a todo</p>
-        </>
-      )}
+    <div
+      className={(cn(
+        'notification', 'is-danger', 'is-light', 'has-text-weight-normal', {
+          hidden: !isError,
+        },
+      ))}
+    >
+      <button
+        type="button"
+        className="delete"
+        aria-label="delete"
+        onClick={handleCloseError}
+      />
+      {isError}
     </div>
   );
 };

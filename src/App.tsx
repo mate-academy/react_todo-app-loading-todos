@@ -7,15 +7,15 @@ import { Error } from './components/Error/Error';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { Todolist } from './components/Todolist/Todolist';
+import { ErrorMessage } from './types/ErrorMessage';
+import { TodoStatus } from './types/TodoStatus';
 
 const USER_ID = 10890;
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('All');
-  const [isAddError, setIsAddError] = useState(false);
-  const [isDeleteError, setIsDeleteError] = useState(false);
-  const [isUpdateError, setIsUpdateError] = useState(false);
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.ALL);
+  const [isError, setIsError] = useState<ErrorMessage>(ErrorMessage.NOERROR);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -23,17 +23,15 @@ export const App: React.FC = () => {
   }, []);
 
   const handleCloseError = () => {
-    setIsAddError(false);
-    setIsDeleteError(false);
-    setIsUpdateError(false);
+    setIsError(ErrorMessage.NOERROR);
   };
 
   const filterTodos = useCallback((todoStatus: string) => {
-    if (todoStatus === 'Completed') {
+    if (todoStatus === TodoStatus.COMPLETED) {
       return visibleTodos.filter(todo => todo.completed);
     }
 
-    if (todoStatus === 'Active') {
+    if (todoStatus === TodoStatus.ACTIVE) {
       return visibleTodos.filter(todo => !todo.completed);
     }
 
@@ -81,13 +79,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {(isAddError
-      || isDeleteError
-      || isUpdateError) && (
+      {isError && (
         <Error
-          isAddError={isAddError}
-          isDeleteError={isDeleteError}
-          isUpdateError={isUpdateError}
+          isError={isError}
           handleCloseError={handleCloseError}
         />
       )}

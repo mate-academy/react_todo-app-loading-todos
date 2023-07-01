@@ -1,10 +1,11 @@
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   visibleTodos: Todo[] | null,
   status: string,
-  setStatus: (status: string) => void,
+  setStatus: (status: TodoStatus) => void,
   areCompleted: Todo[] | null,
   handleClearCompleted: () => void,
 };
@@ -28,9 +29,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: status === 'All',
+            selected: status === TodoStatus.ALL,
           })}
-          onClick={() => setStatus('All')}
+          onClick={() => setStatus(TodoStatus.ALL)}
         >
           All
         </a>
@@ -38,9 +39,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: status === 'Active',
+            selected: status === TodoStatus.ACTIVE,
           })}
-          onClick={() => setStatus('Active')}
+          onClick={() => setStatus(TodoStatus.ACTIVE)}
         >
           Active
         </a>
@@ -48,9 +49,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: status === 'Completed',
+            selected: status === TodoStatus.COMPLETED,
           })}
-          onClick={() => setStatus('Completed')}
+          onClick={() => setStatus(TodoStatus.COMPLETED)}
         >
           Completed
         </a>
