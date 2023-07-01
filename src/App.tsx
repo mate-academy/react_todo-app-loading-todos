@@ -38,12 +38,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader />
+        <TodoHeader isTodosPresent={isTodosPresent} />
 
         <TodoList todos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {!isTodosPresent
+        {isTodosPresent
         && (
           <TodoFooter
             filterOption={filterOption}
