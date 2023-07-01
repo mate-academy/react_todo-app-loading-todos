@@ -26,20 +26,11 @@ export const App: React.FC = () => {
     try {
       const responce = await getTodos(USER_ID);
 
-      if ('error' in responce) {
-        setLoadError({
-          status: true,
-          message: 'Unable to load a todos, pleace retry',
-        });
-
-        return;
-      }
-
       setTodos(responce);
     } catch (error) {
       setLoadError({
         status: true,
-        message: 'Unable to load a todos, check your internet connection',
+        message: 'Unable to load a todos, retry later',
       });
     }
   }, []);
