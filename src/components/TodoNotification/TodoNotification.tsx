@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-export const TodoNotification: React.FC = () => {
+interface Props{
+  isTodosPresent: boolean;
+}
+
+export const TodoNotification: React.FC<Props> = ({ isTodosPresent }) => {
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
@@ -25,11 +29,16 @@ export const TodoNotification: React.FC = () => {
       />
 
       {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
+      {!isTodosPresent && (
+        <>
+          Unable to load a todos
+        </>
+      )}
+
+      {/*
       Unable to update a todo
+      Unable to delete a todo
+      Unable to add a todo */}
     </div>
   );
 };
