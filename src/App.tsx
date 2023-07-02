@@ -68,7 +68,7 @@ export const App: React.FC = () => {
           filteredTodos={filteredTodos}
         />
 
-        {filteredTodos && (
+        {!filteredTodos && (
           <Footer
             visibleTodos={visibleTodos}
             status={status}
