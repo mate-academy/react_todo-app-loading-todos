@@ -19,7 +19,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setVisibleTodos);
+      .then(setVisibleTodos)
+      .catch(() => {
+        setIsError(ErrorMessage.LOADERROR);
+      });
   }, []);
 
   const handleCloseError = () => {
