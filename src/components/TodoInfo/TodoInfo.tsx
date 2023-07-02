@@ -1,4 +1,6 @@
 import React from 'react';
+import cn from 'classnames';
+
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -7,7 +9,7 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
-    <div className="todo completed">
+    <div className={cn('todo', { completed: todo.completed })}>
       <label className="todo__status-label">
         <input
           type="checkbox"
