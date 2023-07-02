@@ -1,14 +1,13 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/TodoHeader';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/todoFooter';
-import { Messege } from './components/ErrorMessege';
+import { Message } from './components/ErrorMessege';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoStatus } from './types/TodoStatus';
-import { visibleTodos } from './utils/TodoFilter';
+import { VisibleTodos } from './utils/TodoFilter';
 
 const USER_ID = 10883;
 
@@ -40,7 +39,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
 
         <TodoList
-          todos={visibleTodos(todos, todoStatus)}
+          todos={VisibleTodos(todos, todoStatus)}
         />
 
         {todos.length > 0 && (
@@ -53,7 +52,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* Notification is shown in case of any error */}
-      <Messege
+      <Message
         visibleError={visibleError}
         setVisibleError={setVisibleError}
       />

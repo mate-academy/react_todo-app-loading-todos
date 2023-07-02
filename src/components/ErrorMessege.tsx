@@ -6,7 +6,7 @@ type Props = {
   setVisibleError: (value: string) => void;
 };
 
-export const Messege: React.FC<Props> = ({ visibleError, setVisibleError }) => {
+export const Message: React.FC<Props> = ({ visibleError, setVisibleError }) => {
   const handleRemoveErrorMsg = () => {
     setVisibleError('');
   };
@@ -35,7 +35,6 @@ export const Messege: React.FC<Props> = ({ visibleError, setVisibleError }) => {
         onClick={handleRemoveErrorMsg}
       />
 
-      {/* show only one message at a time */}
       {visibleError}
     </div>
   );
