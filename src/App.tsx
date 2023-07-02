@@ -4,14 +4,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Todo, todosFromServer } from './types/Todo';
 import { TodoStatusFilter } from './types/TodoStatusFilter';
 import { getFilteredTodos } from './helpers';
-import { getTodos } from './api/todos';
+// import { getTodos } from './api/todos';
 
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoError } from './components/TodoError/TodoError';
 
-const USER_ID = 10884;
+// const USER_ID = 10884;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(todosFromServer);
@@ -70,7 +70,6 @@ export const App: React.FC = () => {
           <>
             <TodoList todos={visibleTodos} />
 
-            {/* Hide the footer if there are no todos */}
             <TodoFooter
               status={statusFilter}
               onSelectStatusFilter={selectStatusFilter}

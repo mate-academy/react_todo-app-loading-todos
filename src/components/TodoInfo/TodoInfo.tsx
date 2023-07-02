@@ -22,10 +22,8 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         {todo.title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove">×</button>
 
-      {/* overlay will cover the todo while it is being updated */}
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
