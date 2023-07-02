@@ -28,10 +28,10 @@ function request<T>(
 
   // we wait for testing purpose to see loaders
   return wait(300)
-    .then(() => fetch(BASE_URL + url, options))
+    .then(() => fetch(`${BASE_URL}${url}`, options))
     .then(response => {
       if (!response.ok) {
-        throw new Error();
+        throw new Error(`${response.status} - ${response.statusText}`);
       }
 
       return response.json();
