@@ -7,6 +7,12 @@ interface Props {
   setFilter: (text: string) => void;
 }
 
+export enum FilterStatus {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const Footer: React.FC<Props> = ({ filter, todos, setFilter }) => {
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
@@ -19,8 +25,10 @@ export const Footer: React.FC<Props> = ({ filter, todos, setFilter }) => {
       <nav className="filter">
         <a
           href="#/"
-          className={cn('filter__link', { selected: filter === 'all' })}
-          onClick={() => setFilter('all')}
+          className={cn('filter__link', {
+            selected: filter === FilterStatus.ALL,
+          })}
+          onClick={() => setFilter(FilterStatus.ALL)}
         >
           All
         </a>
@@ -28,9 +36,9 @@ export const Footer: React.FC<Props> = ({ filter, todos, setFilter }) => {
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filter === 'active',
+            selected: filter === FilterStatus.ACTIVE,
           })}
-          onClick={() => setFilter('active')}
+          onClick={() => setFilter(FilterStatus.ACTIVE)}
         >
           Active
         </a>
@@ -38,9 +46,9 @@ export const Footer: React.FC<Props> = ({ filter, todos, setFilter }) => {
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filter === 'completed',
+            selected: filter === FilterStatus.COMPLETED,
           })}
-          onClick={() => setFilter('completed')}
+          onClick={() => setFilter(FilterStatus.COMPLETED)}
         >
           Completed
         </a>

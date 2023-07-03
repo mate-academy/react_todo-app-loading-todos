@@ -13,6 +13,9 @@ export const Header: React.FC<Props> = ({
   searchQuery,
 }) => {
   const activeInputButton = todos.some(todo => !todo.completed);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    (setSearchQuery(event.target.value));
+  };
 
   return (
     <header className="todoapp__header">
@@ -35,7 +38,7 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={searchQuery}
-          onChange={(event) => (setSearchQuery(event.target.value))}
+          onChange={handleChange}
         />
       </form>
     </header>

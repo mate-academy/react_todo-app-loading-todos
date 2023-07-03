@@ -5,7 +5,7 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { showError } from './helpers/helpers';
 import { Error } from './components/Error';
-import { Footer } from './components/Footer';
+import { Footer, FilterStatus } from './components/Footer';
 import { Todos } from './components/Todos';
 import { Header } from './components/Header';
 
@@ -25,21 +25,12 @@ export const App: React.FC = () => {
 
   let visibleTodos = todos;
 
-  if (searchQuery) {
-    visibleTodos = visibleTodos
-      .filter(todo => (
-        todo.title
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
-      ));
-  }
-
   switch (filter) {
-    case 'completed':
+    case FilterStatus.COMPLETED:
       visibleTodos = visibleTodos.filter(todo => todo.completed);
       break;
 
-    case 'active':
+    case FilterStatus.ACTIVE:
       visibleTodos = visibleTodos.filter(todo => !todo.completed);
       break;
 
@@ -65,7 +56,7 @@ export const App: React.FC = () => {
         <Todos todos={visibleTodos} />
 
         {todos.length > 0 && (
-          <Footer todos={visibleTodos} filter={filter} setFilter={setFilter} />
+          <Footer todos={todos} filter={filter} setFilter={setFilter} />
         )}
 
       </div>
