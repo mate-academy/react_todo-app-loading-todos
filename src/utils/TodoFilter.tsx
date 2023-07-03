@@ -2,24 +2,22 @@ import { useMemo } from 'react';
 import { TodoStatus } from '../types/TodoStatus';
 import { Todo } from '../types/Todo';
 
-export const FilterTodos = (todos: Todo[], todoStatus: TodoStatus) => {
-  const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (todoStatus) {
-        case TodoStatus.ALL:
+export const FilterTodos = (todos: Todo[], todoFilter: TodoStatus) => {
+  return useMemo(() => (
+    todos.filter(todo => {
+      switch (todoFilter) {
+        case TodoStatus.All:
           return todo;
 
-        case TodoStatus.ACTIVE:
+        case TodoStatus.Active:
           return !todo.completed;
 
-        case TodoStatus.COMPLETED:
+        case TodoStatus.Completed:
           return todo.completed;
 
         default:
-          throw new Error(`${todoStatus} is not defined`);
+          throw new Error(`${todoFilter} is not defined`);
       }
-    });
-  }, [todos, todoStatus]);
-
-  return visibleTodos;
+    })
+  ), [todos, todoFilter]);
 };

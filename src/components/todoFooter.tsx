@@ -14,9 +14,7 @@ export const Footer: React.FC<Props> = ({
   todoFilter,
   todos,
 }) => {
-  const isButtonVisible = () => {
-    return todos.some(todo => todo.completed);
-  };
+  const isButtonVisible = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer">
@@ -28,9 +26,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: todoFilter === TodoStatus.ALL,
+            selected: todoFilter === TodoStatus.All,
           })}
-          onClick={() => setTodoFilter(TodoStatus.ALL)}
+          onClick={() => setTodoFilter(TodoStatus.All)}
         >
           All
         </a>
@@ -38,9 +36,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: todoFilter === TodoStatus.ACTIVE,
+            selected: todoFilter === TodoStatus.Active,
           })}
-          onClick={() => setTodoFilter(TodoStatus.ACTIVE)}
+          onClick={() => setTodoFilter(TodoStatus.Active)}
         >
           Active
         </a>
@@ -48,15 +46,15 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: todoFilter === TodoStatus.COMPLETED,
+            selected: todoFilter === TodoStatus.Completed,
           })}
-          onClick={() => setTodoFilter(TodoStatus.COMPLETED)}
+          onClick={() => setTodoFilter(TodoStatus.Completed)}
         >
           Completed
         </a>
       </nav>
 
-      {isButtonVisible() && (
+      {isButtonVisible && (
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>

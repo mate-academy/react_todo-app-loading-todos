@@ -13,7 +13,7 @@ const USER_ID = 10883;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoFilter, setTodoFilter] = useState<TodoStatus>(TodoStatus.ALL);
+  const [todoFilter, setTodoFilter] = useState<TodoStatus>(TodoStatus.All);
   const [visibleError, setVisibleError] = useState('');
 
   useEffect(() => {

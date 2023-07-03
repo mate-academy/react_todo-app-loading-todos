@@ -59,10 +59,9 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               </>
             )}
 
-            {/* 'is-active' class puts this modal on top of the todo */}
             <div
               className={cn('modal overlay', {
-                'is-active': !(todos.length), // will change in future. When todo is loading
+                'is-active': !(todos.length),
               })}
             >
               <div className="modal-background has-background-white-ter" />
