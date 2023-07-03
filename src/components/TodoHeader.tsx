@@ -7,14 +7,14 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ todos }) => {
-  const isButtonVisible = todos.every(todo => todo.completed);
+  const isToggleButtonVisible = todos.every(todo => todo.completed);
 
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={cn('todoapp__toggle-all', {
-          active: isButtonVisible,
+          active: isToggleButtonVisible,
         })}
         aria-label="todoapp__toggle-all"
       />

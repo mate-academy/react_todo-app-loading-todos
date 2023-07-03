@@ -14,7 +14,7 @@ export const Footer: React.FC<Props> = ({
   todoFilter,
   todos,
 }) => {
-  const isButtonVisible = todos.some(todo => todo.completed);
+  const isClearButtonVisible = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer">
@@ -54,7 +54,7 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {isButtonVisible && (
+      {isClearButtonVisible && (
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>
