@@ -3,13 +3,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
-import { Filter } from './components/Filter/Filter';
+import { Filter } from './components/Filter';
 import { Filtering } from './types/Filter';
-import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
 import { Notifications } from './components/Notifications/Notification';
 
-const USER_ID = 12000; // impossible to get userId because the server doesn't work
+const USER_ID = 10921;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
