@@ -2,28 +2,23 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FilterStatus } from '../../helper';
 
 interface Props {
   todos: Todo[],
   filter: string,
-  onFilterChange: (arg: string) => void,
+  onFilterChange: (arg: FilterStatus) => void,
 }
 export const TodoContent: React.FC<Props> = ({
   todos,
   filter,
   onFilterChange,
 }) => {
-  const handleShowAllTodo = () => {
-    onFilterChange('all');
+  const handleFilterChange = (status: FilterStatus) => {
+    onFilterChange(status);
   };
 
-  const handleShowActiveTodo = () => {
-    onFilterChange('active');
-  };
-
-  const handleShowCompletedTodo = () => {
-    onFilterChange('completed');
-  };
+  const filterStatuses = Object.values(FilterStatus);
 
   const activeTodo = todos.filter(todo => !todo.completed);
 
@@ -88,35 +83,17 @@ export const TodoContent: React.FC<Props> = ({
 
             {/* Active filter should have a 'selected' class */}
             <nav className="filter">
-              <a
-                href="#/"
-                className={classNames('filter__link', {
-                  selected: filter === 'all',
-                })}
-                onClick={handleShowAllTodo}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={classNames('filter__link', {
-                  selected: filter === 'active',
-                })}
-                onClick={handleShowActiveTodo}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={classNames('filter__link', {
-                  selected: filter === 'completed',
-                })}
-                onClick={handleShowCompletedTodo}
-              >
-                Completed
-              </a>
+              {filterStatuses.map((status) => (
+                <a
+                  href="#/"
+                  className={classNames('filter__link', {
+                    selected: filter === status,
+                  })}
+                  onClick={() => handleFilterChange(status)}
+                >
+                  {`${status.slice(0, 1).toUpperCase()}${status.slice(1)}`}
+                </a>
+              ))}
             </nav>
 
             {/* don't show this button if there are no completed todos */}

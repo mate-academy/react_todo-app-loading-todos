@@ -5,6 +5,7 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoContent } from './components/Content/TodoContent';
 import { ErrorNotification } from './components/Notification/ErrorNotification';
+import { FilterStatus } from './helper';
 
 const USER_ID = 10888;
 
@@ -12,7 +13,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isAnyError, setIsAnyError] = useState(false);
   const [isErrorMessage, setIsErrorMessage] = useState(false);
-  const [filterCondition, setFilterCondition] = useState('all');
+  const [filterCondition, setFilterCondition] = useState(FilterStatus.ALL);
 
   useEffect(() => {
     const loadTodosByUser = async (userID: number) => {
@@ -39,12 +40,14 @@ export const App: React.FC = () => {
   const filteredTodos: Todo[] = useMemo(() => {
     return todos.filter(todo => {
       switch (filterCondition) {
-        case 'active':
+        case FilterStatus.ALL:
+          return todo;
+        case FilterStatus.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case FilterStatus.COMPLETED:
           return todo.completed;
         default:
-          return todo;
+          return 0;
       }
     });
   }, [todos, filterCondition]);
