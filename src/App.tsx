@@ -12,6 +12,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [todoTitle, setTodoTitle] = useState('');
   const [status, setStatus] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     let updatedTodos;
@@ -42,9 +43,11 @@ export const App: React.FC = () => {
       });
 
       setTodos((prevTodos) => [...prevTodos, newTodo]);
+      setErrorMessage('');
 
       return newTodo;
     } catch (error) {
+      setErrorMessage('Unable to add a todo');
       throw new Error('Error');
     }
   }, []);
@@ -56,7 +59,9 @@ export const App: React.FC = () => {
       setTodos((prevTodos: Todo[]) => prevTodos.map((todo: Todo): Todo => {
         return todo;
       }));
+      setErrorMessage('');
     } catch (error) {
+      setErrorMessage('Unable to update a todo');
       throw new Error('Error');
     }
   };
@@ -72,9 +77,11 @@ export const App: React.FC = () => {
 
         return todo;
       }));
+      setErrorMessage('');
 
       return updatedTodo;
     } catch (error) {
+      setErrorMessage('Unable to delete a todo');
       throw new Error('Error');
     }
   };
@@ -113,13 +120,9 @@ export const App: React.FC = () => {
   };
 
   const clearCompletedHandler = () => {
-    todos.map((todo) => {
-      if (todo.completed) {
-        deleteTodo(todo.id);
-      }
+    const updatedTodos = todos.filter(todo => !todo.completed);
 
-      return todo;
-    });
+    setVisibleTodos(updatedTodos);
   };
 
   return (
@@ -308,19 +311,22 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {errorMessage && (
+        <div
+          className="
+          notification
+          is-danger
+          is-light
+          has-text-weight-normal
+          hidden"
+        >
+          <button type="button" className="delete" />
+          <br />
+          {errorMessage}
+          <br />
+        </div>
+      )}
     </div>
   );
 };
