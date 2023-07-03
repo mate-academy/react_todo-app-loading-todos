@@ -11,7 +11,7 @@ export const ErrorNotification: React.FC<Props> = ({
   error,
   onHandleError,
 }) => {
-  const hendleError = () => {
+  const closeNotification = () => {
     onHandleError(false);
   };
 
@@ -28,7 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={hendleError}
+        onClick={closeNotification}
       />
 
       {/* show only one message at a time */}
