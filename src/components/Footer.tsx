@@ -7,6 +7,7 @@ type Props = {
   handleFilterType: (value: FilterType) => void
   someCompleted: boolean
   countOfActive: number,
+  removeCompletedTodos: () => void;
 };
 
 export const Footer: FC<Props> = ({
@@ -14,6 +15,7 @@ export const Footer: FC<Props> = ({
   handleFilterType,
   someCompleted,
   countOfActive,
+  removeCompletedTodos,
 }) => {
   return (
     <footer className="todoapp__footer">
@@ -55,7 +57,11 @@ export const Footer: FC<Props> = ({
 
       {someCompleted
         && (
-          <button type="button" className="todoapp__clear-completed">
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            onClick={() => removeCompletedTodos()}
+          >
             Clear completed
           </button>
         )}

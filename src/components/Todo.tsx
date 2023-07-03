@@ -4,13 +4,19 @@ import { Todo as TodoType } from '../types/Todo';
 
 type Props = {
   todo: TodoType;
+  removeTodo: (id: number) => void;
 };
 
-export const Todo:FC<Props> = ({ todo }) => {
+export const Todo:FC<Props> = ({ todo, removeTodo }) => {
   const {
+    id,
     completed,
     title,
   } = todo;
+
+  const handleRemove = async () => {
+    await removeTodo(id);
+  };
 
   return (
     <li className={classNames('todo', {
@@ -29,7 +35,13 @@ export const Todo:FC<Props> = ({ todo }) => {
         {title}
       </span>
 
-      <button type="button" className="todo__remove">×</button>
+      <button
+        type="button"
+        className="todo__remove"
+        onClick={handleRemove}
+      >
+        ×
+      </button>
 
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />

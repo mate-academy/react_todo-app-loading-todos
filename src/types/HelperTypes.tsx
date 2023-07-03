@@ -6,6 +6,9 @@ export enum FilterType {
 
 export enum ErrorType {
   DATALOADING = 'DATALOADING',
+  EMPTY_FIELD = 'EMPTY_FIELD',
+  ADD_UNABLE = 'ADD_UNABLE',
+  DELETE_UNABLE = ' DELETE_UNABLE',
 }
 
 export interface TodosInfo {
