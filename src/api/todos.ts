@@ -5,4 +5,7 @@ export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-// Add more methods here
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createTodo = (data: any) => {
+  return client.post<Todo>('/todos', data);
+};
