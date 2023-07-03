@@ -1,36 +1,36 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 
-import { Todo, todosFromServer } from './types/Todo';
+import { Todo } from './types/Todo';
 import { TodoStatusFilter } from './types/TodoStatusFilter';
 import { getFilteredTodos } from './helpers';
-// import { getTodos } from './api/todos';
+import { getTodos } from './api/todos';
 
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoError } from './components/TodoError/TodoError';
 
-// const USER_ID = 10884;
+const USER_ID = 10884;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(todosFromServer);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [statusFilter, setStatusFilter] = useState(TodoStatusFilter.All);
   const [error, setError] = useState<string | null>(null);
 
-  const closeError = () => {
-    setError(null);
-  };
-
   useEffect(() => {
-    // getTodos(USER_ID)
-    //   .then(todosFromServer => {
-    //     setTodos(todosFromServer);
-    //   })
-    //   .catch((errorFromServer) => {
-    //     setError(errorFromServer.message);
-    //   });
-    setTodos(todosFromServer);
+    getTodos(USER_ID)
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .catch((errorFromServer) => {
+        setError(errorFromServer.message);
+      });
   }, []);
 
   useEffect(() => {
@@ -49,22 +49,27 @@ export const App: React.FC = () => {
     return getFilteredTodos(todos, statusFilter);
   }, [statusFilter, todos]);
 
-  const selectStatusFilter = (status: TodoStatusFilter) => {
+  const selectStatusFilter = useCallback((status: TodoStatusFilter) => {
     setStatusFilter(status);
-  };
+  }, []);
+
+  const closeError = useCallback(() => {
+    setError(null);
+  }, []);
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
 
   const isVisibleClearCompleted = completedTodosCount > 0;
-  const isVisibleTodoList = visibleTodos.length > 0;
+  const isVisibleTodoList = todos.length > 0;
+  const isVisibleToggleAllActive = completedTodosCount === todos.length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader />
+        <TodoHeader isVisibleToggleAllActive={isVisibleToggleAllActive} />
 
         {isVisibleTodoList && (
           <>

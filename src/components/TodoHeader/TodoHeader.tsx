@@ -1,12 +1,19 @@
 import React from 'react';
+import cn from 'classnames';
 
-export const TodoHeader: React.FC = () => {
+type Props = {
+  isVisibleToggleAllActive: boolean,
+};
+
+export const TodoHeader: React.FC<Props> = ({ isVisibleToggleAllActive }) => {
   return (
     <header className="todoapp__header">
       <button
         aria-label="toggle-all active"
         type="button"
-        className="todoapp__toggle-all active"
+        className={cn('todoapp__toggle-all', {
+          active: isVisibleToggleAllActive,
+        })}
       />
 
       <form>
