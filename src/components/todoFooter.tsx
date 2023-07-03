@@ -4,16 +4,20 @@ import { TodoStatus } from '../types/TodoStatus';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  setTodoStatus: (status: TodoStatus) => void;
-  todoStatus: TodoStatus;
+  setTodoFilter: (status: TodoStatus) => void;
+  todoFilter: TodoStatus;
   todos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
-  setTodoStatus,
-  todoStatus,
+  setTodoFilter,
+  todoFilter,
   todos,
 }) => {
+  const isButtonVisible = () => {
+    return todos.some(todo => todo.completed);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -24,9 +28,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: todoStatus === TodoStatus.ALL,
+            selected: todoFilter === TodoStatus.ALL,
           })}
-          onClick={() => setTodoStatus(TodoStatus.ALL)}
+          onClick={() => setTodoFilter(TodoStatus.ALL)}
         >
           All
         </a>
@@ -34,9 +38,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: todoStatus === TodoStatus.ACTIVE,
+            selected: todoFilter === TodoStatus.ACTIVE,
           })}
-          onClick={() => setTodoStatus(TodoStatus.ACTIVE)}
+          onClick={() => setTodoFilter(TodoStatus.ACTIVE)}
         >
           Active
         </a>
@@ -44,15 +48,15 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: todoStatus === TodoStatus.COMPLETED,
+            selected: todoFilter === TodoStatus.COMPLETED,
           })}
-          onClick={() => setTodoStatus(TodoStatus.COMPLETED)}
+          onClick={() => setTodoFilter(TodoStatus.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      {todos.some(todo => todo.completed === true) && (
+      {isButtonVisible() && (
         <button type="button" className="todoapp__clear-completed">
           Clear completed
         </button>

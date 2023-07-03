@@ -7,13 +7,13 @@ import { Message } from './components/ErrorMessege';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoStatus } from './types/TodoStatus';
-import { VisibleTodos } from './utils/TodoFilter';
+import { FilterTodos } from './utils/TodoFilter';
 
 const USER_ID = 10883;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.ALL);
+  const [todoFilter, setTodoFilter] = useState<TodoStatus>(TodoStatus.ALL);
   const [visibleError, setVisibleError] = useState('');
 
   useEffect(() => {
@@ -39,19 +39,18 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
 
         <TodoList
-          todos={VisibleTodos(todos, todoStatus)}
+          todos={FilterTodos(todos, todoFilter)}
         />
 
         {todos.length > 0 && (
           <Footer
-            setTodoStatus={setTodoStatus}
-            todoStatus={todoStatus}
+            setTodoFilter={setTodoFilter}
+            todoFilter={todoFilter}
             todos={todos}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
       <Message
         visibleError={visibleError}
         setVisibleError={setVisibleError}

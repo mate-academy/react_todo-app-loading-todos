@@ -7,17 +7,20 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ todos }) => {
+  const toggleButton = (
+    <button
+      type="button"
+      className={cn('todoapp__toggle-all', {
+        active: todos.every(todo => todo.completed),
+      })}
+      aria-label="todoapp__toggle-all"
+    />
+  );
+
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={cn('todoapp__toggle-all', {
-          active: todos.every(todo => todo.completed === true),
-        })}
-        aria-label="todoapp__toggle-all"
-      />
+      {toggleButton}
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"

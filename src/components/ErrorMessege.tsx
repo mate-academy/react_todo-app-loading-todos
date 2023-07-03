@@ -7,13 +7,13 @@ type Props = {
 };
 
 export const Message: React.FC<Props> = ({ visibleError, setVisibleError }) => {
-  const handleRemoveErrorMsg = () => {
+  const handleRemoveErrorMessage = () => {
     setVisibleError('');
   };
 
   setTimeout(() => {
     if (visibleError) {
-      handleRemoveErrorMsg();
+      handleRemoveErrorMessage();
     }
   }, 3000);
 
@@ -32,7 +32,7 @@ export const Message: React.FC<Props> = ({ visibleError, setVisibleError }) => {
         type="button"
         className="delete"
         aria-label="Delete"
-        onClick={handleRemoveErrorMsg}
+        onClick={handleRemoveErrorMessage}
       />
 
       {visibleError}
