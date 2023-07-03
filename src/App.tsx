@@ -14,7 +14,7 @@ const USER_ID = 10890;
 
 export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<TodoStatus>(TodoStatus.ALL);
+  const [filter, setFilter] = useState<TodoStatus>(TodoStatus.ALL);
   const [isError, setIsError] = useState<ErrorMessage>(ErrorMessage.NOERROR);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ export const App: React.FC = () => {
     }
 
     return visibleTodos;
-  }, [status, visibleTodos]);
+  }, [filter, visibleTodos]);
 
-  const filteredTodos = filterTodos(status);
+  const filteredTodos = filterTodos(filter);
 
   const areCompleted = filteredTodos.filter(todo => todo.completed);
   const areActive = filteredTodos.filter(todo => !todo.completed);
@@ -74,8 +74,8 @@ export const App: React.FC = () => {
         {!filteredTodos && (
           <Footer
             visibleTodos={visibleTodos}
-            status={status}
-            setStatus={setStatus}
+            filter={filter}
+            setFilter={setFilter}
             areCompleted={areCompleted}
             handleClearCompleted={handleClearCompleted}
           />
