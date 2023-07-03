@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useCallback, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
 import { UpdateTodoData } from './types/types';
@@ -8,7 +9,29 @@ const USER_ID = 10917;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
   const [todoTitle, setTodoTitle] = useState('');
+  const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    let updatedTodos;
+
+    switch (status) {
+      case 'Active': {
+        updatedTodos = visibleTodos.filter(todo => !todo.completed);
+        break;
+      }
+
+      case 'Completed': {
+        updatedTodos = visibleTodos.filter(todo => todo.completed);
+        break;
+      }
+
+      default: updatedTodos = visibleTodos;
+    }
+
+    setVisibleTodos(updatedTodos);
+  }, [todos, setVisibleTodos]);
 
   const addTodo = useCallback(async (title: string) => {
     try {
@@ -61,6 +84,7 @@ export const App: React.FC = () => {
       try {
         const response = await client.get(`/todos?userId=${USER_ID}`);
 
+        setVisibleTodos(response as Todo[]);
         setTodos(response as Todo[]);
       } catch (error) {
         throw new Error('Data not found');
@@ -125,7 +149,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             todo.completed
               ? (
                 <div className="todo completed">
@@ -241,16 +265,34 @@ export const App: React.FC = () => {
             <nav className="filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={classNames(
+                  'filter__link',
+                  { selected: status === '' },
+                )}
+                onClick={() => setStatus('')}
               >
                 All
               </a>
 
-              <a href="#/active" className="filter__link">
+              <a
+                href="#/active"
+                className={classNames(
+                  'filter__link',
+                  { selected: status === 'Active' },
+                )}
+                onClick={() => setStatus('Active')}
+              >
                 Active
               </a>
 
-              <a href="#/completed" className="filter__link">
+              <a
+                href="#/completed"
+                className={classNames(
+                  'filter__link',
+                  { selected: status === 'Completed' },
+                )}
+                onClick={() => setStatus('Completed')}
+              >
                 Completed
               </a>
             </nav>
