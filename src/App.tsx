@@ -88,6 +88,16 @@ export const App: React.FC = () => {
     clearForm();
   };
 
+  const clearCompletedHandler = () => {
+    todos.map((todo) => {
+      if (todo.completed) {
+        deleteTodo(todo.id);
+      }
+
+      return todo;
+    });
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -246,7 +256,11 @@ export const App: React.FC = () => {
             </nav>
 
             {/* don't show this button if there are no completed todos */}
-            <button type="button" className="todoapp__clear-completed">
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              onClick={clearCompletedHandler}
+            >
               Clear completed
             </button>
           </footer>
