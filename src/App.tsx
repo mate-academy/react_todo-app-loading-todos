@@ -63,7 +63,9 @@ export const App: FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList todos={visibleTodos} />
+        {visibleTodos.length > 0 && (
+          <TodoList todos={visibleTodos} />
+        )}
 
         {todos.length > 0 && (
           <Footer
