@@ -7,7 +7,7 @@ interface Props {
   onChangeFilter: (filter: StatusFilterType) => void
 }
 
-export const Filter: FC<Props> = ({ filter, onChangeFilter }) => (
+export const StatusFilter: FC<Props> = ({ filter, onChangeFilter }) => (
   <nav className="filter">
     <a
       href="#/"

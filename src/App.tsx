@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
 import { ErrorMessage } from './components/ErrorMessage';
 import { StatusFilterType } from './types/StatusFilterType';
-import { Filter } from './components/StatusFilter';
+import { StatusFilter } from './components/StatusFilter';
 
 const USER_ID = 10684;
 
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
               {`${uncompletedTodos.length} items left`}
             </span>
 
-            <Filter filter={filter} onChangeFilter={setFilter} />
+            <StatusFilter filter={filter} onChangeFilter={setFilter} />
 
             {completedTodos && (
               <button type="button" className="todoapp__clear-completed">

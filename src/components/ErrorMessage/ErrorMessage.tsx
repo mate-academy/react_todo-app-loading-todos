@@ -17,7 +17,14 @@ export const ErrorMessage: FC<Props> = ({ error, onCloseError }) => {
         className="delete"
         onClick={onCloseError}
       />
+      {/* show only one message at a time */}
       {error}
+      {/* show only one message at a time */}
+      {/* Unable to add a todo
+      <br />
+      Unable to delete a todo
+      <br />
+      Unable to update a todo */}
     </div>
   );
 };
