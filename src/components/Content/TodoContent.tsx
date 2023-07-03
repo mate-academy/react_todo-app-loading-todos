@@ -51,39 +51,35 @@ export const TodoContent: React.FC<Props> = ({
         <>
           <section className="todoapp__main">
             {/* This is a completed todo */}
-            {todos.map(todo => {
-              const { id, completed, title } = todo;
+            {todos.map(({ id, completed, title }) => (
+              <div
+                key={id}
+                className={classNames('todo', {
+                  completed,
+                })}
+              >
+                <label className="todo__status-label">
+                  <input
+                    type="checkbox"
+                    className="todo__status"
+                    checked
+                  />
+                </label>
 
-              return (
-                <div
-                  key={id}
-                  className={classNames('todo', {
-                    completed,
-                  })}
-                >
-                  <label className="todo__status-label">
-                    <input
-                      type="checkbox"
-                      className="todo__status"
-                      checked
-                    />
-                  </label>
+                <span className="todo__title">{title}</span>
 
-                  <span className="todo__title">{title}</span>
+                {/* Remove button appears only on hover */}
+                <button type="button" className="todo__remove">×</button>
 
-                  {/* Remove button appears only on hover */}
-                  <button type="button" className="todo__remove">×</button>
-
-                  {/* overlay will cover the todo while it is being updated */}
-                  <div className="modal overlay">
-                    <div
-                      className="modal-background has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
+                {/* overlay will cover the todo while it is being updated */}
+                <div className="modal overlay">
+                  <div
+                    className="modal-background has-background-white-ter"
+                  />
+                  <div className="loader" />
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </section>
           <footer className="todoapp__footer">
             <span className="todo-count">
