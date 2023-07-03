@@ -92,10 +92,11 @@ export const App: React.FC = () => {
           <form
             onSubmit={e => {
               e.preventDefault();
-              const newTodoTitle = e.target.elements['new-todo'].value;
+              const newTodoTitle = (e.target as HTMLFormElement)['new-todo']
+                .value;
 
               handleCreateTodo(newTodoTitle);
-              e.target.reset();
+              (e.target as HTMLFormElement).reset();
             }}
           >
             <input
