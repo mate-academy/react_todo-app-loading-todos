@@ -7,11 +7,13 @@ import { FilterStatus } from '../../helper';
 interface Props {
   todos: Todo[],
   filter: string,
+  activeTodosQuantity: number,
   onFilterChange: (arg: FilterStatus) => void,
 }
 export const TodoContent: React.FC<Props> = ({
   todos,
   filter,
+  activeTodosQuantity,
   onFilterChange,
 }) => {
   const handleFilterChange = (status: FilterStatus) => {
@@ -19,8 +21,6 @@ export const TodoContent: React.FC<Props> = ({
   };
 
   const filterStatuses = Object.values(FilterStatus);
-
-  const activeTodo = todos.filter(todo => !todo.completed);
 
   return (
     <div className="todoapp__content">
@@ -78,7 +78,7 @@ export const TodoContent: React.FC<Props> = ({
           </section>
           <footer className="todoapp__footer">
             <span className="todo-count">
-              {`${activeTodo.length} items left`}
+              {`${activeTodosQuantity} items left`}
             </span>
 
             {/* Active filter should have a 'selected' class */}

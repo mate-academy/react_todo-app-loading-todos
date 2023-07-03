@@ -37,6 +37,8 @@ export const App: React.FC = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  const activeTodosQuantity = todos.filter(todo => !todo.completed).length;
+
   const filteredTodos: Todo[] = useMemo(() => {
     return todos.filter(todo => {
       switch (filterCondition) {
@@ -62,6 +64,7 @@ export const App: React.FC = () => {
 
       <TodoContent
         todos={filteredTodos}
+        activeTodosQuantity={activeTodosQuantity}
         filter={filterCondition}
         onFilterChange={setFilterCondition}
       />
