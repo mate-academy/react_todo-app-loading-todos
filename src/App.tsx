@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
-import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Message } from './components/ErrorMessage';
+import { TodoList } from './components/TodoList';
+import { TodoFooter } from './components/TodoFooter';
+import { TodoHeader } from './components/TodoHeader';
 
 const USER_ID = 10910;
 
@@ -45,87 +47,16 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+        <TodoHeader />
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
-        <section className="todoapp__main">
-          {visibleTodos.map(todo => (
-            <div className="todo" key={todo.id}>
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                />
-              </label>
-
-              <span className="todo__title">{todo.title}</span>
-              <button type="button" className="todo__remove">×</button>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section>
+        <TodoList visibleTodos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            {`${visibleTodos.length} items left`}
-          </span>
-
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a
-              href="#/"
-              className={cn('filter__link', {
-                selected: selectedNav === 'All',
-              })}
-              onClick={() => setSelectedNav('All')}
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={cn('filter__link', {
-                selected: selectedNav === 'Active',
-              })}
-              onClick={() => setSelectedNav('Active')}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={cn('filter__link', {
-                selected: selectedNav === 'Completed',
-              })}
-              onClick={() => setSelectedNav('Completed')}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          {visibleTodos.some(todo => todo.completed === true) && (
-            <button type="button" className="todoapp__clear-completed">
-              Clear completed
-            </button>
-          )}
-        </footer>
+        <TodoFooter
+          visibleTodos={visibleTodos}
+          selectedNav={selectedNav}
+          setSelectedNav={setSelectedNav}
+        />
       </div>
 
       <Message visibleError={visibleError} setVisibleError={setVisibleError} />
