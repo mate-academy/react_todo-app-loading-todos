@@ -29,16 +29,17 @@ export const App: React.FC = () => {
     setIsError(ErrorMessage.NOERROR);
   };
 
-  const filterTodos = useCallback((todoStatus: string) => {
-    if (todoStatus === TodoStatus.COMPLETED) {
-      return visibleTodos.filter(todo => todo.completed);
-    }
+  const filterTodos = useCallback((TodoFilter: TodoStatus) => {
+    switch (TodoFilter) {
+      case TodoStatus.COMPLETED:
+        return visibleTodos.filter(todo => todo.completed);
 
-    if (todoStatus === TodoStatus.ACTIVE) {
-      return visibleTodos.filter(todo => !todo.completed);
-    }
+      case TodoStatus.ACTIVE:
+        return visibleTodos.filter(todo => !todo.completed);
 
-    return visibleTodos;
+      default:
+        return visibleTodos;
+    }
   }, [filter, visibleTodos]);
 
   const filteredTodos = filterTodos(filter);
