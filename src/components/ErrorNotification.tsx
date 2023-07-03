@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 type Props = {
   error: string | null;
-  setError: (error: null) => void;
+  setError: (error: null | string) => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({ error, setError }) => {

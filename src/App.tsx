@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
@@ -8,24 +8,9 @@ import { Todo } from './types/Todo';
 import { Filters } from './types/Filters';
 import { filterTodos } from './helpers/filterTodos';
 import { ErrorNotification } from './components/ErrorNotification';
+import { Header } from './components/Header';
 
 const USER_ID = 10858;
-// const todosFromMe = [{
-//   id: 1,
-//   userId: 2,
-//   title: 'string',
-//   completed: true,
-// }, {
-//   id: 4,
-//   userId: 3,
-//   title: 'string',
-//   completed: false,
-// }, {
-//   id: 5,
-//   userId: 4,
-//   title: 'string',
-//   completed: true,
-// }];
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -50,40 +35,35 @@ export const App: React.FC = () => {
     return () => clearTimeout(timerId);
   }, [error]);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const visibleTodos = useMemo(() => (
+    filter !== Filters.All
+      ? filterTodos(todosFromServer, filter)
+      : todosFromServer
+  ), [todosFromServer, filter]);
 
-  const visibleTodos = filter !== Filters.All
-    ? filterTodos(todosFromServer, filter)
-    : todosFromServer;
-  const isAnyCompletedTodo = todosFromServer.some(todo => todo.completed);
-  const todosCount = todosFromServer.length;
+  const isAnyCompletedTodo = useMemo(() => (
+    todosFromServer.some(todo => todo.completed)
+  ), [todosFromServer]);
+
+  const activeTodosCount = useMemo(() => (
+    todosFromServer
+      .filter(todo => !todo.completed).length
+  ), [todosFromServer]);
 
   const handleFilterChange = (newFilter: Filters) => {
     setFilter(newFilter);
   };
 
-  todosFromServer.filter(todo => todo.completed || !todo.completed);
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <Header />
 
         <section className="todoapp__main">
           <TodoList
@@ -94,7 +74,7 @@ export const App: React.FC = () => {
         {visibleTodos.length > 0 && (
           <Footer
             isAnyCompleted={isAnyCompletedTodo}
-            todosCount={todosCount}
+            activeTodosCount={activeTodosCount}
             onFilterChange={handleFilterChange}
             selectedFilter={filter}
           />

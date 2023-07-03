@@ -3,14 +3,14 @@ import { Filters } from '../types/Filters';
 
 type Props = {
   isAnyCompleted: boolean;
-  todosCount: number;
+  activeTodosCount: number;
   onFilterChange: (newFilter: Filters) => void;
   selectedFilter: Filters;
 };
 
 export const Footer: React.FC<Props> = ({
   isAnyCompleted,
-  todosCount,
+  activeTodosCount,
   onFilterChange,
   selectedFilter,
 }) => {
@@ -25,7 +25,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosCount} items left`}
+        {`${activeTodosCount} items left`}
       </span>
 
       <nav className="filter">

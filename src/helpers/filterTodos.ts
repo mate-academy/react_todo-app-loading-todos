@@ -4,9 +4,11 @@ import { Todo } from '../types/Todo';
 export const filterTodos = (todos: Todo[], filter: Filters) => {
   return todos.filter(todo => {
     switch (filter) {
-      case 'completed':
+      case Filters.All:
+        return todo;
+      case Filters.Completed:
         return todo.completed;
-      case 'active':
+      case Filters.Active:
         return !todo.completed;
       default:
         return todo;
