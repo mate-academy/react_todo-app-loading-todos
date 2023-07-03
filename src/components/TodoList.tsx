@@ -6,7 +6,7 @@ interface Props {
   todos: Todo[];
 }
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
   return (
     <section className="todoapp__main">
       {/* This is a completed todo */}
@@ -18,4 +18,4 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       ))}
     </section>
   );
-};
+});

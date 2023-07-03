@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { NewTodo } from './components/NewTodo';
@@ -38,25 +38,25 @@ export const App: React.FC = () => {
     setErrorMessage('');
   };
 
-  const visibleTodos = todos.filter(todo => {
+  const activeTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter(todo => todo.completed);
+
+  const visibleTodos = useMemo(() => {
     switch (selectedFilter) {
       case 'Active':
-        return todo.completed === false;
+        return activeTodos;
 
       case 'Completed':
-        return todo.completed === true;
+        return completedTodos;
 
       default:
-        return todo;
+        return todos;
     }
-  });
+  }, [todos, selectedFilter]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const activeTodos = todos.filter(todo => todo.completed === false);
-  const completedTodos = todos.filter(todo => todo.completed === true);
 
   return (
     <div className="todoapp">
