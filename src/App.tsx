@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { Content } from './components/Content/Content';
-import { Notification } from './components/Notification/Notification';
+import { TodoContent } from './components/Content/TodoContent';
+import { ErrorNotification } from './components/Notification/ErrorNotification';
 
 const USER_ID = 10888;
 
@@ -57,14 +57,14 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <Content
+      <TodoContent
         todos={filteredTodos}
         filter={filterCondition}
         onFilterChange={setFilterCondition}
       />
 
       {isAnyError && (
-        <Notification
+        <ErrorNotification
           error={isErrorMessage}
           onHandleError={setIsErrorMessage}
         />

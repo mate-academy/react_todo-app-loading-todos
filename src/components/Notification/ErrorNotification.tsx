@@ -7,7 +7,10 @@ interface Props {
   onHandleError: (arg: boolean) => void;
 }
 
-export const Notification: React.FC<Props> = ({ error, onHandleError }) => {
+export const ErrorNotification: React.FC<Props> = ({
+  error,
+  onHandleError,
+}) => {
   const hendleError = () => {
     onHandleError(false);
   };

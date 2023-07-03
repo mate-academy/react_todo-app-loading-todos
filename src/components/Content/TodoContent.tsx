@@ -8,7 +8,7 @@ interface Props {
   filter: string,
   onFilterChange: (arg: string) => void,
 }
-export const Content: React.FC<Props> = ({
+export const TodoContent: React.FC<Props> = ({
   todos,
   filter,
   onFilterChange,
