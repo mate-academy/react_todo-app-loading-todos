@@ -4,21 +4,21 @@ import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Filter } from './components/Filter';
-import { Filtering } from './types/Filter';
-import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
+import { FilteringOptions } from './types/Filter';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
 import { Notifications } from './components/Notifications/Notification';
 
 const USER_ID = 10921;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filtering>(Filtering.ALL);
+  const [filter, setFilter] = useState<FilteringOptions>(FilteringOptions.all);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+      .then(setTodos)
       .catch(() => {
         setError('Failed to load todos');
         setTimeout(() => setError(null), 3000);
@@ -30,10 +30,10 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filter) {
-      case Filtering.ACTIVE:
+      case FilteringOptions.active:
         return activeTodos;
 
-      case Filtering.COMPLETED:
+      case FilteringOptions.completed:
         return completedTodos;
 
       default:

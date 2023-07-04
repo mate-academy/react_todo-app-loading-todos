@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 interface Props {
   error: string | null;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  setError: CallableFunction;
 }
 
 export const Notifications: React.FC<Props> = ({ error, setError }) => {
