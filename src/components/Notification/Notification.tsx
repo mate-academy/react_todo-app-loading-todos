@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 
 type Props = {
   error: string;
-  setError: (error:string) => void;
+  setError: (error:string | null) => void;
 };
 
 export const Notification:React.FC<Props> = ({ error, setError }) => {
   const closeNotification = () => {
-    setError('');
+    setError(null);
   };
 
   useEffect(() => {
