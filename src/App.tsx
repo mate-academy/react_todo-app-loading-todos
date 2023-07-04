@@ -48,7 +48,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header hasCompletedTodos={hasCompletedTodos} />
 
-        {todos.length > 0 && <TodoList todos={visibleTodos} />}
+        {todos.length && <TodoList todos={visibleTodos} />}
 
         {todos.length > 0 && (
           <footer className="todoapp__footer">
