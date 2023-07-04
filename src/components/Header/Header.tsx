@@ -3,12 +3,12 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  areActive: Todo[] | null
+  activeTodos: Todo[] | null
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 };
 
 export const Header: React.FC<Props> = ({
-  areActive,
+  activeTodos,
   handleSubmit,
 }) => {
   return (
@@ -16,13 +16,13 @@ export const Header: React.FC<Props> = ({
       <button
         type="button"
         className={cn('todoapp__toggle-all', {
-          active: areActive,
+          active: activeTodos,
         })}
         aria-label="button"
       />
 
       <form
-        onSubmit={(e) => handleSubmit(e)}
+        onSubmit={handleSubmit}
       >
         <input
           type="text"

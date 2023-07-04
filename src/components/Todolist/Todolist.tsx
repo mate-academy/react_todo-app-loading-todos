@@ -5,12 +5,10 @@ type Props = {
   filteredTodos: Todo[];
 };
 
-export const Todolist: React.FC<Props> = ({ filteredTodos }) => {
-  return (
-    <section className="todoapp__main">
-      {filteredTodos?.map(todo => (
-        <TodoInfo todo={todo} key={todo.id} />
-      ))}
-    </section>
-  );
-};
+export const Todolist: React.FC<Props> = ({ filteredTodos }) => (
+  <section className="todoapp__main">
+    {filteredTodos?.map(todo => (
+      <TodoInfo todo={todo} key={todo.id} />
+    ))}
+  </section>
+);

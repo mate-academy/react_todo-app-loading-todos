@@ -5,32 +5,39 @@ type Props = {
   todo: Todo
 };
 
-export const TodoInfo: React.FC<Props> = ({ todo }) => (
-  <div
-    className={cn('todo', {
-      completed: todo.completed,
-    })}
-  >
-    <label className="todo__status-label">
-      <input
-        type="checkbox"
-        className="todo__status"
-        checked
-      />
-    </label>
+export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const {
+    completed,
+    title,
+  } = todo;
 
-    <span className="todo__title">{todo.title}</span>
-
-    <button
-      type="button"
-      className="todo__remove"
+  return (
+    <div
+      className={cn('todo', {
+        completed,
+      })}
     >
-      ×
-    </button>
+      <label className="todo__status-label">
+        <input
+          type="checkbox"
+          className="todo__status"
+          checked
+        />
+      </label>
 
-    <div className="modal overlay">
-      <div className="modal-background has-background-white-ter" />
-      <div className="loader" />
+      <span className="todo__title">{title}</span>
+
+      <button
+        type="button"
+        className="todo__remove"
+      >
+        ×
+      </button>
+
+      <div className="modal overlay">
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
