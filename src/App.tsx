@@ -5,7 +5,7 @@ import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { Filters } from './types/Filters';
+import { TodoFilter } from './types/Filters';
 import { filterTodos } from './helpers/filterTodos';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Header } from './components/Header';
@@ -14,14 +14,12 @@ const USER_ID = 10858;
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filters>(Filters.All);
+  const [filter, setFilter] = useState<TodoFilter>(TodoFilter.All);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(result => {
-        setTodosFromServer(result);
-      })
+      .then(setTodosFromServer)
       .catch(() => setError('Unable to load todos'));
   }, []);
 
@@ -36,12 +34,12 @@ export const App: React.FC = () => {
   }, [error]);
 
   const visibleTodos = useMemo(() => (
-    filter !== Filters.All
-      ? filterTodos(todosFromServer, filter)
-      : todosFromServer
+    filter === TodoFilter.All
+      ? todosFromServer
+      : filterTodos(todosFromServer, filter)
   ), [todosFromServer, filter]);
 
-  const isAnyCompletedTodo = useMemo(() => (
+  const hasCompletedTodo = useMemo(() => (
     todosFromServer.some(todo => todo.completed)
   ), [todosFromServer]);
 
@@ -50,7 +48,7 @@ export const App: React.FC = () => {
       .filter(todo => !todo.completed).length
   ), [todosFromServer]);
 
-  const handleFilterChange = (newFilter: Filters) => {
+  const handleFilterChange = (newFilter: TodoFilter) => {
     setFilter(newFilter);
   };
 
@@ -73,7 +71,7 @@ export const App: React.FC = () => {
 
         {visibleTodos.length > 0 && (
           <Footer
-            isAnyCompleted={isAnyCompletedTodo}
+            isAnyCompleted={hasCompletedTodo}
             activeTodosCount={activeTodosCount}
             onFilterChange={handleFilterChange}
             selectedFilter={filter}
