@@ -18,7 +18,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((todosFromServer) => setTodos(todosFromServer))
+      .then(setTodos)
       .catch(() => setError('Loading todos failed'));
   }, []);
 
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const uncompletedTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
         return completedTodos;
 
       case StatusFilterType.ACTIVE:
-        return uncompletedTodos;
+        return activeTodos;
 
       default:
         return todos;
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              {`${uncompletedTodos.length} items left`}
+              {`${activeTodos.length} items left`}
             </span>
 
             <StatusFilter filter={filter} onChangeFilter={setFilter} />
