@@ -10,35 +10,8 @@ import { FilterBy } from './utils/enums';
 
 const USER_ID = 10897;
 
-const testTodos: Todo[] = [
-  {
-    id: 1,
-    userId: USER_ID,
-    title: 'Hi',
-    completed: true,
-  },
-  {
-    id: 2,
-    userId: USER_ID,
-    title: 'Hi',
-    completed: false,
-  },
-  {
-    id: 3,
-    userId: USER_ID,
-    title: 'Hi',
-    completed: false,
-  },
-  {
-    id: 4,
-    userId: USER_ID,
-    title: 'Hi',
-    completed: false,
-  },
-];
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(testTodos);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [hasActive, setHasActive] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [errorText, setErrorText] = useState<null | string>(null);
