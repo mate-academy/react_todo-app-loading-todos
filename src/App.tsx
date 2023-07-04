@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+// import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -15,6 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorNotification, setErrorNotification] = useState(ErrorMessage.none);
   const [filterTodos, setFilterTodos] = useState(FilterBy.all);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -26,7 +28,8 @@ export const App: React.FC = () => {
 
   if (errorNotification) {
     setTimeout(() => {
-      setErrorNotification(ErrorMessage.none);
+      setIsHidden(true);
+      // setErrorNotification(ErrorMessage.none);
     }, 3000);
   }
 
@@ -49,6 +52,10 @@ export const App: React.FC = () => {
     }
   }, [filterTodos, todos]);
 
+  // if (!USER_ID) {
+  //   return <UserWarning />;
+  // }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -56,22 +63,26 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList todos={visibleTodos} />
-
         {visibleTodos.length > 0
           && (
-            <Footer
-              setFilterTodos={setFilterTodos}
-              filterTodos={filterTodos}
-              activeNumber={activeTodos.length}
-              completedNumber={completedTodos.length}
-            />
+            <>
+              <TodoList todos={visibleTodos} />
+
+              <Footer
+                setFilterTodos={setFilterTodos}
+                filterTodos={filterTodos}
+                activeNumber={activeTodos.length}
+                completedNumber={completedTodos.length}
+              />
+            </>
           )}
       </div>
       {errorNotification
         && (
           <ErrorNotification
             errorNotification={errorNotification}
+            isHidden={isHidden}
+            setIsHidden={setIsHidden}
           />
         )}
     </div>
