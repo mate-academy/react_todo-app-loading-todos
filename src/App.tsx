@@ -1,90 +1,19 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
-import { UpdateTodoData } from './types/types';
+import { addTodo, deleteTodo, updateTodo } from './api/api';
 
 const USER_ID = 10917;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
-  const [todoTitle, setTodoTitle] = useState('');
-  const [status, setStatus] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    let updatedTodos;
-
-    switch (status) {
-      case 'Active': {
-        updatedTodos = visibleTodos.filter(todo => !todo.completed);
-        break;
-      }
-
-      case 'Completed': {
-        updatedTodos = visibleTodos.filter(todo => todo.completed);
-        break;
-      }
-
-      default: updatedTodos = visibleTodos;
-    }
-
-    setVisibleTodos(updatedTodos);
-  }, [todos, setVisibleTodos]);
-
-  const addTodo = useCallback(async (title: string) => {
-    try {
-      const newTodo: Todo = await client.post(`/todos?userId=${USER_ID}`, {
-        userId: USER_ID,
-        completed: false,
-        title,
-      });
-
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-      setErrorMessage('');
-
-      return newTodo;
-    } catch (error) {
-      setErrorMessage('Unable to add a todo');
-      throw new Error('Error');
-    }
-  }, []);
-
-  const updateTodo = async (todoId: number, data: UpdateTodoData) => {
-    try {
-      await client.patch(`/todos/${todoId}`, data);
-
-      setTodos((prevTodos: Todo[]) => prevTodos.map((todo: Todo): Todo => {
-        return todo;
-      }));
-      setErrorMessage('');
-    } catch (error) {
-      setErrorMessage('Unable to update a todo');
-      throw new Error('Error');
-    }
-  };
-
-  const deleteTodo = async (todoId: number) => {
-    try {
-      const updatedTodo = await client.delete(`/todos/${todoId}`);
-
-      setTodos((prevTodos: Todo[]) => prevTodos.map((todo: Todo): Todo => {
-        if (todo.id === todoId) {
-          return updatedTodo as Todo;
-        }
-
-        return todo;
-      }));
-      setErrorMessage('');
-
-      return updatedTodo;
-    } catch (error) {
-      setErrorMessage('Unable to delete a todo');
-      throw new Error('Error');
-    }
-  };
+  const [todoTitle, setTodoTitle] = useState<string>('');
+  const [filter, setFilter] = useState<string | null>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,7 +28,20 @@ export const App: React.FC = () => {
     };
 
     fetchData();
-  }, [todos]);
+  }, []);
+
+  useEffect(() => {
+    setVisibleTodos(todos.filter((todo) => {
+      switch (filter) {
+        case 'Active':
+          return !todo.completed;
+        case 'Completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    }));
+  }, [filter, todos]);
 
   const changeTitleHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(event.target.value);
@@ -109,12 +51,16 @@ export const App: React.FC = () => {
     setTodoTitle('');
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (!todoTitle) {
       return;
     }
 
-    addTodo(todoTitle);
+    setIsLoading(true);
+
+    await addTodo(todoTitle, setTodos, setErrorMessage);
+
+    setIsLoading(false);
 
     clearForm();
   };
@@ -132,6 +78,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {todos.some(todo => !todo.completed)}
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
@@ -152,6 +99,22 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
+          {isLoading && (
+            <div className="todo">
+              <label className="todo__status-label">
+                <input type="checkbox" className="todo__status" />
+              </label>
+
+              <span className="todo__title">Todo is being saved now</span>
+              <button type="button" className="todo__remove">×</button>
+
+              {/* 'is-active' class puts this modal on top of the todo */}
+              <div className="modal overlay is-active">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </div>
+          )}
           {visibleTodos.map(todo => (
             todo.completed
               ? (
@@ -161,7 +124,12 @@ export const App: React.FC = () => {
                       type="checkbox"
                       className="todo__status"
                       value={todoTitle}
-                      onClick={() => updateTodo(todo.id, { completed: false })}
+                      onClick={() => updateTodo(
+                        todo.id,
+                        { completed: false },
+                        setTodos,
+                        setErrorMessage,
+                      )}
                       checked
                     />
                   </label>
@@ -172,7 +140,11 @@ export const App: React.FC = () => {
                   <button
                     type="button"
                     className="todo__remove"
-                    onClick={() => deleteTodo(todo.id)}
+                    onClick={() => deleteTodo(
+                      todo.id,
+                      setTodos,
+                      setErrorMessage,
+                    )}
                   >
                     ×
                   </button>
@@ -193,7 +165,12 @@ export const App: React.FC = () => {
                     <input
                       type="checkbox"
                       className="todo__status"
-                      onClick={() => updateTodo(todo.id, { completed: true })}
+                      onClick={() => updateTodo(
+                        todo.id,
+                        { completed: true },
+                        setTodos,
+                        setErrorMessage,
+                      )}
                     />
                   </label>
 
@@ -201,7 +178,11 @@ export const App: React.FC = () => {
                   <button
                     type="button"
                     className="todo__remove"
-                    onClick={() => client.delete(`/todos/${todo.id}`)}
+                    onClick={() => deleteTodo(
+                      todo.id,
+                      setTodos,
+                      setErrorMessage,
+                    )}
                   >
                     ×
                   </button>
@@ -240,22 +221,6 @@ export const App: React.FC = () => {
               <div className="loader" />
             </div>
           </div>
-
-          {/* This todo is in loadind state */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input type="checkbox" className="todo__status" />
-            </label>
-
-            <span className="todo__title">Todo is being saved now</span>
-            <button type="button" className="todo__remove">×</button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
         </section>
 
         {todos.length !== 0 && (
@@ -270,9 +235,9 @@ export const App: React.FC = () => {
                 href="#/"
                 className={classNames(
                   'filter__link',
-                  { selected: status === '' },
+                  { selected: filter === '' },
                 )}
-                onClick={() => setStatus('')}
+                onClick={() => setFilter('')}
               >
                 All
               </a>
@@ -281,9 +246,9 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={classNames(
                   'filter__link',
-                  { selected: status === 'Active' },
+                  { selected: filter === 'Active' },
                 )}
-                onClick={() => setStatus('Active')}
+                onClick={() => setFilter('Active')}
               >
                 Active
               </a>
@@ -292,9 +257,9 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={classNames(
                   'filter__link',
-                  { selected: status === 'Completed' },
+                  { selected: filter === 'Completed' },
                 )}
-                onClick={() => setStatus('Completed')}
+                onClick={() => setFilter('Completed')}
               >
                 Completed
               </a>
@@ -321,6 +286,7 @@ export const App: React.FC = () => {
           has-text-weight-normal
           hidden"
         >
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button type="button" className="delete" />
           <br />
           {errorMessage}
