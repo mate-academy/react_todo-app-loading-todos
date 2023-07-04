@@ -5,7 +5,7 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList.ts/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { Notification } from './components/Notification/Notification';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 
@@ -13,8 +13,10 @@ const USER_ID = 10919;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
-  const [completionStatus, setCompletionStatus] = useState('All');
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState('All');
+
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -23,7 +25,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    switch (completionStatus) {
+    switch (filter) {
       case 'All':
         return todos;
       case 'Active':
@@ -33,7 +35,7 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-  }, [todos, completionStatus]);
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -44,7 +46,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header hasCompletedTodos={hasCompletedTodos} />
 
         {todos.length > 0 && <TodoList todos={visibleTodos} />}
 
@@ -55,23 +57,15 @@ export const App: React.FC = () => {
             </span>
 
             <TodoFilter
-              completionStatus={completionStatus}
-              setCompletionStatus={setCompletionStatus}
+              filter={filter}
+              setFilter={setFilter}
             />
 
-            {/* don't show this button if there are no completed todos */}
-            {/* <button
-              type="button"
-              className="todoapp__clear-completed"
-              hidden={!todos.find(todo => todo.completed)}
-            >
-              Clear completed
-            </button> */}
             <button
               type="button"
               className={cn({
-                'todoapp__clear-completed': todos.some(todo => todo.completed),
-                'todoapp__clear-hidden': !todos.some(todo => todo.completed),
+                'todoapp__clear-completed': hasCompletedTodos,
+                'todoapp__clear-hidden': !hasCompletedTodos,
               })}
             >
               Clear completed
@@ -79,7 +73,9 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-      {error.length > 0 && <Notification error={error} setError={setError} />}
+      {error && (
+        <Notification error={error} setError={setError} />
+      )}
     </div>
   );
 };

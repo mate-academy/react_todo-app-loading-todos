@@ -1,18 +1,25 @@
-export const Header = () => {
-  return (
-    <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
-      {/*  eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="todoapp__toggle-all active" />
+import cn from 'classnames';
 
-      {/* Add a todo on form submit */}
-      <form>
-        <input
-          type="text"
-          className="todoapp__new-todo"
-          placeholder="What needs to be done?"
-        />
-      </form>
-    </header>
-  );
+type Props = {
+  hasCompletedTodos: boolean,
 };
+
+export const Header:React.FC<Props> = ({ hasCompletedTodos }) => (
+  <header className="todoapp__header">
+    {/*  eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+    <button
+      type="button"
+      className={cn('todoapp__toggle-all', {
+        active: hasCompletedTodos,
+      })}
+    />
+
+    <form>
+      <input
+        type="text"
+        className="todoapp__new-todo"
+        placeholder="What needs to be done?"
+      />
+    </form>
+  </header>
+);
