@@ -5,8 +5,8 @@ import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Filter } from './components/Filter';
 import { FilteringOptions } from './types/Filter';
-import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
 import { Notifications } from './components/Notifications/Notification';
 
 const USER_ID = 10921;
