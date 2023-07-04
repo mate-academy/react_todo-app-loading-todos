@@ -20,13 +20,10 @@ export const TodoList: FC<Props> = memo(({ todos, removeTodo, tempTodo }) => {
       ))}
 
       {tempTodo && (
-        <>
-          <Todo
-            todo={tempTodo}
-            removeTodo={removeTodo}
-          />
-          загрузка
-        </>
+        <Todo
+          todo={tempTodo}
+          removeTodo={removeTodo}
+        />
       )}
     </ul>
   );
