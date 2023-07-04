@@ -36,7 +36,9 @@ export const updateTodo = async (
   try {
     await client.patch(`/todos/${todoId}`, data);
 
-    setTodos((prevTodos: Todo[]) => [...prevTodos]);
+    setTodos((prevTodos: Todo[]) => prevTodos
+      .map((todo) => (todo.id === todoId ? { ...todo, ...data } : todo)));
+
     setErrorMessage('');
   } catch (error) {
     setErrorMessage('Unable to update a todo');

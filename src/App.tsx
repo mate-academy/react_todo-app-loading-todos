@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
 import { addTodo, deleteTodo, updateTodo } from './api/api';
+import { Filter } from './types/types';
 
 const USER_ID = 10917;
 
@@ -33,9 +34,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     setVisibleTodos(todos.filter((todo) => {
       switch (filter) {
-        case 'Active':
+        case Filter.Active:
           return !todo.completed;
-        case 'Completed':
+        case Filter.Completed:
           return todo.completed;
         default:
           return true;
@@ -65,10 +66,17 @@ export const App: React.FC = () => {
     clearForm();
   };
 
-  const clearCompletedHandler = () => {
-    const updatedTodos = todos.filter(todo => !todo.completed);
+  const clearCompletedHandler = async () => {
+    try {
+      const completedTodos = todos.filter(todo => todo.completed);
+      const deletedTodos = completedTodos
+        .map(todo => deleteTodo(todo.id, setTodos, setErrorMessage));
 
-    setVisibleTodos(updatedTodos);
+      await Promise.all(deletedTodos);
+    } catch (error) {
+      setErrorMessage('Unable to delete completed todos');
+      throw new Error('Error');
+    }
   };
 
   return (
