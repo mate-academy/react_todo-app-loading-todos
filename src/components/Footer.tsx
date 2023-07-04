@@ -1,22 +1,22 @@
 import cn from 'classnames';
-import { Filters } from '../types/Filters';
+import { TodoFilter } from '../types/Filters';
 
 type Props = {
   isAnyCompleted: boolean;
-  todosCount: number;
-  onFilterChange: (newFilter: Filters) => void;
-  selectedFilter: Filters;
+  activeTodosCount: number;
+  onFilterChange: (newFilter: TodoFilter) => void;
+  selectedFilter: TodoFilter;
 };
 
 export const Footer: React.FC<Props> = ({
   isAnyCompleted,
-  todosCount,
+  activeTodosCount,
   onFilterChange,
   selectedFilter,
 }) => {
   const handleFilterChange = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    newFilter: Filters,
+    newFilter: TodoFilter,
   ) => {
     event.preventDefault();
     onFilterChange(newFilter);
@@ -25,19 +25,19 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosCount} items left`}
+        {`${activeTodosCount} items left`}
       </span>
 
       <nav className="filter">
-        {(Object.keys(Filters) as Array<keyof typeof Filters>).map(key => (
+        {Object.entries(TodoFilter).map(([key, value]) => (
           <a
             href={`#/${key}`}
             className={cn(
               'filter__link',
-              { selected: selectedFilter === Filters[key] },
+              { selected: selectedFilter === value },
             )}
             key={key}
-            onClick={(event) => handleFilterChange(event, Filters[key])}
+            onClick={(event) => handleFilterChange(event, value)}
           >
             {key}
           </a>
