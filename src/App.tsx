@@ -13,13 +13,13 @@ import { Header } from './components/Header';
 const USER_ID = 10858;
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<TodoFilter>(TodoFilter.All);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setTodosFromServer)
+      .then(setTodos)
       .catch(() => setError('Unable to load todos'));
   }, []);
 
@@ -35,18 +35,18 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => (
     filter === TodoFilter.All
-      ? todosFromServer
-      : filterTodos(todosFromServer, filter)
-  ), [todosFromServer, filter]);
+      ? todos
+      : filterTodos(todos, filter)
+  ), [todos, filter]);
 
   const hasCompletedTodo = useMemo(() => (
-    todosFromServer.some(todo => todo.completed)
-  ), [todosFromServer]);
+    todos.some(todo => todo.completed)
+  ), [todos]);
 
   const activeTodosCount = useMemo(() => (
-    todosFromServer
+    todos
       .filter(todo => !todo.completed).length
-  ), [todosFromServer]);
+  ), [todos]);
 
   const handleFilterChange = (newFilter: TodoFilter) => {
     setFilter(newFilter);
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
           />
         </section>
 
-        {visibleTodos.length > 0 && (
+        {todos.length > 0 && (
           <Footer
             isAnyCompleted={hasCompletedTodo}
             activeTodosCount={activeTodosCount}
