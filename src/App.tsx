@@ -7,7 +7,7 @@ import { Message } from './components/ErrorMessege';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoStatus } from './types/TodoStatus';
-import { FilterTodos } from './utils/TodoFilter';
+import { useFilterTodos } from './utils/TodoFilter';
 
 const USER_ID = 10883;
 
@@ -24,6 +24,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const filteredTodos = useFilterTodos(todos, todoFilter);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -39,7 +41,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
 
         <TodoList
-          todos={FilterTodos(todos, todoFilter)}
+          todos={filteredTodos}
         />
 
         {todos.length > 0 && (

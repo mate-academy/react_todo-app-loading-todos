@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { TodoStatus } from '../types/TodoStatus';
 import { Todo } from '../types/Todo';
 
-export const FilterTodos = (todos: Todo[], todoFilter: TodoStatus) => {
+export const useFilterTodos = (todos: Todo[], todoFilter: TodoStatus) => {
   return useMemo(() => (
     todos.filter(todo => {
       switch (todoFilter) {
