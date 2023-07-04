@@ -6,6 +6,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { FilterBy } from './utils/enums';
 
 const USER_ID = 10897;
 
@@ -41,7 +42,7 @@ export const App: React.FC = () => {
   const [hasActive, setHasActive] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [errorText, setErrorText] = useState<null | string>(null);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState(FilterBy.ALL);
 
   const resetError = () => {
     setErrorText(null);
@@ -60,16 +61,16 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const selectFilter = useCallback((event: React.MouseEvent) => {
+  const handleFilterChange = useCallback((event: React.MouseEvent) => {
     const target = event.target as HTMLButtonElement;
 
-    setFilterBy(target.innerText.toLowerCase());
+    setFilterBy(target.innerText.toLowerCase() as FilterBy);
   }, []);
 
-  const visibleTodos = filterBy === 'all'
+  const visibleTodos = filterBy === FilterBy.ALL
     ? todos
     : todos.filter(todo => {
-      if (filterBy === 'active') {
+      if (filterBy === FilterBy.ACTIVE) {
         return !todo.completed;
       }
 
@@ -89,8 +90,6 @@ export const App: React.FC = () => {
           {hasActive && (
             <button type="button" className="todoapp__toggle-all active" />
           )}
-
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -100,15 +99,14 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {!!todos.length && (
+        {Boolean(todos.length) && (
           <>
             <TodoList todos={visibleTodos} />
             <TodoFilter
               amountTodos={visibleTodos.length}
               filterStatus={filterBy}
-              selectFilter={selectFilter}
+              handleFilterChange={handleFilterChange}
               hasCompleted={hasCompleted}
-            // clearCompleted={ }
             />
           </>
         )}
