@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-// import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { FilterBy } from './types/FilterBy';
 import { ErrorMessage } from './types/ErrorMessage';
 import { filterByStatus } from './utils/helpers';
@@ -29,7 +28,6 @@ export const App: React.FC = () => {
   if (errorNotification) {
     setTimeout(() => {
       setIsHidden(true);
-      // setErrorNotification(ErrorMessage.none);
     }, 3000);
   }
 
@@ -51,10 +49,6 @@ export const App: React.FC = () => {
         throw new Error('failed to filter');
     }
   }, [filterTodos, todos]);
-
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
 
   return (
     <div className="todoapp">
