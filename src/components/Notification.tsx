@@ -17,7 +17,7 @@ export const Notification: FC <Props> = ({ errorMessage }) => {
   }, []);
 
   return (
-    showNotification ? (
+    {showNotification} && (
       <div className="notification is-danger is-light has-text-weight-normal">
         <button
           type="button"
@@ -27,6 +27,6 @@ export const Notification: FC <Props> = ({ errorMessage }) => {
         />
         {errorMessage}
       </div>
-    ) : null
+    )
   );
 };

@@ -13,7 +13,7 @@ const USER_ID = 6752;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterValue, setFilterValue] = useState('all');
+  const [filterValue, setFilterValue] = useState(FilterValue.AllItems);
   const [errorMessage, setErrorMessage] = useState<Error>(Error.NoError);
 
   const loadTodos = async () => {
@@ -38,13 +38,15 @@ export const App: React.FC = () => {
     let visibleTodos = [...todos];
 
     switch (filterValue) {
-      case FilterValue.Active: visibleTodos = visibleTodos.filter(
-        (todo) => !todo.completed,
-      );
+      case FilterValue.Active: 
+        visibleTodos = visibleTodos.filter(
+          (todo) => !todo.completed,
+        );
         break;
-      case FilterValue.Completed: visibleTodos = visibleTodos.filter(
-        (todo) => todo.completed,
-      );
+      case FilterValue.Completed: 
+        visibleTodos = visibleTodos.filter(
+          (todo) => todo.completed,
+        );
         break;
       default:
         break;
@@ -62,8 +64,6 @@ export const App: React.FC = () => {
   );
 
   return (
-    <>
-
       <div className="todoapp">
         <h1 className="todoapp__title">todos</h1>
 
@@ -85,19 +85,17 @@ export const App: React.FC = () => {
             <TodoList todos={getFilteringTodos()} />
 
           </section>
-          {todos.length ? (
+          {todos.length && (
             <Footer
               setFilterValue={setFilterValue}
               filterValue={filterValue}
               completedTodos={completedTodos}
               activeTodos={activeTodos}
             />
-          ) : null}
+          )}
         </div>
 
         {errorMessage && <Notification errorMessage={errorMessage} />}
       </div>
-
-    </>
   );
 };
