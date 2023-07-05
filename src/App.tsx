@@ -8,7 +8,7 @@ import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
 import { getTodos } from './api/todos';
 import { ErrorMessage } from './types/ErrorMessage';
-import { FilterStatus } from './types/FilterStatus';
+import { StatusFilter } from './types/StatusFilter ';
 
 const USER_ID = 10906;
 
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<
-  FilterStatus>(FilterStatus.ALL);
+  StatusFilter >(StatusFilter.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -49,10 +49,10 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (selectedFilter) {
-      case FilterStatus.ACTIVE:
+      case StatusFilter.ACTIVE:
         return activeTodos;
 
-      case FilterStatus.COMPLETED:
+      case StatusFilter.COMPLETED:
         return completedTodos;
 
       default:

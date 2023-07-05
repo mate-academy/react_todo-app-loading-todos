@@ -12,7 +12,7 @@ export const NewTodo: React.FC<Props> = ({
   setNewTodoTitle,
   setErrorMessage,
 }) => {
-  const handleChangeTodoTitle = (
+  const handleTodoTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setNewTodoTitle(event.target.value);
@@ -26,7 +26,7 @@ export const NewTodo: React.FC<Props> = ({
         className="todoapp__new-todo"
         placeholder="What needs to be done?"
         value={newTodoTitle}
-        onChange={handleChangeTodoTitle}
+        onChange={handleTodoTitleChange}
       />
     </form>
   );
