@@ -3,5 +3,4 @@ export enum ErrorText {
   onAdd = 'Unable to add a todo',
   onDelete = 'Unable to delete a todo',
   onUpdate = 'Unable to update a todo',
-  none = '',
 }
