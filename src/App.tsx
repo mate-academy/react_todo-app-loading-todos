@@ -9,7 +9,7 @@ import { FilterBy } from './types/FilterBy';
 import { TodoList } from './components/TodoList';
 import { getFilteredTodos } from './helpers/helpers';
 
-const USER_ID = 10929; // ** //
+const USER_ID = 10929;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
