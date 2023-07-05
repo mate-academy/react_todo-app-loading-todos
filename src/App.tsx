@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((todosFromServer: Todo[]) => setTodos(todosFromServer))
+      .then((setTodos))
       .catch(() => setError('Unable to get todos'));
   }, []);
 
