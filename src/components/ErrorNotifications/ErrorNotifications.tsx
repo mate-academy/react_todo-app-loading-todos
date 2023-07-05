@@ -2,14 +2,22 @@ import React from 'react';
 import cn from 'classnames';
 
 interface Props {
-  error: string;
-  remove: () => void;
+  error: string | null;
+  onError: (arg: string) => void;
 }
 
 export const ErrorNotifications: React.FC<Props> = ({
   error,
-  remove,
+  onError,
 }) => {
+  setTimeout(() => {
+    if (error) {
+      onError('');
+    }
+  }, 3000);
+
+  const removeError = () => onError('');
+
   return (
     <div
       className={cn(
@@ -22,7 +30,7 @@ export const ErrorNotifications: React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={() => remove()}
+        onClick={removeError}
       />
 
       {error}

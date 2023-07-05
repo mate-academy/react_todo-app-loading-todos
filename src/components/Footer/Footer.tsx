@@ -1,15 +1,15 @@
 import React from 'react';
 import cn from 'classnames';
-import { FilterTodos } from '../../types/FilterTodos';
+import { TodosFilter } from '../../types/TodosFilter';
 
 interface Props {
-  select: FilterTodos;
-  onSelect: (arg: FilterTodos) => void;
+  selectFilter: TodosFilter;
+  onSelectFilter: (arg: TodosFilter) => void;
 }
 
 export const Footer: React.FC<Props> = ({
-  select,
-  onSelect,
+  selectFilter,
+  onSelectFilter,
 }) => {
   return (
     <footer className="todoapp__footer">
@@ -22,9 +22,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: select === FilterTodos.ALL,
+            selected: selectFilter === TodosFilter.ALL,
           })}
-          onClick={() => onSelect(FilterTodos.ALL)}
+          onClick={() => onSelectFilter(TodosFilter.ALL)}
         >
           All
         </a>
@@ -32,9 +32,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: select === FilterTodos.ACTIVE,
+            selected: selectFilter === TodosFilter.ACTIVE,
           })}
-          onClick={() => onSelect(FilterTodos.ACTIVE)}
+          onClick={() => onSelectFilter(TodosFilter.ACTIVE)}
         >
           Active
         </a>
@@ -42,9 +42,9 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: select === FilterTodos.COMPLETED,
+            selected: selectFilter === TodosFilter.COMPLETED,
           })}
-          onClick={() => onSelect(FilterTodos.COMPLETED)}
+          onClick={() => onSelectFilter(TodosFilter.COMPLETED)}
         >
           Completed
         </a>

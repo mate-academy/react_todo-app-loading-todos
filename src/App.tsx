@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -8,7 +7,7 @@ import React, {
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { FilterTodos } from './types/FilterTodos';
+import { TodosFilter } from './types/TodosFilter';
 import { Header } from './components/Header/Header';
 import {
   ErrorNotifications,
@@ -16,13 +15,13 @@ import {
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
 
-const filteringTodos = (todos: Todo[], filterType: FilterTodos) => {
+const filterTodos = (todos: Todo[], filterType: TodosFilter) => {
   switch (filterType) {
-    case FilterTodos.ALL:
+    case TodosFilter.ALL:
       return todos;
-    case FilterTodos.ACTIVE:
+    case TodosFilter.ACTIVE:
       return todos.filter(todo => !todo.completed);
-    case FilterTodos.COMPLETED:
+    case TodosFilter.COMPLETED:
       return todos.filter(todo => todo.completed);
     default:
       throw new Error('Unexpected type!');
@@ -33,9 +32,12 @@ const USER_ID = 10911;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState('');
-  const [query, setQuery] = useState('');
-  const [select, setSelect] = useState<FilterTodos>(FilterTodos.ALL);
+  const [error, setError] = useState<string | null>('');
+  const [newTitle, setNewTitle] = useState('');
+  const [
+    selectFilter,
+    setSelectFilter
+  ] = useState<TodosFilter>(TodosFilter.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -45,18 +47,9 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const deleteNotification = useCallback(() => {
-    setError('');
-    setTimeout(() => {
-      setError('');
-    }, 3000);
-  }, []);
-
   const visibleTodos = useMemo(() => {
-    const todoList = filteringTodos(todos, select);
-
-    return todoList;
-  }, [select, todos]);
+    return filterTodos(todos, selectFilter);
+  }, [selectFilter, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -68,8 +61,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          query={query}
-          onQuery={setQuery}
+          newTitle={newTitle}
+          onNewTitle={setNewTitle}
           visibleTodos={visibleTodos}
         />
 
@@ -81,8 +74,8 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <Footer
-            select={select}
-            onSelect={setSelect}
+            selectFilter={selectFilter}
+            onSelectFilter={setSelectFilter}
           />
         )}
       </div>
@@ -90,7 +83,7 @@ export const App: React.FC = () => {
       {error && (
         <ErrorNotifications
           error={error}
-          remove={deleteNotification}
+          onError={setError}
         />
       )}
     </div>
