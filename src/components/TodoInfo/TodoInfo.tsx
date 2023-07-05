@@ -7,20 +7,24 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const {
+    title,
+    completed,
+  } = todo;
+
   return (
     <div
-      className={cn('todo',
-        { completed: todo.completed === true })}
+      className={cn('todo', { completed })}
     >
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
-          defaultChecked={todo.completed}
+          defaultChecked={completed}
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      <span className="todo__title">{title}</span>
 
       <button type="button" className="todo__remove">×</button>
 

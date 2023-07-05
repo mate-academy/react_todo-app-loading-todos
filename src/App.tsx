@@ -1,31 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { ErrorNotification } from './components/ErrorNotification';
+import { ErrorMessage } from './components/ErrorMessage';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilterBy } from './types/FilterBy';
-import { ErrorMessage } from './types/ErrorMessage';
+import { ErrorText } from './types/ErrorText';
 import { filterByStatus } from './utils/helpers';
 
 const USER_ID = 10913;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorNotification, setErrorNotification] = useState(ErrorMessage.none);
-  const [filterTodos, setFilterTodos] = useState(FilterBy.All);
+  const [errorMessage, setErrorMessage] = useState<ErrorText | null>(null);
+  const [todosFilter, setTodosFilter] = useState(FilterBy.All);
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorNotification(ErrorMessage.onLoad);
+        setErrorMessage(ErrorText.onLoad);
       });
   }, []);
 
-  if (errorNotification) {
+  if (errorMessage) {
     setTimeout(() => {
       setIsHidden(true);
     }, 3000);
@@ -35,7 +35,7 @@ export const App: React.FC = () => {
   const completedTodos = filterByStatus(todos, true);
 
   const visibleTodos = useMemo(() => {
-    switch (filterTodos) {
+    switch (todosFilter) {
       case FilterBy.All:
         return todos;
 
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
       default:
         throw new Error('failed to filter');
     }
-  }, [filterTodos, todos]);
+  }, [todosFilter, todos]);
 
   return (
     <div className="todoapp">
@@ -63,18 +63,18 @@ export const App: React.FC = () => {
               <TodoList todos={visibleTodos} />
 
               <Footer
-                setFilterTodos={setFilterTodos}
-                filterTodos={filterTodos}
-                activeNumber={activeTodos.length}
-                completedNumber={completedTodos.length}
+                setTodosFilter={setTodosFilter}
+                todosFilter={todosFilter}
+                activeTodosNumber={activeTodos.length}
+                completedTodosdNumber={completedTodos.length}
               />
             </>
           )}
       </div>
-      {errorNotification
+      {errorMessage
         && (
-          <ErrorNotification
-            errorNotification={errorNotification}
+          <ErrorMessage
+            errorMessage={errorMessage}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
           />

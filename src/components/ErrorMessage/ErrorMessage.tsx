@@ -1,17 +1,19 @@
 import cn from 'classnames';
-import { ErrorMessage } from '../../types/ErrorMessage';
+import { ErrorText } from '../../types/ErrorText';
 
 type Props = {
-  errorNotification: ErrorMessage;
+  errorMessage: ErrorText;
   isHidden: boolean;
   setIsHidden: (status: boolean) => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({
-  errorNotification,
+export const ErrorMessage: React.FC<Props> = ({
+  errorMessage,
   isHidden,
   setIsHidden,
 }) => {
+  const handleCloseNotification = () => setIsHidden(true);
+
   return (
     <div className={cn('notification is-danger is-light has-text-weight-normal',
       { hidden: isHidden === true })}
@@ -20,10 +22,10 @@ export const ErrorNotification: React.FC<Props> = ({
         aria-label="closeNotification"
         type="button"
         className="delete"
-        onClick={() => setIsHidden(true)}
+        onClick={handleCloseNotification}
       />
 
-      {errorNotification}
+      {errorMessage}
     </div>
   );
 };
