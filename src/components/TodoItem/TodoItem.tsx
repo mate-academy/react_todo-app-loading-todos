@@ -8,6 +8,8 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, completed } = todo;
+
   return (
     <div className={cn('todo', {
       completed: todo.completed,
@@ -17,11 +19,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      <span className="todo__title">{title}</span>
 
       {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove">×</button>

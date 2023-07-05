@@ -19,14 +19,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((fetchedTodos: Todo[]) => {
-        setTodos(fetchedTodos);
-      })
+      .then(setTodos)
       .catch((fetchedError: Error) => {
-        setError(
-          (fetchedError && fetchedError.message)
-          || 'Unexpected error while fetching todos',
-        );
+        setError(fetchedError?.message ?? 'Unexpected error fetching todos');
       });
   }, []);
 
@@ -46,8 +41,12 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const nonCompletedTodos = todos.filter(todo => !todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
+
+  const handleClearError = () => {
+    setError(null);
+  };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const visibleTodos = useMemo(() => {
@@ -56,7 +55,7 @@ export const App: React.FC = () => {
         return completedTodos;
 
       case Filters.ACTIVE:
-        return nonCompletedTodos;
+        return activeTodos;
 
       default:
         return todos;
@@ -87,10 +86,10 @@ export const App: React.FC = () => {
         {todos.length && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              {`${nonCompletedTodos.length} items left`}
+              {`${activeTodos.length} items left`}
             </span>
 
-            <Filter filter={filter} onChangeFilter={setFilter} />
+            <Filter filter={filter} onFilterChange={setFilter} />
 
             <button type="button" className="todoapp__clear-completed">
               Clear completed
@@ -113,7 +112,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="delete"
-          onClick={() => setError(null)}
+          onClick={handleClearError}
         />
         {error}
       </div>
