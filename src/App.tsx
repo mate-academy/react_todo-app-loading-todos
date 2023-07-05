@@ -37,7 +37,10 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {todos.length > 0 && (
-            <button type="button" className="todoapp__toggle-all active" />
+            <button
+              type="button"
+              className="todoapp__toggle-all active"
+            />
           )}
 
           {/* Add a todo on form submit */}
