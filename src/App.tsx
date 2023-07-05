@@ -36,14 +36,9 @@ export const App: React.FC = () => {
     };
   }, [error]);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const filteredTodos = useMemo(() => {
     switch (filter) {
       case StatusFilterType.COMPLETED:
@@ -61,6 +56,10 @@ export const App: React.FC = () => {
     setError(null);
   };
 
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -76,7 +75,7 @@ export const App: React.FC = () => {
               {`${activeTodos.length} items left`}
             </span>
 
-            <StatusFilter filter={filter} onChangeFilter={setFilter} />
+            <StatusFilter filter={filter} onFilterChange={setFilter} />
 
             {completedTodos && (
               <button type="button" className="todoapp__clear-completed">
@@ -87,7 +86,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorMessage error={error} onCloseError={handleCloseError} />
+      <ErrorMessage error={error} onErrorClose={handleCloseError} />
     </div>
   );
 };
