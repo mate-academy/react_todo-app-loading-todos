@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
 import { ErrorMessage } from '../../types/ErrorMessage';
 
@@ -18,6 +17,7 @@ export const ErrorNotification: React.FC<Props> = ({
       { hidden: isHidden === true })}
     >
       <button
+        aria-label="closeNotification"
         type="button"
         className="delete"
         onClick={() => setIsHidden(true)}

@@ -14,7 +14,7 @@ const USER_ID = 10913;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorNotification, setErrorNotification] = useState(ErrorMessage.none);
-  const [filterTodos, setFilterTodos] = useState(FilterBy.all);
+  const [filterTodos, setFilterTodos] = useState(FilterBy.All);
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
@@ -36,13 +36,13 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filterTodos) {
-      case FilterBy.all:
+      case FilterBy.All:
         return todos;
 
-      case FilterBy.completed:
+      case FilterBy.Completed:
         return completedTodos;
 
-      case FilterBy.active:
+      case FilterBy.Active:
         return activeTodos;
 
       default:

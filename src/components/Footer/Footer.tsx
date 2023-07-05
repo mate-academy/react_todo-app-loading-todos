@@ -22,32 +22,17 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter">
-        <a
-          href="#/"
-          className={cn('filter__link',
-            { selected: filterTodos === FilterBy.all })}
-          onClick={() => setFilterTodos(FilterBy.all)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={cn('filter__link',
-            { selected: filterTodos === FilterBy.active })}
-          onClick={() => setFilterTodos(FilterBy.active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link',
-            { selected: filterTodos === FilterBy.completed })}
-          onClick={() => setFilterTodos(FilterBy.completed)}
-        >
-          Completed
-        </a>
+        {Object.entries(FilterBy).map(([key, value]) => (
+          <a
+            key={key}
+            href={`#${value}`}
+            className={cn('filter__link',
+              { selected: filterTodos === value })}
+            onClick={() => setFilterTodos(value)}
+          >
+            {key}
+          </a>
+        ))}
       </nav>
 
       {completedNumber > 0
