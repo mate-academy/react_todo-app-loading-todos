@@ -25,7 +25,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
       <span className="todo__title">{title}</span>
       <button type="button" className="todo__remove">×</button>
 
-      {/* 'is-active' class puts this modal on top of the todo */}
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
