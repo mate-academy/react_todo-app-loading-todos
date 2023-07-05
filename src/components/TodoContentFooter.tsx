@@ -23,7 +23,6 @@ export const TodoContentFooter: FC<TodoContentFooterProps> = (props) => {
         {statusKeys.map(status => (
           <a
             href="#/"
-            // className="filter__link selected"
             className={classNames(
               'filter__link',
               {
@@ -36,20 +35,8 @@ export const TodoContentFooter: FC<TodoContentFooterProps> = (props) => {
             {status}
           </a>
         ))}
-        {/* <a href="#/" className="filter__link selected">
-          All
-        </a>
-
-        <a href="#/active" className="filter__link">
-          Active
-        </a>
-
-        <a href="#/completed" className="filter__link">
-          Completed
-        </a> */}
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>

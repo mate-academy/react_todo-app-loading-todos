@@ -16,15 +16,14 @@ export const TodoContent: FC<TodoContentProps> = ({ todos }) => {
   ] = useState<TodoStatus>(TodoStatus.All);
 
   const visibleTodos = getFilteredTodos(todos, selectedStatusTodo);
+  const isHasActiveTodos = visibleTodos.some(todo => !todo.completed);
 
   return (
     <div className="todoapp__content">
-      <TodoContentHeader />
+      <TodoContentHeader isHasActiveTodos={isHasActiveTodos} />
 
       <TodoContentMain todos={visibleTodos} />
 
-      {/* Hide the footer if there are no todos */}
-      {/* {todos.length > 0 && <TodoContentFooter />} */}
       {todos.length > 0 && (
         <TodoContentFooter
           selectedStatusTodo={selectedStatusTodo}

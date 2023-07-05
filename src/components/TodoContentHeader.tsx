@@ -1,11 +1,20 @@
-export const TodoContentHeader = () => {
+import { FC } from 'react';
+
+interface TodoContentHeaderProps {
+  isHasActiveTodos: boolean,
+}
+
+export const TodoContentHeader
+: FC<TodoContentHeaderProps> = ({ isHasActiveTodos }) => {
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="todoapp__toggle-all active" />
+      <button
+        type="button"
+        className="todoapp__toggle-all active"
+        disabled={isHasActiveTodos}
+      />
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           type="text"
