@@ -36,7 +36,7 @@ export const App: React.FC = () => {
   const [newTitle, setNewTitle] = useState('');
   const [
     selectFilter,
-    setSelectFilter
+    setSelectFilter,
   ] = useState<TodosFilter>(TodosFilter.ALL);
 
   useEffect(() => {
