@@ -6,23 +6,27 @@ interface Props {
   todo: Todo
 }
 
-export const TodoInfo: FC<Props> = ({ todo: { completed, title } }) => (
-  <div className={cn('todo', { completed })}>
-    <label className="todo__status-label">
-      <input
-        type="checkbox"
-        className="todo__status"
-        checked={completed}
-      />
-    </label>
+export const TodoInfo: FC<Props> = ({ todo }) => {
+  const { completed, title } = todo;
 
-    <span className="todo__title">{title}</span>
+  return (
+    <div className={cn('todo', { completed })}>
+      <label className="todo__status-label">
+        <input
+          type="checkbox"
+          className="todo__status"
+          checked={completed}
+        />
+      </label>
 
-    <button type="button" className="todo__remove">×</button>
+      <span className="todo__title">{title}</span>
 
-    <div className="modal overlay">
-      <div className="modal-background has-background-white-ter" />
-      <div className="loader" />
+      <button type="button" className="todo__remove">×</button>
+
+      <div className="modal overlay">
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
