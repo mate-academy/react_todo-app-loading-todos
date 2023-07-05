@@ -5,13 +5,13 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { FilterTodos } from './components/FilterTodos/FilterTodos';
 import { Todo } from './types/Todo';
+import { FilterOption } from './types/Filter';
 // eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 
@@ -20,10 +20,9 @@ const USER_ID = 10918;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [filterValue, setFilterValue] = useState<string>('All');
+  const [filter, setFilter] = useState<string>(FilterOption.ALL);
 
   const todosCount = todos.length;
-  const completedTodos = todos.some(todo => todo.completed);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -52,17 +51,15 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    switch (filterValue) {
-      case 'All':
-        return todos;
-      case 'Active':
+    switch (filter) {
+      case FilterOption.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case FilterOption.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
     }
-  }, [todos, filterValue]);
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -73,7 +70,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} />
+        <Header todosCount={todosCount} />
 
         {todos.length > 0 && (
           <>
@@ -87,17 +84,14 @@ export const App: React.FC = () => {
               </span>
 
               <FilterTodos
-                filterValue={filterValue}
-                setFilterValue={setFilterValue}
+                filter={filter}
+                setFilter={setFilter}
               />
 
               {/* don't show this button if there are no completed todos */}
               <button
                 type="button"
-                className={cn('todoapp__clear-completed', {
-                  'todoapp__clear-hide': !completedTodos,
-                })}
-                disabled={!completedTodos}
+                className="todoapp__clear-completed"
               >
                 Clear completed
               </button>

@@ -7,10 +7,12 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { completed, title } = todo;
+
   return (
     <div className={cn(
       'todo',
-      { completed: todo.completed },
+      { completed },
     )}
     >
       <label className="todo__status-label">
@@ -21,9 +23,8 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      <span className="todo__title">{title}</span>
 
-      {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove">×</button>
 
       {/* overlay will cover the todo while it is being updated */}

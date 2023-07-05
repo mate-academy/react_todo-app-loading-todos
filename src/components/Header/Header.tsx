@@ -1,11 +1,10 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[]
+  todosCount: number
 };
 
-export const Header: React.FC<Props> = ({ todos }) => {
+export const Header: React.FC<Props> = ({ todosCount }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
@@ -14,7 +13,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
 
-      {todos.length > 0 && (
+      {todosCount > 0 && (
         // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <button
           type="button"
