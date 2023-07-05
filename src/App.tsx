@@ -13,16 +13,14 @@ const USER_ID = 10929;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState(FilterBy.ALL);
-  const [isError, setIsError] = useState<string | null>(null);
+  const [filterBy, setFilterBy] = useState(FilterBy.all);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((loadedTodos: Todo[]) => {
-        setTodos(loadedTodos);
-      })
+      .then(setTodos)
       .catch((loadedError: Error) => {
-        setIsError(loadedError?.message ?? 'Error');
+        setErrorMessage(loadedError?.message ?? 'Error');
       });
   }, []);
 
@@ -38,8 +36,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          {(todos.length > 0) && (
+          {todos.length > 0 && (
             <button type="button" className="todoapp__toggle-all active" />
           )}
 
@@ -66,9 +63,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {isError && <Notification />}
+      {errorMessage && <Notification />}
     </div>
   );
 };

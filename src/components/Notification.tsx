@@ -5,6 +5,10 @@ import classNames from 'classnames';
 export const Notification: React.FC = () => {
   const [hidden, setHidden] = useState(false);
 
+  const deleteHandler = () => {
+    setHidden(true);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setHidden(true);
@@ -20,7 +24,7 @@ export const Notification: React.FC = () => {
       <button
         type="button"
         className="delete"
-        onClick={() => setHidden(true)}
+        onClick={deleteHandler}
       />
       Unable to add a todo
       <br />
