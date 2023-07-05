@@ -7,46 +7,52 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
 import { getTodos } from './api/todos';
+import { ErrorMessage } from './types/ErrorMessage';
+import { FilterStatus } from './types/FilterStatus';
 
 const USER_ID = 10906;
 
-enum ErrorMessages {
-  load = 'Unable to load the todos',
-  add = 'Unable to add a todo',
-  remove = 'Unable to delete a todo',
-  update = 'Unable to update a todo',
-}
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [newTodoTitle, setNewTodoTitle] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState<
+  FilterStatus>(FilterStatus.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorMessage(ErrorMessages.load);
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
+        setErrorMessage(ErrorMessage.LOAD);
       });
   }, []);
 
-  const handleClickDeleteButton = () => {
-    setErrorMessage('');
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+  }, [errorMessage]);
+
+  const handleDeleteError = () => {
+    setErrorMessage(null);
   };
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
+  const activeTodos = useMemo(() => (
+    todos.filter(todo => !todo.completed)
+  ), [todos]);
+
+  const completedTodos = useMemo(() => (
+    todos.filter(todo => todo.completed)
+  ), [todos]);
 
   const visibleTodos = useMemo(() => {
     switch (selectedFilter) {
-      case 'Active':
+      case FilterStatus.ACTIVE:
         return activeTodos;
 
-      case 'Completed':
+      case FilterStatus.COMPLETED:
         return completedTodos;
 
       default:
@@ -64,7 +70,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className="todoapp__toggle-all active"
@@ -113,7 +118,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="delete"
-          onClick={handleClickDeleteButton}
+          onClick={handleDeleteError}
         />
 
         {errorMessage}
