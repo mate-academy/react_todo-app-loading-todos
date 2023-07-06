@@ -8,15 +8,17 @@ import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Notification } from './components/Notification/Notification';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { FilterOptions } from './types/FilterOptions';
 
 const USER_ID = 10919;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<FilterOptions>(FilterOptions.all);
 
   const hasCompletedTodos = todos.some(todo => todo.completed);
+  const countIncompleteTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -26,11 +28,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filter) {
-      case 'All':
-        return todos;
-      case 'Active':
+      case FilterOptions.active:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case FilterOptions.completed:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
@@ -48,12 +48,12 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header hasCompletedTodos={hasCompletedTodos} />
 
-        {todos.length && <TodoList todos={visibleTodos} />}
+        {todos && <TodoList todos={visibleTodos} />}
 
-        {todos.length > 0 && (
+        {todos && (
           <footer className="todoapp__footer">
             <span className="todo-count">
-              {`${todos.length} items left`}
+              {`${countIncompleteTodos} items left`}
             </span>
 
             <TodoFilter
