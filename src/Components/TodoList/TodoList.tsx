@@ -11,7 +11,10 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         {todos.map((todo) => (
           <>
             {todo.completed ? (
-              <div className="todo completed">
+              <div
+                className="todo completed"
+                key={todo.id}
+              >
                 <label className="todo__status-label">
                   <input type="checkbox" className="todo__status" checked />
                 </label>
