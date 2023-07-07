@@ -10,7 +10,7 @@ import { FilterStatus } from './types/FilterStatus';
 const USER_ID = 10999;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
   const [filterStatus, setFilterStatus] = useState(FilterStatus.ALL);
 
@@ -147,11 +147,14 @@ export const App: React.FC = () => {
               </a>
             </nav>
 
-            {!completedTodos && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              style={{ opacity: completedTodos.length > 0 ? '1' : '0' }}
+              disabled={!completedTodos}
+            >
+              Clear completed
+            </button>
           </footer>
         )}
       </div>
