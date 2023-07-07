@@ -8,8 +8,6 @@ import { getTodos } from './api/todos';
 
 const USER_ID = 10995;
 
-type filterType = 'All' | 'Active' | 'Completed';
-
 export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
@@ -17,7 +15,7 @@ export const App: React.FC = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [err, setErr] = useState<string | null>(null);
-  const [filterMethod, setFilterMethod] = useState<filterType>('All');
+  const [filterMethod, setFilterMethod] = useState<string>('All');
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
