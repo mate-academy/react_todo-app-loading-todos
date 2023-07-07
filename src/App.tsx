@@ -9,14 +9,29 @@ import { getTodos } from './api/todos';
 const USER_ID = 10995;
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [err, setErr] = useState<string | null>(null);
   const [filterMethod, setFilterMethod] = useState<string>('All');
   const [isHidden, setIsHidden] = useState(false);
+
+  let visibleTodos = [...todos];
+
+  switch (filterMethod) {
+    case 'Completed':
+      visibleTodos = [...visibleTodos].filter(todo => todo.completed === true);
+      break;
+
+    case 'Active':
+      visibleTodos = [...visibleTodos].filter(todo => todo.completed !== true);
+      break;
+
+    case 'All':
+      visibleTodos = [...visibleTodos];
+      break;
+
+    default:
+      break;
+  }
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -45,23 +60,8 @@ export const App: React.FC = () => {
     };
   }, [err]);
 
-  let visibleTodos = [...todos];
-
-  switch (filterMethod) {
-    case 'Completed':
-      visibleTodos = [...visibleTodos].filter(todo => todo.completed === true);
-      break;
-
-    case 'Active':
-      visibleTodos = [...visibleTodos].filter(todo => todo.completed !== true);
-      break;
-
-    case 'All':
-      visibleTodos = [...visibleTodos];
-      break;
-
-    default:
-      break;
+  if (!USER_ID) {
+    return <UserWarning />;
   }
 
   return (
@@ -165,12 +165,13 @@ export const App: React.FC = () => {
         <div className={cn(
           'notification is-danger is-light has-text-weight-normal',
           { hidden: isHidden },
-        )}>
+        )}
+        >
           <button
             type="button"
             className="delete"
             onClick={() => {
-              setErr(null)
+              setErr(null);
             }}
           />
           {err}
