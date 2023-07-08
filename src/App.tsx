@@ -8,25 +8,27 @@ import { getTodos } from './api/todos';
 
 const USER_ID = 10995;
 
+enum FilterOptions {
+  ALL = 'All',
+  ACTIVE = 'Active',
+  COMPLETED = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [err, setErr] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [filterMethod, setFilterMethod] = useState<string>('All');
   const [isHidden, setIsHidden] = useState(false);
 
   let visibleTodos = [...todos];
 
   switch (filterMethod) {
-    case 'Completed':
-      visibleTodos = [...visibleTodos].filter(todo => todo.completed === true);
+    case FilterOptions.COMPLETED:
+      visibleTodos = visibleTodos.filter(todo => todo.completed === true);
       break;
 
-    case 'Active':
-      visibleTodos = [...visibleTodos].filter(todo => todo.completed !== true);
-      break;
-
-    case 'All':
-      visibleTodos = [...visibleTodos];
+    case FilterOptions.ACTIVE:
+      visibleTodos = visibleTodos.filter(todo => todo.completed !== true);
       break;
 
     default:
@@ -38,19 +40,19 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .catch(() => setErr('Error: cannot upload todos'));
+      .catch(() => setError('Error: cannot upload todos'));
   }, []);
 
   useEffect(() => {
     let errorTimer: number;
     let hiddenTime: number;
 
-    if (err) {
+    if (error) {
       hiddenTime = window.setTimeout(() => {
         setIsHidden(true);
       }, 2000);
       errorTimer = window.setTimeout(() => {
-        setErr(null);
+        setError(null);
       }, 3000);
     }
 
@@ -58,7 +60,7 @@ export const App: React.FC = () => {
       clearTimeout(errorTimer);
       clearTimeout(hiddenTime);
     };
-  }, [err]);
+  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -86,97 +88,97 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-      </div>
 
-      <section className="todoapp__main">
-        <>
-          {visibleTodos.map(todo => (
-            <div className={`todo ${todo.completed && 'completed'}`} key={todo.id}>
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                />
-              </label>
+        <section className="todoapp__main">
+          <>
+            {visibleTodos.map(todo => (
+              <div className={`todo ${todo.completed && 'completed'}`} key={todo.id}>
+                <label className="todo__status-label">
+                  <input
+                    type="checkbox"
+                    className="todo__status"
+                  />
+                </label>
 
-              <span className="todo__title">{todo.title}</span>
-              <button type="button" className="todo__remove">×</button>
+                <span className="todo__title">{todo.title}</span>
+                <button type="button" className="todo__remove">×</button>
 
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
+                <div className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
               </div>
-            </div>
-          ))}
-        </>
-      </section>
+            ))}
+          </>
+        </section>
 
-      {todos.length > 0 && (
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            {todos.length}
-            {' '}
-            items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {todos.length}
+              {' '}
+              items left
+            </span>
 
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a
-              href="#/"
-              className={`filter__link ${filterMethod === 'All' ? 'selected ' : ''}`}
-              onClick={() => {
-                setFilterMethod('All');
-              }}
-            >
-              All
-            </a>
+            {/* Active filter should have a 'selected' class */}
+            <nav className="filter">
+              <a
+                href="#/"
+                className={`filter__link ${filterMethod === FilterOptions.ALL ? 'selected ' : ''}`}
+                onClick={() => {
+                  setFilterMethod(FilterOptions.ALL);
+                }}
+              >
+                All
+              </a>
 
-            <a
-              href="#/active"
-              className={`filter__link ${filterMethod === 'Active' ? 'selected ' : ''}`}
-              onClick={() => {
-                setFilterMethod('Active');
-              }}
-            >
-              Active
-            </a>
+              <a
+                href="#/active"
+                className={`filter__link ${filterMethod === FilterOptions.ACTIVE ? 'selected ' : ''}`}
+                onClick={() => {
+                  setFilterMethod(FilterOptions.ACTIVE);
+                }}
+              >
+                Active
+              </a>
 
-            <a
-              href="#/completed"
-              className={`filter__link ${filterMethod === 'Completed' ? 'selected ' : ''}`}
-              onClick={() => {
-                setFilterMethod('Completed');
-              }}
-            >
-              Completed
-            </a>
-          </nav>
+              <a
+                href="#/completed"
+                className={`filter__link ${filterMethod === FilterOptions.COMPLETED ? 'selected ' : ''}`}
+                onClick={() => {
+                  setFilterMethod(FilterOptions.COMPLETED);
+                }}
+              >
+                Completed
+              </a>
+            </nav>
 
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
-      )}
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {(err) && (
-        <div className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: isHidden },
+            {/* don't show this button if there are no completed todos */}
+            <button type="button" className="todoapp__clear-completed">
+              Clear completed
+            </button>
+          </footer>
         )}
-        >
-          <button
-            type="button"
-            className="delete"
-            onClick={() => {
-              setErr(null);
-            }}
-          />
-          {err}
-        </div>
-      )}
+
+        {/* Notification is shown in case of any error */}
+        {/* Add the 'hidden' class to hide the message smoothly */}
+        {(error) && (
+          <div className={cn(
+            'notification is-danger is-light has-text-weight-normal',
+            { hidden: isHidden },
+          )}
+          >
+            <button
+              type="button"
+              className="delete"
+              onClick={() => {
+                setError(null);
+              }}
+            />
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
