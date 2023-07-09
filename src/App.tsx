@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -18,21 +18,6 @@ export const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [filterMethod, setFilterMethod] = useState<string>(FilterOptions.ALL);
   const [isHidden, setIsHidden] = useState(false);
-
-  let visibleTodos = [...todos];
-
-  switch (filterMethod) {
-    case FilterOptions.COMPLETED:
-      visibleTodos = visibleTodos.filter(todo => todo.completed === true);
-      break;
-
-    case FilterOptions.ACTIVE:
-      visibleTodos = visibleTodos.filter(todo => todo.completed !== true);
-      break;
-
-    default:
-      break;
-  }
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -60,6 +45,19 @@ export const App: React.FC = () => {
       clearTimeout(hiddenTime);
     };
   }, [error]);
+
+  const visibleTodos: Todo[] = useMemo(() => {
+    switch (filterMethod) {
+      case FilterOptions.ACTIVE:
+        return todos.filter((todo) => todo.completed !== true);
+
+      case FilterOptions.COMPLETED:
+        return todos.filter((todo) => todo.completed === true);
+
+      default:
+        return todos;
+    }
+  }, [todos, filterMethod]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -134,7 +132,13 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className={`filter__link ${filterMethod === FilterOptions.ACTIVE ? 'selected ' : ''}`}
+                className={
+                  cn(
+                    'filter__link', {
+                      selected: filterMethod === FilterOptions.ACTIVE,
+                    },
+                  )
+                }
                 onClick={() => {
                   setFilterMethod(FilterOptions.ACTIVE);
                 }}
@@ -144,7 +148,13 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className={`filter__link ${filterMethod === FilterOptions.COMPLETED ? 'selected ' : ''}`}
+                className={
+                  cn(
+                    'filter__link', {
+                      selected: filterMethod === FilterOptions.COMPLETED,
+                    },
+                  )
+                }
                 onClick={() => {
                   setFilterMethod(FilterOptions.COMPLETED);
                 }}
