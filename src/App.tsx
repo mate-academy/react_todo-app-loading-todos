@@ -1,12 +1,38 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
+import React, { useState } from 'react';
+import { Authorization } from './components/authorization';
+import { LogingSteps } from './types/enum';
+import { UserData } from './types/userData';
 
-const USER_ID = 0;
+const defaultUser = {
+  createdAt: '2023-07-10T13:09:53.578Z',
+  email: 'gookidoo@gmail.com',
+  id: 11038,
+  name: 'Віктор Булденко',
+  phone: null,
+  updatedAt: '2023-07-10T13:09:53.578Z',
+  username: null,
+  website: null,
+};
+
+// const USER_ID = 11038;
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
+  const [step, setStep] = useState(LogingSteps.COMPLETE);
+  // const [step, setStep] = useState(LogingSteps.EMAIL);
+  const [user, setUser] = useState<UserData>(defaultUser);
+
+  console.log('render', user.id);
+
+  if (step !== LogingSteps.COMPLETE) {
+    return (
+      <Authorization
+        step={step}
+        setStep={setStep}
+        setUser={setUser}
+      />
+    );
   }
 
   return (
@@ -53,7 +79,7 @@ export const App: React.FC = () => {
 
           {/* This todo is not completed */}
           <div className="todo">
-            <label className="todo__status-label">
+            <label className="todo__status-label outline">
               <input
                 type="checkbox"
                 className="todo__status"
