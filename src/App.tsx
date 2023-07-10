@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
@@ -10,58 +10,63 @@ const USER_ID = 10876;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<string>('all');
+  const [hideError, setHideError] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+
+  const handleErrorMessage = (message: string) => {
+    setHideError(false);
+    setError(message);
+
+    setTimeout(() => {
+      setHideError(true);
+    }, 3000);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const todosFromServer = await getTodos(USER_ID);
+    try {
+      const fetchData = async () => {
+        const todosFromServer = await getTodos(USER_ID);
 
-      setTodos(todosFromServer);
-    };
+        if (!todosFromServer.length) {
+          handleErrorMessage('Unable to get todos from server');
+        }
 
-    fetchData();
+        setTodos(todosFromServer);
+      };
+
+      fetchData();
+    } catch (err) {
+      throw new Error();
+    }
   }, []);
+
+
+  const activeTodos = useMemo(
+    () => todos.filter(todo => !todo.completed), [todos],
+  );
+
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed), [todos],
+  );
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const activeTodos = todos.filter(todo => !todo.completed);
-  const completedTodos = todos.filter(todo => todo.completed);
   const filteredTodos = {
     all: todos,
     active: activeTodos,
     completed: completedTodos,
   };
+
   const visibleTodos:Todo[]
     = filteredTodos[filterType as keyof typeof filteredTodos];
 
-  const messageDelete = document.querySelector('.delete');
-
-  messageDelete?.addEventListener('click', () => {
-    messageDelete.parentElement?.classList.add('hidden');
-  });
-
-  const handleTodosFiltering = () => {
-    const filterAll = document.querySelector('.filter__link__all');
-    const filterActive = document.querySelector('.filter__link__active');
-    const filterCompleted = document.querySelector('.filter__link__completed');
-
-    filterAll?.addEventListener('click', () => {
-      setFilterType('all');
-    });
-
-    filterActive?.addEventListener('click', () => {
-      setFilterType('active');
-    });
-
-    filterCompleted?.addEventListener('click', () => {
-      setFilterType('completed');
-    });
+  const handleFilterChange = (filter: string) => {
+    setFilterType(filter);
   };
 
-  setTimeout(() => {
-    messageDelete?.parentElement?.classList.add('hidden');
-  }, 3000);
+  const handleErrorDelete = () => setHideError(true);
 
   return (
     <div className="todoapp">
@@ -69,10 +74,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -104,10 +107,8 @@ export const App: React.FC = () => {
 
                     <span className="todo__title">{todo.title}</span>
 
-                    {/* Remove button appears only on hover */}
                     <button type="button" className="todo__remove">×</button>
 
-                    {/* overlay will cover the todo while it is being updated */}
                     <div className="modal overlay">
                       <div
                         className="modal-background has-background-white-ter"
@@ -128,19 +129,16 @@ export const App: React.FC = () => {
                   {`${visibleTodos.length} items left`}
                 </span>
 
-                {/* Active filter should have a 'selected' class */}
-                <nav
-                  className="filter"
-                  onClick={handleTodosFiltering}
-                  role="presentation"
-                >
+                <nav className="filter">
                   <a
+                    role="button"
                     href="#/"
                     className={classNames(
                       'filter__link',
                       'filter__link__all',
                       { selected: filterType === 'all' },
                     )}
+                    onClick={() => handleFilterChange('all')}
                   >
                     All
                   </a>
@@ -152,6 +150,7 @@ export const App: React.FC = () => {
                       'filter__link__active',
                       { selected: filterType === 'active' },
                     )}
+                    onClick={() => handleFilterChange('active')}
                   >
                     Active
                   </a>
@@ -163,12 +162,12 @@ export const App: React.FC = () => {
                       'filter__link__completed',
                       { selected: filterType === 'completed' },
                     )}
+                    onClick={() => handleFilterChange('completed')}
                   >
                     Completed
                   </a>
                 </nav>
 
-                {/* don't show this button if there are no completed todos */}
                 <button type="button" className="todoapp__clear-completed">
                   Clear completed
                 </button>
@@ -177,15 +176,17 @@ export const App: React.FC = () => {
         }
       </div>
 
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        {/* Unable to delete a todo
-        <br />
-        Unable to update a todo */}
+      <div
+        className="
+          notification
+          is-danger
+          is-light
+          has-text-weight-normal
+        "
+        hidden={hideError}
+      >
+        <button type="button" className="delete" onClick={handleErrorDelete} />
+        {error}
       </div>
     </div>
   );
