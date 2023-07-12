@@ -117,7 +117,9 @@ export const App: React.FC = () => {
       fetch(`${BASE_URL}/todos?userId=${user.id}&completed=true`)
         .then((data) => data.json())
         .then((todoList) => {
-          todoList.forEach((todo: Todo) => deleteTodoOnServer(todo.id));
+          return Promise.all(
+            todoList.map((todo: Todo) => deleteTodoOnServer(todo.id)),
+          );
         })
         .then(() => getTodosFromServer(user.id))
         .then((todoList) => {
@@ -126,6 +128,20 @@ export const App: React.FC = () => {
         })
         .catch((error) => new Error(error.message));
     };
+
+    // const deleteCompleted = () => {
+    //   fetch(`${BASE_URL}/todos?userId=${user.id}&completed=true`)
+    //     .then((data) => data.json())
+    //     .then((todoList) => {
+    //       return todoList.forEach((todo: Todo) => deleteTodoOnServer(todo.id))
+    //         .then(() => getTodosFromServer(user.id)
+    //           .then((data) => data.json())
+    //           .then((list: Todo[]) => {
+    //             checkCompletedTodo(list);
+    //             setTodos(list);
+    //           }));
+    //     }).catch((error) => new Error(error.message));
+    // };
 
     switch (sortBy) {
       case Etodos.ACTIVE:
@@ -203,6 +219,7 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
+        {/* { true && ( */}
         { Boolean(todos.length) && (
           <footer className="todoapp__footer">
             <span className="todo-count">
