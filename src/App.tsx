@@ -22,7 +22,8 @@ export const App: React.FC = () => {
       })
       .catch((error: Error) => {
         setHasError(true);
-        throw new Error(error.message);
+        // eslint-disable-next-line no-console
+        console.log(error.message);
       });
   }, []);
 
@@ -38,8 +39,24 @@ export const App: React.FC = () => {
     return () => {};
   }, [hasError]);
 
-  const completedTodos = todos?.filter((todo) => todo.completed);
-  const uncompletedTodos = todos?.filter((todo) => !todo.completed);
+  const handleCheckboxChange = (todoId: number) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
+
+  const [completedTodos, uncompletedTodos] = useMemo(() => {
+    const completed = todos?.filter((todo) => todo.completed);
+    const uncompleted = todos?.filter((todo) => !todo.completed);
+
+    return [completed, uncompleted];
+  }, [todos]);
 
   const todoIsActive = todos?.find((todo) => todo.completed === false);
 
@@ -92,7 +109,8 @@ export const App: React.FC = () => {
                 <input
                   type="checkbox"
                   className="todo__status"
-                  defaultChecked={todo?.completed}
+                  checked={todo?.completed}
+                  onChange={() => handleCheckboxChange(todo.id)}
                 />
               </label>
 
@@ -150,7 +168,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               style={{ opacity: completedTodos.length > 0 ? '1' : '0' }}
-              disabled={!completedTodos}
+              disabled={!completedTodos?.length}
             >
               Clear completed
             </button>
