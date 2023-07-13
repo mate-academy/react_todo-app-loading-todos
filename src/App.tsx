@@ -110,7 +110,7 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {todos?.length && (
+        {todos?.length > 0 && (
           <footer className="todoapp__footer">
             <span className="todo-count">{`${uncompletedTodos?.length} items left`}</span>
 
