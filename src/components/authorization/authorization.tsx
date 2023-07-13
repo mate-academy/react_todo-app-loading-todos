@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 
-import style from './style.module.scss';
 import 'bulma';
 import { LogingSteps } from '../../types/enum';
 import { UserData } from '../../types/userData';
@@ -64,12 +63,10 @@ export const Authorization: React.FC<Props> = ({
         : getUserData();
     }
 
-    if (step === LogingSteps.NAME) {
-      if (userNamePattern.test(userName)) {
-        setStep(LogingSteps.COMPLETE);
-      } else {
-        return setNameUnvalid(true);
-      }
+    if (userNamePattern.test(userName)) {
+      setStep(LogingSteps.COMPLETE);
+    } else {
+      return setNameUnvalid(true);
     }
 
     return false;
@@ -89,7 +86,7 @@ export const Authorization: React.FC<Props> = ({
 
   return (
     <>
-      <section className={`"section is-flex m-4 ${style.loginSection}`}>
+      <section className="section is-flex m-4">
         <form className="form box m-auto" method="GET" onSubmit={formHandler}>
           <div className="field">
             <h1 className="form__title title h1">Get your userId</h1>
@@ -134,6 +131,7 @@ export const Authorization: React.FC<Props> = ({
                 <div className="control has-icons-left has-icons-right">
                   <input
                     required
+                    disabled
                     id="userNameID"
                     className={cn('input', {
                       'input is-success': userNameIsValid,
@@ -180,13 +178,13 @@ export const Authorization: React.FC<Props> = ({
           </div>
         </form>
       </section>
-      <span
-        className={`has-text-danger-dark span-warn ${style.spanwarn}`}
+      <p
+        className="has-text-danger-dark span-warn spanwarn"
       >
         *Вибачте, спочатку реалізував,
         а вже потім побачив, що це зовсім не обов`язково було (((
         введіть свію пошту або просто нажміть на Skip
-      </span>
+      </p>
     </>
   );
 };

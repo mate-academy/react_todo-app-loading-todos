@@ -2,18 +2,19 @@
 /* eslint-disable quote-props */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 import { Authorization } from './components/authorization';
-import { LogingSteps } from './types/enum';
+import { Etodos, LogingSteps, ResponseError } from './types/enum';
 import { UserData } from './types/userData';
 import { Todo } from './types/Todo';
 import {
   deleteTodoOnServer,
   getTodosFromServer,
   setTodoCompleteStatus,
-  setTodoOnServer,
 } from './api';
 import { TodoItem } from './components/Todo';
+import { TodoHeader } from './components/TodoHeader';
+import { Footer } from './components/Footer';
+import { Notification } from './components/Notification';
 
 const defaultUser = {
   createdAt: '2023-07-10T13:09:53.578Z',
@@ -26,25 +27,16 @@ const defaultUser = {
   website: null,
 };
 
-enum Etodos {
-  ALL,
-  ACTIVE,
-  COMPLETED,
-  CLEAR,
-}
-
 export const App: React.FC = () => {
-  // const [step, setStep] = useState(LogingSteps.EMAIL);
-  const [step, setStep] = useState(LogingSteps.COMPLETE);
+  const [step, setStep] = useState(LogingSteps.EMAIL);
   const [user, setUser] = useState<UserData>(defaultUser);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [uncomplete, setUncomplete] = useState<number>();
-  const [todoInput, setTodoInput] = useState('');
+  const [uncomplete, setUncomplete] = useState<number>(0);
+  const [showFooter, setShowFooter] = useState<boolean>(false);
   const [sortTodosBy, setSortTodosBy] = useState<Etodos>(Etodos.ALL);
-  const [showClear, setShowClear] = useState(false);
+  const [respError, setRespError] = useState<ResponseError>(ResponseError.NOT);
   const [toggleActiveTodos, setToggleActiveTodos] = useState(true);
 
-  // #region functions
   const toggleTodosActive = () => {
     const promiseList = todos.map(todo => {
       if (todo.completed !== toggleActiveTodos) {
@@ -60,35 +52,21 @@ export const App: React.FC = () => {
       .then(() => {
         getTodosFromServer(user.id).then((todoList) => {
           setTodos(todoList);
+          setShowFooter(Boolean(todoList.length));
         });
       });
   };
 
   const checkCompletedTodo = (arr: Todo[]) => {
-    let status = false;
     let counter = 0;
 
     for (let i = 0; i < arr.length; i += 1) {
-      if (arr[i].completed) {
-        status = true;
-      } else {
+      if (!arr[i].completed) {
         counter += 1;
       }
     }
 
     setUncomplete(counter);
-    setShowClear(status);
-  };
-
-  const todoFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setTodoOnServer(todoInput.trim(), user.id).then(() => {
-      getTodosFromServer(user.id).then((todoList) => {
-        setTodos(todoList);
-        checkCompletedTodo(todoList);
-      });
-    });
-    setTodoInput('');
   };
 
   const deleteTodo = (id: number) => {
@@ -96,8 +74,9 @@ export const App: React.FC = () => {
       getTodosFromServer(user.id).then((todoList) => {
         setTodos(todoList);
         checkCompletedTodo(todoList);
+        setShowFooter(Boolean(todoList.length));
       });
-    });
+    }).catch(() => setRespError(ResponseError.ADD));
   };
 
   const updateTodo = (todoId: number, obj: Partial<Todo>) => {
@@ -105,8 +84,9 @@ export const App: React.FC = () => {
       getTodosFromServer(user.id).then((todoList) => {
         setTodos(todoList);
         checkCompletedTodo(todoList);
+        setShowFooter(Boolean(todoList.length));
       });
-    });
+    }).catch(() => setRespError(ResponseError.UPDATE));
   };
 
   const displayTodos = (sortBy: Etodos) => {
@@ -123,25 +103,12 @@ export const App: React.FC = () => {
         })
         .then(() => getTodosFromServer(user.id))
         .then((todoList) => {
-          checkCompletedTodo(todoList);
           setTodos(todoList);
+          checkCompletedTodo(todoList);
+          setShowFooter(Boolean(todoList.length));
         })
         .catch((error) => new Error(error.message));
     };
-
-    // const deleteCompleted = () => {
-    //   fetch(`${BASE_URL}/todos?userId=${user.id}&completed=true`)
-    //     .then((data) => data.json())
-    //     .then((todoList) => {
-    //       return todoList.forEach((todo: Todo) => deleteTodoOnServer(todo.id))
-    //         .then(() => getTodosFromServer(user.id)
-    //           .then((data) => data.json())
-    //           .then((list: Todo[]) => {
-    //             checkCompletedTodo(list);
-    //             setTodos(list);
-    //           }));
-    //     }).catch((error) => new Error(error.message));
-    // };
 
     switch (sortBy) {
       case Etodos.ACTIVE:
@@ -159,6 +126,7 @@ export const App: React.FC = () => {
         return getTodosFromServer(user.id).then((todoList) => {
           checkCompletedTodo(todoList);
           setTodos(todoList);
+          setShowFooter(Boolean(todoList.length));
         });
     }
 
@@ -167,6 +135,11 @@ export const App: React.FC = () => {
       .then((todoList) => {
         checkCompletedTodo(todoList);
         setTodos(todoList);
+        const footerStatus = sortTodosBy === Etodos.ALL
+          ? Boolean(todoList.length)
+          : true;
+
+        setShowFooter(footerStatus);
       })
       .catch((error) => new Error(error.message));
   };
@@ -176,35 +149,29 @@ export const App: React.FC = () => {
   }, [sortTodosBy]);
 
   if (step !== LogingSteps.COMPLETE) {
-    return <Authorization step={step} setStep={setStep} setUser={setUser} />;
+    return (
+      <Authorization
+        step={step}
+        setStep={setStep}
+        setUser={setUser}
+      />
+    );
   }
-  // #endregion
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {Boolean(todos.length) && (
-            <button
-              type="button"
-              className="todoapp__toggle-all active"
-              onClick={toggleTodosActive}
-            />
-          )}
-
-          {/* Add a todo on form submit */}
-          <form onSubmit={todoFormHandler}>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={todoInput}
-              onChange={(e) => setTodoInput(e.target.value)}
-            />
-          </form>
-        </header>
+        <TodoHeader
+          todos={todos}
+          toggleTodosActive={toggleTodosActive}
+          userID={user.id}
+          setRespError={setRespError}
+          setTodos={setTodos}
+          checkCompletedTodo={checkCompletedTodo}
+          setShowFooter={setShowFooter}
+        />
 
         <section className="todoapp__main">
           {todos.map((todoObj) => (
@@ -218,76 +185,23 @@ export const App: React.FC = () => {
 
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        {/* { true && ( */}
-        { Boolean(todos.length) && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${uncomplete} items left`}
-            </span>
-
-            {/* Active filter should have a 'selected' class */}
-            <nav className="filter">
-              <a
-                href="#/"
-                className={
-                  classNames('filter__link',
-                    { selected: sortTodosBy === Etodos.ALL })
-                }
-                onClick={() => setSortTodosBy(Etodos.ALL)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={
-                  classNames('filter__link',
-                    { selected: sortTodosBy === Etodos.ACTIVE })
-                }
-                onClick={() => setSortTodosBy(Etodos.ACTIVE)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={
-                  classNames('filter__link',
-                    { selected: sortTodosBy === Etodos.COMPLETED })
-                }
-                onClick={() => setSortTodosBy(Etodos.COMPLETED)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* don't show this button if there are no completed todos */}
-            {showClear
-            && (
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                onClick={() => setSortTodosBy(Etodos.CLEAR)}
-              >
-                Clear completed
-              </button>
-            )}
-          </footer>
+        { showFooter && (
+          <Footer
+            uncomplete={uncomplete}
+            sortTodosBy={sortTodosBy}
+            setSortTodosBy={setSortTodosBy}
+            todos={todos}
+          />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {respError !== ResponseError.NOT
+      && (
+        <Notification
+          respError={respError}
+          setRespError={setRespError}
+        />
+      )}
     </div>
   );
 };

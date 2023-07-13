@@ -3,3 +3,18 @@ export enum LogingSteps {
   NAME,
   COMPLETE,
 }
+
+export enum ResponseError {
+  NOT,
+  ADD,
+  DELETE,
+  UPDATE,
+  EMPTY,
+}
+
+export enum Etodos {
+  ALL,
+  ACTIVE,
+  COMPLETED,
+  CLEAR,
+}

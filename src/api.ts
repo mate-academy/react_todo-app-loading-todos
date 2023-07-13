@@ -1,21 +1,7 @@
+/* eslint-disable no-console */
 import { Todo } from './types/Todo';
 
 const BASE_URL = 'https://mate.academy/students-api';
-
-// delete
-function getRandomText() {
-  const words = ['dolor', 'sit', 'amet', 'elit', 'sed', 'do'];
-
-  let randomText = '';
-
-  for (let i = 0; i < 5; i += 1) {
-    const randomIndex = Math.floor(Math.random() * words.length);
-
-    randomText += `${words[randomIndex]} `;
-  }
-
-  return randomText.trim();
-}
 
 export const getTodosFromServer = (userId: number) => {
   return fetch(`${BASE_URL}/todos?userId=${userId}&`)
@@ -31,10 +17,10 @@ export const setTodoOnServer = (srt: string, userId: number) => {
     },
     body: JSON.stringify({
       userId,
-      completed: Boolean(+Date.now() % 2), // delete Boolean
-      title: srt || getRandomText(), // delete getRandom
+      completed: false,
+      title: srt,
     }),
-  }).catch((error) => new Error(error.message));
+  }).catch((error) => console.log('add', error.message));
 };
 
 export const deleteTodoOnServer = (id: number) => {
