@@ -3,14 +3,14 @@ import { Etodos } from '../../types/enum';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  uncomplete: number;
+  isUncomplete: number;
   sortTodosBy: Etodos;
-  setSortTodosBy: (arg:Etodos) => void;
+  setSortTodosBy: (arg: Etodos) => void;
   todos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
-  uncomplete,
+  isUncomplete,
   sortTodosBy,
   setSortTodosBy,
   todos,
@@ -18,16 +18,15 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${uncomplete} items left`}
+        {`${isUncomplete} item${isUncomplete === 1 ? '' : 's'} left`}
       </span>
 
       <nav className="filter">
         <a
           href="#/"
-          className={
-            classNames('filter__link',
-              { selected: sortTodosBy === Etodos.ALL })
-          }
+          className={classNames('filter__link', {
+            selected: sortTodosBy === Etodos.ALL,
+          })}
           onClick={() => setSortTodosBy(Etodos.ALL)}
         >
           All
@@ -35,10 +34,9 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/active"
-          className={
-            classNames('filter__link',
-              { selected: sortTodosBy === Etodos.ACTIVE })
-          }
+          className={classNames('filter__link', {
+            selected: sortTodosBy === Etodos.ACTIVE,
+          })}
           onClick={() => setSortTodosBy(Etodos.ACTIVE)}
         >
           Active
@@ -46,10 +44,9 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/completed"
-          className={
-            classNames('filter__link',
-              { selected: sortTodosBy === Etodos.COMPLETED })
-          }
+          className={classNames('filter__link', {
+            selected: sortTodosBy === Etodos.COMPLETED,
+          })}
           onClick={() => setSortTodosBy(Etodos.COMPLETED)}
         >
           Completed
@@ -58,16 +55,14 @@ export const Footer: React.FC<Props> = ({
 
       <button
         type="button"
-        className={classNames(
-          'todoapp__clear-completed',
-          { 'is-invisible': uncomplete === todos.length },
-        )}
-        disabled={uncomplete === todos.length}
+        className={classNames('todoapp__clear-completed', {
+          'is-invisible': isUncomplete === todos.length,
+        })}
+        disabled={isUncomplete === todos.length}
         onClick={() => setSortTodosBy(Etodos.CLEAR)}
       >
         Clear completed
       </button>
     </footer>
-
   );
 };

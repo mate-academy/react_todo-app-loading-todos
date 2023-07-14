@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 
 import 'bulma';
+import './style.scss';
 import { LogingSteps } from '../../types/enum';
 import { UserData } from '../../types/userData';
 
@@ -85,106 +86,107 @@ export const Authorization: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <section className="section is-flex m-4">
-        <form className="form box m-auto" method="GET" onSubmit={formHandler}>
-          <div className="field">
-            <h1 className="form__title title h1">Get your userId</h1>
+    <section
+      className="section is-flex m-4
+        is-flex-direction-column is-align-items-center"
+    >
+      <form className="form box m-auto" method="GET" onSubmit={formHandler}>
+        <div className="field">
+          <h1 className="form__title title h1">Get your userId</h1>
 
-            {step === LogingSteps.NAME ? (
-              <></>
-            ) : (
-              <div className="field">
-                <label className="label" htmlFor="userMailID">
-                  Email
-                </label>
-                <div className="control has-icons-left has-icons-right">
-                  <input
-                    required
-                    id="userMailID"
-                    className={cn('input', { 'is-danger': mailUnvalid })}
-                    type="email"
-                    placeholder="Email input"
-                    value={userMail}
-                    onChange={userMailHandler}
-                  />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-envelope" />
-                  </span>
-                  {mailUnvalid && (
-                    <span className="icon is-small is-right has-text-danger">
-                      <i className="fas fa-exclamation-triangle" />
-                    </span>
-                  )}
-                </div>
+          {step !== LogingSteps.NAME && (
+            <div className="field">
+              <label className="label" htmlFor="userMailID">
+                Email
+              </label>
+              <div className="control has-icons-left has-icons-right">
+                <input
+                  required
+                  id="userMailID"
+                  className={cn('input', { 'is-danger': mailUnvalid })}
+                  type="email"
+                  placeholder="Email input"
+                  value={userMail}
+                  onChange={userMailHandler}
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-envelope" />
+                </span>
                 {mailUnvalid && (
-                  <p className="help is-danger">This email is invalid</p>
-                )}
-              </div>
-            )}
-
-            {step === LogingSteps.NAME && (
-              <div className="field">
-                <label className="label" htmlFor="userNameID">
-                  Username
-                </label>
-                <div className="control has-icons-left has-icons-right">
-                  <input
-                    required
-                    disabled
-                    id="userNameID"
-                    className={cn('input', {
-                      'input is-success': userNameIsValid,
-                    })}
-                    type="text"
-                    placeholder="Text input"
-                    value={userName}
-                    onChange={userNameHandler}
-                    onBlur={userNameBlur}
-                  />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-user" />
+                  <span className="icon is-small is-right has-text-danger">
+                    <i className="fas fa-exclamation-triangle" />
                   </span>
-                  {userNameIsValid && (
-                    <span className="icon is-small is-right has-text-success">
-                      <i className="fas fa-check" />
-                    </span>
-                  )}
-                </div>
-                {userNameIsValid && (
-                  <p className="help is-success">This username is available</p>
                 )}
               </div>
-            )}
+              {mailUnvalid && (
+                <p className="help is-danger">This email is invalid</p>
+              )}
+            </div>
+          )}
 
-            <div className="field is-grouped">
-              <div className="control">
-                <button
-                  className={cn('button is-primary', { 'is-loading': loading })}
-                  type="submit"
-                >
-                  Login
-                </button>
-
-                <button
-                  className="button is-light ml-2"
-                  type="submit"
-                  onClick={skipHandler}
-                >
-                  Skip
-                </button>
+          {step === LogingSteps.NAME && (
+            <div className="field">
+              <label className="label" htmlFor="userNameID">
+                Username
+              </label>
+              <div className="control has-icons-left has-icons-right">
+                <input
+                  required
+                  disabled
+                  id="userNameID"
+                  className={cn('input', {
+                    'input is-success': userNameIsValid,
+                  })}
+                  type="text"
+                  placeholder="Text input"
+                  value={userName}
+                  onChange={userNameHandler}
+                  onBlur={userNameBlur}
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-user" />
+                </span>
+                {userNameIsValid && (
+                  <span className="icon is-small is-right has-text-success">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
               </div>
+              {userNameIsValid && (
+                <p className="help is-success">This username is available</p>
+              )}
+            </div>
+          )}
+
+          <div className="field is-grouped">
+            <div className="control">
+              <button
+                className={cn('button is-primary', { 'is-loading': loading })}
+                type="submit"
+              >
+                Login
+              </button>
+
+              <button
+                className="button is-light ml-2"
+                type="submit"
+                onClick={skipHandler}
+              >
+                Skip
+              </button>
             </div>
           </div>
-        </form>
-      </section>
+        </div>
+      </form>
+
       <p
-        className="has-text-danger-dark span-warn spanwarn"
+        className="has-text-danger-dark spanwarn mt-3 has-text-centered"
+        style={{ width: '70%' }}
       >
         *Вибачте, спочатку реалізував,
         а вже потім побачив, що це зовсім не обов`язково було (((
         введіть свою пошту або просто натисніть на Skip
       </p>
-    </>
+    </section>
   );
 };

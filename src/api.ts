@@ -3,8 +3,14 @@ import { Todo } from './types/Todo';
 
 const BASE_URL = 'https://mate.academy/students-api';
 
-export const getTodosFromServer = (userId: number) => {
-  return fetch(`${BASE_URL}/todos?userId=${userId}&`)
+export const getTodosFromServer = (userId: number, param = '') => {
+  return fetch(`${BASE_URL}/todos?userId=${userId}&${param}`)
+    .then((data) => data.json())
+    .catch((error) => new Error(error.message));
+};
+
+export const getCompetedTodosFromServer = (userId: number) => {
+  fetch(`${BASE_URL}/todos?userId=${userId}&completed=true`)
     .then((data) => data.json())
     .catch((error) => new Error(error.message));
 };

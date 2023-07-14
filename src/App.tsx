@@ -31,30 +31,31 @@ export const App: React.FC = () => {
   const [step, setStep] = useState(LogingSteps.EMAIL);
   const [user, setUser] = useState<UserData>(defaultUser);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [uncomplete, setUncomplete] = useState<number>(0);
-  const [showFooter, setShowFooter] = useState<boolean>(false);
+  const [isUncomplete, setIsUncomplete] = useState<number>(0);
+  const [isShowFooter, setIsShowFooter] = useState<boolean>(false);
   const [sortTodosBy, setSortTodosBy] = useState<Etodos>(Etodos.ALL);
   const [respError, setRespError] = useState<ResponseError>(ResponseError.NOT);
-  const [toggleActiveTodos, setToggleActiveTodos] = useState(true);
+  const [isToggleActiveTodos, setIsToggleActiveTodos] = useState(true);
 
   const toggleTodosActive = () => {
-    const promiseList = todos.map(todo => {
-      if (todo.completed !== toggleActiveTodos) {
-        return setTodoCompleteStatus(todo.id, { completed: toggleActiveTodos });
+    const promiseList = todos.map((todo) => {
+      if (todo.completed !== isToggleActiveTodos) {
+        return setTodoCompleteStatus(todo.id, {
+          completed: isToggleActiveTodos,
+        });
       }
 
       return [];
     });
 
-    setToggleActiveTodos(!toggleActiveTodos);
+    setIsToggleActiveTodos(!isToggleActiveTodos);
 
-    Promise.all(promiseList)
-      .then(() => {
-        getTodosFromServer(user.id).then((todoList) => {
-          setTodos(todoList);
-          setShowFooter(Boolean(todoList.length));
-        });
+    Promise.all(promiseList).then(() => {
+      getTodosFromServer(user.id).then((todoList) => {
+        setTodos(todoList);
+        setIsShowFooter(Boolean(todoList.length));
       });
+    });
   };
 
   const checkCompletedTodo = (arr: Todo[]) => {
@@ -66,27 +67,31 @@ export const App: React.FC = () => {
       }
     }
 
-    setUncomplete(counter);
+    setIsUncomplete(counter);
   };
 
   const deleteTodo = (id: number) => {
-    deleteTodoOnServer(id).then(() => {
-      getTodosFromServer(user.id).then((todoList) => {
-        setTodos(todoList);
-        checkCompletedTodo(todoList);
-        setShowFooter(Boolean(todoList.length));
-      });
-    }).catch(() => setRespError(ResponseError.ADD));
+    deleteTodoOnServer(id)
+      .then(() => {
+        getTodosFromServer(user.id).then((todoList) => {
+          setTodos(todoList);
+          checkCompletedTodo(todoList);
+          setIsShowFooter(Boolean(todoList.length));
+        });
+      })
+      .catch(() => setRespError(ResponseError.ADD));
   };
 
   const updateTodo = (todoId: number, obj: Partial<Todo>) => {
-    setTodoCompleteStatus(todoId, obj).then(() => {
-      getTodosFromServer(user.id).then((todoList) => {
-        setTodos(todoList);
-        checkCompletedTodo(todoList);
-        setShowFooter(Boolean(todoList.length));
-      });
-    }).catch(() => setRespError(ResponseError.UPDATE));
+    setTodoCompleteStatus(todoId, obj)
+      .then(() => {
+        getTodosFromServer(user.id).then((todoList) => {
+          setTodos(todoList);
+          checkCompletedTodo(todoList);
+          setIsShowFooter(Boolean(todoList.length));
+        });
+      })
+      .catch(() => setRespError(ResponseError.UPDATE));
   };
 
   const displayTodos = (sortBy: Etodos) => {
@@ -94,8 +99,7 @@ export const App: React.FC = () => {
     let endpoint = '';
 
     const deleteCompleted = () => {
-      fetch(`${BASE_URL}/todos?userId=${user.id}&completed=true`)
-        .then((data) => data.json())
+      getTodosFromServer(user.id, 'completed=true')
         .then((todoList) => {
           return Promise.all(
             todoList.map((todo: Todo) => deleteTodoOnServer(todo.id)),
@@ -105,7 +109,7 @@ export const App: React.FC = () => {
         .then((todoList) => {
           setTodos(todoList);
           checkCompletedTodo(todoList);
-          setShowFooter(Boolean(todoList.length));
+          setIsShowFooter(Boolean(todoList.length));
         })
         .catch((error) => new Error(error.message));
     };
@@ -126,7 +130,7 @@ export const App: React.FC = () => {
         return getTodosFromServer(user.id).then((todoList) => {
           checkCompletedTodo(todoList);
           setTodos(todoList);
-          setShowFooter(Boolean(todoList.length));
+          setIsShowFooter(Boolean(todoList.length));
         });
     }
 
@@ -135,11 +139,10 @@ export const App: React.FC = () => {
       .then((todoList) => {
         checkCompletedTodo(todoList);
         setTodos(todoList);
-        const footerStatus = sortTodosBy === Etodos.ALL
-          ? Boolean(todoList.length)
-          : true;
+        const footerStatus
+          = sortTodosBy === Etodos.ALL ? Boolean(todoList.length) : true;
 
-        setShowFooter(footerStatus);
+        setIsShowFooter(footerStatus);
       })
       .catch((error) => new Error(error.message));
   };
@@ -149,13 +152,7 @@ export const App: React.FC = () => {
   }, [sortTodosBy]);
 
   if (step !== LogingSteps.COMPLETE) {
-    return (
-      <Authorization
-        step={step}
-        setStep={setStep}
-        setUser={setUser}
-      />
-    );
+    return <Authorization step={step} setStep={setStep} setUser={setUser} />;
   }
 
   return (
@@ -170,7 +167,7 @@ export const App: React.FC = () => {
           setRespError={setRespError}
           setTodos={setTodos}
           checkCompletedTodo={checkCompletedTodo}
-          setShowFooter={setShowFooter}
+          setIsShowFooter={setIsShowFooter}
         />
 
         <section className="todoapp__main">
@@ -182,12 +179,11 @@ export const App: React.FC = () => {
               updateTodo={updateTodo}
             />
           ))}
-
         </section>
 
-        { showFooter && (
+        {isShowFooter && (
           <Footer
-            uncomplete={uncomplete}
+            isUncomplete={isUncomplete}
             sortTodosBy={sortTodosBy}
             setSortTodosBy={setSortTodosBy}
             todos={todos}
@@ -195,12 +191,8 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {respError !== ResponseError.NOT
-      && (
-        <Notification
-          respError={respError}
-          setRespError={setRespError}
-        />
+      {respError !== ResponseError.NOT && (
+        <Notification respError={respError} setRespError={setRespError} />
       )}
     </div>
   );

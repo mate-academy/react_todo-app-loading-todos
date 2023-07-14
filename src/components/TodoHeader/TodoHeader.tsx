@@ -7,7 +7,7 @@ import { getTodosFromServer, setTodoOnServer } from '../../api';
 type Props = {
   todos: Todo[];
   toggleTodosActive: () => void;
-  setShowFooter: (arg: boolean) => void;
+  setIsShowFooter: (arg: boolean) => void;
   setRespError: (arg: ResponseError) => void;
   setTodos: (arg: Todo[]) => void;
   checkCompletedTodo: (arg: Todo[]) => void;
@@ -17,7 +17,7 @@ type Props = {
 export const TodoHeader: React.FC<Props> = ({
   todos,
   toggleTodosActive,
-  setShowFooter,
+  setIsShowFooter,
   setRespError,
   setTodos,
   checkCompletedTodo,
@@ -32,15 +32,22 @@ export const TodoHeader: React.FC<Props> = ({
       return setRespError(ResponseError.EMPTY);
     }
 
-    setTodoOnServer(todoInput.trim(), userID).then(() => {
-      getTodosFromServer(userID).then((todoList) => {
-        setTodos(todoList);
-        checkCompletedTodo(todoList);
-        setShowFooter(Boolean(todoList.length));
-      });
-    }).catch(() => setRespError(ResponseError.ADD));
+    setTodoOnServer(todoInput.trim(), userID)
+      .then(() => {
+        getTodosFromServer(userID).then((todoList) => {
+          setTodos(todoList);
+          checkCompletedTodo(todoList);
+          setIsShowFooter(Boolean(todoList.length));
+        });
+      })
+      .catch(() => setRespError(ResponseError.ADD));
 
     return setTodoInput('');
+  };
+
+  const todoInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRespError(ResponseError.NOT);
+    setTodoInput(e.target.value);
   };
 
   return (
@@ -59,10 +66,7 @@ export const TodoHeader: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={todoInput}
-          onChange={(e) => {
-            setRespError(ResponseError.NOT);
-            setTodoInput(e.target.value);
-          }}
+          onChange={todoInputHandler}
         />
       </form>
     </header>
