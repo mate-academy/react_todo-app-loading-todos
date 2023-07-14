@@ -19,6 +19,7 @@ import { filterTodos } from '../../utils/sortTodos';
 // Types
 import { Todo } from '../../types/Todo';
 import { SortType } from '../../types/SortType';
+import { ErrorNames } from '../../types/ErrorNames';
 
 type Props = {
   userId: number,
@@ -27,16 +28,12 @@ type Props = {
 export const TodoApp: React.FC<Props> = ({ userId }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortType, setSortType] = useState(SortType.ALL);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(ErrorNames.None);
 
   useEffect(() => {
     getTodos(userId)
       .then(todosFromServer => setTodos(todosFromServer))
-      .catch(() => {
-        setHasError(true);
-        setErrorMessage('Unable to load Todos');
-      });
+      .catch(() => setErrorMessage(ErrorNames.LoadingError));
   }, []);
 
   const handleSortTypeChange = (sortedType: SortType) => {
@@ -67,11 +64,10 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
         )}
       </div>
 
-      {hasError && (
+      {errorMessage !== ErrorNames.None && (
         <Notification
           errorText={errorMessage}
-          hasError={hasError}
-          setHasError={(param: boolean) => setHasError(param)}
+          setHasError={() => setErrorMessage(ErrorNames.None)}
         />
       )}
     </div>

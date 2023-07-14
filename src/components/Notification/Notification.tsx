@@ -1,35 +1,39 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
+
+import { ErrorNames } from '../../types/ErrorNames';
 
 type Props = {
   errorText: string,
-  hasError: boolean,
-  setHasError: (param: boolean) => void,
+  setHasError: (errorName: ErrorNames) => void,
 };
 
 export const Notification: React.FC<Props> = ({
   errorText,
-  hasError,
   setHasError,
 }) => {
-  setTimeout(() => {
-    setHasError(false);
-  }, 3000);
+  useEffect(() => {
+    const unmountTimer = setTimeout(() => {
+      setHasError(ErrorNames.None);
+    }, 3000);
+
+    return () => clearTimeout(unmountTimer);
+  }, []);
 
   return (
     <div
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
         {
-          hidden: hasError === false,
+          hidden: errorText === ErrorNames.None,
         },
       )}
     >
       <button
         type="button"
         className="delete"
-        onClick={() => setHasError(false)}
+        onClick={() => setHasError(ErrorNames.None)}
       />
 
       {errorText}
