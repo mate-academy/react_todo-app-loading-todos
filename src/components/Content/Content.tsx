@@ -38,15 +38,16 @@ const Content: React.FC<Props> = React.memo(({ todos }) => {
     <div className="todoapp__content">
       <TodoHeader activeButton={allTasksAreCompleted} />
 
-      {!!todos.length && <TodoMain todos={filteredList} />}
-
       {!!todos.length && (
-        <TodoFooter
-          showClearButton={someTaskIsCompleted}
-          filter={filter}
-          itemsCount={countOfActiveTodos}
-          setFilter={setFilter}
-        />
+        <>
+          <TodoMain todos={filteredList} />
+          <TodoFooter
+            showClearButton={someTaskIsCompleted}
+            filter={filter}
+            itemsCount={countOfActiveTodos}
+            setFilter={setFilter}
+          />
+        </>
       )}
     </div>
   );

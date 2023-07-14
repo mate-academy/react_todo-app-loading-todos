@@ -9,9 +9,9 @@ type Props = {
 const TodoMain: React.FC<Props> = React.memo(({ todos }) => {
   return (
     <section className="todoapp__main">
-      {todos.map((task) => {
-        return <Task key={task.id} todo={task} />;
-      })}
+      {todos.map((task) => (
+        <Task key={task.id} todo={task} />
+      ))}
 
     </section>
   );

@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useState,
 } from 'react';
 
 import { Title } from './components/Title/Title';
@@ -9,30 +9,32 @@ import { Content } from './components/Content/Content';
 import { Todo } from './types/Todo';
 import { ErrorMessages } from './enums/ErrorMessages';
 import { getTodos } from './api/todos';
+import { Values } from './enums/values';
+import { ErrorState } from './types/ErrorState';
 
 const USER_ID = 11076;
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
-  const [showError, setShowError] = useState(false);
-
-  const errorMessage = useRef<ErrorMessages>(ErrorMessages.noError);
+  const [errorState, setErrorState] = useState<ErrorState>(
+    { message: ErrorMessages.noError, showError: false },
+  );
 
   const resetErrorMessage = useCallback((clearTimer = false) => {
-    const timerId = localStorage.getItem('timerId');
+    const timerId = localStorage.getItem(Values.TimerId);
 
     if (timerId && clearTimer) {
-      setShowError(false);
+      setErrorState((prevState) => ({ ...prevState, showError: false }));
       clearTimeout(+timerId);
 
-      return localStorage.removeItem('timerId');
+      return localStorage.removeItem(Values.TimerId);
     }
 
     const timer = setTimeout(() => {
-      setShowError(false);
+      setErrorState((prevState) => ({ ...prevState, showError: false }));
     }, 3000);
 
-    return localStorage.setItem('timerId', String(timer));
+    return localStorage.setItem(Values.TimerId, String(timer));
   }, []);
 
   useEffect(() => {
@@ -42,8 +44,7 @@ export const App: React.FC = () => {
 
         setTodosList(res);
       } catch (e) {
-        errorMessage.current = ErrorMessages.fetchAll;
-        setShowError(true);
+        setErrorState({ message: ErrorMessages.fetchAll, showError: true });
 
         resetErrorMessage();
       }
@@ -62,8 +63,8 @@ export const App: React.FC = () => {
 
       <ErrorNotification
         closeNotification={resetErrorMessage}
-        message={errorMessage.current}
-        showMessage={showError}
+        message={errorState.message}
+        showMessage={errorState.showError}
       />
     </div>
   );
