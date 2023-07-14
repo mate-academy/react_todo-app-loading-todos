@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 
 import 'bulma';
-import './style.scss';
 import { LogingSteps } from '../../types/enum';
 import { UserData } from '../../types/userData';
 

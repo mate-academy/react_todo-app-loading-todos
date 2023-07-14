@@ -9,13 +9,7 @@ export const getTodosFromServer = (userId: number, param = '') => {
     .catch((error) => new Error(error.message));
 };
 
-export const getCompetedTodosFromServer = (userId: number) => {
-  fetch(`${BASE_URL}/todos?userId=${userId}&completed=true`)
-    .then((data) => data.json())
-    .catch((error) => new Error(error.message));
-};
-
-export const setTodoOnServer = (srt: string, userId: number) => {
+export const createTodo = (srt: string, userId: number) => {
   return fetch(`${BASE_URL}/todos`, {
     method: 'POST',
     headers: {
@@ -45,10 +39,12 @@ export const setTodoCompleteStatus = (id: number, object: Partial<Todo>) => {
   }).catch((error) => new Error(error.message));
 };
 
-export const getTodosCompletedStatus
-  = (f: (arg: Todo[]) => void, arg: boolean) => {
-    return fetch(`${BASE_URL}/todos?completed=${arg}`)
-      .then((data) => data.json())
-      .then((todoList) => f(todoList))
-      .catch((error) => new Error(error.message));
-  };
+export const getTodosCompletedStatus = (
+  f: (arg: Todo[]) => void,
+  arg: boolean,
+) => {
+  return fetch(`${BASE_URL}/todos?completed=${arg}`)
+    .then((data) => data.json())
+    .then((todoList) => f(todoList))
+    .catch((error) => new Error(error.message));
+};

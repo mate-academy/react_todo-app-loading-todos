@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { ResponseError } from '../../types/enum';
-import { getTodosFromServer, setTodoOnServer } from '../../api';
+import { getTodosFromServer, createTodo } from '../../api';
 
 type Props = {
   todos: Todo[];
@@ -32,7 +32,7 @@ export const TodoHeader: React.FC<Props> = ({
       return setRespError(ResponseError.EMPTY);
     }
 
-    setTodoOnServer(todoInput.trim(), userID)
+    createTodo(todoInput.trim(), userID)
       .then(() => {
         getTodosFromServer(userID).then((todoList) => {
           setTodos(todoList);
