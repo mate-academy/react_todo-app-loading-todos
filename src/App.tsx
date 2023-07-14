@@ -12,7 +12,7 @@ const USER_ID = 11074;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setError] = useState(false);
   const [filterStatus, setFilterStatus] = useState(Status.ALL);
 
   useEffect(() => {
@@ -20,16 +20,15 @@ export const App: React.FC = () => {
       .then((todosFromServer) => {
         setTodos(todosFromServer);
       })
-      .catch((error: Error) => {
-        setHasError(true);
-        throw new Error(error.message);
+      .catch((error) => {
+        setError(error.message);
       });
   }, []);
 
   useEffect(() => {
     if (hasError) {
       const timeout = setTimeout(() => {
-        setHasError(false);
+        setError(false);
       }, 3000);
 
       return () => clearTimeout(timeout);
@@ -127,7 +126,7 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {todos?.length > 0 && (
+        {!!todos?.length && (
           <footer className="todoapp__footer">
             <span className="todo-count">{`${uncompletedTodos?.length} items left`}</span>
 
@@ -166,7 +165,7 @@ export const App: React.FC = () => {
             <button
               type="button"
               className="todoapp__clear-completed"
-              style={{ opacity: completedTodos.length > 0 ? '1' : '0' }}
+              style={{ opacity: completedTodos.length ? '1' : '0' }}
               disabled={!completedTodos?.length}
             >
               Clear completed
@@ -189,7 +188,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className="delete"
-          onClick={() => setHasError(false)}
+          onClick={() => setError(false)}
         />
         Unable to load todos
       </div>
