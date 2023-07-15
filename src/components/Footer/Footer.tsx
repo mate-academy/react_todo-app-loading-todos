@@ -18,7 +18,7 @@ export const Footer: React.FC<Props> = ({
 
   return (
     <footer className="todoapp__footer">
-      <span className="todocount" >
+      <span className="todocount">
         {`${incompleteTodoCount} items left`}
       </span>
       <nav className="filter">
@@ -26,10 +26,10 @@ export const Footer: React.FC<Props> = ({
           href="#/"
           className={classNames(
             'filter__link',
-            {selected: filter===Filter.ALL}
+            { selected: filter === Filter.ALL },
           )}
-          onClick={()=> setFilter(Filter.ALL)}
-         >
+          onClick={() => setFilter(Filter.ALL)}
+        >
           All
         </a>
 
@@ -67,5 +67,5 @@ export const Footer: React.FC<Props> = ({
         Clear completed
       </button>
     </footer>
-  )
-}
+  );
+};

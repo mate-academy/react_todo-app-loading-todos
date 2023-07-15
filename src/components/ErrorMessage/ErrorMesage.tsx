@@ -6,10 +6,10 @@ type Props = {
 };
 
 export const ErrorMesage: React.FC<Props> = ({
-  errorString
+  errorString,
 }) => {
   const [isHidden, setIsHidden] = useState(true);
-  const error = `Unable to ${errorString} a todo`;
+  const error = `${errorString}`;
 
   const removeNotification = () => {
     window.setTimeout(() => {
@@ -19,7 +19,7 @@ export const ErrorMesage: React.FC<Props> = ({
 
   const handleHideNotification = () => {
     setIsHidden(true);
-  }
+  };
 
   useEffect(() => {
     setIsHidden(false);
@@ -33,11 +33,11 @@ export const ErrorMesage: React.FC<Props> = ({
       'is-light',
       'has-text-weight-normal', {
         hidden: isHidden,
-      }
+      },
     )}
     >
-      <button 
-        type="button" 
+      <button
+        type="button"
         className="delete"
         aria-label="saveButton"
         onClick={handleHideNotification}

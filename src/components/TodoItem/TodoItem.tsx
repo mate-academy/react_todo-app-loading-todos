@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-}
+};
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isCompleted, setIsCompleted] = useState(todo.completed);

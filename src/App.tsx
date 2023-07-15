@@ -13,7 +13,7 @@ const USER_ID = 11028;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState(Filter.ALL)
+  const [filter, setFilter] = useState(Filter.ALL);
   const [errorNotification, setErrorNotification] = useState(false);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
@@ -34,7 +34,7 @@ export const App: React.FC = () => {
     if (USER_ID) {
       fetchData();
     }
-  }, [USER_ID, setTodos]);
+  }, [USER_ID, todos]);
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
