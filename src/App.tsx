@@ -157,7 +157,9 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={newTodo}
               onChange={(event:
-              ChangeEvent<HTMLInputElement>) => setNewTodo(event.target.value)}
+              ChangeEvent<HTMLInputElement>) => setNewTodo(
+                event.target.value,
+              )}
             />
           </form>
         </header>
