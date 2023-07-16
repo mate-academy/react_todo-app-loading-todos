@@ -2,55 +2,19 @@
 import React, {
   useState, useEffect, ChangeEvent, FormEvent,
 } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
-
-enum TodoStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-interface Todo {
-  id: number;
-  userId: number;
-  title: string;
-  completed: boolean;
-}
+import { Todo } from './types/Todo';
+import { TodoStatus } from './utils/types';
 
 const USER_ID = 10831;
 
 export const App: React.FC = () => {
-  // const [userId, setUserId] = useState<number | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<TodoStatus>(TodoStatus.All);
-
-  // useEffect(() => {
-  //   const registerUserByEmail = async () => {
-  //     try {
-  //       const response = await fetch('https://mate.academy.github.io/react_student-registration/', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({ email: 'your-email@example.com' }),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error('Failed to register user');
-  //       }
-
-  //       const data = await response.json();
-
-  //       setUserId(data.userId);
-  //     } catch (error) {
-  //       console.error('Error registering user:', error);
-  //     }
-  //   };
-
-  //   registerUserByEmail();
-  // }, []);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -58,17 +22,16 @@ export const App: React.FC = () => {
         const result = await client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 
         setTodos(result);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
+      } catch (errors) {
+        setError('Unable to fetch todos.');
       }
     };
 
     fetchTodos();
   }, []);
 
-  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>):
-  Promise<void> => {
+  const handleFormSubmit = async (event:
+  FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
     const isEmpty = newTodo.trim() === '';
@@ -89,14 +52,13 @@ export const App: React.FC = () => {
 
       setTodos([...todos, newTodoItem]);
       setNewTodo('');
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error creating todo:', error);
+    } catch (errors) {
+      setError('Unable to add a todo.');
     }
   };
 
-  // eslint-disable-next-line max-len
-  const handleTodoToggle = async (event: ChangeEvent<HTMLInputElement>, todoId: number): Promise<void> => {
+  const handleTodoToggle = async (event:
+  ChangeEvent<HTMLInputElement>, todoId: number): Promise<void> => {
     const isChecked = event.target.checked;
 
     try {
@@ -104,22 +66,17 @@ export const App: React.FC = () => {
 
       setTodos((prevTodos) => {
         const updatedTodos = prevTodos.map((todo) => {
-          const isModifiedTodo = todo.id === todoId;
-          const modifiedTodo = { ...todo, completed: isChecked };
-          const notModifiedTodo = todo;
-
-          if (isModifiedTodo) {
-            return modifiedTodo;
+          if (todo.id === todoId) {
+            return { ...todo, completed: isChecked };
           }
 
-          return notModifiedTodo;
+          return todo;
         });
 
         return updatedTodos;
       });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating todo:', error);
+    } catch (errors) {
+      setError('Unable to update a todo.');
     }
   };
 
@@ -128,9 +85,8 @@ export const App: React.FC = () => {
       await client.delete(`/todos/${todoId}`);
 
       setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error deleting todo:', error);
+    } catch (errors) {
+      setError('Unable to delete a todo.');
     }
   };
 
@@ -138,9 +94,33 @@ export const App: React.FC = () => {
     setStatusFilter(status);
   };
 
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(null);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+
+    return undefined;
+  }, [error]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const filteredTodos = todos.filter((todo) => {
+    switch (statusFilter) {
+      case TodoStatus.Active:
+        return !todo.completed;
+      case TodoStatus.Completed:
+        return todo.completed;
+      case TodoStatus.All:
+      default:
+        return true;
+    }
+  });
 
   return (
     <div className="todoapp">
@@ -148,8 +128,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button type="button" className="todoapp__toggle-all active" />
-
           <form onSubmit={handleFormSubmit}>
             <input
               type="text"
@@ -157,75 +135,59 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={newTodo}
               onChange={(event:
-              ChangeEvent<HTMLInputElement>) => setNewTodo(
-                event.target.value,
-              )}
+              ChangeEvent<HTMLInputElement>) => setNewTodo(event.target.value)}
             />
           </form>
         </header>
 
         <section className="todoapp__main">
-          {todos
-            .filter((todo) => {
-              if (statusFilter === TodoStatus.All) {
-                return true;
-              }
-
-              if (statusFilter === TodoStatus.Active) {
-                return !todo.completed;
-              }
-
-              if (statusFilter === TodoStatus.Completed) {
-                return todo.completed;
-              }
-
-              return false;
-            })
-            .map((todo) => (
-              <div className={`todo ${todo.completed ? 'completed' : ''}`} key={todo.id}>
-                <label className="todo__status-label">
-                  <input
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                    onChange={(event) => handleTodoToggle(event, todo.id)}
-                  />
-                </label>
-                <span className="todo__title">{todo.title}</span>
-                <button
-                  type="button"
-                  className="todo__remove"
-                  onClick={() => handleTodoDelete(todo.id)}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
+          {filteredTodos.map((todo) => (
+            <div
+              className={classNames('todo', { completed: todo.completed })}
+              key={todo.id}
+            >
+              <label className="todo__status-label">
+                <input
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                  onChange={(event) => handleTodoToggle(event, todo.id)}
+                />
+              </label>
+              <span className="todo__title">{todo.title}</span>
+              <button
+                type="button"
+                className="todo__remove"
+                onClick={() => handleTodoDelete(todo.id)}
+              >
+                ×
+              </button>
+            </div>
+          ))}
         </section>
 
         <footer className="todoapp__footer">
-          <span className="todo-count">3 items left</span>
-
           <nav className="filter">
             <a
               href="#/"
-              className={`filter__link ${statusFilter === TodoStatus.All ? 'selected' : ''}`}
+              className={classNames('filter__link',
+                { selected: statusFilter === TodoStatus.All })}
               onClick={() => handleStatusFilterChange(TodoStatus.All)}
             >
               All
             </a>
             <a
               href="#/active"
-              className={`filter__link ${statusFilter === TodoStatus.Active ? 'selected' : ''}`}
+              className={classNames('filter__link',
+                { selected: statusFilter === TodoStatus.Active })}
               onClick={() => handleStatusFilterChange(TodoStatus.Active)}
             >
               Active
             </a>
             <a
               href="#/completed"
-              className={`filter__link ${
-                statusFilter === TodoStatus.Completed ? 'selected' : ''
-              }`}
+              className={classNames('filter__link',
+                { selected: statusFilter === TodoStatus.Completed })}
               onClick={() => handleStatusFilterChange(TodoStatus.Completed)}
             >
               Completed
@@ -237,6 +199,17 @@ export const App: React.FC = () => {
           </button>
         </footer>
       </div>
+
+      {error && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setError(null)}
+          />
+          {error}
+        </div>
+      )}
     </div>
   );
 };
