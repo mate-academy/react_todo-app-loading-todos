@@ -7,6 +7,7 @@ import { UserWarning } from './UserWarning';
 import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
 import { TodoStatus } from './utils/types';
+import { getTodos } from './api/todos';
 
 const USER_ID = 10831;
 
@@ -19,7 +20,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const result = await client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+        const result = await getTodos(USER_ID);
 
         setTodos(result);
       } catch (errors) {
