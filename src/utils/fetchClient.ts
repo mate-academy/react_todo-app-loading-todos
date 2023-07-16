@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
-function wait(delay: number) {
-  return new Promise(resolve => {
+function wait(delay: number): Promise<void> {
+  return new Promise<void>((resolve) => {
     setTimeout(resolve, delay);
   });
 }
@@ -29,9 +28,9 @@ function request<T>(
   // we wait for testing purpose to see loaders
   return wait(300)
     .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
-        throw new Error();
+        throw new Error(`${response.status} ${response.statusText}`);
       }
 
       return response.json();
@@ -39,8 +38,10 @@ function request<T>(
 }
 
 export const client = {
-  get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  get: <T>(url: string): Promise<T> => request<T>(url),
+  // eslint-disable-next-line max-len
+  post: <T>(url: string, data: any): Promise<T> => request<T>(url, 'POST', data),
+  // eslint-disable-next-line max-len
+  patch: <T>(url: string, data: any): Promise<T> => request<T>(url, 'PATCH', data),
+  delete: (url: string): Promise<void> => request<void>(url, 'DELETE'),
 };
