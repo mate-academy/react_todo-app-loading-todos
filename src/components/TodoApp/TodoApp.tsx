@@ -3,20 +3,16 @@ import React, { useState, useEffect } from 'react';
 
 import './todoApp.scss';
 
-// Data
 import { getTodos } from '../../api/todos';
 
-// Components
 import { TodoAppHeader } from './TodoAppHeader/TodoAppHeader';
 import { TodoAppBody } from './TodoAppBody/TodoAppBody';
 import { TodoAppFooter } from './TodoAppFooter/TodoAppFooter';
 
 import { Notification } from '../Notification/Notification';
 
-// Helpers
 import { filterTodos } from '../../utils/sortTodos';
 
-// Types
 import { Todo } from '../../types/Todo';
 import { SortType } from '../../types/SortType';
 import { ErrorNames } from '../../types/ErrorNames';

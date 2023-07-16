@@ -32,9 +32,7 @@ export const Todo: React.FC<Props> = ({
         />
       </label>
 
-      <span
-        className="todo__title"
-      >
+      <span className="todo__title">
         {title}
       </span>
 
@@ -45,16 +43,12 @@ export const Todo: React.FC<Props> = ({
         ×
       </button>
 
-      <div
-        className="modal overlay"
-      >
+      <div className="modal overlay">
         <div
           className="modal-background has-background-white-ter"
         />
 
-        <div
-          className="loader"
-        />
+        <div className="loader" />
       </div>
     </div>
   );

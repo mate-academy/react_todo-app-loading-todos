@@ -18,6 +18,7 @@ export const TodoAppBody: React.FC<Props> = ({
 
         return (
           <TodoItem
+            key={id}
             title={title}
             id={id}
             completed={completed}
