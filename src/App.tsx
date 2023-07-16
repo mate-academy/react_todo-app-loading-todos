@@ -37,6 +37,10 @@ export const App: React.FC = () => {
   }, [USER_ID, todos]);
 
   const filteredTodos = useMemo(() => {
+    if (filter === Filter.ALL) {
+      return todos;
+    }
+  
     return todos.filter(todo => {
       switch (filter) {
         case Filter.ACTIVE:
@@ -44,12 +48,10 @@ export const App: React.FC = () => {
         case Filter.COMPLETED:
           return todo.completed;
         default:
-          break;
+          return true;
       }
-
-      return true;
     });
-  }, [Filter, todos]);
+  }, [Filter, filter, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -77,7 +79,7 @@ export const App: React.FC = () => {
       </div>
 
       {errorNotification && (
-        <ErrorMesage errorString={error} />
+        <ErrorMesage error={error} />
       )}
     </div>
   );

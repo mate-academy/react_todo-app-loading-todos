@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  errorString: string;
+  error: string;
 };
 
 export const ErrorMesage: React.FC<Props> = ({
-  errorString,
+  error,
 }) => {
   const [isHidden, setIsHidden] = useState(true);
-  const error = `${errorString}`;
 
   const removeNotification = () => {
     window.setTimeout(() => {
