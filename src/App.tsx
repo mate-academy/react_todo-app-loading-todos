@@ -40,7 +40,7 @@ export const App: React.FC = () => {
     if (filter === Filter.ALL) {
       return todos;
     }
-  
+
     return todos.filter(todo => {
       switch (filter) {
         case Filter.ACTIVE:
