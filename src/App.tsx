@@ -34,7 +34,7 @@ export const App: React.FC = () => {
     if (USER_ID) {
       fetchData();
     }
-  }, [USER_ID, todos]);
+  }, [todos]);
 
   const filteredTodos = useMemo(() => {
     if (filter === Filter.ALL) {
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
           return true;
       }
     });
-  }, [Filter, filter, todos]);
+  }, [filter, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={filteredTodos} />
 
-        {!!todos.length && (
+        {todos.length && (
           <Footer
             todosShow={filteredTodos}
             filter={filter}
