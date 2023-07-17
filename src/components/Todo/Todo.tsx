@@ -9,7 +9,9 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({
-  todo, deleteTodo, updateTodo,
+  todo, 
+  deleteTodo, 
+  updateTodo,
 }) => {
   const { id, title, completed } = todo;
   const [isUpdate, setIsUpdate] = useState(false);
