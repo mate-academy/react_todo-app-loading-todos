@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
+import ErrorToast from './components/ErrorToast';
+import TodoFooter from './components/TodoFooter';
+import TodoItem from './components/TodoItem';
 import { Todo, TodoStatus } from './types/Todo';
 
 const USER_ID = 11033;
@@ -13,7 +15,7 @@ export const App: React.FC = () => {
   const [todosContainer, setTodosContainer] = useState<Todo[]>([]);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(TodoStatus.All);
-  const [errorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const filterByStatus = (status: TodoStatus) => {
     const filtered = todosContainer.filter(todo => {
@@ -29,6 +31,10 @@ export const App: React.FC = () => {
 
     setTodos(filtered);
     setSelectedStatus(status);
+  };
+
+  const closeErrorMessage = () => {
+    setErrorMessage('');
   };
 
   useEffect(() => {
@@ -70,93 +76,25 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main">
           {todos.map(todo => (
-            <div
-              className={classNames('todo', { completed: todo.completed })}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                />
-              </label>
-
-              <span className="todo__title">{todo.title}</span>
-              <button type="button" className="todo__remove">×</button>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
+            <TodoItem todo={todo} />
           ))}
         </section>
 
         {todosContainer.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {todosContainer.length - completedTodos.length} items left
-            </span>
-
-            <nav className="filter">
-              <a
-                href="#/"
-                className={classNames('filter__link', {
-                  selected: selectedStatus === TodoStatus.All,
-                })}
-                onClick={() => filterByStatus(TodoStatus.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={classNames('filter__link', {
-                  selected: selectedStatus === TodoStatus.Active,
-                })}
-                onClick={() => filterByStatus(TodoStatus.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={classNames('filter__link', {
-                  selected: selectedStatus === TodoStatus.Completed,
-                })}
-                onClick={() => filterByStatus(TodoStatus.Completed)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* don't show this button if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              disabled={completedTodos.length === 0}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <TodoFooter
+            todosAmount={todosContainer.length - completedTodos.length}
+            completedAmount={completedTodos.length}
+            selected={selectedStatus}
+            onFilter={filterByStatus}
+          />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
-        <div className={
-          classNames('notification is-danger is-light has-text-weight-normal',
-            {
-              hidden: errorMessage.length !== 0,
-            })
-        }
-        >
-          <button type="button" className="delete" />
-
-          {errorMessage}
-        </div>
+        <ErrorToast
+          message={errorMessage}
+          onClose={closeErrorMessage}
+        />
       )}
     </div>
   );
