@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState } from "react";
-import { Todo } from "../../types/Todo";
-import { ResponseError } from "../../types/enum";
-import { getTodos, createTodo } from "../../api";
+import { useState } from 'react';
+import { Todo } from '../../types/Todo';
+import { ResponseError } from '../../types/enum';
+import { getTodos, createTodo } from '../../api';
 
 type Props = {
   todos: Todo[];
@@ -23,7 +23,7 @@ export const TodoHeader: React.FC<Props> = ({
   checkCompletedTodo,
   userID,
 }) => {
-  const [todoInput, setTodoInput] = useState("");
+  const [todoInput, setTodoInput] = useState('');
 
   const todoFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +42,7 @@ export const TodoHeader: React.FC<Props> = ({
       })
       .catch(() => setRespError(ResponseError.ADD));
 
-    return setTodoInput("");
+    return setTodoInput('');
   };
 
   const todoInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
