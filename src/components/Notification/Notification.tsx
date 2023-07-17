@@ -7,6 +7,10 @@ type Props = {
 };
 
 export const Notification: React.FC<Props> = ({ respError, setRespError }) => {
+  if (respError !== ResponseError.NOT) {
+    setTimeout(() => setRespError(ResponseError.NOT), 3000);
+  }
+
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
       <button

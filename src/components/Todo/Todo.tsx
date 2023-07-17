@@ -1,6 +1,3 @@
-/* eslint-disable no-lone-blocks */
-/* eslint-disable no-console */
-/* eslint-disable quote-props */
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
@@ -68,7 +65,7 @@ export const TodoItem: React.FC<Props> = ({
               <input
                 type="text"
                 className="todo__title-field"
-                style={{ 'outline': 'none' }}
+                style={{ outline: 'none' }}
                 placeholder="Empty todo will be deleted"
                 defaultValue={title}
                 onBlur={editHandler}
@@ -85,22 +82,3 @@ export const TodoItem: React.FC<Props> = ({
     </div>
   );
 };
-
-{
-  <div className="todo completed">
-    <label className="todo__status-label">
-      <input type="checkbox" className="todo__status" checked />
-    </label>
-
-    <span className="todo__title">Completed Todo</span>
-
-    <button type="button" className="todo__remove">
-      ×
-    </button>
-
-    <div className="modal overlay">
-      <div className="modal-background has-background-white-ter" />
-      <div className="loader" />
-    </div>
-  </div>;
-}

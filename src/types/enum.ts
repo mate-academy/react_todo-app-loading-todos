@@ -16,5 +16,4 @@ export enum Etodos {
   ALL,
   ACTIVE,
   COMPLETED,
-  CLEAR,
 }

@@ -1,16 +1,9 @@
-/* eslint-disable no-console */
-/* eslint-disable quote-props */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Authorization } from './components/authorization';
 import { Etodos, LogingSteps, ResponseError } from './types/enum';
 import { UserData } from './types/userData';
 import { Todo } from './types/Todo';
-import {
-  deleteTodoOnServer,
-  getTodosFromServer,
-  setTodoCompleteStatus,
-} from './api';
+import { deleteTodoOnServer, getTodos, updateTodoProp } from './api';
 import { TodoItem } from './components/Todo';
 import { TodoHeader } from './components/TodoHeader';
 import { Footer } from './components/Footer';
@@ -32,7 +25,7 @@ export const App: React.FC = () => {
   const [user, setUser] = useState<UserData>(defaultUser);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isUncomplete, setIsUncomplete] = useState<number>(0);
-  const [isShowFooter, setIsShowFooter] = useState<boolean>(false);
+  const [isShowFooter, setIsShowFooter] = useState<boolean>(true);
   const [sortTodosBy, setSortTodosBy] = useState<Etodos>(Etodos.ALL);
   const [respError, setRespError] = useState<ResponseError>(ResponseError.NOT);
   const [isToggleActiveTodos, setIsToggleActiveTodos] = useState(true);
@@ -40,7 +33,7 @@ export const App: React.FC = () => {
   const toggleTodosActive = () => {
     const promiseList = todos.map((todo) => {
       if (todo.completed !== isToggleActiveTodos) {
-        return setTodoCompleteStatus(todo.id, {
+        return updateTodoProp(todo.id, {
           completed: isToggleActiveTodos,
         });
       }
@@ -51,7 +44,7 @@ export const App: React.FC = () => {
     setIsToggleActiveTodos(!isToggleActiveTodos);
 
     Promise.all(promiseList).then(() => {
-      getTodosFromServer(user.id).then((todoList) => {
+      getTodos(user.id).then((todoList) => {
         setTodos(todoList);
         setIsShowFooter(Boolean(todoList.length));
       });
@@ -73,7 +66,7 @@ export const App: React.FC = () => {
   const deleteTodo = (id: number) => {
     deleteTodoOnServer(id)
       .then(() => {
-        getTodosFromServer(user.id).then((todoList) => {
+        getTodos(user.id).then((todoList) => {
           setTodos(todoList);
           checkCompletedTodo(todoList);
           setIsShowFooter(Boolean(todoList.length));
@@ -83,9 +76,9 @@ export const App: React.FC = () => {
   };
 
   const updateTodo = (todoId: number, obj: Partial<Todo>) => {
-    setTodoCompleteStatus(todoId, obj)
+    updateTodoProp(todoId, obj)
       .then(() => {
-        getTodosFromServer(user.id).then((todoList) => {
+        getTodos(user.id).then((todoList) => {
           setTodos(todoList);
           checkCompletedTodo(todoList);
           setIsShowFooter(Boolean(todoList.length));
@@ -95,61 +88,34 @@ export const App: React.FC = () => {
   };
 
   const displayTodos = (sortBy: Etodos) => {
-    const BASE_URL = 'https://mate.academy/students-api';
-    let endpoint = '';
-
-    const deleteCompleted = () => {
-      getTodosFromServer(user.id, 'completed=true')
-        .then((todoList) => {
-          return Promise.all(
-            todoList.map((todo: Todo) => deleteTodoOnServer(todo.id)),
-          );
-        })
-        .then(() => getTodosFromServer(user.id))
-        .then((todoList) => {
-          setTodos(todoList);
-          checkCompletedTodo(todoList);
-          setIsShowFooter(Boolean(todoList.length));
-        })
-        .catch((error) => new Error(error.message));
-    };
-
     switch (sortBy) {
       case Etodos.ACTIVE:
-        endpoint = `/todos?userId=${user.id}&completed=false`;
-        break;
+        return todos.filter((todo) => todo.completed === false);
 
       case Etodos.COMPLETED:
-        endpoint = `/todos?userId=${user.id}&completed=true`;
-        break;
-
-      case Etodos.CLEAR:
-        return deleteCompleted();
+        return todos.filter((todo) => todo.completed === true);
 
       default:
-        return getTodosFromServer(user.id).then((todoList) => {
-          checkCompletedTodo(todoList);
-          setTodos(todoList);
-          setIsShowFooter(Boolean(todoList.length));
-        });
+        return [...todos];
     }
-
-    return fetch(`${BASE_URL}${endpoint}`)
-      .then((data) => data.json())
-      .then((todoList) => {
-        checkCompletedTodo(todoList);
-        setTodos(todoList);
-        const footerStatus
-          = sortTodosBy === Etodos.ALL ? Boolean(todoList.length) : true;
-
-        setIsShowFooter(footerStatus);
-      })
-      .catch((error) => new Error(error.message));
   };
 
   useEffect(() => {
-    displayTodos(sortTodosBy);
-  }, [sortTodosBy]);
+    getTodos(user.id)
+      .then((todosList) => {
+        setIsUncomplete(
+          todosList.reduce((acc: number, todo: Todo):number => {
+            if (!todo.completed) {
+              return acc + 1;
+            }
+
+            return acc;
+          }, 0),
+        );
+
+        setTodos(todosList);
+      });
+  }, []);
 
   if (step !== LogingSteps.COMPLETE) {
     return <Authorization step={step} setStep={setStep} setUser={setUser} />;
@@ -171,7 +137,7 @@ export const App: React.FC = () => {
         />
 
         <section className="todoapp__main">
-          {todos.map((todoObj) => (
+          {displayTodos(sortTodosBy).map((todoObj) => (
             <TodoItem
               todo={todoObj}
               deleteTodo={deleteTodo}
@@ -187,6 +153,10 @@ export const App: React.FC = () => {
             sortTodosBy={sortTodosBy}
             setSortTodosBy={setSortTodosBy}
             todos={todos}
+            setTodos={setTodos}
+            checkCompletedTodo={checkCompletedTodo}
+            setIsShowFooter={setIsShowFooter}
+            userID={user.id}
           />
         )}
       </div>

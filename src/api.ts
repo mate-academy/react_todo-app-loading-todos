@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import { Todo } from './types/Todo';
 
 const BASE_URL = 'https://mate.academy/students-api';
 
-export const getTodosFromServer = (userId: number, param = '') => {
+export const getTodos = (userId: number, param = '') => {
   return fetch(`${BASE_URL}/todos?userId=${userId}&${param}`)
     .then((data) => data.json())
     .catch((error) => new Error(error.message));
@@ -20,7 +19,7 @@ export const createTodo = (srt: string, userId: number) => {
       completed: false,
       title: srt,
     }),
-  }).catch((error) => console.log('add', error.message));
+  }).catch((error) => error.message);
 };
 
 export const deleteTodoOnServer = (id: number) => {
@@ -29,7 +28,7 @@ export const deleteTodoOnServer = (id: number) => {
   }).catch((error) => new Error(error.message));
 };
 
-export const setTodoCompleteStatus = (id: number, object: Partial<Todo>) => {
+export const updateTodoProp = (id: number, object: Partial<Todo>) => {
   return fetch(`${BASE_URL}/todos/${id}`, {
     method: 'PATCH',
     headers: {

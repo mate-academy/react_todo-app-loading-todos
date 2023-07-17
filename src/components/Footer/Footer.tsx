@@ -1,12 +1,17 @@
 import classNames from 'classnames';
 import { Etodos } from '../../types/enum';
 import { Todo } from '../../types/Todo';
+import { deleteTodoOnServer, getTodos } from '../../api';
 
 type Props = {
   isUncomplete: number;
   sortTodosBy: Etodos;
   setSortTodosBy: (arg: Etodos) => void;
   todos: Todo[];
+  setTodos: (arg: Todo[]) => void;
+  checkCompletedTodo: (arg: Todo[]) => void;
+  setIsShowFooter: (arg: boolean) => void;
+  userID: number;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -14,7 +19,27 @@ export const Footer: React.FC<Props> = ({
   sortTodosBy,
   setSortTodosBy,
   todos,
+  setTodos,
+  checkCompletedTodo,
+  setIsShowFooter,
+  userID,
 }) => {
+  const deleteCompleted = () => {
+    getTodos(userID, 'completed=true')
+      .then((todoList) => {
+        return Promise.all(
+          todoList.map((todo: Todo) => deleteTodoOnServer(todo.id)),
+        );
+      })
+      .then(() => getTodos(userID))
+      .then((todoList) => {
+        setTodos(todoList);
+        checkCompletedTodo(todoList);
+        setIsShowFooter(Boolean(todoList.length));
+      })
+      .catch((error) => new Error(error.message));
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -59,7 +84,7 @@ export const Footer: React.FC<Props> = ({
           'is-invisible': isUncomplete === todos.length,
         })}
         disabled={isUncomplete === todos.length}
-        onClick={() => setSortTodosBy(Etodos.CLEAR)}
+        onClick={deleteCompleted}
       >
         Clear completed
       </button>
