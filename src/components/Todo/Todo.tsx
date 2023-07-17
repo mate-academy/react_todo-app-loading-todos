@@ -12,7 +12,7 @@ export const TodoItem: React.FC<Props> = ({
   todo, deleteTodo, updateTodo,
 }) => {
   const { id, title, completed } = todo;
-  const [update, setUpdate] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const editHandler = (e: React.FocusEvent<HTMLInputElement, Element>) => {
