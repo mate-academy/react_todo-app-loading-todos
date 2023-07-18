@@ -7,12 +7,13 @@ import { Todo } from './types/Todo';
 import { createTodo, getTodos } from './api/todos';
 import { Footer } from './components/Footer/Footer';
 import { Notification } from './components/Notification/Notification';
+import { FilterType } from './types/FiterType';
 
 const USER_ID = 11085;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
   const [errorMessage, setErrorMessage] = useState('');
 
   const fetchTodos = async () => {

@@ -1,11 +1,12 @@
 import classNames from 'classnames';
 import React from 'react';
+import { FilterType } from '../../types/FiterType';
 
 interface Props {
   todosCount: number;
   completedCount: number;
-  filter: 'all' | 'active' | 'completed';
-  setFilter: (filter: 'all' | 'active' | 'completed') => void;
+  filter: FilterType;
+  setFilter: (filter: FilterType) => void;
 }
 
 export const Footer: React.FC<Props> = ({
@@ -14,7 +15,7 @@ export const Footer: React.FC<Props> = ({
   filter,
   setFilter,
 }) => {
-  const handleFilterChange = (newFilter: 'all' | 'active' | 'completed') => {
+  const handleFilterChange = (newFilter: FilterType) => {
     setFilter(newFilter);
   };
 
@@ -25,7 +26,6 @@ export const Footer: React.FC<Props> = ({
       case 'active':
         return todosCount - completedCount;
       case 'completed':
-        return completedCount;
       default:
         return completedCount;
     }
@@ -69,14 +69,15 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {completedCount > 0 && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{
+          visibility: (completedCount === 0) ? 'hidden' : 'visible',
+        }}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
