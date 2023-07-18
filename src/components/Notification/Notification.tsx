@@ -37,8 +37,12 @@ export const Notification: React.FC<Props> = ({ errorMessage, onClose }) => {
         ? ''
         : 'hidden'}`}
     >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="delete" onClick={handleClose} />
+      <button
+        type="button"
+        className="delete"
+        onClick={handleClose}
+        aria-label="Close error"
+      />
 
       {errorMessage && (
         <>

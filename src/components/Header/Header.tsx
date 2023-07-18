@@ -10,7 +10,7 @@ export const Header: React.FC<Props> = ({ addTodo }) => {
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (newTodo.trim() !== '') {
+    if (newTodo.trim()) {
       addTodo(newTodo.trim());
       setNewTodo('');
     }

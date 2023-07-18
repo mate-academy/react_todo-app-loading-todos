@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 interface Props {
@@ -18,19 +19,16 @@ export const Footer: React.FC<Props> = ({
   };
 
   const getFilteredTodosCount = () => {
-    if (filter === 'all') {
-      return todosCount;
+    switch (filter) {
+      case 'all':
+        return todosCount;
+      case 'active':
+        return todosCount - completedCount;
+      case 'completed':
+        return completedCount;
+      default:
+        return completedCount;
     }
-
-    if (filter === 'active') {
-      return todosCount - completedCount;
-    }
-
-    if (filter === 'completed') {
-      return completedCount;
-    }
-
-    return todosCount;
   };
 
   const filteredTodosCount = getFilteredTodosCount();
@@ -44,21 +42,27 @@ export const Footer: React.FC<Props> = ({
       <nav className="filter">
         <a
           href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'all',
+          })}
           onClick={() => handleFilterChange('all')}
         >
           All
         </a>
         <a
           href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'all',
+          })}
           onClick={() => handleFilterChange('active')}
         >
           Active
         </a>
         <a
           href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+          className={classNames('filter__link', {
+            selected: filter === 'all',
+          })}
           onClick={() => handleFilterChange('completed')}
         >
           Completed

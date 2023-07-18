@@ -15,17 +15,17 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const fetchTodos = async () => {
+    try {
+      const fetchedTodos = await getTodos(USER_ID);
+
+      setTodos(fetchedTodos);
+    } catch (error) {
+      setErrorMessage('Unable to fetch todos.');
+    }
+  };
+
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const fetchedTodos = await getTodos(USER_ID);
-
-        setTodos(fetchedTodos);
-      } catch (error) {
-        setErrorMessage('Unable to fetch todos');
-      }
-    };
-
     fetchTodos();
   }, []);
 
@@ -44,19 +44,16 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'all') {
-      return true;
+    switch (filter) {
+      case 'all':
+        return true;
+      case 'active':
+        return !todo.completed;
+      case 'completed':
+        return todo.completed;
+      default:
+        return false;
     }
-
-    if (filter === 'active') {
-      return !todo.completed;
-    }
-
-    if (filter === 'completed') {
-      return todo.completed;
-    }
-
-    return false;
   });
 
   if (!USER_ID) {
