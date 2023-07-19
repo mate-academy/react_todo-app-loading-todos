@@ -8,25 +8,29 @@ import { createTodo, getTodos } from './api/todos';
 import { Footer } from './components/Footer/Footer';
 import { Notification } from './components/Notification/Notification';
 import { FilterType } from './types/FiterType';
+import { ErrorMessage } from './types/ErrorMessage';
 
 const USER_ID = 11085;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const fetchTodos = async () => {
-    try {
-      const fetchedTodos = await getTodos(USER_ID);
-
-      setTodos(fetchedTodos);
-    } catch (error) {
-      setErrorMessage('Unable to fetch todos.');
-    }
-  };
+  const [
+    errorMessage,
+    setErrorMessage,
+  ] = useState<ErrorMessage>(ErrorMessage.NoError);
 
   useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const fetchedTodos = await getTodos(USER_ID);
+
+        setTodos(fetchedTodos);
+      } catch (error) {
+        setErrorMessage(ErrorMessage.FetchTodos);
+      }
+    };
+
     fetchTodos();
   }, []);
 
@@ -40,7 +44,7 @@ export const App: React.FC = () => {
 
       setTodos([...todos, newTodo]);
     } catch (error) {
-      setErrorMessage('Unable to add a todo');
+      setErrorMessage(ErrorMessage.AddTodo);
     }
   };
 
@@ -64,7 +68,7 @@ export const App: React.FC = () => {
   const completedCount = todos.filter(todo => todo.completed).length;
 
   const clearErrorMessage = () => {
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.NoError);
   };
 
   return (

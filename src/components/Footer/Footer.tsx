@@ -26,8 +26,9 @@ export const Footer: React.FC<Props> = ({
       case 'active':
         return todosCount - completedCount;
       case 'completed':
+        return (completedCount > 0) ? completedCount : todosCount;
       default:
-        return completedCount;
+        return todosCount;
     }
   };
 
@@ -52,7 +53,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: filter === 'all',
+            selected: filter === 'active',
           })}
           onClick={() => handleFilterChange('active')}
         >
@@ -61,7 +62,7 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: filter === 'all',
+            selected: filter === 'completed',
           })}
           onClick={() => handleFilterChange('completed')}
         >

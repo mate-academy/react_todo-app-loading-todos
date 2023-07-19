@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
 interface Props {
@@ -33,9 +34,15 @@ export const Notification: React.FC<Props> = ({ errorMessage, onClose }) => {
 
   return (
     <div
-      className={`notification is-danger is-light has-text-weight-normal ${showNotification
-        ? ''
-        : 'hidden'}`}
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        {
+          hidden: !showNotification,
+        },
+      )}
     >
       <button
         type="button"
