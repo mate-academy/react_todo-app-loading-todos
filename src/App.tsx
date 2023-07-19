@@ -10,17 +10,29 @@ const USER_ID = 11092;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [selectItem, setSelectItem] = useState(Status.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch((error) => {
-        setErrorMessage('Error');
+        setErrorMessage(true);
         throw error;
       });
   }, []);
+
+  // useEffect(() => {
+  //   if (errorMessage) {
+  //     const timeout = setTimeout(() => {
+  //       setErrorMessage(false);
+  //     }, 5000);
+
+  //     return () => clearTimeout(timeout);
+  //   }
+
+  //   return () => { };
+  // }, [errorMessage]);
 
   const isActiveTodos = todos?.filter(todo => !todo.completed);
 
@@ -32,10 +44,13 @@ export const App: React.FC = () => {
       switch (selectItem) {
         case Status.ALL:
           return todos;
+
         case Status.ACTIVE:
           return activeTodos;
+
         case Status.COMPLETED:
           return completedTodos;
+
         default:
           throw new Error('Unable to add a todo');
       }
@@ -51,12 +66,10 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           {isActiveTodos && (
             <button type="button" className="todoapp__toggle-all active" />
           )}
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -67,34 +80,37 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {preparedTodos?.map(todo => (
-            <div className={classNames('todo', {
-              completed: todo.completed,
-            })}
-            >
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  defaultChecked={todo.completed}
-                />
-              </label>
+          {preparedTodos?.map(todo => {
+            const { id, completed, title } = todo;
 
-              <span className="todo__title">{todo.title}</span>
+            return (
+              <div
+                className={classNames('todo', {
+                  completed,
+                })}
+                key={id}
+              >
+                <label className="todo__status-label">
+                  <input
+                    type="checkbox"
+                    className="todo__status"
+                    defaultChecked={completed}
+                  />
+                </label>
 
-              {/* Remove button appears only on hover */}
-              <button type="button" className="todo__remove">×</button>
+                <span className="todo__title">{title}</span>
 
-              {/* overlay will cover the todo while it is being updated */}
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
+                <button type="button" className="todo__remove">×</button>
+
+                <div className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
 
-        {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer">
           {todos?.length && (
             <>
@@ -102,7 +118,6 @@ export const App: React.FC = () => {
                 {`${isActiveTodos.length} items left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <nav className="filter">
                 <a
                   href="#/"
@@ -135,7 +150,6 @@ export const App: React.FC = () => {
                 </a>
               </nav>
 
-              {/* don't show this button if there are no completed todos */}
               {isActiveTodos && (
                 <button
                   type="button"
@@ -149,8 +163,6 @@ export const App: React.FC = () => {
         </footer>
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
         <div
           // eslint-disable-next-line max-len
@@ -158,7 +170,12 @@ export const App: React.FC = () => {
             hidden: !errorMessage,
           })}
         >
-          <button type="button" className="delete" />
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setErrorMessage(false)}
+          />
+          Unable to load todos
         </div>
       )}
 
