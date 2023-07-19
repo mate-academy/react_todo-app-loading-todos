@@ -4,11 +4,11 @@ import { ErrorType } from '../../types/ErrorType';
 type Props = {
   errorMessage: ErrorType | null;
   isHidden: boolean;
-  onCloseNotification: (value: ErrorType | null) => void;
+  onCloseError: (value: ErrorType | null) => void;
 };
 
 export const ErrNotification: React.FC<Props> = ({
-  errorMessage, isHidden, onCloseNotification,
+  errorMessage, isHidden, onCloseError,
 }) => {
   return (
     <div
@@ -20,7 +20,7 @@ export const ErrNotification: React.FC<Props> = ({
         aria-label="delete notification"
         type="button"
         className="delete"
-        onClick={() => onCloseNotification(null)}
+        onClick={() => onCloseError(null)}
       />
       {errorMessage}
     </div>

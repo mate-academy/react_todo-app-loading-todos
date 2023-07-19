@@ -11,7 +11,7 @@ export const Header: React.FC<Props> = ({ activeTodosCount }) => {
         aria-label="toggle todos"
         type="button"
         className={cn('todoapp__toggle-all', {
-          active: activeTodosCount > 0,
+          active: !activeTodosCount,
         })}
       />
 

@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ visibleTodos, isLoading }) => {
-  const [isEditing] = useState(false);
+  const [isTodoEditing, setIsTodoEditing] = useState(0);
 
   return (
     <section className="todoapp__main">
@@ -27,18 +27,24 @@ export const TodoList: React.FC<Props> = ({ visibleTodos, isLoading }) => {
             />
           </label>
 
-          {isEditing ? (
+          {isTodoEditing === id ? (
             <form>
               <input
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
+                defaultValue={title}
+                onMouseLeave={() => setIsTodoEditing(0)}
               />
             </form>
           ) : (
             <>
-              <span className="todo__title">{title}</span>
+              <span
+                className="todo__title"
+                onDoubleClick={() => setIsTodoEditing(id)}
+              >
+                {title}
+              </span>
               <button
                 type="button"
                 className="todo__remove"

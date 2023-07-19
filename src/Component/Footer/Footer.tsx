@@ -11,6 +11,13 @@ type Props = {
 export const Footer: React.FC<Props> = ({
   activeTodosCount, complitedTodosCount, filterValue, setFilterValue,
 }) => {
+  const handleFilterChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const value = event.currentTarget.innerText as FilterBy;
+
+    setFilterValue(value);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -23,7 +30,7 @@ export const Footer: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterValue === FilterBy.ALL,
           })}
-          onClick={() => setFilterValue(FilterBy.ALL)}
+          onClick={(event) => handleFilterChange(event)}
         >
           {FilterBy.ALL}
         </a>
@@ -33,7 +40,7 @@ export const Footer: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterValue === FilterBy.ACTIVE,
           })}
-          onClick={() => setFilterValue(FilterBy.ACTIVE)}
+          onClick={(event) => handleFilterChange(event)}
         >
           {FilterBy.ACTIVE}
         </a>
@@ -43,7 +50,7 @@ export const Footer: React.FC<Props> = ({
           className={cn('filter__link', {
             selected: filterValue === FilterBy.COMPLETED,
           })}
-          onClick={() => setFilterValue(FilterBy.COMPLETED)}
+          onClick={(event) => handleFilterChange(event)}
         >
           {FilterBy.COMPLETED}
         </a>

@@ -95,7 +95,7 @@ export const App: React.FC = () => {
         <ErrNotification
           errorMessage={errorMessage}
           isHidden={isHidden}
-          onCloseNotification={setErrorMessage}
+          onCloseError={setErrorMessage}
         />
       )}
     </div>
