@@ -5,10 +5,15 @@ import { Status } from '../types/Status';
 
 type Props = {
   todos: Todo[],
+  selectItem: Status,
+  setSelectItem: React.Dispatch<React.SetStateAction<Status>>
 };
 
-export const Footer: React.FC<Props> = ({ todos }) => {
-  const [selectItem, setSelectItem] = useState(Status.ALL);
+export const Footer: React.FC<Props> = ({
+  todos,
+  selectItem,
+  setSelectItem,
+}) => {
   const isActiveTodos = todos.filter(todo => !todo.completed);
 
   return (

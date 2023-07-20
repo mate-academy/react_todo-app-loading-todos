@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
@@ -13,36 +13,35 @@ const USER_ID = 11092;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [selectItem] = useState(Status.ALL);
+  const [isError, setIsError] = useState(false);
+  const [todosFilterBy, setTodosFilterBy] = useState<Status>(Status.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch((error) => {
-        setErrorMessage(true);
+        setIsError(true);
         throw error;
       });
   }, []);
 
-  const preparedTodos = todos.filter(todo => {
-    const activeTodos = !todo.completed;
-    const completedTodos = todo.completed;
+  const preparedTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (todosFilterBy) {
+        case Status.ALL:
+          return todos;
 
-    switch (selectItem) {
-      case Status.ALL:
-        return todos;
+        case Status.ACTIVE:
+          return !todo.completed;
 
-      case Status.ACTIVE:
-        return activeTodos;
+        case Status.COMPLETED:
+          return todo.completed;
 
-      case Status.COMPLETED:
-        return completedTodos;
-
-      default:
-        throw new Error('Unable to add a todo');
-    }
-  });
+        default:
+          throw new Error('Unable to add a todo');
+      }
+    });
+  }, [todosFilterBy, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -60,25 +59,29 @@ export const App: React.FC = () => {
         </section>
 
         {!!todos.length && (
-          <Footer todos={todos} />
+          <Footer
+            todos={todos}
+            selectItem={todosFilterBy}
+            setSelectItem={setTodosFilterBy}
+          />
         )}
 
       </div>
 
-      {errorMessage && (
+      {isError && (
         <div
           className={classNames(
             'notification',
             'is-danger is-light',
             'has-text-weight-normal', {
-              hidden: !errorMessage,
-            },
+            hidden: !isError,
+          },
           )}
         >
           <button
             type="button"
             className="delete"
-            onClick={() => setErrorMessage(false)}
+            onClick={() => setIsError(false)}
           />
           Unable to load todos
         </div>
