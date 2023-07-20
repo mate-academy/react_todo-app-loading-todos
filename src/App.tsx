@@ -74,8 +74,8 @@ export const App: React.FC = () => {
             'notification',
             'is-danger is-light',
             'has-text-weight-normal', {
-            hidden: !isError,
-          },
+              hidden: !isError,
+            },
           )}
         >
           <button

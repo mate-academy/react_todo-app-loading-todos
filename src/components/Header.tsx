@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Todo } from '../types/Todo';
 
@@ -14,6 +13,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
       {isActiveTodos && (
         <button
           type="button"
+          aria-label="button"
           className="todoapp__toggle-all active"
         />
       )}

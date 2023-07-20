@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
