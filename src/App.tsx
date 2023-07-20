@@ -8,7 +8,7 @@ import { Todo } from './types/Todo';
 
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 11073;
+const USER_ID = 10;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
