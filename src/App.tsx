@@ -22,19 +22,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   if (errorMessage) {
-  //     const timeout = setTimeout(() => {
-  //       setErrorMessage(false);
-  //     }, 5000);
-
-  //     return () => clearTimeout(timeout);
-  //   }
-
-  //   return () => { };
-  // }, [errorMessage]);
-
-  const isActiveTodos = todos?.filter(todo => !todo.completed);
+  const isActiveTodos = todos.filter(todo => !todo.completed);
 
   const preparedTodos = todos
     ?.filter(todo => {
@@ -80,9 +68,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {preparedTodos?.map(todo => {
-            const { id, completed, title } = todo;
-
+          {preparedTodos?.map(({ id, completed, title }) => {
             return (
               <div
                 className={classNames('todo', {
@@ -111,56 +97,55 @@ export const App: React.FC = () => {
           })}
         </section>
 
-        <footer className="todoapp__footer">
-          {todos?.length && (
-            <>
-              <span className="todo-count">
-                {`${isActiveTodos.length} items left`}
-              </span>
+        {todos?.length && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${isActiveTodos.length} items left`}
+            </span>
 
-              <nav className="filter">
-                <a
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: selectItem === Status.ALL,
-                  })}
-                  onClick={() => setSelectItem(Status.ALL)}
-                >
-                  All
-                </a>
+            <nav className="filter">
+              <a
+                href="#/"
+                className={classNames('filter__link', {
+                  selected: selectItem === Status.ALL,
+                })}
+                onClick={() => setSelectItem(Status.ALL)}
+              >
+                All
+              </a>
 
-                <a
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: selectItem === Status.ACTIVE,
-                  })}
-                  onClick={() => setSelectItem(Status.ACTIVE)}
-                >
-                  Active
-                </a>
+              <a
+                href="#/active"
+                className={classNames('filter__link', {
+                  selected: selectItem === Status.ACTIVE,
+                })}
+                onClick={() => setSelectItem(Status.ACTIVE)}
+              >
+                Active
+              </a>
 
-                <a
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: selectItem === Status.COMPLETED,
-                  })}
-                  onClick={() => setSelectItem(Status.COMPLETED)}
-                >
-                  Completed
-                </a>
-              </nav>
+              <a
+                href="#/completed"
+                className={classNames('filter__link', {
+                  selected: selectItem === Status.COMPLETED,
+                })}
+                onClick={() => setSelectItem(Status.COMPLETED)}
+              >
+                Completed
+              </a>
+            </nav>
 
-              {isActiveTodos && (
-                <button
-                  type="button"
-                  className="todoapp__clear-completed"
-                >
-                  Clear completed
-                </button>
-              )}
-            </>
-          )}
-        </footer>
+            {!!todos.filter(todo => todo.completed).length && (
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
+        )}
+
       </div>
 
       {errorMessage && (
@@ -178,7 +163,6 @@ export const App: React.FC = () => {
           Unable to load todos
         </div>
       )}
-
     </div>
   );
 };
