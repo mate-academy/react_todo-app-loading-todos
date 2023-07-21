@@ -26,15 +26,15 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
     if (hasError) {
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setHasError(false);
       }, 3000);
-
-      return () => clearTimeout(timeout);
     }
 
-    return () => { };
+    return () => clearTimeout(timeout);
   }, [hasError]);
 
   const completedTodos = useMemo(() => {
