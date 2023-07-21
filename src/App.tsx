@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 
@@ -6,6 +5,8 @@ import { UserWarning } from './UserWarning';
 import { Status } from './types/Status';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { TodoList } from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
 
 const USER_ID = 11098;
 
@@ -36,23 +37,16 @@ export const App: React.FC = () => {
     return () => { };
   }, [hasError]);
 
-  const handleCheckboxChange = (todoId: number) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === todoId) {
-        return { ...todo, completed: !todo.completed };
-      }
-
-      return todo;
-    });
-
-    setTodos(updatedTodos);
-  };
-
-  const [completedTodos, uncompletedTodos] = useMemo(() => {
+  const completedTodos = useMemo(() => {
     const completed = todos?.filter((todo) => todo.completed);
+
+    return completed;
+  }, [todos]);
+
+  const uncompletedTodos = useMemo(() => {
     const uncompleted = todos?.filter((todo) => !todo.completed);
 
-    return [completed, uncompleted];
+    return uncompleted;
   }, [todos]);
 
   const todoIsActive = todos?.find((todo) => todo.completed === false);
@@ -82,7 +76,11 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {todoIsActive && (
-            <button type="button" className="todoapp__toggle-all active" />
+            <button
+              type="button"
+              className="todoapp__toggle-all active"
+              aria-label="toggle todos"
+            />
           )}
 
           <form>
@@ -94,82 +92,18 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main">
-          {visibleTodos?.map((todo: Todo) => (
-            <div
-              key={todo.id}
-              className={cn('todo', {
-                completed: todo?.completed,
-              })}
-            >
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo?.completed}
-                  onChange={() => handleCheckboxChange(todo.id)}
-                />
-              </label>
-
-              <span className="todo__title">{todo?.title}</span>
-
-              <button type="button" className="todo__remove">×</button>
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section>
+        {visibleTodos.length > 0 && (
+          <TodoList visibleTodos={visibleTodos} />
+        )}
 
         {todos?.length > 0 && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${uncompletedTodos?.length} items left`}
-            </span>
-
-            <nav className="filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterStatus === Status.ALL,
-                })}
-                onClick={() => setFilterStatus(Status.ALL)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterStatus === Status.ACTIVE,
-                })}
-                onClick={() => setFilterStatus(Status.ACTIVE)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterStatus === Status.COMPLETEED,
-                })}
-                onClick={() => setFilterStatus(Status.COMPLETEED)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              style={{ opacity: completedTodos.length > 0 ? '1' : '0' }}
-              disabled={!completedTodos?.length}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            completedTodos={completedTodos}
+            uncompletedTodos={uncompletedTodos}
+            todos={todos}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+          />
         )}
       </div>
 
@@ -188,6 +122,7 @@ export const App: React.FC = () => {
           type="button"
           className="delete"
           onClick={() => setHasError(false)}
+          aria-label="delete notification"
         />
         Unable to load todos
       </div>
