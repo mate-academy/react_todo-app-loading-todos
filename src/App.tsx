@@ -11,68 +11,89 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [isSelected, setIsSelected] = useState('');
+  const [isError, setIsError] = useState('');
+  const [filtered, setFiltered] = useState<Todo[]>([]);
 
-  const getAllTodo = () => {
-    return (
-      todosService.getTodos(USER_ID).then(serverTodo => {
-        setTodos(serverTodo);
-      })
-    );
+  const getAllTodo = async () => {
+    // return (
+    //   todosService.getTodos(USER_ID).then(serverTodo => {
+    //     setTodos(serverTodo);
+    //   })
+    // );
+
+    try {
+      setIsError('');
+      const loadTodos = await todosService.getTodos(USER_ID);
+
+      setTodos(loadTodos);
+
+      if (filtered.length === 0) {
+        setFiltered(todos);
+      }
+    } catch (error) {
+      setIsError('Unable to update a todo');
+    }
   };
 
-  const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    const newTodo = {
-      userId: USER_ID,
-      title: newTitle.trim(),
-      completed: false,
-    };
+  //   const newTodo = {
+  //     userId: USER_ID,
+  //     title: newTitle.trim(),
+  //     completed: false,
+  //   };
 
-    todosService.createTodo(newTodo).then(getAllTodo);
-    setNewTitle('');
-  };
+  //   try {
+  //     todosService.createTodo(newTodo).then(getAllTodo);
+  //     setNewTitle('');
+  //   } catch (error) {
+  //     setIsError('Unable to add a todo');
+  //   }
+  // };
 
-  const removeTodo = (id: number) => {
-    todosService.deleteTodo(id);
-    setTodos(curentTodos => curentTodos.filter(todo => todo.id !== id));
-  };
+  // const removeTodo = (id: number) => {
+  //   try {
+  //     todosService.deleteTodo(id);
+  //     setTodos(curentTodos => curentTodos.filter(todo => todo.id !== id));
+  //   } catch (error) {
+  //     setIsError('Unable to delete a todo');
+  //   }
+  // };
 
-  const handleCheck = ({
-    id,
-    title,
-    userId,
-    completed,
-  }: Todo) => {
-    todosService.patchTodo({
-      id,
-      title,
-      userId,
-      completed,
-    });
-  };
+  // const handleCheck = ({
+  //   id,
+  //   title,
+  //   userId,
+  //   completed,
+  // }: Todo) => {
+  //   todosService.patchTodo({
+  //     id,
+  //     title,
+  //     userId,
+  //     completed,
+  //   });
+  // };
 
   const handleTodos = (value: string) => {
     switch (value) {
       case 'All':
-        getAllTodo();
+        setFiltered(todos);
         break;
       case 'Active':
-        getAllTodo()
-          .then(() => setTodos(todos.filter(todo => !todo.completed)));
+        setFiltered(todos.filter(todo => !todo.completed));
         break;
       case 'Completed':
-        getAllTodo()
-          .then(() => setTodos(todos.filter(todo => todo.completed)));
+        setFiltered(todos.filter(todo => todo.completed));
         break;
-      case 'CompletedClear':
-        todos.forEach(todo => {
-          if (todo.completed) {
-            removeTodo(todo.id);
-          }
-        });
-        getAllTodo();
-        break;
+      // case 'CompletedClear':
+      //   todos.forEach(todo => {
+      //     if (todo.completed) {
+      //       removeTodo(todo.id);
+      //     }
+      //   });
+      //   getAllTodo();
+      //   break;
       default:
         break;
     }
@@ -80,7 +101,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getAllTodo();
-  }, []);
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -96,7 +117,8 @@ export const App: React.FC = () => {
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
-          <form onSubmit={(e) => addTodo(e)}>
+          {/* <form onSubmit={(e) => addTodo(e)}> */}
+          <form>
             <input
               type="text"
               className="todoapp__new-todo"
@@ -108,28 +130,32 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          { todos && (
-            todos.map(({
+          { todos.length > 0 && (
+            filtered.map(({
               title,
               id,
               completed,
-              userId,
+              // userId,
             }) => {
               return (
-                <div className="todo" key={id}>
+                <div
+                  className={classNames('todo',
+                    { completed })}
+                  key={id}
+                >
                   <label className="todo__status-label">
                     <input
                       type="checkbox"
                       className="todo__status"
-                      checked
-                      onChange={() => {
-                        handleCheck({
-                          id,
-                          title,
-                          userId,
-                          completed,
-                        });
-                      }}
+                      defaultChecked
+                      // onChange={() => {
+                      //   handleCheck({
+                      //     id,
+                      //     title,
+                      //     userId,
+                      //     completed,
+                      //   });
+                      // }}
                     />
                   </label>
 
@@ -141,7 +167,7 @@ export const App: React.FC = () => {
                   <button
                     type="button"
                     className="todo__remove"
-                    onClick={() => removeTodo(id)}
+                    // onClick={() => removeTodo(id)}
                   >
                     ×
                   </button>
@@ -159,7 +185,7 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        { todos.length > 0 && (
+        { todos && (
           <footer className="todoapp__footer">
             <span className="todo-count">
               { todos.length }
@@ -220,16 +246,16 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      { isError && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button
+            type="button"
+            className="delete"
+            onClick={() => setIsError('')}
+          />
+          {isError}
+        </div>
+      )}
     </div>
   );
 };
