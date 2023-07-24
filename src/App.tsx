@@ -58,6 +58,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
+          removeError={() => setError(false)}
           isTodos={!!todos.length}
           activeTodos={activeTodos}
         />
@@ -75,7 +76,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {error && <ErrorMessage />}
+      {error && <ErrorMessage removeError={() => setError(false)} />}
 
     </div>
   );

@@ -7,11 +7,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   isTodos: boolean;
   activeTodos: Todo[];
+  removeError: () => void;
 };
 
 export const Header: React.FC<Props> = ({
   isTodos,
   activeTodos,
+  removeError,
 }) => {
   const [todoTitle, setTodoTitle] = useState('');
 
@@ -19,6 +21,11 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
 
     setTodoTitle('');
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoTitle(event.target.value);
+    removeError();
   };
 
   return (
@@ -39,7 +46,7 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={todoTitle}
-          onChange={event => setTodoTitle(event.target.value)}
+          onChange={handleChange}
         />
       </form>
     </header>
