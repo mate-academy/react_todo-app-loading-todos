@@ -1,61 +1,66 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './utils/todos';
+import { NotificationText, SortCondition } from './types/enums';
+import { Footer } from './components/Footer';
+import { Notification } from './components/Notification';
 
 const USER_ID = '11161';
 
-enum SortCondition {
-  All,
-  Active,
-  Completed,
-}
-
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[] | null>(null);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
   const [filterBy, setFilterBy] = useState(SortCondition.All);
-  const [visibleItemsCount, setVisibleItemsCount] = useState(0);
+  const [activeItemsCount, setActiveItemsCount] = useState(0);
+  const [completedItemsCount, setCompletedItemsCount] = useState(0);
 
-  function setFilterCOndition(condition: SortCondition) {
-    setFilterBy(condition);
-  }
+  const [
+    notificationMessage,
+    setNotificationMessage,
+  ] = useState<NotificationText | null>(null);
 
-  function showNotification() {
-    setIsNotificationVisible(true);
+  function showNotification(text: NotificationText) {
+    setNotificationMessage(text);
 
     setTimeout(() => {
-      setIsNotificationVisible(false);
+      setNotificationMessage(null);
     }, 3000);
   }
 
   function filterTodos(allTodos: Todo[]) {
     let filteredTodos = allTodos;
+    const activeTodos = filteredTodos.filter(todo => !todo.completed);
+    const completedTodos = filteredTodos.filter(todo => todo.completed);
 
     if (filterBy === SortCondition.Active) {
-      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+      filteredTodos = activeTodos;
     } else if (filterBy === SortCondition.Completed) {
-      filteredTodos = filteredTodos.filter(todo => todo.completed);
+      filteredTodos = completedTodos;
     }
 
-    setVisibleItemsCount(filteredTodos.length);
-    setTodos(filteredTodos);
+    setCompletedItemsCount(completedTodos.length);
+    setActiveItemsCount(activeTodos.length);
+    setVisibleTodos(filteredTodos);
   }
 
   useEffect(() => {
-    setIsNotificationVisible(false);
+    if (todosFromServer) {
+      filterTodos(todosFromServer);
+    }
+  }, [todosFromServer, filterBy]);
+
+  useEffect(() => {
+    setNotificationMessage(null);
 
     getTodos(USER_ID)
-      .then(allTodos => {
-        filterTodos(allTodos);
-      })
+      .then(setTodosFromServer)
       .catch(() => {
-        showNotification();
+        showNotification(NotificationText.Get);
       });
-  }, [filterBy]);
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -80,75 +85,26 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos && (
+        {visibleTodos && (
           <>
-            <TodoList todos={todos} />
+            <TodoList todos={visibleTodos} />
 
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${visibleItemsCount} items left`}
-              </span>
-
-              <nav className="filter">
-                <a
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: filterBy === SortCondition.All,
-                  })}
-                  onClick={() => setFilterCOndition(SortCondition.All)}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: filterBy === SortCondition.Active,
-                  })}
-                  onClick={() => setFilterCOndition(SortCondition.Active)}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: filterBy === SortCondition.Completed,
-                  })}
-                  onClick={() => setFilterCOndition(SortCondition.Completed)}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              {/* don't show this button if there are no completed todos */}
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            </footer>
+            <Footer
+              filterCondition={filterBy}
+              visibleItemsCount={activeItemsCount}
+              isCompletedTodos={completedItemsCount > 0}
+              setFilterCOndition={setFilterBy}
+            />
           </>
         )}
       </div>
 
-      <div className={
-        classNames('notification is-danger is-light has-text-weight-normal', {
-          hidden: !isNotificationVisible,
-        })
-      }
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setIsNotificationVisible(false)}
+      {notificationMessage && (
+        <Notification
+          text={notificationMessage}
+          hideNotification={() => setNotificationMessage(null)}
         />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      )}
     </div>
   );
 };
