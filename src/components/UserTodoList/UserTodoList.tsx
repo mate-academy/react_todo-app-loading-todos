@@ -46,7 +46,7 @@ export const UserTodoList: React.FC<Props> = ({ userId }) => {
         && (
           <Notification
             error={error}
-            setError={setError}
+            closeNotification={() => setError('')}
           />
         )}
 

@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 
 type Props = {
   error: string;
-  setError: (error: string) => void;
+  closeNotification: () => void;
 };
 
 export const Notification: React.FC<Props> = (
-  { error, setError },
+  { error, closeNotification },
 ) => {
   useEffect(() => {
-    const timeout = setTimeout(() => setError(''), 3000);
+    const timeout = setTimeout(closeNotification, 3000);
 
     return () => clearTimeout(timeout);
   }, [error]);
@@ -20,7 +20,7 @@ export const Notification: React.FC<Props> = (
         type="button"
         className="delete"
         aria-label="close notification"
-        onClick={() => setError('')}
+        onClick={closeNotification}
       />
       {error}
     </div>
