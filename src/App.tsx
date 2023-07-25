@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { Header } from './components/Header/Header';
-import { List } from './components/List/List';
+import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import { getTodos } from './api/todos';
@@ -14,25 +14,21 @@ const USER_ID = 11083;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodos, setCurrentTodos] = useState<Todo[]>(todos);
-  const [filterOption, setFilterOption] = useState<FilterOption>(FilterOption
-    .ALL);
+  const [filterOption, setFilterOption] = useState<FilterOption>(
+    FilterOption.ALL,
+  );
   const [error, setError] = useState(false);
-
-  const timeout = () => setTimeout(() => {
-    setError(false);
-    clearTimeout(timeout());
-  }, 3000);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setError(true);
-        timeout();
+        setTimeout(() => setError(false), 3000);
       });
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     switch (filterOption) {
       case FilterOption.ACTIVE:
         setCurrentTodos(todos.filter(todo => !todo.completed));
@@ -52,6 +48,8 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const isClearBtn = activeTodos.length !== currentTodos.length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -64,20 +62,22 @@ export const App: React.FC = () => {
         />
         {!!todos.length && (
           <>
-            <List todos={currentTodos} />
+            <TodoList todos={currentTodos} />
             <Footer
               activeTodos={activeTodos}
               filterOption={filterOption}
               setFilterOption={setFilterOption}
+              isClearBtn={isClearBtn}
             />
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {error && <ErrorMessage removeError={() => setError(false)} />}
-
+      <ErrorMessage
+        removeError={() => setError(false)}
+        error={error}
+      />
     </div>
   );
 };
