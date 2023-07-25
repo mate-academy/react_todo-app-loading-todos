@@ -44,8 +44,8 @@ export const App: React.FC = () => {
         setTodosContainer(res);
         setCompletedTodos(res.filter(todo => todo.completed));
       })
-      .catch((error) => {
-        throw error;
+      .catch((error: Error) => {
+        setErrorMessage(error.message)
       });
   }, []);
 
