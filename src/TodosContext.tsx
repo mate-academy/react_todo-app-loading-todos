@@ -82,7 +82,7 @@ export const TodosProvider: React.FC<ProviderProps> = ({ children }) => {
 
         setTimeout(() => setErrorMessage(''), 3000);
       });
-  }, [todos]);
+  }, []);
 
   const isTodosHasCompleted = () => {
     return todos.some(todo => todo.completed);
