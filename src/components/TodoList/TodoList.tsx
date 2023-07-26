@@ -7,37 +7,33 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ todos }) => (
   <section className="todoapp__main">
-    {todos.map(todo => {
-      const { completed, title } = todo;
+    {todos.map(({ completed, title, id }) => (
+      <div
+        key={id}
+        className={classNames(
+          'todo',
+          { completed },
+        )}
+      >
+        <label className="todo__status-label">
+          <input
+            type="checkbox"
+            className="todo__status"
+            checked={completed}
+          />
+        </label>
 
-      return (
-        <div
-          key={todo.id}
-          className={classNames(
-            'todo',
-            { completed },
-          )}
-        >
-          <label className="todo__status-label">
-            <input
-              type="checkbox"
-              className="todo__status"
-              checked={completed}
-            />
-          </label>
+        <span className="todo__title">
+          {title}
+        </span>
 
-          <span className="todo__title">
-            {title}
-          </span>
+        <button type="button" className="todo__remove">×</button>
 
-          <button type="button" className="todo__remove">×</button>
-
-          <div className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
+        <div className="modal overlay">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
         </div>
-      );
-    })}
+      </div>
+    ))}
   </section>
 );

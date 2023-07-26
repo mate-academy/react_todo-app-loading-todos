@@ -20,12 +20,17 @@ export const App: React.FC = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    const timerId = setTimeout(() => setError(false), 3000);
+
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setError(true);
-        setTimeout(() => setError(false), 3000);
       });
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, []);
 
   useMemo(() => {
@@ -73,7 +78,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorMessage
         removeError={() => setError(false)}
         error={error}

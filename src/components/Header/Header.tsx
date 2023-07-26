@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState } from 'react';
 
 import classNames from 'classnames';
@@ -30,12 +29,12 @@ export const Header: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       {isTodos && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all',
             { active: !activeTodos.length })}
+          aria-label="activeButton"
         />
       )}
 
