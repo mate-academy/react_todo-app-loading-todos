@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import ErrorToast from './components/ErrorToast';
@@ -11,15 +11,17 @@ import { Todo, TodoStatus } from './types/Todo';
 const USER_ID = 11033;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [todosContainer, setTodosContainer] = useState<Todo[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(TodoStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const filterByStatus = (status: TodoStatus) => {
-    const filtered = todosContainer.filter(todo => {
-      switch (status) {
+  const completedTodos = useMemo(() => {
+    return todosContainer.filter(todo => todo.completed);
+  }, [todosContainer]);
+
+  const todos = useMemo(() => {
+    return todosContainer.filter(todo => {
+      switch (selectedStatus) {
         case TodoStatus.Active:
           return !todo.completed;
         case TodoStatus.Completed:
@@ -28,8 +30,9 @@ export const App: React.FC = () => {
           return todo;
       }
     });
+  }, [selectedStatus, todosContainer]);
 
-    setTodos(filtered);
+  const filterByStatus = (status: TodoStatus) => {
     setSelectedStatus(status);
   };
 
@@ -40,12 +43,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then((res) => {
-        setTodos(res);
         setTodosContainer(res);
-        setCompletedTodos(res.filter(todo => todo.completed));
       })
       .catch((error: Error) => {
-        setErrorMessage(error.message)
+        setErrorMessage(error.message);
       });
   }, []);
 
