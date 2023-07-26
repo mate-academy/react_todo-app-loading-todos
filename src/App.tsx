@@ -19,8 +19,8 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(FilterType.All);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [value, setValue] = useState('');
-  const completedTodos = todos.filter(todo => todo.completed);
-  const notCompletedTodos = todos.filter(todo => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
+  const notCompletedTodos = todos.filter((todo) => !todo.completed);
 
   useEffect(() => {
     async function fetchTodos() {
@@ -45,7 +45,11 @@ export const App: React.FC = () => {
   }, [errorMessage]);
 
   const updatedTodos = (newTodo: Todo) => {
-    setTodos(prevTodos => [...prevTodos, newTodo]);
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+  };
+
+  const handleInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -74,7 +78,7 @@ export const App: React.FC = () => {
       case FilterType.Completed:
         return todo.completed;
       default:
-        return todo;
+        return true;
     }
   });
 
@@ -91,12 +95,9 @@ export const App: React.FC = () => {
           {todos.length > 0 && (
             <button
               type="button"
-              className={cn(
-                'todoapp__toggle-all',
-                {
-                  active: completedTodos.length > 0,
-                },
-              )}
+              className={cn('todoapp__toggle-all', {
+                active: completedTodos.length > 0,
+              })}
             />
           )}
 
@@ -106,7 +107,7 @@ export const App: React.FC = () => {
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
               value={value}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={handleInput}
               onKeyDown={handleKeyDown}
             />
           </form>
@@ -120,39 +121,31 @@ export const App: React.FC = () => {
 
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {notCompletedTodos.length === 1 ? '1 item left' : `${notCompletedTodos.length} items left`}
+                {notCompletedTodos.length === 1
+                  ? '1 item left'
+                  : `${notCompletedTodos.length} items left`}
               </span>
 
               <TodoFilter filter={filter} setFilter={setFilter} />
 
               {completedTodos.length > 0 ? (
-                <button
-                  type="button"
-                  className="todoapp__clear-completed"
-                >
+                <button type="button" className="todoapp__clear-completed">
                   Clear completed
                 </button>
-              ) : (
-                <button
-                  style={{ visibility: 'hidden' }}
-                  type="button"
-                  className="todoapp__clear-completed"
-                >
-                  Clear completed
-                </button>
-              )}
+              ) : null}
             </footer>
           </>
         )}
       </div>
 
-      <div className={cn(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: errorMessage === '' },
-      )}
+      <div
+        className={cn(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: errorMessage === '' },
+        )}
       >
         <button
           type="button"
