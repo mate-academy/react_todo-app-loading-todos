@@ -1,16 +1,22 @@
 import classNames from 'classnames';
 import { FilterParams } from '../../types/FilterParams';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   filter: FilterParams,
   setFilter: (newFilter: FilterParams) => void,
+  todos: Todo[],
 }
 
-export const TodoFilterBar: React.FC<Props> = ({ filter, setFilter }) => {
+export const TodoFilterBar: React.FC<Props> = ({
+  filter,
+  setFilter,
+  todos,
+}) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${todos.length} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}

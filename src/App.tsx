@@ -83,6 +83,7 @@ export const App: React.FC = () => {
           <TodoFilterBar
             filter={filter}
             setFilter={(newFilter) => setFilter(newFilter)}
+            todos={todos}
           />
         )}
       </div>
