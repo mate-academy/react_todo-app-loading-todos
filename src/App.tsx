@@ -71,6 +71,8 @@ export const App: React.FC = () => {
         }, 3000);
         throw error;
       });
+
+    setNewTitle('');
   };
 
   return (
