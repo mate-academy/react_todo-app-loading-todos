@@ -9,7 +9,7 @@ const TodoListData: React.FC = () => {
     <section className="todoapp__main">
       {
         todos.map(todo => (
-          <TodoListItem todo={todo} />
+          <TodoListItem todo={todo} key={todo.id} />
         ))
       }
     </section>
