@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoAppHeader
-          todos={todoList}
+          todos={todos}
           addTodo={addTodo}
           newTitle={newTitle}
           setNewTitle={setNewTitle}
