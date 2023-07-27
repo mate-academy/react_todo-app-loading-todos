@@ -61,7 +61,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          removeError={() => setError(false)}
           isTodos={!!todos.length}
           activeTodos={activeTodos}
         />
