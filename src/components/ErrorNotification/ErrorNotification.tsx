@@ -10,13 +10,20 @@ type Props = {
 
 export const ErrorNotification: FC<Props> = ({ error, onHideError }) => {
   const errorMessage = useRef(error);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (error) {
       errorMessage.current = error;
-      setTimeout(() => onHideError(), 3000);
+      timerRef.current = setTimeout(() => onHideError(), 3000);
     }
-  }, [error]);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [error, onHideError]);
 
   return (
     /* eslint-disable-next-line max-len */
