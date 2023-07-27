@@ -1,10 +1,21 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
+import cn from 'classnames';
 import { UserWarning } from './UserWarning';
+import { Todo } from './types/Todo';
 
-const USER_ID = 0;
+const USER_ID = 11229;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // add todo
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -16,10 +27,15 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className={cn('todoapp__toggle-all', {
+              active: todos.some(todo => todo.completed), // replace todo
+            })}
+          />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               className="todoapp__new-todo"
