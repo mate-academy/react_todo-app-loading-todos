@@ -6,22 +6,22 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoInfo: FC<Props> = ({ todo }) => {
+export const TodoInfo: FC<Props> = ({ todo: { completed, title } }) => {
   return (
     <div className={classNames('todo', {
-      completed: todo.completed,
+      completed,
     })}
     >
       <label className="todo__status-label">
         <input
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           readOnly
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      <span className="todo__title">{title}</span>
 
       <button type="button" className="todo__remove">
         ×
