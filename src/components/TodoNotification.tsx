@@ -23,7 +23,7 @@ export const TodoNotification: React.FC<Props> = ({
         hidden: !hasError,
       })}
     >
-
+      {/* eslint-disable-next-line */}
       <button
         type="button"
         className="delete"
