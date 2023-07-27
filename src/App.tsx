@@ -32,20 +32,17 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const addTodo = React.useCallback(
-    ({ title, completed, userId }: Omit<Todo, 'id'>) => {
-      postServes
-        .createTodo({ title, completed, userId })
-        .then(newTodo => {
-          setTodos(currentTodos => [...currentTodos!, newTodo]);
-        })
-        .catch(() => {
-          setIsError(true);
-          setErrorMessage('Unable to add a todo');
-        });
-    },
-    [],
-  );
+  const addTodo = ({ title, completed, userId }: Omit<Todo, 'id'>) => {
+    postServes
+      .createTodo({ title, completed, userId })
+      .then(newTodo => {
+        setTodos(currentTodos => [...currentTodos!, newTodo]);
+      })
+      .catch(() => {
+        setIsError(true);
+        setErrorMessage('Unable to add a todo');
+      });
+  };
 
   if (!USER_ID) {
     return <UserWarning />;

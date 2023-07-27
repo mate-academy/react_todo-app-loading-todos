@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -6,31 +6,34 @@ type Props = {
   userId: number,
 };
 
-export const TodoForm:React.FC<Props> = ({ addTodo, userId }) => {
-  const [title, setTitle] = useState<string>('');
+export const TodoForm:React.FC<Props> = React.memo(
+  ({ addTodo, userId }) => {
+    const [title, setTitle] = useState<string>('');
 
-  const handlerSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    const handlerSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const newTodo = {
-      id: 0,
-      title,
-      completed: false,
-      userId,
+      const newTodo = {
+        id: 0,
+        title,
+        completed: false,
+        userId,
+      };
+
+      addTodo(newTodo);
+      setTitle('');
     };
 
-    addTodo(newTodo);
-  };
-
-  return (
-    <form onSubmit={handlerSubmit}>
-      <input
-        type="text"
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
-        value={title}
-        onChange={event => setTitle(event?.target.value)}
-      />
-    </form>
-  );
-};
+    return (
+      <form onSubmit={handlerSubmit}>
+        <input
+          type="text"
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          value={title}
+          onChange={event => setTitle(event?.target.value)}
+        />
+      </form>
+    );
+  },
+);
