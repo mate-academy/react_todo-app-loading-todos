@@ -29,6 +29,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [filter, setFilter] = useState(FilterParams.all);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const preparedTodos = getPreperedTodos(todos, filter);
 
@@ -45,7 +46,8 @@ export const App: React.FC = () => {
           setErrorMessage('');
         }, 3000);
         throw error;
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (!USER_ID) {
@@ -69,6 +71,14 @@ export const App: React.FC = () => {
       </header>
       <div className="todoapp__content">
         {todosCheck && <TodoList todos={preparedTodos} />}
+        <div
+          className={classNames('modal overlay', {
+            'is-active': isLoading,
+          })}
+        >
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
         {todosCheck && (
           <TodoFilterBar
             filter={filter}
@@ -76,8 +86,6 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
 
       <TodoErrors
         error={errorMessage}
