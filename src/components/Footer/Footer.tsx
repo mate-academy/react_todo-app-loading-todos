@@ -17,12 +17,9 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {numberActiveTodos}
-        {' '}
-        items left
+        {`${numberActiveTodos} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -58,12 +55,13 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      {hasCompletedTodo && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{ visibility: !hasCompletedTodo ? 'hidden' : 'visible' }}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };

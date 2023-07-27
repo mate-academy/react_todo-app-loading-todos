@@ -21,10 +21,15 @@ export const NotificationError: React.FC<Props> = ({
   }, [error]);
 
   return (
-    <div className="notification is-danger is-light has-text-weight-normal">
+    <div className="
+      notification
+      is-danger
+      is-light
+      has-text-weight-normal"
+    >
       <button
         type="button"
-        className="delete"
+        className="delete hidden"
         onClick={onCloseError}
       />
 

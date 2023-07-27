@@ -14,22 +14,22 @@ const USER_ID = 11196;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortByStatus>(SortByStatus.All);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setHasError('Unable to load a todo');
+        setError('Unable to load a todo');
       });
   }, []);
 
   const handleCloseError = () => {
-    setHasError(null);
+    setError(null);
   };
 
-  const activeTodos = todos.filter(todo => !todo.completed).length;
+  const numberActiveTodos = todos.filter(todo => !todo.completed).length;
 
   const visibleTodos = useMemo(() => todos.filter((todo) => {
     switch (sortBy) {
@@ -41,6 +41,9 @@ export const App: React.FC = () => {
         return todo;
     }
   }), [todos, sortBy]);
+
+  const numberCompletedTodos
+    = visibleTodos.filter(todo => todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -55,24 +58,21 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {/* Hide the footer if there are no todos */}
         {(visibleTodos.length > 0) && (
           <Footer
             sortBy={sortBy}
-            numberActiveTodos={activeTodos}
+            numberActiveTodos={numberActiveTodos}
             onChangeSortBy={setSortBy}
-            hasCompletedTodo={visibleTodos.length > 0}
+            hasCompletedTodo={numberCompletedTodos > 0}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {hasError
+      {error
         && (
           <NotificationError
-            error={hasError}
-            setError={setHasError}
+            error={error}
+            setError={setError}
             onCloseError={handleCloseError}
           />
         )}
