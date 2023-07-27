@@ -25,7 +25,6 @@ export const Context: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setError('');
     client.get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(setTodos)
       .catch(() => {
