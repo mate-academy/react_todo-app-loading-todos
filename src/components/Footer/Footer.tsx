@@ -57,12 +57,15 @@ export const Footer: React.FC<Props> = ({ todos, setTodos }) => {
         </a>
       </nav>
 
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-      >
-        Clear completed
-      </button>
+      {todos.some(todo => todo.completed === true)
+        && (
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+          >
+            Clear completed
+          </button>
+        )}
     </footer>
   );
 };

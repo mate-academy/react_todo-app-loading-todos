@@ -10,7 +10,7 @@ const enum NOTIFICATION {
 }
 
 export const Notifications: React.FC = () => {
-  const [notification, setNotification] = useState(NOTIFICATION.DELETE);
+  const [notification, setNotification] = useState(NOTIFICATION.CLEAR);
 
   useEffect(() => {
     if (notification !== NOTIFICATION.CLEAR) {
