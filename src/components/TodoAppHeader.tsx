@@ -19,13 +19,15 @@ export const TodoAppHeader: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: !hasActiveTodo,
-        })}
-      />
+      {todos.length !== 0 && (
+        // eslint-disable-next-line jsx-a11y/control-has-associated-label
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: !hasActiveTodo,
+          })}
+        />
+      )}
 
       <form onSubmit={addTodo}>
         <input
