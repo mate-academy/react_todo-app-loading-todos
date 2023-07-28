@@ -1,10 +1,18 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
-import { TodoContext } from './context/todoContext';
+import { ErrorType } from './enums';
 
-export const ErrorNotification: React.FC = () => {
-  const { error, onErrorHide } = useContext(TodoContext);
+type Props = {
+  error: ErrorType | null,
+  onErrorHide: (value: ErrorType | null) => void
+};
+
+export const ErrorNotification: React.FC<Props> = ({
+  error,
+  onErrorHide,
+}) => {
+  // const { error, onErrorHide } = useContext(TodoContext);
 
   useEffect(() => {
     if (error) {
