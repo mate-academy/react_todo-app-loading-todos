@@ -62,14 +62,14 @@ export const App: React.FC = () => {
         {todosFromServer.length > 0
           && (
             <Footer
-              todos={getFilteredTodos(todosFromServer)}
+              filteredTodos={getFilteredTodos(todosFromServer)}
+              todosFromServer={todosFromServer}
               selectedStatus={selectedStatus}
               setSelectedStatus={setSelectedStatus}
             />
           )}
       </div>
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
+
       {errorMesage && (
         <ErrorTab
           errorMesage={errorMesage}
