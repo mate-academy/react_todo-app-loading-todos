@@ -9,6 +9,7 @@ import { SortByStatus } from './types/SortByStatus';
 import { NotificationError } from
   './components/NotificationError/NotificationError';
 import { TodoList } from './components/TodoList/TodoList';
+import { ErrorTypes } from './types/ErrorTypes';
 
 const USER_ID = 11196;
 
@@ -21,7 +22,7 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setError('Unable to load a todo');
+        setError(ErrorTypes.Load);
       });
   }, []);
 
