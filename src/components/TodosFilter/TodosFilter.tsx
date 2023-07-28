@@ -1,3 +1,6 @@
+/*eslint-disable*/
+/*eslint linebreak-style: ["error", "windows"]*/
+
 import React from 'react';
 import classNames from 'classnames';
 import { SORT } from '../../types/SornEnum';
