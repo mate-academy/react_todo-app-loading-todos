@@ -47,6 +47,7 @@ export const App: React.FC = () => {
         />
         {/* Hide the footer if there are no todos */}
         <TodoFooter
+          todos={todos}
           filterTodos={filterTodos}
           setFilterTodos={setFilterTodos}
         />

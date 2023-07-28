@@ -32,13 +32,9 @@ export const TodoNotification: React.FC<Props> = ({
         }}
       />
 
-      {/* show only one message at a time */}
       {hasError === Error.ADD && 'Unable to add a todo'}
-      <br />
       {hasError === Error.DELETE && 'Unable to delete a todo'}
-      <br />
       {hasError === Error.UPDATE && 'Unable to update a todo'}
-      <br />
       {hasError === Error.FETCH
         && 'Something went wrong with fetch todos request'}
     </div>

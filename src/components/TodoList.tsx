@@ -12,6 +12,7 @@ export const TodoList: React.FC<Props> = ({ filteredTodos }) => {
       {filteredTodos.map(todo => (
         <TodoItem
           todo={todo}
+          key={todo.id}
         />
       ))}
     </section>
