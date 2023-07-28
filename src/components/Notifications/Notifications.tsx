@@ -1,41 +1,33 @@
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { NOTIFICATION } from '../../types/Notification';
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-const enum NOTIFICATION {
-  CLEAR = '',
-  ADD = 'Unable to add a todo',
-  DELETE = 'Unable to delete a todo',
-  UPDATE = 'Unable to update a todo',
-}
+type Props = {
+  notification: NOTIFICATION;
+};
 
-export const Notifications: React.FC = () => {
-  const [notification, setNotification] = useState(NOTIFICATION.CLEAR);
+export const Notifications: React.FC<Props> = ({ notification }) => {
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
-    if (notification !== NOTIFICATION.CLEAR) {
-      const timeout = setTimeout(() => {
-        setNotification(NOTIFICATION.CLEAR);
-      }, 3000);
-
-      return () => clearTimeout(timeout);
-    }
-
-    return () => {};
-  });
+    setTimeout(() => {
+      setIsHidden(true);
+    }, 3000);
+  }, []);
 
   return (
     <div
       className={
         classNames('notification is-danger is-light has-text-weight-normal', {
-          hidden: notification === NOTIFICATION.CLEAR,
+          hidden: isHidden,
         })
       }
     >
       <button
         type="button"
         className="delete"
-        onClick={() => setNotification(NOTIFICATION.CLEAR)}
+        onClick={() => setIsHidden(true)}
       />
       {notification}
     </div>
