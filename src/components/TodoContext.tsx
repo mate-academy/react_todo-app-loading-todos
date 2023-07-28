@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TodosContextType } from '../types/TodoContext';
 import { Todo } from '../types/Todo';
-import { getTodos } from '../api/todos';
+import { createTodo, getTodos } from '../api/todos';
 import { ErrorType } from '../types/Error';
-import { client } from '../utils/fetchClient';
 
 const USER_ID = 11121;
 
@@ -39,8 +38,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       completed: false,
     };
 
-    return client
-      .post<Todo>('/todos', newTodo)
+    createTodo(newTodo)
       .then((createdTodo) => {
         setTodos(prevTodos => [createdTodo, ...prevTodos]);
         setError('');

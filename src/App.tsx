@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useMemo, useState } from 'react';
 import cn from 'classnames';
@@ -20,11 +21,13 @@ export const App: React.FC = () => {
 
   const { todos, addTodo, resetError } = todosContext;
 
-  const activeTodosCount = todos.filter((todo: Todo) => !todo.completed).length;
+  const activeTodosCount = useMemo(() => {
+    return todos.filter((todo: Todo) => !todo.completed).length;
+  }, [todos]);
 
-  const completedTodosCount = todos.filter(
-    (todo: Todo) => todo.completed,
-  ).length;
+  const completedTodosCount = useMemo(() => {
+    return todos.filter((todo: Todo) => todo.completed).length;
+  }, [todos]);
 
   function createTodo(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,7 +43,6 @@ export const App: React.FC = () => {
     setTitle(event.target.value);
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const filteredTodos = useMemo(() => {
     switch (filterStatus) {
       case Filter.All:

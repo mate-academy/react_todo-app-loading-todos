@@ -19,7 +19,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {/* This todo is being edited */}
       {false && (
         <form>
           <input
@@ -34,8 +33,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <span className="todo__title">{title}</span>
       <button type="button" className="todo__remove">×</button>
 
-      {/* 'is-active' class puts this modal on top of the todo */}
-      {/* overlay will cover the todo while it is being updated */}
       <div className={cn('modal overlay', { 'is-active': false })}>
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

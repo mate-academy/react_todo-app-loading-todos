@@ -14,11 +14,9 @@ export const TodoErrors: React.FC = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (error) {
-      const timeoutId = setTimeout(() => {
+      setTimeout(() => {
         resetError();
       }, 3000);
-
-      return () => clearTimeout(timeoutId);
     }
 
     return () => {};
