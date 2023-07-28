@@ -12,9 +12,11 @@ export const TodoErrors: React.FC<Error> = ({
   setError,
 }) => {
   useEffect(() => {
-    setTimeout(() => {
-      setError();
-    }, 3000);
+    if (error) {
+      setTimeout(() => {
+        setError();
+      }, 3000);
+    }
   }, [error]);
 
   return (

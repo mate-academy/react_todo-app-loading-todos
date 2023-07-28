@@ -29,8 +29,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [filter, setFilter] = useState(FilteredParams.all);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loader, setLoader] = useState(true);
 
-  const setError = () => {
+  const setError = () => { // rewrite with unset
     setErrorMessage('');
   };
 
@@ -49,7 +50,8 @@ export const App: React.FC = () => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      });
+      })
+      .finally(() => setLoader(false));
   }, []);
 
   if (!USER_ID) {
@@ -81,6 +83,14 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         {todosCheck && <TodoList todos={preparedTodos} />}
+        <div
+          className={classNames('modal overlay', {
+            'is-active': loader,
+          })}
+        >
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
         {todosCheck && (
           <TodoFilter
             filter={filter}
