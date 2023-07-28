@@ -61,8 +61,8 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {error &&
-      <TodoError error={error} />}
+      {error
+      && <TodoError error={error} />}
     </div>
   );
 };
