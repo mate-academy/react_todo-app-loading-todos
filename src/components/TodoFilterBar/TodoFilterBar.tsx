@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   filter: FilterParams,
-  setFilter: (newFilter: FilterParams) => void,
+  applyFilter: (newFilter: FilterParams) => void,
   todos: Todo[],
 }
 
 export const TodoFilterBar: React.FC<Props> = ({
   filter,
-  setFilter,
+  applyFilter,
   todos,
 }) => {
   return (
@@ -26,10 +26,7 @@ export const TodoFilterBar: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filter === FilterParams.all,
           })}
-          onClick={(event) => {
-            event.preventDefault();
-            setFilter(FilterParams.all);
-          }}
+          onClick={() => applyFilter(FilterParams.all)}
         >
           All
         </a>
@@ -39,10 +36,7 @@ export const TodoFilterBar: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filter === FilterParams.active,
           })}
-          onClick={(event) => {
-            event.preventDefault();
-            setFilter(FilterParams.active);
-          }}
+          onClick={() => applyFilter(FilterParams.active)}
         >
           Active
         </a>
@@ -52,10 +46,7 @@ export const TodoFilterBar: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filter === FilterParams.completed,
           })}
-          onClick={(event) => {
-            event.preventDefault();
-            setFilter(FilterParams.completed);
-          }}
+          onClick={() => applyFilter(FilterParams.completed)}
         >
           Completed
         </a>
