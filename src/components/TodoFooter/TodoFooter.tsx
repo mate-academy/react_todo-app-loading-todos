@@ -1,18 +1,30 @@
 import classNames from 'classnames';
 
+import { useMemo } from 'react';
+
 import { Status } from '../../types/Status';
+import { Todo } from '../../types/Todo';
 
 type Props = {
-  status: Status,
+  todos: Todo[];
+  status: Status;
   onStatusChange: (status: Status) => void;
 };
 
-export const TodoFooter: React.FC<Props> = ({ status, onStatusChange }) => {
+export const TodoFooter: React.FC<Props> = ({
+  todos,
+  status,
+  onStatusChange,
+}) => {
+  const uncompletedTodosCount = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
   return (
     <footer className="todoapp__footer">
       {/* Hide the footer if there are no todos */}
       <span className="todo-count">
-        3 items left
+        {`${uncompletedTodosCount} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}

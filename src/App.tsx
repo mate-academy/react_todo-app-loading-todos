@@ -19,20 +19,20 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.All);
   const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
-  useEffect(() => {
-    (async () => {
+  const getTodosFromServer = useMemo(() => {
+    return async () => {
       try {
         const todosFromServer = await getTodos(USER_ID);
 
         setTodos(todosFromServer);
       } catch {
         setErrorMessage('Unable to upload todos');
-
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 3000);
       }
-    })();
+    };
+  }, []);
+
+  useEffect(() => {
+    getTodosFromServer();
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -56,7 +56,11 @@ export const App: React.FC = () => {
               <TodoList todos={filteredTodos} />
             </section>
 
-            <TodoFooter status={status} onStatusChange={setStatus} />
+            <TodoFooter
+              todos={todos}
+              status={status}
+              onStatusChange={setStatus}
+            />
           </>
         )}
       </div>
