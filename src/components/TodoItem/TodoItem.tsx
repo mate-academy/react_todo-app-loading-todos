@@ -42,7 +42,7 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
       </form> */}
 
       <div className={classNames('modal overlay', {
-        'is-active': !todo.completed,
+        // 'is-active': !todo.completed,
       })}
       >
         <div className="modal-background has-background-white-ter" />

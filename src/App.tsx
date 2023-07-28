@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoForm } from './components/TodoForm/TodoForm';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
@@ -17,17 +18,18 @@ export const USER_ID = 11122;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>([]);
   // const [loading, setLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filterBy, setFilterBy] = useState<string>(FilterType.All);
 
+  const isError = !!errorMessage;
+
   useEffect(() => {
-    setIsError(false);
+    // setIsError(false);
 
     postServes.getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setIsError(true);
+        // setIsError(true);
         setErrorMessage('Unable to load a todo');
       });
   }, []);
@@ -39,7 +41,7 @@ export const App: React.FC = () => {
         setTodos(currentTodos => [...currentTodos!, newTodo]);
       })
       .catch(() => {
-        setIsError(true);
+        // setIsError(true);
         setErrorMessage('Unable to add a todo');
       });
   };
@@ -49,7 +51,7 @@ export const App: React.FC = () => {
   }
 
   const hasTodos = todos?.length !== 0;
-  const vidibleTodos = getPreperadTodos(todos, filterBy);
+  const vidibleTodos = useMemo(() => getPreperadTodos(todos, filterBy), [todos, filterBy]);
 
   return (
     <div className="todoapp">
@@ -82,11 +84,11 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {!isError && (
+      {isError && (
         <TodoNotification
           isError={isError}
           errorMessage={errorMessage}
-          isNotification={setIsError}
+          setNotification={setErrorMessage}
         />
       )}
     </div>

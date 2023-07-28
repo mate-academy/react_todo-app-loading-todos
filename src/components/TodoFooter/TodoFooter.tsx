@@ -13,8 +13,6 @@ export const TodoFooter:React.FC<Props> = ({
   filterBy,
   onFilterBy,
 }) => {
-  const completedTodos = todos?.filter(todo => todo.completed);
-
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -53,11 +51,9 @@ export const TodoFooter:React.FC<Props> = ({
         </a>
       </nav>
 
-      {completedTodos?.length !== 0 && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button type="button" className="todoapp__clear-completed">
+        Clear completed
+      </button>
     </footer>
   );
 };

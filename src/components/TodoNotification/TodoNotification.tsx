@@ -5,17 +5,17 @@ import { useEffect } from 'react';
 type Props = {
   isError: boolean,
   errorMessage: string,
-  isNotification: (value: boolean) => void
+  setNotification: (value: string) => void
 };
 
 export const TodoNotification:React.FC<Props> = ({
   isError,
   errorMessage,
-  isNotification,
+  setNotification,
 }) => {
   useEffect(() => {
     setTimeout(() => {
-      isNotification(false);
+      setNotification('');
     }, 3000);
   }, [isError]);
 
@@ -30,7 +30,7 @@ export const TodoNotification:React.FC<Props> = ({
       <button
         type="button"
         className="delete"
-        onClick={() => isNotification(false)}
+        onClick={() => setNotification('')}
       />
       {errorMessage}
     </div>
