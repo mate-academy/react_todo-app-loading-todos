@@ -10,6 +10,7 @@ import { ErrorType } from './types/Error';
 import { getPreparedTodos } from './services/PrepareTodos';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import { Notifications } from './components/Notifications';
 
 export const USER_ID = 11223;
 
@@ -102,15 +103,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal', {
-          hidden: !errorMessage,
-        },
-      )}
-      >
-        <button type="button" className="delete" />
-        {errorMessage}
-      </div>
+      <Notifications
+        error={errorMessage}
+      />
     </div>
   );
 };
