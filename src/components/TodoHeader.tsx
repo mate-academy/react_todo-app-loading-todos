@@ -7,7 +7,6 @@ export const TodoHeader: React.FC = () => {
   const {
     visibleTodos,
     activeTodosAmount,
-    handleToggleAll,
   } = useContext(TodoContext);
 
   return (
@@ -15,7 +14,6 @@ export const TodoHeader: React.FC = () => {
       {visibleTodos.length > 0 && (
         <button
           type="button"
-          onClick={handleToggleAll}
           className={classNames('todoapp__toggle-all', {
             active: activeTodosAmount === 0,
           })}
