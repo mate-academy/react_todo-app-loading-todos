@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Props = {
   error: string;
@@ -9,14 +9,15 @@ type Props = {
 export const TodoErrors: React.FC<Props> = ({ error }) => {
   const [isHidden, setIsHidden] = useState(false);
 
-  setTimeout(() => setIsHidden(true), 3000);
+  useEffect(() => {
+    setTimeout(() => setIsHidden(true), 3000);
+  }, []);
 
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
       {
-        'notification is-danger is-light has-text-weight-normal hidden':
-         isHidden,
+        hidden: isHidden,
       },
     )}
     >

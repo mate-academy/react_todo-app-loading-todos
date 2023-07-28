@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { TodoForm } from './components/TodoForm';
@@ -8,28 +8,35 @@ import { TodoFooter } from './components/TodoFooter';
 import { TodoErrors } from './components/TodoErrors';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { FilteredBy } from './types/FilteredBy';
+import { getFilteredTodos } from './utils/filter';
 
 const USER_ID = 11127;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
+  const [filterBy, setFilterBy] = useState(FilteredBy.ALL);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then((data) => {
         setTodos(data);
-        setFilteredTodos(data);
-      }).catch(() => setError('There is no Internet connection'));
+      }).catch(() => setError('Wrong URL - could not make a request'));
   }, []);
+
+  const filteredTodos = useMemo(() => {
+    return getFilteredTodos(todos, filterBy);
+  }, [todos, filterBy]);
+
+  const activeTodosLength = useMemo(() => {
+    return filteredTodos
+      .filter(filteredTodo => !filteredTodo.completed).length;
+  }, [filteredTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const activeTodosLength = filteredTodos
-    .filter(filteredTodo => !filteredTodo.completed).length;
 
   return (
     <div className="todoapp">
@@ -41,12 +48,10 @@ export const App: React.FC = () => {
             type="button"
             className={
               classNames('todoapp__toggle-all', {
-                'todoapp__toggle-all active': activeTodosLength !== 0,
+                active: activeTodosLength !== 0,
               })
             }
           />
-
-          {/* Add a todo on form submit */}
           <TodoForm />
         </header>
 
@@ -55,14 +60,16 @@ export const App: React.FC = () => {
           && (
             <>
               <TodoMain todos={filteredTodos} />
-              <TodoFooter todos={todos} setFilteredTodos={setFilteredTodos} />
+              <TodoFooter
+                todos={todos}
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+              />
             </>
           )
         }
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {error.length !== 0
         && <TodoErrors error={error} />}
     </div>
