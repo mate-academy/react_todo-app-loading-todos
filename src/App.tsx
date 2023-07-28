@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getTodos } from './api/todos';
+import { ErrorNotification } from './components/TodoError';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
@@ -9,7 +10,6 @@ import { Error } from './types/Error';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
-import { wait } from './utils/fetchClient';
 import { getVisibleTodos } from './utils/getVisibleTodos';
 
 const USER_ID = 11135;
@@ -19,11 +19,9 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<Error>(Error.none);
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
-  const visibleTodos = getVisibleTodos(todos, filter);
-
-  if (errorMessage) {
-    wait(3000).then(() => setErrorMessage(Error.none));
-  }
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, filter)
+  ), [todos, filter]);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -31,9 +29,15 @@ export const App: React.FC = () => {
       .catch(() => setErrorMessage(Error.load));
   }, []);
 
-  const numberOfTodos = visibleTodos.length;
-  const hasActiveTodos = visibleTodos.some(todo => !todo.completed);
-  const isTodoCompleted = visibleTodos.some(todo => todo.completed);
+  const numberOfTodos = useMemo(() => visibleTodos.length, [visibleTodos]);
+
+  const hasActiveTodos = useMemo(() => (
+    visibleTodos.some(todo => !todo.completed)
+  ), [visibleTodos]);
+
+  const isTodoCompleted = useMemo(() => (
+    visibleTodos.some(todo => todo.completed)
+  ), [visibleTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -87,19 +91,10 @@ export const App: React.FC = () => {
       </div>
 
       {errorMessage && (
-        <div className={classNames(
-          'notification is-danger is-light has-text-weight-normal', {
-            hidden: !errorMessage,
-          },
-        )}
-        >
-          <button
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage(Error.none)}
-          />
-          {errorMessage}
-        </div>
+        <ErrorNotification
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
       )}
     </div>
   );
