@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
+import { memo } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   preparedTodos: Todo[],
 };
 
-export const Header: React.FC<Props> = ({ preparedTodos }) => {
+export const Header: React.FC<Props> = memo(({ preparedTodos }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -32,4 +33,4 @@ export const Header: React.FC<Props> = ({ preparedTodos }) => {
       </form>
     </header>
   );
-};
+});

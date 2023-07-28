@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { memo } from 'react';
 import { SortType } from '../../types/SortType';
 import { Todo } from '../../types/Todo';
 
@@ -9,7 +10,7 @@ type Props = {
   setSort: React.Dispatch<React.SetStateAction<SortType>>,
 };
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<Props> = memo(({
   todos,
   preparedTodos,
   sort,
@@ -64,4 +65,4 @@ export const Footer: React.FC<Props> = ({
       </button>
     </footer>
   );
-};
+});
