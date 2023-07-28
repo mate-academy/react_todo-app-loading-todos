@@ -53,9 +53,9 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const todoCount = visibleTodos.filter(todo => !todo.completed).length;
+  const todoCount = todos.filter(todo => !todo.completed).length;
 
-  const areComplitedTodos = visibleTodos.some(todo => todo.completed);
+  const areComplitedTodos = todos.some(todo => todo.completed);
 
   const areTodosEmpty = visibleTodos.length === 0;
 
