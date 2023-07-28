@@ -9,6 +9,7 @@ import { client } from './utils/fetchClient';
 import { SelectStatus } from './types/SelectStatus';
 import { TodoError } from './types/TodoError';
 import { ErrorTab } from './components/ErrorTab';
+import { getTodos } from './api/todos';
 
 const USER_ID = 11123;
 
@@ -20,6 +21,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     client.get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(todos => setTodosFromServer(todos))
+      .catch(() => setErrorMesage(TodoError.load));
+  }, []);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(allTodos => setTodosFromServer(allTodos))
       .catch(() => setErrorMesage(TodoError.load));
   }, []);
 
