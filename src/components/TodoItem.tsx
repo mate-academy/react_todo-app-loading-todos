@@ -8,7 +8,7 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
   return (
-    <div className={classNames('todo', { completed: todo.completed })}>
+    <div className={classNames('todo', { 'completed': todo.completed })}>
       {/* <div className="todo completed"> */}
       <label className="todo__status-label">
         <input

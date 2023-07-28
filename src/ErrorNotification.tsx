@@ -12,7 +12,6 @@ export const ErrorNotification: React.FC<Props> = ({
   error,
   onErrorHide,
 }) => {
-  // const { error, onErrorHide } = useContext(TodoContext);
 
   useEffect(() => {
     if (error) {
