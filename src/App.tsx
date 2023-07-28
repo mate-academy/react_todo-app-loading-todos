@@ -17,19 +17,15 @@ export const USER_ID = 11122;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>([]);
-  // const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filterBy, setFilterBy] = useState<string>(FilterType.All);
 
   const isError = !!errorMessage;
 
   useEffect(() => {
-    // setIsError(false);
-
     postServes.getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        // setIsError(true);
         setErrorMessage('Unable to load a todo');
       });
   }, []);
@@ -41,7 +37,6 @@ export const App: React.FC = () => {
         setTodos(currentTodos => [...currentTodos!, newTodo]);
       })
       .catch(() => {
-        // setIsError(true);
         setErrorMessage('Unable to add a todo');
       });
   };
