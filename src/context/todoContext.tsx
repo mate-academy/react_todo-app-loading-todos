@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Todo } from '../types/Todo'
+import { Todo } from '../types/Todo';
 import * as todoService from '../api/todos';
-import { USER_ID } from '../App';
 import { ErrorType, SelectType } from '../enums';
 import { selectTodos } from '../utils/selectTodos';
+import { USER_ID } from '../consts';
 
 interface Context {
   todos: Todo[];
@@ -23,7 +23,7 @@ export const TodoContext = React.createContext<Context>({
 
 type Props = {
   children: React.ReactNode
-}
+};
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -32,16 +32,17 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const getTodos = async () => {
     try {
-      const todos = await todoService.getTodos(USER_ID);
-      setTodos(todos);
+      const Alltodos = await todoService.getTodos(USER_ID);
+
+      setTodos(Alltodos);
     } catch {
-        setError(ErrorType.IncorectUrl);
+      setError(ErrorType.IncorectUrl);
     }
-  }
+  };
 
   useEffect(() => {
     getTodos();
-  }, [])
+  }, []);
 
   const selectedTodos = selectTodos(todos, select);
 
@@ -51,11 +52,11 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     select,
     onErrorHide: setError,
     onSelect: setSelect,
-  }), [selectedTodos, error, select])
+  }), [selectedTodos, error, select]);
 
   return (
-    <TodoContext.Provider value={value} >
+    <TodoContext.Provider value={value}>
       {children}
     </TodoContext.Provider>
-  )
-}
+  );
+};

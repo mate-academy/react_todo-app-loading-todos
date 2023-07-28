@@ -4,6 +4,7 @@ import { SelectType } from '../enums';
 
 export const TodoFooter: React.FC = () => {
   const { onSelect } = useContext(TodoContext);
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">3 items left</span>

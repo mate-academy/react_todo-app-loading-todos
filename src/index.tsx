@@ -9,7 +9,7 @@ import { TodoProvider } from './context/todoContext';
 
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(
-  <TodoProvider>
-    <App />
-  </TodoProvider>
+    <TodoProvider>
+      <App />
+    </TodoProvider>,
   );

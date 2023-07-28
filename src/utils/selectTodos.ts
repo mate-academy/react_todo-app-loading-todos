@@ -1,11 +1,11 @@
-import { SelectType } from '../enums'
+import { SelectType } from '../enums';
 import { Todo } from '../types/Todo';
 
 export const selectTodos = (todos: Todo[], select: SelectType) => {
-  let preperedTodos = [...todos];
+  const preperedTodos = [...todos];
 
   if (select) {
-    switch(select) {
+    switch (select) {
       case SelectType.All:
         return preperedTodos;
       case SelectType.Active:
@@ -18,4 +18,4 @@ export const selectTodos = (todos: Todo[], select: SelectType) => {
   }
 
   return preperedTodos;
-}
+};
