@@ -4,19 +4,13 @@ import classNames from 'classnames';
 
 import { Todo } from './types/Todo';
 import { Completion } from './types/Completion';
+import { TodoError } from './types/TodoError';
 import { getTodos } from './api/todos';
-import { wait } from './utils/fetchClient';
 
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-
-enum TodoError {
-  NoError = '',
-  Add = 'Unable to add a todo',
-  Delete = 'Unable to delete a todo',
-  Update = 'Unable to update a todo',
-}
+import { NotificationError } from './components/NotificationError';
 
 const USER_ID = 11228;
 
@@ -25,12 +19,10 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState(TodoError.NoError);
   const [completionFilter, setCompletionFilter] = useState(Completion.All);
 
-  if (errorMessage) {
-    wait(3000).then(() => setErrorMessage(TodoError.NoError));
-  }
-
   useEffect(() => {
-    getTodos(USER_ID).then(setTodos);
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => setErrorMessage(TodoError.Load));
   }, []);
 
   const completedTodos = useMemo(() => (
@@ -103,21 +95,12 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          {
-            hidden: !errorMessage,
-          },
-        )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage(TodoError.NoError)}
+      {errorMessage && (
+        <NotificationError
+          errorMessage={errorMessage}
+          clearError={() => setErrorMessage(TodoError.NoError)}
         />
-        {errorMessage}
-      </div>
+      )}
     </div>
   );
 };
