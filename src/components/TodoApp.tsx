@@ -1,22 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import { FilterChoise } from '../types/FilterChoise';
 import { TodosContext } from '../context/TodoContext';
 import { TodoList } from './TodoList';
 import { TodoFilter } from './TodoFilter';
-import { wait } from '../utils/wait';
+import { ErrorNotification } from './ErrorNotification';
 
 export const TodoApp: React.FC = () => {
   const [filterChoise, setFilterChoise] = useState(FilterChoise.All);
 
-  const [todos, setTodos, errorMsg, setErrorMsg] = useContext(TodosContext);
+  const [todos, setTodos, ,] = useContext(TodosContext);
+
+  // eslint-disable-next-line no-lone-blocks
+  { // for next tasks, i have problem with linter without it
+  }
 
   if (todos.length === -1) {
     setTodos([]);
   }
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = useMemo(() => todos.filter((todo) => {
     switch (filterChoise) {
       case FilterChoise.Active:
         return !todo.completed;
@@ -25,7 +29,7 @@ export const TodoApp: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), [todos, filterChoise]);
 
   const uncompleatedTodos = todos.filter((todo) => !todo.completed);
   const completedTodos = todos.filter((todo) => todo.completed);
@@ -36,14 +40,9 @@ export const TodoApp: React.FC = () => {
     uncompleatedTodos.length === 0,
   );
 
-  useEffect(() => {
+  useMemo(() => {
     setAllCompleated(uncompleatedTodos.length === 0);
   }, [uncompleatedTodos.length]);
-
-  useEffect(() => {
-    wait(3000)
-      .then(() => setErrorMsg(''));
-  }, [errorMsg]);
 
   return (
     <div className="todoapp">
@@ -102,19 +101,7 @@ export const TodoApp: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMsg },
-        )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setErrorMsg('')}
-        />
-        {errorMsg}
-      </div>
+      <ErrorNotification />
     </div>
   );
 };

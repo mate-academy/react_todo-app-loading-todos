@@ -15,8 +15,6 @@ export const App: React.FC = () => {
       .then((data) => setTodos(data))
       .catch(() => {
         setErrorMsg('Unable to fetch todos');
-
-        return [] as Todo[];
       });
   }, []);
 
