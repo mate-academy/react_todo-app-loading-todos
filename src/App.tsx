@@ -5,7 +5,6 @@ import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
 import { SelectStatus } from './types/SelectStatus';
 import { TodoError } from './types/TodoError';
 import { ErrorTab } from './components/ErrorTab';
@@ -17,12 +16,6 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(SelectStatus.All);
   const [errorMesage, setErrorMesage] = useState(TodoError.empty);
-
-  useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
-      .then(todos => setTodosFromServer(todos))
-      .catch(() => setErrorMesage(TodoError.load));
-  }, []);
 
   useEffect(() => {
     getTodos(USER_ID)
