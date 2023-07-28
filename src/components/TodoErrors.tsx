@@ -1,15 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
+import { useEffect } from 'react';
 
 interface Error {
   error: string,
-  setError: (newError: string) => void,
+  setError: () => void,
 }
 
 export const TodoErrors: React.FC<Error> = ({
   error,
   setError,
 }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setError();
+    }, 3000);
+  }, [error]);
+
   return (
     <div
       className={classNames(
@@ -22,7 +29,7 @@ export const TodoErrors: React.FC<Error> = ({
       <button
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={setError}
       />
 
       {error}

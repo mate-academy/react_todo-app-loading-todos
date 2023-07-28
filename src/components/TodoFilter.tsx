@@ -1,23 +1,26 @@
 import classNames from 'classnames';
 import { FilteredParams } from '../types/FilteredParams';
+import { Todo } from '../types/Todo';
 
 interface Props {
   filter: FilteredParams,
   setFilter: (newFilter: FilteredParams) => void,
+  todos: Todo[],
 }
 
 export const TodoFilter: React.FC<Props> = ({
   filter,
   setFilter,
+  todos,
 }) => {
   function handleClickAll(event: { preventDefault: () => void; }) {
     event.preventDefault();
-    setFilter(FilteredParams.completed);
+    setFilter(FilteredParams.all);
   }
 
   function handleClickActive(event: { preventDefault: () => void; }) {
     event.preventDefault();
-    setFilter(FilteredParams.completed);
+    setFilter(FilteredParams.active);
   }
 
   function handleClickCompleted(event: { preventDefault: () => void; }) {
@@ -28,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${todos.length} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}

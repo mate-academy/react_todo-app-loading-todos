@@ -8,16 +8,15 @@ import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { FilteredParams } from './types/FilteredParams';
 import { getTodos } from './api/todos';
-
-const USER_ID = 11139;
+import { USER_ID } from './utils/userId';
 
 function getPreparedTodos(todosForFilter: Todo[], filterField: FilteredParams) {
   return todosForFilter.filter(todo => {
     switch (filterField) {
-      case 'active':
+      case FilteredParams.active:
         return !todo.completed;
 
-      case 'completed':
+      case FilteredParams.completed:
         return todo.completed;
 
       default:
@@ -29,7 +28,11 @@ function getPreparedTodos(todosForFilter: Todo[], filterField: FilteredParams) {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
   const [filter, setFilter] = useState(FilteredParams.all);
-  const [errorMessage, setErrorMesage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const setError = () => {
+    setErrorMessage('');
+  };
 
   // eslint-disable-next-line max-len
   const preparedTodos = useMemo(() => getPreparedTodos(todos, filter), [todos, filter]);
@@ -37,14 +40,14 @@ export const App: React.FC = () => {
   const todosCheck = todos.length > 0;
 
   useEffect(() => {
-    setErrorMesage('');
+    setErrorMessage('');
 
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorMesage('Unable getting todos');
+        setErrorMessage('Unable getting todos');
         setTimeout(() => {
-          setErrorMesage('');
+          setErrorMessage('');
         }, 3000);
       });
   }, []);
@@ -82,13 +85,14 @@ export const App: React.FC = () => {
           <TodoFilter
             filter={filter}
             setFilter={setFilter}
+            todos={todos}
           />
         )}
       </div>
 
       <TodoErrors
         error={errorMessage}
-        setError={setErrorMesage}
+        setError={setError}
       />
     </div>
   );
