@@ -7,52 +7,9 @@ import { getTodos } from './api/todos';
 import { Filters } from './types/enumFilter';
 import { Filter } from './components/Filter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { prepareTodos } from './utils/prepareTodos';
 
 const USER_ID = 11125;
-
-const prepareTodos = (currentTodos: Todo[], field: Filters) => {
-  let todosCopy = [...currentTodos];
-
-  if (field !== Filters.All) {
-    todosCopy = todosCopy.filter(todo => {
-      switch (field) {
-        case Filters.Active:
-          return !todo.completed;
-        case Filters.Completed:
-          return todo.completed;
-        default:
-          return true;
-      }
-    });
-  }
-
-  return todosCopy;
-};
-
-// const testTodos: Todo[] = [{
-//   id: 1,
-//   userId: USER_ID,
-//   title: 'Todo 1',
-//   completed: true,
-// },
-// {
-//   id: 2,
-//   userId: USER_ID,
-//   title: 'Todo 2',
-//   completed: true,
-// },
-// {
-//   id: 3,
-//   userId: USER_ID,
-//   title: 'Todo 3',
-//   completed: false,
-// },
-// {
-//   id: 4,
-//   userId: USER_ID,
-//   title: 'Todo 4',
-//   completed: false,
-// }];
 
 export const App: React.FC = () => {
   const [todos, seTodos] = useState<Todo[]>([]);
@@ -64,14 +21,16 @@ export const App: React.FC = () => {
       .then(seTodos)
       .catch(() => {
         setErrorMessage('Unable to load a todo');
-
-        setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const todoCount = (currentTodos: Todo[]) => {
+    return currentTodos.filter(todo => !todo.completed).length;
+  };
 
   const visibletodos = prepareTodos(todos, filteringField);
 
@@ -98,15 +57,13 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length && <TodoList todos={visibletodos} />}
+        {todos.length !== 0 && <TodoList todos={visibletodos} />}
 
-        {visibletodos.length
+        {todos.length !== 0
           && (
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {
-                  `${visibletodos.filter(todo => !todo.completed).length} items left`
-                }
+              {`${todoCount(todos)} items left`}
               </span>
 
               <Filter

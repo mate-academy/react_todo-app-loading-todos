@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 type Props = {
@@ -11,6 +11,10 @@ export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   setErrorMessage,
 }) => {
+  useEffect(() => {
+    setTimeout(() => setErrorMessage(''), 3000);
+  }, []);
+
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
