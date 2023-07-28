@@ -1,3 +1,6 @@
+/* eslint-disable implicit-arrow-linebreak */
+import { RequestMethod } from '../types/RequestMethod';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
@@ -8,12 +11,9 @@ function wait(delay: number) {
   });
 }
 
-// To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
-
 function request<T>(
   url: string,
-  method: RequestMethod = 'GET',
+  method: RequestMethod = RequestMethod.Get,
   data: any = null, // we can send any data to the server
 ): Promise<T> {
   const options: RequestInit = { method };
@@ -40,7 +40,9 @@ function request<T>(
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  post: <T>(url: string, data: any) =>
+    request<T>(url, RequestMethod.Post, data),
+  patch: <T>(url: string, data: any) =>
+    request<T>(url, RequestMethod.Patch, data),
+  delete: (url: string) => request(url, RequestMethod.Delete),
 };
