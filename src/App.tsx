@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -5,38 +6,36 @@ import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { client } from './utils/fetchClient';
 
 type Field = 'all' | 'active' | 'completed';
 
 const USER_ID = 11140;
 
 export const App: React.FC = () => {
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
   const [todos, setTodos] = useState([] as Todo[]);
   const [initialTodos, setInitialTodos] = useState([] as Todo[]);
-  const [errorMessage, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [selectedField, setSelectedField] = useState<Field>('all');
-  const [isErrorUnnount, setIsErrorUnnount] = useState(false);
-  const [isDblClick, setIsDblClick] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [inputTitle, setInputTitle] = useState('');
+  const [updatedTitle, setUpdateTitle] = useState('');
 
-  const timer = () => {
-    setTimeout(() => {
-      setIsErrorUnnount(true);
-    }, 3000);
-  };
-
-  timer();
+  const loadTodos = () => getTodos(USER_ID)
+    .then(someTodos => {
+      setTodos(someTodos);
+      setInitialTodos(someTodos);
+    })
+    .catch(() => setErrorMessage('Incorrect URL'));
 
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(someTodos => {
-        setTodos(someTodos);
-        setInitialTodos(someTodos);
-      })
-      .catch(() => setMessage('Incorrect URL'));
-    // .finally(() => setTimeout(() => setMessage(false), 3000));
+    loadTodos();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
   }, []);
 
   let preparedTodos = [...todos];
@@ -86,11 +85,25 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              setTodos(prevTodos => [...prevTodos, {
+                id: 0, title: inputTitle, completed: false, userId: USER_ID,
+              }]);
+              client.post(`/todos?userId=${USER_ID}`, { title: inputTitle, completed: false, userId: USER_ID })
+                .then(loadTodos)
+                .catch(() => setErrorMessage('Can\'t load a todo'));
+
+              setInputTitle('');
+            }}
+          >
             <input
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              onChange={event => setInputTitle(event.target.value)}
+              value={inputTitle}
             />
           </form>
         </header>
@@ -121,33 +134,88 @@ export const App: React.FC = () => {
                     }}
                   />
                 </label>
-                {isDblClick
+                {selectedTodo === todo
                   ? (
-                    <form>
+                    <form onSubmit={event => {
+                      event.preventDefault();
+                      setTodos(someTodos => {
+                        const newTodos = [...someTodos];
+                        // eslint-disable-next-line max-len
+                        const index = someTodos.findIndex(t => t.id === todo.id);
+                        const newTodo = {
+                          ...todo, title: updatedTitle, id: 0,
+                        };
+
+                        newTodos.splice(index, 1, newTodo);
+
+                        return newTodos;
+                      });
+
+                      client.patch(`/todos/${todo.id}?userId=${USER_ID}`, { title: updatedTitle })
+                        .then(loadTodos)
+                        .catch(() => setErrorMessage('Can\'t update a todo'));
+
+                      setSelectedTodo(null);
+                    }}
+                    >
                       <input
                         type="text"
                         className="todo__title-field"
                         placeholder="Empty todo will be deleted"
-                        value={todo.title}
-                        onBlur={() => setIsDblClick(prev => !prev)}
+                        value={updatedTitle}
+                        onChange={(event) => {
+                          event.preventDefault();
+                          setUpdateTitle(event.target.value);
+                        }}
+                        onBlur={event => {
+                          event.preventDefault();
+                          setTodos(someTodos => {
+                            const newTodos = [...someTodos];
+                            // eslint-disable-next-line max-len
+                            const index = someTodos.findIndex(t => t.id === todo.id);
+                            const newTodo = {
+                              ...todo, title: updatedTitle, id: 0,
+                            };
+
+                            newTodos.splice(index, 1, newTodo);
+
+                            return newTodos;
+                          });
+
+                          client.patch(`/todos/${todo.id}?userId=${USER_ID}`, { title: updatedTitle })
+                            .then(loadTodos)
+                            .catch(() => setErrorMessage('Can\'t update a todo'));
+
+                          setSelectedTodo(null);
+                        }}
+                        autoFocus
                       />
                     </form>
                   ) : (
-                    <span
+                    <div
                       className="todo__title"
-                      // onDoubleClick={() => setIsDblClick(prev => !prev)}
+                      onDoubleClick={() => {
+                        setSelectedTodo(todo);
+                        setUpdateTitle(todo.title);
+                      }}
                     >
-                      {todo.title}
-                    </span>
-
+                      {todo.id !== 0
+                        ? todo.title
+                        : (
+                          <span className="loader" />
+                        )}
+                    </div>
                   )}
                 {/* Remove button appears only on hover */}
                 <button
                   type="button"
                   className="todo__remove"
                   onClick={() => {
+                    client.delete(`/todos/${todo.id}?userId=${USER_ID}`);
                     setTodos(someTodos => {
                       const filteredTodos = [...someTodos].filter(t => t.id !== todo.id);
+
+                      setInitialTodos(filteredTodos);
 
                       return filteredTodos;
                     });
@@ -157,10 +225,18 @@ export const App: React.FC = () => {
                 </button>
 
                 {/* overlay will cover the todo while it is being updated */}
-                <div className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
+                {/* {todo.id !== 0
+                  ? (
+                    <div className="modal overlay">
+                      <div className="modal-background has-background-white-ter" />
+                      <div className="loader" />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="modal-background has-background-white-ter" />
+                      <div className="loader" />
+                    </>
+                  )} */}
               </div>
             ))}
           </section>
@@ -182,7 +258,10 @@ export const App: React.FC = () => {
                 className={classNames('filter__link', {
                   selected: selectedField === 'all',
                 })}
-                onClick={() => setSelectedField('all')}
+                onClick={(event) => {
+                  event?.preventDefault();
+                  setSelectedField('all');
+                }}
               >
                 All
               </a>
@@ -192,7 +271,10 @@ export const App: React.FC = () => {
                 className={classNames('filter__link', {
                   selected: selectedField === 'active',
                 })}
-                onClick={() => setSelectedField('active')}
+                onClick={(event) => {
+                  event?.preventDefault();
+                  setSelectedField('active');
+                }}
               >
                 Active
               </a>
@@ -202,7 +284,10 @@ export const App: React.FC = () => {
                 className={classNames('filter__link', {
                   selected: selectedField === 'completed',
                 })}
-                onClick={() => setSelectedField('completed')}
+                onClick={(event) => {
+                  event?.preventDefault();
+                  setSelectedField('completed');
+                }}
               >
                 Completed
               </a>
@@ -218,6 +303,12 @@ export const App: React.FC = () => {
                 setTodos(someTodos => {
                   const newTodos = [...someTodos].filter(todo => !todo.completed);
 
+                  [...someTodos]
+                    .filter(todo => todo.completed)
+                    .map(todo => client.delete(`/todos/${todo.id}?userId=${USER_ID}`));
+
+                  setInitialTodos(newTodos);
+
                   return newTodos;
                 });
               }}
@@ -230,7 +321,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {todos.length === 0 && !isErrorUnnount && (
+      {errorMessage && (
         <div
         // eslint-disable-next-line max-len
           className="notification is-danger is-light has-text-weight-normal"
@@ -238,9 +329,9 @@ export const App: React.FC = () => {
           <button
             type="button"
             className="delete"
-            onClick={() => setIsErrorUnnount(true)}
+            onClick={() => setErrorMessage('')}
           />
-          Incorrect URL
+          {errorMessage}
           {/* show only one message at a time
           Unable to add a todo
           <br />
