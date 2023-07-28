@@ -1,9 +1,8 @@
 import {
-  PropsWithChildren, createContext, useEffect, useState,
+  PropsWithChildren, createContext, useEffect, useMemo, useState,
 } from 'react';
 import { Todo } from '../../types/Todo';
-import { USER_ID } from '../../utils/UserId';
-import { client } from '../../utils/fetchClient';
+import { getTodos } from '../../api/todos';
 
 enum Status{
   all = 'All',
@@ -11,8 +10,21 @@ enum Status{
   completed = 'Completed',
 }
 
+const prepareTodos = (currentFilter: Status, allTodos: Todo[]) => {
+  switch (currentFilter) {
+    case Status.all:
+    default:
+      return [...allTodos];
+    case Status.active:
+      return [...allTodos].filter((todo) => !todo.completed);
+    case Status.completed:
+      return [...allTodos].filter((todo) => todo.completed);
+  }
+};
+
 export const TodoContext = createContext({
   todos: [] as Todo[],
+  allTodos: [] as Todo[],
   setFilter: (() => {}) as React.Dispatch<React.SetStateAction<Status>>,
   filter: Status.all,
   error: '',
@@ -25,32 +37,18 @@ export const Context: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
+    getTodos()
       .then(setTodos)
-      .catch(() => {
-        setError('Enable to download todo');
-        setTimeout(() => {
-          setError('');
-        }, 3000);
-      });
+      .catch(() => setError('Unable to download todos'));
   }, []);
 
-  const prepareTodos = () => {
-    switch (filter) {
-      case Status.all:
-      default:
-        return [...todos];
-      case Status.active:
-        return [...todos].filter((todo) => !todo.completed);
-      case Status.completed:
-        return [...todos].filter((todo) => todo.completed);
-    }
-  };
-
-  const preparedTodos = prepareTodos();
+  const preparedTodos = useMemo(() => {
+    return prepareTodos(filter, todos);
+  }, [filter, todos]);
 
   const value = {
     todos: preparedTodos,
+    allTodos: todos,
     setFilter,
     filter,
     error,
