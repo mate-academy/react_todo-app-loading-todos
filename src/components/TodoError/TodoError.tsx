@@ -1,9 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
+import { TodoErrorType } from '../../types/TodoErrorType';
 
 type Props = {
   hasError: string,
-  setHasError: (error: string) => void,
+  setHasError: (error: TodoErrorType) => void,
 };
 export const TodoError: React.FC<Props> = ({
   hasError,
@@ -20,7 +21,7 @@ export const TodoError: React.FC<Props> = ({
         type="button"
         className="delete"
         aria-label="Close"
-        onClick={() => setHasError('')}
+        onClick={() => setHasError(TodoErrorType.noError)}
       />
       {hasError}
     </div>
