@@ -33,18 +33,6 @@ export const App: React.FC = () => {
     setErrorMessage('');
   };
 
-  useEffect(() => {
-    if (errorMessage) {
-      const timeoutId = setTimeout(() => {
-        resetError();
-      }, 3000);
-
-      return () => clearTimeout(timeoutId);
-    }
-
-    return () => {};
-  }, [errorMessage]);
-
   const filteredTodos = useMemo(() => getPreparedTodos(
     todos,
     filter,
@@ -105,6 +93,7 @@ export const App: React.FC = () => {
 
       <Notifications
         error={errorMessage}
+        reset={resetError}
       />
     </div>
   );
