@@ -23,12 +23,3 @@ export const ErrorMessage: React.FC<Props> = ({ message, setMessage }) => {
     </div>
   );
 };
-
-//  Notification is shown in case of any error
-//  Add the 'hidden' class to hide the message smoothly
-// show only one message at a time
-// Unable to add a todo
-// <br />
-// Unable to delete a todo
-// <br />
-// Unable to update a todo

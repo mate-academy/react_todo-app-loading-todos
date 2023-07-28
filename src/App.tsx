@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
@@ -14,12 +14,12 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(Filter.All);
 
-  const activeCount = allTodos.reduce(
+  const activeCount = useMemo(() => allTodos.reduce(
     (total, todo) => (todo.completed ? total : total + 1),
     0,
-  );
+  ), [allTodos]);
 
-  const filteredTodos = allTodos.filter(todo => {
+  const filteredTodos = useMemo(() => allTodos.filter(todo => {
     switch (filter) {
       case Filter.Completed:
         return todo.completed;
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
       default:
         return true;
     }
-  });
+  }), [allTodos, filter]);
 
   const showErrorMessage = (message: string): void => {
     setErrorMessage(message);
