@@ -11,12 +11,14 @@ type Props = {
 export const Footer: React.FC<Props> = ({ todos, setFilter }) => {
   const [selectedLink, setSelectedLink] = useState<string | null>('All');
 
-  const handleAllChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleChange = (filterType: Filter) => (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
     event.preventDefault();
     const selectedLinkText = event.currentTarget.textContent;
 
     setSelectedLink(selectedLinkText);
-    setFilter(Filter.All);
+    setFilter(filterType);
   };
 
   const countItemsLeft = useMemo(() => {
@@ -27,24 +29,6 @@ export const Footer: React.FC<Props> = ({ todos, setFilter }) => {
   }, [todos]);
 
   const completedItems = todos.some(todo => todo.completed);
-
-  // eslint-disable-next-line
-  const handleActiveChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    const selectedLinkText = event.currentTarget.textContent;
-
-    setSelectedLink(selectedLinkText);
-    setFilter(Filter.Active);
-  };
-
-  // eslint-disable-next-line
-  const handleCompletedChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    const selectedLinkText = event.currentTarget.textContent;
-
-    setSelectedLink(selectedLinkText);
-    setFilter(Filter.Completed);
-  };
 
   return (
     <footer className="todoapp__footer">
@@ -58,7 +42,7 @@ export const Footer: React.FC<Props> = ({ todos, setFilter }) => {
           className={classNames('filter__link', {
             selected: selectedLink === 'All',
           })}
-          onClick={handleAllChange}
+          onClick={(event) => handleChange(Filter.All)(event)}
         >
           All
         </a>
@@ -68,7 +52,7 @@ export const Footer: React.FC<Props> = ({ todos, setFilter }) => {
           className={classNames('filter__link', {
             selected: selectedLink === 'Active',
           })}
-          onClick={handleActiveChange}
+          onClick={(event) => handleChange(Filter.Active)(event)}
         >
           Active
         </a>
@@ -78,7 +62,7 @@ export const Footer: React.FC<Props> = ({ todos, setFilter }) => {
           className={classNames('filter__link', {
             selected: selectedLink === 'Completed',
           })}
-          onClick={handleCompletedChange}
+          onClick={(event) => handleChange(Filter.Completed)(event)}
         >
           Completed
         </a>
