@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { ITodo } from '../../types/Todo';
-import { useSetTodoContext, useTodoContext } from '../TodoContextProvider';
+import { useTodoContext } from '../TodoContextProvider';
 
 type Props = {
   todo: ITodo
@@ -20,9 +20,7 @@ export const Todo: React.FC<Props> = (
 ) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
-
-  const { loading } = useTodoContext();
-  const { setLoading } = useSetTodoContext();
+  const { loading, setLoading } = useTodoContext();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

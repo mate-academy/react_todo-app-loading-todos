@@ -4,15 +4,16 @@ import { TodoList } from '../TodoList';
 import { TodoFilter } from '../TodoFilter';
 import { Notification } from '../Notification';
 import { getTodos } from '../../api/todos';
-import { useSetTodoContext, useTodoContext } from '../TodoContextProvider';
+import { useTodoContext } from '../TodoContextProvider';
 
 type Props = {
   userId: number;
 };
 
 export const UserTodoList: React.FC<Props> = ({ userId }) => {
-  const { todos, error } = useTodoContext();
-  const { setTodos, setError, setLoading } = useSetTodoContext();
+  const {
+    todos, error, setTodos, setError, setLoading,
+  } = useTodoContext();
 
   const hasTodos = todos.length > 0;
 

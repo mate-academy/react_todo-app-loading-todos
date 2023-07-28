@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { StatusType } from '../../types';
-import { useSetTodoContext, useTodoContext } from '../TodoContextProvider';
+import { useTodoContext } from '../TodoContextProvider';
 
 const filterOptions = [
   {
@@ -19,8 +19,7 @@ const filterOptions = [
 ];
 
 export const TodoFilter: React.FC = () => {
-  const { todos, filter } = useTodoContext();
-  const { setFilter } = useSetTodoContext();
+  const { todos, filter, setFilter } = useTodoContext();
 
   const numberOfActiveTodos = todos.filter((todo) => !todo.completed).length;
   const hasCompletedTodos = todos.some((todo) => todo.completed);
@@ -46,11 +45,15 @@ export const TodoFilter: React.FC = () => {
         ))}
       </nav>
 
-      {hasCompletedTodos && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed', {
+          hidden: !hasCompletedTodos,
+        })}
+      >
+        Clear completed
+      </button>
+
     </footer>
   );
 };

@@ -10,9 +10,6 @@ const TodoStateContext = createContext({
   visibleTodos: [] as ITodo[],
   loading: false,
   error: '',
-});
-
-const SetTodoStateContext = createContext({
   setTodos: (_todos: ITodo[]) => { },
   setFilter: (_filter: StatusType) => { },
   setLoading: (_loading: boolean) => { },
@@ -20,7 +17,6 @@ const SetTodoStateContext = createContext({
 });
 
 export const useTodoContext = () => useContext(TodoStateContext);
-export const useSetTodoContext = () => useContext(SetTodoStateContext);
 
 type Props = {
   children: React.ReactNode;
@@ -51,20 +47,15 @@ export const TodoContextProvider: React.FC<Props> = ({ children }) => {
     visibleTodos,
     loading,
     error,
-  }), [todos, filter, loading, error]);
-
-  const appStatusValue = useMemo(() => ({
     setTodos,
     setFilter,
     setLoading,
     setError,
-  }), []);
+  }), [todos, filter, loading, error]);
 
   return (
-    <SetTodoStateContext.Provider value={appStatusValue}>
-      <TodoStateContext.Provider value={value}>
-        {children}
-      </TodoStateContext.Provider>
-    </SetTodoStateContext.Provider>
+    <TodoStateContext.Provider value={value}>
+      {children}
+    </TodoStateContext.Provider>
   );
 };

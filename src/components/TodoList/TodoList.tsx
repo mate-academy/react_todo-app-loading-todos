@@ -1,11 +1,9 @@
 import React from 'react';
 import { Todo } from '../Todo';
-
-import { useSetTodoContext, useTodoContext } from '../TodoContextProvider';
+import { useTodoContext } from '../TodoContextProvider';
 
 export const TodoList: React.FC = () => {
-  const { visibleTodos } = useTodoContext();
-  const { setError } = useSetTodoContext();
+  const { visibleTodos, setError } = useTodoContext();
 
   const deleteTodo = (todoId: number) => {
     if (!todoId) {

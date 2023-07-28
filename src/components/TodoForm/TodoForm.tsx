@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { useSetTodoContext, useTodoContext } from '../TodoContextProvider';
+import { useTodoContext } from '../TodoContextProvider';
 
 export const TodoForm: React.FC = () => {
-  const { todos } = useTodoContext();
-  const { setError } = useSetTodoContext();
+  const { todos, setError } = useTodoContext();
   const [query, setQuery] = useState<string>('');
 
   const hasActiveTodos = todos.some(todo => !todo.completed);
