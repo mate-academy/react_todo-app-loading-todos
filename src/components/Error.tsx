@@ -1,11 +1,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 type Props = {
   errorType: string,
   setErrorType: (x: string) => void,
 };
 export const Error: FC<Props> = ({ errorType, setErrorType }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorType('');
+    }, 3000);
+  });
+
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
       <button

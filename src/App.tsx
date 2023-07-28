@@ -6,7 +6,6 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Filter } from './types/Filter';
-import { ErrorType } from './types/Error';
 import { TodoInput } from './components/TodoInput';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoList } from './components/TodoList';
@@ -37,10 +36,6 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setErrorType(ErrorType.ADD);
-    });
-
     getTodos(USER_ID)
       .then(setTodos)
       .catch(fetchError => console.error(`Fetch Error ${fetchError}`));

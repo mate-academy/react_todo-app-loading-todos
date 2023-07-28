@@ -15,7 +15,6 @@ export const TodoFooter: FC<Props> = ({ filter, setFilter, itemsLeft }) => {
         {`${itemsLeft} item(s) left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
