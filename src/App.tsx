@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
-import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 import { TodoFilter } from './TodoFilter';
 import { Todolist } from './TodoList';
+import { TodoErrors } from './TodoErrors';
 
 const USER_ID = 11129;
 
@@ -22,10 +22,10 @@ export const App: React.FC = () => {
         setTodos(fetchedTodos);
       })
       .catch((error: Error) => {
+        setErrorText(error.message);
         setTimeout(() => {
-          setErrorText(error.message);
+          setErrorText('');
         }, 3000);
-        throw new Error(error.message);
       });
   }, []);
 
@@ -39,6 +39,8 @@ export const App: React.FC = () => {
         return todos;
     }
   }, [todos, filter]);
+
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -66,7 +68,7 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer">
           <span className="todo-count">
-            {`${visibletodos.length} items left`}
+            {`${activeTodos.length} items left`}
           </span>
 
           {/* Active filter should have a 'selected' class */}
@@ -81,21 +83,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className={cn(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: !errorText },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setErrorText('')}
-        />
-        Unable to add a todo
-      </div>
+      <TodoErrors errorText={errorText} setErrorText={setErrorText} />
     </div>
   );
 };
