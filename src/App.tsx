@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loader, setLoader] = useState(true);
 
-  const setError = () => { // rewrite with unset
+  const unSetError = () => {
     setErrorMessage('');
   };
 
@@ -102,7 +102,7 @@ export const App: React.FC = () => {
 
       <TodoErrors
         error={errorMessage}
-        setError={setError}
+        setError={unSetError}
       />
     </div>
   );
