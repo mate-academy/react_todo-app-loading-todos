@@ -39,12 +39,6 @@ export const App: React.FC = () => {
       .catch(() => setError(Error.Load));
   }, []);
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => setError(Error.None), 3000);
-    }
-  }, [error]);
-
   const visibleTodos = useMemo(() => {
     return getVisibleTodos(todos, status);
   }, [todos, status]);
