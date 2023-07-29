@@ -10,8 +10,6 @@ type Props = {
 export const TodoHeader: React.FC<Props> = ({ todos }) => {
   const countActiveTodods = todos.filter(todo => !todo.completed).length;
 
-  console.log(countActiveTodods);
-
   return (
     <header className="todoapp__header">
       {todos.length > 0

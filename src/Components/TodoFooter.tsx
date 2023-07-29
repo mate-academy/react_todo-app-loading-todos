@@ -55,12 +55,13 @@ export const TodoFooter: React.FC<Props> = ({
         </a>
       </nav>
 
-      {completedTodo.length > 0
-      && (
-        <button type="button" className="todoapp__clear-completed">
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed',
+          { 'is-invisible': completedTodo.length > 0 })}
+      >
+        Clear completed
+      </button>
 
     </footer>
   );

@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 // import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { ErrorType } from './types/Errors';
 import { getTodos } from './api/todos';
 import { FilterType } from './types/FilterType';
-import { preparedTodos } from './utils/filterFunction';
+import { getPreparedTodos } from './utils/filterFunction';
 import { TodoList } from './Components/TodoList';
 import { TodoFooter } from './Components/TodoFooter';
 import { TodoHeader } from './Components/TodoHeader';
+import { ErrorNotification } from './Components/ErrorsNotification';
 
 const USER_ID = 11128;
 
@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [filterType, setFilterType] = useState(FilterType.All);
 
-  const visibleTodos = preparedTodos(todos, filterType);
+  const visibleTodos = getPreparedTodos(todos, filterType);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -31,18 +31,6 @@ export const App: React.FC = () => {
         setError(ErrorType.getData);
       });
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      const timeoutId = setTimeout(() => {
-        setError('');
-      }, 3000);
-
-      return () => clearTimeout(timeoutId);
-    }
-
-    return () => {};
-  }, [error]);
 
   return (
     <div className="todoapp">
@@ -66,22 +54,10 @@ export const App: React.FC = () => {
       </div>
 
       {/* Notification is shown in case of any error */}
-      <div className={
-        classNames('notification is-danger is-light has-text-weight-normal', {
-          hidden: !error,
-        })
-      }
-      >
-
-        <button
-          type="button"
-          className="delete"
-          onClick={() => setError('')}
-        />
-
-        {error}
-
-      </div>
+      <ErrorNotification
+        errorMessage={error}
+        closeError={setError}
+      />
     </div>
   );
 };

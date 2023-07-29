@@ -1,7 +1,7 @@
 import { FilterType } from '../types/FilterType';
 import { Todo } from '../types/Todo';
 
-export const preparedTodos = (
+export const getPreparedTodos = (
   todos: Todo[],
   filterType: FilterType,
 ) => {
