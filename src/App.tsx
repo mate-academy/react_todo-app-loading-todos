@@ -81,11 +81,12 @@ export const App: React.FC = () => {
               setFilter={setFilter}
             />
 
-            {isTodoCompleted && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
+            <button type="button" className="todoapp__clear-completed">
+              {isTodoCompleted && (
+                'Clear completed'
+              )}
+            </button>
+
           </footer>
         )}
       </div>
