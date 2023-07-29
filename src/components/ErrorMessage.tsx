@@ -1,19 +1,18 @@
 /* eslint-disable max-len */
 import classNames from 'classnames';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { TodoContext } from '../context/TodoContext';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const ErrorMessage: React.FC = () => {
   const { error, setError } = useContext(TodoContext);
 
-  const errMessage = useRef(error);
-
   useEffect(() => {
-    if (error) {
-      errMessage.current = error;
-      setTimeout(() => (() => setError(null)), 3000);
-    }
+    setTimeout(() => {
+      if (error) {
+        setError(null);
+      }
+    }, 3000);
   }, [error]);
 
   return (
@@ -26,7 +25,7 @@ export const ErrorMessage: React.FC = () => {
         className="delete"
         onClick={() => setError(null)}
       />
-      {errMessage.current || error}
+      {error}
     </div>
   );
 };
