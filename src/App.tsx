@@ -11,9 +11,9 @@ import { ShowTodos } from './components/ShowTodos';
 const USER_ID = 11093;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [hiddenError, setHiddenError] = useState(true);
-  const [avtiveTab, setAvtiveTab] = useState('All');
+  const [activeTab, setAvtiveTab] = useState('All');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -36,12 +36,12 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header todos={todos} />
 
-        <ShowTodos todos={todos} avtiveTab={avtiveTab} />
+        <ShowTodos todos={todos} activeTab={activeTab} />
 
         <Footer
           todos={todos}
           setAvtiveTab={setAvtiveTab}
-          avtiveTab={avtiveTab}
+          avtiveTab={activeTab}
         />
       </div>
 

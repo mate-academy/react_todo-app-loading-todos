@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
-  const tubs: string[] = ['All', 'Active', 'Completed'];
+  const tabs: string[] = ['All', 'Active', 'Completed'];
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setAvtiveTab(e.currentTarget.textContent || 'All');
   };
@@ -22,14 +22,15 @@ export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
 
           {/* Active filter should have a 'selected' class */}
           <nav className="filter">
-            {tubs.map((tub) => (
+            {tabs.map((tab) => (
               <a
-                href={`#/${tub !== 'All' ? tub.toLocaleLowerCase() : ''}`}
+                href={`#/${tab !== 'All' ? tab.toLocaleLowerCase() : ''}`}
                 className={classNames('filter__link',
-                  { selected: avtiveTab === tub })}
+                  { selected: avtiveTab === tab })}
                 onClick={handleClick}
+                key={tab}
               >
-                {tub}
+                {tab}
               </a>
             ))}
           </nav>

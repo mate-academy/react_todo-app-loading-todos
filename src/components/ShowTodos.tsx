@@ -1,33 +1,29 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[],
-  avtiveTab: string,
+  activeTab: string,
 };
 
-export const ShowTodos: React.FC<Props> = ({ todos, avtiveTab }) => {
-  const [showTodos, setShowTodos] = useState<Todo[]>(todos);
-
-  useEffect(() => {
-    switch (avtiveTab) {
+export const ShowTodos: React.FC<Props> = ({ todos, activeTab }) => {
+  const getVisibleTodos = (t: Todo[], at: string) => {
+    switch (at) {
       case 'Active':
-        setShowTodos(todos.filter(el => !el.completed));
-        break;
-
+        return t.filter((el) => !el.completed);
       case 'Completed':
-        setShowTodos(todos.filter(el => el.completed));
-        break;
-
+        return t.filter((el) => el.completed);
       default:
-        setShowTodos(todos);
+        return t;
     }
-  }, [todos, avtiveTab]);
+  };
+
+  const visibleTodos = getVisibleTodos(todos, activeTab);
 
   return (
     <section className="todoapp__main">
-      {showTodos.map((todo) => (
+      {visibleTodos.map((todo) => (
         <div
           className={classNames('todo', { completed: todo.completed })}
           key={todo.id}
