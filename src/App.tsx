@@ -24,16 +24,17 @@ export const App: React.FC = () => {
 
     deleteTodos(todoId)
       .then(() => {
-        setIsLoading(false);
-        setHasError(TodoErrorType.noError);
         setTodosFromServer(currentTodos => currentTodos.filter(
           todo => todo.id !== todoId,
         ));
       })
 
       .catch(() => {
-        setIsLoading(false);
         setHasError(TodoErrorType.deleteTodoError);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setHasError(TodoErrorType.noError);
       });
   };
 
@@ -93,6 +94,7 @@ export const App: React.FC = () => {
           )
         }
       </div>
+      {false && isLoading}
       <TodoError
         hasError={hasError}
         setHasError={setHasError}
