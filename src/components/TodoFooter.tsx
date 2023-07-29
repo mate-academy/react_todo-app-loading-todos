@@ -7,7 +7,7 @@ export const TodoFooter = () => {
     filter, setFilter, visibleTodos, activeTodosAmount,
   } = useContext(TodoContext);
 
-  const completedTodosAmount = visibleTodos.every(todo => !todo.completed);
+  const completedTodosAmount = visibleTodos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer">
@@ -47,8 +47,9 @@ export const TodoFooter = () => {
       </nav>
       <button
         type="button"
-        className="todoapp__clear-completed"
-        disabled={!completedTodosAmount}
+        className={classNames('todoapp__clear-completed', {
+          hidden_completed_button: !completedTodosAmount,
+        })}
       >
         Clear completed
       </button>
