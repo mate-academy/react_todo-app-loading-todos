@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { ErrorText } from '../../types/ErrorText';
 
 type Props = {
-  operation: ErrorText,
-  onHideError: (text: ErrorText) => void,
+  fieldOperation: ErrorText,
+  onSetFieldOperation: (text: ErrorText) => void,
 };
 
-export const Notifications: React.FC<Props> = ({ operation, onHideError }) => {
-  const handlerDeleteError = () => onHideError(ErrorText.null);
+export const Notifications: React.FC<Props> = ({
+  fieldOperation, onSetFieldOperation,
+}) => {
+  const handlerDeleteError = () => onSetFieldOperation(ErrorText.empty);
 
-  if (operation.length > 0) {
-    setTimeout(handlerDeleteError, 3000);
-  }
+  useEffect(() => {
+    const timerID = setTimeout(handlerDeleteError, 3000);
+
+    return () => clearTimeout(timerID);
+  }, []);
 
   return (
     <div className={classNames(
@@ -20,12 +24,13 @@ export const Notifications: React.FC<Props> = ({ operation, onHideError }) => {
       'is-danger',
       'is-light',
       'has-text-weight-normal',
-      { hidden: !operation.length },
+      { hidden: !fieldOperation.length },
     )}
     >
-      {`Unable to ${operation} a todo`}
-      {/* eslint-disable-next-line */}
+      {`Unable to ${fieldOperation} a todo`}
+
       <button
+        aria-label="Delate-Error-Message"
         type="button"
         className="delete"
         onClick={handlerDeleteError}
@@ -33,6 +38,3 @@ export const Notifications: React.FC<Props> = ({ operation, onHideError }) => {
     </div>
   );
 };
-
-// Notification is shown in case of any error
-// Add the 'hidden' class to hide the message smoothly

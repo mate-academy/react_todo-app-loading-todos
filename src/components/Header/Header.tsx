@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  // userId: number,
   activeTodos: Todo[],
-  // onSetLoadingTodo: (id: number) => void,
 };
 
 export const Header: React.FC<Props> = ({ activeTodos }) => {
@@ -16,8 +14,8 @@ export const Header: React.FC<Props> = ({ activeTodos }) => {
 
   return (
     <header className="todoapp__header">
-      {/* eslint-disable-next-line */}
       <button
+        aria-label="Select-all-or-Deselect-all"
         type="button"
         className={classNames(
           'todoapp__toggle-all', { active: activeTodos.length < 1 },

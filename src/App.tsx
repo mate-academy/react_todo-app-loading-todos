@@ -16,11 +16,11 @@ const USER_ID = 11213;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadedTodo, setLoadingTodo] = useState<number | null>(null);
-  const [fieldOperation, setFieldOperation] = useState(ErrorText.null);
+  const [fieldOperation, setFieldOperation] = useState(ErrorText.empty);
   const [selectedFilter, setSelectedFilter] = useState<Filters>(Filters.all);
 
-  const activeTodos = todos.filter(t => t.completed === false) || [];
-  const complitedTodos = todos.filter(t => t.completed === true) || [];
+  const activeTodos = todos.filter(t => t.completed === false);
+  const completedTodos = todos.filter(t => t.completed === true);
 
   const filteredTodos = (filterChar: Filters) => {
     return todos.filter(todo => {
@@ -58,9 +58,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          // userId={USER_ID}
           activeTodos={activeTodos}
-          // onSetLoadingTodo={(id) => setLoadingTodo(id)}
         />
 
         <TodoList
@@ -73,17 +71,19 @@ export const App: React.FC = () => {
           && (
             <Filter
               activeTodos={activeTodos}
-              complitedTodos={complitedTodos}
+              completedTodos={completedTodos}
               selectedFilter={selectedFilter}
               onSetSelectedFilter={(char) => setSelectedFilter(char)}
             />
           )}
       </div>
 
+      {/* {fieldOperation.length > 0 && */}
       <Notifications
-        operation={fieldOperation}
-        onHideError={(text: ErrorText) => setFieldOperation(text)}
+        fieldOperation={fieldOperation}
+        onSetFieldOperation={(text: ErrorText) => setFieldOperation(text)}
       />
+      {/* } */}
     </div>
   );
 };

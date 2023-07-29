@@ -1,5 +1,5 @@
 export enum ErrorText {
-  null = '',
+  empty = '',
   get = 'get',
   add = 'add',
   delete = 'delete',
