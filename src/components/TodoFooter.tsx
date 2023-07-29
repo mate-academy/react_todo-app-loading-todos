@@ -1,20 +1,22 @@
 import React, { useContext } from 'react';
+import classNames from 'classnames';
 import { TodoContext } from '../context/todoContext';
 import { SelectType } from '../enums';
-import classNames from 'classnames';
 
 export const TodoFooter: React.FC = () => {
-  const { select, onSelect } = useContext(TodoContext);
+  const { itemsLeft, select, onSelect } = useContext(TodoContext);
 
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">3 items left</span>
+      <span className="todo-count">
+        {`${itemsLeft} items left`}
+      </span>
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
-          className={classNames("filter__link", {
+          className={classNames('filter__link', {
             selected: select === SelectType.All,
           })}
           onClick={() => onSelect(SelectType.All)}
@@ -24,7 +26,7 @@ export const TodoFooter: React.FC = () => {
 
         <a
           href="#/active"
-          className={classNames("filter__link", {
+          className={classNames('filter__link', {
             selected: select === SelectType.Active,
           })}
           onClick={() => onSelect(SelectType.Active)}
@@ -34,7 +36,7 @@ export const TodoFooter: React.FC = () => {
 
         <a
           href="#/completed"
-          className={classNames("filter__link", {
+          className={classNames('filter__link', {
             selected: select === SelectType.Completed,
           })}
           onClick={() => onSelect(SelectType.Completed)}

@@ -9,7 +9,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { USER_ID } from './consts';
 
 export const App: React.FC = () => {
-  const { todos, error, onErrorHide } = useContext(TodoContext);
+  const { visibleFooter, error, onErrorHide } = useContext(TodoContext);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -21,13 +21,10 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoHeader />
-        {todos.length !== 0 && (
-          <>
-            <TodoList />
-            <TodoFooter />
-          </>
+        <TodoList />
+        {visibleFooter !== 0 && (
+          <TodoFooter />
         )}
-        {/* Hide the footer if there are no todos */}
       </div>
       <ErrorNotification
         error={error}

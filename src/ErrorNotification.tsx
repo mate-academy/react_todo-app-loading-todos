@@ -12,7 +12,6 @@ export const ErrorNotification: React.FC<Props> = ({
   error,
   onErrorHide,
 }) => {
-
   useEffect(() => {
     if (error) {
       setTimeout(() => {

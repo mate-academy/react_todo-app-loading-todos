@@ -7,8 +7,10 @@ import { USER_ID } from '../consts';
 
 interface Context {
   todos: Todo[];
+  itemsLeft: number;
+  visibleFooter: number;
   error: ErrorType | null;
-  select: SelectType,
+  select: SelectType;
   onErrorHide: (value: ErrorType | null) => void;
   onSelect: (value: SelectType) => void;
 }
@@ -16,6 +18,8 @@ interface Context {
 export const TodoContext = React.createContext<Context>({
   todos: [],
   error: null,
+  itemsLeft: 0,
+  visibleFooter: 0,
   select: SelectType.All,
   onErrorHide: () => {},
   onSelect: () => {},
@@ -32,9 +36,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const getTodos = async () => {
     try {
-      const Alltodos = await todoService.getTodos(USER_ID);
+      const allTodos = await todoService.getTodos(USER_ID);
 
-      setTodos(Alltodos);
+      setTodos(allTodos);
     } catch {
       setError(ErrorType.IncorectUrl);
     }
@@ -46,10 +50,15 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const selectedTodos = selectTodos(todos, select);
 
+  const itemsLeft = selectedTodos.filter(todo => !todo.completed).length;
+  const visibleFooter = todos.length;
+
   const value: Context = useMemo(() => ({
     todos: selectedTodos,
     error,
     select,
+    itemsLeft,
+    visibleFooter,
     onErrorHide: setError,
     onSelect: setSelect,
   }), [selectedTodos, error, select]);
