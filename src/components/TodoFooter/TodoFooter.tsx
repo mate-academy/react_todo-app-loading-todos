@@ -1,22 +1,21 @@
 import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
 import { FilterType } from '../../types/enum';
 
 type Props = {
-  todos: Todo[] | null,
+  activeTodos: number,
   filterBy: string,
   onFilterBy: (filterType: string) => void,
 };
 
 export const TodoFooter:React.FC<Props> = ({
-  todos,
+  activeTodos,
   filterBy,
   onFilterBy,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todos?.length} items left`}
+        {`${activeTodos} items left`}
       </span>
 
       <nav className="filter">

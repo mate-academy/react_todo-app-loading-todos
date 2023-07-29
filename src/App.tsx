@@ -47,6 +47,7 @@ export const App: React.FC = () => {
 
   const hasTodos = todos?.length !== 0;
   const vidibleTodos = useMemo(() => getPreperadTodos(todos, filterBy), [todos, filterBy]);
+  const activeTodosLength = todos!.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
 
         {hasTodos && (
           <TodoFooter
-            todos={vidibleTodos}
+            activeTodos={activeTodosLength}
             filterBy={filterBy}
             onFilterBy={setFilterBy}
           />
