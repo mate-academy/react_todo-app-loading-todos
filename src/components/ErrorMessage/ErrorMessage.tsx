@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import { memo } from 'react';
+import cn from 'classnames';
 import { ErrorType } from '../../types/ErrorType';
 
 type Props = {
@@ -8,10 +9,12 @@ type Props = {
   setError: React.Dispatch<React.SetStateAction<ErrorType>>,
 };
 
-/* Add the 'hidden' class to hide the message smoothly */
-
 export const ErrorMessage: React.FC<Props> = memo(({ error, setError }) => (
-  <div className="notification is-danger is-light has-text-weight-normal">
+  <div
+    className={cn('notification is-danger is-light has-text-weight-normal', {
+      hidden: error === ErrorType.NONE,
+    })}
+  >
     <button
       type="button"
       className="delete"

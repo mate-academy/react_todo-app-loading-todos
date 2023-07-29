@@ -1,10 +1,8 @@
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -13,6 +11,7 @@ import { ErrorType } from './types/ErrorType';
 import { SortType } from './types/SortType';
 import { Header } from './components/Header';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
+import { TodoList } from './components/TodoList';
 
 const USER_ID = 11229;
 
@@ -25,12 +24,13 @@ export const App: React.FC = () => {
     setError(ErrorType.NONE);
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setError(ErrorType.LOAD));
+      .catch(() => {
+        setError(ErrorType.LOAD);
+        setTimeout(() => setError(ErrorType.NONE), 3000);
+      });
   }, []);
 
-  const getPreparedTodos = useCallback((
-    currentTodos: Todo[],
-  ) => {
+  const preparedTodos = useMemo(() => {
     let sortedTodos = [];
 
     switch (sort) {
@@ -39,11 +39,11 @@ export const App: React.FC = () => {
         break;
 
       case SortType.ACTIVE:
-        sortedTodos = currentTodos.filter(todo => !todo.completed);
+        sortedTodos = todos.filter(todo => !todo.completed);
         break;
 
       case SortType.COMPLETED:
-        sortedTodos = currentTodos.filter(todo => todo.completed);
+        sortedTodos = todos.filter(todo => todo.completed);
         break;
 
       default:
@@ -52,10 +52,6 @@ export const App: React.FC = () => {
 
     return sortedTodos;
   }, [todos, sort]);
-
-  const preparedTodos = useMemo(() => (
-    getPreparedTodos(todos)
-  ), [todos, sort]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -68,34 +64,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header preparedTodos={preparedTodos} />
 
-        <section className="todoapp__main">
-          {preparedTodos.map(todo => (
-            <div
-              className={cn('todo', {
-                completed: todo.completed,
-              })}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  defaultChecked={todo.completed}
-                />
-              </label>
-
-              <span className="todo__title">{todo.title}</span>
-              <button type="button" className="todo__remove">×</button>
-
-              {/* className="modal overlay is-active" */}
-
-              <div className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section>
+        <TodoList preparedTodos={preparedTodos} />
 
         {!!todos.length && (
           <Footer
@@ -107,9 +76,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {!!error && (
-        <ErrorMessage error={error} setError={setError} />
-      )}
+      <ErrorMessage error={error} setError={setError} />
     </div>
   );
 };
