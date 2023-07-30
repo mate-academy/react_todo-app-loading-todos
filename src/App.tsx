@@ -19,7 +19,7 @@ export const App: React.FC = () => {
 
   function loadTodos() {
     getTodos(USER_ID)
-      .then(loadTodos => setTodos(loadTodos as Todo[]))
+      .then(loadedTodos => setTodos(loadedTodos as Todo[]))
       .catch(() => {
         setErrorMessage('Unable to load todos');
         setTimeout(() => {
