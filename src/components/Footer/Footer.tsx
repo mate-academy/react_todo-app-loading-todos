@@ -1,31 +1,29 @@
 import cn from 'classnames';
+import { useAppContext } from '../Context/AppContext';
+import { FilterType } from '../../types/FilterType';
 
-type Props = {
-  filterType: string,
-  setFilterType: (val: string) => void,
-  quantity: number,
-};
+export const Footer = () => {
+  const {
+    todos,
+    filterType,
+    setFilterType,
+  } = useAppContext();
 
-export const Footer = ({
-  filterType,
-  setFilterType,
-  quantity,
-}: Props) => {
+  const countOfActiveTodos = todos.filter(todo => !todo.completed).length;
+  const countOfCompletedTodos = todos.filter(todo => todo.completed).length;
+
   return (
     <>
-      {/* Hide the footer if there are no todos */}
-
       <footer className="todoapp__footer">
         <span className="todo-count">
-          {`${quantity} items left`}
+          {`${countOfActiveTodos} items left`}
         </span>
 
-        {/* Active filter should have a 'selected' class */}
         <nav className="filter">
           <a
             href="#/"
             className={cn('filter__link', {
-              selected: filterType === 'all',
+              selected: filterType === FilterType.all,
             })}
             onClick={() => setFilterType('all')}
           >
@@ -35,7 +33,7 @@ export const Footer = ({
           <a
             href="#/active"
             className={cn('filter__link', {
-              selected: filterType === 'active',
+              selected: filterType === FilterType.active,
             })}
             onClick={() => setFilterType('active')}
           >
@@ -45,7 +43,7 @@ export const Footer = ({
           <a
             href="#/completed"
             className={cn('filter__link', {
-              selected: filterType === 'completed',
+              selected: filterType === FilterType.completed,
             })}
             onClick={() => setFilterType('completed')}
           >
@@ -53,8 +51,11 @@ export const Footer = ({
           </a>
         </nav>
 
-        {/* don't show this button if there are no completed todos */}
-        <button type="button" className="todoapp__clear-completed">
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          disabled={countOfCompletedTodos === 0}
+        >
           Clear completed
         </button>
       </footer>

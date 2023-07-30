@@ -1,30 +1,58 @@
-/* eslint-disable */
-type Props = {
-  query: string,
-  setQuery: (val: string) => void,
-};
+import { FormEvent } from 'react';
+import cn from 'classnames';
+import { useAppContext } from '../Context/AppContext';
+import { client } from '../../utils/fetchClient';
+import { getTodos } from '../../api/todos';
 
-export const Header = ({ query, setQuery }: Props) => {
-  // useEffect(() => {
+export const Header = () => {
+  const {
+    userId,
+    todos,
+    setTodos,
+    todoTitle,
+    setTodoTitle,
+    setIsError,
+  } = useAppContext();
 
-  // }, []);
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    const newTodo = {
+      title: todoTitle,
+      userId,
+      completed: false,
+    };
+
+    client.post('/todos/', newTodo)
+      .then(() => {
+        getTodos(userId)
+          .then(setTodos);
+      })
+      .catch(() => {
+        setIsError('add');
+      });
+    setTodoTitle('');
+  };
 
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button type="button" className="todoapp__toggle-all active" />
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        type="button"
+        className={cn('todoapp__toggle-all', {
+          active: todos.every(todo => todo.completed),
+        })}
+      />
 
       {/* Add a todo on form submit */}
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        setQuery('');
-      }}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={query}
+          value={todoTitle}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => setTodoTitle(event.target.value)}
         />
       </form>
     </header>
