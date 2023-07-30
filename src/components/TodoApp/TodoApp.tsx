@@ -51,7 +51,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
   const makeSetErrorMessage
     = (message: string) => () => setErrorMessage(message);
 
-  const filteredTodos = [...todos].filter(todo => (
+  const filteredTodos = todos.filter(todo => (
     filterTodos(todo, filterValue)
   ));
 
@@ -68,7 +68,9 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
           {/* eslint-disable-next-line */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          <form>
+          <form
+            onSubmit={(event) => event.preventDefault()}
+          >
             <input
               type="text"
               className="todoapp__new-todo"
