@@ -45,8 +45,8 @@ export const App: React.FC = () => {
       .then((res) => {
         setTodosContainer(res);
       })
-      .catch((error: Error) => {
-        setErrorMessage(error.message);
+      .catch(() => {
+        setErrorMessage('Something went wrong');
       });
   }, []);
 
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main">
           {todos.map(todo => (
-            <TodoItem todo={todo} />
+            <TodoItem todo={todo} key={todo.id} />
           ))}
         </section>
 
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
+      {errorMessage.length > 0 && (
         <ErrorToast
           message={errorMessage}
           onClose={closeErrorMessage}

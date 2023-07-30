@@ -18,7 +18,7 @@ const ErrorToast: React.FC<Props> = ({ message, onClose }) => {
     <div className={
       classNames('notification is-danger is-light has-text-weight-normal',
         {
-          hidden: message.length !== 0,
+          hidden: message.length === 0,
         })
     }
     >

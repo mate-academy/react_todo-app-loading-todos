@@ -10,7 +10,6 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
   return (
     <div
       className={classNames('todo', { completed: todo.completed })}
-      key={todo.id}
     >
       <label className="todo__status-label">
         <input
