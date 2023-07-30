@@ -1,28 +1,34 @@
+import classNames from 'classnames';
+import { Todo } from '../types/Todo';
+
 interface Props {
-  query: string,
-  setQuery: (query: string) => void,
+  // query: string,
+  // setQuery: (query: string) => void,
+  todos: Todo[],
 }
 
-export const TodoHeader: React.FC<Props> = ({ query, setQuery }) => {
+export const TodoHeader: React.FC<Props> = ({ todos }) => {
+  const countActiveTodos = todos.filter(todo => !todo.completed).length;
+
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-      <button type="button" className="todoapp__toggle-all active" />
+      {todos.length > 0
+        && (
+          <button
+            aria-label="btn"
+            type="button"
+            className={classNames('todoapp__toggle-all', {
+              active: countActiveTodos > 0,
+            })}
+          />
+        )}
 
       {/* Add a todo on form submit */}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          setQuery('');
-        }}
-      >
+      <form>
         <input
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
         />
       </form>
     </header>
