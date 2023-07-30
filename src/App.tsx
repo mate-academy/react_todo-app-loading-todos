@@ -7,12 +7,15 @@ import { TodoFooter } from './components/TodoFooter';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
+import { Error } from './types/Error';
+import { Errors } from './components/Errors';
 
 const USER_ID = 11142;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState(Status.all);
+  const [error, setError] = useState(Error.without);
   const numberOfAllTodos = todos.length;
   const numberOfCompletedTodos = todos.filter(todo => todo.completed).length;
   const numberOfActiveTodos = todos.filter(todo => !todo.completed).length;
@@ -65,9 +68,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error
-      Add the 'hidden' class to hide the message smoothly
-        <Errors /> */}
+      {error !== Error.without && (
+        <Errors error={error} onClearErrors={setError} />
+      )}
     </div>
   );
 };
