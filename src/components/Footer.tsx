@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import { Tabs } from '../enums/TabsFooter';
+import { TabsFooter } from '../enums/TabsFooter';
 
 type Props = {
   todos: Todo[],
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
-  const tabs: string[] = Object.values(Tabs);
+  const tabs: string[] = Object.values(TabsFooter);
   const itemsLeft = todos.filter(todo => !todo.completed).length;
   const completed = todos.find(todo => todo.completed);
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

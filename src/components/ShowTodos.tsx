@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { Todo } from '../types/Todo';
+import { TabsFooter } from '../enums/TabsFooter';
 
 type Props = {
   todos: Todo[],
@@ -10,9 +11,9 @@ type Props = {
 export const ShowTodos: React.FC<Props> = ({ todos, activeTab }) => {
   const getVisibleTodos = (t: Todo[], at: string) => {
     switch (at) {
-      case 'Active':
+      case TabsFooter.Active:
         return t.filter((el) => !el.completed);
-      case 'Completed':
+      case TabsFooter.Completed:
         return t.filter((el) => el.completed);
       default:
         return t;
