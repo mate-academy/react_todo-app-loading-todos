@@ -6,20 +6,21 @@ import { Filter } from '../Filter/Filter';
 import { Todo } from '../Todo/Todo';
 import { TodoType } from '../../types/TodoType';
 import { getTodos } from '../../api/todos';
+import { FilterValue } from '../../types/FilterValue';
 
 type Props = {
   userId: number;
 };
 
-function filterTodos(todo: TodoType, todoFilter: string) {
-  switch (todoFilter) {
-    case '':
+function filterTodos(todo: TodoType, filterValue: FilterValue) {
+  switch (filterValue) {
+    case FilterValue.All:
       return true;
 
-    case 'active':
+    case FilterValue.Active:
       return !todo.completed;
 
-    case 'completed':
+    case FilterValue.Completed:
       return todo.completed;
 
     default:
@@ -31,7 +32,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [newTitle, setNewTitle] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [todoFilter, setTodoFilter] = useState('');
+  const [filterValue, setFilterValue] = useState(FilterValue.All);
 
   useEffect(() => {
     setErrorMessage('');
@@ -47,9 +48,16 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
       });
   }, []);
 
+  const makeSetErrorMessage
+    = (message: string) => () => setErrorMessage(message);
+
   const filteredTodos = [...todos].filter(todo => (
-    filterTodos(todo, todoFilter)
+    filterTodos(todo, filterValue)
   ));
+
+  const makeSetNewTitle = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => setNewTitle(event.target.value);
 
   return (
     <div className="todoapp">
@@ -66,7 +74,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
               value={newTitle}
-              onChange={(event) => setNewTitle(event.target.value)}
+              onChange={makeSetNewTitle}
             />
           </form>
         </header>
@@ -86,7 +94,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
               3 items left
             </span>
 
-            <Filter todoFilter={todoFilter} handleFilter={setTodoFilter} />
+            <Filter filterValue={filterValue} handleFilter={setFilterValue} />
 
             <button type="button" className="todoapp__clear-completed">
               Clear completed
@@ -108,7 +116,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
         <button
           type="button"
           className="delete"
-          onClick={() => setErrorMessage('')}
+          onClick={makeSetErrorMessage('')}
         />
 
         {errorMessage}
