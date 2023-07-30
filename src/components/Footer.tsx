@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
+import { Tabs } from '../enums/TabsFooter';
 
 type Props = {
   todos: Todo[],
@@ -9,7 +10,9 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
-  const tabs: string[] = ['All', 'Active', 'Completed'];
+  const tabs: string[] = Object.values(Tabs);
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
+  const completed = todos.find(todo => todo.completed);
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setAvtiveTab(e.currentTarget.textContent || 'All');
   };
@@ -18,9 +21,10 @@ export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
     <>
       {Boolean(todos.length) && (
         <footer className="todoapp__footer">
-          <span className="todo-count">3 items left</span>
+          <span className="todo-count">
+            {`${itemsLeft} items left`}
+          </span>
 
-          {/* Active filter should have a 'selected' class */}
           <nav className="filter">
             {tabs.map((tab) => (
               <a
@@ -35,10 +39,11 @@ export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
             ))}
           </nav>
 
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
+          { completed && (
+            <button type="button" className="todoapp__clear-completed">
+              Clear completed
+            </button>
+          )}
         </footer>
       )}
     </>
