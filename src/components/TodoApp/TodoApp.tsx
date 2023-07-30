@@ -4,8 +4,8 @@ import cn from 'classnames';
 import './TodoApp.scss';
 import { Filter } from '../Filter/Filter';
 import { Todo } from '../Todo/Todo';
-import { client } from '../../utils/fetchClient';
 import { TodoType } from '../../types/TodoType';
+import { getTodos } from '../../api/todos';
 
 type Props = {
   userId: number;
@@ -36,7 +36,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
   useEffect(() => {
     setErrorMessage('');
 
-    client.get<TodoType[]>(`/todos?userId=${userId}`)
+    getTodos(userId)
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
@@ -51,22 +51,6 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
     filterTodos(todo, todoFilter)
   ));
 
-  // function addTodo(title: string) {
-  //   setTodos(currentTodos => {
-  //     const nextId = Math.max(0, ...currentTodos.map(todo => todo.id));
-  //     const id = nextId + 1;
-
-  //     return [...currentTodos, {
-  //       id, userId, title, completed: false,
-  //     }];
-  //   });
-  //   setNewTitle('');
-  // }
-
-  // function deleteTodo(todoId: number) {
-  //   setTodos(currentTodos => currentTodos.filter(todo => todo.id !== todoId));
-  // }
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -77,7 +61,6 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
           <button type="button" className="todoapp__toggle-all active" />
 
           <form>
-            {/* onSubmit={() => addTodo(newTitle)} */}
             <input
               type="text"
               className="todoapp__new-todo"
@@ -104,7 +87,7 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
             </span>
 
             <Filter todoFilter={todoFilter} handleFilter={setTodoFilter} />
-            {/* don't show this button if there are no completed todos */}
+
             <button type="button" className="todoapp__clear-completed">
               Clear completed
             </button>
@@ -129,11 +112,6 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
         />
 
         {errorMessage}
-        {/* Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );
