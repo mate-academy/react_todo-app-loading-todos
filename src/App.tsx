@@ -95,12 +95,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <Error
-          message={errorMessage}
-          onClose={closeError}
-        />
-      )}
+      <Error
+        message={errorMessage}
+        onClose={closeError}
+      />
     </div>
   );
 };

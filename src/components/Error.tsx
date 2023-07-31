@@ -17,7 +17,7 @@ export const Error: React.FC<Props> = ({ message, onClose }) => {
   return (
     <div className={
       classNames('notification is-danger is-light has-text-weight-normal',
-        { hidden: message.length !== 0 })
+        { hidden: message.length === 0 })
     }
     >
       <button
