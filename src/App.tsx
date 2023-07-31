@@ -83,7 +83,7 @@ export const App: React.FC = () => {
         {
           todosFromServer.length > 0 && (
             <TodoFooter
-              todos={preparedTodos}
+              todos={todosFromServer}
               filteredBy={filteredBy}
               setFilteredBy={setFilteredBy}
               handleDeleteTodo={handleDeleteTodo}
