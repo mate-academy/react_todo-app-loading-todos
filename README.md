@@ -17,7 +17,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
     ```
-    https://mate.academy/students-api/todos?userId=???
+    https://mate.academy/students-api/todos?userId=11235
     ```
 - hide the list and the footer if there are no todos yet;
 
