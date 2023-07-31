@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 
 import { TodoList } from './components/TodoList/TodoList';
@@ -33,8 +33,8 @@ export const App: React.FC = () => {
   const todoCount = (currentTodos: Todo[]) => {
     return currentTodos.filter(todo => !todo.completed).length;
   };
-
-  const visibletodos = prepareTodos(todos, filteringField);
+  // eslint-disable-next-line
+  const visibletodos = useMemo(() => prepareTodos(todos, filteringField), [todos, filteringField]);
 
   return (
     <div className="todoapp">
