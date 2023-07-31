@@ -5,15 +5,15 @@ import { SORT } from '../types/Sort';
 export const TodoFooter: React.FC = () => {
   const {
     todos,
-    countItemsLeft,
+    itemsLeft,
     resetCompleted,
-    countItemsCompleted,
+    itemsCompleted,
     currentFilter,
     setCurrentFilter,
   } = useContext(TodoContext);
 
   const hasTodos = todos.length > 0;
-  const completedItemsCount = countItemsCompleted();
+  const completedItemsCount = itemsCompleted;
 
   if (!hasTodos && currentFilter === SORT.ALL) {
     return null;
@@ -21,7 +21,7 @@ export const TodoFooter: React.FC = () => {
 
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">{`${countItemsLeft()} items left`}</span>
+      <span className="todo-count">{`${itemsLeft} items left`}</span>
 
       <nav className="filter">
         <a

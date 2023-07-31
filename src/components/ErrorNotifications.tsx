@@ -1,21 +1,33 @@
-/* eslint-disable no-lone-blocks */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-
-{
-  /* Add the 'hidden' class to hide the message smoothly */
-}
+import React, { useContext, useEffect } from 'react';
+import classNames from 'classnames';
+import { TodoError } from '../types/TodoError';
+import { TodoContext } from '../context/todoContext';
 
 export const ErrorNotifications: React.FC = () => {
+  const { errorMessage, setErrorMessage } = useContext(TodoContext);
+
+  useEffect(() => {
+    setTimeout(() => setErrorMessage(TodoError.empty), 3000);
+  }, []);
+
   return (
-    <div className="notification is-danger is-light has-text-weight-normal">
-      <button type="button" className="delete" />
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+    <div
+      className={classNames(
+        'notification',
+        'is-danger',
+        'is-light',
+        'has-text-weight-normal',
+        { hidden: !errorMessage },
+      )}
+    >
+      {errorMessage}
+
+      <button
+        type="button"
+        className="delete"
+        aria-label="delete"
+        onClick={() => setErrorMessage(TodoError.empty)}
+      />
     </div>
   );
 };

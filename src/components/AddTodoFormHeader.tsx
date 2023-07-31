@@ -5,11 +5,11 @@ import { TodoContext } from '../context/todoContext';
 
 export const AddTodoFormHeader: React.FC = () => {
   const {
-    inputValue, addNewTodoInput, handleSubmit, countItemsLeft,
+    inputValue, addNewTodoInput, handleSubmit, itemsLeft,
   }
     = useContext(TodoContext);
 
-  const activeTasks = countItemsLeft();
+  const activeTasks = itemsLeft;
 
   return (
     <header className="todoapp__header">

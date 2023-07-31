@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { TodoProvider } from './context/todoContext';
+import React, { useContext } from 'react';
+import { TodoContext, TodoProvider } from './context/todoContext';
 import { UserWarning } from './UserWarning';
 import { AddTodoFormHeader } from './components/AddTodoFormHeader';
 import { TodoListSection } from './components/TodoListSection';
@@ -10,6 +9,8 @@ import { ErrorNotifications } from './components/ErrorNotifications';
 const USER_ID = 11238;
 
 export const App: React.FC = () => {
+  const { errorMessage } = useContext(TodoContext);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -25,7 +26,7 @@ export const App: React.FC = () => {
           <TodoFooter />
         </div>
 
-        {false && <ErrorNotifications />}
+        {errorMessage && <ErrorNotifications />}
       </div>
     </TodoProvider>
   );

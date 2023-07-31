@@ -1,10 +1,12 @@
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-confusing-arrow */
+/* eslint-disable max-len */
 /* eslint-disable no-console */
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useEffect, useMemo, useState,
+} from 'react';
 import { Todo } from '../types/Todo';
 import { SORT } from '../types/Sort';
 import { client } from '../utils/fetchClient';
+import { TodoError } from '../types/TodoError';
 
 type Props = {
   children: React.ReactNode;
@@ -19,10 +21,14 @@ interface TodoContextType {
   handleCheck: (todoId: number) => void;
   handleDelete: (todoId: number) => void;
   countItemsLeft: () => number;
+  itemsLeft: number;
   countItemsCompleted: () => number;
+  itemsCompleted: number;
   resetCompleted: () => void;
   currentFilter: SORT;
   setCurrentFilter: React.Dispatch<React.SetStateAction<SORT>>;
+  errorMessage: TodoError;
+  setErrorMessage: React.Dispatch<React.SetStateAction<TodoError>>;
 }
 
 export const TodoContext = createContext<TodoContextType>({
@@ -34,16 +40,21 @@ export const TodoContext = createContext<TodoContextType>({
   handleCheck: () => {},
   handleDelete: () => {},
   countItemsLeft: () => 0,
+  itemsLeft: 0,
   countItemsCompleted: () => 0,
+  itemsCompleted: 0,
   resetCompleted: () => {},
   currentFilter: SORT.ALL,
   setCurrentFilter: () => {},
+  errorMessage: TodoError.empty,
+  setErrorMessage: () => {},
 });
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentFilter, setCurrentFilter] = useState<SORT>(SORT.ALL);
+  const [errorMessage, setErrorMessage] = useState(TodoError.empty);
 
   const USER_ID = 11238;
 
@@ -56,7 +67,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
       setTodos(filteredTodos);
     } catch (error) {
-      console.error('Failed to fetch todos from the server:', error);
+      setErrorMessage(TodoError.load);
+      console.error(`${errorMessage}`, error);
     }
   };
 
@@ -69,9 +81,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   const handleCheck = (todoId: number) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo));
+    setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo)));
   };
 
   const handleDelete = (todoId: number) => {
@@ -94,6 +104,9 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     return completedTask.length;
   };
 
+  const itemsLeft = useMemo(countItemsLeft, [todos]);
+  const itemsCompleted = useMemo(countItemsCompleted, [todos]);
+
   const resetCompleted = () => {
     setTodos(todos.filter((todo) => todo.completed === false));
   };
@@ -115,17 +128,19 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setInputValue('');
   };
 
-  const visibleTodos = todos.filter((todo) => {
-    if (!todo.completed && currentFilter === SORT.COMPLETED) {
-      return false;
-    }
+  const visibleTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      if (!todo.completed && currentFilter === SORT.COMPLETED) {
+        return false;
+      }
 
-    if (todo.completed && currentFilter === SORT.ACTIVE) {
-      return false;
-    }
+      if (todo.completed && currentFilter === SORT.ACTIVE) {
+        return false;
+      }
 
-    return true;
-  });
+      return true;
+    });
+  }, [todos, currentFilter]);
 
   const value = {
     inputValue,
@@ -136,10 +151,14 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     handleCheck,
     handleDelete,
     countItemsLeft,
+    itemsLeft,
     resetCompleted,
     countItemsCompleted,
+    itemsCompleted,
     currentFilter,
     setCurrentFilter,
+    errorMessage,
+    setErrorMessage,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
