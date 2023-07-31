@@ -37,9 +37,11 @@ export const App: React.FC = () => {
   const todos = filterTodosByStatus(baseTodo, filterStatus);
 
   useEffect(() => {
-    getTodos().then(todo => {
-      setBaseTodo(todo);
-    }).catch(() => setError('Invalid url link'));
+    getTodos()
+      .then(todo => {
+        setBaseTodo(todo);
+      })
+      .catch(() => setError('Invalid url link'));
   }, []);
 
   const countTodoActive = baseTodo
