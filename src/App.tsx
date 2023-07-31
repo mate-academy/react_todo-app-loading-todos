@@ -13,8 +13,10 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState(Filter.ALL);
   const [error, setError] = useState('');
 
-  const todos = useMemo(() => filterTodosByStatus(baseTodo, filterStatus), [baseTodo, filterStatus]
-  )
+  const todos = useMemo(
+    () => filterTodosByStatus(baseTodo, filterStatus), [baseTodo, filterStatus],
+  );
+
   useEffect(() => {
     getTodos()
       .then(todo => {
@@ -24,7 +26,7 @@ export const App: React.FC = () => {
   }, []);
 
   const countTodoActive = useMemo(() => baseTodo
-  .filter(todo => !todo.completed).length, [baseTodo])
+    .filter(todo => !todo.completed).length, [baseTodo]);
 
   return (
     <div className="todoapp">

@@ -1,4 +1,4 @@
-import { Filter, Todo } from "../types/Todo";
+import { Filter, Todo } from '../types/Todo';
 
 export function filterTodosByStatus(todos: Todo[], status: Filter) {
   let todosCopy = [...todos];
