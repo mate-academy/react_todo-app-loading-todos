@@ -45,9 +45,6 @@ export const App: React.FC = () => {
       .then(setTodosFromServer)
       .catch(() => {
         setHasError(TodoErrorType.loadTodoError);
-        // setTimeout(() => {
-        //   setHasError(TodoErrorType.noError);
-        // }, 3000);
       });
   }, []);
   const preparedTodos = useMemo(() => {
