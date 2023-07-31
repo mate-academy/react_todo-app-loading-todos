@@ -5,35 +5,33 @@ import { TodoFooter } from './Components/TodoFooter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { ErrorNotification } from './Components/ErrorNotification';
+import { Filter } from './types/Filter';
+import { ErrorStatus } from './types/ErrorStatus';
 
 const USER_ID = 11143;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState(Filter.All);
   // const [query, setQuery] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(setErrorMessage);
+      .catch(() => {
+        setErrorMessage(ErrorStatus.Load);
+      });
   }, []);
 
-  // const preparedTodos = [...todos]
-  //   .filter((todo) => {
-  //     const normalizedQuery = query.toLowerCase().trim();
-  //     const normalizedTitle = todo.title.toLowerCase().trim();
-
-  //     return query ? normalizedTitle.includes(normalizedQuery) : true;
-  //   })
-  //   .filter((todo) => {
-  //     switch (filterType) {
-  //       case 'active': return !todo.completed;
-  //       case 'completed': return todo.completed;
-  //       default: return todo;
-  //     }
-  //   });
+  const preparedTodos = [...todos]
+    .filter((todo) => {
+      switch (filterType) {
+        case Filter.Active: return !todo.completed;
+        case Filter.Completed: return todo.completed;
+        default: return todo;
+      }
+    });
 
   return (
     <div className="todoapp">
@@ -41,12 +39,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoHeader
-          todos={todos}
+          todos={preparedTodos}
         />
 
         {todos && (
           <TodoMain
-            todos={todos}
+            todos={preparedTodos}
           />
         )}
 
@@ -54,7 +52,7 @@ export const App: React.FC = () => {
           <TodoFooter
             filterType={filterType}
             setFilterType={setFilterType}
-            todos={todos}
+            todos={preparedTodos}
           />
         )}
       </div>

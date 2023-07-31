@@ -12,15 +12,15 @@ export const ErrorNotification: React.FC<Props> = ({
 }) => {
   useEffect(() => {
     if (errorMessage) {
-      const timeoutId = setTimeout(() => {
+      setTimeout(() => {
         setErrorMessage('');
       }, 3000);
-
-      return () => clearTimeout(timeoutId);
     }
-
-    return () => {};
   }, [errorMessage]);
+
+  if (!errorMessage) {
+    return null;
+  }
 
   return (
     <div className={classNames(

@@ -29,6 +29,8 @@ export const TodoHeader: React.FC<Props> = ({ todos }) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          // value={query}
+          // onChange={(event) => setQuery(event.target.value)}
         />
       </form>
     </header>
