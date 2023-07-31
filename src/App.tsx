@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TodoHeader } from './Components/TodoHeader';
 import { TodoMain } from './Components/TodoMain';
 import { TodoFooter } from './Components/TodoFooter';
@@ -24,14 +24,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const preparedTodos = [...todos]
-    .filter((todo) => {
-      switch (filterType) {
-        case Filter.Active: return !todo.completed;
-        case Filter.Completed: return todo.completed;
-        default: return todo;
-      }
-    });
+  const preparedTodos = useMemo(() => {
+    const todosCopy = [...todos]
+      .filter((todo) => {
+        switch (filterType) {
+          case Filter.Active: return !todo.completed;
+          case Filter.Completed: return todo.completed;
+          default: return todo;
+        }
+      });
+
+    return todosCopy;
+  }, [todos, filterType]);
 
   return (
     <div className="todoapp">
@@ -52,7 +56,7 @@ export const App: React.FC = () => {
           <TodoFooter
             filterType={filterType}
             setFilterType={setFilterType}
-            todos={preparedTodos}
+            todos={todos}
           />
         )}
       </div>
