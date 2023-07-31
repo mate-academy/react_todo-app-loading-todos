@@ -10,14 +10,10 @@ import { ErrorNotification } from './ErrorNotification';
 export const TodoApp: React.FC = () => {
   const [filterChoise, setFilterChoise] = useState(FilterChoise.All);
 
-  const [todos, setTodos, ,] = useContext(TodosContext);
+  const [todos, , ,] = useContext(TodosContext);
 
   // eslint-disable-next-line no-lone-blocks
   { // for next tasks, i have problem with linter without it
-  }
-
-  if (todos.length === -1) {
-    setTodos([]);
   }
 
   const filteredTodos = useMemo(() => todos.filter((todo) => {
