@@ -12,10 +12,10 @@ const USER_ID = 11220;
 export const App: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState(FilterStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
-  const [todosContent, setTodosContent] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
-  const todos = useMemo(() => {
-    return todosContent.filter(todo => {
+  const filtredTodos = useMemo(() => {
+    return todos.filter(todo => {
       switch (selectedStatus) {
         case FilterStatus.Completed:
           return todo.completed;
@@ -27,11 +27,11 @@ export const App: React.FC = () => {
           return todo;
       }
     });
-  }, [selectedStatus, todosContent]);
+  }, [selectedStatus, todos]);
 
-  const completeTodo = useMemo(() => {
-    return todosContent.filter(todo => todo.completed);
-  }, [todosContent]);
+  const completedTodos = useMemo(() => {
+    return todos.filter(todo => todo.completed);
+  }, [todos]);
 
   const closeError = () => {
     setErrorMessage('');
@@ -44,14 +44,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(response => {
-        setTodosContent(response);
+        setTodos(response);
       })
-      .catch(err => {
-        setErrorMessage(err);
+      .catch(() => {
+        setErrorMessage('Something wrong');
       });
   }, []);
 
-  const amount = todosContent.length - completeTodo.length;
+  const activeTodosCount = todos.length - completedTodos.length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length > 0 && (
+          {filtredTodos.length > 0 && (
             <button
               type="button"
               className="todoapp__toggle-all active"
@@ -80,17 +80,17 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {todos.map(todo => (
+          {filtredTodos.map(todo => (
             <TodoItem todo={todo} key={todo.id} />
           ))}
         </section>
 
-        {todosContent.length > 0 && (
+        {todos.length > 0 && (
           <TodoFilter
             selected={selectedStatus}
             filter={filterOnStatus}
-            todosTotalAmount={amount}
-            completedTodosAmount={completeTodo.length}
+            todosTotalAmount={activeTodosCount}
+            completedTodosAmount={completedTodos.length}
           />
         )}
       </div>
@@ -98,7 +98,7 @@ export const App: React.FC = () => {
       {errorMessage && (
         <Error
           message={errorMessage}
-          whenClose={closeError}
+          onClose={closeError}
         />
       )}
     </div>

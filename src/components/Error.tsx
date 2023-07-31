@@ -4,28 +4,26 @@ import classNames from 'classnames';
 
 type Props = {
   message: string;
-  whenClose: () => void;
+  onClose: () => void;
 };
 
-export const Error: React.FC<Props> = ({ message, whenClose }) => {
+export const Error: React.FC<Props> = ({ message, onClose }) => {
   useEffect(() => {
     if (message) {
-      setTimeout(() => whenClose, 3000);
+      setTimeout(() => onClose, 3000);
     }
   }, [message]);
 
   return (
     <div className={
       classNames('notification is-danger is-light has-text-weight-normal',
-        {
-          hidden: message.length !== 0,
-        })
+        { hidden: message.length !== 0 })
     }
     >
       <button
         type="button"
         className="delete"
-        onClick={whenClose}
+        onClick={onClose}
       />
       {message}
     </div>
