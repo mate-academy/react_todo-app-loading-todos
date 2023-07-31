@@ -10,13 +10,14 @@ import { TodoInput } from './components/TodoInput';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoList } from './components/TodoList';
 import { Error } from './components/Error';
+import { ErrorType } from './types/Error';
 
 const USER_ID = 10822;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('');
-  const [errorType, setErrorType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const countNotCompletedTodos = () => {
     return todos.filter(todo => !todo.completed).length;
@@ -38,7 +39,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(fetchError => console.error(`Fetch Error ${fetchError}`));
+      .catch(() => setErrorMessage(ErrorType.FETCH));
   }, []);
 
   if (!USER_ID) {
@@ -66,10 +67,10 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any errorType */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {errorType && (
+      {errorMessage && (
         <Error
-          errorType={errorType}
-          setErrorType={setErrorType}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
       )}
     </div>

@@ -2,13 +2,13 @@
 import { FC, useEffect } from 'react';
 
 type Props = {
-  errorType: string,
-  setErrorType: (x: string) => void,
+  errorMessage: string,
+  setErrorMessage: (x: string) => void,
 };
-export const Error: FC<Props> = ({ errorType, setErrorType }) => {
+export const Error: FC<Props> = ({ errorMessage, setErrorMessage }) => {
   useEffect(() => {
     setTimeout(() => {
-      setErrorType('');
+      setErrorMessage('');
     }, 3000);
   });
 
@@ -17,16 +17,10 @@ export const Error: FC<Props> = ({ errorType, setErrorType }) => {
       <button
         type="button"
         className="delete"
-        onClick={() => setErrorType('')}
+        onClick={() => setErrorMessage('')}
       />
-
-      {/* show only one message at a time */}
-      {errorType
-        && `Unable to ${errorType} a todo`}
+      {errorMessage}
       <br />
-      {/* Unable to delete a todo */}
-      {/* <br /> */}
-      {/* Unable to update a todo */}
     </div>
   );
 };
