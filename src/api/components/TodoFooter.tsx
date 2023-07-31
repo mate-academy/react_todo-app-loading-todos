@@ -7,21 +7,20 @@ import { FilterBy } from '../../utils/FilterBy';
 type Props = {
   todos: Todo[];
   filterBy: FilterBy;
-  whenTodoShow: (filterBy: FilterBy) => void;
+  filterTodos: (filterBy: FilterBy) => void;
 };
 
 export const TodoFooter: React.FC<Props> = ({
   todos,
   filterBy,
-  whenTodoShow,
+  filterTodos,
 }) => {
-  const todosNotDone = todos.filter(todo => !todo.completed).length;
-
+  const uncompletedTodosLength = todos.filter(todo => !todo.completed).length;
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosNotDone} items left`}
+        {`${uncompletedTodosLength} items left`}
       </span>
 
       <nav className="filter">
@@ -30,7 +29,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filterBy === FilterBy.All,
           })}
-          onClick={() => whenTodoShow(FilterBy.All)}
+          onClick={() => filterTodos(FilterBy.All)}
         >
           All
         </a>
@@ -40,7 +39,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filterBy === FilterBy.Active,
           })}
-          onClick={() => whenTodoShow(FilterBy.Active)}
+          onClick={() => filterTodos(FilterBy.Active)}
         >
           Active
         </a>
@@ -50,7 +49,7 @@ export const TodoFooter: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: filterBy === FilterBy.Completed,
           })}
-          onClick={() => whenTodoShow(FilterBy.Completed)}
+          onClick={() => filterTodos(FilterBy.Completed)}
         >
           Completed
         </a>

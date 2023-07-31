@@ -1,7 +1,7 @@
 import { FilterBy } from './FilterBy';
 import { Todo } from '../types/Todo';
 
-export const NewFilterTodos = (
+export const getFilteredTodos = (
   todos: Todo[],
   filterBy: FilterBy,
 ) => {

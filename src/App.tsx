@@ -11,7 +11,7 @@ import { FilterBy } from './utils/FilterBy';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 
-import { NewFilterTodos } from './utils/NewFilterTodos';
+import { getFilteredTodos } from './utils/NewFilterTodos';
 
 const USER_ID = 1333;
 
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filterTodos = useMemo(() => {
-    return NewFilterTodos(todos, filterBy);
+    return getFilteredTodos(todos, filterBy);
   }, [todos, filterBy]);
 
   if (!USER_ID) {
@@ -58,14 +58,8 @@ export const App: React.FC = () => {
         <TodoFooter
           todos={todos}
           filterBy={filterBy}
-          whenTodoShow={setFilterBy}
+          filterTodos={setFilterBy}
         />
-
-        {/* {todos.length > 0 &&(
-        <>
-
-        </>
-      )} */}
 
         {newError && (
           <ErrorOnPage
