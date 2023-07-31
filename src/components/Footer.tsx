@@ -14,7 +14,7 @@ export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
   const itemsLeft = todos.filter(todo => !todo.completed).length;
   const completed = todos.find(todo => todo.completed);
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    setAvtiveTab(e.currentTarget.textContent || 'All');
+    setAvtiveTab(e.currentTarget.textContent || TabsFooter.All);
   };
 
   return (
@@ -28,7 +28,7 @@ export const Footer: React.FC<Props> = ({ todos, setAvtiveTab, avtiveTab }) => {
           <nav className="filter">
             {tabs.map((tab) => (
               <a
-                href={`#/${tab !== 'All' ? tab.toLocaleLowerCase() : ''}`}
+                href={`#/${tab !== TabsFooter.All ? tab.toLocaleLowerCase() : ''}`}
                 className={classNames('filter__link',
                   { selected: avtiveTab === tab })}
                 onClick={handleClick}
