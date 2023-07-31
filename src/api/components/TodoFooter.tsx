@@ -15,9 +15,8 @@ export const TodoFooter: React.FC<Props> = ({
   filterBy,
   whenTodoShow,
 }) => {
-  const todosNotDone = () => {
-    return todos.filter(todo => !todo.completed).length;
-  };
+  const todosNotDone = todos.filter(todo => !todo.completed).length;
+
 
   return (
     <footer className="todoapp__footer">
