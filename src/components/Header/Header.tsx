@@ -23,7 +23,6 @@ export const Header: React.FC<Props> = ({ activeTodos }) => {
         onClick={() => { }}
       />
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handlerSubmit}>
         <input
           type="text"

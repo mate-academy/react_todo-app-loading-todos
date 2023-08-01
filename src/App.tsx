@@ -25,13 +25,13 @@ export const App: React.FC = () => {
   const filteredTodos = (filterChar: Filters) => {
     return todos.filter(todo => {
       switch (filterChar) {
-        case 'all':
+        case Filters.all:
           return true;
 
-        case 'active':
+        case Filters.active:
           return todo.completed === false;
 
-        case 'completed':
+        case Filters.completed:
           return todo.completed === true;
 
         default:
@@ -78,12 +78,10 @@ export const App: React.FC = () => {
           )}
       </div>
 
-      {/* {fieldOperation.length > 0 && */}
       <Notifications
         fieldOperation={fieldOperation}
         onSetFieldOperation={(text: ErrorText) => setFieldOperation(text)}
       />
-      {/* } */}
     </div>
   );
 };
