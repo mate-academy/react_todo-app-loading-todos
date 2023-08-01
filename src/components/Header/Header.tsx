@@ -1,51 +1,122 @@
+/* eslint-disable no-console */
 import { FormEvent } from 'react';
 import cn from 'classnames';
 import { useAppContext } from '../Context/AppContext';
 import { client } from '../../utils/fetchClient';
 import { getTodos } from '../../api/todos';
+import { Todo } from '../../types/Todo';
+import { ErrorTypes } from '../../types/ErrorTypes';
 
-export const Header = () => {
+type Props = {
+  setTempTodo: (val: Todo | null) => void,
+};
+
+export const Header = ({ setTempTodo }: Props) => {
   const {
     userId,
     todos,
     setTodos,
     todoTitle,
     setTodoTitle,
-    setIsError,
+    setErrorType,
+    setProcessing,
   } = useAppContext();
+  let disableInput = false;
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+    disableInput = true;
 
-    const newTodo = {
-      title: todoTitle,
-      userId,
-      completed: false,
-    };
+    if (todoTitle.length === 0) {
+      setErrorType(ErrorTypes.title);
+    } else {
+      const newTodo = {
+        title: todoTitle,
+        userId,
+        completed: false,
+      };
 
-    client.post('/todos/', newTodo)
+      setTempTodo({
+        id: 0,
+        ...newTodo,
+      });
+
+      client.post('/todos/', newTodo)
+        .then(() => {
+          getTodos(userId)
+            .then((data) => {
+              setTempTodo(null);
+              setTodos(data);
+              setTodoTitle('');
+              disableInput = false;
+            })
+            .catch(() => {
+              setErrorType(ErrorTypes.load);
+            })
+            .finally(() => {
+            });
+        })
+        .catch(() => {
+          setErrorType(ErrorTypes.add);
+        });
+    }
+  };
+
+  const handleToggleAll = () => {
+    const arrOfPromises: Promise<unknown>[] = [];
+    const activeTodosId = todos
+      .filter(todo => !todo.completed)
+      .map(todo => todo.id);
+
+    if (activeTodosId.length > 0) {
+      activeTodosId.forEach((id) => {
+        setProcessing((currentState) => [...currentState, id]);
+        arrOfPromises.push(
+          client.patch(`/todos/${id}`, { completed: true })
+            .catch(() => {
+              setErrorType(ErrorTypes.update);
+            }),
+        );
+      });
+    } else {
+      todos.forEach((item) => {
+        setProcessing((currentState) => [...currentState, item.id]);
+        arrOfPromises.push(
+          client.patch(`/todos/${item.id}`, { completed: false })
+            .catch(() => {
+              setErrorType(ErrorTypes.update);
+            }),
+        );
+      });
+    }
+
+    Promise.all(arrOfPromises)
       .then(() => {
         getTodos(userId)
-          .then(setTodos);
+          .then(setTodos)
+          .catch(() => {
+            setErrorType(ErrorTypes.load);
+          })
+          .finally(() => {
+            setProcessing([]);
+          });
       })
       .catch(() => {
-        setIsError('add');
+        setProcessing([]);
       });
-    setTodoTitle('');
   };
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className={cn('todoapp__toggle-all', {
           active: todos.every(todo => todo.completed),
         })}
+        onClick={handleToggleAll}
       />
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -53,6 +124,7 @@ export const Header = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           onChange={(event) => setTodoTitle(event.target.value)}
+          disabled={disableInput}
         />
       </form>
     </header>

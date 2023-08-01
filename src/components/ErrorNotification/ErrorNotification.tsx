@@ -4,20 +4,24 @@ import { useAppContext } from '../Context/AppContext';
 
 export const ErrorNotification = () => {
   const {
-    isError,
-    setIsError,
+    errorType,
+    setErrorType,
   } = useAppContext();
 
   useEffect(() => {
-    if (isError.length) {
+    if (errorType.length) {
       setTimeout(() => {
-        setIsError('');
+        setErrorType('');
       }, 3000);
     }
-  }, [isError]);
+  }, [errorType]);
 
-  if (!isError.length) {
-    return <></>;
+  const handleDeleteNotification = () => {
+    setErrorType('');
+  };
+
+  if (!errorType.length) {
+    return null;
   }
 
   return (
@@ -33,9 +37,9 @@ export const ErrorNotification = () => {
       <button
         type="button"
         className="delete"
-        onClick={() => setIsError('')}
+        onClick={handleDeleteNotification}
       />
-      {`Unable to ${isError} a todo`}
+      {errorType}
     </div>
   );
 };
