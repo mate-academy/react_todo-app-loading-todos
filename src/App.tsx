@@ -14,7 +14,7 @@ const USER_ID = 6909;
 export const App: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [sortField, setSortField] = useState(Status.all);
+  const [sortField, setSortField] = useState(Status.All);
   const [error, setError] = useState(Error.NONE);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const todosExist = todos.length > 0;
   const completedTodos = todos.filter(todo => todo.completed);
   const notCompletedTodos = todos.filter(todo => !todo.completed);
 
@@ -58,14 +59,14 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0
+        {todosExist
           && (
             <section className="todoapp__main">
               <TodoList filteredTodos={filteredTodos} />
             </section>
           )}
 
-        {todos.length > 0 && (
+        {todosExist && (
           <Footer
             completedTodos={completedTodos}
             notCompletedTodos={notCompletedTodos}
