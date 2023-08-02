@@ -1,16 +1,14 @@
-import React, { useContext } from 'react';
-import { TodoContext, TodoProvider } from './context/todoContext';
+import React from 'react';
 import { UserWarning } from './UserWarning';
 import { AddTodoFormHeader } from './components/AddTodoFormHeader';
 import { TodoListSection } from './components/TodoListSection';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotifications } from './components/ErrorNotifications';
+import { TodoProvider } from './context/todoContext';
 
 const USER_ID = 11238;
 
 export const App: React.FC = () => {
-  const { errorMessage } = useContext(TodoContext);
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -26,7 +24,7 @@ export const App: React.FC = () => {
           <TodoFooter />
         </div>
 
-        {errorMessage && <ErrorNotifications />}
+        <ErrorNotifications />
       </div>
     </TodoProvider>
   );
