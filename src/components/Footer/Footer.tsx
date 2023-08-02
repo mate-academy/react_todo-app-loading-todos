@@ -1,23 +1,22 @@
 import { Status } from '../../types/Status';
-import { Todo } from '../../types/Todo';
 import { TodoFilter } from '../TodoFilter/TodoFilter';
 
 type Props = {
-  completedTodos: Todo[],
-  notCompletedTodos: Todo[],
+  numberOfCompletedTodos: number,
+  numberOfNotCompletedTodos: number,
   sortField: Status,
   setSortField: (status: Status) => void,
 };
 
 export const Footer: React.FC<Props> = ({
-  completedTodos,
-  notCompletedTodos,
+  numberOfCompletedTodos,
+  numberOfNotCompletedTodos,
   sortField,
   setSortField,
 }) => (
   <footer className="todoapp__footer">
     <span className="todo-count">
-      {`${notCompletedTodos.length} items left`}
+      {`${numberOfNotCompletedTodos} items left`}
     </span>
 
     <TodoFilter
@@ -25,7 +24,7 @@ export const Footer: React.FC<Props> = ({
       setSortField={setSortField}
     />
 
-    {completedTodos.length > 0
+    {numberOfCompletedTodos > 0
       && (
         <button
           type="button"

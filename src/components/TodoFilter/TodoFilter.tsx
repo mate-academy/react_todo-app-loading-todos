@@ -15,9 +15,9 @@ export const TodoFilter: React.FC<Props> = ({
       <a
         href="#/"
         className={cn('filter__link', {
-          selected: sortField === Status.all,
+          selected: sortField === Status.All,
         })}
-        onClick={() => setSortField(Status.all)}
+        onClick={() => setSortField(Status.All)}
       >
         All
       </a>
@@ -25,9 +25,9 @@ export const TodoFilter: React.FC<Props> = ({
       <a
         href="#/active"
         className={cn('filter__link', {
-          selected: sortField === Status.active,
+          selected: sortField === Status.Active,
         })}
-        onClick={() => setSortField(Status.active)}
+        onClick={() => setSortField(Status.Active)}
       >
         Active
       </a>
@@ -35,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
       <a
         href="#/completed"
         className={cn('filter__link', {
-          selected: sortField === Status.completed,
+          selected: sortField === Status.Completed,
         })}
-        onClick={() => setSortField(Status.completed)}
+        onClick={() => setSortField(Status.Completed)}
       >
         Completed
       </a>

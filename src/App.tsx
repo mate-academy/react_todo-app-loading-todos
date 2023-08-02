@@ -68,8 +68,8 @@ export const App: React.FC = () => {
 
         {todosExist && (
           <Footer
-            completedTodos={completedTodos}
-            notCompletedTodos={notCompletedTodos}
+            numberOfCompletedTodos={completedTodos.length}
+            numberOfNotCompletedTodos={notCompletedTodos.length}
             sortField={sortField}
             setSortField={setSortField}
           />
