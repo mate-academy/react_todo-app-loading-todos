@@ -61,19 +61,19 @@ export const App: React.FC = () => {
 
         {todosExist
           && (
-            <section className="todoapp__main">
-              <TodoList filteredTodos={filteredTodos} />
-            </section>
-          )}
+            <>
+              <section className="todoapp__main">
+                <TodoList filteredTodos={filteredTodos} />
+              </section>
 
-        {todosExist && (
-          <Footer
-            numberOfCompletedTodos={completedTodos.length}
-            numberOfNotCompletedTodos={notCompletedTodos.length}
-            sortField={sortField}
-            setSortField={setSortField}
-          />
-        )}
+              <Footer
+                numberOfCompletedTodos={completedTodos.length}
+                numberOfNotCompletedTodos={notCompletedTodos.length}
+                sortField={sortField}
+                setSortField={setSortField}
+              />
+            </>
+          )}
       </div>
 
       {error
