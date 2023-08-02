@@ -10,7 +10,7 @@ type Props = {
 export const Notifications: React.FC<Props> = ({
   fieldOperation, onSetFieldOperation,
 }) => {
-  const handlerDeleteError = () => onSetFieldOperation(ErrorText.empty);
+  const handlerDeleteError = () => onSetFieldOperation(ErrorText.Empty);
 
   useEffect(() => {
     const timerID = setTimeout(handlerDeleteError, 3000);

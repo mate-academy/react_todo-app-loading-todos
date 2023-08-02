@@ -16,8 +16,8 @@ const USER_ID = 11213;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadedTodo, setLoadingTodo] = useState<number | null>(null);
-  const [fieldOperation, setFieldOperation] = useState(ErrorText.empty);
-  const [selectedFilter, setSelectedFilter] = useState<Filters>(Filters.all);
+  const [fieldOperation, setFieldOperation] = useState(ErrorText.Empty);
+  const [selectedFilter, setSelectedFilter] = useState<Filters>(Filters.All);
 
   const activeTodos = todos.filter(t => t.completed === false);
   const completedTodos = todos.filter(t => t.completed === true);
@@ -25,13 +25,13 @@ export const App: React.FC = () => {
   const filteredTodos = (filterChar: Filters) => {
     return todos.filter(todo => {
       switch (filterChar) {
-        case Filters.all:
+        case Filters.All:
           return true;
 
-        case Filters.active:
+        case Filters.Active:
           return todo.completed === false;
 
-        case Filters.completed:
+        case Filters.Completed:
           return todo.completed === true;
 
         default:
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setFieldOperation(ErrorText.get);
+        setFieldOperation(ErrorText.Get);
       });
   }, []);
 
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
         <TodoList
           todos={filteredTodos(selectedFilter)}
           loadingTodoId={loadedTodo}
-          onSetLoadingTodo={(id) => setLoadingTodo(id)}
+          onSetLoadingTodo={setLoadingTodo}
         />
 
         {todos.length > 0
@@ -73,14 +73,14 @@ export const App: React.FC = () => {
               activeTodos={activeTodos}
               completedTodos={completedTodos}
               selectedFilter={selectedFilter}
-              onSetSelectedFilter={(char) => setSelectedFilter(char)}
+              onSetSelectedFilter={setSelectedFilter}
             />
           )}
       </div>
 
       <Notifications
         fieldOperation={fieldOperation}
-        onSetFieldOperation={(text: ErrorText) => setFieldOperation(text)}
+        onSetFieldOperation={setFieldOperation}
       />
     </div>
   );

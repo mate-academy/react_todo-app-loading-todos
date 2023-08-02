@@ -18,7 +18,7 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
           todo={todo}
           loadingTodoId={loadingTodoId}
-          onSetLoadingTodo={(id) => onSetLoadingTodo(id)}
+          onSetLoadingTodo={onSetLoadingTodo}
         />
       ))}
     </section>
