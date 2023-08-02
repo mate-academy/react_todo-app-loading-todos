@@ -19,10 +19,10 @@ export const ErrorNotification: FC<Props> = ({ error, onHideError }) => {
   }, [error]);
 
   return (
-    /* eslint-disable-next-line max-len */
-    <div className={classNames('notification is-danger is-light has-text-weight-normal', {
-      hidden: !error,
-    })}
+    <div className={classNames(
+      'notification is-danger is-light has-text-weight-normal', 
+      { hidden: !error},
+    )}
     >
       <button
         type="button"

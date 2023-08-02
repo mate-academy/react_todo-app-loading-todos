@@ -20,9 +20,7 @@ export const TodoFooter: FC = () => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {activeTodosLeft}
-        {' '}
-        items left
+        {`${activeTodosLeft} items left`}
       </span>
 
       <nav className="filter">
