@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import cn from 'classnames';
 import { FilterType } from '../types/filter';
 
 interface Props {
@@ -33,7 +34,9 @@ export const Footer: React.FC<Props> = ({
           <a
             key={type}
             href={`#/${type.toLowerCase()}`}
-            className={`filter__link ${currentFilterType === type ? 'selected' : ''}`}
+            className={`filter__link ${cn({
+              selected: currentFilterType === type,
+            })}`}
             onClick={() => setFilterType(type)}
           >
             {value}
@@ -43,8 +46,9 @@ export const Footer: React.FC<Props> = ({
 
       <button
         type="button"
-        className="todoapp__clear-completed"
-        style={{ visibility: completedLength > 0 ? 'visible' : 'hidden' }}
+        className={`todoapp__clear-completed${cn({
+          '--hidden': !completedLength,
+        })}`}
       >
         Clear completed
       </button>

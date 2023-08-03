@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
-import { UserWarning } from './UserWarning';
+import cn from 'classnames';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { FilterType } from './types/filter';
@@ -18,11 +18,21 @@ const filterActive = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const filteredTodos = useMemo(() => {
+    switch (filterType) {
+      case FilterType.Active:
+        return filterActive(todos);
+      case FilterType.Completed:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filterType]);
 
   const activeLength = useMemo(
     () => filterActive(todos).length,
@@ -37,35 +47,21 @@ export const App: React.FC = () => {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined;
 
+    setIsLoading(true);
+
     getTodos(USER_ID)
       .then((todosFromApi) => {
         setTodos(todosFromApi);
-        setLoading(true);
         setErrorMessage('');
       })
       .catch(() => {
         setErrorMessage(FETCH_ERROR);
         timeoutId = setTimeout(() => setErrorMessage(''), 3000);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
 
     return () => clearTimeout(timeoutId);
   }, []);
-
-  useEffect(() => {
-    if (filterType === FilterType.Active) {
-      setFilteredTodos(filterActive(todos));
-    } else if (filterType === FilterType.Completed) {
-      setFilteredTodos(todos
-        .filter((todo) => todo.completed));
-    } else {
-      setFilteredTodos(todos);
-    }
-  }, [todos, filterType]);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <div className="todoapp">
@@ -75,7 +71,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className={`todoapp__toggle-all ${activeLength > 0 ? 'active' : ''}`}
+            className={`todoapp__toggle-all ${cn({ active: activeLength > 0 })}`}
           />
 
           <form>
@@ -87,10 +83,13 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && !loading
+        {todos.length > 0
         && (
           <>
-            <TodoList filteredTodos={filteredTodos} />
+            <TodoList
+              filteredTodos={filteredTodos}
+              isLoading={isLoading}
+            />
 
             <Footer
               filterType={filterType}
@@ -102,19 +101,16 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage
-      && (
-        <div
-          className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
-        >
-          <button
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
-          {errorMessage}
-        </div>
-      )}
+      <div
+        className={`notification is-danger is-light has-text-weight-normal ${cn({ hidden: !errorMessage })}`}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
+        {errorMessage}
+      </div>
     </div>
   );
 };
