@@ -24,7 +24,7 @@ export const TodoFooter: React.FC<Props> = ({
     onChangeFilter(filter);
   };
 
-  const handleClickClearComplated = () => {
+  const handleClickClearCompleted = () => {
     return 0;
   };
 
@@ -56,7 +56,7 @@ export const TodoFooter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         disabled={completedTodos === 0}
-        onClick={handleClickClearComplated}
+        onClick={handleClickClearCompleted}
       >
         Clear completed
       </button>

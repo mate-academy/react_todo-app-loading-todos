@@ -1,14 +1,11 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
-type Props = {};
-
-export const TodoHeader: React.FC<Props> = () => {
+export const TodoHeader: React.FC = () => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
       <button
         type="button"
         className="todoapp__toggle-all active"
+        aria-label="Close"
       />
 
       {/* Add a todo on form submit */}
