@@ -11,7 +11,7 @@ import { FilterBy } from './types/FilterBy';
 import { Errors } from './types/Errors';
 
 const USER_ID = 11246;
-const URL_GET = `/todos?userId1=${USER_ID}`;
+const URL_GET = `/todos?userId=${USER_ID}`;
 const DELAY_ERROR = 3000;
 
 export const App: React.FC = () => {
