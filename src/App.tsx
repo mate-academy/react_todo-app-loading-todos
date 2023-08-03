@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -9,6 +9,9 @@ import { Footer } from './components/Footer';
 
 const USER_ID = 10344;
 
+const FETCH_ERROR = 'Failed to fetch todos from the server. '
++ 'Please check your internet connection and try again later.';
+
 const filterActive = (
   data: Todo[],
 ) => data.filter((todo) => todo.completed === false);
@@ -17,9 +20,19 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
-  const [activeLength, setActiveLength] = useState(0);
-  const [completedLength, setCompletedLength] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const activeLength = useMemo(
+    () => filterActive(todos).length,
+    [todos],
+  );
+
+  const completedLength = useMemo(
+    () => todos.length - activeLength,
+    [todos],
+  );
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined;
@@ -27,21 +40,14 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then((todosFromApi) => {
         setTodos(todosFromApi);
-
-        const activeTodos = filterActive(todosFromApi);
-
-        setActiveLength(activeTodos.length);
-        setCompletedLength(todosFromApi.length - activeTodos.length);
-
+        setLoading(true);
         setErrorMessage('');
       })
       .catch(() => {
-        setErrorMessage(
-          // eslint-disable-next-line max-len
-          'Failed to fetch todos from the server. Please check your internet connection and try again later.',
-        );
+        setErrorMessage(FETCH_ERROR);
         timeoutId = setTimeout(() => setErrorMessage(''), 3000);
-      });
+      })
+      .finally(() => setLoading(false));
 
     return () => clearTimeout(timeoutId);
   }, []);
@@ -67,13 +73,11 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className={`todoapp__toggle-all ${activeLength > 0 ? 'active' : ''}`}
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -83,7 +87,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0
+        {todos.length > 0 && !loading
         && (
           <>
             <TodoList filteredTodos={filteredTodos} />
@@ -98,8 +102,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage
       && (
         <div
@@ -111,12 +113,6 @@ export const App: React.FC = () => {
             onClick={() => setErrorMessage('')}
           />
           {errorMessage}
-          {/* show only one message at a time */}
-          {/* Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo */}
         </div>
       )}
     </div>
