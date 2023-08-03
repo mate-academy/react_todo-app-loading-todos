@@ -3,17 +3,20 @@ import { createTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 
 type Props = {
+  USER_ID: number;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMessage: (v: string) => void;
 };
 
 export const NewTodo: React.FC<Props> = React.memo(({
-  setTodos, setErrorMessage,
+  USER_ID, setTodos, setErrorMessage,
 }) => {
   const [query, setQuery] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
   const addTodo = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorMessage('');
 
     if (query.trim() === '') {
       setQuery('');
@@ -21,20 +24,22 @@ export const NewTodo: React.FC<Props> = React.memo(({
       return;
     }
 
+    setIsAdding(true);
     createTodo({
-      userId: 11253,
+      userId: USER_ID,
       title: query.trim(),
       completed: false,
     })
       .then(newTodo => {
         setTodos((currentTodos: Todo[]) => [...currentTodos, newTodo]);
       })
-      .catch(() => {
+      .catch(error => {
         setErrorMessage('Unable to add a todo');
 
-        throw new Error();
-      });
-    setQuery('');
+        throw error;
+      })
+      .then(() => setQuery(''))
+      .finally(() => setIsAdding(false));
   };
 
   return (
@@ -45,6 +50,7 @@ export const NewTodo: React.FC<Props> = React.memo(({
         placeholder="What needs to be done?"
         value={query}
         onChange={event => setQuery(event.target.value)}
+        disabled={isAdding}
       />
     </form>
   );

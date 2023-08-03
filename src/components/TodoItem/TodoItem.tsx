@@ -7,8 +7,17 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [edited] = useState(false);
+  const [edited, setEdited] = useState(false);
   const [changeTodo, setChangeTodo] = useState('Todo is being edited now');
+
+  const handleDoubleClick = () => {
+    setEdited(true);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setEdited(false);
+  };
 
   return (
     <div
@@ -29,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       </label>
 
       {edited ? (
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             className="todo__title-field"
@@ -40,7 +49,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         </form>
       ) : (
         <>
-          <span className="todo__title">{todo.title}</span>
+          <span
+            className="todo__title"
+            onDoubleClick={handleDoubleClick}
+          >
+            {todo.title}
+          </span>
           <button type="button" className="todo__remove">×</button>
         </>
       )}

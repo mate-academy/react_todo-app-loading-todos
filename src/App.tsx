@@ -9,9 +9,8 @@ import { Filter } from './components/Filter';
 import { NewTodo } from './components/NewTodo';
 import { FILTERS } from './types/FILTERS';
 
-const USER_ID = 11253;
-
 export const App: React.FC = () => {
+  const USER_ID = 12353;
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState(FILTERS.ALL);
@@ -23,7 +22,7 @@ export const App: React.FC = () => {
       case FILTERS.ACTIVE:
         return todos.filter(todo => !todo.completed);
 
-      case FILTERS.COMPLITED:
+      case FILTERS.COMPLETED:
         return todos.filter(todo => todo.completed);
 
       default:
@@ -34,15 +33,30 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch();
+      .catch((error) => {
+        setErrorMessage('Unable to download todos');
+        throw error;
+      });
   }, []);
 
   useEffect(() => {
+    let timeoutId: unknown;
+
     if (errorMessage !== '') {
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
+      const clearErrorMessage = () => setErrorMessage('');
+
+      if (typeof timeoutId === 'number') {
+        clearTimeout(timeoutId as number);
+      }
+
+      timeoutId = setTimeout(clearErrorMessage, 3000);
     }
+
+    return () => {
+      if (typeof timeoutId === 'number') {
+        clearTimeout(timeoutId as number);
+      }
+    };
   }, [errorMessage]);
 
   const allTodoComplited = useMemo(() => {
@@ -67,15 +81,18 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            type="button"
-            className={classNames(
-              'todoapp__toggle-all',
-              { active: allTodoComplited },
-            )}
-          />
+          {todos.length !== 0 && (
+            <button
+              type="button"
+              className={classNames(
+                'todoapp__toggle-all',
+                { active: allTodoComplited },
+              )}
+            />
+          )}
 
           <NewTodo
+            USER_ID={USER_ID}
             setTodos={setTodos}
             setErrorMessage={setErrorMessage}
           />

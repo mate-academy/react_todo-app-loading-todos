@@ -38,9 +38,9 @@ export const Filter: React.FC<Props> = React.memo(({
         href="#/completed"
         className={classNames(
           'filter__link',
-          { selected: filter === FILTERS.COMPLITED },
+          { selected: filter === FILTERS.COMPLETED },
         )}
-        onClick={() => setFilter(FILTERS.COMPLITED)}
+        onClick={() => setFilter(FILTERS.COMPLETED)}
       >
         Completed
       </a>
