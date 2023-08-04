@@ -129,5 +129,20 @@
     &:active {
       text-decoration: none;
     }
+
+    &--hidden {
+      visibility: hidden;
+    }
+  }
+
+  &__loading-content {
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+
+    &--caption {
+      z-index: 1;
+      font-size: 20px;
+    }
   }
 }
