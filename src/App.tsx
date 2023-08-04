@@ -6,11 +6,7 @@ import { getTodos } from './api/todos';
 import { FilterType } from './types/filter';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
-
-const USER_ID = 10344;
-
-const FETCH_ERROR = 'Failed to fetch todos from the server. '
-+ 'Please check your internet connection and try again later.';
+import { USER_ID, ERROR_TIMEOUT, FETCH_ERROR } from './utils/constants';
 
 const filterActive = (
   data: Todo[],
@@ -56,7 +52,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setErrorMessage(FETCH_ERROR);
-        timeoutId = setTimeout(() => setErrorMessage(''), 3000);
+        timeoutId = setTimeout(() => setErrorMessage(''), ERROR_TIMEOUT);
       })
       .finally(() => setIsLoading(false));
 

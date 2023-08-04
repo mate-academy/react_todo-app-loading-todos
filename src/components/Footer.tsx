@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { FilterType } from '../types/filter';
 
@@ -21,7 +21,13 @@ export const Footer: React.FC<Props> = ({
   filterType,
   completedLength,
 }) => {
-  const currentFilterType = useMemo(() => filterType, [filterType]);
+  const linkClickHandler = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    type: FilterType,
+  ) => {
+    event.preventDefault();
+    setFilterType(type);
+  };
 
   return (
     <footer className="todoapp__footer">
@@ -35,9 +41,9 @@ export const Footer: React.FC<Props> = ({
             key={type}
             href={`#/${type.toLowerCase()}`}
             className={`filter__link ${cn({
-              selected: currentFilterType === type,
+              selected: filterType === type,
             })}`}
-            onClick={() => setFilterType(type)}
+            onClick={(event) => linkClickHandler(event, type)}
           >
             {value}
           </a>
