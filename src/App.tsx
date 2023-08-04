@@ -101,8 +101,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
         <TodoError error={errorMessage} onErrorChange={setErrorMessage} />
       )}
