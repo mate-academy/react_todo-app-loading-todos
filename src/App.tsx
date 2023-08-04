@@ -48,8 +48,8 @@ export const App: React.FC = () => {
   const isCompletedTodos = useMemo(() => todos.some(todo => todo.completed),
     [todos]);
 
-  const isNoTodo = useMemo(() => visibleTodos.length === 0,
-    [visibleTodos]);
+  const isNoTodo = useMemo(() => todos.length === 0,
+    [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -70,7 +70,6 @@ export const App: React.FC = () => {
             />
           )}
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
@@ -81,23 +80,23 @@ export const App: React.FC = () => {
         </header>
 
         {!isNoTodo && (
-          <TodoList todos={visibleTodos} />
-        )}
+          <>
+            <TodoList todos={visibleTodos} />
 
-        {!isNoTodo && (
-          <footer className="todoapp__footer">
-            <span className="todo-count">
-              {`${todoCount} items left`}
-            </span>
+            <footer className="todoapp__footer">
+              <span className="todo-count">
+                {`${todoCount} items left`}
+              </span>
 
-            <TodoFilter status={status} onStatusChange={setStatus} />
+              <TodoFilter status={status} onStatusChange={setStatus} />
 
-            {isCompletedTodos && (
-              <button type="button" className="todoapp__clear-completed">
-                Clear completed
-              </button>
-            )}
-          </footer>
+              {isCompletedTodos && (
+                <button type="button" className="todoapp__clear-completed">
+                  Clear completed
+                </button>
+              )}
+            </footer>
+          </>
         )}
       </div>
 
