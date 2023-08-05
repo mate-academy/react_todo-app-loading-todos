@@ -11,9 +11,11 @@ type Props = {
 export const TodoError: React.FC<Props> = ({ error, onErrorChange }) => {
   useEffect(() => {
     if (error) {
-      setTimeout(() => onErrorChange(Error.None), 3000);
+      const timeoutId = setTimeout(() => onErrorChange(Error.None), 3000);
+
+      clearTimeout(timeoutId);
     }
-  }, [error]);
+  }, [error, onErrorChange]);
 
   return (
     <div className={cn('notification',
