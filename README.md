@@ -11,15 +11,15 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 ## General info
 
-- register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-- save the received `userId` in the `App` and use to load load todos
-- log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
-- create some todos to see them later in your App
-- load your todos when the `App` is loaded (put your userId instead of `???`);
++ register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
++ save the received `userId` in the `App` and use to load load todos
++ log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
++ create some todos to see them later in your App
++ load your todos when the `App` is loaded (put your userId instead of `???`);
     ```
     https://mate.academy/students-api/todos?userId=???
     ```
-- hide the list and the footer if there are no todos yet;
++ hide the list and the footer if there are no todos yet;
 
 > The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
 
@@ -44,4 +44,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://IzzetYusufov.github.io/react_todo-app-loading-todos/) and add it to the PR description.
