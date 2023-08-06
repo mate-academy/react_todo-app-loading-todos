@@ -17,7 +17,7 @@ export const TodoFooter: React.FC<Props> = ({
   setFilterBy,
   deleteTodo,
 }) => {
-  // Hide the "Clear complited" if there isn't any complited todo
+  // Hide the "Clear complited" if there isn't any completed todo
   const someCompleted = useMemo(() => {
     return todos.some(todo => todo.completed);
   }, [todos]);
