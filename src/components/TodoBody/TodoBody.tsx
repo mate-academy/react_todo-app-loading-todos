@@ -16,7 +16,7 @@ export const TodoBody: React.FC<Props> = ({
   const [editValue, setEditValue] = useState('');
   const editFocus = useRef<HTMLInputElement | null>(null);
 
-  // OnDoubleclick activate input to edit the todo
+  // Activate input OnDoubleclick to edit the todo
   useEffect(() => {
     if (editFocus.current) {
       editFocus.current.focus();
