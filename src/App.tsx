@@ -8,11 +8,12 @@ import { TodoBody } from './components/TodoBody';
 import { TodoFooter } from './components/TodoFooter';
 import { FilterBy } from './types/FilterBy';
 import { Todo } from './types/Todo';
+import { Errors } from './types/Errors';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(FilterBy.ALL);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.RESET);
   const [newTodoId, setNewTodoId] = useState<number[]>([]);
 
   // Request todos from server on first render
@@ -20,13 +21,12 @@ export const App: React.FC = () => {
     todosService.getTodos(todosService.USER_ID)
       .then(setTodos)
       .catch((error) => {
-        setErrorMessage('load');
+        setErrorMessage(Errors.LOAD);
         throw error;
       })
       .finally(() => {
-        setErrorMessage('');
         setTimeout(() => {
-          setErrorMessage('');
+          setErrorMessage(Errors.RESET);
         }, 3000);
       });
   }, []);
@@ -44,49 +44,49 @@ export const App: React.FC = () => {
   }, [filterBy, todos]);
 
   // Update or Edit todo on server
-  const updateTodo = async (todoToUpdate: Todo) => {
+  const updateTodo = (todoToUpdate: Todo) => {
     setNewTodoId(currentIDs => [...currentIDs, todoToUpdate.id]);
 
-    try {
-      const updatedTodo = await todosService
-        .updateTodo(todoToUpdate.id, todoToUpdate) as Todo;
+    return todosService.updateTodo(todoToUpdate.id, todoToUpdate)
+      .then((updatedTodo: Todo) => {
+        setTodos(currentTodos => {
+          const newTodos = [...currentTodos];
 
-      const findIndexTodo = [...todos]
-        .findIndex(todo => todo.id === todoToUpdate.id);
+          const findIndexTodo = [...todos].findIndex(
+            todo => todo.id === todoToUpdate.id,
+          );
 
-      setTodos((currentTodos: Todo[]): Todo[] => {
-        const newTodos = [...currentTodos];
+          newTodos.splice(findIndexTodo, 1, updatedTodo);
 
-        newTodos.splice(findIndexTodo, 1, updatedTodo);
-
-        return newTodos;
+          return newTodos;
+        });
+      })
+      .catch((error) => {
+        setErrorMessage(Errors.UPDATE);
+        throw error;
+      })
+      .finally(() => {
+        setNewTodoId([]);
+        setTimeout(() => setErrorMessage(Errors.RESET), 3000);
       });
-    } catch (error) {
-      setErrorMessage('update');
-      throw error;
-    } finally {
-      setNewTodoId([]);
-      setTimeout(() => setErrorMessage(''), 3000);
-    }
   };
 
   // Delete todo from server
-  const deleteTodo = async (todoId: number) => {
+  const deleteTodo = (todoId: number) => {
     setNewTodoId(currentIDs => [...currentIDs, todoId]);
 
-    try {
-      await todosService.deleteTodo(todoId);
-
-      setTodos((currentTodos: Todo[]) => (
-        currentTodos.filter(todo => todo.id !== todoId)
-      ));
-    } catch (error) {
-      setErrorMessage('delete');
-      throw error;
-    } finally {
-      setNewTodoId([]);
-      setTimeout(() => setErrorMessage(''), 3000);
-    }
+    return todosService.deleteTodo(todoId)
+      .then(() => setTodos(
+        currentTodos => currentTodos.filter(todo => todo.id !== todoId),
+      ))
+      .catch((error) => {
+        setErrorMessage(Errors.DELETE);
+        throw error;
+      })
+      .finally(() => {
+        setNewTodoId([]);
+        setTimeout(() => setErrorMessage(Errors.RESET), 3000);
+      });
   };
 
   return (
@@ -125,7 +125,7 @@ export const App: React.FC = () => {
               hidden: !errorMessage,
             })}
             onClick={() => {
-              setErrorMessage('');
+              setErrorMessage(Errors.RESET);
             }}
           />
           {`Unable ${errorMessage} a todo`}

@@ -32,13 +32,8 @@ export const TodoFooter: React.FC<Props> = ({
   };
 
   // delete all complied todos
-  const deleteComplitedTodos = async () => {
-    const completedTodos = [...todos].filter(todo => todo.completed);
-
-    const newTodos = await Promise.all(completedTodos
-      .map(todo => deleteTodo(todo.id)));
-
-    return newTodos;
+  const deleteComplitedTodos = () => {
+    todos.map(todo => todo.completed && deleteTodo(todo.id));
   };
 
   return (

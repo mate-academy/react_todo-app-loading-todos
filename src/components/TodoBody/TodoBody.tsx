@@ -6,7 +6,7 @@ type Props = {
   filteringBy: Todo[],
   newTodoId: number[],
   deleteTodo: (todoId: number) => void,
-  updateTodo: (updatedTodo: Todo) => void,
+  updateTodo: (updatedTodo: Todo) => Promise<void>,
 };
 
 export const TodoBody: React.FC<Props> = ({
@@ -34,9 +34,11 @@ export const TodoBody: React.FC<Props> = ({
       return;
     }
 
-    updateTodo({ ...todo, title: editValue });
-    setIsEditing(null);
-    setEditValue('');
+    updateTodo({ ...todo, title: editValue })
+      .then(() => {
+        setIsEditing(null);
+        setEditValue('');
+      });
   };
 
   // Reset the edited todo on KeyUp "Escape"

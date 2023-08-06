@@ -10,12 +10,13 @@ import {
 import * as todosService from '../../api/todos';
 
 import { Todo } from '../../types/Todo';
+import { Errors } from '../../types/Errors';
 
 type Props = {
   todos: Todo[],
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
-  setErrorMessage: (error: string) => void,
-  updateTodo: (updatedTodo: Todo) => void,
+  setErrorMessage: (error: Errors) => void,
+  updateTodo: (updatedTodo: Todo) => Promise<void>,
   setNewTodoId: React.Dispatch<React.SetStateAction<number[]>>
 };
 
@@ -55,7 +56,7 @@ export const TodoHeader: React.FC<Props> = ({
     setNewTodoId((currentTodos: number[]) => [...currentTodos, 0]);
 
     try {
-      setErrorMessage('');
+      setErrorMessage(Errors.RESET);
       setIsDisabledInput(true);
       const newTodo = await todosService.createTodo(data);
 
@@ -65,7 +66,7 @@ export const TodoHeader: React.FC<Props> = ({
         return [...currentTodos, newTodo];
       });
     } catch (error) {
-      setErrorMessage('add');
+      setErrorMessage(Errors.ADD);
       setTodos(currentTodos => {
         currentTodos.pop();
 
@@ -73,7 +74,7 @@ export const TodoHeader: React.FC<Props> = ({
       });
       throw error;
     } finally {
-      setTimeout(() => setErrorMessage(''), 3000);
+      setTimeout(() => setErrorMessage(Errors.RESET), 3000);
       setNewTodoId([]);
       setIsDisabledInput(false);
     }
@@ -83,13 +84,13 @@ export const TodoHeader: React.FC<Props> = ({
 
   // Make all todos completed or uncompleted
   const completeAllTodos = async () => {
-    let uncompletedTodos = [...todos].filter(todo => !todo.completed);
+    const statusOfTodos = [...todos].every(todo => todo.completed);
 
-    if (uncompletedTodos.length < 1) {
-      uncompletedTodos = [...todos].filter(todo => todo.completed);
-    }
+    const updateTodos = statusOfTodos
+      ? todos.filter(todo => todo.completed)
+      : todos.filter(todo => !todo.completed);
 
-    const newTodos = await Promise.all(uncompletedTodos.map(todo => {
+    const newTodos = await Promise.all(updateTodos.map(todo => {
       return updateTodo({ ...todo, completed: !todo.completed });
     }));
 
