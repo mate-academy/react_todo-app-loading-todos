@@ -12,23 +12,17 @@ import { Errors } from './types/Errors';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [tempTodo, setTempTodo] = useState<Omit<Todo, 'id'> | null>(null);
   const [filterBy, setFilterBy] = useState(FilterBy.ALL);
-  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.RESET);
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.NULL);
   const [newTodoId, setNewTodoId] = useState<number[]>([]);
 
   // Request todos from server on first render
   useEffect(() => {
     todosService.getTodos(todosService.USER_ID)
       .then(setTodos)
-      .catch((error) => {
-        setErrorMessage(Errors.LOAD);
-        throw error;
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setErrorMessage(Errors.RESET);
-        }, 3000);
-      });
+      .catch(() => setErrorMessage(Errors.LOAD))
+      .finally(() => setTimeout(() => setErrorMessage(Errors.NULL), 3000));
   }, []);
 
   // Filtering todos by FilteringBy without request on server
@@ -42,6 +36,31 @@ export const App: React.FC = () => {
         return todos;
     }
   }, [filterBy, todos]);
+
+  // Update or Edit todo on server
+  const addTodo = (inputValue: string) => {
+    const data = {
+      title: inputValue,
+      completed: false,
+      userId: todosService.USER_ID,
+    };
+
+    setTempTodo(data);
+    setNewTodoId((currentTodos: number[]) => [...currentTodos, 0]);
+
+    return todosService.createTodo(data)
+      .then(createdTodo => (
+        setTodos(currentTodos => [...currentTodos, createdTodo])))
+      .catch((error) => {
+        setErrorMessage(Errors.ADD);
+        throw error;
+      })
+      .finally(() => {
+        setTimeout(() => setErrorMessage(Errors.NULL), 3000);
+        setTempTodo(null);
+        setNewTodoId([]);
+      });
+  };
 
   // Update or Edit todo on server
   const updateTodo = (todoToUpdate: Todo) => {
@@ -67,7 +86,7 @@ export const App: React.FC = () => {
       })
       .finally(() => {
         setNewTodoId([]);
-        setTimeout(() => setErrorMessage(Errors.RESET), 3000);
+        setTimeout(() => setErrorMessage(Errors.NULL), 3000);
       });
   };
 
@@ -75,17 +94,14 @@ export const App: React.FC = () => {
   const deleteTodo = (todoId: number) => {
     setNewTodoId(currentIDs => [...currentIDs, todoId]);
 
-    return todosService.deleteTodo(todoId)
+    todosService.deleteTodo(todoId)
       .then(() => setTodos(
         currentTodos => currentTodos.filter(todo => todo.id !== todoId),
       ))
-      .catch((error) => {
-        setErrorMessage(Errors.DELETE);
-        throw error;
-      })
+      .catch(() => setErrorMessage(Errors.DELETE))
       .finally(() => {
         setNewTodoId([]);
-        setTimeout(() => setErrorMessage(Errors.RESET), 3000);
+        setTimeout(() => setErrorMessage(Errors.NULL), 3000);
       });
   };
 
@@ -96,14 +112,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader
           todos={todos}
-          setTodos={setTodos}
+          addTodo={addTodo}
           setErrorMessage={setErrorMessage}
           updateTodo={updateTodo}
-          setNewTodoId={setNewTodoId}
         />
         <TodoBody
           filteringBy={filteringBy}
           newTodoId={newTodoId}
+          tempTodo={tempTodo}
           deleteTodo={deleteTodo}
           updateTodo={updateTodo}
         />
@@ -125,10 +141,10 @@ export const App: React.FC = () => {
               hidden: !errorMessage,
             })}
             onClick={() => {
-              setErrorMessage(Errors.RESET);
+              setErrorMessage(Errors.NULL);
             }}
           />
-          {`Unable ${errorMessage} a todo`}
+          {errorMessage}
         </div>
 
       )}

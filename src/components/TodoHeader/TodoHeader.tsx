@@ -7,28 +7,25 @@ import {
   useRef,
   useState,
 } from 'react';
-import * as todosService from '../../api/todos';
 
 import { Todo } from '../../types/Todo';
 import { Errors } from '../../types/Errors';
 
 type Props = {
   todos: Todo[],
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   setErrorMessage: (error: Errors) => void,
   updateTodo: (updatedTodo: Todo) => Promise<void>,
-  setNewTodoId: React.Dispatch<React.SetStateAction<number[]>>
+  addTodo: (inputValue: string) => Promise<void>,
 };
 
 export const TodoHeader: React.FC<Props> = ({
   todos,
   setErrorMessage,
-  setTodos,
   updateTodo,
-  setNewTodoId,
+  addTodo,
 }) => {
   const [inputValue, setInputValue] = useState('');
-  const [IsDisabledInput, setIsDisabledInput] = useState(false);
+  const [isDisabledInput, setIsDisabledInput] = useState(false);
   const headerInputFocus = useRef<HTMLInputElement | null>(null);
 
   // Autofocus on main input
@@ -43,43 +40,21 @@ export const TodoHeader: React.FC<Props> = ({
     event.preventDefault();
 
     if (!inputValue.trim()) {
+      setErrorMessage(Errors.NO_TITLE);
+      setTimeout(() => setErrorMessage(Errors.NULL), 3000);
+
       return;
     }
 
-    const data = {
-      title: inputValue,
-      completed: false,
-      userId: todosService.USER_ID,
-    };
+    setErrorMessage(Errors.NULL);
+    setIsDisabledInput(true);
 
-    setTodos(currentTodos => [...currentTodos, { ...data, id: 0 }]);
-    setNewTodoId((currentTodos: number[]) => [...currentTodos, 0]);
-
-    try {
-      setErrorMessage(Errors.RESET);
-      setIsDisabledInput(true);
-      const newTodo = await todosService.createTodo(data);
-
-      setTodos(currentTodos => {
-        currentTodos.pop();
-
-        return [...currentTodos, newTodo];
-      });
-    } catch (error) {
-      setErrorMessage(Errors.ADD);
-      setTodos(currentTodos => {
-        currentTodos.pop();
-
-        return [...currentTodos];
-      });
-      throw error;
-    } finally {
-      setTimeout(() => setErrorMessage(Errors.RESET), 3000);
-      setNewTodoId([]);
-      setIsDisabledInput(false);
-    }
-
-    setInputValue('');
+    addTodo(inputValue)
+      .then(() => {
+        setIsDisabledInput(false);
+        setInputValue('');
+      })
+      .catch(() => setIsDisabledInput(false));
   };
 
   // Make all todos completed or uncompleted
@@ -124,7 +99,7 @@ export const TodoHeader: React.FC<Props> = ({
           ref={headerInputFocus}
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
-          disabled={IsDisabledInput}
+          disabled={isDisabledInput}
         />
       </form>
     </header>
