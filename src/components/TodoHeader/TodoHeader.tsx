@@ -1,28 +1,50 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import classNames from 'classnames';
-import { useContext, useMemo, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import * as todosService from '../../api/todos';
 
-import { TodosContext } from '../../context/TodoContext';
+import { Todo } from '../../types/Todo';
 
-export const TodoHeader: React.FC = () => {
+type Props = {
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
+  setErrorMessage: (error: string) => void,
+  updateTodo: (updatedTodo: Todo) => void,
+  setNewTodoId: React.Dispatch<React.SetStateAction<number[]>>
+};
+
+export const TodoHeader: React.FC<Props> = ({
+  todos,
+  setErrorMessage,
+  setTodos,
+  updateTodo,
+  setNewTodoId,
+}) => {
   const [inputValue, setInputValue] = useState('');
-  const {
-    todos,
-    setErrorMessage,
-    setTodos,
-    updateTodo,
-  } = useContext(TodosContext);
+  const [IsDisabledInput, setIsDisabledInput] = useState(false);
+  const headerInputFocus = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+  // Autofocus on main input
+  useEffect(() => {
+    if (headerInputFocus.current) {
+      headerInputFocus.current.focus();
+    }
+  }, [todos]);
+
+  // Submition the form to add new Todo
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!inputValue.trim()) {
       return;
     }
 
-    setErrorMessage('');
     const data = {
       title: inputValue,
       completed: false,
@@ -30,8 +52,11 @@ export const TodoHeader: React.FC = () => {
     };
 
     setTodos(currentTodos => [...currentTodos, { ...data, id: 0 }]);
+    setNewTodoId((currentTodos: number[]) => [...currentTodos, 0]);
 
     try {
+      setErrorMessage('');
+      setIsDisabledInput(true);
       const newTodo = await todosService.createTodo(data);
 
       setTodos(currentTodos => {
@@ -49,11 +74,14 @@ export const TodoHeader: React.FC = () => {
       throw error;
     } finally {
       setTimeout(() => setErrorMessage(''), 3000);
+      setNewTodoId([]);
+      setIsDisabledInput(false);
     }
 
     setInputValue('');
   };
 
+  // Make all todos completed or uncompleted
   const completeAllTodos = async () => {
     let uncompletedTodos = [...todos].filter(todo => !todo.completed);
 
@@ -68,6 +96,7 @@ export const TodoHeader: React.FC = () => {
     return newTodos;
   };
 
+  // Activating the "Toggle All" button if all todos completed
   const allCompleted = useMemo(() => {
     return todos.every(todo => todo.completed);
   }, [todos]);
@@ -85,15 +114,16 @@ export const TodoHeader: React.FC = () => {
         />
       )}
 
-      {/* Add a todo on form submit */}
-      <form onSubmit={handleSubmitForm}>
+      <form onSubmit={handleSubmit}>
         <input
           id="todoInput"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          ref={headerInputFocus}
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
+          disabled={IsDisabledInput}
         />
       </form>
     </header>

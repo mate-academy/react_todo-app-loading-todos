@@ -1,22 +1,28 @@
 import classNames from 'classnames';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { FilterBy } from '../../types/FilterBy';
-import { TodosContext } from '../../context/TodoContext';
+import { Todo } from '../../types/Todo';
 
-export const TodoFooter: React.FC = () => {
-  const {
-    todos,
-    filterBy,
-    setFilterBy,
-    deleteTodo,
-    setIsLoading,
-  } = useContext(TodosContext);
+type Props = {
+  todos: Todo[],
+  filterBy: FilterBy,
+  setFilterBy: (v: FilterBy) => void,
+  deleteTodo: (todoId: number) => void,
+};
 
+export const TodoFooter: React.FC<Props> = ({
+  todos,
+  filterBy,
+  setFilterBy,
+  deleteTodo,
+}) => {
+  // Hide the "Clear complited" if there isn't any complited todo
   const someCompleted = useMemo(() => {
     return todos.some(todo => todo.completed);
   }, [todos]);
 
+  // Set filtering by "ALL, ACTIVE or COMPLITED"
   const handleFiltering = (value: FilterBy) => {
     if (value === filterBy) {
       return;
@@ -25,15 +31,12 @@ export const TodoFooter: React.FC = () => {
     setFilterBy(value);
   };
 
+  // delete all complied todos
   const deleteComplitedTodos = async () => {
-    setIsLoading(true);
     const completedTodos = [...todos].filter(todo => todo.completed);
 
-    const newTodos = await Promise.all(completedTodos.map(todo => {
-      return deleteTodo(todo.id);
-    }));
-
-    setIsLoading(false);
+    const newTodos = await Promise.all(completedTodos
+      .map(todo => deleteTodo(todo.id)));
 
     return newTodos;
   };
@@ -46,7 +49,6 @@ export const TodoFooter: React.FC = () => {
             {`${todos.filter(todo => !todo.completed).length} items left`}
           </span>
 
-          {/* Active filter should have a 'selected' class */}
           <nav className="filter">
             <a
               href="#/"

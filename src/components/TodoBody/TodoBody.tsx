@@ -1,24 +1,29 @@
 import classNames from 'classnames';
-import {
-  useContext, useEffect, useRef, useState,
-} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
-import { TodosContext } from '../../context/TodoContext';
 
-export const TodoBody: React.FC = () => {
+type Props = {
+  filteringBy: Todo[],
+  newTodoId: number[],
+  deleteTodo: (todoId: number) => void,
+  updateTodo: (updatedTodo: Todo) => void,
+};
+
+export const TodoBody: React.FC<Props> = ({
+  filteringBy, newTodoId, deleteTodo, updateTodo,
+}) => {
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
   const editFocus = useRef<HTMLInputElement | null>(null);
-  const {
-    filteringBy, newTodoId, isLoading, deleteTodo, updateTodo,
-  } = useContext(TodosContext);
 
+  // OnDoubleclick activate input to edit the todo
   useEffect(() => {
     if (editFocus.current) {
       editFocus.current.focus();
     }
   }, [editValue]);
 
+  // Submit the edited todo
   const handleEditingTodo = (
     event: React.FormEvent<HTMLFormElement>,
     todo: Todo,
@@ -34,6 +39,7 @@ export const TodoBody: React.FC = () => {
     setEditValue('');
   };
 
+  // Reset the edited todo on KeyUp "Escape"
   const resetEditing = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Escape') {
       setIsEditing(null);
@@ -95,8 +101,7 @@ export const TodoBody: React.FC = () => {
 
           <div className={classNames(
             'modal overlay',
-            { 'is-active': newTodoId === todo.id },
-            { 'is-active': isLoading },
+            { 'is-active': newTodoId.includes(todo.id || 0) },
           )}
           >
             <div className="modal-background has-background-white-ter" />
