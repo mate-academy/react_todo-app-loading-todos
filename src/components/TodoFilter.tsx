@@ -34,6 +34,7 @@ export const TodoFilter: React.FC<Props> = ({
               selected: status === filter,
             })}
             onClick={() => onFilterChange(status)}
+            key={status}
           >
             {status}
           </a>

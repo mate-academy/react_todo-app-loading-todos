@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TodoHeader: React.FC<Props> = ({ todos }) => {
-  const isSomeVisible = todos.length !== 0;
+  const isSomeVisible = !!todos.length;
   const isEveryCompleted = todos.every(todo => todo.completed);
 
   return (

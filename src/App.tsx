@@ -35,7 +35,7 @@ export const App: React.FC = () => {
       .catch(() => setErrorMessage(Error.Load));
   }
 
-  useEffect(loadPosts, [USER_ID]);
+  useEffect(loadPosts, []);
 
   const visibleTodos = useMemo(() => {
     return getVisibleTodos(todos, filter);

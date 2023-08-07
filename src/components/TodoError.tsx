@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import classNames from 'classnames';
 import { Error } from '../types/Error';
 
@@ -9,13 +9,9 @@ type Props = {
 };
 
 export const TodoError: React.FC<Props> = ({ error, onErrorChange }) => {
-  const timeRef = useRef(0);
-
   useEffect(() => {
-    window.clearTimeout(timeRef.current);
-
     if (error) {
-      timeRef.current = window.setTimeout(() => {
+      window.setTimeout(() => {
         onErrorChange(Error.None);
       }, 3000);
     }
