@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { TodoFooter } from './components/TodoFooter';
@@ -16,24 +17,11 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [status, setStatus] = useState<Status>(Status.all);
 
-  const filteredTodos = todos.filter(todo => {
-    switch (status) {
-      case Status.completed:
-        return todo.completed;
-
-      case Status.active:
-        return !todo.completed;
-
-      default:
-        return true;
-    }
-  });
-
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => {
-        setError('Error');
+      .catch(error => {
+        setError(`Error fetching todos: ${error.message}`);
       });
   }, []);
 
@@ -51,6 +39,20 @@ export const App: React.FC = () => {
 
     setTodos(updatedTodos);
   };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const filteredTodos = useMemo(() => {
+    switch (status) {
+      case Status.completed:
+        return todos.filter(todo => todo.completed);
+
+      case Status.active:
+        return todos.filter(todo => !todo.completed);
+
+      default:
+        return todos;
+    }
+  }, [status, todos]);
 
   return (
     <div className="todoapp">

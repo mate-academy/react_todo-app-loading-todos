@@ -12,15 +12,15 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
       {todos.map(todo => (
         <div
           key={todo.id}
-          className={classNames('todo', ({
-            'todo completed': todo.completed,
-          }))}
+          className={classNames('todo', {
+            completed: todo.completed,
+          })}
         >
           <label className="todo__status-label">
             <input
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed} // Make sure to set the correct checked value
             />
           </label>
 
