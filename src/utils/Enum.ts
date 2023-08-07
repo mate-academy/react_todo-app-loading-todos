@@ -6,6 +6,13 @@ export enum Error {
   FETCH = 'fetch',
 }
 
+export enum ErrorText {
+  ADD = 'Unable to add a todo',
+  DELETE = 'Unable to delete a todo',
+  UPDATE = 'Unable to update a todo',
+  FETCH = 'Error with fetch todos request',
+}
+
 export enum Filter {
   ALL = 'all',
   ACTIVE = 'active',

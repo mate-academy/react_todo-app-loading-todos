@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [hasError, setHasError] = useState(Error.NOTHING);
   const [filterTodo, setFilterTodo] = useState(Filter.ALL);
   const [isActive, setIsActive] = useState(false);
-  const [isComplited, setIsComplited] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const filteredTodos = useMemo(() => {
     switch (filterTodo) {
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
     }
 
     if (todos.find(todo => todo.completed)) {
-      setIsComplited(true);
+      setIsCompleted(true);
     }
   }, [todos]);
 
@@ -53,20 +53,16 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeder
-          activeButton={isActive}
-        />
+        <TodoHeder activeButton={isActive} />
 
-        <TodoList
-          filteredTodos={filteredTodos}
-        />
+        <TodoList filteredTodos={filteredTodos} />
 
         {todos.length > 0 && (
           <TodoFooter
             todos={todos}
             filterTodos={filterTodo}
             setFilterTodos={setFilterTodo}
-            clearButton={isComplited}
+            clearButton={isCompleted}
           />
         )}
 

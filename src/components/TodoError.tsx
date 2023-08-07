@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import cn from 'classnames';
-import { Error } from '../utils/Enum';
+import { Error, ErrorText } from '../utils/Enum';
 
 type Props = {
   hasError: string
@@ -35,10 +35,10 @@ export const TodoError: React.FC<Props> = ({
         }}
       />
 
-      {hasError === Error.ADD && 'Unable to add a todo'}
-      {hasError === Error.DELETE && 'Unable to delete a todo'}
-      {hasError === Error.UPDATE && 'Unable to update a todo'}
-      {hasError === Error.FETCH && 'Error with fetch todos request'}
+      {hasError === Error.ADD && ErrorText.ADD}
+      {hasError === Error.DELETE && ErrorText.DELETE}
+      {hasError === Error.UPDATE && ErrorText.UPDATE}
+      {hasError === Error.FETCH && ErrorText.FETCH}
     </div>
   );
 };

@@ -9,7 +9,6 @@ type Props = {
 export const TodoHeder: React.FC<Props> = ({ activeButton }) => {
   return (
     <header className="todoapp__header">
-
       <button
         type="button"
         className={cn('todoapp__toggle-all', { active: activeButton })}
