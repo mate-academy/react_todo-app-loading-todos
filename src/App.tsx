@@ -64,12 +64,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <TodoError
-          error={errorMessage}
-          onErrorChange={setErrorMessage}
-        />
-      )}
+      <TodoError
+        error={errorMessage}
+        onErrorChange={setErrorMessage}
+      />
     </div>
   );
 };

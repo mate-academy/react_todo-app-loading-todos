@@ -38,7 +38,6 @@ export const TodoFilter: React.FC<Props> = ({
             {status}
           </a>
         ))}
-        ;
       </nav>
 
       {isSomeCompleted && (
