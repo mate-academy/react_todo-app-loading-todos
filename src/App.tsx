@@ -28,17 +28,12 @@ export const App: React.FC = () => {
   const preparedTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (todosFilterBy) {
-        case Status.ALL:
-          return todos;
-
         case Status.ACTIVE:
           return !todo.completed;
-
         case Status.COMPLETED:
           return todo.completed;
-
         default:
-          throw new Error('Unable to add a todo');
+          return true;
       }
     });
   }, [todosFilterBy, todos]);

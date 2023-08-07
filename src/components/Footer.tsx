@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -7,6 +8,10 @@ type Props = {
   todos: Todo[],
   selectItem: Status,
   setSelectItem: React.Dispatch<React.SetStateAction<Status>>
+};
+
+const handleSelectFactory = (status: Status, setSelectItem: React.Dispatch<React.SetStateAction<Status>>) => () => {
+  setSelectItem(status);
 };
 
 export const Footer: React.FC<Props> = ({
@@ -28,7 +33,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectItem === Status.ALL,
           })}
-          onClick={() => setSelectItem(Status.ALL)}
+          onClick={handleSelectFactory(Status.ALL, setSelectItem)}
         >
           All
         </a>
@@ -38,7 +43,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectItem === Status.ACTIVE,
           })}
-          onClick={() => setSelectItem(Status.ACTIVE)}
+          onClick={handleSelectFactory(Status.ACTIVE, setSelectItem)}
         >
           Active
         </a>
@@ -48,7 +53,7 @@ export const Footer: React.FC<Props> = ({
           className={classNames('filter__link', {
             selected: selectItem === Status.COMPLETED,
           })}
-          onClick={() => setSelectItem(Status.COMPLETED)}
+          onClick={handleSelectFactory(Status.COMPLETED, setSelectItem)}
         >
           Completed
         </a>
