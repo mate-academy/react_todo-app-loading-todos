@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import { UserWarning } from './UserWarning';
 
@@ -56,15 +56,19 @@ export const App: React.FC = () => {
       .catch(() => showError(ErrorMessage.Load, setError));
   }, []);
 
-  const filteredTodos = filter(todos, category);
+  const filteredTodos = useMemo(() => {
+    return filter(todos, category);
+  }, [todos, category]);
 
-  const countActiveTodos = todos.reduce((prev, todo) => {
-    if (!todo.completed) {
-      return prev + 1;
-    }
+  const countActiveTodos = useMemo(() => {
+    return todos.reduce((prev, todo) => {
+      if (!todo.completed) {
+        return prev + 1;
+      }
 
-    return prev;
-  }, 0);
+      return prev;
+    }, 0);
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
