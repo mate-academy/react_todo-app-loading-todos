@@ -37,11 +37,7 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!todos.find(todo => !todo.completed) && todos.length) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
+    setIsActive(!!(!todos.find(todo => !todo.completed) && todos.length));
 
     if (todos.find(todo => todo.completed)) {
       setIsCompleted(true);
