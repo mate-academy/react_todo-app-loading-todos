@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
 
 type Props = {
@@ -26,7 +25,9 @@ export const TodoError: React.FC<Props> = ({
         type="button"
         className="delete"
         onClick={() => onSetError(false)}
-      />
+      >
+        ×
+      </button>
 
       {errorMessage}
     </div>

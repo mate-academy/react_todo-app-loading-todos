@@ -15,7 +15,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div
+    <li
       className={cn(
         'todo',
         { completed },
@@ -54,6 +54,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
-    </div>
+    </li>
   );
 };

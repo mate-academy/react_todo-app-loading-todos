@@ -59,6 +59,7 @@ export const App: React.FC = () => {
         />
         {todos.length > 0 && (
           <TodoFooter
+            todos={todos}
             filterStatus={filterStatus}
             onFilterStatus={setFilterStatus}
           />

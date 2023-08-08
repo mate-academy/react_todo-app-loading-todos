@@ -1,20 +1,28 @@
 import cn from 'classnames';
 import { FilterStatus } from '../../types/FilterStatus';
+import { getCompletedTodos } from '../../services/todo';
+import { Todo } from '../../types/Todo';
 
 type Props = {
+  todos: Todo[],
   filterStatus: FilterStatus,
   onFilterStatus: (filterStatus: FilterStatus) => void,
 };
 
 export const TodoFooter: React.FC<Props> = ({
+  todos,
   filterStatus,
   onFilterStatus,
 }) => {
+  const completedTodosCount = getCompletedTodos(todos).length;
+  const activeTodosCount = todos.length - completedTodosCount;
+
   const handleFilterChanging = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     newStatus: FilterStatus,
   ) => {
     event.preventDefault();
+
     if (newStatus !== filterStatus) {
       onFilterStatus(newStatus);
     }
@@ -23,10 +31,9 @@ export const TodoFooter: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${activeTodosCount} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a
           href="#/"
@@ -68,8 +75,13 @@ export const TodoFooter: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className={cn(
+          'todoapp__clear-completed',
+          { hidden: !completedTodosCount },
+        )}
+      >
         Clear completed
       </button>
     </footer>
