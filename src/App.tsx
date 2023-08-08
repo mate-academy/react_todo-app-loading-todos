@@ -60,7 +60,7 @@ export const App: React.FC = () => {
     return filter(todos, category);
   }, [todos, category]);
 
-  const countActiveTodos = useMemo(() => {
+  const ActiveTodosCounter = useMemo(() => {
     return todos.reduce((prev, todo) => {
       if (!todo.completed) {
         return prev + 1;
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           <ToggleAll
-            activeTodos={countActiveTodos}
+            activeTodos={ActiveTodosCounter}
           />
 
           <NewTodo />
@@ -100,7 +100,7 @@ export const App: React.FC = () => {
 
             <footer className="todoapp__footer">
               <span className="todo-count">
-                {`${countActiveTodos} items left`}
+                {`${ActiveTodosCounter} items left`}
               </span>
 
               <Filter
@@ -110,7 +110,7 @@ export const App: React.FC = () => {
 
               <ClearCompleted
                 todos={todos}
-                countActiveTodos={countActiveTodos}
+                countActiveTodos={ActiveTodosCounter}
               />
             </footer>
           </>
