@@ -17,13 +17,17 @@ export const TodoFooter: React.FC<Props> = ({
   const completedTodosCount = getCompletedTodos(todos).length;
   const activeTodosCount = todos.length - completedTodosCount;
 
+  const isStatusChosen = (newStatus: FilterStatus) => {
+    return newStatus === filterStatus;
+  };
+
   const handleFilterChanging = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     newStatus: FilterStatus,
   ) => {
     event.preventDefault();
 
-    if (newStatus !== filterStatus) {
+    if (!isStatusChosen(newStatus)) {
       onFilterStatus(newStatus);
     }
   };
@@ -39,7 +43,7 @@ export const TodoFooter: React.FC<Props> = ({
           href="#/"
           className={cn(
             'filter__link',
-            { selected: filterStatus === FilterStatus.All },
+            { selected: isStatusChosen(FilterStatus.All) },
           )}
           onClick={(event) => (
             handleFilterChanging(event, FilterStatus.All)
@@ -52,7 +56,7 @@ export const TodoFooter: React.FC<Props> = ({
           href="#/active"
           className={cn(
             'filter__link',
-            { selected: filterStatus === FilterStatus.Active },
+            { selected: isStatusChosen(FilterStatus.Active) },
           )}
           onClick={(event) => (
             handleFilterChanging(event, FilterStatus.Active)
@@ -65,7 +69,7 @@ export const TodoFooter: React.FC<Props> = ({
           href="#/completed"
           className={cn(
             'filter__link',
-            { selected: filterStatus === FilterStatus.Completed },
+            { selected: isStatusChosen(FilterStatus.Completed) },
           )}
           onClick={(event) => (
             handleFilterChanging(event, FilterStatus.Completed)
