@@ -63,69 +63,73 @@ export const TodoBody: React.FC<Props> = ({
   return (
     <section className="todoapp__main">
       {/* Todos from server response */}
-      {filteringBy.map(todo => (
-        <div
-          className={classNames(
-            'todo',
-            { completed: todo.completed },
-          )}
-          key={todo.id}
-          onDoubleClick={() => {
-            setIsEditing(todo.id);
-            setEditValue(todo.title);
-          }}
-        >
-          <label className="todo__status-label">
-            <input
-              type="checkbox"
-              className="todo__status"
-              onChange={() => updateTodo(
-                { ...todo, completed: !todo.completed },
-              )}
-            />
-          </label>
+      {filteringBy.map(todo => {
+        const { id, completed, title } = todo;
 
-          {/* Edit input which activate after OnDoubleClick */}
-          {todo.id === isEditing ? (
-            <form onSubmit={(event) => handleEditingTodo(event, todo)}>
-              <input
-                ref={editFocus}
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value={editValue}
-                onKeyUp={resetEditing}
-                onBlur={() => handleEditingTodo(null, todo)}
-                onChange={(event) => setEditValue(event.target.value)}
-              />
-            </form>
-          ) : (
-            <>
-              {/* Standart Todo from server */}
-              <span className="todo__title">
-                {todo.title}
-              </span>
-
-              <button
-                type="button"
-                className="todo__remove"
-                onClick={() => deleteTodo(todo.id)}
-              >
-                ×
-              </button>
-            </>
-          )}
-
-          <div className={classNames(
-            'modal overlay',
-            { 'is-active': newTodoId.includes(todo.id || 0) },
-          )}
+        return (
+          <div
+            className={classNames(
+              'todo',
+              { completed },
+            )}
+            key={id}
+            onDoubleClick={() => {
+              setIsEditing(id);
+              setEditValue(title);
+            }}
           >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
+            <label className="todo__status-label">
+              <input
+                type="checkbox"
+                className="todo__status"
+                onChange={() => updateTodo(
+                  { ...todo, completed: !completed },
+                )}
+              />
+            </label>
+
+            {/* Edit input which activate after OnDoubleClick */}
+            {id === isEditing ? (
+              <form onSubmit={(event) => handleEditingTodo(event, todo)}>
+                <input
+                  ref={editFocus}
+                  type="text"
+                  className="todo__title-field"
+                  placeholder="Empty todo will be deleted"
+                  value={editValue}
+                  onKeyUp={resetEditing}
+                  onBlur={() => handleEditingTodo(null, todo)}
+                  onChange={(event) => setEditValue(event.target.value)}
+                />
+              </form>
+            ) : (
+              <>
+                {/* Standart Todo from server */}
+                <span className="todo__title">
+                  {title}
+                </span>
+
+                <button
+                  type="button"
+                  className="todo__remove"
+                  onClick={() => deleteTodo(id)}
+                >
+                  ×
+                </button>
+              </>
+            )}
+
+            <div className={classNames(
+              'modal overlay',
+              { 'is-active': newTodoId.includes(id || 0) },
+            )}
+            >
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Temproary Todo during waitind for server response */}
       {tempTodo && (
