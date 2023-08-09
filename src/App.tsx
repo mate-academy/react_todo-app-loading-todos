@@ -59,7 +59,9 @@ export const App: React.FC = () => {
     return getFilterdTodos(todos, filterBy);
   }, [todos, filterBy]);
 
-  const activeTodos = filteredTodos.filter(todo => !todo.completed);
+  const activeTodos = useMemo(() => {
+    return filteredTodos.filter(todo => !todo.completed);
+  }, [filteredTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
