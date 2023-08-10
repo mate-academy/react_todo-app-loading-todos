@@ -19,10 +19,6 @@ export const TodoApp = () => {
   const [status, setStatus] = useState<Status>(Status.ALL);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const useFilter = (filter: Status) => {
-    setStatus(filter);
-  };
-
   useEffect(() => {
     TodosService.getTodos(USER_ID)
       .then(setTodos)
@@ -41,14 +37,11 @@ export const TodoApp = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (status) {
-      case Status.ALL:
-        return todos;
-
       case Status.ACTIVE:
-        return !todo.completed;
+        return todo.completed === false;
 
       case Status.COMPLETED:
-        return todo.completed;
+        return todo.completed === true;
 
       default:
         return true;
@@ -71,14 +64,12 @@ export const TodoApp = () => {
         />
 
         <TodoFooter
-          onChangeFilter={useFilter}
+          onChangeFilter={setStatus}
           filteredSelected={status}
           todos={todos}
         />
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorMessage && (
         <TodoNotificaition
           errorMessage={errorMessage}
