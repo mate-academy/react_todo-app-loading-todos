@@ -13,6 +13,10 @@ export const Footer: React.FC<Props> = ({ setFilterBy, filterBy, todos }) => {
   const completedTodo = todos.filter(todo => todo.completed);
   const activeTodosQuantity = todos.filter(todo => !todo.completed).length;
 
+  const handleFilterStatus = (filter: Status) => () => {
+    setFilterBy(filter);
+  };
+
   return (
     <>
       {todos.length > 0 && (
@@ -27,7 +31,7 @@ export const Footer: React.FC<Props> = ({ setFilterBy, filterBy, todos }) => {
               className={classNames('filter__link', {
                 selected: filterBy === Status.all,
               })}
-              onClick={() => setFilterBy(Status.all)}
+              onClick={handleFilterStatus(Status.all)}
             >
               All
             </a>
@@ -37,7 +41,7 @@ export const Footer: React.FC<Props> = ({ setFilterBy, filterBy, todos }) => {
               className={classNames('filter__link', {
                 selected: filterBy === Status.active,
               })}
-              onClick={() => setFilterBy(Status.active)}
+              onClick={handleFilterStatus(Status.active)}
             >
               Active
             </a>
@@ -47,7 +51,7 @@ export const Footer: React.FC<Props> = ({ setFilterBy, filterBy, todos }) => {
               className={classNames('filter__link', {
                 selected: filterBy === Status.completed,
               })}
-              onClick={() => setFilterBy(Status.completed)}
+              onClick={handleFilterStatus(Status.completed)}
             >
               Completed
             </a>
