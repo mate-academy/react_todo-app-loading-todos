@@ -15,26 +15,20 @@ const USER_ID = 11281;
 function getPreparedTodos(
   todos: Todo[], selected: Selected,
 ) {
-  let preparedTodos = [...todos];
-
-  if (selected) {
-    preparedTodos = preparedTodos.filter(todo => {
-      switch (selected) {
-        case Selected.ACTIVE: {
-          return !todo.completed;
-        }
-
-        case Selected.COMPLETED: {
-          return todo.completed;
-        }
-
-        default:
-          return true;
+  return todos.filter(todo => {
+    switch (selected) {
+      case Selected.ACTIVE: {
+        return !todo.completed;
       }
-    });
-  }
 
-  return preparedTodos;
+      case Selected.COMPLETED: {
+        return todo.completed;
+      }
+
+      default:
+        return todos;
+    }
+  });
 }
 
 export const App: React.FC = () => {
@@ -45,19 +39,11 @@ export const App: React.FC = () => {
   = useState<Selected>(Selected.ALL);
 
   useEffect(() => {
-    (async () => {
-      try {
-        setisLoading(true);
-        const fetchedTodos = await getTodos(USER_ID);
-
-        setTodos(fetchedTodos);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setErrorMessage(error.message || ErrorMessages.GET);
-      } finally {
-        setisLoading(false);
-      }
-    })();
+    setisLoading(true);
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(error => setErrorMessage(error.message || ErrorMessages.GET))
+      .finally(() => setisLoading(false));
   }, []);
 
   useEffect(() => {
