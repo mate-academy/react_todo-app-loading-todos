@@ -6,13 +6,19 @@ type Props = {
   filterOption: FilterOptions;
   onChangeFilterOption: React.Dispatch<React.SetStateAction<FilterOptions>>;
   activeTodosCount: number;
+  hasCompletedTodo: boolean;
 };
 
 export const TodoFooter: React.FC<Props> = ({
   filterOption,
   onChangeFilterOption,
   activeTodosCount,
+  hasCompletedTodo,
 }) => {
+  const handleFilter = (filterField: FilterOptions) => {
+    return () => onChangeFilterOption(filterField);
+  };
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
@@ -26,7 +32,7 @@ export const TodoFooter: React.FC<Props> = ({
             'filter__link',
             { selected: filterOption === FilterOptions.All },
           )}
-          onClick={() => onChangeFilterOption(FilterOptions.All)}
+          onClick={handleFilter(FilterOptions.All)}
         >
           All
         </a>
@@ -37,7 +43,7 @@ export const TodoFooter: React.FC<Props> = ({
             'filter__link',
             { selected: filterOption === FilterOptions.Active },
           )}
-          onClick={() => onChangeFilterOption(FilterOptions.Active)}
+          onClick={handleFilter(FilterOptions.Active)}
         >
           Active
         </a>
@@ -48,14 +54,17 @@ export const TodoFooter: React.FC<Props> = ({
             'filter__link',
             { selected: filterOption === FilterOptions.Completed },
           )}
-          onClick={() => onChangeFilterOption(FilterOptions.Completed)}
+          onClick={handleFilter(FilterOptions.Completed)}
         >
           Completed
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        style={{ visibility: !hasCompletedTodo ? 'hidden' : 'visible' }}
+      >
         Clear completed
       </button>
     </footer>

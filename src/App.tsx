@@ -6,8 +6,9 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
 import { FilterOptions } from './types/FilterOptions';
+import { getTodos } from './api/todos';
+import { ErrorMessages } from './types/errorMessages';
 
 const USER_ID = 11272;
 
@@ -15,22 +16,28 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterOption, setFilterOption] = useState(FilterOptions.All);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessages | ''>('');
 
   const activeTodosCount = todos
     .filter(todo => todo.completed === false)
     .length;
 
+  const completedTodoCount = todos.some(todo => todo.completed === true);
+
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
+    getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setHasError(true));
+      .catch(() => {
+        setErrorMessage(ErrorMessages.Add);
+        setHasError(true);
+      });
   }, []);
 
   useEffect(() => {
     setTimeout(() => {
       setHasError(false);
     }, 3000);
-  }, [hasError]);
+  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -53,14 +60,14 @@ export const App: React.FC = () => {
               filterOption={filterOption}
               onChangeFilterOption={setFilterOption}
               activeTodosCount={activeTodosCount}
+              hasCompletedTodo={completedTodoCount}
             />
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorMessage
+        errorMessage={errorMessage}
         hasError={hasError}
         onHasError={setHasError}
       />
