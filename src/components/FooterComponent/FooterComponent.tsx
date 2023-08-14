@@ -4,6 +4,12 @@ import { useContext } from 'react';
 import { AppContext } from '../../context';
 import { Types } from '../../reducer';
 import { deleteTodo } from '../../api/todos';
+import {
+  removeUpdatedTodoIdAction,
+  setUpdatedTodoIdAction,
+} from '../../services/actions/updatedTodoIdActions';
+import { deleteTodoAction } from '../../services/actions/todoActions';
+import { setErrorMessageAction } from '../../services/actions/errorActions';
 
 export const FooterComponent:React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -24,39 +30,24 @@ export const FooterComponent:React.FC = () => {
   };
 
   const clearCompleted = () => {
-    todos.forEach(({ id }) => {
-      dispatch({
-        type: Types.SetUpdatedTodoId,
-        payload: {
-          updatedTodoId: id,
-        },
-      });
+    todos.forEach(({ id, completed }) => {
+      if (!completed) {
+        return;
+      }
+
+      dispatch(setUpdatedTodoIdAction(id));
+
       deleteTodo(id)
         .then(() => {
-          dispatch({
-            type: Types.Delete,
-            payload: {
-              id,
-            },
-          });
+          dispatch(deleteTodoAction(id));
         })
         .catch(() => {
           if (!state.errorMessage) {
-            dispatch({
-              type: Types.SetErrorMessage,
-              payload: {
-                errorMessage: 'Can\'t delete a todo',
-              },
-            });
+            dispatch(setErrorMessageAction('Can\'t delete a todo'));
           }
         })
         .finally(() => {
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: id,
-            },
-          });
+          dispatch(removeUpdatedTodoIdAction(id));
         });
     });
   };

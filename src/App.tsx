@@ -6,8 +6,8 @@ import { MainComponent } from './components/MainComponent';
 import { USER_ID } from './utils/const';
 import { FooterComponent } from './components/FooterComponent';
 import { AppContext } from './context';
-import { Types } from './reducer';
 import { getTodos } from './api/todos';
+import { setTodosToStateAction } from './services/actions/todoActions';
 
 export const App: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -15,12 +15,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID).then(todos => {
-      dispatch({
-        type: Types.SetTodosToState,
-        payload: {
-          todos,
-        },
-      });
+      dispatch(setTodosToStateAction(todos));
     });
   }, []);
 

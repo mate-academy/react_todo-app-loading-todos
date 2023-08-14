@@ -5,9 +5,19 @@ import {
 import classNames from 'classnames';
 
 import { AppContext } from '../../context';
-import { Types } from '../../reducer';
+
 import { createTodo, editTodo } from '../../api/todos';
 import { USER_ID } from '../../utils/const';
+import { setErrorMessageAction } from '../../services/actions/errorActions';
+import {
+  createTodoAction,
+  deleteTodoAction,
+  editTodoAction,
+} from '../../services/actions/todoActions';
+import {
+  removeUpdatedTodoIdAction,
+  setUpdatedTodoIdAction,
+} from '../../services/actions/updatedTodoIdActions';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const HeaderComponent:React.FC = () => {
@@ -37,114 +47,47 @@ export const HeaderComponent:React.FC = () => {
 
     const tempId = +new Date();
 
-    dispatch({
-      type: Types.SetErrorMessage,
-      payload: {
-        errorMessage: '',
-      },
-    });
+    dispatch(setErrorMessageAction(''));
 
-    dispatch({
-      type: Types.Create,
-      payload: {
-        id: tempId,
-        userId: USER_ID,
-        title: newTitle,
-        completed: false,
-      },
-    });
+    dispatch(createTodoAction(tempId, newTitle));
 
-    dispatch({
-      type: Types.SetUpdatedTodoId,
-      payload: {
-        updatedTodoId: tempId,
-      },
-    });
+    dispatch(setUpdatedTodoIdAction(tempId));
 
     createTodo({
       userId: USER_ID,
       title: newTitle,
       completed: false,
     }).then((newTodo) => {
-      dispatch({
-        type: Types.Edit,
-        payload: {
-          todoToEdit: newTodo,
-          id: tempId,
-        },
-      });
+      dispatch(editTodoAction(newTodo, tempId));
 
-      dispatch({
-        type: Types.RemoveUpdatedTodoId,
-        payload: {
-          updatedTodoId: tempId,
-        },
-      });
+      dispatch(removeUpdatedTodoIdAction(tempId));
 
       setTitle('');
     }).catch(() => {
-      dispatch({
-        type: Types.Delete,
-        payload: {
-          id: tempId,
-        },
-      });
-      dispatch({
-        type: Types.RemoveUpdatedTodoId,
-        payload: {
-          updatedTodoId: tempId,
-        },
-      });
-      dispatch({
-        type: Types.SetErrorMessage,
-        payload: {
-          errorMessage: 'Unable to add a todo',
-        },
-      });
+      dispatch(deleteTodoAction(tempId));
+
+      dispatch(removeUpdatedTodoIdAction(tempId));
+
+      dispatch(setErrorMessageAction('Unable to add a todo'));
     });
   };
 
   const handleSelectAll = async () => {
     await state.todos.forEach(todo => {
-      dispatch({
-        type: Types.SetUpdatedTodoId,
-        payload: {
-          updatedTodoId: todo.id,
-        },
-      });
+      dispatch(setUpdatedTodoIdAction(todo.id));
       editTodo({
         ...todo,
         completed: !isSelectedAll,
       })
         .then((updatedTodo) => {
-          dispatch({
-            type: Types.Edit,
-            payload: {
-              todoToEdit: updatedTodo,
-            },
-          });
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: todo.id,
-            },
-          });
+          dispatch(editTodoAction(updatedTodo));
+          dispatch(removeUpdatedTodoIdAction(todo.id));
         }).catch(() => {
           if (!state.errorMessage) {
-            dispatch({
-              type: Types.SetErrorMessage,
-              payload: {
-                errorMessage: 'Can\'t update a todo',
-              },
-            });
+            dispatch(setErrorMessageAction('Can\'t update a todo'));
           }
 
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: todo.id,
-            },
-          });
+          dispatch(removeUpdatedTodoIdAction(todo.id));
         });
     });
   };

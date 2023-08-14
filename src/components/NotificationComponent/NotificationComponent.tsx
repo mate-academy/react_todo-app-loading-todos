@@ -3,19 +3,14 @@ import classNames from 'classnames';
 
 import { useContext, useState } from 'react';
 import { AppContext } from '../../context';
-import { Types } from '../../reducer';
+import { setErrorMessageAction } from '../../services/actions/errorActions';
 
 export const NotificationComponent: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
   const [isHidden, setIsHidden] = useState(false);
   const { errorMessage } = state;
   const handleClick = () => {
-    dispatch({
-      type: Types.SetErrorMessage,
-      payload: {
-        errorMessage: '',
-      },
-    });
+    dispatch(setErrorMessageAction(''));
   };
 
   setTimeout(() => {

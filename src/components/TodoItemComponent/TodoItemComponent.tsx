@@ -4,9 +4,18 @@ import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { ModalOverlayComponent } from '../ModalOverlayComponent';
 import { AppContext } from '../../context';
-import { Types } from '../../reducer';
 import { deleteTodo, editTodo } from '../../api/todos';
 import { USER_ID } from '../../utils/const';
+import {
+  removeUpdatedTodoIdAction,
+  setUpdatedTodoIdAction,
+} from '../../services/actions/updatedTodoIdActions';
+import {
+  deleteTodoAction,
+  editTodoAction,
+  toggleTodoCompletedAction,
+} from '../../services/actions/todoActions';
+import { setErrorMessageAction } from '../../services/actions/errorActions';
 
 type Props = {
   todo: Todo;
@@ -19,82 +28,35 @@ export const TodoItemComponent:React.FC<Props> = ({ todo }) => {
   const { updatedTodoIds } = state;
 
   const handleToggleChange = useCallback(() => {
-    dispatch({
-      type: Types.SetUpdatedTodoId,
-      payload: {
-        updatedTodoId: todo.id,
-      },
-    });
+    dispatch(setUpdatedTodoIdAction(todo.id));
 
     editTodo({
       ...todo,
       completed: !todo.completed,
     })
       .then(() => {
-        dispatch({
-          type: Types.ToggleCompleted,
-          payload: {
-            id: todo.id,
-          },
-        });
-
-        dispatch({
-          type: Types.RemoveUpdatedTodoId,
-          payload: {
-            updatedTodoId: todo.id,
-          },
-        });
+        dispatch(toggleTodoCompletedAction(todo.id));
+        dispatch(removeUpdatedTodoIdAction(todo.id));
       })
       .catch(() => {
-        dispatch({
-          type: Types.RemoveUpdatedTodoId,
-          payload: {
-            updatedTodoId: todo.id,
-          },
-        });
-
-        dispatch({
-          type: Types.SetErrorMessage,
-          payload: {
-            errorMessage: 'Can\'t update a todo',
-          },
-        });
+        dispatch(removeUpdatedTodoIdAction(todo.id));
+        dispatch(setErrorMessageAction('Can\'t update a todo'));
       });
   }, []);
 
   const handleDeleteTodo = useCallback(
     () => {
-      dispatch({
-        type: Types.SetUpdatedTodoId,
-        payload: {
-          updatedTodoId: todo.id,
-        },
-      });
+      dispatch(setUpdatedTodoIdAction(todo.id));
 
       deleteTodo(todo.id)
         .then(() => {
-          dispatch({
-            type: Types.Delete,
-            payload: {
-              id: todo.id,
-            },
-          });
+          dispatch(deleteTodoAction(todo.id));
         })
         .catch(() => {
-          dispatch({
-            type: Types.SetErrorMessage,
-            payload: {
-              errorMessage: 'Can\'t delete a todo',
-            },
-          });
+          dispatch(setErrorMessageAction('Can\'t delete a todo'));
         })
         .finally(() => {
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: todo.id,
-            },
-          });
+          dispatch(removeUpdatedTodoIdAction(todo.id));
         });
     }, [],
   );
@@ -107,46 +69,20 @@ export const TodoItemComponent:React.FC<Props> = ({ todo }) => {
   };
 
   const editingTodoCompleted = async () => {
-    if (!newTodoTitle.trim()) {
-      dispatch({
-        type: Types.SetUpdatedTodoId,
-        payload: {
-          updatedTodoId: todo.id,
-        },
-      });
+    dispatch(setUpdatedTodoIdAction(todo.id));
 
+    if (!newTodoTitle.trim()) {
       await deleteTodo(todo.id)
         .then(() => {
-          dispatch({
-            type: Types.Delete,
-            payload: {
-              id: todo.id,
-            },
-          });
+          dispatch(deleteTodoAction(todo.id));
           setIsEditing(false);
         })
         .catch(() => {
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: todo.id,
-            },
-          });
-
-          dispatch({
-            type: Types.SetErrorMessage,
-            payload: {
-              errorMessage: 'Can\'t update a todo',
-            },
-          });
+          dispatch(removeUpdatedTodoIdAction(todo.id));
+          dispatch(setErrorMessageAction('Can\'t update a todo'));
         })
         .finally(() => {
-          dispatch({
-            type: Types.RemoveUpdatedTodoId,
-            payload: {
-              updatedTodoId: todo.id,
-            },
-          });
+          dispatch(removeUpdatedTodoIdAction(todo.id));
         });
 
       return;
@@ -154,42 +90,31 @@ export const TodoItemComponent:React.FC<Props> = ({ todo }) => {
 
     editTodo(todoToEdit)
       .then(() => {
-        dispatch({
-          type: Types.Edit,
-          payload: {
-            todoToEdit,
-          },
-        });
+        dispatch(editTodoAction(todoToEdit));
+
         setIsEditing(false);
       })
       .catch(() => {
-        dispatch({
-          type: Types.RemoveUpdatedTodoId,
-          payload: {
-            updatedTodoId: todoToEdit.id,
-          },
-        });
-
-        dispatch({
-          type: Types.SetErrorMessage,
-          payload: {
-            errorMessage: 'Can\'t update a todo',
-          },
-        });
+        dispatch(setErrorMessageAction('Can\'t update a todo'));
       })
       .finally(() => {
-        dispatch({
-          type: Types.RemoveUpdatedTodoId,
-          payload: {
-            updatedTodoId: todoToEdit.id,
-          },
-        });
+        dispatch(removeUpdatedTodoIdAction(todoToEdit.id));
       });
   };
 
   const cancelEditing = () => {
     setIsEditing(false);
     setNewTodoTitle(todo.title);
+  };
+
+  const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      editingTodoCompleted();
+    }
+
+    if (e.key === 'Escape') {
+      cancelEditing();
+    }
   };
 
   return (
@@ -239,15 +164,7 @@ export const TodoItemComponent:React.FC<Props> = ({ todo }) => {
               value={newTodoTitle}
               onChange={(e) => setNewTodoTitle(e.target.value.trim())}
               onBlur={editingTodoCompleted}
-              onKeyUp={(e) => {
-                if (e.key === 'Enter') {
-                  editingTodoCompleted();
-                }
-
-                if (e.key === 'Escape') {
-                  cancelEditing();
-                }
-              }}
+              onKeyUp={handleOnKeyUp}
             />
           </form>
         )}
