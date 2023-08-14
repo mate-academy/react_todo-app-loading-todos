@@ -1,51 +1,39 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { TodosError } from './components/TodosError/TodosError';
 import { TodosFooter } from './components/TodosFooter/TodosFooter';
 import { TodosHeader } from './components/TodosHeader/TodosHeader';
 import { TodosList } from './components/TodosList/TodosList';
+import { getVisibleTodos } from './helpers/GetVisibleTodos';
 import { Filter } from './types/Filter';
 import { Todo } from './types/Todo';
+import { Error } from './types/Error';
 import { UserWarning } from './UserWarning';
 
 const USER_ID = 11331;
 
-const ERROR_ADD = 'Unable to add a todo';
-// const ERROR_DELETE = 'Unable to delete a todo';
-// const ERROR_UPDATE = 'Unable to update a todo';
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.All);
-  const [error] = useState(ERROR_ADD);
-
-  function getVisibleTodos(filterType: Filter): Todo[] {
-    switch (filterType) {
-      case Filter.Active:
-        return todos.filter(todo => !todo.completed);
-      case Filter.Comleted:
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
-    }
-  }
-
-  const visibleTodos = useMemo(() => (
-    getVisibleTodos(filter)
-  ), [todos, filter]);
-
-  const activeTodosCount = useMemo(() => (
-    getVisibleTodos(Filter.Active).length
-  ), [todos]);
+  const [error, setError] = useState(Error.Unknown);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .catch(() => {});
+      .catch(() => {
+        setError(Error.Download);
+      });
   }, []);
+
+  const visibleTodos = useMemo(() => (
+    getVisibleTodos(todos, filter)
+  ), [todos, filter]);
+
+  const activeTodosCount = useMemo(() => (
+    getVisibleTodos(todos, Filter.Active).length
+  ), [todos]);
 
   const isAnyTodos = todos.length > 0;
 
@@ -72,7 +60,13 @@ export const App: React.FC = () => {
           )}
       </div>
 
-      { error && <TodosError errorMessage={error} />}
+      { error
+        && (
+          <TodosError
+            errorMessage={error}
+            onError={setError}
+          />
+        )}
     </div>
   );
 };

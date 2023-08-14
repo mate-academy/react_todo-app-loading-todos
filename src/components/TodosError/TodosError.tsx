@@ -1,16 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import cn from 'classnames';
+import { Error } from '../../types/Error';
 
 type Props = {
   errorMessage: string;
+  onError: (e: Error) => void;
 };
 
-export const TodosError: React.FC<Props> = ({ errorMessage }) => {
-  const notification = useRef<HTMLDivElement>(null);
-
+export const TodosError: React.FC<Props> = ({ errorMessage, onError }) => {
   const hideNotification = () => {
-    if (notification) {
-      notification.current?.classList.add('hidden');
-    }
+    onError(Error.None);
   };
 
   const handleDeleteButtonClick = () => {
@@ -25,8 +24,8 @@ export const TodosError: React.FC<Props> = ({ errorMessage }) => {
 
   return (
     <div
-      className="notification is-danger is-light has-text-weight-normal"
-      ref={notification}
+      className={cn('notification is-danger is-light has-text-weight-normal',
+        { hidden: Error.None })}
     >
       <button
         type="button"
