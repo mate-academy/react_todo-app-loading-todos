@@ -32,14 +32,14 @@ export const App: React.FC = () => {
     getTodos(USER_ID).then(setTodos).catch(() => showError(Error.Loading));
   }, []);
 
-  const VisibleTodos = useMemo(() => todos.filter(todo => {
+  const visibleTodos = useMemo(() => todos.filter(todo => {
     switch (status) {
       case Status.Active:
         return !todo.completed;
       case Status.Completed:
         return todo.completed;
       default:
-        return Status.All;
+        return true;
     }
   }), [status, todos]);
 
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header />
-        {todos.length > 0 && (<TodoList todos={VisibleTodos} />
+        {todos.length > 0 && (<TodoList todos={visibleTodos} />
         ) && (
           <Footer
             status={status}
