@@ -29,7 +29,9 @@ export const App: React.FC = () => {
   ), [todos]);
 
   useEffect(() => {
-    getTodos(USER_ID).then(setTodos).catch(() => showError(Error.Loading));
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => showError(Error.Loading));
   }, []);
 
   const visibleTodos = useMemo(() => todos.filter(todo => {
@@ -52,14 +54,18 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header />
-        {todos.length > 0 && (<TodoList todos={visibleTodos} />
-        ) && (
-          <Footer
-            status={status}
-            setStatus={setStatus}
-            count={count}
-          />
+        {todos.length > 0 && (
+          <>
+            <TodoList todos={visibleTodos} />
+
+            <Footer
+              status={status}
+              setStatus={setStatus}
+              count={count}
+            />
+          </>
         )}
+
         <ErrorMessage
           error={error}
           setError={setError}

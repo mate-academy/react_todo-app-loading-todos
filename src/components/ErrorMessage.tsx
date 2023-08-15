@@ -3,23 +3,24 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React from 'react';
 import classNames from 'classnames';
+import { Error } from '../types/Error';
 
 type Props = {
   error: string,
-  setError: (error: string) => void,
+  setError: (error: Error) => void,
 };
 
 export const ErrorMessage: React.FC<Props> = ({ error, setError }) => {
   return (
     <div className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: error === '' },
+      { hidden: error === Error.None },
     )}
     >
       <button
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={() => setError(Error.None)}
       />
       {error}
     </div>
