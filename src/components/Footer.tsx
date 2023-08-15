@@ -1,18 +1,24 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Status } from '../types/Status';
+import { Todo } from '../types/Todo';
 
 type Props = {
-  count: number,
+  todos: Todo[],
   status: Status,
   setStatus: (status: Status) => void;
 };
 
-export const Footer: React.FC<Props> = ({ count, status, setStatus }) => {
+export const Footer: React.FC<Props> = ({
+  todos, status, setStatus,
+}) => {
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${count} items left`}
+        {activeTodosCount === 1 ? `${activeTodosCount} item left` : `${activeTodosCount} items left`}
       </span>
       <nav className="filter">
         <a
@@ -46,7 +52,12 @@ export const Footer: React.FC<Props> = ({ count, status, setStatus }) => {
         </a>
       </nav>
 
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className={classNames('todoapp__clear-completed', {
+          hidden: completedTodosCount === 0,
+        })}
+      >
         Clear completed
       </button>
     </footer>

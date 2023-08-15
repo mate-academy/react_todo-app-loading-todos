@@ -24,10 +24,6 @@ export const App: React.FC = () => {
     }, 3000);
   };
 
-  const count = useMemo(() => todos.reduce(
-    (total, todo) => (todo.completed ? total : total + 1), 0,
-  ), [todos]);
-
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
@@ -61,11 +57,10 @@ export const App: React.FC = () => {
             <Footer
               status={status}
               setStatus={setStatus}
-              count={count}
+              todos={todos}
             />
           </>
         )}
-
         <ErrorMessage
           error={error}
           setError={setError}

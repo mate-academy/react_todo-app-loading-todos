@@ -12,10 +12,12 @@ type Props = {
 
 export const ErrorMessage: React.FC<Props> = ({ error, setError }) => {
   return (
-    <div className={classNames(
-      'notification is-danger is-light has-text-weight-normal',
-      { hidden: error === Error.None },
-    )}
+    <div
+      hidden={!Error.None}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+      )}
+
     >
       <button
         type="button"
