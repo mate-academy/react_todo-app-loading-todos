@@ -11,9 +11,9 @@ const USER_ID = 11337;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterStatus, setFilterStatus] = useState<Filter>(Filter.all);
-  let filteredTodos: Todo[];
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -24,22 +24,26 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  switch (filterStatus) {
-    case Filter.active:
-      filteredTodos = todos.filter(todo => todo.completed === false);
-      break;
+  useEffect(() => {
+    switch (filterStatus) {
+      case Filter.active:
+        setFilteredTodos(todos.filter(todo => todo.completed === false));
+        break;
 
-    case Filter.completed:
-      filteredTodos = todos.filter(todo => todo.completed === true);
-      break;
+      case Filter.completed:
+        setFilteredTodos(todos.filter(todo => todo.completed === true));
+        break;
 
-    case Filter.all:
-    default:
-      filteredTodos = [...todos];
-  }
+      case Filter.all:
+      default:
+        setFilteredTodos([...todos]);
+    }
+  }, [filterStatus, todos]);
 
   const filteredTodosCount = filteredTodos.length;
-  const todosCount = todos.length;
+  const todosLeft = todos.reduce((count, todo) => (
+    todo.completed === false ? count + 1 : count
+  ), 0);
 
   return (
     <div className="todoapp">
@@ -52,11 +56,11 @@ export const App: React.FC = () => {
           <TodoList todos={filteredTodos} />
         )}
 
-        {!!todosCount && (
+        {!!todos.length && (
           <TodosFilter
             onChangeStatus={setFilterStatus}
             status={filterStatus}
-            todosCount={todosCount}
+            todosLeft={todosLeft}
           />
         )}
       </div>

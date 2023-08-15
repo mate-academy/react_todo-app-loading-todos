@@ -4,18 +4,18 @@ import { Filter } from '../types/Filter';
 type Props = {
   onChangeStatus: (filterStatus: Filter) => void;
   status: Filter;
-  todosCount: number;
+  todosLeft: number;
 };
 
 export const TodosFilter: React.FC<Props> = ({
   onChangeStatus,
   status,
-  todosCount,
+  todosLeft,
 }) => {
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${todosCount} items left`}
+        {`${todosLeft} items left`}
       </span>
 
       <nav className="filter">
