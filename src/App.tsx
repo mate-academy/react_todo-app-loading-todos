@@ -7,6 +7,7 @@ import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { useTodo } from './hooks/useTodo';
+import { ErrorMessage } from './types/ErrorMessage';
 
 const USER_ID = 11340;
 
@@ -24,13 +25,16 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
-      });
+      .catch(() => setErrorMessage(ErrorMessage.LOAD_ERROR));
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
 
   setIsChecked(todos.every(todo => todo.completed) && todos.length > 0);
 
@@ -61,7 +65,7 @@ export const App: React.FC = () => {
   };
 
   const handleCheckAllTodos = () => {
-    setTodos(todos.map(todo => ({
+    setTodos((prev) => prev.map(todo => ({
       ...todo,
       completed: !isChecked,
     })));
