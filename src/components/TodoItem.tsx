@@ -1,12 +1,84 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { Todo } from '../types/Todo';
+import { useTodo } from '../hooks/useTodo';
 
 type Props = {
   todo: Todo;
 };
 
-export const TodoItem:React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { todos, setTodos, setIsChecked } = useTodo();
+  const [title, setTitle] = useState(todo.title);
+  const [isEditing, setIsEditing] = useState(false);
+  const [focus, setFocus] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (focus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [focus]);
+
+  const checkTodo = (todoId: number): void => {
+    const updatedTodos = todos.map(item => (
+      item.id === todoId
+        ? { ...item, completed: !item.completed }
+        : item));
+
+    setTodos(updatedTodos);
+    setIsChecked(updatedTodos.every(item => item.completed));
+  };
+
+  const handleDoubleClick = useCallback(() => {
+    setIsEditing(true);
+    setFocus(true);
+  }, [isEditing]);
+
+  function deleteTodo(todoId: number): void {
+    const filteredTodos = todos
+      .filter(item => item.id !== todoId);
+
+    setTodos(filteredTodos);
+  }
+
+  const handleBlur = () => {
+    const newTitle = title.trim();
+
+    if (!newTitle) {
+      deleteTodo(todo.id);
+
+      return;
+    }
+
+    setTodos(todos.map(item => (
+      item.id === todo.id
+        ? {
+          ...todo,
+          title: newTitle,
+        }
+        : item)));
+
+    setTitle(newTitle);
+    setIsEditing(false);
+    setFocus(false);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setTitle(todo.title);
+      setIsEditing(false);
+      setFocus(false);
+    }
+
+    if (event.key === 'Enter') {
+      handleBlur();
+    }
+  };
+
   return (
     <div
       className={classNames('todo', {
@@ -18,15 +90,43 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
+          onChange={() => checkTodo(todo.id as number)}
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
+      {!isEditing ? (
+        <>
+          <span
+            className="todo__title"
+            onDoubleClick={handleDoubleClick}
+          >
+            {todo.title}
+          </span>
+          <button
+            type="button"
+            className="todo__remove"
+            onClick={() => deleteTodo(todo.id)}
+          >
+            ×
+          </button>
+        </>
+      ) : (
+        <form>
+          <input
+            ref={inputRef}
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            onChange={event => setTitle(event.target.value)}
+            value={title}
+            onBlur={handleBlur}
+            onKeyUp={handleKeyUp}
+          />
+        </form>
+      )}
 
-      {/* Remove button appears only on hover */}
-      <button type="button" className="todo__remove">×</button>
-
-      {/* overlay will cover the todo while it is being updated */}
+      {/* overlay will cover the todo while it is being updated
+      'is-active' class puts this modal on top of the todo */}
       <div className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
@@ -34,84 +134,3 @@ export const TodoItem:React.FC<Props> = ({ todo }) => {
     </div>
   );
 };
-
-// This is a completed todo
-//       <div className="todo completed">
-//         <label className="todo__status-label">
-//           <input
-//             type="checkbox"
-//             className="todo__status"
-//             checked
-//           />
-//         </label>
-
-//         <span className="todo__title">Completed Todo</span>
-
-//         Remove button appears only on hover
-//         <button type="button" className="todo__remove">×</button>
-
-//         overlay will cover the todo while it is being updated
-//         <div className="modal overlay">
-//           <div className="modal-background has-background-white-ter" />
-//           <div className="loader" />
-//         </div>
-//       </div>
-
-//       This todo is not completed
-//       <div className="todo">
-//         <label className="todo__status-label">
-//           <input
-//             type="checkbox"
-//             className="todo__status"
-//           />
-//         </label>
-
-//         <span className="todo__title">Not Completed Todo</span>
-//         <button type="button" className="todo__remove">×</button>
-
-//         <div className="modal overlay">
-//           <div className="modal-background has-background-white-ter" />
-//           <div className="loader" />
-//         </div>
-//       </div>
-
-//       This todo is being edited
-//       <div className="todo">
-//         <label className="todo__status-label">
-//           <input
-//             type="checkbox"
-//             className="todo__status"
-//           />
-//         </label>
-
-//         This form is shown instead of the title and remove button
-//         <form>
-//           <input
-//             type="text"
-//             className="todo__title-field"
-//             placeholder="Empty todo will be deleted"
-//             value="Todo is being edited now"
-//           />
-//         </form>
-
-//         <div className="modal overlay">
-//           <div className="modal-background has-background-white-ter" />
-//           <div className="loader" />
-//         </div>
-//       </div>
-
-//       This todo is in loadind state
-//       <div className="todo">
-//         <label className="todo__status-label">
-//           <input type="checkbox" className="todo__status" />
-//         </label>
-
-//         <span className="todo__title">Todo is being saved now</span>
-//         <button type="button" className="todo__remove">×</button>
-
-//         'is-active' class puts this modal on top of the todo
-//         <div className="modal overlay is-active">
-//           <div className="modal-background has-background-white-ter" />
-//           <div className="loader" />
-//         </div>
-//       </div>

@@ -19,18 +19,16 @@ type Props = {
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isChecked, setIsChecked] = useState<boolean>(
-    todos.every(todo => todo.completed) && todos.length > 0,
-  );
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const [filter, setFilter] = useState(Status.ALL);
 
   const visibleTodos = () => {
     switch (filter) {
       case Status.ACTIVE:
-        return todos.filter(todo => todo.completed === false);
+        return todos.filter(todo => !todo.completed);
 
       case Status.COMPLETED:
-        return todos.filter(todo => todo.completed === true);
+        return todos.filter(todo => todo.completed);
 
       default:
         return todos;

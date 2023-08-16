@@ -19,11 +19,20 @@ export const App: React.FC = () => {
   } = useTodo();
 
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setTodos);
+      .then(setTodos)
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      });
   }, []);
+
+  setIsChecked(todos.every(todo => todo.completed) && todos.length > 0);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoTitle(event.target.value);
@@ -72,6 +81,10 @@ export const App: React.FC = () => {
     setIsChecked(false);
   };
 
+  const handleDeleteErrorMessage = () => {
+    setErrorMessage('');
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -82,16 +95,14 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className={classNames('todoapp__toggle-all', {
-              active: activeTodosCounter > 0,
+              active: isChecked,
             })}
-            onChange={handleCheckAllTodos}
+            onClick={handleCheckAllTodos}
           />
 
-          {/* Add a todo on form submit */}
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -103,46 +114,44 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos && (
+        {todos.length > 0 && (
           <>
-            <TodoList todos={todos} />
+            <TodoList />
 
-            {/* Hide the footer if there are no todos */}
             <footer className="todoapp__footer">
               <span className="todo-count">
                 {`${activeTodosCounter} item${activeTodosCounter === 1 ? '' : 's'} left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <TodoFilter />
 
-              {/* don't show this button if there are no completed todos */}
-              {completedTodosCounter > 0 && (
-                <button
-                  type="button"
-                  className="todoapp__clear-completed"
-                  onClick={clearCompletedTodos}
-                >
-                  Clear completed
-                </button>
-              )}
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                onClick={clearCompletedTodos}
+                disabled={completedTodosCounter < 0}
+              >
+                {completedTodosCounter > 0 && 'Clear completed'}
+              </button>
             </footer>
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {errorMessage && (
+        <div className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={handleDeleteErrorMessage}
+          />
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };

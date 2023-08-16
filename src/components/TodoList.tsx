@@ -1,17 +1,15 @@
 import React from 'react';
-import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+import { useTodo } from '../hooks/useTodo';
 
-type Props = {
-  todos: Todo[];
-};
+export const TodoList: React.FC = React.memo(() => {
+  const { visibleTodos } = useTodo();
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {todos.map(todo => (
+      {visibleTodos().map(todo => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </section>
   );
-};
+});
