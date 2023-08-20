@@ -27,7 +27,7 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     switch (filter) {
       case Filters.Active: {
-        return [...todos].filter(todo => !todo.completed);
+        return todos.filter(todo => !todo.completed);
       }
 
       case Filters.Completed: {

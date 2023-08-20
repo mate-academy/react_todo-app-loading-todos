@@ -16,10 +16,7 @@ export const ErrorMessage: React.FC<Props> = ({
 }) => {
   return (
     <div className={cn(
-      'notification',
-      'is-danger',
-      'is-light',
-      'has-text-weight-normal',
+      'notification is-danger is-light has-text-weight-normal',
       { hidden: !isVisible },
     )}
     >
