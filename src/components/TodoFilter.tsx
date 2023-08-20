@@ -10,16 +10,8 @@ export const TodoFilter: React.FC<Props> = ({
   setStatus,
   status,
 }) => {
-  const handleAllButton = () => {
-    setStatus(Status.ALL);
-  };
-
-  const handleActiveButton = () => {
-    setStatus(Status.ACTIVE);
-  };
-
-  const handleCompletedButton = () => {
-    setStatus(Status.COMPLETED);
+  const handleFilter = (filter: Status) => () => {
+    setStatus(filter);
   };
 
   return (
@@ -29,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
         className={classNames('filter__link', {
           selected: status === Status.ALL,
         })}
-        onClick={handleAllButton}
+        onClick={handleFilter(Status.ALL)}
       >
         All
       </a>
@@ -39,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
         className={classNames('filter__link', {
           selected: status === Status.ACTIVE,
         })}
-        onClick={handleActiveButton}
+        onClick={handleFilter(Status.ACTIVE)}
       >
         Active
       </a>
@@ -49,7 +41,7 @@ export const TodoFilter: React.FC<Props> = ({
         className={classNames('filter__link', {
           selected: status === Status.COMPLETED,
         })}
-        onClick={handleCompletedButton}
+        onClick={handleFilter(Status.COMPLETED)}
       >
         Completed
       </a>
