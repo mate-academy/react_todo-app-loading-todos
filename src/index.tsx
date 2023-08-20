@@ -10,6 +10,6 @@ import { GlobalContextPropvider } from './context/GlobalContext';
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(
     <GlobalContextPropvider>
-     <App />
-    </GlobalContextPropvider>
-);
+      <App />
+    </GlobalContextPropvider>,
+  );
