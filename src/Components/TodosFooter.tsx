@@ -1,8 +1,8 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { TodoContext } from './TodosContext';
 import { Todo } from '../types/Todo';
 import { ListAction } from '../Enum/ListAction';
+import { useTodo } from '../Hooks/UseTodo';
 
 export const TodosFooter: React.FC = () => {
   const {
@@ -10,7 +10,7 @@ export const TodosFooter: React.FC = () => {
     setTodo,
     filter,
     setFilter,
-  } = useContext(TodoContext);
+  } = useTodo();
 
   const selectedTodosLength = useMemo(() => (
     todo.filter(todos => !todos.completed).length), [todo]);

@@ -1,20 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { ListAction } from '../Enum/ListAction';
 import { Todo } from '../types/Todo';
-
-export type TodosContext = {
-  todo: Todo[],
-  setTodo: (value: Todo[]) => void,
-  filter: ListAction,
-  setFilter: (value: ListAction) => void,
-  filterTodos: () => Todo[],
-  isToggleAll: boolean;
-  setIsToggleAll: (ListAction: boolean) => void,
-};
-
-type Props = {
-  children: React.ReactNode;
-};
+import { TodosContext } from '../types/TodosContext';
 
 export const TodoContext = React.createContext<TodosContext>({
   todo: [],
@@ -25,6 +12,10 @@ export const TodoContext = React.createContext<TodosContext>({
   isToggleAll: false,
   setIsToggleAll: () => {},
 });
+
+type Props = {
+  children: React.ReactNode;
+};
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todo, setTodo] = useState<Todo[]>([]);

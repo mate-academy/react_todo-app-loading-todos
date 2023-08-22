@@ -1,10 +1,9 @@
-import { useContext } from 'react';
-import { TodoContext } from './TodosContext';
+import { useTodo } from '../Hooks/UseTodo';
 
 export const TodosHeader = () => {
   const {
     todo,
-  } = useContext(TodoContext);
+  } = useTodo();
 
   const activeTodos = todo.filter(todos => !todos.completed).length;
 
