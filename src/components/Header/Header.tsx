@@ -5,7 +5,7 @@ export const Header: React.FC = () => {
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
       <button
-        aria-label="button"
+        aria-label="change the completed of todos"
         type="button"
         className="todoapp__toggle-all active"
       />

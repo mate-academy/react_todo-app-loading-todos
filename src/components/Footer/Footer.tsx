@@ -2,30 +2,42 @@ import React, { useState } from 'react';
 
 type Props = {
   changeQuery: (query: string) => void,
+  isCompleted: boolean,
+  numberActive: number,
 };
 
-export const Footer: React.FC<Props> = ({ changeQuery }) => {
+enum StatusTodos {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
+}
+
+export const Footer: React.FC<Props> = ({
+  changeQuery,
+  isCompleted,
+  numberActive,
+}) => {
   const [status, setStatus] = useState('All');
 
   const handleClickAll = () => {
-    changeQuery('All');
-    setStatus('All');
+    changeQuery(StatusTodos.all);
+    setStatus(StatusTodos.all);
   };
 
   const handleClickActive = () => {
-    changeQuery('Active');
-    setStatus('Active');
+    changeQuery(StatusTodos.active);
+    setStatus(StatusTodos.active);
   };
 
   const handleClickCompleted = () => {
-    changeQuery('Completed');
-    setStatus('Completed');
+    changeQuery(StatusTodos.completed);
+    setStatus(StatusTodos.completed);
   };
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        3 items left
+        {`${numberActive} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -56,9 +68,11 @@ export const Footer: React.FC<Props> = ({ changeQuery }) => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
-        Clear completed
-      </button>
+      {isCompleted && (
+        <button type="button" className="todoapp__clear-completed">
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

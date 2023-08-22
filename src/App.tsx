@@ -14,15 +14,40 @@ export const App: React.FC = () => {
   const [closeError, setCloseError] = useState(false);
   const [errorMassege, setErrorMassege] = useState('');
   const [query, setQuery] = useState('All');
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [numberActive, setNumberActive] = useState(0);
 
   function hideError() {
     setTimeout(() => setCloseError(true), 3000);
   }
 
+  function isCompletedTodo() {
+    const result = myTodos.find(todo => todo.completed);
+
+    if (result) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function getNumberActiveTodos(items: Todo[]) {
+    const activeTodos = items.filter(todo => !todo.completed);
+
+    return activeTodos.length;
+  }
+
+  if (isCompletedTodo()) {
+    setIsCompleted(true);
+  }
+
   useEffect(() => {
     setCloseError(true);
     getTodos(USER_ID)
-      .then(setMyTodos)
+      .then((todos) => {
+        setMyTodos(todos);
+        setNumberActive(getNumberActiveTodos(todos));
+      })
       .catch(() => {
         setErrorMassege('unable to load todos');
         setCloseError(false);
@@ -61,7 +86,13 @@ export const App: React.FC = () => {
         <Header />
         <Main todos={filterTodos(query)} />
 
-        {myTodos.length !== 0 && <Footer changeQuery={setQuery} />}
+        {myTodos.length !== 0 && (
+          <Footer
+            changeQuery={setQuery}
+            isCompleted={isCompleted}
+            numberActive={numberActive}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
