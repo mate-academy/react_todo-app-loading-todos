@@ -9,10 +9,16 @@ import { getTodos } from './api/todos';
 
 const USER_ID = 11359;
 
+enum QueryTodos {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [myTodos, setMyTodos] = useState<Todo[]>([]);
   const [errorMassege, setErrorMassege] = useState('');
-  const [query, setQuery] = useState('All');
+  const [query, setQuery] = useState<string>(QueryTodos.all);
   const [isCompleted, setIsCompleted] = useState(false);
 
   function hideError() {
@@ -54,13 +60,13 @@ export const App: React.FC = () => {
 
   function filterTodos(param: string) {
     switch (param) {
-      case 'Active': {
+      case QueryTodos.active: {
         const activeTodos = myTodos.filter(todo => !todo.completed);
 
         return activeTodos;
       }
 
-      case 'Completed': {
+      case QueryTodos.completed: {
         const completedTodos = myTodos.filter(todo => todo.completed);
 
         return completedTodos;
@@ -79,7 +85,7 @@ export const App: React.FC = () => {
         <Header />
         <Main todos={filterTodos(query)} />
 
-        {myTodos.length !== 0 && (
+        {!!myTodos.length && (
           <Footer
             changeQuery={setQuery}
             isCompleted={isCompleted}

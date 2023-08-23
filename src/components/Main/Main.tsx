@@ -8,8 +8,8 @@ type Props = {
 export const Main: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
-      {todos.map(todo => (
-        <div key={todo.id} className="todo">
+      {todos.map(({ title, id }) => (
+        <div key={id} className="todo">
           <label className="todo__status-label">
             <input
               type="checkbox"
@@ -17,7 +17,7 @@ export const Main: React.FC<Props> = ({ todos }) => {
             />
           </label>
 
-          <span className="todo__title">{todo.title}</span>
+          <span className="todo__title">{title}</span>
           <button type="button" className="todo__remove">×</button>
 
           <div className="modal overlay">
