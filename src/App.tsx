@@ -48,7 +48,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header todos={todos} />
         <Todos todos={visibleTodos} />
-        {todos.length >= 1
+        {todos.length
           && (
             <Footer
               todos={todos}
