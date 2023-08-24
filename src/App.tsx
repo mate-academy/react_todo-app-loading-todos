@@ -1,33 +1,39 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { client } from './utils/fetchClient';
 import { Todo } from './types/Todo';
+import { getTodos } from './api/todos';
 
 const USER_ID = 11361;
 
-// https://mate.academy/students-api/todos?userId=11361
-
-// const todos = client.get('/todos?userId=11361');
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [updatedTodos, setuptadedTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState(false);
+  const [updatedTodos, setUptadedTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('all');
 
   useEffect(() => {
-    client.get<Todo[]>('/todos?userId=11361')
-      .then((json: Todo[]) => setTodos(json))
-      .catch(() => {
-        setError(true);
-        setTimeout(() => setError(false), 3000);
-      });
+    async function fetchTodos() {
+      try {
+        const data = await getTodos(USER_ID);
+
+        setTodos(data);
+        setUptadedTodos(data);
+      } catch (error) {
+        setErrorMessage('Unable to load a todo');
+      }
+    }
+
+    fetchTodos();
   }, []);
 
   useEffect(() => {
-    setuptadedTodos(todos);
-  }, [todos]);
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    }
+  }, [errorMessage]);
 
   useEffect(() => {
     const filteredTodos = todos.filter(todo => {
@@ -43,7 +49,7 @@ export const App: React.FC = () => {
       }
     });
 
-    setuptadedTodos(filteredTodos);
+    setUptadedTodos(filteredTodos);
   }, [sortBy]);
 
   if (!USER_ID) {
@@ -150,24 +156,24 @@ export const App: React.FC = () => {
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
-        className={error
+        className={errorMessage
           ? 'notification is-danger is-light has-text-weight-normal'
           : 'notification is-danger is-light has-text-weight-normal hidden'}
       >
         <button
           type="button"
           className="delete"
-          onClick={() => setError(false)}
+          onClick={() => setErrorMessage('')}
         />
 
         {/* show only one message at a time */}
-        Unable to load a todo
-        <br />
+        {errorMessage}
+        {/* <br />
         Unable to add a todo
         <br />
         Unable to delete a todo
         <br />
-        Unable to update a todo
+        Unable to update a todo */}
       </div>
     </div>
   );
