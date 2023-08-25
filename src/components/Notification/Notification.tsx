@@ -2,13 +2,14 @@
 import cn from 'classnames';
 import React, { useContext, useEffect } from 'react';
 import { TodosContext } from '../../TodosContext';
+import { Error } from '../../types/Error';
 
 export const Notification: React.FC = () => {
   const { errorMessage, setErrorMessage } = useContext(TodosContext);
   let timeoutId = 0;
 
   useEffect(() => {
-    timeoutId = window.setTimeout(() => setErrorMessage(''), 3000);
+    timeoutId = window.setTimeout(() => setErrorMessage(Error.Absent), 3000);
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -24,7 +25,7 @@ export const Notification: React.FC = () => {
       <button
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => setErrorMessage(Error.Absent)}
       />
       {errorMessage}
     </div>

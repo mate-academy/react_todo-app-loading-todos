@@ -7,6 +7,7 @@ import * as todoService from './api/todos';
 import { Notification } from './components/Notification';
 import { UserWarning } from './UserWarning';
 import { TodosContext } from './TodosContext';
+import { Error } from './types/Error';
 
 const USER_ID = 11364;
 
@@ -21,14 +22,18 @@ export const App: React.FC = () => {
     todoService.getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(Error.Load);
       });
   }, []);
 
-  const completed = useMemo(() => {
-    return todos.filter(todo => todo.completed).length;
+  const [completed, active]: number[] = useMemo(() => {
+    const complete = todos.filter(todo => todo.completed).length;
+
+    return [
+      complete,
+      todos.length - complete,
+    ];
   }, [todos]);
-  const active = todos.length - completed;
 
   if (!USER_ID) {
     return <UserWarning />;

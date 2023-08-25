@@ -17,7 +17,7 @@ export const TodosContext = React.createContext<TodosGlobalContext>({
   todos: [],
   setTodos: () => {},
   filteredTodos: [],
-  errorMessage: '',
+  errorMessage: Error.Absent,
   setErrorMessage: () => {},
   filter: Filter.All,
   setFilter: () => {},
@@ -29,7 +29,7 @@ type Props = {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<Error>('');
+  const [errorMessage, setErrorMessage] = useState<Error>(Error.Absent);
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
   const filteredTodos = useMemo(() => {
@@ -40,6 +40,9 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
         case Filter.Completed:
           return todo.completed;
+
+        case Filter.All:
+          return true;
 
         default:
           return true;

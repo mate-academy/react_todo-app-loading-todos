@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
@@ -7,8 +6,8 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [isTodoLoading] = useState(false);
-  const [isEditable] = useState(false);
+  const isTodoLoading = false;
+  const isEditable = false;
 
   return (
     <li
