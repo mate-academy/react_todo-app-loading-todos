@@ -1,22 +1,26 @@
 import React from 'react';
 import { TodoFilter } from './TodoFilter/TodoFilter';
-import { Todo } from '../../types/Todo';
 import { TodoCounter } from './TodoCounter';
+import { TodoClearButton } from './TodoClearButton';
 
 type Props = {
-  todos: Todo[]
-  setTodo: (currentTodo: Todo[]) => void,
-
+  changeQuery: (query: string) => void,
+  active: number,
+  completed: boolean,
 };
 
-export const TodoFooter: React.FC<Props> = ({ todos, setTodo }) => {
+export const TodoFooter: React.FC<Props> = ({
+  changeQuery,
+  completed,
+  active,
+}) => {
   return (
     <footer className="todoapp__footer">
-      <TodoCounter todos={todos} />
+      <TodoCounter active={active} />
       <TodoFilter
-        todos={todos}
-        setTodo={setTodo}
+        changeQuery={changeQuery}
       />
+      <TodoClearButton completed={completed} />
     </footer>
   );
 };

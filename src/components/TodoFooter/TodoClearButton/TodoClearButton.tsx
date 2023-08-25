@@ -1,23 +1,18 @@
 import React from 'react';
-import { Todo } from '../../../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  completed: boolean;
 };
 
-export const TodoClearButton: React.FC<Props> = ({ todos }) => {
-  const completedTodoLength = todos.filter(
-    currentTodo => currentTodo.completed,
-  ).length;
-
+export const TodoClearButton: React.FC<Props> = ({ completed }) => {
   return (
-    completedTodoLength > 0 ? (
+    { completed } && (
       <button
         className="clear-completed"
         type="button"
       >
         Clear completed
       </button>
-    ) : null
+    )
   );
 };

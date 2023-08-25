@@ -1,17 +1,14 @@
 import React from 'react';
-import { Todo } from '../../../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  active: number;
 };
 
-export const TodoCounter: React.FC<Props> = ({ todos }) => {
-  const todoLength = todos.filter(currentTodo => !currentTodo.completed).length;
-
+export const TodoCounter: React.FC<Props> = ({ active }) => {
   return (
     <>
       <span className="todo-count">
-        {`${todoLength} ${todoLength <= 1 ? 'item' : 'items'} left`}
+        {`${active} ${active <= 1 ? 'item' : 'items'} left`}
       </span>
     </>
   );
