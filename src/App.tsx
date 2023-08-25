@@ -11,7 +11,6 @@ const USER_ID = 11368;
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
   const [query, setQuery] = useState<string>(Filter.all);
-  const [isCompleted, setCompleted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   function hideError() {
@@ -26,10 +25,6 @@ export const App: React.FC = () => {
     const activeTodo = todo.filter(currentTodo => !currentTodo.completed);
 
     return activeTodo.length;
-  }
-
-  if (isCompletedTodos()) {
-    setCompleted(true);
   }
 
   const numberOfActive = useMemo(() => {
@@ -95,7 +90,7 @@ export const App: React.FC = () => {
         {!!todos.length && (
           <TodoFooter
             changeQuery={setQuery}
-            completed={isCompleted}
+            completed={isCompletedTodos()}
             active={numberOfActive}
           />
         )}
