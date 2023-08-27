@@ -8,9 +8,15 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
+  const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const handleEditing = () => {
     setIsEditing(true);
+  };
+
+  const handleChecked = () => {
+    setChecked(!checked);
   };
 
   return (
@@ -18,25 +24,28 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       className={classNames('todo', { completed, editing: isEditing })}
       key={id}
     >
-      <div className="view">
+      <label
+        className="todo__status-label"
+        onDoubleClick={handleEditing}
+        htmlFor={`toggle-view-${id}`}
+      >
         <input
           type="checkbox"
-          className="toggle"
+          className="todo__status"
           id={`toggle-view-${id}`}
+          onClick={handleChecked}
         />
-        <label onDoubleClick={handleEditing} htmlFor={`toggle-view-${id}`}>
-          {title}
-        </label>
-        <button
-          type="button"
-          className="destroy"
-          aria-label="Delete Todo"
-        />
-      </div>
-      <input
-        type="text"
-        className="edit"
-      />
+      </label>
+
+      <span className="todo__title">{title}</span>
+
+      <button
+        type="button"
+        className="todo__remove"
+        aria-label="Delete Todo"
+      >
+        x
+      </button>
     </li>
   );
 };

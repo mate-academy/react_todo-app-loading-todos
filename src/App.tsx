@@ -5,6 +5,7 @@ import { Todo } from './types/Todo';
 import { client } from './utils/fetchClient';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
+import { ErrorMessage } from './types/ErrorMessage';
 
 const USER_ID = 11357;
 const URL = `/todos?userId=${USER_ID}`;
@@ -13,6 +14,20 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<ErrorMessage | null>(null);
+  const [title, setTitle] = useState('');
+
+  const resetField = (): void => {
+    setTitle('');
+    setIsError(false);
+    setError(null);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      resetField();
+    }
+  };
 
   useEffect(() => {
     client.get(URL).then(data => {
@@ -21,9 +36,9 @@ export const App: React.FC = () => {
       setFilteredTodos(todosData);
       setTodos(todosData);
     })
-      .catch(error => {
+      .catch(err => {
         setIsError(true);
-        throw new Error('Oops, something went wrong: ', error);
+        throw new Error('Oops, something went wrong: ', err);
       });
   }, []);
 
@@ -57,6 +72,9 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={title}
+              onChange={event => setTitle(event.target.value)}
+              onKeyUp={handleKeyUp}
             />
           </form>
         </header>
@@ -74,23 +92,19 @@ export const App: React.FC = () => {
         </footer>
       </div>
 
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button
-          type="button"
-          className="delete"
-          aria-label="button"
-        />
-
-        {isError && (
-          <>
-            <>Unable to add a todo</>
-            <br />
-            <>Unable to delete a todo</>
-            <>Unable to update a todo</>
-            <br />
-          </>
-        )}
-      </div>
+      {isError && (
+        <div className="notification is-danger is-light has-text-weight-normal">
+          <button
+            type="button"
+            className="delete"
+            aria-label="button"
+          />
+          <br />
+          {error}
+          <br />
+        </div>
+      )}
     </div>
+
   );
 };

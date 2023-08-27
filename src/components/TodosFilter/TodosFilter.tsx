@@ -42,10 +42,10 @@ export const TodosFilter: React.FC<Props> = ({ todos, setTodos, allTodos }) => {
   };
 
   const completedTodos
-    = todos.filter(todo => todo.completed).length;
+    = allTodos.filter(todo => todo.completed).length;
 
   const uncompletedTodos
-    = todos.filter(todo => !todo.completed).length;
+    = allTodos.filter(todo => !todo.completed).length;
 
   return (
     (todos.length > 0) ? (
@@ -83,7 +83,7 @@ export const TodosFilter: React.FC<Props> = ({ todos, setTodos, allTodos }) => {
           completedTodos && (
             <button
               type="button"
-              className="clear-completed"
+              className="todoapp__clear-completed"
             >
               Clear completed
             </button>
