@@ -6,16 +6,28 @@ import { client } from './utils/fetchClient';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
 import { ErrorMessage } from './types/ErrorMessage';
+import { Status } from './types/Status';
 
 const USER_ID = 11357;
 const URL = `/todos?userId=${USER_ID}`;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState<ErrorMessage | null>(null);
   const [title, setTitle] = useState('');
+  const [filterBy, setFilterBy] = useState<Status>(Status.all);
+
+  const filteredTodos = (filter: Status) => {
+    switch (filter) {
+      case Status.active:
+        return todos.filter(todo => !todo.completed);
+      case Status.completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  };
 
   const resetField = (): void => {
     setTitle('');
@@ -33,7 +45,6 @@ export const App: React.FC = () => {
     client.get(URL).then(data => {
       const todosData = data as Todo[];
 
-      setFilteredTodos(todosData);
       setTodos(todosData);
     })
       .catch(err => {
@@ -80,16 +91,17 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          <TodoList todos={filteredTodos} />
+          <TodoList todos={filteredTodos(filterBy)} />
         </section>
-
-        <footer className="todoapp__footer">
-          <TodosFilter
-            todos={filteredTodos}
-            setTodos={setFilteredTodos}
-            allTodos={todos}
-          />
-        </footer>
+        {
+          todos.length > 0 && (
+            <TodosFilter
+              todos={todos}
+              filterBy={filterBy}
+              setFilterBy={setFilterBy}
+            />
+          )
+        }
       </div>
 
       {isError && (

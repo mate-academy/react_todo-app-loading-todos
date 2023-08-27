@@ -1,95 +1,76 @@
-import React, { useState } from 'react';
 import classNames from 'classnames';
 
 import { Todo } from '../../types/Todo';
+import { Status } from '../../types/Status';
 
 type Props = {
-  todos: Todo[],
-  setTodos: (a: Todo[]) => void;
-  allTodos: Todo[];
+  todos: Todo[];
+  filterBy: Status;
+  setFilterBy: React.Dispatch<React.SetStateAction<Status>>;
 };
 
-export const TodosFilter: React.FC<Props> = ({ todos, setTodos, allTodos }) => {
-  enum Status {
-    all = 'all',
-    active = 'active',
-    completed = 'Completed',
-  }
-
-  const [filterBy, setFilterBy] = useState<Status>(Status.all);
-
-  const getFilteredTodos = async (filter: Status) => {
-    let filteredTodos: Todo[] = [];
-
-    switch (filter) {
-      case Status.active:
-        filteredTodos = allTodos.filter(todo => !todo.completed);
-        break;
-      case Status.completed:
-        filteredTodos = allTodos.filter(todo => todo.completed);
-        break;
-      default:
-        filteredTodos = allTodos;
-        break;
-    }
-
-    setTodos(filteredTodos);
-  };
-
+export const TodosFilter: React.FC<Props> = (
+  {
+    todos,
+    filterBy,
+    setFilterBy,
+  },
+) => {
   const handleSetFilteredTodos = (filter: Status) => {
     setFilterBy(filter);
-    getFilteredTodos(filter);
   };
 
   const completedTodos
-    = allTodos.filter(todo => todo.completed).length;
+    = todos.filter(todo => todo.completed).length;
 
   const uncompletedTodos
-    = allTodos.filter(todo => !todo.completed).length;
+    = todos.filter(todo => !todo.completed).length;
 
   return (
-    (todos.length > 0) ? (
-      <>
-        <span className="todo-count">
-          {`${uncompletedTodos} items left`}
-        </span>
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: (filterBy === Status.all),
-          })}
-          onClick={() => handleSetFilteredTodos(Status.all)}
-        >
-          All
-        </a>
+    <footer className="todoapp__footer">
+      <span className="todo-count">
+        {`${uncompletedTodos} items left`}
+      </span>
+      <a
+        href="#/"
+        className={classNames('filter__link', {
+          selected: (filterBy === Status.all),
+        })}
+        onClick={() => handleSetFilteredTodos(Status.all)}
+      >
+        All
+      </a>
 
-        <a
-          href="#/completed"
-          className="filter__link"
-          onClick={() => handleSetFilteredTodos(Status.completed)}
-        >
-          Completed
-        </a>
+      <a
+        href="#/completed"
+        className={classNames('filter__link', {
+          selected: (filterBy === Status.completed),
+        })}
+        onClick={() => handleSetFilteredTodos(Status.completed)}
+      >
+        Completed
+      </a>
 
-        <a
-          href="#/active"
-          className="filter__link"
-          onClick={() => handleSetFilteredTodos(Status.active)}
-        >
-          Active
-        </a>
+      <a
+        href="#/active"
+        className={classNames('filter__link', {
+          selected: (filterBy === Status.active),
+        })}
+        onClick={() => handleSetFilteredTodos(Status.active)}
+      >
+        Active
+      </a>
 
-        {
-          completedTodos && (
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-            >
-              Clear completed
-            </button>
-          )
-        }
-      </>
-    ) : null
+      {
+        completedTodos && (
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+          >
+            Clear completed
+          </button>
+        )
+      }
+    </footer>
   );
 };
