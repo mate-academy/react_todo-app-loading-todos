@@ -16,7 +16,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleChecked = () => {
-    setChecked(!checked);
+    setChecked(currentChecked => !currentChecked);
   };
 
   return (
@@ -33,6 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           id={`toggle-view-${id}`}
+          checked={checked}
           onClick={handleChecked}
         />
       </label>

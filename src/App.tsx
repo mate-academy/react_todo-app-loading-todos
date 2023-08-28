@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
@@ -18,8 +18,8 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [filterBy, setFilterBy] = useState<Status>(Status.all);
 
-  const filteredTodos = (filter: Status) => {
-    switch (filter) {
+  const filteredTodos = useMemo(() => {
+    switch (filterBy) {
       case Status.active:
         return todos.filter(todo => !todo.completed);
       case Status.completed:
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-  };
+  }, [filterBy, todos]);
 
   const resetField = (): void => {
     setTitle('');
@@ -63,6 +63,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
+          <button
+            data-cy="ToggleAllButton"
+            aria-label="toggle-button"
+            type="button"
+            className="todoapp__toggle-all"
+          />
           {!todos.find(todo => todo.completed === false) && (
             <button
               type="button"
@@ -71,7 +77,7 @@ export const App: React.FC = () => {
                 cn(
                   'todoapp__toggle-all',
                   {
-                    active: todos.length > 0,
+                    active: !!todos.length,
                   },
                 )
               }
@@ -90,9 +96,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main">
-          <TodoList todos={filteredTodos(filterBy)} />
-        </section>
+        <TodoList todos={filteredTodos} />
         {
           todos.length > 0 && (
             <TodosFilter
