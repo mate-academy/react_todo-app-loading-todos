@@ -33,9 +33,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((currentTodo) => {
-        setTodo(currentTodo);
-      })
+      .then(setTodo)
       .catch(() => {
         setErrorMessage('Unable to load Todo');
         hideError();
@@ -43,29 +41,21 @@ export const App: React.FC = () => {
   }, []);
 
   const getFilteredTodo = (filterMode: string) => {
-    let filteredTodos: Todo[] = [];
-
     switch (filterMode) {
       case Filter.all:
-        filteredTodos = todos;
-
-        return filteredTodos;
+        return todos;
 
       case Filter.active:
-        filteredTodos = todos.filter(currentTodo => !currentTodo.completed);
-
-        return filteredTodos;
+        return todos.filter(currentTodo => !currentTodo.completed);
 
       case Filter.completed:
-        filteredTodos = todos.filter(currentTodo => currentTodo.completed);
-
-        return filteredTodos;
+        return todos.filter(currentTodo => currentTodo.completed);
 
       default:
         break;
     }
 
-    return filteredTodos;
+    return todos;
   };
 
   return (
