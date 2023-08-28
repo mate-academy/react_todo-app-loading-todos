@@ -28,39 +28,41 @@ export const TodosFilter: React.FC<Props> = (
 
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">
+      <span className="todo-count" data-cy="todosCounter">
         {`${uncompletedTodos} items left`}
       </span>
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: (filterBy === Status.all),
-        })}
-        onClick={() => handleSetFilteredTodos(Status.all)}
-      >
-        All
-      </a>
+      <nav className="filter" data-cy="Filter">
+        <a
+          href="#/"
+          className={classNames('filter__link', {
+            selected: (filterBy === Status.all),
+          })}
+          onClick={() => handleSetFilteredTodos(Status.all)}
+        >
+          All
+        </a>
 
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: (filterBy === Status.completed),
-        })}
-        onClick={() => handleSetFilteredTodos(Status.completed)}
-      >
-        Completed
-      </a>
+        <a
+          href="#/completed"
+          className={classNames('filter__link', {
+            selected: (filterBy === Status.completed),
+          })}
+          onClick={() => handleSetFilteredTodos(Status.completed)}
+        >
+          Completed
+        </a>
 
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: (filterBy === Status.active),
-        })}
-        onClick={() => handleSetFilteredTodos(Status.active)}
-      >
-        Active
-      </a>
+        <a
+          href="#/active"
+          className={classNames('filter__link', {
+            selected: (filterBy === Status.active),
+          })}
+          onClick={() => handleSetFilteredTodos(Status.active)}
+        >
+          Active
+        </a>
 
+      </nav>
       {
         completedTodos && (
           <button
