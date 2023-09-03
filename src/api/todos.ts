@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
