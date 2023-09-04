@@ -7,12 +7,14 @@ type Props = {
 };
 
 export const Filter: React.FC<Props> = ({ activeFilter, setActiveFilter }) => {
+  const isItActiveFilter = (filter: ActiveFilter) => activeFilter === filter;
+
   return (
     <nav className="filter">
       <a
         href="#/"
         className={classNames('filter__link', {
-          selected: activeFilter === ActiveFilter.All,
+          selected: isItActiveFilter(ActiveFilter.All),
         })}
         onClick={() => setActiveFilter(ActiveFilter.All)}
       >
@@ -22,7 +24,7 @@ export const Filter: React.FC<Props> = ({ activeFilter, setActiveFilter }) => {
       <a
         href="#/active"
         className={classNames('filter__link', {
-          selected: activeFilter === ActiveFilter.Active,
+          selected: isItActiveFilter(ActiveFilter.Active),
         })}
         onClick={() => setActiveFilter(ActiveFilter.Active)}
       >
@@ -32,7 +34,7 @@ export const Filter: React.FC<Props> = ({ activeFilter, setActiveFilter }) => {
       <a
         href="#/completed"
         className={classNames('filter__link', {
-          selected: activeFilter === ActiveFilter.Completed,
+          selected: isItActiveFilter(ActiveFilter.Completed),
         })}
         onClick={() => setActiveFilter(ActiveFilter.Completed)}
       >
