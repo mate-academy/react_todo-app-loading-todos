@@ -6,10 +6,11 @@ import React, {
 import classNames from 'classnames';
 import {
   StateContext,
-  ACTIONS,
-  FILTER,
+  // ACTIONS,
+  // FILTER,
 } from './components/TodoContext';
 import { TodoList } from './components/TodoList';
+import { FILTER, ACTIONS } from './utils/enums';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');

@@ -6,21 +6,9 @@ import React, {
 } from "react";
 import { Todo } from "../types/Todo";
 import { getTodos } from '../api/todos';
+import { FILTER, ACTIONS } from '.././utils/enums';
 
 const USER_ID = 11384;
-
-export enum ACTIONS {
-  SORT,
-  SET_LENGTH,
-  SET_LIST,
-  SET_ERROR,
-}
-
-export enum FILTER {
-  ALL = 'All',
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
-}
 
 type Action = { type: ACTIONS.SORT, payload: string }
   | { type: ACTIONS.SET_LIST, payload: Todo[] }
@@ -69,7 +57,7 @@ function reducer(state: State, action: Action): State {
       return [
         {
           ...state[0],
-          totalLength: action.payload,
+          totalLength: state[0].list.length,
         },
         () => { }
       ];
@@ -101,7 +89,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     getTodos(USER_ID)
       .then(res => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res })
-        dispatch({ type: ACTIONS.SET_LENGTH, payload: res.length })
+        // dispatch({ type: ACTIONS.SET_LENGTH, payload: res.length })
       })
       .catch(() => dispatch({ type: ACTIONS.SET_ERROR, payload: 'Can`t load the page' }))
   }, []);

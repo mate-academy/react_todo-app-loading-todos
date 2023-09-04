@@ -6,8 +6,6 @@ type Props = {
   todo: Todo,
 }
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  function handleCheck() {}
-  console.log(todo.completed, 'todo');
 
   return (
     <div className={classNames('todo',{
@@ -17,8 +15,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       <input
         type="checkbox"
         className="todo__status"
-        // checked={todo.completed}
-        onChange={handleCheck}
       />
     </label>
 
