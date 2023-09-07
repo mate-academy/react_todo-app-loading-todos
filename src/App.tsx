@@ -51,7 +51,6 @@ export const App: React.FC = () => {
               className={classNames('filter__link', {
                 selected: state.sortBy === FILTER.ALL,
               })}
-              // "filter__link selected"
               onClick={() => handleFilter(FILTER.ALL)}
             >
               All

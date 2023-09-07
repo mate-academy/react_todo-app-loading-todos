@@ -21,8 +21,6 @@ interface Data {
   error: string,
 };
 
-
-
 function reducer(state: Data, action: Action): Data {
   switch (action.type) {
     case ACTIONS.SORT:
@@ -30,8 +28,6 @@ function reducer(state: Data, action: Action): Data {
           ...state,
           sortBy: action.payload,
         };
-        // () => { }
-
     case ACTIONS.SET_LIST:
       return {
           ...state,
@@ -76,7 +72,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     getTodos(USER_ID)
       .then(res => {
         dispatch({ type: ACTIONS.SET_LIST, payload: res })
-        // dispatch({ type: ACTIONS.SET_LENGTH, payload: res.length })
       })
       .catch(() => dispatch({ type: ACTIONS.SET_ERROR, payload: 'Can`t load the page' }))
   }, []);
