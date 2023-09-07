@@ -12,7 +12,6 @@ const USER_ID = 11384;
 
 type Action = { type: ACTIONS.SORT, payload: string }
   | { type: ACTIONS.SET_LIST, payload: Todo[] }
-  | { type: ACTIONS.SET_LENGTH, payload: number }
   | { type: ACTIONS.SET_ERROR, payload: string }
 
 interface Data {
@@ -22,59 +21,47 @@ interface Data {
   error: string,
 };
 
-type State = [
-  state: Data,
-  dispatch: Dispatch<Action>,
-];
 
-function reducer(state: State, action: Action): State {
+
+function reducer(state: Data, action: Action): Data {
   switch (action.type) {
     case ACTIONS.SORT:
-      return [
-        {
-          ...state[0],
+      return {
+          ...state,
           sortBy: action.payload,
-        },
-        () => { }
-      ];
+        };
+        // () => { }
+
     case ACTIONS.SET_LIST:
-      return [
-        {
-          ...state[0],
+      return {
+          ...state,
           list: action.payload,
-        },
-        () => { }
-      ];
+          totalLength: action.payload.length,
+        };
     case ACTIONS.SET_ERROR:
-      return [
-        {
-          ...state[0],
+      return {
+          ...state,
           error: action.payload,
-        },
-        () => { }
-      ];
-    case ACTIONS.SET_LENGTH:
-      return [
-        {
-          ...state[0],
-          totalLength: state[0].list.length,
-        },
-        () => { }
-      ];
+        };
     default:
       return state;
   }
 }
 
-const initialState: State = [
-  {
+type State = {
+  state: Data,
+  dispatch: Dispatch<Action>,
+};
+
+const initialState: State = {
+  state : {
     list: [],
     sortBy: 'All',
     totalLength: 0,
     error: '',
   },
-  () => { },
-];
+  dispatch: () => { },
+};
 
 export const StateContext = React.createContext(initialState);
 
@@ -83,7 +70,7 @@ type Props = {
 };
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState.state);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -95,23 +82,26 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   function filteredTodos(): Todo[] {
-    switch (state[0].sortBy) {
+    switch (state.sortBy) {
       case FILTER.ALL:
-        return [...state[0].list];
+        return [...state.list];
       case FILTER.COMPLETED:
-        return state[0].list.filter(todo => todo.completed);
+        return state.list.filter(todo => todo.completed);
       case FILTER.ACTIVE:
-        return state[0].list.filter(todo => !todo.completed);
+        return state.list.filter(todo => !todo.completed);
       default:
-        return state[0].list;
+        return state.list;
     }
   }
 
   return (
-    <StateContext.Provider value={[{
-      ...state[0],
-      list: filteredTodos(),
-    }, dispatch]}>
+    <StateContext.Provider value={{
+      state: {
+        ...state,
+        list: filteredTodos(),
+      },
+      dispatch,
+    }}>
       {children}
     </StateContext.Provider>
   )

@@ -6,15 +6,13 @@ import React, {
 import classNames from 'classnames';
 import {
   StateContext,
-  // ACTIONS,
-  // FILTER,
 } from './components/TodoContext';
 import { TodoList } from './components/TodoList';
 import { FILTER, ACTIONS } from './utils/enums';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
-  const [state, dispatch] = useContext(StateContext);
+  const { state, dispatch } = useContext(StateContext);
 
   function handleFilter(trigger: string) {
     dispatch({ type: ACTIONS.SORT, payload: trigger });
@@ -26,10 +24,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               type="text"
