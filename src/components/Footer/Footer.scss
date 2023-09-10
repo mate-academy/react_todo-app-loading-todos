@@ -1,0 +1,10 @@
+.todoapp__clear-completed {
+  opacity: 1;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+
+  &--disabled {
+    opacity: 0;
+    cursor: unset;
+  }
+}

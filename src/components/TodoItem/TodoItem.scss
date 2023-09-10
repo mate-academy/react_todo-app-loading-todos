@@ -1,0 +1,12 @@
+.todo {
+
+  &__remove {
+    display: none;
+  }
+
+  &:hover {
+    .todo__remove {
+      display: block;
+    }
+  }
+}
