@@ -10,7 +10,7 @@ type Props = {
 
 function filteredTodos(todos: Todo[], selectedFilter: string) {
   switch (selectedFilter) {
-    case Status.Acctive:
+    case Status.Active:
       return todos.filter(item => !item.completed);
     case Status.Completed:
       return todos.filter(item => item.completed);
@@ -27,14 +27,12 @@ export const TodoList: React.FC<Props> = ({
 
   return (
     <section className="todoapp__main">
-      {updatedTodos.map((todo: Todo) => {
-        return (
-          <TodoItem
-            todo={todo}
-            key={todo.id}
-          />
-        );
-      })}
+      {updatedTodos.map((todo: Todo) => (
+        <TodoItem
+          todo={todo}
+          key={todo.id}
+        />
+      ))}
     </section>
   );
 };

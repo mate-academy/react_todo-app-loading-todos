@@ -45,9 +45,9 @@ export const Filter: React.FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: selectedFilter === Status.Acctive },
+            { selected: selectedFilter === Status.Active },
           )}
-          onClick={() => selectTheFilter(Status.Acctive)}
+          onClick={() => selectTheFilter(Status.Active)}
         >
           Active
         </a>

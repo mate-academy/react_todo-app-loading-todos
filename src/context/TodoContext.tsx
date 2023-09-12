@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { UserWarning } from '../UserWarning';
-import { getTodos } from '../api/todos';
+import { deleteTodos, getTodos } from '../api/todos';
 import { TodoContextValue } from '../types/TodoContext';
 
 const USER_ID = 11408;
@@ -42,7 +42,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
           console.error(error);
         });
     }
-  }, []);
+  }, [todos]);
 
   const addTodo = (title: string) => {
     const newTodo: Todo = {
@@ -52,6 +52,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       completed: false,
     };
 
+    // createTodos({ id, title, completed });
     setTodos([...todos, newTodo]);
   };
 
@@ -67,7 +68,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   const toogleAll = () => {
-    const allCompleted = todos.every(todo => todo.completed === true);
+    const allCompleted = todos.every(todo => todo.completed);
 
     const updatedTodos = todos.map(todo => ({
       ...todo,
@@ -78,17 +79,18 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   const deleteTodo = (id: number) => {
-    const updatedTodos = [...todos];
-    const index = todos.findIndex(todo => todo.id === id);
+    // const updatedTodos = [...todos];
+    // const index = todos.findIndex(todo => todo.id === id);
 
-    if (index !== -1) {
-      updatedTodos.splice(index, 1);
-    }
+    // if (index !== -1) {
+    //   updatedTodos.splice(index, 1);
+    // }
 
-    setTodos(updatedTodos);
+    // setTodos(updatedTodos);
+    deleteTodos(id);
   };
 
-  const deleteComplitedTodo = () => {
+  const deleteCompletedTodo = () => {
     const updatedTodos = todos.filter(todo => !todo.completed);
 
     setTodos(updatedTodos);
@@ -121,7 +123,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     toggleTodo,
     toogleAll,
     deleteTodo,
-    deleteComplitedTodo,
+    deleteComplitedTodo: deleteCompletedTodo,
     updateTodo,
     isError,
     setIsError,
@@ -141,7 +143,3 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 };
 
 export const useTodo = (): TodoContextValue => React.useContext(TodoContext);
-
-// deleteTodos(id);
-// createTodos({ id, title, completed });
-// updateTodos = ({ id, userId, title, completed });
