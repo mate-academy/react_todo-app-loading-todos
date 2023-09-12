@@ -99,23 +99,6 @@ export const App: React.FC = () => {
             </footer>
           </>
         )}
-
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          <TodoFilter
-            status={status}
-            onStatusChange={setStatus}
-          />
-
-          {isCompletedTodos && (
-            <button type="button" className="todoapp__clear-completed">
-              Clear completed
-            </button>
-          )}
-        </footer>
       </div>
 
       {errorMessage && (
