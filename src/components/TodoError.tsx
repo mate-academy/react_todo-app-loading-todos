@@ -9,12 +9,19 @@ type Props = {
 
 export const TodoError: React.FC<Props> = ({ error, onErrorChange }) => {
   useEffect(() => {
-    if (error) {
-      const timeotId = setTimeout(() => onErrorChange(Error.None),
-        3000);
+    let timeoutId: NodeJS.Timeout;
 
-      clearTimeout(timeotId);
+    if (error) {
+      timeoutId = setTimeout(() => {
+        onErrorChange(Error.None);
+      }, 3000);
     }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [error, onErrorChange]);
 
   return (
