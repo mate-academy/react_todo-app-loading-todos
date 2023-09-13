@@ -10,7 +10,7 @@ import { TodoError } from './components/TodoError';
 import { Error } from './types/Error';
 import { getTodos } from './api/todos';
 
-const USER_ID = 11204;
+const USER_ID = 11404;
 
 const getVisibleTodos = (todos: Todo[], status: FilterType) => {
   return todos.filter(todo => {
@@ -91,30 +91,27 @@ export const App: React.FC = () => {
                 onStatusChange={setStatus}
               />
 
-              {isCompletedTodos && (
-                <button
-                  type="button"
-                  className={classNames(
-                    'todoapp__clear-completed',
-                    { 'todoapp__clear-completed--disabled': !isCompletedTodos },
-                  )}
-                >
-                  Clear completed
-                </button>
-              )}
+              <button
+                type="button"
+                className={classNames(
+                  'todoapp__clear-completed',
+                  { 'todoapp__clear-completed--disabled': !isCompletedTodos },
+                )}
+              >
+                Clear completed
+              </button>
+
             </footer>
           </>
         )}
       </div>
 
-      {
-        errorMessage && (
-          <TodoError
-            error={errorMessage}
-            onErrorChange={setErrorMessage}
-          />
-        )
-      }
+      {errorMessage && (
+        <TodoError
+          error={errorMessage}
+          onErrorChange={setErrorMessage}
+        />
+      )}
     </div>
   );
 };
