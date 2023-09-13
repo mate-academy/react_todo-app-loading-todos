@@ -91,11 +91,15 @@ export const App: React.FC = () => {
                 onStatusChange={setStatus}
               />
 
-              {isCompletedTodos && (
-                <button type="button" className="todoapp__clear-completed">
-                  Clear completed
-                </button>
-              )}
+              <button
+                type="button"
+                className={classNames('todoapp__clear-completed', {
+                  'todoapp__clear-completed--disabled': !isCompletedTodos,
+                })}
+              >
+                Clear completed
+              </button>
+
             </footer>
           </>
         )}
