@@ -1,5 +1,6 @@
 import { useTodo } from '../../provider/todoProvider';
-import { FilterType } from '../../provider/types';
+import { FilterType } from '../../types/FilterType';
+
 import { TodoCount } from '../TodoCount';
 
 export const Footer = () => {

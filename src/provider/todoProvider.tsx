@@ -2,9 +2,11 @@ import {
   createContext, useContext, useEffect, useState,
 } from 'react';
 import {
-  Errors, FilterType, Props, Todo, TodoContextType,
+  Errors, Props, TodoContextType,
 } from './types';
 import { getTodos } from '../api/todos';
+import { Todo } from '../types/Todo';
+import { FilterType } from '../types/FilterType';
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined); // Zmiana na TodoContext
 const USER_ID = 11433;
