@@ -1,17 +1,14 @@
-import { Todo } from '../../types/Todo';
+import { useTodo } from '../../provider/todoProvider';
 
-type Props = {
-  todos: Todo[];
-};
-
-export const TodoCount = ({ todos }: Props) => {
-  const todosLeft = () => todos.length;
+export const TodoCount = () => {
+  const { todos } = useTodo();
+  const todosLeft = todos.filter(todo => !todo.completed);
 
   return (
     <span className="todo-count">
-      {todosLeft()}
+      {todosLeft.length}
       {' '}
-      {todosLeft() === 1 ? 'item' : 'items'}
+      {todosLeft.length === 1 ? 'item' : 'items'}
       {' '}
       left
     </span>

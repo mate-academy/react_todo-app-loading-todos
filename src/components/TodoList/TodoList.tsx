@@ -1,13 +1,9 @@
-import { FilterType } from '../../types/FilterType';
-import { Todo } from '../../types/Todo';
 import { Task } from '../Task';
+import { useTodo } from '../../provider/todoProvider';
 
-type Props = {
-  todos: Todo[];
-  filterTodos: FilterType;
-};
+export const TodoList = () => {
+  const { todos, filterTodos } = useTodo();
 
-export const TodoList = ({ todos, filterTodos }: Props) => {
   const visibleTodos = () => {
     if (filterTodos === 'active') {
       return todos.filter(todo => !todo.completed);

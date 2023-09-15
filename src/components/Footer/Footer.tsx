@@ -1,20 +1,17 @@
-import { FilterType } from '../../types/FilterType';
-import { Todo } from '../../types/Todo';
+import { useTodo } from '../../provider/todoProvider';
+import { FilterType } from '../../provider/types';
 import { TodoCount } from '../TodoCount';
 
-type Props = {
-  handleSetFilterTodos: (filterType: FilterType) => void;
-  todos: Todo[];
-};
+export const Footer = () => {
+  const { handleSetFilterTodos } = useTodo();
 
-export const Footer = ({ handleSetFilterTodos, todos }: Props) => {
   const addFilterType = (filterType: FilterType) => {
     handleSetFilterTodos(filterType);
   };
 
   return (
     <footer className="todoapp__footer">
-      <TodoCount todos={todos} />
+      <TodoCount />
       {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         <a

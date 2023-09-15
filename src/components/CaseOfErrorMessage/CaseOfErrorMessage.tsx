@@ -1,18 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import { Errors } from '../../types/Erros';
+import { useTodo } from '../../provider/todoProvider';
 
 /* Notification is shown in case of any error */
 /* Add the 'hidden' class to hide the message smoothly */
 
-type Props = {
-  error: Errors,
-  closeErrorMessage: () => void,
-};
-export const CaseOfErrorMessage = ({
-  error,
-  closeErrorMessage,
-}: Props) => {
+export const CaseOfErrorMessage = () => {
+  const { error, closeErrorMessage } = useTodo();
+
   return (
     <div
       className="notification is-danger is-light has-text-weight-normal"
@@ -23,7 +18,7 @@ export const CaseOfErrorMessage = ({
         onClick={closeErrorMessage}
       />
 
-      { error }
+      {error}
     </div>
   );
 };
