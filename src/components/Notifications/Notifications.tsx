@@ -71,4 +71,4 @@ export const Notifications: React.FC<NotificationsProps> = ({
       )}
     </div>
   );
-}
+};
