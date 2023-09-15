@@ -2,192 +2,94 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
-import { Header } from './components/Header';
+import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import {
-  createTodo,
-  deleteTodo,
-  editTodo,
-  getTodos,
-} from './api/todos';
+import { TodoFilter } from './types/TodoFilter';
+import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
-import { TodoFilter } from './types/TodoFIlter';
+import { Notifications } from './components/Notifications';
 
-export const USER_ID = 11401;
+const USER_ID = 11399;
 
 export const App: React.FC = () => {
-  const [loadingId, setLoadingId] = useState<number | null>(null);
-  const [errorAdd, setErrorAdd] = useState(false);
-  const [errorDelete, setErrorDelete] = useState(false);
-  const [errorUpdate, setErrorUpdate] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [errors, setErrors] = useState({
+    load: false,
+  });
   const [currentFilter, setCurrentFilter] = useState(TodoFilter.All);
 
-  const updateTodos = () => {
+  const filterTodos = (initTodos?: Todo[]) => {
+    let filtered;
+
+    if (initTodos) {
+      filtered = [...initTodos];
+    } else {
+      filtered = [...todos];
+    }
+
+    switch (currentFilter) {
+      case TodoFilter.Active:
+        filtered = filtered.filter(todo => !todo.completed);
+        break;
+      case TodoFilter.Completed:
+        filtered = filtered.filter(todo => todo.completed);
+        break;
+      default:
+        break;
+    }
+
+    setVisibleTodos(filtered);
+  };
+
+  const loadTodos = () => {
     getTodos(USER_ID).then(items => {
-      let completedTodos = [...items];
-
-      if (currentFilter === TodoFilter.Completed) {
-        completedTodos
-          = completedTodos.filter((item) => item.completed === true);
-      } else if (currentFilter === TodoFilter.Active) {
-        completedTodos
-        = completedTodos.filter((item) => item.completed === false);
-      }
-
-      setTodos(completedTodos);
-    })
-      .catch(() => {
-        // --
-      });
+      setTodos([...items]);
+      filterTodos(items);
+    }).catch(() => {
+      setErrors(prevErrors => ({ ...prevErrors, load: true }));
+    });
   };
 
   useEffect(() => {
-    updateTodos();
-  }, [currentFilter, todos]);
+    loadTodos();
+  }, []);
+
+  useEffect(() => {
+    filterTodos();
+  }, [currentFilter]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const handleDeleteTodo = (todoId: number) => {
-    setLoadingId(todoId);
-
-    deleteTodo(todoId)
-      .then(() => {
-        updateTodos();
-        setLoadingId(null);
-        setErrorDelete(false);
-      })
-      .catch(() => {
-        setErrorDelete(true);
-      });
-  };
-
-  const handleCreateTodo = (newTitle: string) => {
-    const maxId = Math.max(...todos.map(todo => todo.id));
-
-    createTodo({
-      id: maxId + 1,
-      title: newTitle,
-      completed: false,
-      userId: USER_ID,
-    })
-      .then(() => {
-        updateTodos();
-        setErrorAdd(false);
-      })
-      .catch(() => {
-        setErrorAdd(true);
-      });
-  };
-
-  const handleEditTodo = (
-    property: string,
-    value: any,
-    todoId: number,
-  ) => {
-    setLoadingId(todoId);
-    const existingTodo = todos.find((todo) => todo.id === todoId);
-
-    if (existingTodo) {
-      const updatedTodo: Todo = { ...existingTodo, [property]: value };
-
-      editTodo(updatedTodo, todoId)
-        .then(() => {
-          updateTodos();
-          setLoadingId(null);
-          setErrorUpdate(false);
-        })
-        .catch(() => {
-          setErrorUpdate(true);
-        });
-    }
-  };
-
-  const handleToggleAll = () => {
-    const isAllCompleted = todos.every(todo => todo.completed === true);
-
-    if (isAllCompleted) {
-      todos.forEach(todo => {
-        handleEditTodo('completed', false, todo.id);
-      });
-    } else {
-      todos.forEach(todo => {
-        handleEditTodo('completed', true, todo.id);
-      });
-    }
-  };
-
-  const handleCloseError = () => {
-    setErrorAdd(false);
-    setErrorDelete(false);
-    setErrorUpdate(false);
-  };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
-        <Header
-          handleToggleAll={handleToggleAll}
-          handleCreateTodo={handleCreateTodo}
-        />
+        <Header />
 
-        <TodoList
-          todos={todos}
-          handleDeleteTodo={handleDeleteTodo}
-          handleEditTodo={handleEditTodo}
-          loadingId={loadingId}
-        />
+        {visibleTodos.length > 0 && (
+          <TodoList
+            todos={visibleTodos}
+          />
+        )}
 
-        {/* Hide the footer if there are no todos */}
-        <Footer
-          todos={todos}
-          currentFilter={currentFilter}
-          setCurrentFilter={setCurrentFilter}
-          handleDeleteTodo={handleDeleteTodo}
-        />
+        {visibleTodos.length > 0 && (
+          <Footer
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-
-      <div
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorAdd && !errorDelete && !errorUpdate },
-        )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={handleCloseError}
-        />
-
-        {/* show only one message at a time */}
-        {errorAdd && (
-          <>
-            Unable to add a todo
-            <br />
-          </>
-        )}
-        {errorDelete && (
-          <>
-            Unable to delete a todo
-            <br />
-          </>
-        )}
-        {errorUpdate && (
-          <>
-            Unable to update a todo
-            <br />
-          </>
-        )}
-      </div>
-
+      <Notifications
+        errors={errors}
+        setErrors={setErrors}
+      />
     </div>
   );
 };

@@ -1,40 +1,24 @@
 import classNames from 'classnames';
-import { Todo } from '../../types/Todo';
-import { TodoFilter } from '../../types/TodoFIlter';
-import './Footer.scss';
+import { TodoFilter } from '../../types/TodoFilter';
 
 type FooterProps = {
-  todos: Todo[];
   currentFilter: TodoFilter;
   setCurrentFilter: React.Dispatch<React.SetStateAction<TodoFilter>>;
-  handleDeleteTodo: (todoId: number) => void;
 };
 
 export const Footer: React.FC<FooterProps> = ({
-  todos,
   currentFilter,
   setCurrentFilter,
-  handleDeleteTodo,
 }) => {
-  const counterActive = todos.filter(todo => !todo.completed).length || 0;
-  const counterCompleted = todos.filter(todo => todo.completed).length || 0;
-
-  const handleFilter = (filter: TodoFilter) => {
-    setCurrentFilter(filter);
-  };
-
-  const handleClearCompleted = () => {
-    todos.forEach(todo => {
-      if (todo.completed) {
-        handleDeleteTodo(todo.id);
-      }
-    });
+  // Обробник кліку на батьківському елементі
+  const handleFilter = (filterParam: TodoFilter) => {
+    setCurrentFilter(filterParam);
   };
 
   return (
     <footer className="todoapp__footer">
       <span className="todo-count">
-        {`${counterActive} items left`}
+        3 items left
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -79,19 +63,10 @@ export const Footer: React.FC<FooterProps> = ({
         </a>
       </nav>
 
-      <button
-        type="button"
-        className={classNames(
-          'todoapp__clear-completed',
-          { 'todoapp__clear-completed--disabled': !counterCompleted },
-        )}
-        onClick={() => {
-          handleClearCompleted();
-        }}
-      >
+      {/* don't show this button if there are no completed todos */}
+      <button type="button" className="todoapp__clear-completed">
         Clear completed
       </button>
-
     </footer>
   );
 };
