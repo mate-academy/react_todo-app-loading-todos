@@ -6,5 +6,11 @@ import './styles/index.scss';
 
 import { App } from './App';
 
+import { TodoContextProvider } from './components/TodoContextProvider';
+
 createRoot(document.getElementById('root') as HTMLDivElement)
-  .render(<App />);
+  .render(
+    <TodoContextProvider>
+      <App />
+    </TodoContextProvider>,
+  );
