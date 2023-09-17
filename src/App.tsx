@@ -1,35 +1,61 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
+import classNames from 'classnames';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Todo } from './types/Todo';
+import { Filters } from './utils/Filters';
+import { NewTodo } from './components/NewTodo/NewTodo';
+import { TodoList } from './components/TodoList/TodoList';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { getTodos } from './api/todos';
 
-const USER_ID = 0;
+const USER_ID = 11437;
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isErrorHidden, setIsErrorHidden] = useState(true);
+
+  const [filterParam, setFilterParam] = useState(Filters.All);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch((error) => {
+        setErrorMessage(JSON.parse(error.message).error);
+        setIsErrorHidden(false);
+
+        setTimeout(() => {
+          setIsErrorHidden(true);
+        }, 3000);
+      });
+  }, []);
+
+  const visibleTodos = useMemo(() => {
+    switch (filterParam) {
+      case Filters.Active:
+        return todos.filter(({ completed }) => !completed);
+
+      case Filters.Completed:
+        return todos.filter(({ completed }) => completed);
+
+      case Filters.All:
+        return todos;
+
+      default:
+        return todos;
+    }
+  }, [filterParam, todos]);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <NewTodo />
 
         <section className="todoapp__main">
-          {/* This is a completed todo */}
+          <TodoList todos={visibleTodos} />
           <div className="todo completed">
             <label className="todo__status-label">
               <input
@@ -112,44 +138,31 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
-
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
-
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
+        {!!todos?.length && (
+          <TodoFilter
+            todos={todos}
+            filterParam={filterParam}
+            onFilterChange={(newFilter) => setFilterParam(newFilter)}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
+      <div className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: isErrorHidden },
+      )}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setIsErrorHidden(true)}
+        />
 
         {/* show only one message at a time */}
-        Unable to add a todo
+        {errorMessage}
         <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
       </div>
     </div>
   );
