@@ -2,11 +2,11 @@
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
 import { Filters } from './utils/Filters';
 import { NewTodo } from './components/NewTodo/NewTodo';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { getTodos } from './api/todos';
 
 const USER_ID = 11437;
 
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [filterParam, setFilterParam] = useState(Filters.All);
 
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
+    getTodos(USER_ID)
       .then(setTodos)
       .catch((error) => {
         setErrorMessage(JSON.parse(error.message).error);
