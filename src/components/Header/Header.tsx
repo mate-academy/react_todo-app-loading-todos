@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const Header = () => {
+export const Header: React.FC = () => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}

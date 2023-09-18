@@ -1,18 +1,33 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const Error = () => {
+import classNames from 'classnames';
+
+type Props = {
+  errorMessage: string;
+  setErrorMessage: (newMessage: string) => void;
+};
+
+export const Error: React.FC<Props> = ({
+  errorMessage,
+  setErrorMessage = () => {},
+}) => {
   return (
     // Notification is shown in case of any error
     // Add the 'hidden' class to hide the message smoothly
-    <div className="notification is-danger is-light has-text-weight-normal">
-      <button type="button" className="delete" />
+    <div
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal', {
+          hidden: !errorMessage,
+        },
+      )}
+    >
+      <button
+        type="button"
+        className="delete"
+        onClick={() => setErrorMessage('')}
+      />
 
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessage}
     </div>
   );
 };
