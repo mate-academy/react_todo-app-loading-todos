@@ -32,7 +32,7 @@ export const ToDoProvider = ({ children }: Props) => {
       .catch(() => {
         handleShowError(Errors.Update);
       });
-  }, [todos]);
+  }, []);
   const handleSetFilterTodos = (filterType: FilterType) => {
     setFilterTodos(filterType);
   };
