@@ -23,8 +23,8 @@ type Props = {
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<TodoType[]>([]);
-  const [filterTodo, setFilterTodo] = useState(Filter.All);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [filterTodo, setFilterTodo] = useState<Filter>(Filter.All);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     getTodos(USER_ID)
