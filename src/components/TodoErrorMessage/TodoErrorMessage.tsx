@@ -1,18 +1,25 @@
 import classNames from 'classnames';
 import React from 'react';
+import { UseTodosContext } from '../../utils/TodosContext';
+import { ErrorMessages } from '../../types/ErrorMessages';
 
-type Props = {
-  errorMessage: string,
-  removeErrorMessage: () => void,
-};
+const ERROR_MESSAGE_DISSAPEAR_DELAY = 3000;
 
-export const TodoErrorMessage: React.FC<Props> = ({
-  errorMessage,
-  removeErrorMessage,
-}) => {
-  // useEffect(() => {
-  //   setTimeout(removeErrorMessage, 3000);
-  // }, []);
+type Props = {};
+
+export const TodoErrorMessage: React.FC<Props> = () => {
+  const context = UseTodosContext();
+
+  const {
+    errorMessage,
+    setErrorMessage,
+  } = context;
+
+  const removeErrorMessage = () => setErrorMessage(ErrorMessages.Default);
+
+  if (errorMessage) {
+    setTimeout(removeErrorMessage, ERROR_MESSAGE_DISSAPEAR_DELAY);
+  }
 
   return (
     <div className={classNames(

@@ -3,52 +3,30 @@ import React from 'react';
 import { TodoItem } from '../TodoItem';
 import { TodoLoadingItem } from '../TodoLoadingItem';
 
-import { ErrorMessages } from '../../types/ErrorMessages';
-import { Todo } from '../../types/Todo';
+import { UseTodosContext } from '../../utils/TodosContext';
 
 type Props = {
-  todos: Todo[],
-  loadingTodoTitle: string,
-  setErrorMessage: (value: ErrorMessages) => void,
-  handleTodoDelete: (id: number) => void,
-  handleTodoUpdate: (newTodo: Todo) => void,
-  isAllCompleted: boolean | null,
-  setIsAllCompleted: (value: boolean | null) => void,
-  clearCompleted: boolean,
-  setClearCompleted: (value: boolean) => void,
 };
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  loadingTodoTitle,
-  setErrorMessage,
-  handleTodoDelete,
-  handleTodoUpdate,
-  isAllCompleted,
-  setIsAllCompleted,
-  clearCompleted,
-  setClearCompleted,
-}) => {
+export const TodoList: React.FC<Props> = () => {
+  const context = UseTodosContext();
+
+  const {
+    filteredTodos,
+    titleOfLoadingTodo,
+  } = context;
+
   return (
     <section className="todoapp__main">
-      {/* This todo is not completed */}
-
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}
-          setErrorMessage={setErrorMessage}
-          handleTodoDelete={handleTodoDelete}
-          handleTodoUpdate={handleTodoUpdate}
-          isAllCompleted={isAllCompleted}
-          setIsAllCompleted={setIsAllCompleted}
-          clearCompleted={clearCompleted}
-          setClearCompleted={setClearCompleted}
         />
       ))}
 
-      {loadingTodoTitle && (
-        <TodoLoadingItem title={loadingTodoTitle} />
+      {titleOfLoadingTodo && (
+        <TodoLoadingItem title={titleOfLoadingTodo} />
       )}
     </section>
   );

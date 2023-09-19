@@ -4,32 +4,30 @@ import { Todo } from '../../types/Todo';
 import { deleteTodo, changeTodo } from '../../api/todos';
 import { ErrorMessages } from '../../types/ErrorMessages';
 import { TodoLoadingItem } from '../TodoLoadingItem';
+import { UseTodosContext } from '../../utils/TodosContext';
 
-type Props = {
-  todo: Todo
-  handleTodoDelete: (id: number) => void,
-  setErrorMessage: (message: ErrorMessages) => void,
-  handleTodoUpdate: (newTodo: Todo) => void,
-  isAllCompleted: boolean | null,
-  setIsAllCompleted: (value: boolean | null) => void,
-  clearCompleted: boolean,
-  setClearCompleted: (value: boolean) => void,
-};
+type Props = { todo: Todo };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  handleTodoDelete,
-  setErrorMessage,
-  handleTodoUpdate,
-  isAllCompleted,
-  setIsAllCompleted,
-  clearCompleted,
-  setClearCompleted,
-}) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const context = UseTodosContext();
+  const {
+    setTodos,
+    setErrorMessage,
+    isAllCompleted,
+    setIsAllCompleted,
+    isCompletedTodosCleared,
+    setIsCompletedTodosCleared,
+  } = context;
+
   const { title, completed, id } = todo;
+
   const [isEdited, setIsEdited] = useState(false);
-  const [todoTitle, setTodoTitle] = useState(title);
+  const [editedTodoTitle, setEditedTodoTitle] = useState(title);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleTodoDelete = (todoId: number) => {
+    setTodos(prevState => prevState.filter(task => task.id !== todoId));
+  };
 
   const removeTodo = () => {
     setIsLoading(true);
@@ -40,41 +38,54 @@ export const TodoItem: React.FC<Props> = ({
       .finally(() => setIsLoading(false));
   };
 
-  const updateTodo = (updates: any) => {
+  const updateTodo = (updatedTodo: Todo) => {
+    setTodos(prevState => {
+      const stateCopy = [...prevState];
+      const updatedTodoIndex = stateCopy
+        .findIndex(task => task.id === updatedTodo.id);
+
+      stateCopy[updatedTodoIndex] = updatedTodo;
+
+      return stateCopy;
+    });
+  };
+
+  // eslint-disable-next-line
+  const handleTodoUpdate = (updates: any) => {
     setIsLoading(true);
 
     changeTodo(id, updates)
-      .then((newTodo) => handleTodoUpdate(newTodo))
+      .then((newTodo) => updateTodo(newTodo))
       .catch(() => setErrorMessage(ErrorMessages.CannotUpdate))
       .finally(() => setIsLoading(false));
   };
 
   const handleCompletionStatusChange = () => {
     setIsAllCompleted(null);
-    updateTodo({ completed: !completed });
+    handleTodoUpdate({ completed: !completed });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    updateTodo({ title: todoTitle });
+    handleTodoUpdate({ title: editedTodoTitle });
 
     setIsEdited(false);
   };
 
   useEffect(() => {
     if (isAllCompleted !== null) {
-      updateTodo({ completed: isAllCompleted });
+      handleTodoUpdate({ completed: isAllCompleted });
     }
   }, [isAllCompleted]);
 
   useEffect(() => {
-    if (completed && clearCompleted) {
+    if (completed && isCompletedTodosCleared) {
       removeTodo();
     }
 
-    setClearCompleted(false);
-  }, [clearCompleted]);
+    setIsCompletedTodosCleared(false);
+  }, [isCompletedTodosCleared]);
 
   if (isLoading) {
     return (
@@ -103,9 +114,9 @@ export const TodoItem: React.FC<Props> = ({
               type="text"
               className="todo__title-field"
               placeholder="Empty todo will be deleted"
-              value={todoTitle}
+              value={editedTodoTitle}
               onBlur={() => setIsEdited(false)}
-              onChange={(event) => setTodoTitle(event.target.value)}
+              onChange={(event) => setEditedTodoTitle(event.target.value)}
               // eslint-disable-next-line
               autoFocus
             />

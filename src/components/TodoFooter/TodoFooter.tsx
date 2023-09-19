@@ -3,21 +3,20 @@ import classNames from 'classnames';
 
 import { FilterParams } from '../../types/FilterParams';
 
-import { Todo } from '../../types/Todo';
+import { UseTodosContext } from '../../utils/TodosContext';
 
-type Props = {
-  setFilterParam: (param: FilterParams) => void,
-  filterParam: FilterParams,
-  todos: Todo[],
-  setClearCompleted: (param: boolean) => void,
-};
+type Props = {};
 
-export const TodoFooter: React.FC<Props> = ({
-  setFilterParam,
-  filterParam,
-  todos,
-  setClearCompleted,
-}) => {
+export const TodoFooter: React.FC<Props> = () => {
+  const context = UseTodosContext();
+
+  const {
+    todos,
+    filterParam,
+    setFilterParam,
+    setIsCompletedTodosCleared,
+  } = context;
+
   const itemsLeft = todos.filter(({ completed }) => !completed).length;
   const isSomeTodoCompleted = todos.some(({ completed }) => completed);
 
@@ -47,7 +46,7 @@ export const TodoFooter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         disabled={!isSomeTodoCompleted}
-        onClick={() => setClearCompleted(true)}
+        onClick={() => setIsCompletedTodosCleared(true)}
       >
         Clear completed
       </button>

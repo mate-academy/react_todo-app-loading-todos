@@ -3,18 +3,22 @@ import { addTodo } from '../../api/todos';
 import { USER_ID } from '../../utils/user';
 import { Todo } from '../../types/Todo';
 import { ErrorMessages } from '../../types/ErrorMessages';
+import { UseTodosContext } from '../../utils/TodosContext';
 
-type Props = {
-  handleTodosUpdate: (value: Todo) => void,
-  setErrorMessage: (value: ErrorMessages) => void,
-  setLoadingTodoTitle: (value: string) => void,
-};
+type Props = {};
 
-export const TodoForm: React.FC<Props> = ({
-  handleTodosUpdate,
-  setErrorMessage,
-  setLoadingTodoTitle,
-}) => {
+export const TodoForm: React.FC<Props> = () => {
+  const context = UseTodosContext();
+  const {
+    setTodos,
+    setErrorMessage,
+    setTitleOfLoadingTodo,
+  } = context;
+
+  const handleTodosUpdate = (newTodo: Todo) => {
+    setTodos(prevState => [...prevState, newTodo]);
+  };
+
   const [todoTitle, setTodoTitle] = useState('');
   const [loader, setLoader] = useState(false);
 
@@ -24,14 +28,14 @@ export const TodoForm: React.FC<Props> = ({
   };
 
   const resetLoaders = () => {
-    setLoadingTodoTitle('');
+    setTitleOfLoadingTodo('');
     setLoader(false);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoader(true);
-    setLoadingTodoTitle(todoTitle);
+    setTitleOfLoadingTodo(todoTitle);
 
     const newTodo = {
       completed: false,

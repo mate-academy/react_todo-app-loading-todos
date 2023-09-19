@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { getTodos } from '../api/todos';
 
@@ -7,20 +7,48 @@ import { ErrorMessages } from '../types/ErrorMessages';
 import { Todo } from '../types/Todo';
 import { USER_ID } from './user';
 
-const TodosContext = React.createContext({
-  // todos: [],
-  // loadingTodoTitle: '',
-  // setErrorMessage: () => {},
-  // handleTodoDelete: () => {},
-  // handleTodoUpdate: () => {},
-  // isAllCompleted: null,
-  // setIsAllCompleted: () => {},
-  // clearCompleted: false,
-  // setClearCompleted: () => {},
-  // setFilterParam: () => {},
-  // filterParam: null,
-  // handleTodosUpdate: () => {},
-  // setLoadingTodoTitle: () => {},
+interface TodosContextInterface {
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
+
+  filteredTodos: Todo[],
+
+  errorMessage: ErrorMessages,
+  setErrorMessage: React.Dispatch<React.SetStateAction<ErrorMessages>>,
+
+  titleOfLoadingTodo: string,
+  setTitleOfLoadingTodo: React.Dispatch<React.SetStateAction<string>>,
+
+  isAllCompleted: boolean | null,
+  setIsAllCompleted: React.Dispatch<React.SetStateAction<boolean | null>>,
+
+  filterParam: FilterParams,
+  setFilterParam: React.Dispatch<React.SetStateAction<FilterParams>>,
+
+  isCompletedTodosCleared: boolean,
+  setIsCompletedTodosCleared: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+export const TodosContext = React.createContext<TodosContextInterface>({
+  todos: [],
+  setTodos: () => {},
+
+  filteredTodos: [],
+
+  errorMessage: ErrorMessages.Default,
+  setErrorMessage: () => {},
+
+  titleOfLoadingTodo: '',
+  setTitleOfLoadingTodo: () => {},
+
+  isAllCompleted: null,
+  setIsAllCompleted: () => {},
+
+  filterParam: FilterParams.All,
+  setFilterParam: () => {},
+
+  isCompletedTodosCleared: false,
+  setIsCompletedTodosCleared: () => {},
 });
 
 const getFilteredTodos = (todos: Todo[], completionStatus: FilterParams) => {
@@ -40,13 +68,16 @@ type Props = {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [errorMessage, setErrorMessage]
   = useState<ErrorMessages>(ErrorMessages.Default);
+
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadingTodoTitle, setLoadingTodoTitle] = useState('');
+  const [titleOfLoadingTodo, setTitleOfLoadingTodo] = useState('');
   const [isAllCompleted, setIsAllCompleted]
   = useState<null | boolean>(null);
+
   const [filterParam, setFilterParam]
- = useState<FilterParams>(FilterParams.All);
-  const [clearCompleted, setClearCompleted] = useState(false);
+  = useState<FilterParams>(FilterParams.All);
+
+  const [isCompletedTodosCleared, setIsCompletedTodosCleared] = useState(false);
 
   const filteredTodos = getFilteredTodos(todos, filterParam);
 
@@ -55,25 +86,37 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       .then(setTodos);
   }, []);
 
-  const value = useMemo(() => ({
-    errorMessage,
-    setErrorMessage,
+  const value = {
     todos,
     setTodos,
-    loadingTodoTitle,
-    setLoadingTodoTitle,
+
+    filteredTodos,
+
+    errorMessage,
+    setErrorMessage,
+
+    titleOfLoadingTodo,
+    setTitleOfLoadingTodo,
+
     isAllCompleted,
     setIsAllCompleted,
+
     filterParam,
     setFilterParam,
-    clearCompleted,
-    setClearCompleted,
-    filteredTodos,
-  }), [errorMessage]);
+
+    isCompletedTodosCleared,
+    setIsCompletedTodosCleared,
+  };
 
   return (
     <TodosContext.Provider value={value}>
       {children}
     </TodosContext.Provider>
   );
+};
+
+export const UseTodosContext = () => {
+  const context = useContext(TodosContext);
+
+  return context;
 };
