@@ -18,7 +18,7 @@ const USER_ID = 11449;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('a');
   const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(todos);
 
   useEffect(() => {
