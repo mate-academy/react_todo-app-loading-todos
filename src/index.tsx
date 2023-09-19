@@ -5,6 +5,14 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
 import { App } from './App';
+import { TodoProvider } from './context/TodoContext';
+import { FilterProvider } from './context/FilterContext';
 
 createRoot(document.getElementById('root') as HTMLDivElement)
-  .render(<App />);
+  .render(
+    <TodoProvider>
+      <FilterProvider>
+        <App />
+      </FilterProvider>
+    </TodoProvider>,
+  );
