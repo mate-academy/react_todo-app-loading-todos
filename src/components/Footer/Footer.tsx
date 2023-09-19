@@ -16,7 +16,6 @@ export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
         {`${todos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter">
         {Object.keys(Filter).map((key) => {
           const value = Filter[key as keyof typeof Filter];
