@@ -1,14 +1,31 @@
-export const TodoError = () => {
-  return (
-    <div className="notification is-danger is-light has-text-weight-normal">
-      <button type="button" className="delete" />
+import classNames from 'classnames';
+import React from 'react';
 
-      {/* show only one message at a time */}
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+type Props = {
+  errorMessage: string,
+  hasError: boolean,
+  onClick: (v: boolean) => void
+};
+
+export const TodoError: React.FC<Props> = ({
+  errorMessage, hasError, onClick,
+}) => {
+  return (
+    <div
+      className={
+        classNames('notification is-danger is-light has-text-weight-normal', {
+          hidden: hasError,
+        })
+      }
+    >
+      {/* eslint-disable */}
+      <button
+        type="button"
+        className="delete"
+        onClick={() => onClick(false)}
+      />
+      {/* eslint-enable */}
+      {errorMessage}
     </div>
   );
 };

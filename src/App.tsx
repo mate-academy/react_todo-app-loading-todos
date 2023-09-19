@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { UserWarning } from './UserWarning';
-import { TodoApp } from './components/TodoApp/TodoApp';
-import { TodoError } from './components/TodoError/TodoError';
+import { TodoApp, USER_ID } from './components/TodoApp/TodoApp';
 import {
-  USER_ID,
+  TodosContextProvider,
 } from './components/TodosContextProvider/TodosContextProvider';
 
 export const App: React.FC = () => {
@@ -13,14 +12,8 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
-
+    <TodosContextProvider>
       <TodoApp />
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <TodoError />
-    </div>
+    </TodosContextProvider>
   );
 };

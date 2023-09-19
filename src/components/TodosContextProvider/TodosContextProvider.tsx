@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api/todos';
 
 export const TodosContext = React.createContext({
   todos: [],
@@ -16,15 +15,8 @@ type Props = {
   children: React.ReactNode,
 };
 
-export const USER_ID = 11492;
-
 export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    getTodos(USER_ID)
-      .then(setTodos);
-  }, []);
 
   const initialValue = {
     todos,
