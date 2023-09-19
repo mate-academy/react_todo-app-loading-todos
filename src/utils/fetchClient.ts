@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// To have autocompletion and avoid mistypes
+import { RequestMethod } from '../types/requestMethod';
+
 const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
@@ -7,9 +10,6 @@ function wait(delay: number) {
     setTimeout(resolve, delay);
   });
 }
-
-// To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 function request<T>(
   url: string,
@@ -31,7 +31,9 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
-        throw new Error();
+        const message = options.method;
+
+        throw new Error(message);
       }
 
       return response.json();
