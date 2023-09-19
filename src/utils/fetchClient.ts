@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
+// https://mate.academy/students-api/todos?userId=11458
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -27,7 +28,7 @@ function request<T>(
   }
 
   // we wait for testing purpose to see loaders
-  return wait(100)
+  return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
