@@ -31,7 +31,6 @@ In case of any error show the notification with an appropriate message at the bo
 - automatically hide the notification after 3 seconds;
 - also hide the notification before any next request;
 - use a wrong todos URL to test the error;
-- there are no tests yet.
 
 ## Filtering todos
 
