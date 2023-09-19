@@ -1,13 +1,60 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 
-const USER_ID = 0;
+import { UserWarning } from './UserWarning';
+import { Todo } from './types/Todo';
+import { FilterTodos } from './types/FilterTodos';
+import { ErrorType } from './types/Errormessage';
+import { getTodos } from './api/todos';
+import { TodoFilter } from './components/TodoFilter';
+
+const USER_ID = 11500;
+
+function getFilteredTodos(
+  todos: Todo[],
+  sortBy: string,
+) {
+  switch (sortBy) {
+    case FilterTodos.All:
+      return todos;
+
+    case FilterTodos.Active:
+      return todos.filter(todo => todo.completed === false);
+
+    case FilterTodos.Completed:
+      return todos.filter(todo => todo.completed === true);
+
+    default:
+      return todos;
+  }
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterTodos, setFilterTodos] = useState<string>(FilterTodos.All);
+  const [errorMessage, setErrorMessage] = useState(ErrorType.None);
+  const [isErrorClosed, setIsErrorClosed] = useState(false);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => {
+        setErrorMessage(ErrorType.LoadingError);
+        setIsErrorClosed(false);
+        setTimeout(() => {
+          setIsErrorClosed(true);
+        }, 3000);
+      });
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const filteredTodos = getFilteredTodos(todos, filterTodos);
+  const activeTodos = getFilteredTodos(todos, FilterTodos.Active);
+  const completedTodos = getFilteredTodos(todos, FilterTodos.Completed);
 
   return (
     <div className="todoapp">
@@ -15,11 +62,14 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
-          <button type="button" className="todoapp__toggle-all active" />
+          <button
+            type="button"
+            className={classNames('todoapp__toggle-all', {
+              active: activeTodos.length === 0,
+            })}
+          />
 
-          {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={() => setIsErrorClosed(true)}>
             <input
               type="text"
               className="todoapp__new-todo"
@@ -29,128 +79,76 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main">
-          {/* This is a completed todo */}
-          <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+          {filteredTodos.map(todo => {
+            const { id, completed, title } = todo;
 
-            <span className="todo__title">Completed Todo</span>
+            return (
+              <div
+                className={classNames('todo', {
+                  completed: todo.completed,
+                })}
+                key={id}
+              >
+                <label className="todo__status-label">
+                  <input
+                    type="checkbox"
+                    className="todo__status"
+                    checked={completed}
+                  />
+                </label>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
+                <span className="todo__title">{title}</span>
 
-            {/* overlay will cover the todo while it is being updated */}
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+                <button type="button" className="todo__remove">×</button>
 
-          {/* This todo is not completed */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input type="checkbox" className="todo__status" />
-            </label>
-
-            <span className="todo__title">Todo is being saved now</span>
-            <button type="button" className="todo__remove">×</button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+                <div className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
+              </div>
+            );
+          })}
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer">
+            <span className="todo-count">
+              {`${activeTodos.length} items left`}
+            </span>
 
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
+            <TodoFilter
+              setFilterTodos={setFilterTodos}
+              filterTodos={filterTodos}
+            />
 
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
+            {completedTodos.length > 0 && (
+              <button type="button" className="todoapp__clear-completed">
+                Clear completed
+              </button>
+            )}
 
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
+          </footer>
+        )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
-        {/* show only one message at a time */}
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {errorMessage && (
+        <div
+          className={classNames(
+            'notification is-danger is-light has-text-weight-normal', {
+              hidden: isErrorClosed,
+            },
+          )}
+        >
+          <button
+            type="button"
+            className="delete"
+            onClick={() => {
+              setIsErrorClosed(true);
+            }}
+          />
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 };
