@@ -1,13 +1,59 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
-
-const USER_ID = 0;
+import React, { useState, useMemo, useEffect } from 'react';
+import classNames from 'classnames';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { TodoStatus, Todo } from './types';
+import { getTodos } from './services/todo';
+import { TodoList } from './components/TodoList/Todolist';
+import { getFilteredTodos } from './utils/getFilteredTodos';
+import { USER_ID, DOWNLOAD_ERROR } from './utils/constants';
+import { countUncompletedTodos } from './utils/countUncompletedTodos';
+// import { UserWarning } from './UserWarning';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  // if (!USER_ID) {
+  //   return <UserWarning />;
+  // }
+  const [todoItems, setTodoItems] = useState<Todo[]>([]);
+  const [filterByStatus, setFilterByStatus] = useState(TodoStatus.All);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const visibleTodos = useMemo(() => getFilteredTodos(
+    filterByStatus, todoItems,
+  ), [filterByStatus, todoItems]);
+
+  const uncompletedTodos = countUncompletedTodos(todoItems);
+
+  // const addTodo = ({ title, userId }: Todo) => {
+  //   postService.createTodo({ title, userId })
+  //     .then(newTodo => {
+  //       setTodoItems(currentTodos => {
+  //         const maxId = Math.max(0, ...currentTodos.map(todo => todo.id));
+  //         const id = maxId + 1;
+
+  //         return [...currentTodos, {
+  //           ...newTodo,
+  //           id,
+  //           completed: false,
+  //         }];
+  //       });
+  //     });
+  // };
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodoItems)
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        setErrorMessage(DOWNLOAD_ERROR);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+        throw error;
+      });
+  }, []);
+
+  // const { selectedTodo } = useContext(TodoContext);
 
   return (
     <div className="todoapp">
@@ -15,7 +61,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
+          {/* this button is active only if there are some active todos */}
           <button type="button" className="todoapp__toggle-all active" />
 
           {/* Add a todo on form submit */}
@@ -24,51 +70,19 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              // value={value}
+              // onChange={event => addTodo(event.target.value)}
             />
           </form>
         </header>
 
+        {visibleTodos && (
+          <TodoList
+            todos={visibleTodos}
+            // onStatusChange={setFilterByCategory}
+          />
+        )}
         <section className="todoapp__main">
-          {/* This is a completed todo */}
-          <div className="todo completed">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span className="todo__title">Completed Todo</span>
-
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove">×</button>
-
-            {/* overlay will cover the todo while it is being updated */}
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is not completed */}
-          <div className="todo">
-            <label className="todo__status-label">
-              <input
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span className="todo__title">Not Completed Todo</span>
-            <button type="button" className="todo__remove">×</button>
-
-            <div className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
           {/* This todo is being edited */}
           <div className="todo">
             <label className="todo__status-label">
@@ -94,7 +108,7 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* This todo is in loadind state */}
+          {/* This todo is in loading state */}
           <div className="todo">
             <label className="todo__status-label">
               <input type="checkbox" className="todo__status" />
@@ -112,44 +126,36 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer">
-          <span className="todo-count">
-            3 items left
-          </span>
-
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter">
-            <a href="#/" className="filter__link selected">
-              All
-            </a>
-
-            <a href="#/active" className="filter__link">
-              Active
-            </a>
-
-            <a href="#/completed" className="filter__link">
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button type="button" className="todoapp__clear-completed">
-            Clear completed
-          </button>
-        </footer>
+        {todoItems && (
+          <TodoFilter
+            selectStatus={setFilterByStatus}
+            status={filterByStatus}
+            uncompletedTodos={uncompletedTodos}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className="notification is-danger is-light has-text-weight-normal">
-        <button type="button" className="delete" />
-
+      <div
+        className={classNames(
+          'notification', 'is-danger', 'is-light', 'has-text-weight-normal', {
+            hidden: !errorMessage,
+          },
+        )}
+      >
+        <button
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
+        {errorMessage}
         {/* show only one message at a time */}
-        Unable to add a todo
+        {/* Unable to add a todo
         <br />
         Unable to delete a todo
         <br />
-        Unable to update a todo
+        Unable to update a todo */}
       </div>
     </div>
   );
