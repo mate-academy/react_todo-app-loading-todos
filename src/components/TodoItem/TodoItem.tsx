@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { deleteTodo, changeTodo } from '../../api/todos';
@@ -7,9 +7,13 @@ import { TodoLoadingItem } from '../TodoLoadingItem';
 
 type Props = {
   todo: Todo
-  handleTodoDelete: (id: number) => void;
-  setErrorMessage: (message: ErrorMessages) => void;
+  handleTodoDelete: (id: number) => void,
+  setErrorMessage: (message: ErrorMessages) => void,
   handleTodoUpdate: (newTodo: Todo) => void,
+  isAllCompleted: boolean | null,
+  setIsAllCompleted: (value: boolean | null) => void,
+  clearCompleted: boolean,
+  setClearCompleted: (value: boolean) => void,
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -17,6 +21,10 @@ export const TodoItem: React.FC<Props> = ({
   handleTodoDelete,
   setErrorMessage,
   handleTodoUpdate,
+  isAllCompleted,
+  setIsAllCompleted,
+  clearCompleted,
+  setClearCompleted,
 }) => {
   const { title, completed, id } = todo;
   const [isEdited, setIsEdited] = useState(false);
@@ -42,6 +50,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleCompletionStatusChange = () => {
+    setIsAllCompleted(null);
     updateTodo({ completed: !completed });
   };
 
@@ -52,6 +61,20 @@ export const TodoItem: React.FC<Props> = ({
 
     setIsEdited(false);
   };
+
+  useEffect(() => {
+    if (isAllCompleted !== null) {
+      updateTodo({ completed: isAllCompleted });
+    }
+  }, [isAllCompleted]);
+
+  useEffect(() => {
+    if (completed && clearCompleted) {
+      removeTodo();
+    }
+
+    setClearCompleted(false);
+  }, [clearCompleted]);
 
   if (isLoading) {
     return (

@@ -6,7 +6,7 @@ import { USER_ID } from './utils/user';
 
 import { Todo } from './types/Todo';
 
-import { changeTodo, getTodos } from './api/todos';
+import { getTodos } from './api/todos';
 
 import { UserWarning } from './UserWarning';
 import { TodoForm } from './components/TodoForm';
@@ -14,14 +14,31 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoErrorMessage } from './components/TodoErrorMessage';
 import { ErrorMessages } from './types/ErrorMessages';
+import { FilterParams } from './types/FilterParams';
+
+const getFilteredTodos = (todos: Todo[], completionStatus: FilterParams) => {
+  if (completionStatus === 'All') {
+    return [...todos];
+  }
+
+  const isCompleted = completionStatus === FilterParams.Completed;
+
+  return todos.filter(({ completed }) => completed === isCompleted);
+};
 
 export const App: React.FC = () => {
   const [errorMessage, setErrorMessage]
     = useState<ErrorMessages>(ErrorMessages.Default);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingTodoTitle, setLoadingTodoTitle] = useState('');
+  const [isAllCompleted, setIsAllCompleted]
+    = useState<null | boolean>(null);
+  const [filterParam, setFilterParam]
+   = useState<FilterParams>(FilterParams.All);
+  const [clearCompleted, setClearCompleted] = useState(false);
 
-  const isAllCompleted = todos.every(({ completed }) => completed);
+  const filteredTodos = getFilteredTodos(todos, filterParam);
+  const currentCompletionStatus = todos.every(({ completed }) => completed);
 
   const handleTodosUpdate = (newTodo: Todo) => {
     setTodos(prevState => [...prevState, newTodo]);
@@ -44,36 +61,13 @@ export const App: React.FC = () => {
   };
 
   const changeAllTodosStatus = () => {
-    if (isAllCompleted) {
-      setTodos(prevState => {
-        return prevState.map(todo => {
-          const updatedTodo = {
-            ...todo,
-            completed: false,
-          };
-
-          changeTodo(todo.id, { completed: false });
-
-          return updatedTodo;
-        });
-      });
+    if (isAllCompleted || currentCompletionStatus) {
+      setIsAllCompleted(false);
 
       return;
     }
 
-    setTodos(prevState => {
-      return prevState.map(todo => {
-        const updatedTodo = {
-          ...todo,
-          completed: true,
-        };
-
-        changeTodo(todo.id, { completed: true })
-          .catch(() => setErrorMessage(ErrorMessages.CannotUpdate));
-
-        return updatedTodo;
-      });
-    });
+    setIsAllCompleted(true);
   };
 
   useEffect(() => {
@@ -92,13 +86,15 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button
-            onClick={changeAllTodosStatus}
-            type="button"
-            className={classNames('todoapp__toggle-all', {
-              active: isAllCompleted,
-            })}
-          />
+          {Boolean(todos.length) && (
+            <button
+              onClick={changeAllTodosStatus}
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: currentCompletionStatus,
+              })}
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <TodoForm
@@ -111,21 +107,28 @@ export const App: React.FC = () => {
         {Boolean(todos.length) && (
           <>
             <TodoList
-              todos={todos}
+              clearCompleted={clearCompleted}
+              setClearCompleted={setClearCompleted}
+              todos={filteredTodos}
               loadingTodoTitle={loadingTodoTitle}
               setErrorMessage={setErrorMessage}
               handleTodoDelete={handleTodosDelete}
               handleTodoUpdate={handleTodoUpdate}
+              isAllCompleted={isAllCompleted}
+              setIsAllCompleted={setIsAllCompleted}
             />
 
-            <TodoFooter />
+            <TodoFooter
+              setClearCompleted={setClearCompleted}
+              todos={todos}
+              setFilterParam={setFilterParam}
+              filterParam={filterParam}
+            />
           </>
         )}
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <TodoErrorMessage
         errorMessage={errorMessage}
         removeErrorMessage={() => {

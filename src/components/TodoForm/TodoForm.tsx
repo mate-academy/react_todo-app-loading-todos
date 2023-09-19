@@ -6,7 +6,7 @@ import { ErrorMessages } from '../../types/ErrorMessages';
 
 type Props = {
   handleTodosUpdate: (value: Todo) => void,
-  setErrorMessage: (value: ErrorMessages) => void
+  setErrorMessage: (value: ErrorMessages) => void,
   setLoadingTodoTitle: (value: string) => void,
 };
 

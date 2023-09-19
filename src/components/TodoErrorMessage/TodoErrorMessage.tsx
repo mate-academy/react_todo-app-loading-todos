@@ -10,6 +10,10 @@ export const TodoErrorMessage: React.FC<Props> = ({
   errorMessage,
   removeErrorMessage,
 }) => {
+  // useEffect(() => {
+  //   setTimeout(removeErrorMessage, 3000);
+  // }, []);
+
   return (
     <div className={classNames(
       'notification',

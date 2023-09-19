@@ -12,6 +12,10 @@ type Props = {
   setErrorMessage: (value: ErrorMessages) => void,
   handleTodoDelete: (id: number) => void,
   handleTodoUpdate: (newTodo: Todo) => void,
+  isAllCompleted: boolean | null,
+  setIsAllCompleted: (value: boolean | null) => void,
+  clearCompleted: boolean,
+  setClearCompleted: (value: boolean) => void,
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -20,6 +24,10 @@ export const TodoList: React.FC<Props> = ({
   setErrorMessage,
   handleTodoDelete,
   handleTodoUpdate,
+  isAllCompleted,
+  setIsAllCompleted,
+  clearCompleted,
+  setClearCompleted,
 }) => {
   return (
     <section className="todoapp__main">
@@ -32,75 +40,16 @@ export const TodoList: React.FC<Props> = ({
           setErrorMessage={setErrorMessage}
           handleTodoDelete={handleTodoDelete}
           handleTodoUpdate={handleTodoUpdate}
+          isAllCompleted={isAllCompleted}
+          setIsAllCompleted={setIsAllCompleted}
+          clearCompleted={clearCompleted}
+          setClearCompleted={setClearCompleted}
         />
       ))}
 
       {loadingTodoTitle && (
         <TodoLoadingItem title={loadingTodoTitle} />
       )}
-
-      {/* This is a completed todo
-      <div className="todo completed">
-        <label className="todo__status-label">
-          <input
-            type="checkbox"
-            className="todo__status"
-            checked
-          />
-        </label>
-
-        <span className="todo__title">Completed Todo</span>
-
-        Remove button appears only on hover
-        <button type="button" className="todo__remove">×</button>
-
-        overlay will cover the todo while it is being updated
-        <div className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div> */}
-
-      {/* This todo is being edited
-      <div className="todo">
-        <label className="todo__status-label">
-          <input
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
-
-        This form is shown instead of the title and remove button
-        <form>
-          <input
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form>
-
-        <div className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
-
-      This todo is in loadind state
-      <div className="todo">
-        <label className="todo__status-label">
-          <input type="checkbox" className="todo__status" />
-        </label>
-
-        <span className="todo__title">Todo is being saved now</span>
-        <button type="button" className="todo__remove">×</button>
-
-        'is-active' class puts this modal on top of the todo
-        <div className="modal overlay is-active">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div> */}
     </section>
   );
 };
