@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
+import { TodosContext } from '../../TodosContext';
 
 type Props = {
 
 };
 
 export const Header: React.FC<Props> = () => {
+  const { todos } = useContext(TodosContext);
+
+  const activeTodos = useMemo(() => (
+    todos.filter(todo => todo.completed === false)), [todos]);
+
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        aria-label="delete"
-      />
+      {activeTodos.length > 0 && (
+        <button
+          type="button"
+          className="todoapp__toggle-all active"
+          aria-label="delete"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form>
