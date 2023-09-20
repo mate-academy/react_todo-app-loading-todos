@@ -17,11 +17,13 @@ export const TodoHeader: React.FC = () => {
           className={classNames('todoapp__toggle-all', {
             active: activeTodosAmount === 0,
           })}
+          data-cy="ToggleAllButton"
         />
       )}
 
       <form>
         <input
+          data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"

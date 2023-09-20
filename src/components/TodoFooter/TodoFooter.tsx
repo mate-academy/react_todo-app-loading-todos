@@ -10,17 +10,18 @@ export const TodoFooter = () => {
   const completedTodosAmount = visibleTodos.some(todo => todo.completed);
 
   return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
+    <footer className="todoapp__footer" data-cy="Footer">
+      <span className="todo-count" data-cy="TodosCounter">
         {`${activeTodosAmount} items left`}
       </span>
-      <nav className="filter">
+      <nav className="filter" data-cy="Filter">
         <a
           href="#/"
           className={classNames('filter__link', {
             selected: filter === 'all',
           })}
           onClick={() => setFilter(FilterOption.all)}
+          data-cy="FilterLinkAll"
         >
           All
         </a>
@@ -31,6 +32,7 @@ export const TodoFooter = () => {
             selected: filter === 'active',
           })}
           onClick={() => setFilter(FilterOption.active)}
+          data-cy="FilterLinkActive"
         >
           Active
         </a>
@@ -41,6 +43,7 @@ export const TodoFooter = () => {
             selected: filter === 'completed',
           })}
           onClick={() => setFilter(FilterOption.completed)}
+          data-cy="FilterLinkCompleted"
         >
           Completed
         </a>
@@ -50,6 +53,7 @@ export const TodoFooter = () => {
         className={classNames('todoapp__clear-completed', {
           hidden_completed_button: !completedTodosAmount,
         })}
+        data-cy="ClearCompletedButton"
       >
         Clear completed
       </button>

@@ -8,21 +8,30 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
-    <div className={classNames('todo', {
-      completed: todo.completed,
-    })}
+    <div
+      data-cy="Todo"
+      className={classNames('todo', {
+        completed: todo.completed,
+      })}
     >
       <label className="todo__status-label">
         <input
+          data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
         />
       </label>
 
-      <span className="todo__title">{todo.title}</span>
-      <button type="button" className="todo__remove">×</button>
-      <div className="modal overlay">
+      <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+      >
+        ×
+      </button>
+      <div className="modal overlay" data-cy="TodoLoader">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

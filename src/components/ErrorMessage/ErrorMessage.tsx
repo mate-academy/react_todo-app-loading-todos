@@ -16,11 +16,14 @@ export const ErrorMessage: React.FC = () => {
   }, [error]);
 
   return (
-    <div className={classNames('notification is-danger is-light has-text-weight-normal', {
-      hidden: !error,
-    })}
+    <div
+      data-cy="ErrorNotification"
+      className={classNames('notification is-danger is-light has-text-weight-normal', {
+        hidden: !error,
+      })}
     >
       <button
+        data-cy="HideErrorButton"
         type="button"
         className="delete"
         onClick={() => setError(null)}
