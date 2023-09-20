@@ -45,11 +45,8 @@ export const App: React.FC = () => {
             {visibleTodos && (
               <Section
                 todos={visibleTodos}
-
-        
               />
             )}
-
 
             <Footer
               todos={todos}
