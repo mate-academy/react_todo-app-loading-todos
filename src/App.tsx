@@ -18,9 +18,14 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState<string>('');
 
   const fetchData = async () => {
-    const todoss = getTodos(USER_ID);
+    try {
+      const todoss = getTodos(USER_ID);
 
-    setTodos(await todoss);
+      setTodos(await todoss);
+    } catch (e) {
+      setError('Unable to load todos');
+      setTimeout(() => setError(null), 3000);
+    }
   };
 
   const handleSubmit: FormEventHandler = (e) => {
