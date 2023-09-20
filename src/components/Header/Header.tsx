@@ -13,6 +13,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
       {visibleToogleAllButton && (
+        // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <button
           type="button"
           className={cn('todoapp__toggle-all', { active: false })}

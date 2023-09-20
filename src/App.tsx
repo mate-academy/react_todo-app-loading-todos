@@ -25,13 +25,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      // eslint-disable-next-line no-console
       .catch(() => setErrorMessage(ERROR_MESSAGES.unableToLoadTodos));
-  }, []);
 
-  setTimeout(() => {
-    setErrorMessage('');
-  }, 3000);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  }, []);
 
   const preparedTodos = filteredTodos(todos, selectFilter);
 
@@ -41,7 +40,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header todos={todos} />
-
         <TodosList todos={preparedTodos} />
 
         {todos.length > 0 && (
