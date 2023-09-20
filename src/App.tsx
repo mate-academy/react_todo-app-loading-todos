@@ -49,19 +49,21 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button
-            type="button"
-            className={cn('todoapp__toggle-all',
-              { active: todos.every(todo => todo.completed) })}
-            data-cy="ToggleAllButton"
-            onClick={() => {
-              if (todos.every(todo => todo.completed === true)) {
-                setTodos(todos.map(todo => ({ ...todo, completed: false })));
-              } else {
-                setTodos(todos.map(todo => ({ ...todo, completed: true })));
-              }
-            }}
-          />
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className={cn('todoapp__toggle-all',
+                { active: todos.every(todo => todo.completed) })}
+              data-cy="ToggleAllButton"
+              onClick={() => {
+                if (todos.every(todo => todo.completed === true)) {
+                  setTodos(todos.map(todo => ({ ...todo, completed: false })));
+                } else {
+                  setTodos(todos.map(todo => ({ ...todo, completed: true })));
+                }
+              }}
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form onSubmit={handleSubmit}>
