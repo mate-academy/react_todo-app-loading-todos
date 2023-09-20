@@ -24,6 +24,8 @@ export const App: React.FC = () => {
   useEffect(clearError, [errorMessage]);
 
   function loadTodos() {
+    setErrorMessage('');
+
     getTodos(USER_ID)
       .then(response => {
         setTodos(response);
@@ -55,7 +57,7 @@ export const App: React.FC = () => {
           />
         )}
 
-        {!!todos.length && (
+        {todos.length > 0 && (
           <Footer
             todos={todos}
             setVisibleTodos={setVisibleTodos}
