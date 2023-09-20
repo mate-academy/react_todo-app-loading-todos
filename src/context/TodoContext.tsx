@@ -13,7 +13,7 @@ export enum FilterOption {
 }
 
 export enum ErrorOption {
-  FetchErr = 'Unable to upload todos',
+  FetchErr = 'Unable to load todos',
   AddError = 'Unable to add a todo',
   DeleteError = 'Unable to delete a todo',
   UpdateError = 'Unable to update a todo',
