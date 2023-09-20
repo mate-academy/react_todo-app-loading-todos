@@ -25,6 +25,7 @@ function filterBySelect(
   }
 }
 
+// !!!!!!!!!!!
 function filterTodos(todos: Todo[], selectedOption: string) {
   if (!selectedOption) {
     return todos;
