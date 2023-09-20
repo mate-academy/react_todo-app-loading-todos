@@ -45,13 +45,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader todos={filteredTodos} />
+        <TodoHeader todos={todos} />
 
         {filteredTodos.length > 0 && (
           <TodoList todos={filteredTodos} />
         )}
 
-        {filteredTodos.length > 0 && (
+        {todos.length > 0 && (
           <TodoFilter
             todos={todos}
             selectedFilter={selectedFilter}
