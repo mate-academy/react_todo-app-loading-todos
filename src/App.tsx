@@ -11,18 +11,20 @@ import { getTodos } from './api/todos';
 const USER_ID = 11449;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(todos);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
 
-  useEffect(() => {
+  function loadTodos() {
     getTodos(USER_ID)
-      .then((promise) => {
-        setTodos(promise);
-        setVisibleTodos(promise);
+      .then(response => {
+        setTodos(response);
+        setVisibleTodos(response);
       })
-      .catch(error => setErrorMessage(error));
-  }, []);
+      .catch(() => setErrorMessage('Try again later'));
+  }
+
+  useEffect(loadTodos, [USER_ID]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -38,21 +40,19 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
 
-        <Header />
+        <Header todos={!!todos} />
 
-        {todos && (
-          <>
-            {visibleTodos && (
-              <Section
-                todos={visibleTodos}
-              />
-            )}
+        {visibleTodos && (
+          <Section
+            visibleTodos={visibleTodos}
+          />
+        )}
 
-            <Footer
-              todos={todos}
-              setVisibleTodos={setVisibleTodos}
-            />
-          </>
+        {!!todos.length && (
+          <Footer
+            todos={todos}
+            setVisibleTodos={setVisibleTodos}
+          />
         )}
 
       </div>

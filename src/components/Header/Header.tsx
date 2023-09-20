@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-export const Header: React.FC = () => {
+type Props = {
+  todos: boolean,
+};
+
+export const Header: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className="todoapp__toggle-all"
-        data-cy="ToggleAllButton"
-      />
+      {!todos && (
+        <button
+          type="button"
+          className="todoapp__toggle-all"
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       <form>
         <input

@@ -1,13 +1,13 @@
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[]
+  visibleTodos: Todo[]
 };
 
-export const Section: React.FC<Props> = ({ todos }) => {
+export const Section: React.FC<Props> = ({ visibleTodos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
+      {visibleTodos.map(todo => (
         <div data-cy="Todo" className="todo" key={todo.id}>
           <label className="todo__status-label">
             <input
