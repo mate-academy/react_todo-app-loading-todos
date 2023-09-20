@@ -6,7 +6,7 @@ export const TodoList: React.FC = () => {
   const { visibleTodos } = useContext(TodoContext);
 
   return (
-    <section className="todoapp__main">
+    <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (
         <TodoInfo todo={todo} key={todo.id} />
       ))}
