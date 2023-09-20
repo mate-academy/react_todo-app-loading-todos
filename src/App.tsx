@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 // import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
@@ -11,7 +11,7 @@ import { SortType } from './types/SortType';
 import {
   ErrorNotification,
 } from './components/ErrorNotification/ErrorNotification';
-import { ERROR_MESSAGES } from './utils/ERROR_MESSAGES';
+import { ERROR_MESSAGES } from './utils/constants/ERROR_MESSAGES';
 
 const USER_ID = 11542;
 
@@ -19,8 +19,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectFilter, setSelectFilter] = useState(SortType.All);
-
-  const clearCompleteStatusButton = todos.some((todo) => todo.completed);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -32,7 +30,9 @@ export const App: React.FC = () => {
     }, 3000);
   }, []);
 
-  const preparedTodos = filteredTodos(todos, selectFilter);
+  const preparedTodos = useMemo(() => {
+    return filteredTodos(todos, selectFilter);
+  }, [todos, selectFilter]);
 
   return (
     <div className="todoapp">
@@ -47,7 +47,6 @@ export const App: React.FC = () => {
             selectFilter={selectFilter}
             setSelectFilter={setSelectFilter}
             todos={todos}
-            clearCompleteStatusButton={clearCompleteStatusButton}
           />
         )}
       </div>

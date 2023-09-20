@@ -7,7 +7,6 @@ type Props = {
   todos: Todo[],
   setSelectFilter: (value: SortType) => void,
   selectFilter: SortType,
-  clearCompleteStatusButton: boolean,
 };
 
 export const Footer: React.FC<Props> = (
@@ -15,9 +14,10 @@ export const Footer: React.FC<Props> = (
     todos,
     setSelectFilter,
     selectFilter,
-    clearCompleteStatusButton,
   },
 ) => {
+  const clearCompleteStatusButton = todos.some((todo) => todo.completed);
+
   const itemsLeftCounter = todos.reduce((acc, todo) => {
     const { completed } = todo;
 
@@ -67,16 +67,17 @@ export const Footer: React.FC<Props> = (
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      {clearCompleteStatusButton && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-        >
-          Clear completed
-        </button>
-      )}
+      <div>
+        {clearCompleteStatusButton && (
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            data-cy="ClearCompletedButton"
+          >
+            Clear completed
+          </button>
+        )}
+      </div>
     </footer>
   );
 };
