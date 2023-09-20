@@ -55,11 +55,11 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoForm />
-        {todos.length !== 0 && <TodoList todos={visibleTodos} />}
+        <TodoForm todos={visibleTodos} />
+        {visibleTodos.length !== 0 && <TodoList todos={visibleTodos} />}
 
         {/* Hide the footer if there are no todos */}
-        {todos.length !== 0
+        {visibleTodos.length !== 0
           && (
             <Footer
               setFilterType={setFilterType}
