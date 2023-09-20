@@ -30,9 +30,9 @@ export const App: React.FC = () => {
         // eslint-disable-next-line no-console
         console.warn(error);
       });
-    const timerId = setInterval(() => {
+    const timerId = setTimeout(() => {
       setErrorMessage('');
-    }, 3000);
+    }, 4000);
 
     return () => {
       clearInterval(timerId);
