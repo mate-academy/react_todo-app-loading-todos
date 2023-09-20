@@ -1,13 +1,21 @@
-export const TodoForm: React.FC = () => {
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[];
+};
+
+export const TodoForm: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        aria-label="todo do"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {todos.length !== 0 && (
+        <button
+          type="button"
+          aria-label="todo do"
+          className="todoapp__toggle-all active"
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form>
