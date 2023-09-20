@@ -5,12 +5,15 @@ type Props = {
   status: StatusFilter,
   handleStatusChange: (status: StatusFilter) => void,
   countActiveTodos: number,
+  countCompletedTodos: number,
 };
 
 export const TodoFilter: React.FC<Props> = ({
   status,
   handleStatusChange,
   countActiveTodos,
+  countCompletedTodos,
+
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -56,6 +59,7 @@ export const TodoFilter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!countCompletedTodos}
       >
         Clear completed
       </button>

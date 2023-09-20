@@ -76,6 +76,9 @@ export const App: React.FC = () => {
   const countActiveTodos = todos
     .filter(todo => todo.completed === false)
     .length;
+  const countCompletedTodos = todos
+    .filter(todo => todo.completed === true)
+    .length;
 
   const handleStatusChange = (filteredKey: StatusFilter) => {
     setStatus(filteredKey);
@@ -88,11 +91,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+          {!!todos.length && (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all',
+                { active: !countActiveTodos })}
+              data-cy="ToggleAllButton"
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form>
@@ -113,6 +119,7 @@ export const App: React.FC = () => {
                 status={status}
                 handleStatusChange={handleStatusChange}
                 countActiveTodos={countActiveTodos}
+                countCompletedTodos={countCompletedTodos}
               />
             )}
 
@@ -122,26 +129,24 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {isShowError && (
-        <div
-          data-cy="ErrorNotification"
-          className={classNames(
-            'notification',
-            'is-danger',
-            'is-light',
-            'has-text-weight-normal',
-            { hidden: !isShowError },
-          )}
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setIsShowError(null)}
-          />
-          {isShowError}
-        </div>
-      )}
+      <div
+        data-cy="ErrorNotification"
+        className={classNames(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: !isShowError },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setIsShowError(null)}
+        />
+        {isShowError}
+      </div>
     </div>
   );
 };
