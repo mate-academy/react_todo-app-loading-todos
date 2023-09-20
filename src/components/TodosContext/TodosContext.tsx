@@ -12,6 +12,8 @@ interface Context {
   todos: Todo[],
   visibleTodos: Todo[],
   errorMessage: boolean,
+  isHidden: boolean,
+  setIsHidden: (value: boolean) => void
   setErrorMessage: (value: boolean) => void,
   setFilterType: (value: SortType) => void,
 }
@@ -22,6 +24,8 @@ export const TodosContext = React.createContext<Context>({
   errorMessage: false,
   setErrorMessage: () => { },
   setFilterType: () => { },
+  isHidden: false,
+  setIsHidden: () => { },
 });
 
 interface Props {
@@ -38,16 +42,25 @@ export enum SortType {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
   const [filterType, setFilterType] = useState(SortType.All);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setTodos)
+      .then((response) => {
+        if (response.length !== 0) {
+          setTodos(response);
+          setErrorMessage(false);
+        } else {
+          setTodos(response);
+        }
+      })
       .catch((e: string) => {
         setErrorMessage(true);
+        setIsHidden(true);
         setTimeout(() => {
-          setErrorMessage(false);
+          setIsHidden(false);
         }, 3000);
         // eslint-disable-next-line no-console
         console.log(e);
@@ -77,6 +90,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         todos,
         visibleTodos,
         errorMessage,
+        isHidden,
+        setIsHidden,
         setErrorMessage,
         setFilterType,
       }}

@@ -18,11 +18,10 @@ export const App: React.FC = () => {
         <Header />
 
         {!errorMessage && !!visibleTodos && (
-          <TodoList todos={visibleTodos} />
-        )}
-
-        {!!visibleTodos.length && (
-          <Footer />
+          <>
+            <TodoList todos={visibleTodos} />
+            <Footer />
+          </>
         )}
 
         {/* Hide the footer if there are no todos */}

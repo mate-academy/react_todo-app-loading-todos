@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const ErrorNotification: React.FC = () => {
-  const { errorMessage, setErrorMessage } = useContext(TodosContext);
+  const { isHidden, setIsHidden } = useContext(TodosContext);
 
   return (
     <div
@@ -15,7 +15,7 @@ export const ErrorNotification: React.FC = () => {
         'is-light',
         'has-text-weight-normal',
         {
-          hidden: !errorMessage,
+          hidden: !isHidden,
         },
       )}
     >
@@ -23,7 +23,7 @@ export const ErrorNotification: React.FC = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage(false)}
+        onClick={() => setIsHidden(false)}
       />
       Unable to load todos
       {/* <br />
