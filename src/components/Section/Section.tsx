@@ -6,17 +6,27 @@ type Props = {
 
 export const Section: React.FC<Props> = ({ todos }) => {
   return (
-    <section className="todoapp__main">
+    <section data-cy="TodoList" className="todoapp__main">
       {todos.map(todo => (
-        <div className="todo" key={todo.id}>
+        <div data-cy="Todo" className="todo" key={todo.id}>
           <label className="todo__status-label">
-            <input type="checkbox" className="todo__status" />
+            <input
+              data-cy="TodoStatus"
+              type="checkbox"
+              className="todo__status"
+            />
           </label>
 
-          <span className="todo__title">{todo.title}</span>
-          <button type="button" className="todo__remove">×</button>
+          <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
+          <button
+            data-cy="TodoDelete"
+            type="button"
+            className="todo__remove"
+          >
+            ×
+          </button>
 
-          <div className="modal overlay">
+          <div data-cy="TodoLoader" className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
           </div>

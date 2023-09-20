@@ -3,7 +3,11 @@
 export const Header: React.FC = () => {
   return (
     <header className="todoapp__header">
-      <button type="button" className="todoapp__toggle-all active" />
+      <button
+        data-cy="ToggleAllButton"
+        type="button"
+        className="todoapp__toggle-all active"
+      />
 
       <form>
         <input
