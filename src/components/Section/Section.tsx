@@ -6,7 +6,7 @@ type Props = {
 
 export const Section: React.FC<Props> = ({ todos }) => {
   return (
-    <section data-cy="TodoList" className="todoapp__main">
+    <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
         <div data-cy="Todo" className="todo" key={todo.id}>
           <label className="todo__status-label">
@@ -19,9 +19,9 @@ export const Section: React.FC<Props> = ({ todos }) => {
 
           <span data-cy="TodoTitle" className="todo__title">{todo.title}</span>
           <button
-            data-cy="TodoDelete"
             type="button"
             className="todo__remove"
+            data-cy="TodoDelete"
           >
             ×
           </button>

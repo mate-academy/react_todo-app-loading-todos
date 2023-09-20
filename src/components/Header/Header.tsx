@@ -4,9 +4,9 @@ export const Header: React.FC = () => {
   return (
     <header className="todoapp__header">
       <button
-        data-cy="ToggleAllButton"
         type="button"
-        className="todoapp__toggle-all active"
+        className="todoapp__toggle-all"
+        data-cy="ToggleAllButton"
       />
 
       <form>
