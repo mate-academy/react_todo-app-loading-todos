@@ -98,6 +98,7 @@ export const App: React.FC = () => {
         <button
           data-cy="HideErrorButton"
           type="button"
+          onClick={() => (setErrorMessage(''))}
           className="delete"
         />
         {errorMessage}
