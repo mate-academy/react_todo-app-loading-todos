@@ -1,10 +1,11 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from './Filter';
+import { TodoStatus } from '../types/TodoStatus';
 
 type Props = {
   todos: Todo[],
-  onChangeSelect: (event: string) => void,
+  onChangeSelect: (event: TodoStatus) => void,
   selectedOption: string,
 };
 

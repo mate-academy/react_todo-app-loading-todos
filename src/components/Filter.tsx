@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { TodoStatus } from '../types/TodoStatus';
 
 type Props = {
-  onChangeSelect: (event: string) => void,
+  onChangeSelect: (event: TodoStatus) => void,
   selectedOption: string,
 };
 
