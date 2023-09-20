@@ -18,13 +18,13 @@ export const Footer: React.FC<Props> = ({
   setVisibleTodos = () => { },
 }) => {
   const [status, setStatus] = useState(Status.ALL);
+  const completedTodos = todos.filter(todo => todo.completed);
+  const activeTodos = todos.filter(todo => !todo.completed);
+
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const newStatus = event.currentTarget.textContent as Status;
 
     setStatus(newStatus);
-    const completedTodos = todos.filter(todo => todo.completed);
-    const activeTodos = todos.filter(todo => !todo.completed);
-
     switch (newStatus) {
       case Status.ACTIVE:
         setVisibleTodos(activeTodos);
@@ -42,7 +42,7 @@ export const Footer: React.FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.length} items left`}
+        {`${activeTodos.length} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -80,11 +80,20 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {todos.filter(todo => todo.completed).length > 0 && (
+      {completedTodos.length > 0 ? (
         <button
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
+        >
+          Clear completed
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+          disabled
         >
           Clear completed
         </button>
