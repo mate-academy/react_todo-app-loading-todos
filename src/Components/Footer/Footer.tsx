@@ -1,23 +1,28 @@
 import classNames from 'classnames';
 import { FilterType } from '../../utils/FilterType';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   filterType: FilterType;
   setFilterType: (filter: FilterType) => void;
+  todos: Todo[] ;
 };
 
 export const Footer: React.FC<Props> = ({
   filterType,
   setFilterType,
+  todos,
 }) => {
   const hundleFiltering = (filter: FilterType) => {
     setFilterType(filter);
   };
 
+  const todosCounter = todos.filter(todo => !todo.completed).length;
+
   return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
-        3 items left
+    <footer data-cy="Footer" className="todoapp__footer">
+      <span data-cy="TodosCounter" className="todo-count">
+        {`${todosCounter} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -28,6 +33,7 @@ export const Footer: React.FC<Props> = ({
             selected: filterType === FilterType.All,
           })}
           onClick={() => hundleFiltering(FilterType.All)}
+          data-cy="FilterLinkAll"
         >
           All
         </a>
@@ -38,6 +44,7 @@ export const Footer: React.FC<Props> = ({
             selected: filterType === FilterType.Active,
           })}
           onClick={() => hundleFiltering(FilterType.Active)}
+          data-cy="FilterLinkActive"
         >
           Active
         </a>
@@ -48,13 +55,18 @@ export const Footer: React.FC<Props> = ({
             selected: filterType === FilterType.Completed,
           })}
           onClick={() => hundleFiltering(FilterType.Completed)}
+          data-cy="FilterLinkCompleted"
         >
           Completed
         </a>
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+      >
         Clear completed
       </button>
     </footer>

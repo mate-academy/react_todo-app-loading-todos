@@ -64,6 +64,7 @@ export const App: React.FC = () => {
             <Footer
               setFilterType={setFilterType}
               filterType={filterType}
+              todos={todos}
             />
           )}
       </div>

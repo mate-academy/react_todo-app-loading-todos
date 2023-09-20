@@ -9,7 +9,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { completed, title } = todo;
 
   return (
-    <div className={classNames('todo', { completed })}>
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           type="checkbox"
