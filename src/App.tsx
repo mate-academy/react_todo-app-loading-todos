@@ -24,8 +24,6 @@ export const App: React.FC = () => {
   useEffect(clearError, [errorMessage]);
 
   function loadTodos() {
-    setErrorMessage('');
-
     getTodos(USER_ID)
       .then(response => {
         setTodos(response);
@@ -33,7 +31,7 @@ export const App: React.FC = () => {
       })
       .catch((error) => {
         setErrorMessage(error);
-        clearError();
+        throw error;
       });
   }
 
@@ -66,12 +64,10 @@ export const App: React.FC = () => {
 
       </div>
 
-      {errorMessage && (
-        <Error
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
-      )}
+      <Error
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
