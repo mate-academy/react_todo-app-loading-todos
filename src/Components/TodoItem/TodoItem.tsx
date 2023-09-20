@@ -14,17 +14,24 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <input
           type="checkbox"
           className="todo__status"
+          data-cy="TodoStatus"
           checked={completed}
         />
       </label>
 
-      <span className="todo__title">{title}</span>
+      <span data-cy="TodoTitle" className="todo__title">{title}</span>
 
       {/* Remove button appears only on hover */}
-      <button type="button" className="todo__remove">×</button>
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+      >
+        ×
+      </button>
 
       {/* overlay will cover the todo while it is being updated */}
-      <div className="modal overlay">
+      <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

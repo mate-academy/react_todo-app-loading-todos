@@ -1,6 +1,6 @@
 export const TodoForm: React.FC = () => {
   return (
-    <header data-cy="NewTodoField" className="todoapp__header">
+    <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
       <button
         type="button"
@@ -13,6 +13,7 @@ export const TodoForm: React.FC = () => {
       <form>
         <input
           type="text"
+          data-cy="NewTodoField"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
         />

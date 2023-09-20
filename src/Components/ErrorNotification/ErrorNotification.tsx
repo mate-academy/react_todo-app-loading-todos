@@ -19,16 +19,9 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         aria-label="Clear Error Message"
         onClick={() => setErrorMessage('')}
+        data-cy="HideErrorButton"
       />
-
       {errorMessage}
-
-      {/* show only one message at a time */}
-      {/* Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };

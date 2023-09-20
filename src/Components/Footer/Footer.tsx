@@ -26,7 +26,7 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       {/* Active filter should have a 'selected' class */}
-      <nav className="filter">
+      <nav data-cy="Filter" className="filter">
         <a
           href="#/"
           className={classNames('filter__link', {
