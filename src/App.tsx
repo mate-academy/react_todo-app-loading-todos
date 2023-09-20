@@ -26,24 +26,42 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(CurrentError.Default);
+      }, 3000);
+    }
+  }, [errorMessage]);
+
   const filteredTodos = useMemo(() => {
     return getFilteredTodos(todos, todoFilter);
   }, [todos, todoFilter]);
+
+  const handleSetTodoFilter = (filter: TodoFilter) => (
+    setTodoFilter(filter)
+  );
+
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoHeader />
+        <TodoHeader
+          activeTodosCount={activeTodosCount}
+        />
 
         <TodoList todos={filteredTodos} />
 
         {!!todos.length && (
           <TodoFooter
-            todos={filteredTodos}
             filter={todoFilter}
-            setFilter={setTodoFilter}
+            setFilter={handleSetTodoFilter}
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
           />
         )}
       </div>

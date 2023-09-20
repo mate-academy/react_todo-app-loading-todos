@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import classNames from 'classnames';
-import React from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -8,17 +8,25 @@ type Props = {
 
 export const TodoElement: React.FC<Props> = ({ todo }) => {
   const { completed, title } = todo;
+  const [isCompleted, setIsCompleted] = useState(completed);
 
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed })}
+      className={classNames(
+        'todo',
+        { completed: isCompleted },
+      )}
     >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          checked={isCompleted}
+          onChange={(event) => {
+            setIsCompleted(event.target.checked);
+          }}
         />
       </label>
 

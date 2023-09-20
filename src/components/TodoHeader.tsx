@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const TodoHeader = () => {
+
+type Props = {
+  activeTodosCount: number,
+};
+
+export const TodoHeader: React.FC<Props> = ({ activeTodosCount }) => {
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {!!activeTodosCount && (
+        <button
+          type="button"
+          className="todoapp__toggle-all active"
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form>

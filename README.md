@@ -27,8 +27,8 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 In case of any error show the notification with an appropriate message at the bottom
 
-- the notification can be closed with the `close` button (add the `hidden` class);
-- automatically hide the notification after 3 seconds;
++ the notification can be closed with the `close` button (add the `hidden` class);
++ automatically hide the notification after 3 seconds;
 - also hide the notification before any next request;
 - use a wrong todos URL to test the error;
 
@@ -36,8 +36,8 @@ In case of any error show the notification with an appropriate message at the bo
 
 Filter todos by status `All` / `Active` / `Completed`:
 
-- `all` is the default value;
-- use the `selected` class to highlight a selected link;
++ `all` is the default value;
++ use the `selected` class to highlight a selected link;
 
 ## Instructions
 
