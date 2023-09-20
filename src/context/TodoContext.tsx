@@ -12,13 +12,6 @@ export enum FilterOption {
   completed = 'completed',
 }
 
-export enum ErrorOption {
-  FetchErr = 'Unable to load todos',
-  AddError = 'Unable to add a todo',
-  DeleteError = 'Unable to delete a todo',
-  UpdateError = 'Unable to update a todo',
-}
-
 type Props = {
   children: ReactNode;
 };
@@ -29,8 +22,8 @@ interface ContextValues {
   activeTodosAmount: number,
   error: string | null,
   filter: string,
-  setError: React.Dispatch<React.SetStateAction<string | null>>,
-  setFilter: React.Dispatch<React.SetStateAction<FilterOption>>,
+  setError: (val: string | null) => void,
+  setFilter: (filter: FilterOption) => void,
 }
 
 export const TodoContext = React.createContext({} as ContextValues);
@@ -45,9 +38,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => {
-        setError('actual');
-      });
+      .catch(() => setError('Unable to load todos'));
   }, []);
 
   const filterTodos = (
