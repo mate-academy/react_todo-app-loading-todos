@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -8,7 +9,15 @@ export const Section: React.FC<Props> = ({ visibleTodos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (
-        <div data-cy="Todo" className="todo" key={todo.id}>
+        <div
+          data-cy="Todo"
+          // className="todo"
+          className={classNames('todo', {
+            completed: todo.completed,
+            active: !todo.completed,
+          })}
+          key={todo.id}
+        >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
