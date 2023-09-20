@@ -51,7 +51,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   const filterTodos = (
     array: Todo[], selectedFilterOption: FilterOption,
   ) => {
-    const filteredTodos = array.filter(todo => {
+    return array.filter(todo => {
       switch (selectedFilterOption) {
         case FilterOption.active:
           return !todo.completed;
@@ -61,14 +61,12 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
           return todo;
       }
     });
-
-    return filteredTodos;
   };
 
   const visibleTodos: Todo[] = useMemo(() => filterTodos(todos, filter),
     [todos, filter]);
 
-  const activeTodosAmount = todos.filter(todo => !todo.completed).length;
+  const activeTodosAmount = todos.filter((todo) => !todo.completed).length;
 
   const contextValues: ContextValues = useMemo(() => ({
     todos,
