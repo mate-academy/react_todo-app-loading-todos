@@ -37,6 +37,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
+
         <Header />
 
         {todos && (
@@ -44,8 +45,11 @@ export const App: React.FC = () => {
             {visibleTodos && (
               <Section
                 todos={visibleTodos}
+
+        
               />
             )}
+
 
             <Footer
               todos={todos}
