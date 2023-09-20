@@ -15,13 +15,24 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
 
+  const clearError = () => {
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
+
+  useEffect(clearError, [errorMessage]);
+
   function loadTodos() {
     getTodos(USER_ID)
       .then(response => {
         setTodos(response);
         setVisibleTodos(response);
       })
-      .catch(() => setErrorMessage('Try again later'));
+      .catch((error) => {
+        setErrorMessage(error);
+        clearError();
+      });
   }
 
   useEffect(loadTodos, [USER_ID]);
@@ -30,17 +41,13 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  setTimeout(() => {
-    setErrorMessage('');
-  }, 3000);
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
 
-        <Header todos={!!todos} />
+        <Header todos={todos} />
 
         {visibleTodos && (
           <Section

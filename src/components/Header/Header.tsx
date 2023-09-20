@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
+import { Todo } from '../../types/Todo';
+
 type Props = {
-  todos: boolean,
+  todos: Todo[],
 };
+
+// type Props = {
+//   todos: boolean,
+// };
 
 export const Header: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
-      {!todos && (
+      {todos.length > 0 && (
         <button
           type="button"
           className="todoapp__toggle-all"
