@@ -23,6 +23,7 @@ function request<T>(
     };
   }
 
+  // we wait for testing purpose to see loaders
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
