@@ -29,7 +29,7 @@ interface ContextValues {
   activeTodosAmount: number,
   error: string | null,
   filter: string,
-  setError: React.Dispatch<React.SetStateAction<ErrorOption | null>>,
+  setError: React.Dispatch<React.SetStateAction<string | null>>,
   setFilter: React.Dispatch<React.SetStateAction<FilterOption>>,
 }
 
@@ -38,14 +38,16 @@ export const TodoContext = React.createContext({} as ContextValues);
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterOption>(FilterOption.all);
-  const [error, setError] = useState<ErrorOption | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setError(null);
 
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setError(ErrorOption.FetchErr));
+      .catch(() => {
+        setError('Unable to load todos');
+      });
   }, []);
 
   const filterTodos = (
