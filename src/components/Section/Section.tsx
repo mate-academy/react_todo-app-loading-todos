@@ -11,7 +11,6 @@ export const Section: React.FC<Props> = ({ visibleTodos }) => {
       {visibleTodos.map(todo => (
         <div
           data-cy="Todo"
-          // className="todo"
           className={classNames('todo', {
             completed: todo.completed,
             active: !todo.completed,
@@ -23,6 +22,7 @@ export const Section: React.FC<Props> = ({ visibleTodos }) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
+              checked={todo.completed}
             />
           </label>
 
