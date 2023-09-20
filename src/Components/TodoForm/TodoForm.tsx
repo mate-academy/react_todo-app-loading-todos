@@ -1,14 +1,12 @@
-import { Todo } from '../../types/Todo';
-
 type Props = {
-  todos: Todo[];
+  todos: number;
 };
 
 export const TodoForm: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      {todos.length !== 0 && (
+      {todos !== 0 && (
         <button
           type="button"
           aria-label="todo do"

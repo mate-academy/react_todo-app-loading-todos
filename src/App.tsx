@@ -21,7 +21,7 @@ export const App: React.FC = () => {
       .then((response) => {
         setTodos(response);
       })
-      .catch(() => setErrorMessage('Unable to load a todo'));
+      .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
   useEffect(() => {
@@ -55,11 +55,11 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <TodoForm todos={visibleTodos} />
-        {visibleTodos.length !== 0 && <TodoList todos={visibleTodos} />}
+        <TodoForm todos={todos.length} />
+        {todos.length !== 0 && <TodoList todos={visibleTodos} />}
 
         {/* Hide the footer if there are no todos */}
-        {visibleTodos.length !== 0
+        {todos.length !== 0
           && (
             <Footer
               setFilterType={setFilterType}
