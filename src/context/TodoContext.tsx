@@ -46,7 +46,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setError('Unable to load todos');
+        setError('actual');
       });
   }, []);
 
