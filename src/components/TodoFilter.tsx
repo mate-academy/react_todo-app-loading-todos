@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Todo } from "../types/Todo";
+import { useState } from 'react';
 import cn from 'classnames';
+import { Todo } from '../types/Todo';
 
 type Filter = 'all' | 'active' | 'completed';
 
 type TodoFilterProps = {
   todos: Todo[];
   onFilter: (filter: Filter) => void;
-}
+};
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({ todos, onFilter }) => {
   const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ todos, onFilter }) => {
   const otherTodos = todos.filter((todo) => !todo.completed).length;
 
   return (
-      <footer className="todoapp__footer" data-cy="Footer">
+    <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {`${otherTodos} ${otherTodos === 1 ? 'item' : 'items'} left`}
       </span>
@@ -31,25 +31,27 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ todos, onFilter }) => {
           href="#/"
           className={cn('filter__link', { selected: selectedFilter === 'all' })}
           data-cy="FilterLinkAll"
-          onClick ={() => handleChangeFilter('all')}
+          onClick={() => handleChangeFilter('all')}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={cn('filter__link', { selected: selectedFilter === 'active' })}
+          className={cn('filter__link',
+            { selected: selectedFilter === 'active' })}
           data-cy="FilterLinkActive"
-          onClick ={() => handleChangeFilter('active')}
+          onClick={() => handleChangeFilter('active')}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={cn('filter__link', { selected: selectedFilter === 'completed' as Filter})}
+          className={cn('filter__link',
+            { selected: selectedFilter === 'completed' as Filter })}
           data-cy="FilterLinkCompleted"
-          onClick ={() => handleChangeFilter('completed' as Filter)}
+          onClick={() => handleChangeFilter('completed' as Filter)}
         >
           Completed
         </a>

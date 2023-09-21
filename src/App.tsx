@@ -1,22 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import cn from 'classnames';
 
 const USER_ID = 11563;
 
 type Filter = 'all' | 'active' | 'completed';
 
 enum Errors {
- loading = 'Unable to load todos',
- requiredTitle = 'Title should not be empty',
- adding = 'Unable to add a todo',
- deleting = 'Unable to delete a todo',
- updating = 'Unable to update a todo',
+  loading = 'Unable to load todos',
+  requiredTitle = 'Title should not be empty',
+  adding = 'Unable to add a todo',
+  deleting = 'Unable to delete a todo',
+  updating = 'Unable to update a todo',
 }
 
 export const App: React.FC = () => {
@@ -39,8 +39,8 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const onFilter = (filter: Filter) => {
-    setFilter(filter);
+  const onFilter = (selectedFilter: Filter) => {
+    setFilter(selectedFilter);
   };
 
   if (!USER_ID) {
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-        {todos.filter(todo => !todo.completed).length !== 0
+          {todos.filter(todo => !todo.completed).length !== 0
             && (
               <button
                 type="button"
@@ -73,9 +73,9 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-          {todos && (<TodoList selectedFilter={filter} todos={todos}/>)}
+        {todos && (<TodoList selectedFilter={filter} todos={todos} />)}
 
-          {todos.length !== 0
+        {todos.length !== 0
           && (
             <TodoFilter onFilter={onFilter} todos={todos} />
           )}

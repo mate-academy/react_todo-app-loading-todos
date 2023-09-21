@@ -1,9 +1,9 @@
-import { Todo } from "../types/Todo";
 import cn from 'classnames';
+import { Todo } from '../types/Todo';
 
 type TodoInfoProps = {
   todo: Todo;
-}
+};
 
 export const TodoInfo: React.FC<TodoInfoProps> = ({ todo }) => {
   return (
