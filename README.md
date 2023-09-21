@@ -7,7 +7,10 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
-# ❗️❗️❗️<br>Please implement ONLY todos loading, errors, and filtering. <br><br>All the rest will be implemented in the next tasks<br>❗️❗️❗️
+## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
+
+## If you can't pass some tests
+❗️ You can find the test by its name in the `cypress/integration/page.spec.js` and replace `it(` with `it.skip(` for this test. ❗️
 
 ## General info
 
