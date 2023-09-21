@@ -29,13 +29,12 @@ export const App: React.FC = () => {
         setTodos(response);
         setVisibleTodos(response);
       })
-      .catch((error) => {
-        setErrorMessage(error);
-        throw error;
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
       });
   }
 
-  useEffect(loadTodos, [USER_ID]);
+  useEffect(loadTodos, []);
 
   if (!USER_ID) {
     return <UserWarning />;
