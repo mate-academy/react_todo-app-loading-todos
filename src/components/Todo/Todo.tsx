@@ -1,6 +1,18 @@
-export const Todo = () => {
+import cn from 'classnames';
+import { TodoType } from '../../types/Todo';
+
+type TodoProps = {
+  todo: TodoType,
+};
+
+export const Todo = ({ todo }: TodoProps) => {
   return (
-    <div data-cy="Todo" className="todo completed">
+    <div
+      data-cy="Todo"
+      className={cn('todo', {
+        completed: todo.completed,
+      })}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
@@ -11,7 +23,7 @@ export const Todo = () => {
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        Completed Todo
+        {todo.title}
       </span>
 
       {/* Remove button appears only on hover */}

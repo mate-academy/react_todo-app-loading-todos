@@ -1,7 +1,10 @@
-import { Todo } from '../../types/Todo';
+import { Filters } from '../../types/Filters';
+import { TodoType } from '../../types/Todo';
 
 export type TodosContextType = {
-  todos: Todo[] | [],
+  todos: TodoType[];
+  loadingTodos: boolean;
+  handleFilter: (filter: Filters) => void;
+  filteredTodos: TodoType[],
+  filter: Filters,
 };
-
-export type TodosProviderType = React.PropsWithChildren;

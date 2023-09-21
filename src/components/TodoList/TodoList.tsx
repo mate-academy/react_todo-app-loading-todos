@@ -1,9 +1,24 @@
+import { useContext } from 'react';
 import { Todo } from '../Todo';
+import { TodosContext } from '../../providers/TodosProvider/TodosProvider';
 
 export const TodoList = () => {
+  const todosContext = useContext(TodosContext);
+
+  const { filteredTodos, loadingTodos } = todosContext;
+
+  if (loadingTodos) {
+    return <div>Loading todos...</div>;
+  }
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <Todo />
+      {filteredTodos.map(todo => {
+        return (
+          <Todo key={todo.id} todo={todo} />
+        );
+      })}
+
       {/* This is a completed todo */}
       <div data-cy="Todo" className="todo completed">
         <label className="todo__status-label">
