@@ -26,7 +26,7 @@ export const TodoNotification: React.FC = () => {
         title="Close error"
         onClick={handleErrorDelete}
       />
-      {errorMessage && (errorMessage)}
+      {errorMessage}
     </div>
   );
 };

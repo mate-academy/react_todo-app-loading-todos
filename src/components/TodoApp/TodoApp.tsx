@@ -12,7 +12,6 @@ export const TodoApp: React.FC = () => {
   const {
     todos,
     selectedStatus,
-    errorMessage,
   } = useTodos();
 
   function filterTodos(items: Todo[], status: Status) {
@@ -48,9 +47,8 @@ export const TodoApp: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <TodoNotification />
-      )}
+      <TodoNotification />
+
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Todo } from './Todo';
 
 export type TodosContextType = {
   todos: Todo[];
-  setTodos: (todos: Todo[]) => void;
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
   addTodo: (title: string) => void;
   toggleTodo: (id: number) => void;
   toggleAll: () => void;
@@ -11,9 +11,9 @@ export type TodosContextType = {
   deleteTodo: (id: number) => void;
   updateTodoTitle: (id: number, newTitle: string) => void;
   selectedStatus: Status;
-  setSelectedStatus: (status: Status) => void;
+  setSelectedStatus: React.Dispatch<React.SetStateAction<Status>>
   errorMessage: string,
-  setErrorMessage: (message: string) => void,
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
   removeErrorIn3sec: () => void,
   notCompletedTodos: number,
 };
