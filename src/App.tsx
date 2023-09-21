@@ -6,6 +6,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import { ErrorMessage } from './types/ErrorMessage';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 
 const USER_ID = 11527;
@@ -16,21 +17,25 @@ export const App: React.FC = () => {
   } */
 
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(ErrorMessage.Default);
   const [filter, setFilter] = useState(Filter.All);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch((error) => {
+      .catch(() => {
         // eslint-disable-next-line no-console
-        setErrorMessage('Some download errors');
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
-        throw error;
+        setErrorMessage(ErrorMessage.LoadingError);
       });
   }, []);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(ErrorMessage.Default);
+      }, 3000);
+    }
+  }, [errorMessage]);
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.filter(todo => todo.completed).length;
@@ -84,7 +89,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setErrorMessage(errorMessage)}
+          onClick={() => setErrorMessage(ErrorMessage.Default)}
         />
         {errorMessage}
       </div>
