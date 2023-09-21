@@ -20,7 +20,7 @@ export const TodoInfo = ({ todo }: TodoInfoProps) => {
           type="checkbox"
           className="todo__status"
           title="todoInput"
-          checked
+          checked={!!todo.completed}
         />
       </label>
 

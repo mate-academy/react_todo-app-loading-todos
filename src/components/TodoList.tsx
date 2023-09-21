@@ -2,12 +2,8 @@ import { useContext } from 'react';
 import { TodoInfo } from './TodoInfo';
 import { TodosContext } from '../context/TodoContext';
 
-type TodoListProps = {
-  selectedFilter: 'all' | 'active' | 'completed';
-};
-
-export const TodoList = ({ selectedFilter }: TodoListProps) => {
-  const { todos } = useContext(TodosContext);
+export const TodoList = () => {
+  const { todos, selectedFilter } = useContext(TodosContext);
 
   const visibleTodos = todos.filter((todo) => {
     if (selectedFilter === 'completed') {
@@ -24,7 +20,7 @@ export const TodoList = ({ selectedFilter }: TodoListProps) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => {
-        return <TodoInfo todo={todo} />;
+        return <TodoInfo todo={todo} key={todo.id} />;
       })}
     </section>
   );
