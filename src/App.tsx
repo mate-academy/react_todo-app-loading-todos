@@ -1,16 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { Todo } from './types/Todo';
+import { Todo, Status } from './types';
 import { getTodos } from './api/todos';
 
 const USER_ID = 11530;
-
-enum Status {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
