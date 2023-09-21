@@ -14,7 +14,7 @@ export const TodoFilter:React.FC<Props> = ({ handleSort, sortType }) => {
         <a
           href="#/"
           className={`filter__link ${type.toLowerCase() === sortType ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
+          data-cy={`FilterLink${type}`}
           onClick={() => handleSort(type.toLowerCase())}
         >
           {type}
