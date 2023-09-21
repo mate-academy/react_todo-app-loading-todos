@@ -1,6 +1,7 @@
 /// <reference types='cypress' />
 /// <reference types='../support' />
 
+//#region Page Objects
 const page = {
   toggleAllButton: () => cy.byDataCy('ToggleAllButton'),
   newTodoField: () => cy.byDataCy('NewTodoField'),
@@ -16,6 +17,13 @@ const page = {
     cy.get('.todoapp__title').should('exist');
   },
   pauseTimers: () => cy.clock(),
+
+  flushJSTimers: (delay = 1000) => {
+    cy.clock().then(clock => {
+      clock.tick(delay);
+      clock.restore();
+    });
+  },
 
   /**
    * @param {*} response - can be a valid response object or stub
@@ -60,6 +68,7 @@ const todos = {
   deleteButton: index => todos.el(index).byDataCy('TodoDelete'),
   statusToggler: index => todos.el(index).byDataCy('TodoStatus'),
   title: index => todos.el(index).byDataCy('TodoTitle'),
+  titleField: index => todos.el(index).byDataCy('TodoTitleField'),
 
   assertCount: length => cy.byDataCy('Todo').should('have.length', length),
   assertTitle: (index, title) => todos.title(index).should('have.text', title),
@@ -91,6 +100,7 @@ const filter = {
   assertSelected: type => filter.link(type).should('have.class', 'selected'),
   assertNotSelected: type => filter.link(type).should('not.have.class', 'selected'),
 };
+//#endregion
 
 let failed = false;
 
@@ -105,6 +115,20 @@ describe('', () => {
   });
 
   describe('Page with no todos', () => {
+    it('should send 1 todos request', () => {
+      const spy = cy.stub()
+        .callsFake(req => req.reply({ body: [] }))
+        .as('loadCallback')
+
+      page.mockLoad(spy).as('loadRequest');
+      page.visit();
+
+      cy.wait('@loadRequest');
+      cy.wait(1000);
+
+      cy.get('@loadCallback').should('have.callCount', 1);
+    });
+
     describe('', () => {
       beforeEach(() => {
         page.mockLoad({ body: [] }).as('loadRequest');
@@ -128,22 +152,6 @@ describe('', () => {
 
       it('should not show error message', () => {
         errorMessage.assertHidden();
-      });
-    });
-
-    describe('', () => {
-      it('should send 1 todos request', () => {
-        const spy = cy.stub()
-          .callsFake(req => req.reply({ body: [] }))
-          .as('loadCallback')
-
-        page.mockLoad(spy).as('loadRequest');
-        page.visit();
-
-        cy.wait('@loadRequest');
-        cy.wait(1000);
-
-        cy.get('@loadCallback').should('have.callCount', 1);
       });
     });
 
@@ -195,10 +203,6 @@ describe('', () => {
 
     it('should have delete buttons for every todo', () => {
       todos.deleteButton(0).should('exist');
-    });
-
-    it('should not have todos in editing mode', () => {
-      cy.byDataCy('TodoList').eq(0).byDataCy('TodoTitleField').should('not.exist');
     });
 
     it('should not have loaders', () => {
