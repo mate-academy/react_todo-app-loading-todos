@@ -47,6 +47,7 @@ export const App: React.FC = () => {
           {/* Add a todo on form submit */}
           <form>
             <input
+              data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
@@ -57,23 +58,27 @@ export const App: React.FC = () => {
         <TodoList todos={todos} />
 
         {/* Hide the footer if there are no todos */}
-        <TodoFooter
-          activeTodosCount={activeTodosCount}
-          completedTodosCount={completedTodosCount}
-          filter={filter}
-          setFilter={setFilter}
-        />
+        {!!todos.length && (
+          <TodoFooter
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
+            filter={filter}
+            setFilter={setFilter}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div className={classNames(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: !errorMessage },
-      )}
+      <div
+        data-cy="ErrorNotification"
+        className={classNames(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
         <button
           data-cy="HideErrorButton"
