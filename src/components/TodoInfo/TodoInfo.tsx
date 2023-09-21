@@ -23,6 +23,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         { completed: todo.completed },
       )}
       key={todo.id}
+      data-cy="Todo"
     >
       <label className="todo__status-label">
         <input

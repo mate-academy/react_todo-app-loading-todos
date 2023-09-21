@@ -20,17 +20,18 @@ export const Footer: React.FC<Props> = ({ filter, setFilter, todos }) => {
 
   return (
     <footer className="todoapp__footer">
-      <span className="todo-count">
+      <span className="todo-count" data-cy="TodosCounter">
         {`${notCompletedTodos.length} items left`}
       </span>
 
-      <nav className="filter">
+      <nav className="filter" data-cy="Filter">
         <a
           href="#/"
           className={classNames(
             'filter__link',
             { selected: filter === Filter.ALL },
           )}
+          data-cy="FilterLinkAll"
           onClick={() => setFilter(Filter.ALL)}
         >
           All
@@ -42,6 +43,7 @@ export const Footer: React.FC<Props> = ({ filter, setFilter, todos }) => {
             'filter__link',
             { selected: filter === Filter.ACTIVE },
           )}
+          data-cy="FilterLinkActive"
           onClick={() => setFilter(Filter.ACTIVE)}
         >
           Active
@@ -53,6 +55,7 @@ export const Footer: React.FC<Props> = ({ filter, setFilter, todos }) => {
             'filter__link',
             { selected: filter === Filter.COMPLETED },
           )}
+          data-cy="FilterLinkCompleted"
           onClick={() => setFilter(Filter.COMPLETED)}
         >
           Completed
@@ -65,6 +68,7 @@ export const Footer: React.FC<Props> = ({ filter, setFilter, todos }) => {
         }}
         type="button"
         className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
       >
         Clear completed
       </button>

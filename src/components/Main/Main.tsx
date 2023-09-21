@@ -8,7 +8,7 @@ type Props = {
 
 export const Main: React.FC<Props> = ({ todos }) => {
   return (
-    <section className="todoapp__main">
+    <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
         <TodoInfo todo={todo} key={todo.id} />
 
