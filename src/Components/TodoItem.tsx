@@ -11,6 +11,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <div
+      data-cy="Todo"
       className={cn('todo', {
         completed,
       })}
@@ -18,17 +19,24 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     >
       <label className="todo__status-label">
         <input
+          data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={completed}
         />
       </label>
 
-      <span className="todo__title">{title}</span>
+      <span data-cy="TodoTitle" className="todo__title">{title}</span>
 
-      <button type="button" className="todo__remove">×</button>
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+      >
+        ×
+      </button>
 
-      <div className="modal overlay">
+      <div className="modal overlay" data-cy="TodoLoader">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

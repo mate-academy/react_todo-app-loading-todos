@@ -11,11 +11,12 @@ export const NavMenu: React.FunctionComponent<Props> = ({
   setCondition,
 }) => {
   return (
-    <nav className="filter">
+    <nav className="filter" data-cy="Filter">
       {Object.entries(ForComletedTodo).map(([key, value]) => (
         <a
           key={value}
           href={`#/${value}`}
+          data-cy={`FilterLink${key}`}
           className={cn('filter__link', {
             selected: value === condition,
           })}

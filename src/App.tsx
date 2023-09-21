@@ -168,6 +168,7 @@ export const App: React.FC = () => {
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
+        data-cy="ErrorNotification"
         className={cn(
           'notification',
           'is-danger',
@@ -180,6 +181,7 @@ export const App: React.FC = () => {
       >
 
         <button
+          data-cy="HideErrorButton"
           type="button"
           className="delete"
           onClick={() => setHasErrorOnLoading(false)}
