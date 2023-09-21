@@ -19,7 +19,7 @@ export const Footer: React.FC<Props> = ({ filter, setFilter, todos }) => {
   }, [todos]);
 
   return (
-    <footer className="todoapp__footer">
+    <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {`${notCompletedTodos.length} items left`}
       </span>

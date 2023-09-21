@@ -27,6 +27,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
     >
       <label className="todo__status-label">
         <input
+          data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={isCompleted}
@@ -39,6 +40,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           <>
             <span
               className="todo__title"
+              data-cy="TodoTitle"
             >
               {isLoading
                 ? 'Todo is being saved now'
@@ -48,6 +50,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
             <button
               type="button"
               className="todo__remove"
+              data-cy="TodoDelete"
               onClick={onDeleteHandler}
             >
               ×
@@ -59,6 +62,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
             <input
               type="text"
               className="todo__title-field"
+              data-cy="TodoTitleField"
               placeholder="Empty todo will be deleted"
               value="Todo is being edited now"
             />
@@ -67,10 +71,12 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
       {/* overlay will cover the todo while it is being updated */}
 
-      <div className={classNames(
-        'modal overlay',
-        { 'is-active': isLoading },
-      )}
+      <div
+        data-cy="TodoLoader"
+        className={classNames(
+          'modal overlay',
+          { 'is-active': isLoading },
+        )}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

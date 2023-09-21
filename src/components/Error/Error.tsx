@@ -19,6 +19,7 @@ export const Error: React.FC<Props> = () => {
       )}
     >
       <button
+        data-cy="HideErrorButton"
         type="button"
         className="delete"
         aria-label="delete"

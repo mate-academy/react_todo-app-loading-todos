@@ -18,6 +18,7 @@ export const Header: React.FC<Props> = () => {
         <button
           type="button"
           className="todoapp__toggle-all active"
+          data-cy="ToggleAllButton"
           aria-label="delete"
         />
       )}
@@ -26,9 +27,9 @@ export const Header: React.FC<Props> = () => {
       <form>
         <input
           type="text"
+          data-cy="NewTodoField"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          data-cy="NewTodoField"
         />
       </form>
     </header>
