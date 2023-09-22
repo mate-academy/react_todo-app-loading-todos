@@ -4,6 +4,7 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { FilterTodos } from './types/FilterTodos';
+import classNames from 'classnames';
 
 const USER_ID = 11544;
 
@@ -254,10 +255,16 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {todosError ? (
-        <div
-          data-cy="ErrorNotification"
-          className={`notification is-danger is-light has-text-weight-normal ${todosError ? '' : 'hidden'}`}
+      {todosError && (
+        <div className={classNames(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          {
+            hidden: !todosError,
+          },
+        )}
         >
           <button
             data-cy="HideErrorButton"
@@ -275,11 +282,6 @@ export const App: React.FC = () => {
           Unable to delete a todo
           <br />
           Unable to update a todo
-        </div>
-      ) : (
-        <div data-cy="TodoLoader" className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
         </div>
       )}
     </div>
