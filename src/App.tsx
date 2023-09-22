@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
@@ -18,6 +18,16 @@ export const App: React.FC = () => {
     sortType,
     setSortType,
   } = useTodoContext() as TContext;
+  const [timer, setTimer] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(true);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setTimer(true);
+    }, 3000);
+
+    return () => clearTimeout(timerId);
+  }, []);
 
   const handleSorting = (type: string) => setSortType(type as SortTypes);
 
@@ -34,6 +44,10 @@ export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const handleHideError = () => {
+    setErrorVisible(false);
+  };
 
   return (
     <div className="todoapp">
@@ -55,39 +69,44 @@ export const App: React.FC = () => {
         <TodoList todos={sortedTodos[sortType]} />
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            {`${todos.length}`}
-            {' '}
-            items
-            {/* items left */}
-          </span>
+        {(todos.length > 0) && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {`${todos.length}`}
+              {' '}
+              items left
+              {/* items left */}
+            </span>
 
-          {/* Active filter should have a 'selected' class */}
-          <TodoFilter sortType={sortType} handleSort={handleSorting} />
+            {/* Active filter should have a 'selected' class */}
+            <TodoFilter sortType={sortType} handleSort={handleSorting} />
 
-          {/* don't show this button if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+            {/* don't show this button if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {(todos.length < 1) && (
+      {((todos.length < 1) || !timer) && errorVisible && (
         <div
           data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
+          className={(todos.length < 1)
+            ? 'hidden'
+            : 'notification is-danger is-light has-text-weight-normal'}
         >
           <button
             data-cy="HideErrorButton"
             type="button"
             className="delete"
+            onClick={handleHideError}
           />
           {/* show only one message at a time */}
           Unable to load todos
