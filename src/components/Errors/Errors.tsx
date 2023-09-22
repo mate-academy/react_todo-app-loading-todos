@@ -5,7 +5,7 @@ import { ErrorsContext } from '../../providers/ErrorsProvider/ErrorsProvider';
 export const Errors = () => {
   const contextErrors = useContext(ErrorsContext);
 
-  const { errors } = contextErrors;
+  const { errors, clearErrors } = contextErrors;
 
   const {
     errorEmptyTitle,
@@ -28,16 +28,37 @@ export const Errors = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        onClick={clearErrors}
       />
       {/* show only one message at a time */}
-      {errorLoadingTodos && 'Unable to load todos'}
-      <br />
-      {errorEmptyTitle && 'Title should not be empty'}
-      <br />
-      {errorUnableToAddTodo && 'Unable to add a todo'}
-      <br />
-      {errorUnableToDeleteTodo && 'Unable to delete a todo'}
-      <br />
+      {errorLoadingTodos && (
+        <>
+          Unable to load todos
+          <br />
+        </>
+      )}
+
+      {errorEmptyTitle && (
+        <>
+          Title should not be empty
+          <br />
+        </>
+      )}
+
+      {errorUnableToAddTodo && (
+        <>
+          Unable to add a todo
+          <br />
+        </>
+      )}
+
+      {errorUnableToDeleteTodo && (
+        <>
+          Unable to delete a todo
+          <br />
+        </>
+      )}
+
       {errorUpdateTodo && 'Unable to update a todo'}
     </div>
   );

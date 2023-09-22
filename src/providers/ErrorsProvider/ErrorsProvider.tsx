@@ -8,6 +8,7 @@ type AddError = (err: keyof Errors) => void;
 type ErrorsContextType = {
   addError: AddError,
   errors: Errors,
+  clearErrors: () => void,
 };
 
 export const ErrorsContext = createContext<ErrorsContextType>({
@@ -19,6 +20,7 @@ export const ErrorsContext = createContext<ErrorsContextType>({
     errorUnableToDeleteTodo: false,
     errorUpdateTodo: false,
   },
+  clearErrors: () => {},
 });
 
 export const ErrorsProvider = ({ children }: PropsWithChildren) => {
@@ -35,10 +37,29 @@ export const ErrorsProvider = ({ children }: PropsWithChildren) => {
       ...prevErrors,
       [err]: true,
     }));
+    setTimeout(() => {
+      setErrors({
+        errorLoadingTodos: false,
+        errorEmptyTitle: false,
+        errorUnableToAddTodo: false,
+        errorUnableToDeleteTodo: false,
+        errorUpdateTodo: false,
+      });
+    }, 3000);
+  };
+
+  const clearErrors = () => {
+    setErrors({
+      errorLoadingTodos: false,
+      errorEmptyTitle: false,
+      errorUnableToAddTodo: false,
+      errorUnableToDeleteTodo: false,
+      errorUpdateTodo: false,
+    });
   };
 
   return (
-    <ErrorsContext.Provider value={{ addError, errors }}>
+    <ErrorsContext.Provider value={{ addError, errors, clearErrors }}>
       {children}
     </ErrorsContext.Provider>
   );

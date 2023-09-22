@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTodos } from '../api/todos';
 import { TodoType } from '../types/Todo';
+import { ErrorsContext } from '../providers/ErrorsProvider/ErrorsProvider';
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [loadingTodos, setLoadingTodos] = useState<boolean>(true);
-  const [errorLoadingTodos, setErrorLoadingTodos] = useState<boolean>(false);
+  const errorsContext = useContext(ErrorsContext);
+  const { addError } = errorsContext;
 
   useEffect(() => {
     getTodos(11524)
       .then(setTodos)
-      .catch(() => setErrorLoadingTodos(true))
+      .catch(() => addError('errorLoadingTodos'))
       .finally(() => setLoadingTodos(false));
   }, []);
 
-  return { todos, loadingTodos, errorLoadingTodos };
+  return { todos, loadingTodos };
 };
