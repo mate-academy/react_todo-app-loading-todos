@@ -11,6 +11,10 @@ export const Filter = () => {
 
   const { todos, handleFilter, filter } = todosContext;
 
+  if (todos.length === 0) {
+    return null;
+  }
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
