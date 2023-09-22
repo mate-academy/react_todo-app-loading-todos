@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         {(todos.length > 0) && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              5 items left
+              2 items left
               {/* items left */}
             </span>
 
@@ -96,13 +96,11 @@ export const App: React.FC = () => {
       <div
         data-cy="ErrorNotification"
         className={(((todos.length < 1) || !timer) && errorVisible)
-          ? 'hiddenn'
+          ? 'hidden'
           : 'notification is-danger is-light has-text-weight-normal'}
       >
         {((todos.length < 1) || !timer) && errorVisible && (
-          <div
-            className="hidden"
-          >
+          <>
             <button
               data-cy="HideErrorButton"
               type="button"
@@ -119,7 +117,7 @@ export const App: React.FC = () => {
           Unable to delete a todo
           <br />
           Unable to update a todo */}
-          </div>
+          </>
         )}
       </div>
     </div>
