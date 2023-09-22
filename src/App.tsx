@@ -95,22 +95,25 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {((todos.length < 1) || !timer) && errorVisible && (
-        <div
-          data-cy="ErrorNotification"
-          className={(todos.length < 1)
-            ? 'hidden'
-            : 'notification is-danger is-light has-text-weight-normal'}
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={handleHideError}
-          />
-          {/* show only one message at a time */}
-          Unable to load todos
-          {/* <br />
+      <div
+        data-cy="ErrorNotification"
+        className={(todos.length < 1)
+          ? 'hiddenn'
+          : 'notification is-danger is-light has-text-weight-normal'}
+      >
+        {((todos.length < 1) || !timer) && errorVisible && (
+          <div
+            className="notification is-danger is-light has-text-weight-normal"
+          >
+            <button
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+              onClick={handleHideError}
+            />
+
+            Unable to load todos
+            {/* <br />
           Title should not be empty
           <br />
           Unable to add a todo
@@ -118,8 +121,9 @@ export const App: React.FC = () => {
           Unable to delete a todo
           <br />
           Unable to update a todo */}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
