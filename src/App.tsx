@@ -72,9 +72,7 @@ export const App: React.FC = () => {
         {(todos.length > 0) && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {`${todos.length}`}
-              {' '}
-              items left
+              5 items left
               {/* items left */}
             </span>
 
@@ -97,7 +95,7 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={(todos.length < 1)
+        className={(((todos.length < 1) || !timer) && errorVisible)
           ? 'hiddenn'
           : 'notification is-danger is-light has-text-weight-normal'}
       >
