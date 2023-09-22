@@ -1,31 +1,34 @@
-import { PropsWithChildren, createContext, useState } from 'react';
+import {
+  PropsWithChildren, createContext, useContext, useState,
+} from 'react';
+import { ErrorsContext } from '../ErrorsProvider/ErrorsProvider';
 
 type NewTodoContextType = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>, input: string) => void,
   handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  errorEmptyTitle: boolean,
   todoInput: string,
 };
 
 export const NewTodoContext = createContext<NewTodoContextType>({
   handleSubmit: () => {},
   handleInput: () => {},
-  errorEmptyTitle: false,
   todoInput: '',
 });
 
 export const NewTodoProvider = ({ children }: PropsWithChildren) => {
-  const [errorEmptyTitle, setErrorEmptyTitle] = useState(false);
   const [todoInput, setTodoInput] = useState('');
 
+  const errorsContext = useContext(ErrorsContext);
+  const { addError } = errorsContext;
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoInput(e.target.value);
+    setTodoInput(e.target.value.trimStart());
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>, input: string) => {
     e.preventDefault();
     if (input.length === 0) {
-      setErrorEmptyTitle(true);
+      addError('errorEmptyTitle');
     }
   };
 
@@ -33,7 +36,6 @@ export const NewTodoProvider = ({ children }: PropsWithChildren) => {
     <NewTodoContext.Provider value={{
       handleSubmit,
       handleInput,
-      errorEmptyTitle,
       todoInput,
     }}
     >

@@ -1,5 +1,24 @@
+import { useContext } from 'react';
+import { ErrorsContext } from '../../providers/ErrorsProvider/ErrorsProvider';
+
 /* eslint-disable jsx-a11y/control-has-associated-label */
 export const Errors = () => {
+  const contextErrors = useContext(ErrorsContext);
+
+  const { errors } = contextErrors;
+
+  const {
+    errorEmptyTitle,
+    errorLoadingTodos,
+    errorUnableToAddTodo,
+    errorUnableToDeleteTodo,
+    errorUpdateTodo,
+  } = errors;
+
+  if (Object.values(errors).every(error => error === false)) {
+    return null;
+  }
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -11,15 +30,15 @@ export const Errors = () => {
         className="delete"
       />
       {/* show only one message at a time */}
-      {/* Unable to load todos */}
+      {errorLoadingTodos && 'Unable to load todos'}
       <br />
-      {/* Title should not be empty
+      {errorEmptyTitle && 'Title should not be empty'}
       <br />
-      Unable to add a todo
+      {errorUnableToAddTodo && 'Unable to add a todo'}
       <br />
-      Unable to delete a todo
+      {errorUnableToDeleteTodo && 'Unable to delete a todo'}
       <br />
-      Unable to update a todo */}
+      {errorUpdateTodo && 'Unable to update a todo'}
     </div>
   );
 };

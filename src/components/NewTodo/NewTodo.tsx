@@ -25,7 +25,7 @@ export const NewTodo = () => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={todoInput}
-          onChange={() => handleInput}
+          onChange={handleInput}
         />
       </form>
     </header>
