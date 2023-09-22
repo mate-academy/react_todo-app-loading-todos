@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { FilterTodos } from './types/FilterTodos';
-import classNames from 'classnames';
 
 const USER_ID = 11544;
 
