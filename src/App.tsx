@@ -103,7 +103,7 @@ export const App: React.FC = () => {
       >
         {((todos.length < 1) || !timer) && errorVisible && (
           <div
-            className="notification is-danger is-light has-text-weight-normal"
+            className="hidden"
           >
             <button
               data-cy="HideErrorButton"
