@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
@@ -13,21 +13,21 @@ export const App: React.FC = () => {
   const {
     todos,
     // addTodo,
-    // hasError,
-    // handleError,
+    hasError,
+    setHasError,
     sortType,
     setSortType,
   } = useTodoContext() as TContext;
-  const [timer, setTimer] = useState(false);
-  const [errorVisible, setErrorVisible] = useState(true);
+  // const [timer, setTimer] = useState(false);
+  // const [errorVisible, setErrorVisible] = useState(true);
 
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setTimer(true);
-    }, 3000);
+  // useEffect(() => {
+  //   const timerId = setTimeout(() => {
+  //     setTimer(true);
+  //   }, 3000);
 
-    return () => clearTimeout(timerId);
-  }, []);
+  //   return () => clearTimeout(timerId);
+  // }, []);
 
   const handleSorting = (type: string) => setSortType(type as SortTypes);
 
@@ -45,9 +45,9 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleHideError = () => {
-    setErrorVisible(false);
-  };
+  // const handleHideError = () => {
+  //   setErrorVisible(false);
+  // };
 
   return (
     <div className="todoapp">
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         {(todos.length > 0) && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              2 items left
+              {`${sortedTodos.active.length} items left`}
               {/* items left */}
             </span>
 
@@ -95,21 +95,18 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={(((todos.length < 1) || !timer) && errorVisible)
-          ? 'hidden'
-          : 'notification is-danger is-light has-text-weight-normal'}
+        className={`notification is-danger is-light has-text-weight-normal ${hasError === null ? 'hidden' : ''}`}
       >
-        {((todos.length < 1) || !timer) && errorVisible && (
-          <>
-            <button
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={handleHideError}
-            />
 
-            Unable to load todos
-            {/* <br />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setHasError(null)}
+        />
+
+        {hasError}
+        {/* <br />
           Title should not be empty
           <br />
           Unable to add a todo
@@ -117,8 +114,7 @@ export const App: React.FC = () => {
           Unable to delete a todo
           <br />
           Unable to update a todo */}
-          </>
-        )}
+
       </div>
     </div>
   );

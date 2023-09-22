@@ -7,9 +7,10 @@ import { SortTypes, Todo } from '../types/Todo';
 export interface TContext {
   todos: Todo[];
   hasError: null | string;
-  handleError: (error:SetStateAction<null>) => void;
+  handleError: (error: string) => void;
   sortType: SortTypes;
   setSortType: React.Dispatch<SetStateAction<SortTypes>>;
+  setHasError: React.Dispatch<SetStateAction<string | null>>;
 }
 
 // Tworzymy kontekst
@@ -24,11 +25,12 @@ const USER_ID = 11550;
 
 export function TodoProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [hasError, setHasError] = useState(null);
+  const [hasError, setHasError] = useState<string | null>(null);
   const [sortType, setSortType] = useState<SortTypes>('all');
 
-  const handleError = (error: SetStateAction<null>) => {
+  const handleError = (error: string) => {
     setHasError(error);
+    setTimeout(() => setHasError(null), 3000);
   };
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export function TodoProvider({ children }: { children: ReactNode }) {
   const contextValues: TContext = {
     todos,
     hasError,
+    setHasError,
     handleError,
     sortType,
     setSortType,
