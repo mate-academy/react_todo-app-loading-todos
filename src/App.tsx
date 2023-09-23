@@ -70,12 +70,15 @@ export const App: React.FC = () => {
         <List filterTodos={filterTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer
-          isOneTodoCompleted={isOneTodoCompleted}
-          todos={filterTodos}
-          filtredTodos={filtredTodos}
-          setFiltredTodos={setFiltredTodos}
-        />
+        {todos.length && (
+          <Footer
+            isOneTodoCompleted={isOneTodoCompleted}
+            todos={filterTodos}
+            filtredTodos={filtredTodos}
+            setFiltredTodos={setFiltredTodos}
+          />
+        )}
+
       </div>
 
       {/* Notification is shown in case of any error */}
@@ -109,7 +112,6 @@ export const App: React.FC = () => {
           Unable to update a todo
         </div>
       )}
-
     </div>
   );
 };
