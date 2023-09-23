@@ -70,7 +70,7 @@ export const App: React.FC = () => {
         <List filterTodos={filterTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length && (
+        {todos.length > 0 && (
           <Footer
             isOneTodoCompleted={isOneTodoCompleted}
             todos={filterTodos}
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
             'is-light',
             'has-text-weight-normal',
             {
-              hiden: !todosError,
+              hidden: !todosError,
             },
           )}
         >
