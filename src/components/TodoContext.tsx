@@ -39,8 +39,8 @@ export function TodoProvider({ children }: { children: ReactNode }) {
       .then((res) => {
         setTodos(res);
       })
-      .catch((error) => {
-        handleError(error.message);
+      .catch(() => {
+        handleError('Unable to load todos');
       });
   }, []);
 
