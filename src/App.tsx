@@ -87,7 +87,10 @@ export const App: React.FC = () => {
         <div
           data-cy="ErrorNotification"
           className={classNames(
-            'notification is-danger is-light has-text-weight-normal',
+            'notification',
+            'is-danger',
+            'is-light',
+            'has-text-weight-normal',
             {
               hiden: !todosError,
             },
@@ -99,17 +102,16 @@ export const App: React.FC = () => {
             className="delete"
             onClick={() => setTodosError('')}
           />
-          {todosError}
           {/* show only one message at a time */}
-          Unable to load todos
-          <br />
+          {todosError}
+          {/* <br />
           Title should not be empty
           <br />
           Unable to add a todo
           <br />
           Unable to delete a todo
           <br />
-          Unable to update a todo
+          Unable to update a todo */}
         </div>
       )}
     </div>
