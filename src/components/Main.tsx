@@ -21,6 +21,7 @@ export const Main: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          checked={completed}
         />
       </label>
 

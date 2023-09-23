@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = ({
           })}
           onClick={(event) => {
             event.preventDefault();
-            setFiltredTodos(FilterTodos.Active);
+            setFiltredTodos(FilterTodos.All);
           }}
         >
           All

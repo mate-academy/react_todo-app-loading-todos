@@ -22,8 +22,9 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.warn(error);
         setTodosError('Unable to download todos');
-        throw error;
       });
   }, []);
 
@@ -92,7 +93,7 @@ export const App: React.FC = () => {
             'is-light',
             'has-text-weight-normal',
             {
-              hidden: !todosError,
+              hidden: !todosError.length,
             },
           )}
         >
