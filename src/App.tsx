@@ -20,9 +20,9 @@ export const App: React.FC = () => {
 
     getTodos(USER_ID)
       .then(setTodos)
-      .catch((error) => {
+      .catch(() => {
         // eslint-disable-next-line no-console
-        console.warn(error);
+        // console.warn(error);
         setTodosError('Unable to download todos');
       });
   }, []);
