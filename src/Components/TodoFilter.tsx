@@ -1,13 +1,13 @@
 import React from 'react';
 
-type SortTypes = 'all' | 'completed' | 'active';
+type SortTypes = 'All' | 'Completed' | 'Active';
 
 type Props = {
   handleSort: (type: SortTypes) => void;
   sortType: SortTypes;
 };
 
-const types: SortTypes[] = ['all', 'active', 'completed'];
+const types: SortTypes[] = ['All', 'Active', 'Completed'];
 
 export const TodoFilter: React.FC<Props> = ({ handleSort, sortType }) => {
   return (

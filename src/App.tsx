@@ -8,12 +8,12 @@ import { TodoForm } from './Components/TodoForm';
 
 const USER_ID = 11578;
 
-type SortTypes = 'all' | 'completed' | 'active';
+type SortTypes = 'All' | 'Completed' | 'Active';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [hasError, setHasError] = useState<string | null>(null);
-  const [sortType, setSortType] = useState<SortTypes>('all');
+  const [sortType, setSortType] = useState<SortTypes>('All');
 
   const handleError = (err: string) => {
     setHasError(err);
@@ -29,9 +29,9 @@ export const App: React.FC = () => {
   }, []);
 
   const sortedTodos: Record<SortTypes, Todo[]> = {
-    all: todos,
-    completed: todos.filter(todo => todo.completed),
-    active: todos.filter(todo => !todo.completed),
+    All: todos,
+    Completed: todos.filter(todo => todo.completed),
+    Active: todos.filter(todo => !todo.completed),
   };
 
   if (!USER_ID) {
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
             <button
               type="button"
               aria-label="toggle-all"
-              className={`todoapp__toggle-all ${sortedTodos.completed.length === 0 ? 'active' : ''}`}
+              className={`todoapp__toggle-all ${sortedTodos.Completed.length === 0 ? 'active' : ''}`}
               data-cy="ToggleAllButton"
             />
           )}
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
             data-cy="Footer"
           >
             <span className="todo-count" data-cy="TodosCounter">
-              {`${sortedTodos.active.length} items left`}
+              {`${sortedTodos.Active.length} items left`}
             </span>
 
             <TodoFilter
@@ -75,7 +75,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={sortedTodos.completed.length === 0}
+              disabled={sortedTodos.Completed.length === 0}
             >
               Clear completed
             </button>
