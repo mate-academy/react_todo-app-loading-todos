@@ -18,7 +18,8 @@ export const ErrorBin: React.FC<ErrorBinProps> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        'hidden',
+        // eslint-disable-next-line quote-props
+        { 'hidden': errorMessage === '' },
       )}
     >
       <button
