@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useState, useMemo } from 'react';
-import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { List } from './components/List';
@@ -57,16 +56,16 @@ export const App: React.FC = () => {
       }
     }), [todos, filtredTodos]);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header
+          activeTodosCount={activeTodosCount}
+        />
 
         <List filterTodos={filterTodos} />
 

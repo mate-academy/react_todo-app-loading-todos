@@ -2,18 +2,20 @@
 import React from 'react';
 
 type Props = {
-
+  activeTodosCount: number;
 };
 
-export const Header: React.FC<Props> = () => {
+export const Header: React.FC<Props> = ({ activeTodosCount }) => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
+      {activeTodosCount > 0 && (
+        <button
+          type="button"
+          className="todoapp__toggle-all active"
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form>
