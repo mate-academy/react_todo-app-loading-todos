@@ -57,7 +57,6 @@ export const App: React.FC = () => {
     }), [todos, filtredTodos]);
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
-  const completedTodosCount = todos.filter(todo => todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -77,7 +76,6 @@ export const App: React.FC = () => {
             todos={filterTodos}
             filtredTodos={filtredTodos}
             setFiltredTodos={setFiltredTodos}
-            completedTodosCount={completedTodosCount}
           />
         )}
 
