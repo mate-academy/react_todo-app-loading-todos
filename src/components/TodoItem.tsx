@@ -1,20 +1,32 @@
-import { TodoLoader } from './TodoLoader';
+import cn from 'classnames';
+import { Todo } from '../types/Todo';
+// import { TodoLoader } from './TodoLoader';
 
-export const TodoItem = () => (
+type Props = {
+  todo: Todo;
+};
+
+export const TodoItem: React.FC<Props> = ({ todo }) => (
   <>
     {/* This is a completed todo */}
-    <div data-cy="Todo" className="todo completed">
+    <div
+      data-cy="Todo"
+      className={cn('todo', {
+        completed: todo.completed,
+      })}
+    >
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked
+          checked={todo.completed}
+          onChange={() => {}}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        Completed Todo
+        {todo.title}
       </span>
 
       {/* Remove button appears only on hover */}
@@ -23,10 +35,10 @@ export const TodoItem = () => (
       </button>
 
       {/* overlay will cover the todo while it is being updated */}
-      <TodoLoader />
+      {/* <TodoLoader /> */}
     </div>
 
-    {/* This todo is not completed */}
+    {/* This todo is being edited
     <div data-cy="Todo" className="todo">
       <label className="todo__status-label">
         <input
@@ -36,27 +48,7 @@ export const TodoItem = () => (
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        Not Completed Todo
-      </span>
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
-        ×
-      </button>
-
-      <TodoLoader />
-    </div>
-
-    {/* This todo is being edited */}
-    <div data-cy="Todo" className="todo">
-      <label className="todo__status-label">
-        <input
-          data-cy="TodoStatus"
-          type="checkbox"
-          className="todo__status"
-        />
-      </label>
-
-      {/* This form is shown instead of the title and remove button */}
+      This form is shown instead of the title and remove button
       <form>
         <input
           data-cy="TodoTitleField"
@@ -70,7 +62,7 @@ export const TodoItem = () => (
       <TodoLoader />
     </div>
 
-    {/* This todo is in loadind state */}
+    This todo is in loadind state
     <div data-cy="Todo" className="todo">
       <label className="todo__status-label">
         <input
@@ -88,8 +80,8 @@ export const TodoItem = () => (
         ×
       </button>
 
-      {/* 'is-active' class puts this modal on top of the todo */}
+      'is-active' class puts this modal on top of the todo
       <TodoLoader />
-    </div>
+    </div> */}
   </>
 );

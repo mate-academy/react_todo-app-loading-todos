@@ -1,13 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoAddForm } from './components/TodoAddForm';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
+import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
 
 const USER_ID = 11579;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then((data) => {
+        setTodos(data);
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.log('err');
+      });
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -29,7 +44,7 @@ export const App: React.FC = () => {
           <TodoAddForm />
         </header>
 
-        <TodoList />
+        <TodoList todos={todos} />
 
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
