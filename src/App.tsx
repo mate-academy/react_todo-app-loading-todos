@@ -1,15 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
+import * as todosService from './api/todos';
 import { TodoStatus } from './types/TodoStatus';
-
-const USER_ID = 11468;
 
 function filterBySelect(
   todo: Todo,
@@ -41,7 +38,8 @@ export const App: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState(TodoStatus.All);
 
   useEffect(() => {
-    client.get<Todo[]>(`/todos?userId=${USER_ID}`)
+    todosService
+      .getTodos()
       .then((todosFromSrever) => {
         setTodos(todosFromSrever);
       })
@@ -53,10 +51,6 @@ export const App: React.FC = () => {
         }, 3000);
       });
   }, []);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   const visibleTodos = filterTodos(todos, selectedOption);
 

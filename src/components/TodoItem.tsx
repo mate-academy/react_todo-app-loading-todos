@@ -9,13 +9,12 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({
   todo,
 }) => {
-  const { title } = todo;
-  const isCompleted = todo.completed;
+  const { title, completed } = todo;
 
   return (
     <div
       className={classNames('todo',
-        { completed: isCompleted })}
+        { completed: todo.completed })}
       data-cy="Todo"
     >
       <label className="todo__status-label">
@@ -23,7 +22,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={isCompleted}
+          checked={completed}
         />
       </label>
 
@@ -33,7 +32,6 @@ export const TodoItem: React.FC<Props> = ({
       >
         {title}
       </span>
-      {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"
@@ -42,10 +40,10 @@ export const TodoItem: React.FC<Props> = ({
         ×
       </button>
 
-      {/* overlay will cover the todo while it is being updated */}
       <div
         data-cy="TodoLoader"
-        className="modal overlay"
+        className={classNames('modal overlay',
+          { 'is-active': false })}
       >
         <div
           className="modal-background
