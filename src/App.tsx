@@ -82,8 +82,8 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
+      {/* Notification is shown in case of any error */}
       {todosError && (
         <div
           data-cy="ErrorNotification"
