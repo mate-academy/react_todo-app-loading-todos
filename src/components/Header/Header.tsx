@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
 type HeaderProps = {
   todos: Todo[];
   handleToggleAll: () => void;
@@ -19,13 +20,18 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-        disabled={!todos}
-        onClick={() => handleToggleAll()}
-      />
+      { todos.length && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all',
+            {
+              active: todos.some(todo => !todo.completed) && todos.length > 0,
+            })}
+          data-cy="ToggleAllButton"
+          disabled={todos.length === 0}
+          onClick={() => handleToggleAll()}
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleNewTodoSubmit}>

@@ -29,6 +29,7 @@ export const ErrorBin: React.FC<ErrorBinProps> = ({
         onClick={() => {
           setErrorMessage('');
         }}
+        disabled={errorMessage === ''}
       />
       {/* show only one message at a time */}
       {errorMessage && `${errorMessage}`}

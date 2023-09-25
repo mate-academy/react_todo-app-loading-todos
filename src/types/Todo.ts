@@ -1,6 +1,6 @@
 export type Filter = 'All' | 'Active' | 'Completed';
 
-export enum ErrorMessegeEnum {
+export enum ErrorMessageEnum {
   noTodos = 'Unable to load todos',
   emptyTitle = 'Title should not be empty',
   noPostTodo = 'Unable to add a todo',

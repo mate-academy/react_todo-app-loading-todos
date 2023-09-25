@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { Filter, Todo, ErrorMessegeEnum } from './types/Todo';
+import { Filter, Todo, ErrorMessageEnum } from './types/Todo';
 import { client } from './utils/fetchClient';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
@@ -20,21 +20,22 @@ export const App: React.FC = () => {
   const [editTitle, setEditTitle] = useState<string>('');
   const [editIsLoading, setEditIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [refreshTodos, setRefreshTodos] = useState<boolean>(false);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then((data) => {
         setTodos(data);
       })
-      .catch((error) => {
-        console.error('Error fetching todos:', error);
-        setErrorMessage(ErrorMessegeEnum.noTodos);
+      .catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noTodos);
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
       });
-  }, [USER_ID, todos]);
+  }, [refreshTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -71,18 +72,21 @@ export const App: React.FC = () => {
     setEditIsLoading(true);
 
     client.patch(url, updatedData)
-      .then((response) => {
-        console.log(`Todo with ID ${todo.id} updated successfully:`, response);
+      .then(() => {
+
       })
-      .catch(error => {
-        console.error(`Error updating todo with ID ${todo.id}:`, error);
-        setErrorMessage(ErrorMessegeEnum.noUpdateTodo);
+      .catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noUpdateTodo);
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
       })
-      .finally(() => setEditIsLoading(false));
+      .finally(() => {
+        setEditIsLoading(false);
+        setRefreshTodos(prev => !prev);
+      });
   };
 
   const handleToggleAll = () => {
@@ -95,15 +99,18 @@ export const App: React.FC = () => {
             .then(() => {
               setEditIsLoading(true);
             })
-            .catch(error => {
-              console.error(`Error updating todo with ID ${todo.id}:`, error);
-              setErrorMessage(ErrorMessegeEnum.noUpdateTodo);
+            .catch(() => {
+              setErrorMessage('');
+              setErrorMessage(ErrorMessageEnum.noUpdateTodo);
 
               setTimeout(() => {
                 setErrorMessage('');
               }, 3000);
             })
-            .finally(() => setEditIsLoading(false));
+            .finally(() => {
+              setEditIsLoading(false);
+              setRefreshTodos(prev => !prev);
+            });
         },
       );
     } else {
@@ -117,14 +124,14 @@ export const App: React.FC = () => {
     client.delete(url).then(() => {
       console.log(`Todo with ID ${todo.id} deleted successfully`);
     })
-      .catch(error => {
-        console.error(`Error deleting todo with ID ${todo.id}:`, error);
-        setErrorMessage(ErrorMessegeEnum.noDeleteTodo);
+      .catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noDeleteTodo);
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      });
+      }).finally(() => setRefreshTodos(prev => !prev));
   };
 
   const handleEditTodo: React.ChangeEventHandler<HTMLInputElement>
@@ -148,15 +155,18 @@ export const App: React.FC = () => {
       .then(response => {
         console.log(`Todo with ID ${todo.id} updated successfully:`, response);
       })
-      .catch(error => {
-        console.error(`Error updating todo with ID ${todo.id}:`, error);
-        setErrorMessage(ErrorMessegeEnum.noUpdateTodo);
+      .catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noUpdateTodo);
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
       })
-      .finally(() => setEditIsLoading(false));
+      .finally(() => {
+        setRefreshTodos(prev => !prev);
+        setEditIsLoading(false);
+      });
 
     setEditTodo(null);
   };
@@ -164,7 +174,8 @@ export const App: React.FC = () => {
   const handleNewTodoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!newTodoTitle.trim()) {
-      setErrorMessage(ErrorMessegeEnum.emptyTitle);
+      setErrorMessage('');
+      setErrorMessage(ErrorMessageEnum.emptyTitle);
 
       setTimeout(() => {
         setErrorMessage('');
@@ -186,35 +197,31 @@ export const App: React.FC = () => {
       console.log('New todo created:', response);
       setNewTodoTitle('');
     })
-      .catch(error => {
-        console.error(`Error deleting todo with ID ${newTodoId}:`, error);
-        setErrorMessage(ErrorMessegeEnum.noDeleteTodo);
+      .catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noDeleteTodo);
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      });
+      }).finally(() => setRefreshTodos(prev => !prev));
   };
 
   const handleClearCompleted = () => {
-    todos.forEach(todo => {
+    todos.filter(todo => todo.completed === true).forEach(todo => {
       const url = `/todos/${todo.id}`;
 
-      if (todo.completed) {
-        return client.delete(url).then(() => {
-          console.log(`Todo with ID ${todo.id} deleted successfully`);
-        })
-          .catch(error => {
-            console.error(`Error deleting todo with ID ${todo.id}:`, error);
-            setErrorMessage(ErrorMessegeEnum.noDeleteTodo);
+      return (client.delete(url).then(() => {
+        console.log(`Todo with ID ${todo.id} deleted successfully`);
+      }).catch(() => {
+        setErrorMessage('');
+        setErrorMessage(ErrorMessageEnum.noDeleteTodo);
 
-            setTimeout(() => {
-              setErrorMessage('');
-            }, 3000);
-          });
-      }
-
-      return todo;
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      })
+      ).finally(() => setRefreshTodos(prev => !prev));
     });
   };
 
@@ -231,17 +238,19 @@ export const App: React.FC = () => {
           setNewTodoTitle={setNewTodoTitle}
         />
 
-        <TodoList
-          displayedTodos={displayedTodos}
-          editTodo={editTodo}
-          editIsLoading={editIsLoading}
-          editTitle={editTitle}
-          handleDoubleClick={handleDoubleClick}
-          handleDelete={handleDelete}
-          handleCompletedStatus={handleCompletedStatus}
-          handleFormSubmitEdited={handleFormSubmitEdited}
-          handleEditTodo={handleEditTodo}
-        />
+        {todos.length > 0 && (
+          <TodoList
+            displayedTodos={displayedTodos}
+            editTodo={editTodo}
+            editIsLoading={editIsLoading}
+            editTitle={editTitle}
+            handleDoubleClick={handleDoubleClick}
+            handleDelete={handleDelete}
+            handleCompletedStatus={handleCompletedStatus}
+            handleFormSubmitEdited={handleFormSubmitEdited}
+            handleEditTodo={handleEditTodo}
+          />
+        )}
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
@@ -256,12 +265,11 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {errorMessage !== '' && (
-        <ErrorBin
-          setErrorMessage={setErrorMessage}
-          errorMessage={errorMessage}
-        />
-      )}
+      <ErrorBin
+        setErrorMessage={setErrorMessage}
+        errorMessage={errorMessage}
+      />
+
     </div>
   );
 };
