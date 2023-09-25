@@ -244,7 +244,7 @@ export const App: React.FC = () => {
         />
 
         {/* Hide the footer if there are no todos */}
-        {todos && (
+        {todos.length > 0 && (
           <Footer
             todos={todos}
             filter={filter}
@@ -256,7 +256,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {errorMessage && (
+      {errorMessage !== '' && (
         <ErrorBin
           setErrorMessage={setErrorMessage}
           errorMessage={errorMessage}
