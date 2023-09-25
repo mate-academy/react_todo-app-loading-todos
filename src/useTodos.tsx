@@ -15,6 +15,10 @@ export const useTodos = (userId: number) => {
       .catch((error) => {
         console.error('Error fetching todos:', error);
         setErrorTodos(true);
+
+        setTimeout(() => {
+          setErrorTodos(false);
+        }, 3000);
       });
   }, [userId, todos]);
 
