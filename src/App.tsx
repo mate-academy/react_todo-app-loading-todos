@@ -11,6 +11,7 @@ const USER_ID = 11579;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -44,7 +45,7 @@ export const App: React.FC = () => {
           <TodoAddForm />
         </header>
 
-        <TodoList todos={todos} />
+        <TodoList todos={todos} filter={filter} />
 
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
@@ -52,7 +53,7 @@ export const App: React.FC = () => {
             3 items left
           </span>
 
-          <TodoFilter />
+          <TodoFilter filter={filter} setFilter={setFilter} />
 
           {/* don't show this button if there are no completed todos */}
           <button
