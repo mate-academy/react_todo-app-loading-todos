@@ -10,7 +10,7 @@ import { client } from './utils/fetchClient';
 const USER_ID = 11572;
 
 export const App: React.FC = () => {
-  const { todos } = useTodos(USER_ID);
+  const { todos, errorTodos } = useTodos(USER_ID);
   const [newTodoTitle, setNewTodoTitle] = useState<string>('');
   const [filter, setFilter] = useState<Filter>('All');
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
@@ -124,27 +124,27 @@ export const App: React.FC = () => {
       });
   };
 
-  // const handleNewTodoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const newTodoId: number = Date.now();
+  const handleNewTodoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const newTodoId: number = Date.now();
 
-  //   const newTodo = {
-  //     id: newTodoId,
-  //     userId: USER_ID,
-  //     title: newTodoTitle,
-  //     completed: false,
-  //   };
+    const newTodo = {
+      id: newTodoId,
+      userId: USER_ID,
+      title: newTodoTitle,
+      completed: false,
+    };
 
-  //   client.post('/todos', newTodo).then((response) => {
-  //     console.log('New todo created:', response);
-  //   })
-  //     .catch(error => {
-  //       console.error(`Error deleting todo with ID ${newTodoId}:`, error);
-  //       setErrorMessage('Unable to add a todo');
-  //     });
+    client.post('/todos', newTodo).then((response) => {
+      console.log('New todo created:', response);
+    })
+      .catch(error => {
+        console.error(`Error deleting todo with ID ${newTodoId}:`, error);
+        setErrorMessage('Unable to add a todo');
+      });
 
-  //   setNewTodoTitle('');
-  // };
+    setNewTodoTitle('');
+  };
 
   const handleClearCompleted = () => {
     todos.forEach(todo => {
@@ -180,7 +180,7 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleNewTodoSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
@@ -208,7 +208,7 @@ export const App: React.FC = () => {
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked
+                    checked={todo.completed}
                     onChange={() => handleCompletedStatus(todo)}
                   />
                 </label>
@@ -344,8 +344,9 @@ export const App: React.FC = () => {
           onClick={() => setCloseErrors(true)}
         />
         {/* show only one message at a time */}
+        {errorTodos && 'Unable to load todos'}
         {errorMessage && `${errorMessage}`}
-        {/* {false && 'Unable to load todos'}
+        {/*
         {false && 'Title should not be empty'}
         {false && 'Unable to add a todo'}
         {false && 'Unable to delete a todo'}

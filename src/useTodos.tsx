@@ -5,6 +5,7 @@ import { Todo } from './types/Todo';
 
 export const useTodos = (userId: number) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorTodos, setErrorTodos] = useState<boolean>(false);
 
   useEffect(() => {
     getTodos(userId)
@@ -13,10 +14,11 @@ export const useTodos = (userId: number) => {
       })
       .catch((error) => {
         console.error('Error fetching todos:', error);
+        setErrorTodos(true);
       });
   }, [userId, todos]);
 
   return {
-    todos, setTodos,
+    todos, setTodos, errorTodos,
   };
 };
