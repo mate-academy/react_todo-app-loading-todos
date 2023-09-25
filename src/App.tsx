@@ -23,7 +23,7 @@ export const App: React.FC = () => {
       .catch(() => {
         // eslint-disable-next-line no-console
         // console.warn(error);
-        setTodosError('Unable to download todos');
+        setTodosError('Unable to load todos');
       });
   }, []);
 
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
       }
     }), [todos, filtredTodos]);
 
-  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const activeTodosCount = filterTodos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -70,10 +70,9 @@ export const App: React.FC = () => {
         <List filterTodos={filterTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {isOneTodoCompleted && (
           <Footer
             isOneTodoCompleted={isOneTodoCompleted}
-            todos={filterTodos}
             filtredTodos={filtredTodos}
             setFiltredTodos={setFiltredTodos}
           />
