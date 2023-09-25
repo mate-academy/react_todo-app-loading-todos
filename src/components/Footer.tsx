@@ -8,6 +8,7 @@ type Props = {
   isOneTodoCompleted: boolean;
   filtredTodos: FilterTodos;
   setFiltredTodos: (newValue: FilterTodos) => void;
+  completedTodosCount: number;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -15,6 +16,7 @@ export const Footer: React.FC<Props> = ({
   isOneTodoCompleted,
   filtredTodos,
   setFiltredTodos,
+  completedTodosCount,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -68,16 +70,14 @@ export const Footer: React.FC<Props> = ({
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      {isOneTodoCompleted && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-        >
-          Clear completed
-        </button>
-      )}
-
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        disabled={completedTodosCount === 0}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
