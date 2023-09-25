@@ -34,7 +34,7 @@ export const App: React.FC = () => {
           setErrorMessage('');
         }, 3000);
       });
-  }, [todos]);
+  }, [USER_ID, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;

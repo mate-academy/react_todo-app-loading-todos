@@ -18,9 +18,7 @@ export const ErrorBin: React.FC<ErrorBinProps> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        {
-          hidden: errorMessage,
-        },
+        'hidden',
       )}
     >
       <button
