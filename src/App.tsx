@@ -3,17 +3,13 @@ import React, { useState, useMemo, useEffect } from 'react';
 import classNames from 'classnames';
 import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { TodoStatus, Todo } from './types';
-import { getTodos } from './services/todo';
+import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList/Todolist';
 import { getFilteredTodos } from './utils/getFilteredTodos';
 import { USER_ID, DOWNLOAD_ERROR } from './utils/constants';
 import { countUncompletedTodos } from './utils/countUncompletedTodos';
-// import { UserWarning } from './UserWarning';
 
 export const App: React.FC = () => {
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
   const [todoItems, setTodoItems] = useState<Todo[]>([]);
   const [filterByStatus, setFilterByStatus] = useState(TodoStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,22 +19,6 @@ export const App: React.FC = () => {
   ), [filterByStatus, todoItems]);
 
   const uncompletedTodos = countUncompletedTodos(todoItems);
-
-  // const addTodo = ({ title, userId }: Todo) => {
-  //   postService.createTodo({ title, userId })
-  //     .then(newTodo => {
-  //       setTodoItems(currentTodos => {
-  //         const maxId = Math.max(0, ...currentTodos.map(todo => todo.id));
-  //         const id = maxId + 1;
-
-  //         return [...currentTodos, {
-  //           ...newTodo,
-  //           id,
-  //           completed: false,
-  //         }];
-  //       });
-  //     });
-  // };
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -52,8 +32,6 @@ export const App: React.FC = () => {
         throw error;
       });
   }, []);
-
-  // const { selectedTodo } = useContext(TodoContext);
 
   return (
     <div className="todoapp">
@@ -79,7 +57,6 @@ export const App: React.FC = () => {
         {visibleTodos && (
           <TodoList
             todos={visibleTodos}
-            // onStatusChange={setFilterByCategory}
           />
         )}
         <section className="todoapp__main">
@@ -150,12 +127,7 @@ export const App: React.FC = () => {
           onClick={() => setErrorMessage('')}
         />
         {errorMessage}
-        {/* show only one message at a time */}
-        {/* Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
+
       </div>
     </div>
   );

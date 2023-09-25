@@ -1,11 +1,8 @@
-// import { useContext } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-// import { TodoContext } from '../../TodoContext';
 
 type Props = {
   todo: Todo;
-  // onStatusChange: () => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -16,10 +13,6 @@ export const TodoItem: React.FC<Props> = ({
     completed,
   } = todo;
 
-  // const handleStatusChange = () => onStatusChange
-
-  // const { selectedTodo, setSelectedTodo } = useContext(TodoContext);
-
   return (
     <div
       className={classNames('todo', { completed })}
@@ -29,7 +22,6 @@ export const TodoItem: React.FC<Props> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          // onChange={handleStatusChange}
         />
       </label>
 

@@ -4,7 +4,6 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  // onStatusChange: () => void;
 };
 
 export const TodoList: React.FC<Props> = React.memo(({
@@ -15,7 +14,6 @@ export const TodoList: React.FC<Props> = React.memo(({
       <TodoItem
         key={todo.id}
         todo={todo}
-        // onStatus={onStatusChange}
       />
     ))}
   </section>
