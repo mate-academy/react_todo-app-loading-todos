@@ -15,13 +15,15 @@ export const NewTodo = () => {
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
-        type="button"
-        className={cn('todoapp__toggle-all', {
-          active: todos.every(todo => todo.completed === true),
-        })}
-        data-cy="ToggleAllButton"
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed === true),
+          })}
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={() => handleSubmit}>

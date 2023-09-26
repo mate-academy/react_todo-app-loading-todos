@@ -58,13 +58,19 @@ export const Filter = () => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
+
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!todos.every(todo => todo.completed === false)}
+        style={todos.every(todo => todo.completed === false)
+          ? { visibility: 'hidden' }
+          : {}}
       >
         Clear completed
       </button>
+
     </footer>
   );
 };

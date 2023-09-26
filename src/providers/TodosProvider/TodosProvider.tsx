@@ -11,6 +11,7 @@ export const TodosContext
   handleFilter: () => 'all',
   filteredTodos: [],
   filter: 'all',
+  // handleChecked: () => {},
 });
 
 export const TodosProvider = ({ children }: React.PropsWithChildren) => {
@@ -33,6 +34,19 @@ export const TodosProvider = ({ children }: React.PropsWithChildren) => {
     return todos;
   };
 
+  // const handleChecked = (todo: TodoType) => {
+  //   setTodos(todos.map(t => {
+  //     if (t.id === todo.id) {
+  //       return {
+  //         ...todo,
+  //         completed: !todo.completed,
+  //       };
+  //     }
+
+  //     return t;
+  //   }));
+  // };
+
   const filteredTodos = visibleTodos(filter);
 
   return (
@@ -42,6 +56,7 @@ export const TodosProvider = ({ children }: React.PropsWithChildren) => {
       handleFilter,
       filteredTodos,
       filter,
+      // handleChecked,
     }}
     >
       <>{children}</>

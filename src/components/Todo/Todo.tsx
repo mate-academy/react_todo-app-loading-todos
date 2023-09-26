@@ -1,4 +1,5 @@
 import cn from 'classnames';
+// import { useState } from 'react';
 import { TodoType } from '../../types/Todo';
 
 type TodoProps = {
@@ -6,6 +7,12 @@ type TodoProps = {
 };
 
 export const Todo = ({ todo }: TodoProps) => {
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  // const todosContext = useContext(TodosContext);
+
+  // const { handleChecked } = todosContext;
+
   return (
     <div
       data-cy="Todo"
@@ -18,7 +25,8 @@ export const Todo = ({ todo }: TodoProps) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked
+          checked={todo.completed}
+          // onChange={() => setIsChecked(!todo.completed)}
         />
       </label>
 
