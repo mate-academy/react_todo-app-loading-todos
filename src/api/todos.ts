@@ -4,5 +4,7 @@ import { client } from '../utils/fetchClient';
 export const getTodos = (userId: number) => {
   return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
-
 // Add more methods here
+
+export const API_URL = 'https://mate.academy/students-api/todos?userId=11570';
+export const USER_ID = 11570;
