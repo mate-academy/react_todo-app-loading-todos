@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
-// import { TodoLoader } from './TodoLoader';
+import { TodoLoader } from './TodoLoader';
 
 type Props = {
   todo: Todo;
@@ -8,7 +8,6 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => (
   <>
-    {/* This is a completed todo */}
     <div
       data-cy="Todo"
       className={cn('todo', {
@@ -35,7 +34,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => (
       </button>
 
       {/* overlay will cover the todo while it is being updated */}
-      {/* <TodoLoader /> */}
+      <TodoLoader />
     </div>
 
     {/* This todo is being edited
