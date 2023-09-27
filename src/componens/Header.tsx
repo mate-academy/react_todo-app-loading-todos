@@ -20,7 +20,7 @@ export const Header: React.FC<Props> = (
           event.preventDefault();
 
           createTodo(
-            { userId: USER_ID, title: textTodo, completed: true },
+            { userId: USER_ID, title: textTodo, completed: false },
           );
 
           setTextTodo('');
