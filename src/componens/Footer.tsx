@@ -15,14 +15,24 @@ interface Props {
 
 export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
   return (
-    <footer className="todoapp__footer">
-      <span className="todo-count">
+    <footer
+      className="todoapp__footer"
+      data-cy="Footer"
+    >
+      <span
+        data-cy="TodosCounter"
+        className="todo-count"
+      >
         {`${todos.length} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
-      <nav className="filter">
+      <nav
+        className="filter"
+        data-cy="Filter"
+      >
         <a
+          data-cy="FilterLinkAll"
           href="#/"
           className={
             classNames('filter__link',
@@ -37,6 +47,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
         </a>
 
         <a
+          data-cy="FilterLinkActive"
           href="#/active"
           className={
             classNames('filter__link',
@@ -51,6 +62,7 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
         </a>
 
         <a
+          data-cy="FilterLinkCompleted"
           href="#/completed"
           className={
             classNames('filter__link',
@@ -66,7 +78,11 @@ export const Footer: React.FC<Props> = ({ status, setStatus, todos }) => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      <button type="button" className="todoapp__clear-completed">
+      <button
+        data-cy="ClearCompletedButton"
+        type="button"
+        className="todoapp__clear-completed"
+      >
         Clear completed
       </button>
     </footer>
