@@ -23,31 +23,19 @@ export const App: React.FC = () => {
 
   const [textTodo, setTextTodo] = useState('');
 
-  // useEffect(() => {
-
-  // }, [errorMessege]);
-
   useEffect(() => {
     postService.getTodos(USER_ID)
-      .then(setTodos);
-  }, []);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
-  function createTodo({ userId, title, completed = false }: Omit<Todo, 'id'>) {
-    postService.createTodos({ userId, title, completed })
-      .then(newPost => {
-        setTodos(prevTodos => [...prevTodos, newPost]);
-        setErrorMessege('');
-      })
+      .then(setTodos)
       .catch(() => {
-        setErrorMessege('Unable to add a todo');
+        setErrorMessege('Unable to load todos');
         setTimeout(() => {
           setErrorMessege('');
         }, 3000);
       });
+  }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
   }
 
   function filterTodo() {
@@ -78,8 +66,6 @@ export const App: React.FC = () => {
         <Header
           setTextTodo={setTextTodo}
           textTodo={textTodo}
-          // eslint-disable-next-line react/jsx-no-bind
-          createTodo={createTodo}
         />
 
         <TodoList

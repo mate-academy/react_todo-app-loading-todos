@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
-import * as postService from '../api/todos';
 
 interface Props {
   todos: Todo[]
   setTodos: React.Dispatch<React.SetStateAction<[] | Todo[]>>
 }
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main">
       {todos.map(todo => (
@@ -27,14 +26,6 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
           <button
             type="button"
             className="todo__remove"
-            onClick={() => {
-              setTodos(
-                (prevTodo: Todo[]) => [...prevTodo.filter(
-                  (item: Todo) => item.id !== todo.id,
-                )],
-              );
-              postService.deleteTodos(todo.id);
-            }}
           >
             ×
           </button>

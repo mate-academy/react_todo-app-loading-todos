@@ -2,13 +2,10 @@
 interface Props {
   setTextTodo: (text: string) => void,
   textTodo: string,
-  createTodo: (
-    todo: { userId: number, title: string, completed: boolean }) => void
 }
-const USER_ID = 11582;
 
 export const Header: React.FC<Props> = (
-  { setTextTodo, textTodo, createTodo },
+  { setTextTodo, textTodo },
 ) => {
   return (
     <header className="todoapp__header">
@@ -18,10 +15,6 @@ export const Header: React.FC<Props> = (
       <form
         onSubmit={(event) => {
           event.preventDefault();
-
-          createTodo(
-            { userId: USER_ID, title: textTodo, completed: false },
-          );
 
           setTextTodo('');
         }}
