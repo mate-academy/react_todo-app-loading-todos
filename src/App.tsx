@@ -38,6 +38,8 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const completedTodos = todos.filter(todo => !todo.completed);
+
   function filterTodo() {
     const filterTodos: Todo[] = [...todos].filter((todo) => {
       switch (status) {
@@ -77,7 +79,7 @@ export const App: React.FC = () => {
           <Footer
             status={status}
             setStatus={setStatus}
-            todos={todos}
+            todos={completedTodos}
           />
         )}
 
