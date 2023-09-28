@@ -63,6 +63,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
 
+
         <Header
           setTextTodo={setTextTodo}
           textTodo={textTodo}
@@ -80,10 +81,12 @@ export const App: React.FC = () => {
             todos={todos}
           />
         )}
+
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
+
       <div className={
         classNames(
           'notification is-danger is-light has-text-weight-normal',
@@ -97,6 +100,7 @@ export const App: React.FC = () => {
           onClick={() => setErrorMessege('')}
         />
         {errorMessege}
+
       </div>
     </div>
   );
