@@ -80,10 +80,12 @@ export const App: React.FC = () => {
             todos={todos}
           />
         )}
+
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
+
       <div
         data-cy="ErrorNotification"
         className={
@@ -92,6 +94,7 @@ export const App: React.FC = () => {
             { hidden: !errorMessege },
           )
         }
+
       >
         <button
           data-cy="HideErrorButton"
@@ -100,6 +103,7 @@ export const App: React.FC = () => {
           onClick={() => setErrorMessege('')}
         />
         {errorMessege}
+
       </div>
     </div>
   );
