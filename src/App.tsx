@@ -30,8 +30,8 @@ export const App: React.FC = () => {
     }
   }, [errorMessage]);
 
-  const filteredTodos = (todos: Todo[], filterStatus: Status): Todo[] => {
-    return todos.filter(currentTodo => {
+  const filteredTodos = (todosFilter: Todo[], filterStatus: Status): Todo[] => {
+    return todosFilter.filter(currentTodo => {
       switch (filterStatus) {
         case Status.Active:
           return !currentTodo.completed;
