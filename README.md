@@ -47,4 +47,40 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://daryna-hnidash.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+
+
+https://mate.academy/students-api/todos?userId=11443
+
+
+Add a todo with the entered title on the form submit:
+
+text field should be focused by default;
+
+if the title is empty show the Title should not be empty notification at the bottom;
+
+trim the title when checked or saved;
+
+use your userId for the new todo;
+
+send a POST request to the API (check the API Documentation)
+
+disable the input until receiving a response from the API;
+
+immediately after sending a request create a todo with id: 0 and save it to the tempTodo variable in the state (NOT to the todos array);
+
+show an independent TodoItem after the list if tempTodo is not null;
+
+temp TodoItem should have the loader (check the original markup);
+
+in case of success add the todo created by the API to the array (take it from the POST response);
+
+in case of an API error showing Unable to add a todo notification at the bottom;
+
+set tempTodo to null to hide the extra TodoItem;
+
+focus the text field after receiving a response;
+
+clear the text in case of success;
+
+keep the text in case of error;
