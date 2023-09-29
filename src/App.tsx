@@ -72,7 +72,6 @@ export const App: React.FC = () => {
               items left
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter">
               <a
                 href="#/"
