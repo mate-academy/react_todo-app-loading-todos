@@ -7,12 +7,16 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
-# ❗️❗️❗️<br>Please implement ONLY todos loading, errors and filtering. <br><br>All the rest will be implemented in the next tasks<br>❗️❗️❗️
+## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
+
+## ❗️ If you can't pass some tests ❗️
+- You can find the test by its name in the `cypress/integration/page.spec.js` and skip a test (replace `it` with `it.skip`);
+- Or skip a group of tests (replace `describe` with `describe.skip`)
 
 ## General info
 
 - register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-- save the received `userId` in the `App` and use to load load todos
+- save the received `userId` in the `App` and use it to load todos
 - log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
@@ -31,7 +35,6 @@ In case of any error show the notification with an appropriate message at the bo
 - automatically hide the notification after 3 seconds;
 - also hide the notification before any next request;
 - use a wrong todos URL to test the error;
-- there are no tests yet.
 
 ## Filtering todos
 
