@@ -9,8 +9,9 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
 ## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
 
-## If you can't pass some tests
-❗️ You can find the test by its name in the `cypress/integration/page.spec.js` and replace `it(` with `it.skip(` for this test. ❗️
+## ❗️ If you can't pass some tests ❗️
+- You can find the test by its name in the `cypress/integration/page.spec.js` and skip a test (replace `it` with `it.skip`);
+- Or skip a group of tests (replace `describe` with `describe.skip`)
 
 ## General info
 
