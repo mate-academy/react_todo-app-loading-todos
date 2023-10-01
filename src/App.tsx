@@ -1,56 +1,67 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
+import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
-import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
-import { TodoList } from './components/TodoList';
+import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
 import { TodoFilter } from './components/TodoFilter';
-import { NewTodo } from './components/NewTodo';
-import { TodoStatus } from './types/TodoStatus';
+import { TodoList } from './components/TodoList';
+import { getTodos } from './api/todos';
+import { ErrorMessage, Filter, Todo } from './types/Todo';
+import { TodoError } from './components/TodoError/TodoError';
+
+export const USER_ID = 11549;
 
 export const App: React.FC = () => {
-  const USER_ID = 11549;
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [filter, setFilter] = useState(TodoStatus.All);
+  const [filter, setFilter] = useState<Filter>('All');
+  const [error, setError] = useState<ErrorMessage | ''>('');
+  const [title, setTitle] = useState('');
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(setTodos)
-      .catch((error) => {
-        setErrorMessage('Unable to download todos');
-        throw error;
+      .then((data) => {
+        setTodos(data);
+      })
+      .catch(() => {
+        setError(ErrorMessage.noTodos);
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       });
   }, []);
 
-  const visibleTodos = todos.filter((todo) => {
-    switch (filter) {
-      case TodoStatus.All:
-        return true;
-      case TodoStatus.Active:
-        return !todo.completed;
-      case TodoStatus.Completed:
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+  useEffect(() => {
+    const activeTodos = todos.filter((todo) => !todo.completed);
 
-  const allTodoComplited = todos.length > 0
-    && todos.every((todo) => todo.completed);
+    setCounter(activeTodos.length);
+  }, [todos]);
 
-  const uncomplitedTodos = todos.filter((todo) => !todo.completed).length;
+  const getVisibleTodos = () => {
+    const visible = todos.filter(todo => {
+      if (filter === 'Active' && todo.completed) {
+        return false;
+      }
 
-  const complitedTodos = todos.filter((todo) => todo.completed).length;
+      if (filter === 'Completed' && !todo.completed) {
+        return false;
+      }
 
-  const clearErrorMessage = () => {
-    setErrorMessage('');
+      return true;
+    });
+
+    return visible;
   };
 
-  const handleFilterChange = (newFilter: TodoStatus) => {
-    setFilter(newFilter);
-    clearErrorMessage();
+  const visibleTodos = getVisibleTodos();
+
+  const handleSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    if (!title.trim()) {
+      setError(ErrorMessage.noTitle);
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+    }
   };
 
   if (!USER_ID) {
@@ -63,59 +74,48 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length !== 0 && (
-            <button
-              type="button"
-              className={classNames(
-                'todoapp__toggle-all',
-                { active: allTodoComplited },
-              )}
-            />
-          )}
+          {/* this buttons is active only if there are some active todos */}
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+            data-cy="ToggleAllButton"
+          />
 
-          <NewTodo
-            USER_ID={USER_ID}
-            setTodos={setTodos}
-            setErrorMessage={setErrorMessage}
+          {/* Add a todo on form submit */}
+          <TodoAddForm
+            title={title}
+            setTitle={setTitle}
+            onSubmit={handleSubmit}
           />
         </header>
 
-        {todos.length !== 0 && (
-          <>
-            <TodoList visibleTodos={visibleTodos} />
+        <TodoList visibleTodos={visibleTodos} />
 
-            <footer className="todoapp__footer">
-              <span className="todo-count">
-                {`${uncomplitedTodos} items left`}
-              </span>
+        {/* Hide the footer if there are no todos */}
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {`${counter} items left`}
+            </span>
 
-              <TodoFilter
-                filter={filter}
-                setFilter={handleFilterChange}
-              />
+            <TodoFilter filter={filter} setFilter={setFilter} />
 
-              {complitedTodos !== 0 && (
-                <button type="button" className="todoapp__clear-completed">
-                  Clear completed
-                </button>
-              )}
-            </footer>
-          </>
+            {/* don't show this button if there are no completed todos */}
+            {todos.some((todo) => todo.completed) && (
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                data-cy="ClearCompletedButton"
+              >
+                Clear completed
+              </button>
+            )}
+          </footer>
         )}
       </div>
 
-      <div className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: errorMessage.length === 0 },
-      )}
-      >
-        <button
-          type="button"
-          className="delete"
-          onClick={clearErrorMessage}
-        />
-        {errorMessage}
-      </div>
+      {/* Notification is shown in case of any error */}
+      <TodoError error={error} setError={setError} />
     </div>
   );
 };
