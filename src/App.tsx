@@ -91,7 +91,6 @@ export const App: React.FC = () => {
   };
 
   const handleComplete = async (id: number, completed: boolean) => {
-    closeError();
     try {
       await updateTodo(id, { completed: !completed });
     } catch (error) {
@@ -121,6 +120,30 @@ export const App: React.FC = () => {
     return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
+  const toggleAll = () => {
+    if (uncompletedTodos() === 0) {
+      try {
+        todos.map(async (todo) => {
+          await updateTodo(todo.id, { completed: false });
+          await loadTodos();
+        });
+      } catch (error) {
+        handleErrorSet('update-todo');
+        throw error;
+      }
+    } else {
+      try {
+        todos.map(async (todo) => {
+          await updateTodo(todo.id, { completed: true });
+          await loadTodos();
+        });
+      } catch (error) {
+        handleErrorSet('update-todo');
+        throw error;
+      }
+    }
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -136,6 +159,7 @@ export const App: React.FC = () => {
           query={query}
           setQuery={setQuery}
           uncompletedTodos={uncompletedTodos()}
+          toggleAll={toggleAll}
         />
         {todos && (
           <TodoList
