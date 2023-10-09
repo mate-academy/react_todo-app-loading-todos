@@ -35,7 +35,7 @@ export const TodoList: React.FC<Props> = React.memo(({
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={!completed}
+              checked={completed}
               readOnly
               onClick={() => {
                 handleComplete(id, completed);

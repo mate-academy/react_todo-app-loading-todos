@@ -30,14 +30,12 @@ export const App: React.FC = () => {
   };
 
   const loadTodos = async () => {
-    closeError();
     try {
       const loadedTodos = await getTodos(USER_ID);
 
       setTodos(loadedTodos);
-    } catch (error) {
+    } catch {
       handleErrorSet('load-todo');
-      throw error;
     }
   };
 
@@ -81,9 +79,8 @@ export const App: React.FC = () => {
 
     try {
       await addTodo('/todos', newTodo);
-    } catch (error) {
+    } catch {
       handleErrorSet('add-todo');
-      throw error;
     }
 
     await loadTodos();
@@ -93,9 +90,8 @@ export const App: React.FC = () => {
   const handleComplete = async (id: number, completed: boolean) => {
     try {
       await updateTodo(id, { completed: !completed });
-    } catch (error) {
+    } catch {
       handleErrorSet('update-todo');
-      throw error;
     }
 
     await loadTodos();
@@ -104,9 +100,8 @@ export const App: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await deleteTodo(id);
-    } catch (error) {
+    } catch {
       handleErrorSet('delete-todo');
-      throw error;
     }
 
     await loadTodos();
@@ -127,9 +122,8 @@ export const App: React.FC = () => {
           await updateTodo(todo.id, { completed: false });
           await loadTodos();
         });
-      } catch (error) {
+      } catch {
         handleErrorSet('update-todo');
-        throw error;
       }
     } else {
       try {
@@ -137,9 +131,8 @@ export const App: React.FC = () => {
           await updateTodo(todo.id, { completed: true });
           await loadTodos();
         });
-      } catch (error) {
+      } catch {
         handleErrorSet('update-todo');
-        throw error;
       }
     }
   };
