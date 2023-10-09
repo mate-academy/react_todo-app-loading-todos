@@ -33,13 +33,9 @@ export const App: React.FC = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
 
   useEffect(() => {
-    setTimeout(() => {
-      getTodos(USER_ID)
-        .then(setTodos)
-        .catch(() => setErrorMessage(Message.NoLoadTotos));
-    }, 3000);
-
-    setErrorMessage('');
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => setErrorMessage(Message.NoLoadTotos));
   }, [USER_ID]);
 
   if (!USER_ID) {

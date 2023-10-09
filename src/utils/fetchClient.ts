@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+const BASE_URL = 'https://mate.academy/nstudents-api';
 
 export const USER_ID = 11642;
 
