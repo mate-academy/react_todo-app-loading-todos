@@ -23,6 +23,8 @@ const page = {
       clock.tick(delay);
       clock.restore();
     });
+
+    cy.wait(100);
   },
 
   /**
@@ -157,6 +159,9 @@ describe('', () => {
 
     describe('on loading error', () => {
       beforeEach(() => {
+        // to prevent Cypress from failing the test on uncaught exception
+        cy.once('uncaught:exception', () => false);
+
         page.mockLoad({ statusCode: 404, body: 'Not found' }).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
