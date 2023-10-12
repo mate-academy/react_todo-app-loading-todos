@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import './styles/App.scss';
 import { TodosContext } from './components/TodosContext';
@@ -12,11 +12,16 @@ const USER_ID = 11677;
 
 export const App: React.FC = () => {
   const { todos, dispatch } = useContext(TodosContext);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getTodos(USER_ID).then(responce => {
-      dispatch({ type: 'get', payload: responce });
-    });
+    getTodos(USER_ID)
+      .then(responce => {
+        dispatch({ type: 'get', payload: responce });
+      })
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+      });
   }, [dispatch]);
 
   return (
@@ -34,7 +39,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification />
+      <ErrorNotification errorMessage={errorMessage} />
     </div>
   );
 };
