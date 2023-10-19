@@ -2,7 +2,7 @@ import React from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItems } from './TodoItems';
 
-type Props = { 
+type Props = {
   todos: Todo[];
 };
 

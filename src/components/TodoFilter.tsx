@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Filter } from '../types/Filter';
+import { StatusFilter } from '../types/Filter';
 
 type Props = {
-  filter: Filter,
-  setFilter: (type: Filter) => void,
+  filter: StatusFilter,
+  setFilter: (type: StatusFilter) => void,
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -17,9 +17,9 @@ export const TodoFilter: React.FC<Props> = ({
         href="#/"
         className={classNames(
           'filter__link',
-          { selected: filter === Filter.ALL },
+          { selected: filter === StatusFilter.ALL },
         )}
-        onClick={() => setFilter(Filter.ALL)}
+        onClick={() => setFilter(StatusFilter.ALL)}
         data-cy="FilterLinkAll"
       >
         All
@@ -29,9 +29,9 @@ export const TodoFilter: React.FC<Props> = ({
         href="#/active"
         className={classNames(
           'filter__link',
-          { selected: filter === Filter.ACTIVE },
+          { selected: filter === StatusFilter.ACTIVE },
         )}
-        onClick={() => setFilter(Filter.ACTIVE)}
+        onClick={() => setFilter(StatusFilter.ACTIVE)}
         data-cy="FilterLinkActive"
       >
         Active
@@ -41,9 +41,9 @@ export const TodoFilter: React.FC<Props> = ({
         href="#/completed"
         className={classNames(
           'filter__link',
-          { selected: filter === Filter.COMPLETED },
+          { selected: filter === StatusFilter.COMPLETED },
         )}
-        onClick={() => setFilter(Filter.COMPLETED)}
+        onClick={() => setFilter(StatusFilter.COMPLETED)}
         data-cy="FilterLinkCompleted"
       >
         Completed
