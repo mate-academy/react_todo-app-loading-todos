@@ -1,13 +1,25 @@
+/* eslint-disable */
+// @ts-nocheck
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
-
-const USER_ID = 0;
+import React, { useEffect, useState } from "react";
+import { UserWarning } from "./UserWarning";
+import { client } from "./utils/fetchClient";
+import { Todo } from "./types/Todo";
+const USER_ID = 11694;
 
 export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    client.get<Todo[]>(`/todos?userId=${USER_ID}`).then((response) => {
+      setTodos(response);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="todoapp">
