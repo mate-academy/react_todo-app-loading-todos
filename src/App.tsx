@@ -99,32 +99,6 @@ export const App: React.FC = () => {
                   setFilter={setFilterStatus}
                 />
 
-                <nav className="filter" data-cy="Filter">
-                  <a
-                    href="#/"
-                    className="filter__link selected"
-                    data-cy="FilterLinkAll"
-                  >
-                    All
-                  </a>
-
-                  <a
-                    href="#/active"
-                    className="filter__link"
-                    data-cy="FilterLinkActive"
-                  >
-                    Active
-                  </a>
-
-                  <a
-                    href="#/completed"
-                    className="filter__link"
-                    data-cy="FilterLinkCompleted"
-                  >
-                    Completed
-                  </a>
-                </nav>
-
                 {/* don't show this button if there are no completed todos */}
                 <button
                   type="button"
@@ -145,7 +119,7 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
-          errorMessage ? '' : 'hidden',
+          { hidden: !errorMessage },
         )}
       >
         <button
