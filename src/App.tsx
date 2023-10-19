@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterStatus, setFilterStatus] = useState(StatusFilter.ALL);
+  const [statusFilter, setStatusFilter] = useState(StatusFilter.ALL);
 
   useEffect(() => {
     setLoading(true);
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   const filtredTodos: Todo[] = useMemo(() => {
     let filtered = todos;
 
-    switch (filterStatus) {
+    switch (statusFilter) {
       case StatusFilter.ACTIVE:
         filtered = filtered.filter(todo => !todo.completed);
         break;
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
     }
 
     return filtered;
-  }, [todos, filterStatus]);
+  }, [todos, statusFilter]);
 
   const countActiveTodos = todos.filter(todo => !todo.completed).length;
 
@@ -95,8 +95,8 @@ export const App: React.FC = () => {
                 {/* Active filter should have a 'selected' class */}
 
                 <TodoFilter
-                  filter={filterStatus}
-                  setFilter={setFilterStatus}
+                  filter={statusFilter}
+                  setFilter={setStatusFilter}
                 />
 
                 {/* don't show this button if there are no completed todos */}
@@ -128,17 +128,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={() => setErrorMessage('')}
         />
-        {/* <br />
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-        {errorMessage}
+          {errorMessage}
       </div>
     </div>
   );
