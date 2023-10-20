@@ -61,6 +61,14 @@ export const App: React.FC = () => {
 
     setNewTodo("");
   };
+
+  const activateAll = () => {
+    setTodos(todos.map((item) => ({ ...item, completed: true })));
+  };
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
