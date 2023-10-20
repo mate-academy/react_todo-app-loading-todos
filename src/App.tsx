@@ -80,6 +80,7 @@ export const App: React.FC = () => {
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
+            onClick={() => activateAll()}
           />
 
           {/* Add a todo on form submit */}
@@ -89,6 +90,8 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
             />
           </form>
         </header>
