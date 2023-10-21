@@ -7,9 +7,11 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
+
 ## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
 
 ## ❗️ If you can't pass some tests ❗️
+
 - You can find the test by its name in the `cypress/integration/page.spec.js` and skip a test (replace `it` with `it.skip`);
 - Or skip a group of tests (replace `describe` with `describe.skip`)
 
@@ -20,9 +22,9 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 - log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
 - create some todos to see them later in your App
 - load your todos when the `App` is loaded (put your userId instead of `???`);
-    ```
-    https://mate.academy/students-api/todos?userId=???
-    ```
+  ```
+  https://mate.academy/students-api/todos?userId=???
+  ```
 - hide the list and the footer if there are no todos yet;
 
 > The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
@@ -47,4 +49,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://dimarogkov.github.io/react_todo-app-loading-todos/) and add it to the PR description.
