@@ -15,15 +15,15 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 ## General info
 
-- register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-- save the received `userId` in the `App` and use it to load todos
-- log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
-- create some todos to see them later in your App
-- load your todos when the `App` is loaded (put your userId instead of `???`);
++ register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
++ save the received `userId` in the `App` and use it to load todos
++ log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
++ create some todos to see them later in your App
++ load your todos when the `App` is loaded (put your userId instead of `???`);
     ```
-    https://mate.academy/students-api/todos?userId=???
+    https://mate.academy/students-api/todos?userId=11522
     ```
-- hide the list and the footer if there are no todos yet;
++ hide the list and the footer if there are no todos yet;
 
 > The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
 
@@ -31,8 +31,8 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 
 In case of any error show the notification with an appropriate message at the bottom
 
-- the notification can be closed with the `close` button (add the `hidden` class);
-- automatically hide the notification after 3 seconds;
++ the notification can be closed with the `close` button (add the `hidden` class);
++ automatically hide the notification after 3 seconds;
 - also hide the notification before any next request;
 - use a wrong todos URL to test the error;
 
@@ -40,8 +40,8 @@ In case of any error show the notification with an appropriate message at the bo
 
 Filter todos by status `All` / `Active` / `Completed`:
 
-- `all` is the default value;
-- use the `selected` class to highlight a selected link;
++ `all` is the default value;
++ use the `selected` class to highlight a selected link;
 
 ## Instructions
 
