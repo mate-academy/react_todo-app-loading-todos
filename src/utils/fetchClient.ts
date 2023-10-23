@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+export const BASE_URL = 'https://mate.academy/students-api/todos?userId=11712';
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -11,7 +11,7 @@ function wait(delay: number) {
 // To have autocompletion and avoid mistypes
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-function request<T>(
+export function request<T>(
   url: string,
   method: RequestMethod = 'GET',
   data: any = null, // we can send any data to the server
@@ -31,6 +31,8 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
+        // eslint-disable-next-line no-console
+        console.log('Error');
         throw new Error();
       }
 
