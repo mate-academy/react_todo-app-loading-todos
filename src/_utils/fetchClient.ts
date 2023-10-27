@@ -26,7 +26,6 @@ function request<T>(
     };
   }
 
-  // DON'T change the delay it is required for tests
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
@@ -34,7 +33,7 @@ function request<T>(
         throw new Error();
       }
 
-      return response.json();
+      return response.json() as T;
     });
 }
 
