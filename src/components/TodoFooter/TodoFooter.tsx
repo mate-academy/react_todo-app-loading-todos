@@ -1,4 +1,4 @@
-// import cn from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { TodoFilter } from '../../types/TodoFilter';
 
@@ -21,7 +21,10 @@ export const TodoFooter: React.FC<TodoFooterProps> = (
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${currentFilter === TodoFilter.All ? 'selected' : ''}`}
+          className={cn('filter__link',
+            {
+              selected: currentFilter === TodoFilter.All,
+            })}
           data-cy="FilterLinkAll"
           onClick={() => filterChange(TodoFilter.All)}
         >
@@ -30,7 +33,10 @@ export const TodoFooter: React.FC<TodoFooterProps> = (
 
         <a
           href="#/active"
-          className={`filter__link ${currentFilter === TodoFilter.Active ? 'selected' : ''}`}
+          className={cn('filter__link',
+            {
+              selected: currentFilter === TodoFilter.Active,
+            })}
           data-cy="FilterLinkActive"
           onClick={() => filterChange(TodoFilter.Active)}
         >
@@ -39,7 +45,10 @@ export const TodoFooter: React.FC<TodoFooterProps> = (
 
         <a
           href="#/completed"
-          className={`filter__link ${currentFilter === TodoFilter.Completed ? 'selected' : ''}`}
+          className={cn('filter__link',
+            {
+              selected: currentFilter === TodoFilter.Completed,
+            })}
           data-cy="FilterLinkCompleted"
           onClick={() => filterChange(TodoFilter.Completed)}
         >

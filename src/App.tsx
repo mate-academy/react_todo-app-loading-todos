@@ -63,12 +63,12 @@ export const App: React.FC = () => {
 
         <TodoHeader />
 
-        <TodoList todos={todos} />
+        <TodoList todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
         {todos && todos.length > 0 && (
           <TodoFooter
-            todos={todos}
+            todos={filteredTodos}
             currentFilter={currentFilter}
             filterChange={handleFilterChange}
           />
