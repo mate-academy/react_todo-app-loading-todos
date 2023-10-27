@@ -111,6 +111,7 @@ export const App: React.FC = () => {
 
       <Errors
         error={error}
+        setError={setError}
       />
     </div>
   );
