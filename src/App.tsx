@@ -60,7 +60,7 @@ export const App: React.FC = () => {
             todos={todos}
             filter={typeTodo}
             onFilter={setTypeTodo}
-            countTodos={filterTodos().length}
+            // countTodos={filterTodos().length}
           />
         )}
       </div>

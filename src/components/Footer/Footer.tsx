@@ -7,21 +7,23 @@ type Props = {
   todos: Todo[],
   filter: TodoFilter,
   onFilter: (filter: TodoFilter) => void,
-  countTodos: number,
+  // countTodos: number,
 };
 
 export const Footer: React.FC<Props> = ({
   todos,
   filter,
   onFilter,
-  countTodos,
+  // countTodos,
 }) => {
   const handleTodoCompleted = todos.filter(todo => todo.completed);
+  const handleCountActiveTodos = todos
+    .filter(todo => !todo.completed).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${countTodos} items left`}
+        {`${handleCountActiveTodos} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
