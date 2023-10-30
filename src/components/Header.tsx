@@ -11,6 +11,9 @@ export const Header:React.FC<Props> = ({ handleSubmit }) => {
   const [value, setValue] = useState('');
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (value === '') {
+      return;
+    }
 
     // eslint-disable-next-line no-console
     console.log('success');
@@ -18,27 +21,20 @@ export const Header:React.FC<Props> = ({ handleSubmit }) => {
     handleSubmit({
       userId: USER_ID,
       title: value,
-      id: 0,
+      id: +new Date(),
       completed: false,
     });
     setValue('');
   };
 
-  const addTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-
-    // eslint-disable-next-line no-console
-    console.log(e.target.value);
-  };
-
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      <button
+      {/* <button
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
-      />
+      /> */}
 
       <form onSubmit={onSubmit}>
         <input
@@ -46,7 +42,7 @@ export const Header:React.FC<Props> = ({ handleSubmit }) => {
           type="text"
           className="todoapp__new-todo"
           value={value}
-          onChange={addTodo}
+          onChange={(event) => setValue(event.target.value)}
           placeholder="What needs to be done?"
         />
       </form>

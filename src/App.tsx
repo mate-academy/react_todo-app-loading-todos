@@ -5,38 +5,64 @@ import { Todo } from './types/Todo';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Header, USER_ID } from './components/Header';
-import { getTodos } from './api/todos';
+import {
+  createTodo, deleteTodo, getTodos, updateTodo,
+} from './api/todos';
+import { FilteredBy } from './types/FilteredBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [typeTodo, setTypeTodo] = useState<FilteredBy>(FilteredBy.ALL);
 
-  const addTodo = (newTodo: Todo) => {
-    setTodos(currentTodos => [...currentTodos, newTodo]);
+  const filterTodos = () => {
+    switch (typeTodo) {
+      case FilteredBy.Active:
+        return todos.filter((todo) => !todo.completed);
+      case FilteredBy.Completed:
+        return todos.filter((todo) => todo.completed);
+      case FilteredBy.ALL:
+        return todos;
+      default:
+        return todos;
+    }
+  };
+
+  const addTodo = ({ title, completed, userId } : Todo) => {
+    createTodo({ title, completed, userId })
+      .then(newTodo => setTodos(currentTodos => [...currentTodos, newTodo]));
+  };
+
+  const handleTodoStatusUpdate = (completed: boolean, id: Todo['id']) => {
+    updateTodo({ completed }, id, USER_ID)
+      .then(() => {
+        setTodos((prev) => prev.map(todo => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              completed,
+              id,
+            };
+          }
+
+          return todo;
+        }));
+      });
   };
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(todosFromserver => (setTodos(todosFromserver)));
+  }, []);
 
-    setVisibleTodos(todos);
-  }, [todos]);
+  const onDelete = (todoId: Todo['id']) => {
+    deleteTodo(todoId);
+
+    setTodos((curr) => curr.filter((todo) => todo.id !== todoId));
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const todoFilter = (completed: string | boolean) => {
-    if (completed === 'all') {
-      setVisibleTodos(visibleTodos);
-    } else {
-      const newTodos = [...visibleTodos].filter(
-        (todo) => todo.completed === completed,
-      );
-
-      setVisibleTodos(newTodos);
-    }
-  };
 
   return (
     <div className="todoapp">
@@ -44,8 +70,17 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header handleSubmit={addTodo} />
-        <TodoList todos={visibleTodos} />
-        <Footer todos={todos} todoFilter={todoFilter} />
+        <TodoList
+          todos={todos}
+          handleTodoStatusUpdate={handleTodoStatusUpdate}
+          onDelete={onDelete}
+        />
+        <Footer
+          todos={todos}
+          filterBy={typeTodo}
+          onFilter={setTypeTodo}
+          countTodos={filterTodos().length}
+        />
       </div>
 
       {/* Notification is shown in case of any error */}
