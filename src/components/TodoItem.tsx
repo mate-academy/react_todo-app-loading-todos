@@ -1,52 +1,43 @@
-import cn from 'classnames';
+import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-type Props = {
+interface Props {
   todo: Todo;
-  handleTodoStatusUpdate: (status: boolean, id: Todo['id']) => void;
-  onDelete: (todoId: Todo['id']) => void;
-};
+  onCheck: (id: number) => void;
+}
 
-export const TodoItem: React.FC<Props>
-  = ({ todo, handleTodoStatusUpdate, onDelete }) => {
-    function handleUpdate() {
-      handleTodoStatusUpdate(!todo.completed, todo.id);
-    }
+export const TodoItem: React.FC<Props> = ({ todo, onCheck }) => {
+  return (
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: todo.completed === true })}
+    >
+      <label className="todo__status-label">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          onChange={() => {
+            onCheck(todo.id);
+          }}
+        />
+      </label>
 
-    return (
-      <div
-        data-cy="Todo"
-        className={cn('todo', {
-          completed: todo.completed === true,
-        })}
-        key={todo.id}
-      >
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            onClick={handleUpdate}
-            checked={todo.completed}
-          />
-        </label>
+      <span data-cy="TodoTitle" className="todo__title">
+        {todo.title}
+      </span>
 
-        <span data-cy="TodoTitle" className="todo__title">
-          {todo.title}
-        </span>
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={() => onDelete(todo.id)}
-        >
-          ×
-        </button>
+      <button type="button" className="todo__remove" data-cy="TodoDelete">
+        ×
+      </button>
 
-        <div data-cy="TodoLoader" className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
+      {/* overlay will cover the todo while it is being updated */}
+      <div data-cy="TodoLoader" className="modal overlay">
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
       </div>
-    );
-  };
+    </div>
+  );
+};

@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
-type Props = {
+interface Props {
   todos: Todo[];
-  handleTodoStatusUpdate: (status: boolean, id: Todo['id']) => void;
-  onDelete: (todoId: Todo['id']) => void,
-};
+}
 
-export const TodoList: React.FC<Props>
-  = ({ todos, handleTodoStatusUpdate, onDelete }) => {
-    return (
-      <section className="todoapp__main" data-cy="TodoList">
-        {todos.map((todo) => (
-          <TodoItem
-            todo={todo}
-            handleTodoStatusUpdate={handleTodoStatusUpdate}
-            onDelete={onDelete}
-          />
-        ))}
-      </section>
-    );
+export const TodosList: React.FC<Props> = ({ todos }) => {
+  const [todoList, setTodoList] = useState(todos);
+
+  const onChange = (todoId: number) => {
+    const upDateTodo = todoList.map((todo) => {
+      if (todo.id === todoId) {
+        return { ...todo, completed: !todo.completed };
+      }
+
+      return todo;
+    });
+
+    setTodoList(upDateTodo);
   };
+
+  return (
+    <section className="todoapp__main" data-cy="TodoList">
+      {todos.map((todo) => (
+        <TodoItem todo={todo} key={todo.id} onCheck={onChange} />
+      ))}
+    </section>
+  );
+};
