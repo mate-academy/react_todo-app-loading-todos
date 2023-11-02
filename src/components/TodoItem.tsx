@@ -9,11 +9,9 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const { id, title, completed } = todo;
-  const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  console.debug(id, setIsEditing, setIsLoading);
+  const { title, completed } = todo;
+  const [isEditing] = useState(false);
+  const [isLoading] = useState(false);
 
   return (
     <div
