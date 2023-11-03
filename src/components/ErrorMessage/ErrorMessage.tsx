@@ -13,10 +13,12 @@ export const ErrorMessage: React.FC<Props> = ({
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timerId = setTimeout(() => {
       setIsVisible(false);
       onCloseError();
     }, 3000);
+
+    return () => clearTimeout(timerId);
   }, [onCloseError]);
 
   return (

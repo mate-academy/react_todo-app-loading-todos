@@ -50,15 +50,16 @@ export const App: React.FC = () => {
     if (!title.trim()) {
       setErrorMessage('Title should not be empty');
 
-      return;
+      return null;
     }
 
-    todoServices.createTodo({ userId, title, completed })
+    return todoServices.createTodo({ userId, title, completed })
       .then((newTodo) => {
         setTodos(currentTodos => [...currentTodos, newTodo]);
       })
-      .catch(() => {
+      .catch((error) => {
         setErrorMessage('Unable to add a todo');
+        throw error;
       });
   };
 
@@ -75,7 +76,7 @@ export const App: React.FC = () => {
   };
 
   const updateTodo = (updatedTodo: Todo) => {
-    todoServices.updateTodo(updatedTodo)
+    return todoServices.updateTodo(updatedTodo)
       .then((todo) => {
         setTodos(currentTodos => {
           const newTodos = [...currentTodos];
@@ -86,12 +87,29 @@ export const App: React.FC = () => {
           return newTodos;
         });
       })
-      .catch(() => {
+      .catch((error) => {
         setErrorMessage('Unable to update a todo');
+        throw error;
       });
   };
 
   const someoneCompletedTodo = todos.some(todo => !todo.completed);
+  const toggleAllTodos = () => {
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      completed: !todo.completed,
+    }));
+
+    Promise.all(updatedTodos.map(updatedTodo => {
+      return todoServices.updateTodo(updatedTodo);
+    }))
+      .then(() => {
+        setTodos(updatedTodos);
+      })
+      .catch(error => {
+        setErrorMessage('Unable to update a todo: ' + error.message);
+      });
+  };
 
   const toggleButton = (
     <button
@@ -100,6 +118,7 @@ export const App: React.FC = () => {
       className={cn('todoapp__toggle-all', {
         active: !someoneCompletedTodo,
       })}
+      onClick={toggleAllTodos}
     />
   );
 
@@ -112,7 +131,7 @@ export const App: React.FC = () => {
           {todos.length > 0 && toggleButton}
 
           <TodoForm
-            onAdd={addTodo}
+            onSubmit={addTodo}
             userId={USER_ID}
           />
         </header>

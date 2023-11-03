@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  onAdd: (todo: Todo) => void;
+  onSubmit: (todo: Todo) => Promise<void> | null;
   userId: number;
 }
 
-export const TodoForm: React.FC<Props> = ({ onAdd, userId }) => {
+export const TodoForm: React.FC<Props> = ({ onSubmit, userId }) => {
   const [newTodo, setNewTodo] = useState('');
   const titleField = useRef<HTMLInputElement>(null);
 
@@ -18,13 +18,21 @@ export const TodoForm: React.FC<Props> = ({ onAdd, userId }) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onAdd({
+
+    const submitResult = onSubmit({
       id: 0,
       userId,
       title: newTodo,
       completed: false,
     });
-    setNewTodo('');
+
+    if (submitResult instanceof Promise) {
+      submitResult
+        .then(() => setNewTodo(''))
+        .catch((error) => {
+          throw error;
+        });
+    }
   };
 
   return (
