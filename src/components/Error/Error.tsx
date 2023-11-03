@@ -29,6 +29,7 @@ export const Error: React.FC<Props> = ({
         hidden: hiddenClass,
       })}
     >
+      {/* eslint-disable jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
         type="button"
