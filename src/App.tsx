@@ -2,7 +2,7 @@
 import React from 'react';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 
