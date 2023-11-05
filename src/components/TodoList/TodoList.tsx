@@ -25,11 +25,15 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <p>{loading}</p>
       <p>{errorMessage}</p>
       {todos.map(todo => (
-        <p>{todo.id}</p>))}
-      <TodoItem />
+        <TodoItem
+          title={todo.title}
+          completed={todo.completed}
+          isLoading={loading}
+        />
+      ))}
+
     </section>
   );
 };
