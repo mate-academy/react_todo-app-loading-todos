@@ -1,8 +1,14 @@
-export const Footer: React.FC = () => {
+type Props = {
+  todosQty: number
+};
+
+export const Footer: React.FC<Props> = ({ todosQty }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {todosQty}
+        {' '}
+        items left
       </span>
 
       {/* Active filter should have a 'selected' class */}

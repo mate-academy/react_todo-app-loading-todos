@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { TodoItem } from './TodoListElements/TodoItem';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
+import { Footer } from './Footer';
 
 type Props = {
   userId: number;
@@ -26,13 +27,19 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <p>{errorMessage}</p>
-      {todos.map(todo => (
+
+      { todos.map(todo => (
         <TodoItem
           title={todo.title}
+          key={todo.id}
           completed={todo.completed}
           isLoading={loading}
         />
       ))}
+
+      { todos.length > 0 && (
+        <Footer todosQty={todos.length} />
+      )}
 
     </section>
   );
