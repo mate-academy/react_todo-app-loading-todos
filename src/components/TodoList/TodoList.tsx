@@ -13,7 +13,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({ userId }) => {
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMesage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const [filteredTodo, setFilteredTodo] = useState<FilterType>(FilterType.ALL);
@@ -22,11 +22,12 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
     getTodos(userId)
       .then(setTodos)
       .catch(() => {
-        setErrorMesage('Unable to load todos');
+        setErrorMessage('Unable to load todos');
       })
       .finally(() => {
         setLoading(false);
       });
+    setErrorMessage('');
   }, [userId]);
 
   let updatedTodos = [...todos];
@@ -47,36 +48,37 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   const todosQty = todos.filter(todo => todo.completed !== true).length;
 
   return (
-
     <>
-      <section className="todoapp__main" data-cy="TodoList">
-        <Header
-          userId={userId}
-          setTodos={setTodos}
-          currentTodos={todos}
-        />
-
-        { updatedTodos.map(todo => (
-          <TodoItem
-            title={todo.title}
-            key={todo.id}
-            completed={todo.completed}
-            isLoading={loading}
+      <div className="todoapp__content">
+        <section className="todoapp__main" data-cy="TodoList">
+          <Header
+            userId={userId}
+            setTodos={setTodos}
+            currentTodos={todos}
+            setErrorMessage={setErrorMessage}
           />
-        ))}
 
-        { todos.length > 0 && (
-          <Footer
-            todosQty={todosQty}
-            filterTodo={setFilteredTodo}
-            selectedTodoFilter={filteredTodo}
-          />
-        )}
+          { updatedTodos.map(todo => (
+            <TodoItem
+              title={todo.title}
+              key={todo.id}
+              completed={todo.completed}
+              isLoading={loading}
+            />
+          ))}
 
-      </section>
+          { todos.length > 0 && (
+            <Footer
+              todosQty={todosQty}
+              filterTodo={setFilteredTodo}
+              selectedTodoFilter={filteredTodo}
+            />
+          )}
+
+        </section>
+      </div>
 
       <ErrorNotification
-        onErrorMessage={() => {}}
         errorMessage={errorMessage}
       />
     </>

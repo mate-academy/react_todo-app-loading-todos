@@ -14,16 +14,8 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <div className="todoapp__content">
+      <TodoList userId={USER_ID} />
 
-        <TodoList userId={USER_ID} />
-
-        {/* Hide the footer if there are no todos */}
-
-      </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
     </div>
   );
 };

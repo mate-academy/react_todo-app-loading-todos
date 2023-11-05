@@ -12,13 +12,25 @@ type Props = {
   userId: number;
   setTodos: (value: Todo[]) => void;
   currentTodos: Todo[];
+  setErrorMessage: (value: string) => void;
 };
 
-export const Header: React.FC<Props> = ({ userId, setTodos, currentTodos }) => {
+export const Header: React.FC<Props> = ({
+  userId,
+  setTodos,
+  currentTodos,
+  setErrorMessage,
+}) => {
   const [query, setQuery] = useState('');
 
   const createTodo = (event: React.KeyboardEvent<object>) => {
     event.preventDefault();
+    if (query.trim().length === 0) {
+      setErrorMessage('Title should not be empty');
+
+      return;
+    }
+
     setQuery('');
     postTodo({
       title: query,
@@ -27,6 +39,10 @@ export const Header: React.FC<Props> = ({ userId, setTodos, currentTodos }) => {
     })
       .then(newTodo => {
         setTodos([...currentTodos, newTodo]);
+        setErrorMessage('');
+      })
+      .catch(() => {
+        setErrorMessage('Unable to add a todo');
       });
   };
 

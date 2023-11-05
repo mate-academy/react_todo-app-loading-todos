@@ -1,8 +1,5 @@
 module.exports = {
   extends: ['@mate-academy/eslint-config-react-typescript', 'plugin:cypress/recommended'],
-  include: [
-    "src",
-  ],
   parserOptions: {
     project: "tsconfig.json",
     tsconfigRootDir: __dirname,

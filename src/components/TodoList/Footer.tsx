@@ -17,6 +17,7 @@ export const Footer: React.FC<Props> = ({
       <span className="todo-count" data-cy="TodosCounter">
         {`${todosQty} items left`}
       </span>
+      {/* Hide the footer if there are no todos */}
 
       {/* Active filter should have a 'selected' class */}
       <TodoFilter
