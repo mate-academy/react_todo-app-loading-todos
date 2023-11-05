@@ -27,6 +27,9 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
     if (query.trim().length === 0) {
       setErrorMessage('Title should not be empty');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
 
       return;
     }
@@ -39,10 +42,12 @@ export const Header: React.FC<Props> = ({
     })
       .then(newTodo => {
         setTodos([...currentTodos, newTodo]);
-        setErrorMessage('');
       })
       .catch(() => {
         setErrorMessage('Unable to add a todo');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       });
   };
 

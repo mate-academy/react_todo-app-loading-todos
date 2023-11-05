@@ -23,11 +23,13 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       })
       .finally(() => {
         setLoading(false);
       });
-    setErrorMessage('');
   }, [userId]);
 
   let updatedTodos = [...todos];
@@ -80,6 +82,7 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
 
       <ErrorNotification
         errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
     </>
 
