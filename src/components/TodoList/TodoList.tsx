@@ -49,7 +49,11 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
     <section className="todoapp__main" data-cy="TodoList">
       <p>{errorMessage}</p>
 
-      <Header userId={userId} />
+      <Header
+        userId={userId}
+        setTodos={setTodos}
+        currentTodos={todos}
+      />
 
       { updatedTodos.map(todo => (
         <TodoItem

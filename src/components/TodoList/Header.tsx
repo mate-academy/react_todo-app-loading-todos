@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { postTodo } from '../../api/todos';
+import { Todo } from '../../types/Todo';
 
 // {
 //   "title": "Learn JS",
@@ -9,18 +10,24 @@ import { postTodo } from '../../api/todos';
 
 type Props = {
   userId: number;
+  setTodos: (value: Todo[]) => void;
+  currentTodos: Todo[];
 };
 
-export const Header: React.FC<Props> = ({ userId }) => {
+export const Header: React.FC<Props> = ({ userId, setTodos, currentTodos }) => {
   const [query, setQuery] = useState('');
 
   const createTodo = (event: React.KeyboardEvent<object>) => {
     event.preventDefault();
+    setQuery('');
     postTodo({
       title: query,
       userId,
       completed: false,
-    });
+    })
+      .then(newTodo => {
+        setTodos([...currentTodos, newTodo]);
+      });
   };
 
   return (
@@ -39,6 +46,7 @@ export const Header: React.FC<Props> = ({ userId }) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          value={query}
           onChange={event => setQuery(event.target.value)}
           onKeyDown={event => {
             if (event.key === 'Enter') {
