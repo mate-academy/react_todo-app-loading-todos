@@ -2,7 +2,6 @@
 import React from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
-import { ErrorNotification } from './components/ErrorNotification';
 
 const USER_ID = 11846;
 
@@ -25,10 +24,6 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <ErrorNotification
-        onErrorMessage={() => {}}
-        errorMessage=""
-      />
     </div>
   );
 };

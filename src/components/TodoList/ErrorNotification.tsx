@@ -29,6 +29,7 @@ export const ErrorNotification: React.FC<Props> = (
         // onClick={() => onErrorMessage('')}
       />
       {/* show only one message at a time */}
+      {/* {errorMessage} */}
       Unable to load todos
       <br />
       Title should not be empty

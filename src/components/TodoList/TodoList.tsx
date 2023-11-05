@@ -5,6 +5,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { TodoItem } from './TodoListElements/TodoItem';
 import { FilterType } from '../../types/FilterType';
+import { ErrorNotification } from './ErrorNotification';
 
 type Props = {
   userId: number;
@@ -46,32 +47,39 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   const todosQty = todos.filter(todo => todo.completed !== true).length;
 
   return (
-    <section className="todoapp__main" data-cy="TodoList">
-      <p>{errorMessage}</p>
 
-      <Header
-        userId={userId}
-        setTodos={setTodos}
-        currentTodos={todos}
+    <>
+      <section className="todoapp__main" data-cy="TodoList">
+        <Header
+          userId={userId}
+          setTodos={setTodos}
+          currentTodos={todos}
+        />
+
+        { updatedTodos.map(todo => (
+          <TodoItem
+            title={todo.title}
+            key={todo.id}
+            completed={todo.completed}
+            isLoading={loading}
+          />
+        ))}
+
+        { todos.length > 0 && (
+          <Footer
+            todosQty={todosQty}
+            filterTodo={setFilteredTodo}
+            selectedTodoFilter={filteredTodo}
+          />
+        )}
+
+      </section>
+
+      <ErrorNotification
+        onErrorMessage={() => {}}
+        errorMessage={errorMessage}
       />
+    </>
 
-      { updatedTodos.map(todo => (
-        <TodoItem
-          title={todo.title}
-          key={todo.id}
-          completed={todo.completed}
-          isLoading={loading}
-        />
-      ))}
-
-      { todos.length > 0 && (
-        <Footer
-          todosQty={todosQty}
-          filterTodo={setFilteredTodo}
-          selectedTodoFilter={filteredTodo}
-        />
-      )}
-
-    </section>
   );
 };
