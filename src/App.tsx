@@ -21,7 +21,7 @@ export const App: React.FC = () => {
 
         <Header />
 
-        <TodoList />
+        <TodoList userId={USER_ID} />
 
         {/* Hide the footer if there are no todos */}
         <Footer />
