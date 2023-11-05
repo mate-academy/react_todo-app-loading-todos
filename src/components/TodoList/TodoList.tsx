@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { TodoItem } from './TodoListElements/TodoItem';
-import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
+import { Todo } from '../../types/Todo';
+import { Header } from './Header';
 import { Footer } from './Footer';
+import { TodoItem } from './TodoListElements/TodoItem';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -47,6 +48,8 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <p>{errorMessage}</p>
+
+      <Header userId={userId} />
 
       { updatedTodos.map(todo => (
         <TodoItem
