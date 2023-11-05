@@ -21,7 +21,7 @@ export const TodoItem: React.FC<Props> = ({ title, completed, isLoading }) => {
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            checked // TODO
+            defaultChecked={completed}
           />
         </label>
 
