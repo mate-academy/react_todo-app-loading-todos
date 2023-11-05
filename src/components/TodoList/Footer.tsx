@@ -1,15 +1,16 @@
+import { FilterType } from '../../types/FilterType';
 import { TodoFilter } from './TodoFilter';
 
 type Props = {
   todosQty: number,
-  selectedTodo: (value: string) => void,
-  isSelectedTodo: string,
+  filterTodo: (value: FilterType) => void,
+  selectedTodoFilter: FilterType,
 };
 
 export const Footer: React.FC<Props> = ({
   todosQty,
-  selectedTodo,
-  isSelectedTodo,
+  filterTodo,
+  selectedTodoFilter,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -19,8 +20,8 @@ export const Footer: React.FC<Props> = ({
 
       {/* Active filter should have a 'selected' class */}
       <TodoFilter
-        selectedTodo={selectedTodo}
-        isSelectedTodo={isSelectedTodo}
+        filterTodo={filterTodo}
+        selectedTodoFilter={selectedTodoFilter}
       />
       {/* don't show this button if there are no completed todos */}
       <button

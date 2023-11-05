@@ -3,6 +3,7 @@ import { TodoItem } from './TodoListElements/TodoItem';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { Footer } from './Footer';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   userId: number;
@@ -13,7 +14,7 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   const [errorMessage, setErrorMesage] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const [isSelectedTodo, setIsSelectedTodo] = useState('');
+  const [filteredTodo, setFilteredTodo] = useState<FilterType>(FilterType.ALL);
 
   useEffect(() => {
     getTodos(userId)
@@ -28,14 +29,14 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
 
   let updatedTodos = [...todos];
 
-  switch (isSelectedTodo) {
-    case 'ALL':
+  switch (filteredTodo) {
+    case FilterType.ALL:
       updatedTodos = todos.filter(todo => todo);
       break;
-    case 'ACTIVE':
+    case FilterType.ACTIVE:
       updatedTodos = todos.filter(todo => !todo.completed);
       break;
-    case 'COMPLETED':
+    case FilterType.COMPLETED:
       updatedTodos = todos.filter(todo => todo.completed);
       break;
     default: updatedTodos = todos;
@@ -59,8 +60,8 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
       { todos.length > 0 && (
         <Footer
           todosQty={todosQty}
-          selectedTodo={setIsSelectedTodo}
-          isSelectedTodo={isSelectedTodo}
+          filterTodo={setFilteredTodo}
+          selectedTodoFilter={filteredTodo}
         />
       )}
 

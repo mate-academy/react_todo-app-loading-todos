@@ -1,17 +1,13 @@
 import cn from 'classnames';
 import { useState } from 'react';
+import { FilterType } from '../../types/FilterType';
 
-enum TodoSelectionType {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
 type Props = {
-  selectedTodo: (value: string) => void,
-  isSelectedTodo: string,
+  filterTodo: (value: FilterType) => void,
+  selectedTodoFilter: FilterType,
 };
 export const TodoFilter: React.FC<Props> = ({
-  selectedTodo, isSelectedTodo,
+  filterTodo, selectedTodoFilter,
 }) => {
   const [selected, setSelected] = useState(true);
 
@@ -26,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
         )}
         data-cy="FilterLinkAll"
         onClick={() => {
-          selectedTodo(TodoSelectionType.ALL);
+          filterTodo(FilterType.ALL);
           setSelected(true);
         }}
       >
@@ -37,12 +33,12 @@ export const TodoFilter: React.FC<Props> = ({
         href="#/active"
         className={cn(
           'filter__link', {
-            selected: TodoSelectionType.ACTIVE === isSelectedTodo,
+            selected: FilterType.ACTIVE === selectedTodoFilter,
           },
         )}
         data-cy="FilterLinkActive"
         onClick={() => {
-          selectedTodo(TodoSelectionType.ACTIVE);
+          filterTodo(FilterType.ACTIVE);
           setSelected(false);
         }}
       >
@@ -53,12 +49,12 @@ export const TodoFilter: React.FC<Props> = ({
         href="#/completed"
         className={cn(
           'filter__link', {
-            selected: TodoSelectionType.COMPLETED === isSelectedTodo,
+            selected: FilterType.COMPLETED === selectedTodoFilter,
           },
         )}
         data-cy="FilterLinkCompleted"
         onClick={() => {
-          selectedTodo(TodoSelectionType.COMPLETED);
+          filterTodo(FilterType.COMPLETED);
           setSelected(false);
         }}
       >
