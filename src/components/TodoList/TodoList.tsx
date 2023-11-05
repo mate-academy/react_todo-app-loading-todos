@@ -13,6 +13,8 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
   const [errorMessage, setErrorMesage] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  const [isSelectedTodo, setIsSelectedTodo] = useState('');
+
   useEffect(() => {
     getTodos(userId)
       .then(setTodos)
@@ -24,11 +26,28 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
       });
   }, [userId]);
 
+  let updatedTodos = [...todos];
+
+  switch (isSelectedTodo) {
+    case 'ALL':
+      updatedTodos = todos.filter(todo => todo);
+      break;
+    case 'ACTIVE':
+      updatedTodos = todos.filter(todo => !todo.completed);
+      break;
+    case 'COMPLETED':
+      updatedTodos = todos.filter(todo => todo.completed);
+      break;
+    default: updatedTodos = todos;
+  }
+
+  const todosQty = todos.filter(todo => todo.completed !== true).length;
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       <p>{errorMessage}</p>
 
-      { todos.map(todo => (
+      { updatedTodos.map(todo => (
         <TodoItem
           title={todo.title}
           key={todo.id}
@@ -38,7 +57,11 @@ export const TodoList: React.FC<Props> = ({ userId }) => {
       ))}
 
       { todos.length > 0 && (
-        <Footer todosQty={todos.length} />
+        <Footer
+          todosQty={todosQty}
+          selectedTodo={setIsSelectedTodo}
+          isSelectedTodo={isSelectedTodo}
+        />
       )}
 
     </section>
