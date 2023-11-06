@@ -23,6 +23,7 @@ function filterBy(todos: Todo[], filterValue: string) {
       break;
 
     case 'all':
+    default:
       return filteredTodos;
   }
 
@@ -129,15 +130,18 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={cn('notification is-danger is-light has-text-weight-normal', {
+        className={cn(
+          'notification is-danger is-light has-text-weight-normal', {
           'hidden': !errorMessage,
         })}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+        />
           {errorMessage}
         {/* show only one message at a time
         Unable to load todos
