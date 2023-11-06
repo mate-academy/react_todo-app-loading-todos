@@ -49,7 +49,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          {todos && (
+          {todos.length > 0 && (
             <button
               type="button"
               className="todoapp__toggle-all active"
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
             </div>
           ))}
           {/* This todo is not completed */}
-          <div data-cy="Todo" className="todo">
+          {/* <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
@@ -126,9 +126,9 @@ export const App: React.FC = () => {
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
-          </div>
+          </div> */}
 
-          {/* This todo is being edited */}
+          {/* This todo is being edited
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
@@ -138,7 +138,7 @@ export const App: React.FC = () => {
               />
             </label>
 
-            {/* This form is shown instead of the title and remove button */}
+            This form is shown instead of the title and remove button
             <form>
               <input
                 data-cy="TodoTitleField"
@@ -155,7 +155,7 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* This todo is in loadind state */}
+          This todo is in loadind state
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
@@ -173,59 +173,62 @@ export const App: React.FC = () => {
               ×
             </button>
 
-            {/* 'is-active' class puts this modal on top of the todo */}
+            'is-active' class puts this modal on top of the todo
             <div data-cy="TodoLoader" className="modal overlay is-active">
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
-          </div>
+          </div> */}
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              3 items left
+            </span>
 
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-              onClick={() => setFilterBy(FilterBy.All)}
+            {/* Active filter should have a 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className="filter__link selected"
+                data-cy="FilterLinkAll"
+                onClick={() => setFilterBy(FilterBy.All)}
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className="filter__link"
+                data-cy="FilterLinkActive"
+                onClick={() => setFilterBy(FilterBy.Active)}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className="filter__link"
+                data-cy="FilterLinkCompleted"
+                onClick={() => setFilterBy(FilterBy.Complited)}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* don't show this button if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
+              Clear completed
+            </button>
+          </footer>
+        )}
 
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-              onClick={() => setFilterBy(FilterBy.Active)}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-              onClick={() => setFilterBy(FilterBy.Complited)}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
       </div>
 
       {errorMessage && (
