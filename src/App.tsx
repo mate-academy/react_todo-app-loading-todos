@@ -8,19 +8,25 @@ import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Filter } from './types/Filter';
+import { ErrorMessage } from './components/ErrorMessage';
 
 const USER_ID = '11827';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.All);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isShowError, setIsShowError] = useState(false);
+  // const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     client
       .get(`/todos?userId=${USER_ID}`)
-      .then((allTodos) => setTodos(allTodos as Todo[]));
+      .then((allTodos) => setTodos(allTodos as Todo[]))
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        setIsShowError(true);
+      });
   }, []);
 
   if (!USER_ID) {
@@ -55,29 +61,19 @@ export const App: React.FC = () => {
               // onTodoSelected={setSelectedTodo}
             />
 
-            <TodoFilter filterBy={filterBy} onFilterClick={setFilterBy} />
+            <TodoFilter
+              todos={todos}
+              filterBy={filterBy}
+              onFilterClick={setFilterBy}
+            />
           </>
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorMessage
+        errorMessage={errorMessage}
+        isShowError={isShowError}
+        setIsShowError={setIsShowError}
+      />
     </div>
   );
 };
