@@ -15,10 +15,10 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [typeOfFiltering, setTypeOfFiltering]
   = useState<string>(FilteringType.All);
-  const [isLoadedTodos, setIsLoadedTodos] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   // const [isCompletedTodo, setIsCompletedTodo] = useState<Todo | null>(null);
 
-  const hasErrorMessage = !isLoadedTodos;
+  // const hasErrorMessage = !isLoadedTodos;
 
   const filteredTodos = [...todos].filter(todo => {
     if (typeOfFiltering) {
@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(todoses => setTodos(todoses))
-      .catch(() => setIsLoadedTodos(false));
+      .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
@@ -75,7 +75,10 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {hasErrorMessage && (<ErrorNotification />)}
+      <ErrorNotification
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
