@@ -14,9 +14,10 @@ const USER_ID = 11841;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [typeOfFiltering, setTypeOfFiltering] = useState('');
+  const [isLoadedTodos, setIsLoadedTodos] = useState(true);
   // const [isCompletedTodo, setIsCompletedTodo] = useState<Todo | null>(null);
 
-  const hasErrorMessage = !todos;
+  const hasErrorMessage = !isLoadedTodos;
 
   const filteredTodos = [...todos].filter(todo => {
     if (typeOfFiltering) {
@@ -36,7 +37,9 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    getTodos(USER_ID).then(todoses => setTodos(todoses));
+    getTodos(USER_ID)
+      .then(todoses => setTodos(todoses))
+      .catch(() => setIsLoadedTodos(false));
   }, []);
 
   if (!USER_ID) {
@@ -48,9 +51,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header todos={todos} />
 
-        {todos
+        {todos.length > 0
           && (
             <TodoList
               todos={filteredTodos}
@@ -59,11 +62,12 @@ export const App: React.FC = () => {
             />
           )}
 
-        {todos
+        {todos.length > 0
         && (
           <Footer
             setTypeOfFiltering={setTypeOfFiltering}
             typeOfFiltering={typeOfFiltering}
+            todos={todos}
           />
         )}
       </div>
