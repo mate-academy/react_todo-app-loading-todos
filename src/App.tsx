@@ -18,6 +18,9 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
+  const todosCounter = todos.length - todos
+    .reduce((acc, todo) => acc + +todo.completed, 0);
+
   const filteredTodos = (selectedTodos: Todo[], filter: FilterBy) => {
     switch (filter) {
       case FilterBy.Active:
@@ -185,14 +188,16 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {`${todosCounter} items left`}
             </span>
 
             {/* Active filter should have a 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={cn('filter__link', {
+                  selected: filterBy === FilterBy.All,
+                })}
                 data-cy="FilterLinkAll"
                 onClick={() => setFilterBy(FilterBy.All)}
               >
@@ -201,7 +206,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={cn('filter__link', {
+                  selected: filterBy === FilterBy.Active,
+                })}
                 data-cy="FilterLinkActive"
                 onClick={() => setFilterBy(FilterBy.Active)}
               >
@@ -210,7 +217,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={cn('filter__link', {
+                  selected: filterBy === FilterBy.Complited,
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setFilterBy(FilterBy.Complited)}
               >
@@ -234,7 +243,12 @@ export const App: React.FC = () => {
       {errorMessage && (
         <div
           data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
+          className={
+            cn(
+              'notification', 'is-danger', 'is-light', 'has-text-weight-normal',
+              { hidden: !errorMessage },
+            )
+          }
         >
           <button
             data-cy="HideErrorButton"
