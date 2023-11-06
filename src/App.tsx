@@ -15,7 +15,7 @@ enum FilterBy {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
   const todosCounter = todos.length - todos
@@ -36,8 +36,8 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then((todosList) => setTodos(filteredTodos(todosList, filterBy)))
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setTimeout(() => setErrorMessage(''), 3000);
+        setErrorMessage(true);
+        setTimeout(() => setErrorMessage(false), 3000);
       });
   }, [filterBy]);
 
@@ -254,10 +254,10 @@ export const App: React.FC = () => {
             data-cy="HideErrorButton"
             type="button"
             className="delete"
-            onClick={() => setErrorMessage('')}
+            onClick={() => setErrorMessage(false)}
           />
           {/* show only one message at a time */}
-          {errorMessage}
+          Unable to load todos
           {/* <br />
           Title should not be empty
           <br />
