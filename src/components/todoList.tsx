@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({
             type="checkbox"
             className="todo__status"
             // onClick={() => setIsCompletedTodo(todo)}
-            checked
+            checked={todo.completed}
           />
         </label>
 

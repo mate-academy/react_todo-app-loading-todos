@@ -13,7 +13,8 @@ const USER_ID = 11841;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [typeOfFiltering, setTypeOfFiltering] = useState('');
+  const [typeOfFiltering, setTypeOfFiltering]
+  = useState<string>(FilteringType.All);
   const [isLoadedTodos, setIsLoadedTodos] = useState(true);
   // const [isCompletedTodo, setIsCompletedTodo] = useState<Todo | null>(null);
 
