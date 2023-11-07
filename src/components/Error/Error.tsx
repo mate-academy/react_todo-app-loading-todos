@@ -13,10 +13,10 @@ export const ErrorMessage: React.FC<Props> = ({
   setIsErrorHidden,
 }) => {
   useEffect(() => {
-    setTimeout(() => setIsErrorHidden(true), 3000);
+    const timer = setTimeout(() => setIsErrorHidden(true), 3000);
 
-    // return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [setIsErrorHidden, isErrorHidden]);
 
   return (
     <div
@@ -33,7 +33,6 @@ export const ErrorMessage: React.FC<Props> = ({
         onClick={() => setIsErrorHidden(true)}
       />
       {errorMessage}
-      {/* Unable to load todos */}
       {/* <br />
         Title should not be empty
         <br />

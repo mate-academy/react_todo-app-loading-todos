@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [isErrorHidden, setIsErrorHidden] = useState(true);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.all);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -23,7 +24,8 @@ export const App: React.FC = () => {
       .catch(() => {
         setErrorMessage('Unable to load todos');
         setIsErrorHidden(false);
-      });
+      })
+      .finally(() => setIsDataLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => (
@@ -66,7 +68,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {!isErrorHidden && (
+        {!isDataLoading && !isErrorHidden && (
           <ErrorMessage
             errorMessage={errorMessage}
             isErrorHidden={isErrorHidden}

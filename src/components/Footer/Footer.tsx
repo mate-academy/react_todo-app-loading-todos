@@ -18,7 +18,7 @@ export enum Filter {
 
 export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
   const todosLeftCount = todos.filter(todo => !todo.completed).length;
-  const isClearCompletedButtonShown = todos.some(todo => todo.completed);
+  const isClearButtonShown = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -62,15 +62,14 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      {isClearCompletedButtonShown && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        disabled={!isClearButtonShown}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
