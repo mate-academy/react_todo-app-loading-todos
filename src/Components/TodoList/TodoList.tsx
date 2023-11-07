@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../../types/Todo';
@@ -7,27 +7,28 @@ import { deleteTodos, updateTodos } from '../../api/todos';
 type Props = {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}
+};
 
 export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   // const [isCompleted, setIsCompleted] = useState(false);
 
   const handleDelete = (todoId: number) => {
     deleteTodos(todoId);
-    setTodos((currentTodos) => currentTodos.filter(todo => todo.id !== todoId))
+    setTodos((currentTodos) => currentTodos.filter(todo => todo.id !== todoId));
   };
 
   const handleChangeComplete = (todo: Todo) => {
-    const { id } = todo;
+    // eslint-disable-next-line no-param-reassign
     todo.completed = !todo.completed;
-    updateTodos(id, todo)
-      .then(data => setTodos((currentTodos) => {
 
+    updateTodos(todo)
+      .then(data => setTodos((currentTodos) => {
         return [
-          ...currentTodos.map(t => t.id === id ? data : t)
-        ]
-      }))
-  }
+          ...currentTodos
+            .map(todoMap => (todoMap.id === todo.id ? data : todoMap)),
+        ];
+      }));
+  };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -38,7 +39,7 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
           key={todo.id}
           data-cy="Todo"
           className={cn('todo', {
-            'completed': todo.completed,
+            completed: todo.completed,
           })}
         >
           <label className="todo__status-label">
@@ -122,7 +123,7 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
-          </div>*/}
+          </div> */}
     </section>
   );
 };

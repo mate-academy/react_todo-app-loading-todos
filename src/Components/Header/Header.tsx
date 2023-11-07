@@ -23,7 +23,8 @@ export const Header: React.FC<Props> = ({ setTodos }) => {
     addTodos(todoData)
       .then(data => {
         return setTodos((currentTodos) => [...currentTodos, data])
-      });
+      })
+      .finally(() => setTitleTodo(''));
   }
 
   return (
