@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
@@ -30,7 +29,6 @@ function filterBy(todos: Todo[], filterValue: string) {
   return filteredTodos;
 }
 
-
 export const App: React.FC = () => {
   // if (!USER_ID) {
   //   return <UserWarning />;
@@ -41,13 +39,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-    .then(todo => setTodos(todo))
-    .catch(() => {
-      setErrorMessage('Unable to load todos');
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 3000)
-    })
+      .then(todo => setTodos(todo))
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      });
   }, []);
 
   const visibleTodos = filterBy([...todos], filterValue);
@@ -72,7 +70,7 @@ export const App: React.FC = () => {
               {activeItems.length ? (
                 `${activeItems.length} items left`
               ) : (
-               '0 items left'
+                '0 items left'
               )}
             </span>
 
@@ -81,7 +79,7 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={cn('filter__link', {
-                  'selected': filterValue === 'all'
+                  selected: filterValue === 'all',
                 })}
                 data-cy="FilterLinkAll"
                 onClick={() => {
@@ -94,7 +92,7 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={cn('filter__link', {
-                  'selected': filterValue === 'active'
+                  selected: filterValue === 'active',
                 })}
                 data-cy="FilterLinkActive"
                 onClick={() => {
@@ -107,7 +105,7 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={cn('filter__link', {
-                  'selected': filterValue === 'completed'
+                  selected: filterValue === 'completed',
                 })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => {
@@ -134,15 +132,17 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={cn(
           'notification is-danger is-light has-text-weight-normal', {
-          'hidden': !errorMessage,
-        })}
+            hidden: !errorMessage,
+          },
+        )}
       >
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
         />
-          {errorMessage}
+        {errorMessage}
         {/* show only one message at a time
         Unable to load todos
         <br />

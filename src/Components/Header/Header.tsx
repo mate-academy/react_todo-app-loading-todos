@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { addTodos } from "../../api/todos";
-import { Todo } from "../../types/Todo";
-import { TodoFromServer } from "../../types/TodoFromServer";
+import React, { useState } from 'react';
+import { addTodos } from '../../api/todos';
+import { Todo } from '../../types/Todo';
+import { TodoFromServer } from '../../types/TodoFromServer';
 
 type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-}
+};
 
 const todoData: TodoFromServer = {
   userId: 11853,
@@ -22,14 +22,15 @@ export const Header: React.FC<Props> = ({ setTodos }) => {
 
     addTodos(todoData)
       .then(data => {
-        return setTodos((currentTodos) => [...currentTodos, data])
+        return setTodos((currentTodos) => [...currentTodos, data]);
       })
       .finally(() => setTitleTodo(''));
-  }
+  };
 
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className="todoapp__toggle-all active"
@@ -48,5 +49,5 @@ export const Header: React.FC<Props> = ({ setTodos }) => {
         />
       </form>
     </header>
-  )
-}
+  );
+};
