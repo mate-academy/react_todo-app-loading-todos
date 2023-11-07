@@ -11,7 +11,7 @@ const USER_ID = 11893;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('All');
-  const [error, setError] = useState('');
+  const [error] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -27,7 +27,6 @@ export const App: React.FC = () => {
         }
 
         setTodos(filteredList);
-        setError('');
       });
   }, [filter]);
 
