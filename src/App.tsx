@@ -54,7 +54,7 @@ export const App: React.FC = () => {
         <TodoappList todos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && (
+        {todos.length > 0 && (
           <TodoappFooter
             todos={todos}
             filterBy={filterBy}
