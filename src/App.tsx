@@ -1,32 +1,23 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
 const USER_ID = 11880;
 
-function preparedTodos(todosList: Todo[], status: string): Todo[] {
-  return todosList.filter(todo => {
-    switch (status) {
-      case 'all':
-        return todo.completed || !todo.completed;
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+enum FilterBy {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -34,7 +25,7 @@ export const App: React.FC = () => {
       try {
         const todos = await getTodos(USER_ID);
 
-        setFilteredTodos(preparedTodos(todos, filterBy));
+        setFilteredTodos(todos);
         setAllTodos(todos);
         setError('');
       } catch (newError) {
@@ -46,8 +37,33 @@ export const App: React.FC = () => {
     loadTodos();
   }, [filterBy]);
 
-  const completedTodos = filteredTodos.filter(todo => todo.completed);
-  const activeTodos = filteredTodos.filter(todo => !todo.completed);
+  useEffect(() => {
+    switch (filterBy) {
+      case FilterBy.All:
+        setFilteredTodos(allTodos.filter(todo => todo.completed
+          || !todo.completed));
+        break;
+      case FilterBy.Active:
+        setFilteredTodos(allTodos.filter(todo => !todo.completed));
+        break;
+      case FilterBy.Completed:
+        setFilteredTodos(allTodos.filter(todo => todo.completed));
+        break;
+      default:
+        setFilteredTodos(allTodos);
+        break;
+    }
+  }, [filterBy, allTodos]);
+
+  const handleFilterClick = (filterType: FilterBy) => (
+    event: React.MouseEvent,
+  ) => {
+    event.preventDefault();
+    setFilterBy(filterType);
+  };
+
+  const completedTodos = [...allTodos].filter(todo => todo.completed);
+  const activeTodos = [...allTodos].filter(todo => !todo.completed);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -82,13 +98,14 @@ export const App: React.FC = () => {
             return (
               <div
                 data-cy="Todo"
-                className={cn('todo', { completed: todo.completed })}
+                className={classNames('todo', { completed: todo.completed })}
               >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
+                    checked={todo.completed}
                   />
                 </label>
 
@@ -115,16 +132,15 @@ export const App: React.FC = () => {
         {allTodos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {`${activeTodos.length} items left`}
+              {(activeTodos.length > 1 || activeTodos.length === 0) && `${activeTodos.length} items left`}
+              {(activeTodos.length === 1) && `${activeTodos.length} item left`}
             </span>
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
                 className={`filter__link ${filterBy === 'all' ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
-                onClick={() => {
-                  setFilterBy('all');
-                }}
+                onClick={handleFilterClick(FilterBy.All)}
               >
                 All
               </a>
@@ -132,10 +148,8 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={`filter__link ${filterBy === 'active' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => {
-                  setFilterBy('active');
-                }}
+                data-cy="FilterLinkActive"
+                onClick={handleFilterClick(FilterBy.Active)}
               >
                 Active
               </a>
@@ -143,16 +157,14 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={`filter__link ${filterBy === 'completed' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => {
-                  setFilterBy('completed');
-                }}
+                data-cy="FilterLinkCompleted"
+                onClick={handleFilterClick(FilterBy.Completed)}
               >
                 Completed
               </a>
             </nav>
 
-            {completedTodos.length <= 0 && (
+            {completedTodos.length >= 0 && (
               <button
                 type="button"
                 className="todoapp__clear-completed"
@@ -167,20 +179,21 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {error && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setError('')}
-          />
-          {error}
-        </div>
-      )}
+      <div
+        data-cy="ErrorNotification"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !error },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError('')}
+        />
+        {error}
+      </div>
     </div>
   );
 };
