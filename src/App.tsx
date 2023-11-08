@@ -13,7 +13,6 @@ const USER_ID = 11861;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isErrorHidden, setIsErrorHidden] = useState(true);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.all);
   const [selectedTodoId, setSelectedTodoId] = useState(0);
   const [isDataLoading, setIsDataLoading] = useState(true);
@@ -23,7 +22,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        setIsErrorHidden(false);
       })
       .finally(() => setIsDataLoading(false));
   }, []);
@@ -68,11 +66,10 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {!isDataLoading && !isErrorHidden && (
+        {(!isDataLoading) && (
           <ErrorMessage
             errorMessage={errorMessage}
-            isErrorHidden={isErrorHidden}
-            setIsErrorHidden={setIsErrorHidden}
+            setErrorMessage={setErrorMessage}
           />
         )}
       </div>

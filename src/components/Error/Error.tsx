@@ -3,26 +3,24 @@ import cn from 'classnames';
 
 type Props = {
   errorMessage: string;
-  isErrorHidden: boolean;
-  setIsErrorHidden: (value: boolean) => void;
+  setErrorMessage: (value: string) => void;
 };
 
 export const ErrorMessage: React.FC<Props> = ({
   errorMessage,
-  isErrorHidden,
-  setIsErrorHidden,
+  setErrorMessage,
 }) => {
   useEffect(() => {
-    const timer = setTimeout(() => setIsErrorHidden(true), 3000);
+    const timer = setTimeout(() => setErrorMessage(''), 3000);
 
     return () => clearTimeout(timer);
-  }, [setIsErrorHidden, isErrorHidden]);
+  }, [setErrorMessage, errorMessage]);
 
   return (
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: isErrorHidden,
+        hidden: !errorMessage,
       })}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -30,7 +28,7 @@ export const ErrorMessage: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setIsErrorHidden(true)}
+        onClick={() => setErrorMessage('')}
       />
       {errorMessage}
       {/* <br />
