@@ -11,7 +11,13 @@ const USER_ID = 11893;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('All');
-  const [error] = useState('');
+  const [error, setError] = useState('');
+
+  const displayError = async (errorMessage: string) => {
+    setError(errorMessage);
+
+    setTimeout(() => setError(''), 3000);
+  };
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -27,7 +33,8 @@ export const App: React.FC = () => {
         }
 
         setTodos(filteredList);
-      });
+      })
+      .catch(() => displayError('Unable to load todos'));
   }, [filter]);
 
   return (
@@ -40,7 +47,7 @@ export const App: React.FC = () => {
         <TodoList todos={todos} filter={filter} changeFilter={setFilter} />
       </div>
 
-      {error && (<ErrorField />)}
+      <ErrorField error={error} removeError={setError} />
     </div>
   );
 };
