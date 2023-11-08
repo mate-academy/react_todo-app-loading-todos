@@ -21,6 +21,14 @@ export const App: React.FC = () => {
     setTodos(updatedTodos);
   };
 
+  const clearError = () => {
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
+
+  useEffect(clearError, [errorMessage]);
+
   const loadTodos = () => {
     setErrorMessage('');
     client.get<Todo[]>('https://mate.academy/students-api/todos?userId=11894')
