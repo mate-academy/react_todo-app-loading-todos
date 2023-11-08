@@ -1,11 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import cn from 'classnames';
 
-export const Input: React.FC = () => (
+interface Props {
+  activeTodo: boolean
+}
+
+export const Input: React.FC<Props> = ({ activeTodo }) => (
   <header className="todoapp__header">
     {/* this buttons is active only if there are some active todos */}
     <button
       type="button"
-      className="todoapp__toggle-all active"
+      className={cn('todoapp__toggle-all', { active: !activeTodo })}
       data-cy="ToggleAllButton"
     />
 

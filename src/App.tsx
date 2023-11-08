@@ -13,6 +13,8 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState('All');
   const [error, setError] = useState('');
 
+  const activeChecker = todos.some(todo => !todo.completed);
+
   const displayError = async (errorMessage: string) => {
     setError(errorMessage);
 
@@ -42,7 +44,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Input />
+        <Input activeTodo={activeChecker} />
 
         <TodoList todos={todos} filter={filter} changeFilter={setFilter} />
       </div>
