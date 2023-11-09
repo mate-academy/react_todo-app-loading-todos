@@ -1,15 +1,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
 import cn from 'classnames';
 
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoRow } from './components/TodoRow';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(Filter.All);
 
   const todosCount = todos.reduce((acc, val) => {
     if (!val.completed) {
@@ -23,21 +30,27 @@ export const App: React.FC = () => {
     try {
       const todosData = await getTodos();
 
-      let filteredTodos = todosData;
-
-      if (filter === 'Active') {
-        filteredTodos = todosData.filter(todo => !todo.completed);
-      }
-
-      if (filter === 'Completed') {
-        filteredTodos = todosData.filter(todo => todo.completed);
-      }
-
-      setTodos(filteredTodos);
+      setTodos(todosData);
     } catch (error) {
       setErrorMessage('Unable to load todos');
     }
   };
+
+  const filteredTodos = useMemo(() => (
+    todos.filter(todo => {
+      switch (filter) {
+        case Filter.Active:
+          return !todo.completed;
+
+        case Filter.Completed:
+          return todo.completed;
+
+        case Filter.All:
+        default:
+          return true;
+      }
+    })
+  ), [filter, todos]);
 
   const errorTimerId = useRef(0);
 
@@ -57,7 +70,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodos();
-  });
+  }, []);
 
   return (
     <div className="todoapp">
@@ -85,7 +98,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
-          {todos.map(todo => (
+          {filteredTodos.map(todo => (
             <TodoRow
               todo={todo}
               key={todo.id}
@@ -106,9 +119,10 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={cn('filter__link', { selected: filter === 'All' })}
+                className={cn('filter__link',
+                  { selected: filter === Filter.All })}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilter('All')}
+                onClick={() => setFilter(Filter.All)}
               >
                 All
               </a>
@@ -117,10 +131,10 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={cn(
                   'filter__link',
-                  { selected: filter === 'Active' },
+                  { selected: filter === Filter.Active },
                 )}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilter('Active')}
+                onClick={() => setFilter(Filter.Active)}
               >
                 Active
               </a>
@@ -128,9 +142,9 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={cn('filter__link',
-                  { selected: filter === 'Completed' })}
+                  { selected: filter === Filter.Completed })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilter('Completed')}
+                onClick={() => setFilter(Filter.Completed)}
               >
                 Completed
               </a>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import cn from 'classnames';
 
 import { Todo } from '../types/Todo';
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const TodoRow: React.FC<Props> = ({ todo }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div
@@ -26,7 +26,7 @@ export const TodoRow: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {!isEditing ? (
+      {true ? (
         <>
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
