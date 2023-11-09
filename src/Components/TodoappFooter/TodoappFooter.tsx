@@ -23,7 +23,6 @@ export const TodoappFooter: React.FC<Props> = ({
       </span>
 
       <TodoappFilter
-        todos={todos}
         filterBy={filterBy}
         onFilterClick={onFilterClick}
       />

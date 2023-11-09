@@ -28,20 +28,14 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterBy) {
-        case Filter.ACTIVE:
-          return !todo.completed;
-          break;
-
-        case Filter.COMPLETED:
-          return todo.completed;
-          break;
-
-        default:
-          return true;
-      }
-    });
+    switch (filterBy) {
+      case Filter.ACTIVE:
+        return todos.filter((todo) => !todo.completed);
+      case Filter.COMPLETED:
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
   }, [todos, filterBy]);
 
   return (
@@ -54,9 +48,9 @@ export const App: React.FC = () => {
         <TodoappList todos={visibleTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {visibleTodos.length > 0 && (
           <TodoappFooter
-            todos={todos}
+            todos={visibleTodos}
             filterBy={filterBy}
             onFilterClick={setFilterBy}
           />
