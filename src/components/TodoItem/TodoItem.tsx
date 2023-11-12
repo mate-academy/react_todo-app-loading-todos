@@ -32,10 +32,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   );
 };
 
-// { status, title, isEditing, isLoading }
-
-// properties of Todos
-
 export const TodoItemExamples: React.FC = () => {
   return (
     <section className="todoapp__main" data-cy="TodoList">

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 
@@ -15,6 +14,3 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
     </section>
   );
 };
-
-// { status, title, isEditing, isLoading }
-// properties of Todos

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodos } from './api/todos';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -22,15 +20,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(11725)
       .then(fetchedTodos => setTodos(fetchedTodos))
-      .catch(error => {
-        console.error('Error fetching todos:', error);
+      .catch(() => {
         setErrorType(ErrorType.LoadError);
       });
   }, []);
-
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
 
   const filteredTodos = useMemo(() => {
     switch (currentFilter) {
@@ -42,10 +35,6 @@ export const App: React.FC = () => {
         return todos;
     }
   }, [todos, currentFilter]);
-
-  useEffect(() => {
-    console.log(filteredTodos);
-  }, [filteredTodos]);
 
   const handleFilterChange = (filter: TodoFilter) => {
     setCurrentFilter(filter);
