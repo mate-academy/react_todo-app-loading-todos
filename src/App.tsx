@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Footer } from './components/Footer';
@@ -13,17 +14,21 @@ const USER_ID = 11926;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage]
-    = useState<TodoError>(TodoError.ErrorOfLoad);
+  const [errorMessage, setErrorMessage] = useState<TodoError>(TodoError.ErrorOfLoad);
   const [isShowError, setIsShowError] = useState(false);
   const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     todoService.getTodos(USER_ID)
-      .then(items => setTodos(items as Todo[]))
+      .then(items => {
+        setTodos(items as Todo[]);
+        setIsLoading(false);
+      })
       .catch(() => {
         setErrorMessage(TodoError.ErrorOfLoad);
         setIsShowError(true);
+        setIsLoading(false);
       });
   }, []);
 
@@ -31,10 +36,10 @@ export const App: React.FC = () => {
     const todoList = [...todos];
 
     switch (filterStatus) {
-      case (Status.Active):
+      case Status.Active:
         return todoList.filter(todo => !todo.completed);
 
-      case (Status.Completed):
+      case Status.Completed:
         return todoList.filter(todo => todo.completed);
 
       default:
@@ -51,11 +56,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} />
+        <Header />
 
-        {/* Перевірка, чи є todo перед передачею до List */}
-        {todos.length > 0 && (
-          <List todos={filteredTodos} />
+        {/* Рендерити тільки тоді, коли дані завантажені */}
+        {!isLoading && (
+          <List
+            todos={filteredTodos}
+          />
         )}
 
         {/* Hide the footer if there are no todos */}

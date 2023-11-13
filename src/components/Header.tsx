@@ -1,12 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
-import { Todo } from '../types/Todo';
 
-type HeaderProps = {
-  todos: Todo[];
-};
+type Props = {};
 
-export const Header: React.FC<HeaderProps> = ({ todos }) => {
+export const Header: React.FC<Props> = () => {
   const [title, setTitle] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,14 +16,12 @@ export const Header: React.FC<HeaderProps> = ({ todos }) => {
 
   return (
     <header className="todoapp__header">
-      {/* Перевірка, чи є todo перед відображенням кнопки */}
-      {todos.length > 0 && (
-        <button
-          type="button"
-          className="todoapp__toggle-all active"
-          data-cy="ToggleAllButton"
-        />
-      )}
+      {/* this buttons is active only if there are some active todos */}
+      <button
+        type="button"
+        className="todoapp__toggle-all active"
+        data-cy="ToggleAllButton"
+      />
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
