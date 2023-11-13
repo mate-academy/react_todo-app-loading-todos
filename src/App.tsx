@@ -53,6 +53,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
+        {/* Перевірка, чи є todo перед передачею до List */}
         {todos.length > 0 && (
           <List todos={filteredTodos} />
         )}
