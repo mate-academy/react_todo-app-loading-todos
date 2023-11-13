@@ -53,7 +53,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {todos && (
+        {todos.length > 0 && (
           <List todos={filteredTodos} />
         )}
 
