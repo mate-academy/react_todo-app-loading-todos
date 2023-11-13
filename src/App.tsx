@@ -18,6 +18,7 @@ export const App: React.FC = () => {
     = useState<TodoError>(TodoError.ErrorOfLoad);
   const [isShowError, setIsShowError] = useState(false);
   const [filterStatus, setFilterStatus] = useState<Status>(Status.All);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     todoService.getTodos(USER_ID)
@@ -25,10 +26,12 @@ export const App: React.FC = () => {
         // eslint-disable-next-line no-console
         console.log(items); // Додайте цей рядок
         setTodos(items as Todo[]);
+        setLoading(false);
       })
       .catch(() => {
         setErrorMessage(TodoError.ErrorOfLoad);
         setIsShowError(true);
+        setLoading(false);
       });
   }, []);
 
@@ -56,20 +59,26 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} />
+        {loading ? (
+          // Індікатор завантаження, якщо дані все ще завантажуються
+          <p>Loading...</p>
+        ) : (
+          // Рендеримо компоненти тільки після завантаження даних
+          <>
+            <Header
+              todos={todos}
+            />
+            <List todos={filteredTodos} />
 
-        {console.log('todos:', todos)}
-        {todos.length > 0 && (
-          <List todos={filteredTodos} />
-        )}
-
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
-          <Footer
-            todos={todos}
-            filterStatus={filterStatus}
-            setFilterStatus={setFilterStatus}
-          />
+            {/* Hide the footer if there are no todos */}
+            {todos.length > 0 && (
+              <Footer
+                todos={todos}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+              />
+            )}
+          </>
         )}
       </div>
 
