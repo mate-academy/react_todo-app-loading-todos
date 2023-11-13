@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import { UserWarning } from './components/UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -21,10 +19,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   const filterTodos = (query: string) => {
     switch (query) {
@@ -54,7 +48,6 @@ export const App: React.FC = () => {
           todos={visibleTodos}
         />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
             filter={filter}
@@ -64,8 +57,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}
