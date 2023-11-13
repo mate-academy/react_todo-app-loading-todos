@@ -1,4 +1,4 @@
-import React from 'react';
+import classNames from 'classnames';
 import { TodosFilter } from '../types/TodosFilter';
 
 type Props = {
@@ -15,7 +15,9 @@ export const TodoFilter: React.FC<Props> = (
         <a
           key={filterId}
           href={`#/${filterId}`}
-          className={`filter__link ${filter === filterId ? 'selected' : ''}`}
+          className={
+            classNames('filter__link', { selected: filter === filterId })
+          }
           data-cy={`FilterLink${filterId}`}
           onClick={() => setFilter(filterId as TodosFilter)}
         >

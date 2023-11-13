@@ -1,23 +1,22 @@
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
-  errorMessage: string;
+  errorNotification: string;
 };
 
-export const Hidden: React.FC<Props> = ({ errorMessage }) => {
+export const Hidden: React.FC<Props> = ({ errorNotification }) => {
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    setHidden(!errorMessage);
+    setHidden(!errorNotification);
 
-    // Hide the error after 3000 ms (3 seconds)
     const timeout = setTimeout(() => {
       setHidden(true);
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [errorMessage]);
+  }, [errorNotification]);
 
   const hideError = () => {
     setHidden(true);
@@ -38,8 +37,9 @@ export const Hidden: React.FC<Props> = ({ errorMessage }) => {
           type="button"
           className="delete"
           onClick={hideError}
-        />
-        {errorMessage}
+        >
+          {errorNotification}
+        </button>
         {/* show only one message at a time
         Unable to load todos
         <br />

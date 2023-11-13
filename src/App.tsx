@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodosList';
 import * as todosApi from './api/todos';
@@ -8,14 +8,13 @@ import { Hidden } from './components/TodoHidden';
 import { TodoFooter } from './components/TodoFooter';
 import { Todo } from './types/Todo';
 import { TodosFilter } from './types/TodosFilter';
-
-const USER_ID = 11890;
+import { USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
   const [currentTodos, setCurrentTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<TodosFilter>(TodosFilter.all);
   const [newTodo, setNewTodo] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorNotification, setErrorNotification] = useState<string>('');
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -23,9 +22,9 @@ export const App: React.FC = () => {
         const todos = await todosApi.getTodos();
 
         setCurrentTodos(todos);
-        setErrorMessage('');
+        setErrorNotification('');
       } catch (error) {
-        setErrorMessage('Unable to load todos');
+        setErrorNotification('Unable to load todos');
       }
     };
 
@@ -46,13 +45,14 @@ export const App: React.FC = () => {
           setNewTodo={setNewTodo}
           setCurrentTodos={setCurrentTodos}
         />
-        <TodoList
-          currentTodos={currentTodos}
-          filter={filter}
-        />
-
+        {currentTodos.length > 0 && (
+          <TodoList
+            currentTodos={currentTodos}
+            filter={filter}
+          />
+        )}
         {/* Hide the footer if there are no todos */}
-        {currentTodos && (
+        {currentTodos.length > 0 && (
           <TodoFooter
             currentTodos={currentTodos}
             filter={filter}
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Hidden errorMessage={errorMessage} />
+      <Hidden errorNotification={errorNotification} />
     </div>
   );
 };

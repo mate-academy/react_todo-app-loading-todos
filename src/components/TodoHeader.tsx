@@ -1,4 +1,3 @@
-import React from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -7,11 +6,11 @@ type Props = {
   setCurrentTodos: (value: React.SetStateAction<Todo[]>) => void;
 };
 
-export const Header: React.FC<Props> = (
-  {
-    newTodo, setNewTodo, setCurrentTodos,
-  },
-) => {
+export const Header: React.FC<Props> = ({
+  newTodo,
+  setNewTodo,
+  setCurrentTodos,
+}) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
   };
@@ -40,11 +39,17 @@ export const Header: React.FC<Props> = (
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
-      />
+      >
+        <span className="sr-only">Add Todo</span>
+      </button>
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
+        <label htmlFor="newTodo" className="sr-only">
+          New Todo
+        </label>
         <input
+          id="newTodo"
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
