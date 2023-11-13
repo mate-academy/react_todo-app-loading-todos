@@ -51,7 +51,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header todos={todos}/>
 
         {/* Перевірка, чи є todo перед передачею до List */}
         {todos.length > 0 && (
