@@ -1,28 +1,46 @@
+import React, { useContext, useState } from 'react';
+import { TodosContext } from './TodoContext';
+import { addTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
-interface Props {
-  todos: Todo[];
-}
-export const Header: React.FC<Props> = ({ todos }) => {
+export const TodosHeader: React.FC = () => {
+  const {
+    DEFAULT_DATA,
+    setTodos,
+  } = useContext(TodosContext);
+
+  const [newTodo, setNewTodo] = useState('');
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (newTodo.trim()) {
+      DEFAULT_DATA.title = newTodo;
+
+      addTodos(DEFAULT_DATA)
+        .then((data: Todo) => {
+          setTodos((prev: Todo[]) => [...prev, data]);
+        })
+        .finally(() => setNewTodo(''));
+    }
+  };
+
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
-      {todos.length > 0 && (
-        <button
-          type="button"
-          className="todoapp__toggle-all active"
-          data-cy="ToggleAllButton"
-          aria-label="ToggleAllButton"
-        />
-      )}
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        type="button"
+        className="todoapp__toggle-all active"
+        data-cy="ToggleAllButton"
+      />
 
-      {/* Add a todo on form submit */}
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          value={newTodo}
+          onChange={(event) => setNewTodo(event.target.value)}
         />
       </form>
     </header>

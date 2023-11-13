@@ -1,95 +1,109 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
+import { TodosContext } from './TodoContext';
+import { TodoFilter } from './TodoFilter';
 import { Status } from './types/Status';
-import { Header } from './Header';
-import { TodoList } from './TodoList';
-import { Footer } from './Footer';
+import { TodosList } from './TodoList';
+import { getTodos } from './api/todos';
+import { TodosHeader } from './Header';
 
-const USER_ID = 11901;
+const USER_ID = 11891;
+
+const DEFAULT_DATA = {
+  userId: USER_ID,
+  title: '',
+  completed: false,
+};
+
+const useFilter = (todos: Todo[], filter: string) => {
+  return todos.filter(todo => {
+    switch (filter) {
+      case Status.ACTIVE:
+        return !todo.completed;
+      case Status.COMPLETED:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosFilter, setTodosFilter] = useState<Status>(Status.ALL);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterBy, setFilterBy] = useState<Status>(Status.ALL);
-
-  const todosCounter = todos.length - todos
-    .reduce((acc, todo) => acc + +todo.completed, 0);
-
-  const filteredTodos = (selectedTodos: Todo[], filter: Status) => {
-    switch (filter) {
-      case Status.ACTIVE:
-        return selectedTodos.filter(todo => !todo.completed);
-      case Status.COMPLETED:
-        return selectedTodos.filter(todo => todo.completed);
-      default:
-        return selectedTodos;
-    }
-  };
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((todosList) => setTodos(filteredTodos(todosList, filterBy)))
+      .then(todo => setTodos(todo))
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        setTimeout(() => setErrorMessage(''), 3000);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       });
-  }, [filterBy]);
+  }, []);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const todosAfterFiltering = useFilter([...todos], todosFilter);
+  const todosLeft = todos.filter(todo => !todo.completed).length;
 
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+    <TodosContext.Provider
+      value={{
+        DEFAULT_DATA,
+        todosAfterFiltering,
+        todosFilter,
+        setTodos,
+        setTodosFilter,
+      }}
+    >
 
-      <div className="todoapp__content">
-        <Header todos={todos} />
-        <TodoList visibleTodos={todos} />
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
-          <Footer
-            todosCounter={todosCounter}
-            filterBy={filterBy}
-            setFilterBy={setFilterBy}
-          />
-        )}
-      </div>
-      {errorMessage && (
+        <div className="todoapp__content">
+          <TodosHeader />
+
+          <TodosList />
+
+          {/* Hide the footer if there are no todos */}
+          {todos.length > 0 && (
+            <footer className="todoapp__footer" data-cy="Footer">
+              <span className="todo-count" data-cy="TodosCounter">
+                {`${todosLeft} items left`}
+              </span>
+
+              {/* Active filter should have a 'selected' class */}
+              <TodoFilter />
+
+              {/* don't show this button if there are no completed todos */}
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                data-cy="ClearCompletedButton"
+              >
+                Clear completed
+              </button>
+            </footer>
+          )}
+        </div>
+
         <div
           data-cy="ErrorNotification"
-          className={
-            cn(
-              'notification', 'is-danger', 'is-light', 'has-text-weight-normal',
-              { hidden: !errorMessage },
-            )
-          }
+          className={cn(
+            'notification is-danger is-light has-text-weight-normal', {
+              hidden: !errorMessage,
+            },
+          )}
         >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button data-cy="HideErrorButton" type="button" className="delete" />
           {/* show only one message at a time */}
-          Unable to load todos
-          {/* <br />
-          Title should not be empty
-          <br />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo */}
+          {errorMessage}
         </div>
-      )}
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-    </div>
+      </div>
+    </TodosContext.Provider>
   );
 };
