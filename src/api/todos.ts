@@ -1,28 +1,24 @@
 import { Todo } from '../types/Todo';
+import { TodoFromServer } from '../types/TodofromServer';
 import { client } from '../utils/fetchClient';
 
-const USER_ID = 11882;
-
-export const getTodos = () => {
-  return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+export const getTodos = (userId: number) => {
+  return client.get<Todo[]>(`/todos?userId=${userId}`);
 };
 
-export const createTodo = (todo: Todo) => {
-  return client.post<Todo>('/todos', {
-    userId: todo.userId,
-    title: todo.title,
-    completed: todo.completed,
-  });
+export const addTodos = ({ userId, completed, title }: TodoFromServer) => {
+  return client.post<Todo>('/todos', { userId, completed, title });
 };
 
-export const updateTodos = (todo: Todo) => {
-  return client.patch<Todo[]>(`/todos/${todo.id}`, {
-    userId: todo.userId,
-    title: todo.title,
-    completed: todo.completed,
-  });
+export const deleteTodos = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
 };
 
-export const deleteTodos = (id: number) => {
-  return client.delete(`/todos/${id}`);
+export const updateTodos = ({
+  id,
+  userId,
+  completed,
+  title,
+}: Todo) => {
+  return client.patch<Todo>(`/todos/${id}`, { userId, completed, title });
 };
