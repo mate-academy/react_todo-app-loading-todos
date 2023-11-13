@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ todos }) => {
 
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
+      {/* Перевірка, чи є todo перед відображенням кнопки */}
       {todos.length > 0 && (
         <button
           type="button"
