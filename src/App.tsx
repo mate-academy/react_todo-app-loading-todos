@@ -16,6 +16,16 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => setErrorMessage('Unable to load todos'));
+  }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   const filterTodos = (query: string) => {
     switch (query) {
       case Filter.Active:
@@ -30,15 +40,7 @@ export const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    getTodos(USER_ID)
-      .then(setTodos);
-  }, []);
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
+  const todoCount = todos.filter(todo => todo.completed === false).length;
   const visibleTodos = filterTodos(filter);
 
   return (
@@ -57,6 +59,7 @@ export const App: React.FC = () => {
           <Footer
             filter={filter}
             setFilter={setFilter}
+            todoCount={todoCount}
           />
         )}
       </div>

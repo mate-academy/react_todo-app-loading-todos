@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import cn from 'classnames';
+import { useEffect } from 'react';
 
 interface Props {
   errorMessage: string,
@@ -9,11 +11,17 @@ export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   setErrorMessage,
 }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  }, [setErrorMessage]);
+
   return (
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        hidden: errorMessage,
+        hidden: !errorMessage,
       })}
     >
       <button
@@ -22,8 +30,9 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={() => setErrorMessage('')}
       />
+      {errorMessage}
       {/* show only one message at a time */}
-      Unable to load todos
+      {/* Unable to load todos
       <br />
       Title should not be empty
       <br />
@@ -31,7 +40,7 @@ export const ErrorNotification: React.FC<Props> = ({
       <br />
       Unable to delete a todo
       <br />
-      Unable to update a todo
+      Unable to update a todo */}
     </div>
   );
 };
