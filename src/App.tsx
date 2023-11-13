@@ -53,9 +53,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <List
-          todos={filteredTodos}
-        />
+        {todos.length > 0 && (
+          <List todos={filteredTodos} />
+        )}
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
