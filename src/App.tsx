@@ -1,49 +1,43 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { UserWarning } from './UserWarning';
-import { Error } from './Error';
-import { Header } from './Header';
-import { Footer } from './Footer';
 import { Todo } from './types/Todo';
+import { getTodos } from './api/todos';
+import { Status } from './types/Status';
+import { Header } from './Header';
 import { TodoList } from './TodoList';
-import { client } from './utils/fetchClient';
+import { Footer } from './Footer';
 
-const USER_ID = 11894;
+const USER_ID = 11901;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [filterBy, setFilterBy] = useState<Status>(Status.ALL);
 
-  const clearCompletedTodos = () => {
-    const updatedTodos = todos.filter(todo => !todo.completed);
+  const todosCounter = todos.length - todos
+    .reduce((acc, todo) => acc + +todo.completed, 0);
 
-    setTodos(updatedTodos);
-  };
-
-  const clearError = () => {
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-  };
-
-  useEffect(clearError, [errorMessage]);
-
-  const loadTodos = () => {
-    setErrorMessage('');
-    client.get<Todo[]>('https://mate.academy/students-api/todos?userId=11894')
-      .then(fetchedTodos => {
-        setTodos(fetchedTodos);
-        setVisibleTodos(fetchedTodos);
-      })
-      .catch(() => {
-        setErrorMessage('Unable to load todos');
-      });
+  const filteredTodos = (selectedTodos: Todo[], filter: Status) => {
+    switch (filter) {
+      case Status.ACTIVE:
+        return selectedTodos.filter(todo => !todo.completed);
+      case Status.COMPLETED:
+        return selectedTodos.filter(todo => todo.completed);
+      default:
+        return selectedTodos;
+    }
   };
 
   useEffect(() => {
-    loadTodos();
-  }, []);
+    getTodos(USER_ID)
+      .then((todosList) => setTodos(filteredTodos(todosList, filterBy)))
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        setTimeout(() => setErrorMessage(''), 3000);
+      });
+  }, [filterBy]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -55,24 +49,47 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header todos={todos} />
+        <TodoList visibleTodos={todos} />
 
-        {visibleTodos && (
-          <TodoList visibleTodos={visibleTodos} />
-        )}
-
+        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
-            todos={todos}
-            setVisibleTodos={setVisibleTodos}
-            clearCompletedTodos={clearCompletedTodos}
+            todosCounter={todosCounter}
+            filterBy={filterBy}
+            setFilterBy={setFilterBy}
           />
         )}
-
       </div>
-
+      {errorMessage && (
+        <div
+          data-cy="ErrorNotification"
+          className={
+            cn(
+              'notification', 'is-danger', 'is-light', 'has-text-weight-normal',
+              { hidden: !errorMessage },
+            )
+          }
+        >
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={() => setErrorMessage('')}
+          />
+          {/* show only one message at a time */}
+          Unable to load todos
+          {/* <br />
+          Title should not be empty
+          <br />
+          Unable to add a todo
+          <br />
+          Unable to delete a todo
+          <br />
+          Unable to update a todo */}
+        </div>
+      )}
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Error errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
     </div>
   );
 };

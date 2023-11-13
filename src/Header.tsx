@@ -1,22 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Todo } from './types/Todo';
 
-type Props = {
+interface Props {
   todos: Todo[];
-};
-
+}
 export const Header: React.FC<Props> = ({ todos }) => {
-  // const [title, setTitle] = useState('');
-  // const hasActiveTodos = todos.some(todo => !todo.completed);
-
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
-      {/* <button
-        type="button"
-        className={`todoapp__toggle-all ${hasActiveTodos ? 'active' : ''}`}
-        data-cy="ToggleAllButton"
-      /> */}
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className="todoapp__toggle-all active"
+          data-cy="ToggleAllButton"
+          aria-label="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form>
