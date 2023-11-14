@@ -39,7 +39,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(todo => setTodos(todo))
+      .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
         setTimeout(() => {
