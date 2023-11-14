@@ -1,7 +1,7 @@
-import React from "react";
-import { Todo } from "../types/Todo";
-import { FilterValue } from "../types/FilterValue";
-import classNames from "classnames";
+import React from 'react';
+import classNames from 'classnames';
+import { Todo } from '../types/Todo';
+import { FilterValue } from '../types/FilterValue';
 
 type Props = {
   todos: Todo[];

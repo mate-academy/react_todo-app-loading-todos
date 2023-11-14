@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ErrorType } from "../types/ErrorType";
+import React, { useEffect, useState } from 'react';
+import { ErrorType } from '../types/ErrorType';
 
 type Props = {
   error: ErrorType | null;
@@ -22,7 +22,7 @@ export const TodoErrors: React.FC<Props> = ({ error }) => {
 
   const handleHideError = () => {
     setVisible(false);
-  }
+  };
 
   const getErrorMessage = () => {
     switch (error) {
