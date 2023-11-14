@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export const TodoHeader: React.FC = () => {
   return (
@@ -8,6 +8,7 @@ export const TodoHeader: React.FC = () => {
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
+        aria-label="Toggle All"
       />
 
       {/* Add a todo on form submit */}

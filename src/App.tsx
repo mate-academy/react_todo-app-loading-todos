@@ -26,7 +26,7 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setError(ErrorType.LoadError)
+        setError(ErrorType.LoadError);
       });
   }, []);
 
@@ -42,7 +42,7 @@ export const App: React.FC = () => {
   }, [todos, filterValue]);
 
   const handleFilterChange = (filter: FilterValue) => {
-    setFilterValue(filter)
+    setFilterValue(filter);
   };
 
   if (!USER_ID) {
