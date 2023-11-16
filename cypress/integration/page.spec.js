@@ -296,7 +296,7 @@ describe('', () => {
         todos.assertTitle(1, 'React');
       });
 
-      it.skip('should keep footer when active todos are shown', () => {
+      it('should keep footer when active todos are shown', () => {
         filter.link('active').click();
 
         page.todosCounter().should('have.text', '2 items left');
@@ -321,7 +321,7 @@ describe('', () => {
         todos.assertTitle(2, 'JS');
       });
 
-      it.skip('should keep footer when completed todos are shown', () => {
+      it('should keep footer when completed todos are shown', () => {
         filter.link('completed').click();
 
         page.todosCounter().should('have.text', '2 items left');
@@ -353,12 +353,12 @@ describe('', () => {
         todos.assertCount(0);
       });
 
-      it.skip('should keep footer on completed selection', () => {
+      it('should keep footer on completed selection', () => {
         filter.link('completed').click();
         filter.assertVisible();
       });
 
-      it.skip('should keep todos counter on completed selection', () => {
+      it('should keep todos counter on completed selection', () => {
         filter.link('completed').click();
         page.todosCounter().should('have.text', '5 items left');
       });

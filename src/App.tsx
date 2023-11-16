@@ -13,18 +13,23 @@ const USER_ID = 11828;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(Filter.ALL);
-  const [isHidden, setIsHidden] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [todosError, setTodosError] = useState('');
 
   useEffect(() => {
-    getTodos(USER_ID)
-      .then(setTodos)
-      .catch(() => {
+    const loadTodos = async () => {
+      try {
+        const todosData = await getTodos(USER_ID);
+
+        setTodos(todosData);
+      } catch (error) {
         setTodosError('Unable to load todos');
-        setIsHidden(false);
-      })
-      .finally(() => setIsLoading(false));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTodos();
   }, []);
 
   const visibleTodos = useMemo(() => {
@@ -45,15 +50,17 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoappHeader />
 
-        <TodoappList todos={visibleTodos} />
-
         {/* Hide the footer if there are no todos */}
-        {visibleTodos.length > 0 && (
-          <TodoappFooter
-            todos={visibleTodos}
-            filterBy={filterBy}
-            onFilterClick={setFilterBy}
-          />
+        {todos.length > 0 && (
+          <>
+            <TodoappList todos={visibleTodos} />
+
+            <TodoappFooter
+              todos={todos}
+              filterBy={filterBy}
+              onFilterClick={setFilterBy}
+            />
+          </>
         )}
       </div>
 
@@ -61,8 +68,8 @@ export const App: React.FC = () => {
       {!isLoading && (
         <TodoappError
           todosError={todosError}
-          onSetIsHidden={setIsHidden}
-          isHidden={isHidden}
+          // onSetIsHidden={setIsHidden}
+          // isHidden={isHidden}
         />
       )}
     </div>
