@@ -4,14 +4,10 @@ import cn from 'classnames';
 
 type Props = {
   todosError: string,
-  // onSetIsHidden: (value: boolean) => void,
-  // isHidden: boolean,
 };
 
 export const TodoappError: React.FC<Props> = ({
   todosError,
-  // onSetIsHidden,
-  // isHidden,
 }) => {
   const [isHidden, setIsHidden] = useState(false);
 

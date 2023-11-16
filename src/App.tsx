@@ -68,8 +68,6 @@ export const App: React.FC = () => {
       {!isLoading && (
         <TodoappError
           todosError={todosError}
-          // onSetIsHidden={setIsHidden}
-          // isHidden={isHidden}
         />
       )}
     </div>
