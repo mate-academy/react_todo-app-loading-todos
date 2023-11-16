@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [isLoadingError, setIsLoadingError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -21,18 +22,21 @@ export const App: React.FC = () => {
     const fetchTodos = async () => {
       try {
         // throw new Error();
-        const response = await client
-          .get<Todo[]>('/todos?userId=11910');
+        setIsLoading(true);
+        const response = await client.getAll<Todo[]>();
 
         setTodos(response);
       } catch (error) {
         setIsLoadingError(true);
-        setIsError(true);
         // console.log('Error fetching todos:', error);
 
         setTimeout(() => {
           setIsError(false);
         }, 3000);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       }
     };
 
@@ -86,10 +90,15 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <Section filterType={filterType} todos={todos} setTodos={setTodos} />
+        <Section
+          filterType={filterType}
+          todos={todos}
+          setTodos={setTodos}
+          isLoading={isLoading}
+        />
 
         {/* Hide the footer if there are no todos + */}
-        {todos.length && (
+        {todos.length !== 0 && (
           <TodosFooter
             todos={todos}
             setTodos={setTodos}

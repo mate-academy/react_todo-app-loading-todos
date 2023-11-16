@@ -7,12 +7,14 @@ interface T {
   myTodo: Todo,
   setTodos: Dispatch<SetStateAction<Todo[]>>,
   todos: Todo[],
+  isLoading: boolean,
 }
 
 export const TodoItem: React.FC<T> = ({
   myTodo,
   setTodos,
   todos,
+  isLoading,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(myTodo.title);
@@ -132,7 +134,7 @@ export const TodoItem: React.FC<T> = ({
         <div
           data-cy="TodoLoader"
           className={classNames('modal overlay',
-            { 'is-active': false })}
+            { 'is-active': isLoading })}
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
