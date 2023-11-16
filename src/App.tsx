@@ -1,159 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import cn from 'classnames';
-
+import React, { useEffect, useMemo, useState } from 'react';
+import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { Header } from './components/Header/Header';
-import { TodoList } from './components/TodoList/TodoList';
-// import { UserWarning } from './UserWarning';
+import { TodoHeader } from './components/TodoHeader';
+import { TodoList } from './components/TodoList';
+import { TodoFooter } from './components/TodoFooter';
+import { TodoErrors } from './components/TodoErrors';
+import { ErrorType } from './types/ErrorType';
 
-const USER_ID = 11853;
+const USER_ID = 11682;
 
-function filterBy(todos: Todo[], filterValue: string) {
-  let filteredTodos = todos;
-
-  switch (filterValue) {
-    case 'active':
-      filteredTodos = filteredTodos.filter(todo => !todo.completed);
-      break;
-
-    case 'completed':
-      filteredTodos = filteredTodos.filter(todo => todo.completed);
-      break;
-
-    case 'all':
-    default:
-      return filteredTodos;
-  }
-
-  return filteredTodos;
+enum FilterValue {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
 }
 
 export const App: React.FC = () => {
-// if (!USER_ID) {
-//   return <UserWarning />;
-// }
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [filterValue, setFilterValue] = useState('all');
+  const [error, setError] = useState<ErrorType | null>(null);
+  const [filterValue, setFilterValue] = useState<FilterValue>(FilterValue.All);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(todo => setTodos(todo))
+      .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
+        setError(ErrorType.LoadError);
       });
   }, []);
 
-  const visibleTodos = filterBy([...todos], filterValue);
-  const activeItems = todos.filter(todo => !todo.completed);
+  const filteredTodos = useMemo(() => {
+    switch (filterValue) {
+      case FilterValue.Active:
+        return todos.filter(todo => !todo.completed);
+      case FilterValue.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filterValue]);
+
+  const handleFilterChange = (filter: FilterValue) => {
+    setFilterValue(filter);
+  };
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
-          setTodos={setTodos}
+        <TodoHeader />
+
+        <TodoList todos={filteredTodos} />
+
+        <TodoFooter
+          todos={filteredTodos}
+          filterValue={filterValue}
+          filterChange={handleFilterChange}
         />
-
-        <TodoList
-          todos={visibleTodos}
-          setTodos={setTodos}
-        />
-        {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {activeItems.length ? (
-                `${activeItems.length} items left`
-              ) : (
-                '0 items left'
-              )}
-            </span>
-
-            {/* Active filter should have a 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterValue === 'all',
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => {
-                  setFilterValue('all');
-                }}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filterValue === 'active',
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => {
-                  setFilterValue('active');
-                }}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filterValue === 'completed',
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => {
-                  setFilterValue('completed');
-                }}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* don't show this button if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
-        )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal', {
-            hidden: !errorMessage,
-          },
-        )}
-      >
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-        />
-        {errorMessage}
-        {/* show only one message at a time
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-      </div>
+      <TodoErrors error={error} />
     </div>
   );
 };
