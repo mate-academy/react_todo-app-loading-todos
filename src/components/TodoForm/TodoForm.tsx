@@ -1,7 +1,6 @@
 import React from 'react';
 
-export const TodoForm: React.FC= () => {
-
+export const TodoForm: React.FC = () => {
   return (
     <form>
       <input
@@ -11,5 +10,5 @@ export const TodoForm: React.FC= () => {
         placeholder="What needs to be done?"
       />
     </form>
-  )
+  );
 };

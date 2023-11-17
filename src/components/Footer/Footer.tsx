@@ -1,13 +1,18 @@
 import React from 'react';
-import {Todo} from '../../types/Todo';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
+import {Filter} from "../../types/Filter";
 
 type Props = {
   todos: Todo[];
-  handleOnClick: (filter: string) => void;
+  handleFilterChange: (filter: string) => void;
   selectedOption: string;
-}
-export const Footer: React.FC<Props> = ({ todos, handleOnClick, selectedOption }) => {
+};
+export const Footer: React.FC<Props> = ({
+  todos,
+  handleFilterChange,
+  selectedOption,
+}) => {
   const todoCounter = todos.filter(todo => !todo.completed).length;
 
   return (
@@ -20,27 +25,30 @@ export const Footer: React.FC<Props> = ({ todos, handleOnClick, selectedOption }
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={classNames("filter__link", {"selected": selectedOption === 'All'})}
+          className={classNames('filter__link',
+            { selected: selectedOption === 'All' })}
           data-cy="FilterLinkAll"
-          onClick={() => handleOnClick('All')}
+          onClick={() => handleFilterChange(Filter.All)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={classNames("filter__link", {"selected": selectedOption === 'Active'})}
+          className={classNames('filter__link',
+            { selected: selectedOption === 'Active' })}
           data-cy="FilterLinkActive"
-          onClick={() => handleOnClick('Active')}
+          onClick={() => handleFilterChange(Filter.Active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={classNames("filter__link", {"selected": selectedOption === 'Completed'})}
+          className={classNames('filter__link',
+            { selected: selectedOption === 'Completed' })}
           data-cy="FilterLinkCompleted"
-            onClick={() => handleOnClick('Completed')}
+          onClick={() => handleFilterChange(Filter.Completed)}
         >
           Completed
         </a>
@@ -56,5 +64,5 @@ export const Footer: React.FC<Props> = ({ todos, handleOnClick, selectedOption }
       </button>
       {/* Hide the footer if there are no todos */}
     </footer>
-);
+  );
 };
