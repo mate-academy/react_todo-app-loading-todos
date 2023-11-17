@@ -5,7 +5,6 @@ final app step by step and use the result of this task in the next tasks.
 
 You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
-Your userId is
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
 ## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
