@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { TodosContext } from '../TodosContext/TodosContext';
 
 export const Error: React.FC = () => {
-  const { errorMessage, setErrorMessage } = useContext(TodosContext);
+  const { errorMessage, setErrorMessage, todos } = useContext(TodosContext);
   let isErrorHidden = true;
 
   if (errorMessage !== '') {
@@ -16,26 +16,29 @@ export const Error: React.FC = () => {
   }
 
   return (
-    <div
-      data-cy="ErrorNotification"
-      className={cn(
-        'notification',
-        'is-danger',
-        'is-light',
-        'has-text-weight-normal',
-        { hidden: isErrorHidden },
+    <>
+      {todos.length > 0 && (
+        <div
+          data-cy="ErrorNotification"
+          className={cn(
+            'notification',
+            'is-danger',
+            'is-light',
+            { hidden: isErrorHidden },
+          )}
+        >
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={() => {
+              setErrorMessage('');
+              isErrorHidden = true;
+            }}
+          />
+          {errorMessage}
+        </div>
       )}
-    >
-      <button
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-        onClick={() => {
-          setErrorMessage('');
-          isErrorHidden = true;
-        }}
-      />
-      {errorMessage}
-    </div>
+    </>
   );
 };
