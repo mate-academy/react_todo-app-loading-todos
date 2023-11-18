@@ -83,11 +83,14 @@ export const TodoItem: React.FC<Props> = ({
       .then(() => setTodos(newTodos));
   };
 
-  const handlePressEnterEditValue = (
+  const handlePressKey = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.key === 'Enter') {
       updateTitle(editValue.trim());
+    } else if (event.key === 'Escape') {
+      setEditValue(todo.title.trim());
+      setEditTodosId(0);
     }
   };
 
@@ -161,7 +164,7 @@ export const TodoItem: React.FC<Props> = ({
             onChange={handleChangeEditValue}
             onBlur={handleOnBlueEditValue}
             ref={inputRef}
-            onKeyPress={handlePressEnterEditValue}
+            onKeyDown={handlePressKey}
           />
         </form>
       )}
