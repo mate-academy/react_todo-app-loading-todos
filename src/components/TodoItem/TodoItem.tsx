@@ -33,28 +33,34 @@ export const TodoItem: React.FC<Props> = ({
   }, [editTodosId, todo.id]);
 
   const updateTitle = (newTitle: string) => {
-    if (!newTitle) {
-      deleteTodo(todo.id);
-      setEditTodosId(0);
+    const trimmedTitle = newTitle.trim();
+
+    if (!trimmedTitle) {
+      deleteTodo(todo.id)
+        .then(() => {
+          const newTodos = todos.filter((t) => t.id !== todo.id);
+
+          setTodos(newTodos);
+          setEditTodosId(0);
+        });
     } else {
       const newTodo: Todo = {
         id: todo.id,
-        title: newTitle,
+        title: trimmedTitle,
         userId: USER_ID,
         completed: todo.completed,
       };
 
       const newTodos = [...todos];
-      const index = newTodos.findIndex(currentTodo => (
-        currentTodo.id === newTodo.id
-      ));
+      const index = newTodos.findIndex(
+        currentTodo => currentTodo.id === newTodo.id,
+      );
 
       newTodos.splice(index, 1, newTodo);
-      updatedTodo(newTodo)
-        .then(() => {
-          setTodos(newTodos);
-          setEditTodosId(0);
-        });
+      updatedTodo(newTodo).then(() => {
+        setTodos(newTodos);
+        setEditTodosId(0);
+      });
     }
   };
 
