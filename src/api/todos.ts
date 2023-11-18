@@ -7,4 +7,4 @@ export const getTodos = (userId: number) => {
 
 export const getTodosByStatus = (userId: number, completed: boolean) => {
   return client.get<Todo[]>(`/todos?userId=${userId}&completed=${completed}`);
-}
+};

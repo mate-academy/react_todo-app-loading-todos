@@ -1,27 +1,27 @@
-import cn from "classnames";
-import { useState } from "react";
-import { Errors } from "../../types/Errors";
+import cn from 'classnames';
+import { useState } from 'react';
+import { Errors } from '../../types/Errors';
 
 type Props = {
   error: Errors | null,
   setError: React.Dispatch<React.SetStateAction<Errors | null>>,
-}
+};
 
-export const ErrorMessage: React.FC<Props> = ({error, setError}) => {
-  if (!error) {
-    return <></>;
-  }
-
+export const ErrorMessage: React.FC<Props> = ({ error, setError }) => {
   const [hidden, setHidden] = useState(false);
   const handleClose = () => {
     setHidden(true);
     setError(null);
-  }
+  };
 
   setTimeout(() => {
     setHidden(true);
     setError(null);
   }, 3000);
+
+  if (!error) {
+    return <></>;
+  }
 
   return (
     <div
@@ -31,9 +31,10 @@ export const ErrorMessage: React.FC<Props> = ({error, setError}) => {
         'is-danger': true,
         'is-light': true,
         'has-text-weight-normal': true,
-        hidden: hidden
+        hidden,
       })}
     >
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
         type="button"
@@ -42,5 +43,5 @@ export const ErrorMessage: React.FC<Props> = ({error, setError}) => {
       />
       {error}
     </div>
-  )
-}
+  );
+};

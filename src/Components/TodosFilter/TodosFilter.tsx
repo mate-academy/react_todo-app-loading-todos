@@ -1,26 +1,30 @@
 import './style.scss';
-import cn from "classnames";
-import { Status } from "../../types/Status";
-import { Errors } from "../../types/Errors";
+import cn from 'classnames';
+import { Status } from '../../types/Status';
+import { Errors } from '../../types/Errors';
 
 type Props = {
   filterStatus: Status,
   setFilterStatus: React.Dispatch<React.SetStateAction<Status>>,
   setError: React.Dispatch<React.SetStateAction<Errors | null>>
-}
+};
 
-export const TodosFilter: React.FC<Props> = ({filterStatus, setFilterStatus, setError}) => {
+export const TodosFilter: React.FC<Props> = ({
+  filterStatus,
+  setFilterStatus,
+  setError,
+}) => {
   const handleClick = (status: Status) => {
     setFilterStatus(status);
     setError(null);
-  }
+  };
 
   return (
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
         className={cn({
-          'filter__link': true,
+          filter__link: true,
           selected: filterStatus === Status.All,
         })}
         data-cy="FilterLinkAll"
@@ -32,7 +36,7 @@ export const TodosFilter: React.FC<Props> = ({filterStatus, setFilterStatus, set
       <a
         href="#/active"
         className={cn({
-          'filter__link': true,
+          filter__link: true,
           selected: filterStatus === Status.Active,
         })}
         data-cy="FilterLinkActive"
@@ -44,7 +48,7 @@ export const TodosFilter: React.FC<Props> = ({filterStatus, setFilterStatus, set
       <a
         href="#/completed"
         className={cn({
-          'filter__link': true,
+          filter__link: true,
           selected: filterStatus === Status.Completed,
         })}
         data-cy="FilterLinkCompleted"
@@ -53,5 +57,5 @@ export const TodosFilter: React.FC<Props> = ({filterStatus, setFilterStatus, set
         Completed
       </a>
     </nav>
-  )
-}
+  );
+};

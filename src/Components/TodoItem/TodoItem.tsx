@@ -1,19 +1,22 @@
 import './style.scss';
-import cn from "classnames";
-import { Todo } from "../../types/Todo";
+import cn from 'classnames';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
   edited: Todo | null,
   updateProcessing: boolean,
-}
+};
 
-export const TodoItem: React.FC<Props> = ({ todo, edited, updateProcessing }) => {
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  edited,
+  updateProcessing,
+}) => {
   const isCurrentEdited = edited?.id === todo.id;
 
   return (
     <div
-      key={todo.id}
       data-cy="Todo"
       className={cn({
         todo: true,
@@ -40,27 +43,29 @@ export const TodoItem: React.FC<Props> = ({ todo, edited, updateProcessing }) =>
           />
         </form>
       )
-        : <>
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
+        : (
+          <>
+            <span data-cy="TodoTitle" className="todo__title">
+              {todo.title}
+            </span>
 
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-        </>}
+            <button type="button" className="todo__remove" data-cy="TodoDelete">
+              ×
+            </button>
+          </>
+        )}
 
       <div
         data-cy="TodoLoader"
         className={cn({
           modal: true,
           overlay: true,
-          updateProcessing: isCurrentEdited && updateProcessing
+          updateProcessing: isCurrentEdited && updateProcessing,
         })}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react";
-import { Todo } from "../../types/Todo";
-import { getTodosByStatus } from "../../api/todos";
-import { USER_ID } from "../../App";
-import { Errors } from "../../types/Errors";
+import { useEffect, useState } from 'react';
+import { Todo } from '../../types/Todo';
+import { getTodosByStatus } from '../../api/todos';
+import { Errors } from '../../types/Errors';
+import { USER_ID } from '../../utils/userId';
 
 type Props = {
   setError: React.Dispatch<React.SetStateAction<Errors | null>>,
-}
+};
 
-export const Header: React.FC<Props> = ({setError}) => {
+export const Header: React.FC<Props> = ({ setError }) => {
   const [active, setActive] = useState<Todo[]>([]);
 
   useEffect(() => {
     getTodosByStatus(USER_ID, false)
       .then(setActive)
       .catch(() => setError(Errors.LoadError));
-  }, [])
+  }, [setError]);
 
   return (
     <header className="todoapp__header">
       {active.length > 0 && (
+        /* eslint-disable-next-line jsx-a11y/control-has-associated-label */
         <button
           type="button"
           className="todoapp__toggle-all active"
@@ -37,5 +38,5 @@ export const Header: React.FC<Props> = ({setError}) => {
         />
       </form>
     </header>
-  )
-}
+  );
+};
