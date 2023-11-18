@@ -111,13 +111,18 @@ export const TodoItem: React.FC<Props> = ({
       .then(() => setTodos(newTodos));
   };
 
+  const handleDoubleClick = () => {
+    setEditTodosId(todo.id);
+    setEditValue(todo.title.trim());
+  };
+
   return (
     <div
       data-cy="Todo"
       className={classNames('todo',
         { completed: todo.completed },
         { editind: editTodosId === todo.id })}
-      onDoubleClick={() => setEditTodosId(todo.id)}
+      onDoubleClick={handleDoubleClick}
     >
       <label className="todo__status-label">
         <input
