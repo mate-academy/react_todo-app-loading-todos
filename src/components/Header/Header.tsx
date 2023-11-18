@@ -1,17 +1,29 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 import { TodosContext } from '../TodosContext/TodosContext';
 import * as todoService from '../../api/todos';
 
 export const Header = () => {
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     todos,
     setTodos,
     setErrorMessage,
     USER_ID,
   } = useContext(TodosContext);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -71,6 +83,7 @@ export const Header = () => {
           value={inputValue}
           onChange={handleChange}
           onKeyPress={handlePressEnter}
+          ref={inputRef}
         />
       </form>
     </header>
