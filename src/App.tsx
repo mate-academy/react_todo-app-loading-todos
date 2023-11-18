@@ -6,7 +6,7 @@ import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
 import { ErrorMessage } from './Components/ErrorMessage';
 import { Todo } from './types/Todo';
-import { getActiveTodos, getCompletedTodos, getTodos } from './api/todos';
+import { getTodos, getTodosByStatus } from './api/todos';
 import { Errors } from './types/Errors';
 import { Status } from './types/Status';
 
@@ -37,13 +37,13 @@ export const App: React.FC = () => {
         break;
 
       case Status.Active:
-        getActiveTodos(USER_ID)
+        getTodosByStatus(USER_ID, false)
           .then(setVisibleTodos)
           .catch(() => setError(Errors.LoadError));
         break;
 
       case Status.Completed:
-        getCompletedTodos(USER_ID)
+        getTodosByStatus(USER_ID, true)
           .then(setVisibleTodos)
           .catch(() => setError(Errors.LoadError));
         break;
@@ -55,7 +55,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header setError={setError} />
 
         {todos.length > 0 && (
           <>
@@ -64,6 +64,7 @@ export const App: React.FC = () => {
               edited={editedTodo}
               updateProcessing={updateProcessing}
             />
+
             <Footer
               filterStatus={filterStatus}
               setFilterStatus={setFilterStatus}

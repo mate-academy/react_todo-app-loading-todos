@@ -1,6 +1,7 @@
-import cn from "classnames"
-import { Status } from "../../types/Status"
-import { Errors } from "../../types/Errors"
+import './style.scss';
+import cn from "classnames";
+import { Status } from "../../types/Status";
+import { Errors } from "../../types/Errors";
 
 type Props = {
   filterStatus: Status,

@@ -1,5 +1,6 @@
+import './style.scss';
 import cn from "classnames";
-import { Todo } from "../../types/Todo"
+import { Todo } from "../../types/Todo";
 
 type Props = {
   todo: Todo,
@@ -12,6 +13,7 @@ export const TodoItem: React.FC<Props> = ({ todo, edited, updateProcessing }) =>
 
   return (
     <div
+      key={todo.id}
       data-cy="Todo"
       className={cn({
         todo: true,
