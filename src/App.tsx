@@ -1,12 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Sort } from './types/Sort';
-import { filterTodos } from './services/filterTodos';
-
-
 
 const USER_ID = 11932;
 
@@ -23,17 +21,28 @@ const handleErrorMessage = (
   }, 3000);
 };
 
+const filterTodos = (todos: Todo[], sortType: Sort) => {
+  const newTodo = [...todos];
+
+  switch (sortType) {
+    case Sort.Active:
+      return newTodo.filter(todo => !todo.completed);
+    case Sort.Completed:
+      return newTodo.filter(todo => todo.completed);
+    default:
+      return newTodo;
+  }
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState(Sort.All);
   const [isEditing, setIsEditing] = useState<Record<number, boolean>>({});
 
-
   const visibleTodos = useMemo(() => {
     return filterTodos(todos, selectedFilter);
   }, [todos, selectedFilter]);
-
 
   const handleToggleEditing = (id: number) => {
     setIsEditing((prevIsEditing) => ({
@@ -66,19 +75,13 @@ export const App: React.FC = () => {
   }
 
   const isActiveTodo = todos.every(todo => !todo.completed);
-  const isNotCompleted = todos.filter(todo => !todo.completed).length;
-
-  //const filteredTodos = filterTodos(todos, currentFilter);  visibleTodos
-
-  //const uncompletedCount = todos.filter((todo: Todo) => !todo.completed).length;  isNotCompleted
-
-  //const allTodosAreActive = todos.every((todo: Todo) => !todo.completed); isActiveTodo
+  const unComletedTodo = todos.filter(todo => !todo.completed).length;
 
   const isShownFooter = todos.length > 0 && (
     selectedFilter === Sort.All
-    || (selectedFilter === Sort.Active && isNotCompleted > 0)
+    || (selectedFilter === Sort.Active && unComletedTodo > 0)
     || (selectedFilter === Sort.Completed
-      && isNotCompleted < todos.length)
+      && unComletedTodo < todos.length)
     || isActiveTodo
   );
 
@@ -125,7 +128,7 @@ export const App: React.FC = () => {
                     value={todo.title}
                   />
                 ) : (
-
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                   <span
                     data-cy="TodoTitle"
                     className="todo__title"
@@ -158,9 +161,9 @@ export const App: React.FC = () => {
         {isShownFooter && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {isNotCompleted}
+              {unComletedTodo}
               {' '}
-              {isNotCompleted === 1 ? 'item' : 'items'}
+              {unComletedTodo === 1 ? 'item' : 'items'}
               {' '}
               left
             </span>
@@ -168,7 +171,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/"
-                className={`filter__link ${selectedFilter === Sort.All ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: selectedFilter === Sort.All,
+                })}
                 data-cy="FilterLinkAll"
                 onClick={() => setSelectedFilter(Sort.All)}
               >
@@ -176,7 +181,9 @@ export const App: React.FC = () => {
               </a>
               <a
                 href="#/active"
-                className={`filter__link ${selectedFilter === Sort.Active ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: selectedFilter === Sort.Active,
+                })}
                 data-cy="FilterLinkActive"
                 onClick={() => setSelectedFilter(Sort.Active)}
               >
@@ -184,7 +191,9 @@ export const App: React.FC = () => {
               </a>
               <a
                 href="#/completed"
-                className={`filter__link ${selectedFilter === Sort.Completed ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: selectedFilter === Sort.Completed,
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setSelectedFilter(Sort.Completed)}
               >
