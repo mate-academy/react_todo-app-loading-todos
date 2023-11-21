@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './Components/UserWarning/UserWarning';
 import { TodoList } from './Components/TodoList';
 import { Footer } from './Components/Footer';
@@ -24,23 +24,18 @@ export const App: React.FC = () => {
       .catch(() => setError(Errors.LoadError));
   }, []);
 
-  const getVisibleTodos = () => {
+  const visibleTodos = useMemo(() => todos.filter(({ completed }) => {
     switch (filterStatus) {
-      case Status.All:
-        return [...todos];
-
       case Status.Active:
-        return [...todos.filter(todo => !todo.completed)];
+        return !completed;
 
       case Status.Completed:
-        return [...todos.filter(todo => todo.completed)];
+        return completed;
 
       default:
-        return [];
+        return true;
     }
-  };
-
-  const visibleTodos = getVisibleTodos();
+  }), [filterStatus, todos]);
 
   return USER_ID ? (
     <div className="todoapp">
