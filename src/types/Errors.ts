@@ -4,4 +4,4 @@ export enum Errors {
   CAN_NOT_ADD_TODO = 'Unable to add a todo',
   CAN_NOT_DELETE_TODO = 'Unable to delete a todo',
   CAN_NOT_UPDATE_TODO = 'Unable to update a todo',
-};
+}
