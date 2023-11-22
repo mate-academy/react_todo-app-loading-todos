@@ -20,7 +20,7 @@
     "@cypress/webpack-dev-server": "^1.8.4",
     "@mate-academy/cypress-tools": "^1.0.5",
     "@mate-academy/eslint-config-react-typescript": "^1.0.12",
-    "@mate-academy/scripts": "^1.2.8",
+    "@mate-academy/scripts": "^1.2.11",
     "@mate-academy/students-ts-config": "*",
     "@mate-academy/stylelint-config": "*",
     "@types/node": "^17.0.45",
@@ -68,5 +68,9 @@
       "_comment": "Add `cypressComponents: true` to enable component tests",
       "cypress": true
     }
+  },
+  "resolutions": {
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0"
   }
 }
