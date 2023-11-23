@@ -33,9 +33,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setErrorMessage(null);
-    getTodos(USER_ID).then(todo => setTodos(todo)).catch((error) => {
+    getTodos(USER_ID).then(todo => setTodos(todo)).catch(() => {
       setErrorMessage(Errors.LOAD_ERROR);
-      throw error;
     });
   }, []);
 
