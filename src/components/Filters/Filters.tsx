@@ -1,18 +1,20 @@
 import React from 'react';
+import classNames from 'classnames';
 import { StatusFilter } from '../../types/Todo';
 
 export const Filters: React.FC<{
   filter: StatusFilter;
-  setFilter: React.Dispatch<React.SetStateAction<StatusFilter>>
+  setFilter: React.Dispatch<React.SetStateAction<StatusFilter>>;
 }> = ({ filter, setFilter }) => (
   <nav className="filter" data-cy="Filter">
     <a
       href="#/"
-      className={
-        `filter__link
-              ${filter === StatusFilter.All ? 'selected' : ''}
-            `
-      }
+      className={classNames(
+        'filter__link',
+        {
+          selected: filter === StatusFilter.All,
+        },
+      )}
       data-cy="FilterLinkAll"
       onClick={() => setFilter(StatusFilter.All)}
     >
@@ -21,11 +23,12 @@ export const Filters: React.FC<{
 
     <a
       href="#/active"
-      className={
-        `filter__link
-              ${filter === StatusFilter.Active ? 'selected' : ''}
-            `
-      }
+      className={classNames(
+        'filter__link',
+        {
+          selected: filter === StatusFilter.Active,
+        },
+      )}
       data-cy="FilterLinkActive"
       onClick={() => setFilter(StatusFilter.Active)}
     >
@@ -34,11 +37,12 @@ export const Filters: React.FC<{
 
     <a
       href="#/completed"
-      className={
-        `filter__link
-              ${filter === StatusFilter.Completed ? 'selected' : ''}
-            `
-      }
+      className={classNames(
+        'filter__link',
+        {
+          selected: filter === StatusFilter.Completed,
+        },
+      )}
       data-cy="FilterLinkCompleted"
       onClick={() => setFilter(StatusFilter.Completed)}
     >

@@ -29,37 +29,40 @@ export const App: React.FC = () => {
         setTodos(todoList);
       } catch (error) {
         handleErrorMessage(error, setErrorNotification);
+        const errorNotificationTimeout = setTimeout(() => {
+          setErrorNotification(null);
+        }, 3000);
+
+        return () => {
+          clearTimeout(errorNotificationTimeout);
+        };
       }
+
+      // Default return value for TypeScript
+      return undefined;
     };
 
     fetchTodos();
-
-    const errorNotificationTimeout = setTimeout(() => {
-      setErrorNotification(null);
-    }, 3000);
-
-    return () => {
-      clearTimeout(errorNotificationTimeout);
-    };
   }, []);
 
-  const filteredTodos = todos
-    ? todos.filter((todo) => {
-      if (filter === StatusFilter.All) {
-        return true;
-      }
+  let filteredTodos = null;
 
-      if (filter === StatusFilter.Active) {
-        return !todo.completed;
-      }
-
-      return todo.completed;
-    })
-    : null;
+  if (todos) {
+    if (filter === StatusFilter.All) {
+      filteredTodos = todos;
+    } else {
+      filteredTodos = todos.filter((todo) => {
+        return (filter === StatusFilter.Active
+          ? !todo.completed
+          : todo.completed);
+      });
+    }
+  }
 
   const incompleteTodosCount = todos
     ? todos.reduce(
-      (count, todo) => (!todo.completed ? count + 1 : count), 0,
+      (count, todo) => (!todo.completed ? count + 1 : count),
+      0,
     )
     : 0;
 
@@ -98,7 +101,6 @@ export const App: React.FC = () => {
         errorNotification={errorNotification}
         setErrorNotification={setErrorNotification}
       />
-
     </div>
   );
 };
