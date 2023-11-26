@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-// import { UserWarning } from './UserWarning';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -45,24 +44,20 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        {!isLoading && (
+        {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
 
-            {todos.length > 0 && (
-              <TodoFooter
-                filter={filter}
-                onFilterChange={handleFilterChange}
-                quantityActiveTodos={activeTodos.length}
-                isAnyTodoComplete={todos.some(todo => todo.completed)}
-              />
-            )}
+            <TodoFooter
+              filter={filter}
+              onFilterChange={handleFilterChange}
+              quantityActiveTodos={activeTodos.length}
+              isAnyTodoComplete={todos.some(todo => todo.completed)}
+            />
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {!isLoading && (
         <ErrorNotification
           errorMsg={errorMsg}
