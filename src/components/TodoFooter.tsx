@@ -14,6 +14,8 @@ export const TodoFooter: React.FC<Props> = ({
   quantityActiveTodos,
   isAnyTodoComplete,
 }) => {
+  const handleFilterChange = (v: Filter) => () => onFilterChange(v);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -28,7 +30,7 @@ export const TodoFooter: React.FC<Props> = ({
             selected: filter === Filter.ALL,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => onFilterChange(Filter.ALL)}
+          onClick={handleFilterChange(Filter.ALL)}
         >
           All
         </a>
@@ -39,7 +41,7 @@ export const TodoFooter: React.FC<Props> = ({
             selected: filter === Filter.ACTIVE,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => onFilterChange(Filter.ACTIVE)}
+          onClick={handleFilterChange(Filter.ACTIVE)}
         >
           Active
         </a>
@@ -50,7 +52,7 @@ export const TodoFooter: React.FC<Props> = ({
             selected: filter === Filter.COMPLETED,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => onFilterChange(Filter.COMPLETED)}
+          onClick={handleFilterChange(Filter.COMPLETED)}
         >
           Completed
         </a>
