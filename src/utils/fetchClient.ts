@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
+// https://mate.academy/students-api/todos?userId=11973
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
