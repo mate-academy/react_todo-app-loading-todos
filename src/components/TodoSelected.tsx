@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import { SelectedTodo } from '../types/SelectedTodo';
+import { Filter } from '../types/Filter';
 
 type Props = {
-  onTodoSelected: (value: string) => void,
-  isTodoSelected: string,
+  onTodoSelected: (value: Filter) => void;
+  filter: string;
 };
 
 export const TodoSelecet: React.FC<Props> = ({
   onTodoSelected,
-  isTodoSelected,
+  filter,
 }) => {
   const [defaultActiveSelect, setDefaultActiveSelect] = useState(true);
 
@@ -22,7 +22,7 @@ export const TodoSelecet: React.FC<Props> = ({
         })}
         data-cy="FilterLinkAll"
         onClick={() => {
-          onTodoSelected(SelectedTodo.all);
+          onTodoSelected(Filter.all);
           setDefaultActiveSelect(true);
         }}
       >
@@ -32,11 +32,11 @@ export const TodoSelecet: React.FC<Props> = ({
       <a
         href="#/active"
         className={cn('filter__link', {
-          'filter__link selected': SelectedTodo.active === isTodoSelected,
+          'filter__link selected': Filter.active === filter,
         })}
         data-cy="FilterLinkActive"
         onClick={() => {
-          onTodoSelected(SelectedTodo.active);
+          onTodoSelected(Filter.active);
           setDefaultActiveSelect(false);
         }}
       >
@@ -46,11 +46,11 @@ export const TodoSelecet: React.FC<Props> = ({
       <a
         href="#/completed"
         className={cn('filter__link', {
-          'filter__link selected': SelectedTodo.completed === isTodoSelected,
+          'filter__link selected': Filter.completed === filter,
         })}
         data-cy="FilterLinkCompleted"
         onClick={() => {
-          onTodoSelected(SelectedTodo.completed);
+          onTodoSelected(Filter.completed);
           setDefaultActiveSelect(false);
         }}
       >

@@ -1,14 +1,15 @@
+import { Filter } from '../types/Filter';
 import { TodoSelecet } from './TodoSelected';
 
 type Props = {
-  onTodoSelected: (value: string) => void,
-  isTodoSelected: string,
+  onTodoSelected: (value: Filter) => void,
+  filter: string,
   count: number,
 };
 
 export const TodoFooter: React.FC<Props> = ({
   onTodoSelected,
-  isTodoSelected,
+  filter,
   count,
 }) => {
   return (
@@ -19,7 +20,7 @@ export const TodoFooter: React.FC<Props> = ({
 
       <TodoSelecet
         onTodoSelected={onTodoSelected}
-        isTodoSelected={isTodoSelected}
+        filter={filter}
       />
 
       <button
