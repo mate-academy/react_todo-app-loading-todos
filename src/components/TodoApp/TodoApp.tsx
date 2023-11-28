@@ -11,8 +11,8 @@ export const TodoApp: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
+
         <Header />
 
         {todos.length > 0 && (
@@ -21,8 +21,8 @@ export const TodoApp: React.FC = () => {
             <Footer />
           </>
         )}
-        <Error />
       </div>
+      <Error />
     </div>
   );
 };

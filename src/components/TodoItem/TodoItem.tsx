@@ -105,10 +105,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleDeleteValue = () => {
-    const newTodos = [...todos];
-    const index = newTodos.findIndex(currentTodo => currentTodo.id === todo.id);
-
-    newTodos.splice(index, 1);
+    const newTodos = todos.filter(currentTodo => currentTodo.id !== todo.id);
 
     deleteTodo(todo.id)
       .then(() => setTodos(newTodos));

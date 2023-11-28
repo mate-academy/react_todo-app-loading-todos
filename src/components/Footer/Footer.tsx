@@ -12,7 +12,7 @@ export const Footer = () => {
     setTodos(newTodos);
   };
 
-  const isVisibleCrealButton = todos.some(todo => todo.completed);
+  const isClearButtonVisible = todos.some(todo => todo.completed);
   const countTodosActive = getNumberActiveTodo(todos);
 
   return (
@@ -23,7 +23,7 @@ export const Footer = () => {
 
       <TodosFilter />
 
-      {isVisibleCrealButton && (
+      {isClearButtonVisible && (
         <button
           type="button"
           className="todoapp__clear-completed"
