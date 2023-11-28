@@ -28,7 +28,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => setErrorMsg(TodoError.LOAD))
       .finally(() => setIsLoading(false));
-  }, [USER_ID]);
+  }, []);
   // #endregion
 
   const visibleTodos: Todo[] = getPraperedTodos(todos, filter);
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <TodoList todos={visibleTodos} />
 

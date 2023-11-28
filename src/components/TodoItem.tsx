@@ -10,11 +10,10 @@ export const TodoItem: React.FC<Props> = ({
   todo,
 }) => {
   const [isEditing] = useState(false);
-  const { id, title, completed } = todo;
+  const { title, completed } = todo;
 
   return (
     <div
-      key={id}
       data-cy="Todo"
       className={cn('todo', {
         completed,
