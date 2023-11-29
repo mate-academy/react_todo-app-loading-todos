@@ -4,13 +4,15 @@ import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { TodoList } from './components/TodoList/TodoList';
+import { Status } from './types/Status';
 
 const USER_ID = 11983;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Status.ALL);
 
   const handleErrorClose = () => {
     setErrorMessage('');
@@ -29,11 +31,11 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (status) {
-      case 'active':
+      case Status.ACTIVE:
         return !todo.completed;
-      case 'completed':
+      case Status.COMPLETED:
         return todo.completed;
-      case 'all':
+      case Status.ALL:
       default:
         return true;
     }
@@ -68,49 +70,9 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
-        {todos[0] && (
+        {!!todos.length && (
           <>
-            <section className="todoapp__main" data-cy="TodoList">
-              {filteredTodos.map(value => (
-                <div
-                  data-cy="Todo"
-                  className={classNames('todo', {
-                    completed: value.completed,
-                  })}
-                  key={value.id}
-                >
-                  <label className="todo__status-label">
-                    <input
-                      data-cy="TodoStatus"
-                      type="checkbox"
-                      className="todo__status"
-                      checked={value.completed}
-                    />
-                  </label>
-
-                  <span data-cy="TodoTitle" className="todo__title">
-                    {value.title}
-                  </span>
-
-                  {/* Remove button appears only on hover */}
-                  <button
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                  >
-                    ×
-                  </button>
-
-                  {/* overlay will cover the todo while it is being updated */}
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    <div
-                      className="modal-background has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              ))}
-            </section>
+            <TodoList todos={filteredTodos} />
 
             {/* Hide the footer if there are no todos */}
             <footer className="todoapp__footer" data-cy="Footer">
@@ -123,11 +85,11 @@ export const App: React.FC = () => {
                 <a
                   href="#/"
                   className={classNames('filter__link', {
-                    selected: status === 'all',
+                    selected: status === Status.ALL,
                   })}
                   data-cy="FilterLinkAll"
                   onClick={() => {
-                    setStatus('all');
+                    setStatus(Status.ALL);
                   }}
                 >
                   All
@@ -136,11 +98,11 @@ export const App: React.FC = () => {
                 <a
                   href="#/active"
                   className={classNames('filter__link', {
-                    selected: status === 'active',
+                    selected: status === Status.ACTIVE,
                   })}
                   data-cy="FilterLinkActive"
                   onClick={() => {
-                    setStatus('active');
+                    setStatus(Status.ACTIVE);
                   }}
                 >
                   Active
@@ -149,11 +111,11 @@ export const App: React.FC = () => {
                 <a
                   href="#/completed"
                   className={classNames('filter__link', {
-                    selected: status === 'completed',
+                    selected: status === Status.COMPLETED,
                   })}
                   data-cy="FilterLinkCompleted"
                   onClick={() => {
-                    setStatus('completed');
+                    setStatus(Status.COMPLETED);
                   }}
                 >
                   Completed
