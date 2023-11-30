@@ -1,0 +1,40 @@
+import { useContext, useEffect, useState } from 'react';
+import { Error } from '../../types/Error';
+import { TodosContext } from '../TodosContext';
+
+type Props = {};
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
+export const ErrorNotification: React.FC<Props> = () => {
+  const { errorMessage } = useContext(TodosContext);
+  const [hidden, setHidden] = useState(true);
+
+  useEffect(() => {
+    if (errorMessage !== Error.Default) {
+      setHidden(false);
+    }
+
+    const timer = setTimeout(() => {
+      setHidden(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
+
+  return !hidden ? (
+    <div
+      data-cy="ErrorNotification"
+      className="notification is-danger is-light has-text-weight-normal"
+    >
+      {errorMessage}
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={() => setHidden(false)}
+      />
+    </div>
+  ) : (
+    null
+  );
+};
