@@ -1,7 +1,7 @@
 import React from 'react';
+import cn from 'classnames';
 import { Filter } from '../../types/Filter';
 import { Todo } from '../../types/Todo';
-import cn from 'classnames';
 
 interface Props {
   setFilter: (q: Filter) => void;

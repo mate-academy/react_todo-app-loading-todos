@@ -5,14 +5,14 @@ interface Props {
   todo: Todo;
 }
 
-export const TodoItem: React.FC<Props>= ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
-  
+
   return (
     <div
       data-cy="Todo"
       className={cn('todo', {
-        completed: completed,
+        completed,
       })}
     >
       <label className="todo__status-label">
@@ -25,7 +25,7 @@ export const TodoItem: React.FC<Props>= ({ todo }) => {
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-       {title}
+        {title}
       </span>
 
       <button type="button" className="todo__remove" data-cy="TodoDelete">

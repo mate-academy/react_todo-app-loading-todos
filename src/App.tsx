@@ -14,13 +14,14 @@ const USER_ID = 11988;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.All);
-  const [errorMessage, setErrorMessage] = useState<ErrorNotification>(ErrorNotification.Default);
+  const [errorMessage, setErrorMessage]
+    = useState<ErrorNotification>(ErrorNotification.Default);
 
   useEffect(() => {
     setErrorMessage(ErrorNotification.Default);
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setErrorMessage(ErrorNotification.LoadError))
+      .catch(() => setErrorMessage(ErrorNotification.LoadError));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -34,7 +35,6 @@ export const App: React.FC = () => {
     }
   }, [todos, filter]);
 
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <>
             <TodoList todos={filteredTodos} />
-            <Footer 
+            <Footer
               setFilter={setFilter}
               filterOption={filter}
               todos={todos}
