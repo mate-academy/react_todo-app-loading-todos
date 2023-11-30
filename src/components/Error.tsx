@@ -7,34 +7,40 @@ type Props = {
 };
 
 export const Error: React.FC<Props> = ({ error }) => {
-  const [errorMessage, setErrorMessage] = useState(true);
+  const [isErrorMessage, setIsErrorMessage] = useState(true);
 
   const getErrorMessage = () => {
     switch (error) {
       case ErrorType.LoadError:
         return 'Unable to load todos';
+
       case ErrorType.TitleError:
         return 'Title should not be empty';
+
       case ErrorType.AddError:
         return 'Unable to add a todo';
+
       case ErrorType.DeleteError:
         return 'Unable to delete a todo';
+
       case ErrorType.UpdateError:
         return 'Unable to update a todo';
+
       default:
         return null;
     }
   };
 
   const handleHideMessage = () => {
-    setErrorMessage(false);
+    setIsErrorMessage(false);
   };
 
   return (
-    errorMessage && error ? (
+    isErrorMessage && error ? (
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${!errorMessage && 'hidden'}`}
+        className="notification is-danger is-light has-text-weight-normal"
+
       >
         <button
           data-cy="HideErrorButton"

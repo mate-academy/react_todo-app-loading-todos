@@ -60,7 +60,7 @@ export const App: React.FC = () => {
         {visibleTodos && (
           <TodoList todos={visibleTodos} />
         )}
-        {/* Hide the footer if there are no todos */}
+
         {todos.length > 0 && (
           <Footer
             todos={todos}
