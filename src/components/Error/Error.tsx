@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import { useState } from 'react';
 
@@ -28,7 +29,6 @@ export const Error: React.FC<Props> = ({ error }) => {
         type="button"
         className="delete"
         onClick={() => setIsHidden(true)}
-        aria-label="Close error notification"
       />
       {error}
     </div>

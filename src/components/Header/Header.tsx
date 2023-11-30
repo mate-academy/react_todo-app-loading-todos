@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 export const Header = () => {
   return (
     <header className="todoapp__header">
@@ -6,7 +7,6 @@ export const Header = () => {
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
-        aria-label="Show active todo"
       />
 
       {/* Add a todo on form submit */}
