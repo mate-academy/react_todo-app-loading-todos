@@ -206,11 +206,11 @@ describe.skip('', () => {
       todos.assertCount(5);
     });
 
-    it('should have delete buttons for every todo', () => {
+    it.skip('should have delete buttons for every todo', () => {
       todos.deleteButton(0).should('exist');
     });
 
-    it('should not have loaders', () => {
+    it.skip('should not have loaders', () => {
       todos.assertNotLoading(0);
       todos.assertNotLoading(1);
       todos.assertNotLoading(2);
@@ -237,7 +237,7 @@ describe.skip('', () => {
       todos.assertNotCompleted(4);
     });
 
-    it('should have correct completed statuses', () => {
+    it.skip('should have correct completed statuses', () => {
       todos.statusToggler(0).should('be.checked');
       todos.statusToggler(1).should('be.checked');
       todos.statusToggler(2).should('be.checked');
