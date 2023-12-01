@@ -23,9 +23,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setErrorMessage(ErrorMessage.UnableToLoad);
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
+        setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
 
@@ -67,7 +65,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <Error error={errorMessage} />
+      <Error
+        error={errorMessage}
+        setError={setErrorMessage}
+      />
     </div>
   );
 };

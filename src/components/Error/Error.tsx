@@ -1,22 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 
 type Props = {
   error: string
+  setError: (er: string) => void
 };
 
-export const Error: React.FC<Props> = ({ error }) => {
-  const [isHidden, setIsHidden] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsHidden(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+export const Error: React.FC<Props> = ({ error, setError }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -25,14 +15,14 @@ export const Error: React.FC<Props> = ({ error }) => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: isHidden },
+        { hidden: !error },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setIsHidden(true)}
+        onClick={() => setError('')}
       />
       {error}
     </div>
