@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   error: string
@@ -9,9 +9,13 @@ type Props = {
 export const Error: React.FC<Props> = ({ error }) => {
   const [isHidden, setIsHidden] = useState(false);
 
-  setTimeout(() => {
-    setIsHidden(true);
-  }, 3000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsHidden(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div

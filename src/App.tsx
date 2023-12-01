@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
+import * as todosService from './api/todos';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
@@ -19,11 +19,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     setErrorMessage('');
 
-    getTodos(USER_ID)
+    todosService.getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setErrorMessage(ErrorMessage.UnableToLoad);
-        setTimeout(() => setErrorMessage(''), 3000);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       });
   }, []);
 
@@ -65,9 +67,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {errorMessage && (
-        <Error error={errorMessage} />
-      )}
+      <Error error={errorMessage} />
     </div>
   );
 };
