@@ -5,6 +5,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
 import { App } from './App';
+import { ErrorProvider } from './utils/ErrorContext';
 
 createRoot(document.getElementById('root') as HTMLDivElement)
-  .render(<App />);
+  .render(
+    <ErrorProvider>
+      <App />
+    </ErrorProvider>,
+  );
