@@ -21,9 +21,9 @@ export const Footer: React.FC<Props> = ({
     let filteredTodos = todos;
 
     switch (status) {
-      case Status.activ:
+      case Status.active:
         filteredTodos = todos.filter(todo => !todo.completed);
-        setFilterStatus(Status.activ);
+        setFilterStatus(Status.active);
         break;
 
       case Status.completed:
@@ -51,6 +51,8 @@ export const Footer: React.FC<Props> = ({
     return [];
   };
 
+  const completedTodo = todos.find((todo: Todo) => todo.completed);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -74,9 +76,9 @@ export const Footer: React.FC<Props> = ({
           href="#/active"
           className={classNames(
             'filter__link',
-            { selected: filterStatus === Status.activ },
+            { selected: filterStatus === Status.active },
           )}
-          onClick={() => chooseStatus(Status.activ)}
+          onClick={() => chooseStatus(Status.active)}
           data-cy="FilterLinkActive"
         >
           Active
@@ -95,7 +97,7 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {todos.find((todo: Todo) => todo.completed)
+      {completedTodo
         && (
           <button
             type="button"

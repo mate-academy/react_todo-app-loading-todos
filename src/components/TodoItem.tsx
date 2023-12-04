@@ -22,6 +22,20 @@ export const TodoItem: React.FC<Props> = ({
 
   };
 
+  const hendleNewTitle = (
+    event: React.FocusEvent<HTMLInputElement, Element>,
+  ) => {
+    setInLoading(true);
+    setNewTitle(event.target.value);
+    setInLoading(false);
+  };
+
+  const cancelNewTitle = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setNewTitle(title);
+    }
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -35,7 +49,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          id={`${id}`}
+          id={id.toString()}
           checked={completed}
           onChange={handleCompleted}
         />
@@ -50,14 +64,8 @@ export const TodoItem: React.FC<Props> = ({
               placeholder="Empty todo will be deleted"
               value={newTitle}
               onChange={event => setNewTitle(event.target.value)}
-              onBlur={event => {
-                setInLoading(true);
-                setNewTitle(event.target.value);
-                setInLoading(false);
-              }}
-              onKeyUp={
-                event => (event.key === 'Escape') && setNewTitle(title)
-              }
+              onBlur={hendleNewTitle}
+              onKeyUp={cancelNewTitle}
             />
           </form>
         ) : (
