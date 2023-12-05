@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
-import { TodosFilter } from './components/TodosFilter';
+import { Status, Todo } from './types/Todo';
+import { getTodos, getVisibleTodos } from './api/todos';
+import { TodoFilter } from './components/TodosFilter';
 import { ToogleButton } from './components/ToogleButton';
 import { TodoForm } from './components/TodoForm';
 import { TodosList } from './components/TodosList';
@@ -14,20 +14,23 @@ const USER_ID = 11955;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [status, setStatus] = useState(Status.All);
   const [errorType, setErrorType] = useState<Error | null>(null);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(response => {
         setTodos(response);
-        setVisibleTodos(response);
       })
       .catch((error) => {
         setErrorType(Error.Load);
         throw error;
       });
   }, []);
+
+  const shownTodos = useMemo(() => {
+    return getVisibleTodos(todos, status);
+  }, [todos, status]);
 
   const areAllActiveTodos = todos.some(todo => !todo.completed);
 
@@ -46,20 +49,19 @@ export const App: React.FC = () => {
           <TodoForm />
         </header>
 
-        <TodosList visibleTodos={visibleTodos} />
+        <TodosList visibleTodos={shownTodos} />
 
         {!!todos.length && (
-          <TodosFilter
+          <TodoFilter
             todos={todos}
-            setVisibleTodos={setVisibleTodos}
+            status={status}
+            setStatus={setStatus}
             areAllActiveTodos={areAllActiveTodos}
             setErrorType={setErrorType}
           />
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {errorType && (
         <ErrorNotifications errorType={errorType} setErrorType={setErrorType} />
       )}

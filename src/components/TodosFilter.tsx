@@ -1,43 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import { Status, Todo } from '../types/Todo';
 
+const filterButtons = [
+  { address: '#/', name: Status.All },
+  { address: '#/active', name: Status.Active },
+  { address: '#/completed', name: Status.Completed },
+];
+
 type Props = {
   todos: Todo[];
+  status: Status,
   areAllActiveTodos: boolean
-  setVisibleTodos: (todos: Todo[]) => void;
+  setStatus: (status: Status) => void;
   setErrorType: (erroType: null) => void;
 };
 
-export const TodosFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = ({
   todos,
+  status,
   areAllActiveTodos,
-  setVisibleTodos,
+  setStatus,
   setErrorType,
 }) => {
-  const [visibleStatus, setVisibleStatus] = useState(Status.All);
-
   const activeTodos = [...todos].filter(todo => !todo.completed);
-  const completedTodos = [...todos].filter(todo => todo.completed);
 
-  const handleOnClick = (status: Status) => {
-    switch (status) {
-      case 'Completed':
-        setVisibleTodos(completedTodos);
-        setVisibleStatus(Status.Completed);
-        break;
-
-      case 'Active':
-        setVisibleTodos(activeTodos);
-        setVisibleStatus(Status.Active);
-        break;
-
-      default:
-        setVisibleTodos(todos);
-        setVisibleStatus(Status.All);
-    }
-
+  const handleOnClick = (filter: Status) => {
+    setStatus(filter);
     setErrorType(null);
   };
 
@@ -47,46 +37,23 @@ export const TodosFilter: React.FC<Props> = ({
         {`${activeTodos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames(
-            'filter__link',
-            { selected: visibleStatus === 'All' },
-          )}
-          data-cy="FilterLinkAll"
-          onClick={() => handleOnClick(Status.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames(
-            'filter__link',
-            { selected: visibleStatus === 'Active' },
-          )}
-          data-cy="FilterLinkActive"
-          onClick={() => handleOnClick(Status.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames(
-            'filter__link',
-            { selected: visibleStatus === 'Completed' },
-          )}
-          data-cy="FilterLinkCompleted"
-          onClick={() => handleOnClick(Status.Completed)}
-        >
-          Completed
-        </a>
+        {filterButtons.map(({ address, name }) => (
+          <a
+            key={name}
+            href={address}
+            className={classNames(
+              'filter__link',
+              { selected: name === status },
+            )}
+            data-cy={`FilterLink${name}`}
+            onClick={() => handleOnClick(name)}
+          >
+            {name}
+          </a>
+        ))}
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       {!areAllActiveTodos && (
         <button
           type="button"

@@ -1,4 +1,4 @@
-import { Todo } from '../types/Todo';
+import { Status, Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
 export const getTodos = (userId: number) => {
@@ -6,3 +6,16 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+
+export const getVisibleTodos = (todos: Todo[], filter: Status) => {
+  switch (filter) {
+    case 'Completed':
+      return [...todos].filter(todo => todo.completed);
+
+    case 'Active':
+      return [...todos].filter(todo => !todo.completed);
+
+    default:
+      return todos;
+  }
+};
