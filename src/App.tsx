@@ -16,11 +16,11 @@ const preparedTodos = (todosList: Todo[], selectedFilter: Filter): Todo[] => {
   let filteredTodos = [...todosList];
 
   switch (selectedFilter) {
-    case 'Active':
+    case Filter.Active:
       filteredTodos = todosList.filter(todo => !todo.completed);
       break;
 
-    case 'Completed':
+    case Filter.Completed:
       filteredTodos = todosList.filter(todo => todo.completed);
       break;
     default:
