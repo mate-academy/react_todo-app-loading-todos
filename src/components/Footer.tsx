@@ -10,14 +10,12 @@ export const Footer = () => {
 
   const filteredStatus = Object.values(FilterStatus);
 
-  const completedTodosCount = todos?.filter(
+  const completedTodosCount = todos.filter(
     todo => todo.completed,
   )
-    .length;
+    .length || 0;
 
-  const unCompletedTodosCount = todos && completedTodosCount
-    ? todos.length - completedTodosCount
-    : todos?.length;
+  const unCompletedTodosCount = todos.length - completedTodosCount;
 
   const clearCompletedTodos = () => {
 
