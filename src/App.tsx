@@ -8,21 +8,37 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoError } from './components/TodoError/TodoError';
 import { Errors } from './types/Errors';
+import { Filter } from './types/Filter';
 
 const USER_ID = 10236;
 
+const preparedTodos = (todosList: Todo[], selectedFilter: Filter): Todo[] => {
+  let filteredTodos = [...todosList];
+
+  switch (selectedFilter) {
+    case 'Active':
+      filteredTodos = todosList.filter(todo => !todo.completed);
+      break;
+
+    case 'Completed':
+      filteredTodos = todosList.filter(todo => todo.completed);
+      break;
+    default:
+      break;
+  }
+
+  return filteredTodos;
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const [filterStatus, setFilterStatus] = useState<Filter>(Filter.All);
   const [errorType, setErrorType] = useState<Errors | null>(null);
-
-  // const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(response => {
         setTodos(response);
-        setVisibleTodos(response);
       })
       .catch((error) => {
         throw error;
@@ -35,6 +51,8 @@ export const App: React.FC = () => {
 
   const isThereCompleted = todos.some(todo => todo.completed);
 
+  const filteredTodos = preparedTodos(todos, filterStatus);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -43,7 +61,7 @@ export const App: React.FC = () => {
         <TodoHeader />
 
         <TodoList
-          todos={visibleTodos}
+          todos={filteredTodos}
           setErrorType={setErrorType}
         />
 
@@ -51,7 +69,8 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <TodoFooter
             todos={todos}
-            setTodos={setVisibleTodos}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
             isCompleted={isThereCompleted}
           />
         )}

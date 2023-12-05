@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
 
 type Props = {
   todos: Todo[],
-  setTodos: (todos: Todo[]) => void,
+  setFilterStatus: (filter: Filter) => void,
   isCompleted: boolean,
+  filterStatus: Filter,
 };
 
 export const TodoFooter: React.FC<Props> = ({
   todos,
-  setTodos,
+  setFilterStatus,
   isCompleted,
+  filterStatus,
 }) => {
-  const [filterStatus, setFilterStatus] = useState<Filter>(Filter.All);
-
   const activeTodos = [...todos].filter(todo => !todo.completed);
-  const completedTodos = [...todos].filter(todo => todo.completed);
 
   const handleOnClick = (status: Filter) => {
     switch (status) {
       case 'Active':
-        setTodos(activeTodos);
         setFilterStatus(Filter.Active);
         break;
 
       case 'Completed':
-        setTodos(completedTodos);
         setFilterStatus(Filter.Completed);
         break;
       default:
-        setTodos(todos);
         setFilterStatus(Filter.All);
         break;
     }

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import cn from 'classnames';
 import { Errors } from '../../types/Errors';
 
 type Props = {
@@ -10,10 +11,17 @@ export const TodoError: React.FC<Props> = ({
   errorType,
   setErrorType,
 }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setErrorType(null);
+    }, 3000);
+  }, [setErrorType]);
+
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={cn('notification is-danger is-light has-text-weight-normal',
+        { hidden: errorType === null })}
     >
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
