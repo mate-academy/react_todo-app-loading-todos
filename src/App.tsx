@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
-import { Filter } from './components/Filter';
+import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { FilterType, Footer } from './components/Footer';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-
-export type FilterType = 'all' | 'active' | 'completed';
 
 const USER_ID = 12004;
 
@@ -41,12 +39,16 @@ export const App: React.FC = () => {
   const filtering = (qu: FilterType) => {
     setQuery(qu);
     if (todos) {
-      if (qu === 'active') {
-        setFilteredTodos(todos.filter((el) => !el.completed));
-      } else if (qu === 'completed') {
-        setFilteredTodos(todos.filter((el) => el.completed));
-      } else {
-        setFilteredTodos(todos);
+      switch (qu) {
+        case 'active':
+          setFilteredTodos(todos.filter((el) => !el.completed));
+          break;
+        case 'completed':
+          setFilteredTodos(todos.filter((el) => el.completed));
+          break;
+        default:
+          setFilteredTodos(todos);
+          break;
       }
     }
   };
@@ -67,7 +69,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Filter />
+        <Header />
         {filteredTodos && (<TodoList todos={filteredTodos} />)}
         {todos && todos?.length > 0 && (
           <Footer
