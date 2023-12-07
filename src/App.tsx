@@ -29,7 +29,7 @@ export const App: React.FC = () => {
   }, []);
 
   useMemo(() => {
-    let t = todos;
+    let copyTodos = todos;
 
     switch (filter) {
       case Filter.Active:
@@ -76,10 +76,14 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <div
-              data-cy="Todo"
-              className={classNames('todo', { completed: todo.completed })}
+           {visibleTodos.map(todo => (
+        <div
+            key={todo.id}  
+            data-cy="Todo"
+            className={classNames('todo', { completed: todo.completed })}
+            >
+        </div>
+
             >
               <label className="todo__status-label">
                 <input
@@ -102,9 +106,6 @@ export const App: React.FC = () => {
                 ×
               </button>
 
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
               </div>
             </div>
           ))}
