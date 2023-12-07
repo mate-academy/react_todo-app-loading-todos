@@ -8,23 +8,23 @@ export type TodoListProps = {
 export const TodoList = ({ todos }: TodoListProps) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map((todo => (
+      {todos.map((({ id, completed, title }) => (
         <div
           data-cy="Todo"
-          className={classNames('todo', { completed: todo.completed })}
-          key={todo.id}
+          className={classNames('todo', { completed })}
+          key={id}
         >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
+              checked={completed}
             />
           </label>
 
           <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
+            {title}
           </span>
 
           <button type="button" className="todo__remove" data-cy="TodoDelete">
