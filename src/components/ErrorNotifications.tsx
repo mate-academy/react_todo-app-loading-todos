@@ -36,6 +36,9 @@ export const ErrorNotifications: React.FC<Props> = ({
     setIsHidden(true);
   };
 
+  const certainErrorMaessage
+    = errorMessages.filter(message => message.error === errorType)[0].message;
+
   return (
     <div
       data-cy="ErrorNotification"
@@ -50,10 +53,7 @@ export const ErrorNotifications: React.FC<Props> = ({
         className="delete"
         onClick={handleDelete}
       />
-      {errorMessages.filter(message => message.error === errorType)
-        .map(message => (
-          message.message
-        ))}
+      {certainErrorMaessage}
     </div>
   );
 };
