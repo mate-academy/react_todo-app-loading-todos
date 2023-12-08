@@ -38,7 +38,6 @@ export const TodoFooter: React.FC<Props> = ({
         {`${activeTodos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -74,7 +73,6 @@ export const TodoFooter: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       {isCompleted && (
         <button
           type="button"
