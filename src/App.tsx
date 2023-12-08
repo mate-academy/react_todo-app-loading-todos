@@ -2,17 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { FilterType, Footer } from './components/Footer';
+import { Footer } from './components/Footer';
 import { ErrorMessage } from './components/ErrorMessage';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { FilterType } from './types/FilterType';
 
 const USER_ID = 12004;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [filteredTodos, setFilteredTodos] = useState<Todo[] | null>(null);
-  const [query, setQuery] = useState<FilterType>('all');
+  const [query, setQuery] = useState<FilterType>(FilterType.All);
   const [errorText, setErrorText] = useState<string>('');
 
   const getTodosList = async () => {
@@ -36,14 +37,13 @@ export const App: React.FC = () => {
     }, 3000);
   }, [errorText]);
 
-  const filtering = (qu: FilterType) => {
-    setQuery(qu);
+  useEffect(() => {
     if (todos) {
-      switch (qu) {
-        case 'active':
+      switch (query) {
+        case FilterType.Active:
           setFilteredTodos(todos.filter((el) => !el.completed));
           break;
-        case 'completed':
+        case FilterType.Completed:
           setFilteredTodos(todos.filter((el) => el.completed));
           break;
         default:
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
           break;
       }
     }
-  };
+  }, [query, todos]);
 
   const leftItems = (): number => {
     if (todos) {
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
         {filteredTodos && (<TodoList todos={filteredTodos} />)}
         {todos && todos?.length > 0 && (
           <Footer
-            filtering={filtering}
+            setQuery={setQuery}
             leftItems={leftItems}
             query={query}
           />

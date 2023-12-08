@@ -1,14 +1,13 @@
 import classNames from 'classnames';
-
-export type FilterType = 'all' | 'active' | 'completed';
+import { FilterType } from '../types/FilterType';
 
 export type FooterProps = {
-  filtering: (queru: FilterType) => void
+  setQuery: (queru: FilterType) => void
   leftItems: () => number
   query: FilterType
 };
 
-export const Footer = ({ filtering, leftItems, query }: FooterProps) => {
+export const Footer = ({ setQuery, leftItems, query }: FooterProps) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -21,7 +20,7 @@ export const Footer = ({ filtering, leftItems, query }: FooterProps) => {
           href="#/"
           className={classNames('filter__link', { selected: query === 'all' })}
           data-cy="FilterLinkAll"
-          onClick={() => filtering('all')}
+          onClick={() => setQuery(FilterType.All)}
         >
           All
         </a>
@@ -31,7 +30,7 @@ export const Footer = ({ filtering, leftItems, query }: FooterProps) => {
           className={classNames('filter__link',
             { selected: query === 'active' })}
           data-cy="FilterLinkActive"
-          onClick={() => filtering('active')}
+          onClick={() => setQuery(FilterType.Active)}
         >
           Active
         </a>
@@ -41,7 +40,7 @@ export const Footer = ({ filtering, leftItems, query }: FooterProps) => {
           className={classNames('filter__link',
             { selected: query === 'completed' })}
           data-cy="FilterLinkCompleted"
-          onClick={() => filtering('completed')}
+          onClick={() => setQuery(FilterType.Completed)}
         >
           Completed
         </a>
