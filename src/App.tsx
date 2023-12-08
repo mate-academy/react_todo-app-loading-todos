@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { getTodos } from './api/todos';
@@ -25,7 +24,7 @@ export const App: React.FC = () => {
 
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setTodoError(Error.LoadTodosError));
+      .catch(() => setTodoError(Error.LoadTodos));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -54,15 +53,15 @@ export const App: React.FC = () => {
         <TodoHeader />
 
         {!!todos.length && (
-          <TodoList todos={filteredTodos} />
-        )}
+          <div className="wrapper">
+            <TodoList todos={filteredTodos} />
 
-        {!!todos.length && (
-          <TodoFooter
-            todos={todos}
-            todoFilter={todoFilter}
-            setTodoFilter={setTodoFilter}
-          />
+            <TodoFooter
+              todos={todos}
+              todoFilter={todoFilter}
+              setTodoFilter={setTodoFilter}
+            />
+          </div>
         )}
       </div>
 

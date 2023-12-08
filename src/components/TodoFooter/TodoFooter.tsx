@@ -15,8 +15,8 @@ export const TodoFooter: React.FC<Props> = ({
   todoFilter,
   setTodoFilter,
 }) => {
-  const activeTodosCount = (
-    `${todos.filter(todo => !todo.completed).length} items left`
+  const activeTodos = (
+    todos.filter(todo => !todo.completed)
   );
 
   const hasCompletedTodos = todos.some(todo => todo.completed);
@@ -30,10 +30,9 @@ export const TodoFooter: React.FC<Props> = ({
         className="todo-count"
         data-cy="TodosCounter"
       >
-        {activeTodosCount}
+        {`${activeTodos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav
         className="filter"
         data-cy="Filter"
