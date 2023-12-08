@@ -24,7 +24,7 @@ const preparedTodos = (todosList: Todo[], selectedFilter: Filter): Todo[] => {
       filteredTodos = todosList.filter(todo => todo.completed);
       break;
     default:
-      break;
+      return todosList;
   }
 
   return filteredTodos;
@@ -37,19 +37,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(response => {
-        setTodos(response);
-      })
-      .catch((error) => {
-        throw error;
-      });
+      .then(setTodos)
+      .catch(() => setErrorType(Error.Load));
   }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const isThereCompleted = todos.some(todo => todo.completed);
 
   const filteredTodos = preparedTodos(todos, filterStatus);
 
@@ -65,27 +59,21 @@ export const App: React.FC = () => {
           setErrorType={setErrorType}
         />
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length !== 0 && (
+        {!todos.length && (
           <TodoFooter
             todos={todos}
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
-            isCompleted={isThereCompleted}
           />
         )}
-
       </div>
 
-      {/* Notification is shown in case of any error */}
       {errorType && (
         <TodoError
           errorType={errorType}
           setErrorType={setErrorType}
         />
       )}
-
-      {/* Add the 'hidden' class to hide the message smoothly */}
     </div>
   );
 };

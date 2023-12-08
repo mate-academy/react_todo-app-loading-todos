@@ -31,7 +31,7 @@ export const TodoError: React.FC<Props> = ({
         onClick={() => setErrorType(null)}
       />
       {/* show only one message at a time */}
-      {`${errorType}`}
+      {errorType}
     </div>
   );
 };

@@ -6,17 +6,16 @@ import { Filter } from '../../types/Filter';
 type Props = {
   todos: Todo[],
   setFilterStatus: (filter: Filter) => void,
-  isCompleted: boolean,
   filterStatus: Filter,
 };
 
 export const TodoFooter: React.FC<Props> = ({
   todos,
   setFilterStatus,
-  isCompleted,
   filterStatus,
 }) => {
   const activeTodos = [...todos].filter(todo => !todo.completed);
+  const isCompleted = todos.some(todo => todo.completed);
 
   const handleOnClick = (status: Filter) => {
     switch (status) {
