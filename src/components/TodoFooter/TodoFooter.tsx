@@ -20,11 +20,11 @@ export const TodoFooter: React.FC<Props> = ({
 
   const handleOnClick = (status: Filter) => {
     switch (status) {
-      case 'Active':
+      case Filter.Active:
         setFilterStatus(Filter.Active);
         break;
 
-      case 'Completed':
+      case Filter.Completed:
         setFilterStatus(Filter.Completed);
         break;
       default:
@@ -44,7 +44,7 @@ export const TodoFooter: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: filterStatus === 'All',
+            selected: filterStatus === Filter.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => handleOnClick(Filter.All)}
@@ -55,7 +55,7 @@ export const TodoFooter: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: filterStatus === 'Active',
+            selected: filterStatus === Filter.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => handleOnClick(Filter.Active)}
@@ -66,7 +66,7 @@ export const TodoFooter: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: filterStatus === 'Completed',
+            selected: filterStatus === Filter.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => handleOnClick(Filter.Completed)}
