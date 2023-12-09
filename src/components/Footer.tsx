@@ -1,14 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
-import { ErrorContext } from './ErrorsContext';
 
 type Props = {
   todos: Todo[];
 };
 export const Footer : React.FC<Props> = ({ todos }) => {
-  const [isActiv, setIsActiv] = useState('All');
-  const { setIsError } = useContext(ErrorContext);
+  const [filter, setFilter] = useState('All');
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -21,11 +19,10 @@ export const Footer : React.FC<Props> = ({ todos }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={cn('filter__link', { selected: isActiv === 'All' })}
+          className={cn('filter__link', { selected: filter === 'All' })}
           data-cy="FilterLinkAll"
           onMouseDown={() => {
-            setIsActiv('All');
-            setIsError(true);
+            setFilter('All');
           }}
         >
           All
@@ -33,11 +30,10 @@ export const Footer : React.FC<Props> = ({ todos }) => {
 
         <a
           href="#/active"
-          className={cn('filter__link', { selected: isActiv === 'Active' })}
+          className={cn('filter__link', { selected: filter === 'Active' })}
           data-cy="FilterLinkActive"
           onMouseDown={() => {
-            setIsError(true);
-            setIsActiv('Active');
+            setFilter('Active');
           }}
         >
           Active
@@ -45,11 +41,10 @@ export const Footer : React.FC<Props> = ({ todos }) => {
 
         <a
           href="#/completed"
-          className={cn('filter__link', { selected: isActiv === 'Completed' })}
+          className={cn('filter__link', { selected: filter === 'Completed' })}
           data-cy="FilterLinkCompleted"
           onMouseDown={() => {
-            setIsError(true);
-            setIsActiv('Completed');
+            setFilter('Completed');
           }}
         >
           Completed
@@ -63,9 +58,6 @@ export const Footer : React.FC<Props> = ({ todos }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onMouseDown={() => {
-          setIsError(true);
-        }}
       >
         Clear completed
       </button>

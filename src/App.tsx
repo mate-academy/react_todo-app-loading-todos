@@ -9,13 +9,11 @@ import { Footer } from './components/Footer';
 import { ErrorContext, ErrorsMessageContext } from './components/ErrorsContext';
 import { ShowErrorsMessage } from './utils/fetchClient';
 
-// import { UserWarning } from './UserWarning';
-
 const USER_ID = 11969;
 
 // 11969
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | undefined>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const { isError, setIsError } = useContext(ErrorContext);
   const { errorsMesage, setErrorsMesage } = useContext(ErrorsMessageContext);
 
@@ -23,7 +21,6 @@ export const App: React.FC = () => {
     getTodos(USER_ID)
       .then((data) => {
         setTodos(data);
-        setIsError(true);
       })
       .catch(() => {
         setIsError(false);
@@ -39,8 +36,7 @@ export const App: React.FC = () => {
         <Header todos={todos} />
         <TodoList />
 
-        {(todos !== undefined && todos?.length > 0)
-        && (
+        {(todos.length > 0) && (
           <Footer todos={todos} />
         )}
 

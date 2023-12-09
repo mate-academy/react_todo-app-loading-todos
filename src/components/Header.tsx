@@ -14,7 +14,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
 
   return (
     <header className="todoapp__header">
-      {todos?.length ? (
+      {todos?.length && (
         // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <button
           type="button"
@@ -23,10 +23,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
           })}
           data-cy="ToggleAllButton"
         />
-      ) : (
-        ''
-      )}
-
+      ) }
       {/* Add a todo on form submit */}
       <form
         onSubmit={(e) => {
