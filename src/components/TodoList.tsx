@@ -1,12 +1,24 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 
-type Props = {
+type TodoListProps = {
   todos: Todo[],
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+  const [isLoaderShow, setIsLoaderShow] = useState(true);
+
+  useEffect(() => {
+    setIsLoaderShow(false);
+
+    if (todos.length) {
+      setIsLoaderShow(true);
+    }
+  }, [todos]);
+
+  const handleTodoStatusChange = () => {};
+
   return (
     <>
       {!!todos && (
@@ -28,7 +40,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                     type="checkbox"
                     className="todo__status"
                     checked={completed}
-                    onChange={() => {}}
+                    onChange={handleTodoStatusChange}
                   />
                 </label>
 
@@ -36,7 +48,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   {title}
                 </span>
 
-                {/* Remove button appears only on hover */}
                 <button
                   type="button"
                   className="todo__remove"
@@ -45,11 +56,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   ×
                 </button>
 
-                {/* overlay will cover the todo while it is being updated */}
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
+                {isLoaderShow && (
+                  <div data-cy="TodoLoader" className="modal overlay">
+                    <div
+                      className="modal-background has-background-white-ter"
+                    />
+                    <div className="loader" />
+                  </div>
+                )}
               </div>
             );
           })}

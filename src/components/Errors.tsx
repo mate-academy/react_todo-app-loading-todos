@@ -2,12 +2,12 @@
 import classNames from 'classnames';
 import React from 'react';
 
-type Props = {
+type ErrorsProps = {
   error: string,
-  setError: (error: string) => void,
+  setError: () => void,
 };
 
-export const Errors: React.FC<Props> = ({ error, setError }) => {
+export const Errors: React.FC<ErrorsProps> = ({ error, setError }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -22,9 +22,9 @@ export const Errors: React.FC<Props> = ({ error, setError }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={() => setError}
       />
-      {error}
+      <p>{error}</p>
     </div>
   );
 };

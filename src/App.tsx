@@ -49,7 +49,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList todos={filteredTodos} />
-        {todos.length && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             filteredTodoList={setFilteredTodos}
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {!!todos && <Errors error={error} setError={setError} />}
+      {!!todos && <Errors error={error} setError={() => setError} />}
     </div>
   );
 };

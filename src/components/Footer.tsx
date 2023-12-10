@@ -8,12 +8,12 @@ enum Filter {
   Completed = 'completed',
 }
 
-type Props = {
+type FooterProps = {
   todos: Todo[],
   filteredTodoList: (todos: Todo[]) => void,
 };
 
-export const Footer: React.FC<Props> = ({ todos, filteredTodoList }) => {
+export const Footer: React.FC<FooterProps> = ({ todos, filteredTodoList }) => {
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
   const handleFilterClick = (selectedFilter: Filter) => {

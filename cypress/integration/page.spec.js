@@ -111,7 +111,8 @@ Cypress.on('fail', (e) => {
   throw e;
 });
 
-describe.skip('', () => {
+// describe.skip('', () => {
+describe('', () => {
   beforeEach(() => {
     // if (failed) Cypress.runner.stop();
   });
