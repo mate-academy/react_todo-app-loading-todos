@@ -3,7 +3,6 @@ import { Action } from '../types/Action';
 
 export const stateReducer = (state: State, action: Action): State => {
   let todos = [...state.todos];
-  let filteredTodos = [...state.filteredTodos];
 
   switch (action.type) {
     case 'setTodos':
@@ -12,14 +11,6 @@ export const stateReducer = (state: State, action: Action): State => {
       return {
         ...state,
         todos,
-      };
-
-    case 'setFilteredTodos':
-      filteredTodos = [...action.payload];
-
-      return {
-        ...state,
-        filteredTodos,
       };
 
     case 'addTodo':

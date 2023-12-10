@@ -18,7 +18,7 @@ import { Filter, FilterTitles } from './types/Filter';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, filteredTodos, filter } = useContext(StateContext);
+  const { todos, filter } = useContext(StateContext);
 
   const filterTodos = useCallback((
     todosToFilter: Todo[],
@@ -52,20 +52,9 @@ export const App: React.FC = () => {
           type: 'setTodos',
           payload: todosFromServer,
         });
-        dispatch({
-          type: 'setFilteredTodos',
-          payload: todosFromServer,
-        });
       })
       .catch(handleLoadTodosError);
   }, [dispatch, handleLoadTodosError]);
-
-  useEffect(() => {
-    dispatch({
-      type: 'setFilteredTodos',
-      payload: filterTodos(todos, filter),
-    });
-  }, [dispatch, filterTodos, todos, filter]);
 
   return (
     <div className="todoapp">
@@ -74,7 +63,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        <TodoList todos={filteredTodos} />
+        <TodoList todos={filterTodos(todos, filter)} />
 
         {todos.length > 0 && (
           <TodoFooter />
