@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import cn from 'classnames';
+import { DispatchContext, StateContext } from '../../Store';
 
-type Props = {
-  errorMessage: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
-};
+export const ErrorNotification: React.FC = () => {
+  const dispatch = useContext(DispatchContext);
+  const { error } = useContext(StateContext);
 
-export const ErrorNotification: React.FC<Props> = ({
-  errorMessage,
-  setErrorMessage,
-}) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -18,7 +14,7 @@ export const ErrorNotification: React.FC<Props> = ({
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !errorMessage },
+        { hidden: !error },
       )}
     >
       <button
@@ -26,10 +22,10 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         aria-label="Hide error"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => dispatch({ type: 'setError', payload: '' })}
       />
 
-      {errorMessage}
+      {error}
     </div>
   );
 };

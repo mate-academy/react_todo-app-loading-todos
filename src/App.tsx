@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 
 import { DispatchContext, StateContext } from './Store';
 
 import { getTodos } from './api/todos';
-import { filterTodos } from './services/filterTodos';
 
 import { USER_ID } from './lib/user';
 
@@ -13,37 +12,60 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification';
 
-import { Todo } from './types/Todo';
 import { Error } from './types/Error';
+import { Todo } from './types/Todo';
+import { Filter, FilterTitles } from './types/Filter';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { todos, filter } = useContext(StateContext);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { todos, filteredTodos, filter } = useContext(StateContext);
 
-  const handleError = (error: Error) => {
-    setErrorMessage(error);
+  const filterTodos = useCallback((
+    todosToFilter: Todo[],
+    currentFilter: Filter,
+  ) => {
+    switch (currentFilter.title) {
+      case FilterTitles.All:
+      default:
+        return todosToFilter;
+
+      case FilterTitles.Active:
+        return todosToFilter.filter(todo => !todo.completed);
+
+      case FilterTitles.Completed:
+        return todosToFilter.filter(todo => todo.completed);
+    }
+  }, []);
+
+  const handleLoadTodosError = useCallback(() => {
+    dispatch({ type: 'setError', payload: Error.LoadTodosError });
     setTimeout(() => {
-      setErrorMessage('');
+      dispatch({ type: 'setError', payload: '' });
     }, 3000);
-  };
+  }, [dispatch]);
 
   useEffect(() => {
+    dispatch({ type: 'setError', payload: '' });
     getTodos(USER_ID)
       .then(todosFromServer => {
         dispatch({
           type: 'setTodos',
           payload: todosFromServer,
         });
-        setFilteredTodos(todosFromServer);
+        dispatch({
+          type: 'setFilteredTodos',
+          payload: todosFromServer,
+        });
       })
-      .catch(() => handleError(Error.LoadTodosError));
-  }, [dispatch]);
+      .catch(handleLoadTodosError);
+  }, [dispatch, handleLoadTodosError]);
 
   useEffect(() => {
-    setFilteredTodos(() => filterTodos(todos, filter));
-  }, [todos, filter]);
+    dispatch({
+      type: 'setFilteredTodos',
+      payload: filterTodos(todos, filter),
+    });
+  }, [dispatch, filterTodos, todos, filter]);
 
   return (
     <div className="todoapp">
@@ -59,10 +81,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorNotification />
     </div>
   );
 };

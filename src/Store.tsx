@@ -8,7 +8,9 @@ const defaultDispatch: React.Dispatch<Action> = () => {};
 
 const initialState: State = {
   todos: [],
+  filteredTodos: [],
   filter: filters[0],
+  error: '',
 };
 
 export const DispatchContext = React.createContext(defaultDispatch);

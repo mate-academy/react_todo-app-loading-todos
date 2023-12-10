@@ -7,7 +7,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
 };
-export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
   const dispatch = useContext(DispatchContext);
   const [isLoading] = useState(false);
@@ -44,4 +44,4 @@ export const TodoItem: React.FC<Props> = React.memo(({ todo }) => {
       <TodoLoader isLoading={isLoading} />
     </div>
   );
-});
+};
