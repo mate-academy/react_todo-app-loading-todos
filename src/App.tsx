@@ -12,7 +12,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(Filter.All);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]); // Initialize with an empty array
   const activeTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
@@ -28,28 +28,29 @@ export const App: React.FC = () => {
       });
   }, []);
 
-const filteredTodos = useMemo(() => {
-  let copyTodos = [...todos];
+  useEffect(() => {
+    // Use filteredTodos instead of 't'
+    setVisibleTodos(filteredTodos);
+  }, [filter, todos, filteredTodos]); // Include filteredTodos in the dependency array
 
-  switch (filter) {
-    case Filter.Active:
-      copyTodos = copyTodos.filter(todo => !todo.completed);
-      break;
+  const filteredTodos = useMemo(() => {
+    let copyTodos = [...todos];
 
-    case Filter.Completed:
-      copyTodos = copyTodos.filter(todo => todo.completed);
-      break;
-      
-    default:
-      break;
-  }
+    switch (filter) {
+      case Filter.Active:
+        copyTodos = copyTodos.filter(todo => !todo.completed);
+        break;
 
-  return copyTodos;
-}, [todos, filter]);
+      case Filter.Completed:
+        copyTodos = copyTodos.filter(todo => todo.completed);
+        break;
 
+      default:
+        break;
+    }
 
-    setVisibleTodos(t);
-  }, [filter, todos]);
+    return copyTodos;
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -192,3 +193,4 @@ const filteredTodos = useMemo(() => {
     </div>
   );
 };
+
