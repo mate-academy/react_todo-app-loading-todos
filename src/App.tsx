@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
-import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer';
 import { prepareTodos } from './helpers';
 import { Header } from './components/Header';
 import { ErrorType } from './types/ErrorType';
 import { ErrorNotification } from './components/ErrorNotification';
-import { Status } from './types/Status';
 import { TodoList } from './components/TodoList';
+import { AppContext } from './AppContext';
 
 const USER_ID = 11855;
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState(Status.all);
   const [error, setError] = useState<ErrorType | null>(null);
+
+  const {
+    todos,
+    setTodos,
+    status,
+    setStatus,
+  } = useContext(AppContext);
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -23,10 +33,15 @@ export const App: React.FC = () => {
       .catch(() => setError(ErrorType.cantLoadTodos));
   }, []);
 
-  const todosOnPage = prepareTodos({
-    todos,
-    status,
-  });
+  const filterTodos = useCallback(() => {
+    return prepareTodos({
+      todos,
+      status,
+    });
+  }, [todos, status]);
+
+  const todosOnPage = useMemo(() => filterTodos(),
+    [filterTodos]);
 
   const itemsLeft = todos.filter(todo => (
     !todo.completed
