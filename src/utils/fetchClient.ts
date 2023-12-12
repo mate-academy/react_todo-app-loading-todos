@@ -52,7 +52,7 @@ export const ShowErrorsMessage = (message:string) => {
   const { setIsError } = useContext(ErrorContext);
   const setAndStartTimer = () => {
     setTimeout(() => {
-      setIsError(true);
+      setIsError(false);
     }, 3000);
   };
 

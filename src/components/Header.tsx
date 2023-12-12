@@ -4,13 +4,20 @@ import { Todo } from '../types/Todo';
 import { ErrorContext, ErrorsMessageContext } from './ErrorsContext';
 
 type Props = {
-  todos: Todo[] | undefined;
+  todos: Todo[];
 };
 
 export const Header: React.FC<Props> = ({ todos }) => {
   const { setErrorsMesage } = useContext(ErrorsMessageContext);
   const [value, setValue] = useState('');
   const { setIsError } = useContext(ErrorContext);
+  const addTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (value.length <= 0) {
+      setIsError(true);
+      setErrorsMesage('empty');
+    }
+  };
 
   return (
     <header className="todoapp__header">
@@ -24,15 +31,9 @@ export const Header: React.FC<Props> = ({ todos }) => {
           data-cy="ToggleAllButton"
         />
       ) }
-      {/* Add a todo on form submit */}
+
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (value.length <= 0) {
-            setIsError(false);
-            setErrorsMesage('empty');
-          }
-        }}
+        onSubmit={addTodo}
       >
         <input
           data-cy="NewTodoField"
@@ -40,7 +41,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           onMouseDown={() => {
-            setIsError(true);
+            setIsError(false);
           }}
           onChange={e => setValue(e.target.value)}
         />

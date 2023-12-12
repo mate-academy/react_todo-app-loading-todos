@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export const ErrorContext = React.createContext({
-  isError: true as boolean,
+  isError: false as boolean,
   setIsError: (() => {}) as React.Dispatch<React.SetStateAction<boolean>>,
 });
 export const ErrorsMessageContext = React.createContext({
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const ErrorContextProvider : React.FC<Props> = ({ children }) => {
-  const [isError, setIsError] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [errorsMesage, setErrorsMesage] = useState('load');
 
   return (

@@ -23,10 +23,11 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(() => {
-        setIsError(false);
+        setIsError(true);
         setErrorsMesage('load');
       });
-  }, [setErrorsMesage, setIsError]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="todoapp">
@@ -34,7 +35,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header todos={todos} />
-        <TodoList />
+        <TodoList todos={todos} />
 
         {(todos.length > 0) && (
           <Footer todos={todos} />
@@ -42,22 +43,19 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         // eslint-disable-next-line max-len
-        className={cn('notification is-danger is-light has-text-weight-normal', { hidden: isError })}
+        className={cn('notification is-danger is-light has-text-weight-normal', { hidden: !isError })}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
           onMouseDown={() => {
-            setIsError(true);
+            setIsError(false);
           }}
         />
-        {/* show only one message at a time */}
         {ShowErrorsMessage(errorsMesage)}
       </div>
     </div>
