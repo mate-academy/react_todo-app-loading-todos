@@ -28,21 +28,25 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useMemo(() => {
-    let copyTodos = [...todos];
+const filteredTodos = useMemo(() => {
+  let copyTodos = [...todos];
 
-    switch (filter) {
-      case Filter.Active:
-        t = t.filter(todo => !todo.completed);
-        break;
+  switch (filter) {
+    case Filter.Active:
+      copyTodos = copyTodos.filter(todo => !todo.completed);
+      break;
 
-      case Filter.Completed:
-        t = t.filter(todo => todo.completed);
-        break;
+    case Filter.Completed:
+      copyTodos = copyTodos.filter(todo => todo.completed);
+      break;
+      
+    default:
+      break;
+  }
 
-      default:
-        t = todos;
-    }
+  return copyTodos;
+}, [todos, filter]);
+
 
     setVisibleTodos(t);
   }, [filter, todos]);
