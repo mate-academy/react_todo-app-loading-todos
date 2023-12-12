@@ -29,9 +29,8 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Use filteredTodos instead of 't'
     setVisibleTodos(filteredTodos);
-  }, [filter, todos, filteredTodos]); // Include filteredTodos in the dependency array
+  }, [filter, todos, filteredTodos]);
 
   const filteredTodos = useMemo(() => {
     let copyTodos = [...todos];
@@ -81,13 +80,13 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-           {visibleTodos.map(todo => (
-        <div
-            key={todo.id}  
-            data-cy="Todo"
-            className={classNames('todo', { completed: todo.completed })}
-            >
-        </div>
+           {visibleTodos.map(({ id, completed, ....... }) => (
+             <div
+                key={id}  
+                data-cy="Todo"
+                className={classNames('todo', { completed: completed })}
+              >
+            </div>
 
             >
               const { completed } = todo;
@@ -102,7 +101,7 @@ export const App: React.FC = () => {
                 </label>
 
               <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
+                {title}
               </span>
 
               <button
