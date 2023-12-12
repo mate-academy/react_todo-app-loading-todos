@@ -29,7 +29,7 @@ export const App: React.FC = () => {
   }, []);
 
   useMemo(() => {
-    let copyTodos = todos;
+    let copyTodos = [...todos];
 
     switch (filter) {
       case Filter.Active:
@@ -85,14 +85,16 @@ export const App: React.FC = () => {
         </div>
 
             >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                />
-              </label>
+              const { completed } = todo;
+
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                    checked={completed}
+                  />
+                </label>
 
               <span data-cy="TodoTitle" className="todo__title">
                 {todo.title}
