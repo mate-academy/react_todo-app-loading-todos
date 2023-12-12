@@ -10,11 +10,13 @@ export const Header: React.FC<Props> = ({ isEveryCompleted }) => {
       <button
         type="button"
         className={cn(
-          'todoapp__toggle-all',
+          'todoapp__toggle-all text-invisible',
           { active: isEveryCompleted },
         )}
         data-cy="ToggleAllButton"
-      />
+      >
+        {' '}
+      </button>
 
       <form>
         <input

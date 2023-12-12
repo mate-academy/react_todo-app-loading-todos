@@ -13,10 +13,6 @@ import { TodoList } from './components/TodoList';
 const USER_ID = 11855;
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState(Status.all);
   const [error, setError] = useState<ErrorType | null>(null);
@@ -43,6 +39,10 @@ export const App: React.FC = () => {
   const isEveryCompleted = todosOnPage.every(
     todo => todo.completed,
   );
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
