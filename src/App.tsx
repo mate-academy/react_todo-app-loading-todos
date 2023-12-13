@@ -9,18 +9,20 @@ import { Header } from './components/ErrorMessage/Header/Header';
 import { TodoList } from './components/ErrorMessage/TodoList/TodoList';
 import { Footer } from './components/ErrorMessage/Footer/Footer';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
+import { TodoListState } from './types/TodoListState';
+import { Errors } from './types/Errors';
 
 const USER_ID = 12018;
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[] | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState<TodoListState>(TodoListState.All);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(response => setTodoList(response))
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(Errors.Load));
   }, []);
 
   const [activeTodos, completedTodos] = useMemo(() => {
@@ -38,10 +40,10 @@ export const App: React.FC = () => {
   const todoListToShow: Todo[] | null = useMemo(() => {
     if (todoList) {
       switch (filter) {
-        case 'completed':
+        case TodoListState.Completed:
           return todoList.filter(todo => !todo.completed);
 
-        case 'active':
+        case TodoListState.Active:
           return todoList.filter(todo => todo.completed);
 
         default:
@@ -76,7 +78,7 @@ export const App: React.FC = () => {
             activeTodos={activeTodos}
             completedTodos={completedTodos}
             filter={filter}
-            setFilter={(newFilter: string) => setFilter(newFilter)}
+            setFilter={setFilter}
           />
         )}
       </div>
@@ -88,11 +90,3 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
-/*
-  error hint for rest lessons
-  Title should not be empty
-  Unable to add a todo
-  Unable to delete a todo
-  Unable to update a todo
-*/

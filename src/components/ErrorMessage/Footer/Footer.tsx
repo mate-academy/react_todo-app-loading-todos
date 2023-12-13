@@ -1,11 +1,13 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { TodoListState } from '../../../types/TodoListState';
+
 interface FooterProps {
   activeTodos: number;
   completedTodos: number;
   filter: string;
-  setFilter: (newFilter: string) => void;
+  setFilter: (newFilter: TodoListState) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({
 }) => {
   const handleFilterClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
-    filterType: string,
+    filterType: TodoListState,
   ) => {
     event.preventDefault();
     setFilter(filterType);
@@ -35,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({
             selected: !filter,
           })}
           data-cy="FilterLinkAll"
-          onClick={(event) => handleFilterClick(event, '')}
+          onClick={(event) => handleFilterClick(event, TodoListState.All)}
         >
           All
         </a>
@@ -46,7 +48,7 @@ export const Footer: React.FC<FooterProps> = ({
             selected: filter === 'active',
           })}
           data-cy="FilterLinkActive"
-          onClick={(event) => handleFilterClick(event, 'active')}
+          onClick={(event) => handleFilterClick(event, TodoListState.Active)}
         >
           Active
         </a>
@@ -57,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({
             selected: filter === 'completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={(event) => handleFilterClick(event, 'completed')}
+          onClick={(event) => handleFilterClick(event, TodoListState.Completed)}
         >
           Completed
         </a>

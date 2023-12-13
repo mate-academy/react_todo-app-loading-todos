@@ -1,5 +1,7 @@
 import React from 'react';
 
+import cn from 'classnames';
+
 interface HeaderProps {
   activeTodos: number;
 }
@@ -9,15 +11,14 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       {/* eslint-disable jsx-a11y/control-has-associated-label */}
-      {activeTodos && (
-        <button
-          type="button"
-          className="todoapp__toggle-all active"
-          data-cy="ToggleAllButton"
-        />
-      )}
+      <button
+        type="button"
+        className={cn('todoapp__toggle-all', {
+          active: activeTodos,
+        })}
+        data-cy="ToggleAllButton"
+      />
 
       {/* Add a todo on form submit */}
       <form>
