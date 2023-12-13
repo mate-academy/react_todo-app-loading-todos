@@ -1,56 +1,31 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Todo } from '../types/Todo';
-import { ErrorContext, ErrorsMessageContext } from './ErrorsContext';
 import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[];
+  filter: string
 };
-export const TodoList : React.FC<Props> = ({ todos }) => {
-  const { setErrorsMesage } = useContext(ErrorsMessageContext);
+export const TodoList : React.FC<Props> = ({ todos, filter }) => {
+  const filteringTodo = () => {
+    switch (filter) {
+      case 'all':
+        return todos;
+      case 'Active':
+        return todos.filter(el => el.completed === false);
+      case 'Completed':
 
-  const { isError, setIsError } = useContext(ErrorContext);
-
-  const updateTodo = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isError) {
-      setIsError(false);
+        return todos.filter(el => el.completed === true);
+      default:
+        return todos;
     }
-
-    setIsError(true);
-    setErrorsMesage('update');
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => <TodoItem todo={todo} key={todo.id} />)}
-      <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
 
-        <form
-          onSubmit={updateTodo}
-        >
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
+      {filteringTodo().map(todo => <TodoItem todo={todo} key={todo.id} />)}
 
-          />
-        </form>
-
-        <div data-cy="TodoLoader" className="modal overlay">
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
     </section>
   );
 };

@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const { isError, setIsError } = useContext(ErrorContext);
   const { errorsMesage, setErrorsMesage } = useContext(ErrorsMessageContext);
+  const [filter, setFilter] = useState('All');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -35,18 +36,22 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header todos={todos} />
-        <TodoList todos={todos} />
+        <TodoList todos={todos} filter={filter} />
 
         {(todos.length > 0) && (
-          <Footer todos={todos} />
+          <Footer
+            todos={todos}
+            filter={filter}
+            setFilter={setFilter}
+          />
         )}
 
       </div>
 
       <div
         data-cy="ErrorNotification"
-        // eslint-disable-next-line max-len
-        className={cn('notification is-danger is-light has-text-weight-normal', { hidden: !isError })}
+        className={cn('notification is-danger is-light has-text-weight-normal',
+          { hidden: !isError })}
       >
         <button
           data-cy="HideErrorButton"

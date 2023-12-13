@@ -1,13 +1,14 @@
 /* eslint-disable max-len */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
+  filter:string;
+  setFilter : (filter: string) => void
 };
-export const Footer : React.FC<Props> = ({ todos }) => {
-  const [filter, setFilter] = useState('All');
+export const Footer : React.FC<Props> = ({ todos, filter, setFilter }) => {
   const noCompletedItems = useMemo(() => todos.filter(el => el.completed === false).length, [todos]);
 
   return (
