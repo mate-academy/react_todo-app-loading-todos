@@ -15,13 +15,13 @@ import { Errors } from './types/Errors';
 const USER_ID = 12018;
 
 export const App: React.FC = () => {
-  const [todoList, setTodoList] = useState<Todo[] | null>(null);
+  const [todoList, setTodoList] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<TodoListState>(TodoListState.All);
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then(response => setTodoList(response))
+      .then(setTodoList)
       .catch(() => setErrorMessage(Errors.Load));
   }, []);
 
@@ -38,20 +38,16 @@ export const App: React.FC = () => {
   }, [todoList]);
 
   const todoListToShow: Todo[] | null = useMemo(() => {
-    if (todoList) {
-      switch (filter) {
-        case TodoListState.Completed:
-          return todoList.filter(todo => !todo.completed);
+    switch (filter) {
+      case TodoListState.Completed:
+        return todoList.filter(todo => !todo.completed);
 
-        case TodoListState.Active:
-          return todoList.filter(todo => todo.completed);
+      case TodoListState.Active:
+        return todoList.filter(todo => todo.completed);
 
-        default:
-          return todoList;
-      }
+      default:
+        return todoList;
     }
-
-    return null;
   }, [todoList, filter]);
 
   if (!USER_ID) {
