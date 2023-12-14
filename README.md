@@ -1,7 +1,7 @@
 # React Todo App Load Todos
 
-It is the first part of the React Todo App with API. You will implement the
-final app step by step and use the result of this task in the next tasks.
+final app sIt is the first part of the React Todo App with API. You will implement the
+tep by step and use the result of this task in the next tasks.
 
 You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
@@ -47,4 +47,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://Anton-Kuchmasov.github.io/react_todo-app-loading-todos/) and add it to the PR description.
