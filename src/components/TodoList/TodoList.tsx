@@ -1,6 +1,6 @@
-import {FC} from 'react';
-import {Todo} from '../../types/Todo';
+import { FC } from 'react';
 import cn from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[],
@@ -12,15 +12,20 @@ export const TodoList: FC<Props> = (props) => {
   } = props;
 
   return (
-    <div>
+    <section className="todoapp__main" data-cy="TodoList">
+      {/* <section className="todoapp__main" data-cy="TodoList"> */}
       {todos.map(todo => (
-        <div data-cy="Todo" className={cn('todo', { 'completed': todo.completed })} key={todo.id}>
+        <div
+          data-cy="Todo"
+          className={cn('todo', { completed: todo.completed })}
+          key={todo.id}
+        >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
+              // checked
             />
           </label>
 
@@ -35,11 +40,11 @@ export const TodoList: FC<Props> = (props) => {
 
           {/* overlay will cover the todo while it is being updated */}
           <div data-cy="TodoLoader" className="modal overlay">
-            <div className="modal-background has-background-white-ter"/>
-            <div className="loader"/>
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 };
