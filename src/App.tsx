@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './components/UserWarning/UserWarning';
 import { client } from './utils/fetchClient';
@@ -9,6 +8,7 @@ import { Footer } from './components/Footer/Footer';
 import { Errors } from './components/Errors/Errors';
 import { Status } from './types/Status';
 import { ErrorSpec } from './types/ErrorSpec';
+import { filterTodos } from './helpers/filterTodos';
 
 const USER_ID = 12021;
 const ADDED_URL = `/todos?userId=${USER_ID}`;
@@ -41,18 +41,9 @@ export const App: React.FC = () => {
     setUncompletedTodosCount(completedCount);
   }, [todosFromServer, status]);
 
-  const filteredTodos = useMemo(() => {
-    switch (status) {
-      case Status.ACTIVE:
-        return todosFromServer.filter(todo => !todo.completed);
-
-      case Status.COMPLETED:
-        return todosFromServer.filter(todo => todo.completed);
-
-      default:
-        return todosFromServer;
-    }
-  }, [status, todosFromServer]);
+  const filteredTodos = useMemo(() => filterTodos(
+    todosFromServer, status,
+  ), [status, todosFromServer]);
 
   const handleStatus = (newStatus: Status) => {
     setStatus(newStatus);
@@ -76,8 +67,6 @@ export const App: React.FC = () => {
         <Header />
 
         {todosFromServer.length > 0 && <TodoList todos={filteredTodos} />}
-
-        {/* Hide the footer if there are no todos */}
         {todosFromServer.length > 0 && (
           <Footer
             onStatus={handleStatus}
@@ -89,8 +78,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       {hasErrors && <Errors error={error} />}
     </div>
   );
