@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import {FilterValue} from "../../types/FilterValue";
+import { FilterValue } from '../../types/FilterValue';
 
 interface Props {
   todos: Todo[],
