@@ -1,13 +1,30 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
+import React, { useEffect, useState } from 'react';
+// import { UserWarning } from './UserWarning';
+import { Todo } from './types/Todo';
+import { getTodos } from './api/todos';
+import { TodoList } from './components/TodoList';
 
-const USER_ID = 0;
+const USER_ID = 12037;
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  // if (!USER_ID) {
+  //   return <UserWarning />;
+  // }
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  // console.log(todos);
+
+  useEffect(
+    () => {
+      getTodos(USER_ID)
+        .then((dataFromServer) => {
+          setTodos(dataFromServer);
+        });
+    },
+    [],
+  );
 
   return (
     <div className="todoapp">
@@ -34,6 +51,10 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
+          <TodoList
+            todos={todos}
+          />
+
           {/* This is a completed todo */}
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
