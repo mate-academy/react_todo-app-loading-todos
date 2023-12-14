@@ -2,22 +2,24 @@ import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import { TodoList } from '../TodoList';
-import { getTodos } from '../../api/todos';
+import { getTodos, postTodo } from '../../api/todos';
 import { useTodosContext } from '../store';
 import { useUncomplitedTodos } from '../../helpers/useUncomplitedTodos';
 import { TodoFilter } from '../TodoFilter';
 import { useComplitedTodos } from '../../helpers/useComplitedTodos';
+import { ErrorOption } from '../../enum/ErrorOption';
 
 const USER_ID = 12027;
 
 export const TodoApp: React.FC = () => {
-  const { todos, reciveTodos } = useTodosContext();
+  const { addTodo, todos, recieveTodos } = useTodosContext();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [inputValue, setInputValue] = useState('');
   const [hasError, setHasError] = useState('');
 
-  const compTodosLength = useComplitedTodos().length;
-  const uncompTodosLength = useUncomplitedTodos().length;
+  const completedTodosLength = useComplitedTodos().length;
+  const uncompletedTodosLength = useUncomplitedTodos().length;
 
   const resetHasError = () => {
     setHasError('');
@@ -37,11 +39,36 @@ export const TodoApp: React.FC = () => {
 
     getTodos(USER_ID)
       .then(todosFS => {
-        reciveTodos(todosFS);
+        recieveTodos(todosFS);
       })
-      .catch(() => handlerErrors('Unable to load todos'))
+      .catch(() => handlerErrors(ErrorOption.RecivingError))
       .finally(() => setIsLoading(false));
-  }, [handlerErrors, reciveTodos]);
+  }, [handlerErrors, recieveTodos]);
+
+  const onSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (inputValue.trim() === '') {
+      handlerErrors(ErrorOption.TitleError);
+
+      return;
+    }
+
+    const newTodo = {
+      userId: USER_ID,
+      title: inputValue,
+      completed: false,
+    };
+
+    postTodo(newTodo)
+      .then(newTodoFS => {
+        addTodo(newTodoFS);
+      })
+      .catch(() => (
+        handlerErrors(ErrorOption.AddTodoError)
+      ))
+      .finally(() => setInputValue(''));
+  };
 
   return (
     <div className="todoapp">
@@ -49,7 +76,6 @@ export const TodoApp: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             aria-label="toggleAll"
@@ -57,11 +83,12 @@ export const TodoApp: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={onSubmitForm}>
             <input
               data-cy="NewTodoField"
               type="text"
+              value={inputValue}
+              onChange={event => setInputValue(event.target.value)}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
             />
@@ -72,7 +99,7 @@ export const TodoApp: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {`${uncompTodosLength} items left`}
+              {`${uncompletedTodosLength} items left`}
             </span>
 
             <TodoFilter />
@@ -81,7 +108,7 @@ export const TodoApp: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={compTodosLength === 0}
+              disabled={completedTodosLength === 0}
             >
               Clear completed
             </button>
@@ -103,7 +130,7 @@ export const TodoApp: React.FC = () => {
           aria-label="hideErrorBtn"
           type="button"
           className="delete"
-          onClick={() => resetHasError()}
+          onClick={resetHasError}
         />
         {hasError}
       </div>

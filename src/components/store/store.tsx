@@ -8,10 +8,13 @@ import React, {
 import { Todo } from '../../types/Todo';
 import { ProviderProps } from '../../types/ProviderProps';
 import { FilterOption } from '../../enum/FilterOption';
+import { useTodosFilter } from '../../helpers/useTodosFilter';
 
 type TodosContextType = {
   todos: Todo[],
-  reciveTodos: (newTodos: Todo[]) => void,
+  addTodo: (newTodo: Todo) => void;
+  removeTodo: (todoId: number) => void;
+  recieveTodos: (newTodos: Todo[]) => void,
   setFilterSelected: (filter: FilterOption) => void,
   filterSelected: FilterOption,
   filteredTodos: Todo[],
@@ -20,7 +23,9 @@ type TodosContextType = {
 
 const TodosContext = createContext<TodosContextType>({
   todos: [],
-  reciveTodos: () => {},
+  addTodo: () => {},
+  removeTodo: () => {},
+  recieveTodos: () => {},
   setFilterSelected: () => {},
   filterSelected: FilterOption.All,
   filteredTodos: [],
@@ -36,25 +41,22 @@ export const TodosContextProvider: React.FC<ProviderProps> = ({
     setFilterSelected,
   ] = useState<FilterOption>(FilterOption.All);
 
-  const reciveTodos = useCallback(
+  const recieveTodos = useCallback(
     (newTodos: Todo[]) => {
       setTodos(newTodos);
     },
     [],
   );
 
-  const filteredTodos = todos.filter(todo => {
-    switch (filterSelected) {
-      case FilterOption.Active:
-        return !todo.completed;
+  const filteredTodos = useTodosFilter({ todos, filterSelected });
 
-      case FilterOption.Completed:
-        return todo.completed;
+  const addTodo = (newTodo: Todo) => {
+    setTodos([...todos, newTodo]);
+  };
 
-      default:
-        return true;
-    }
-  });
+  const removeTodo = (todoId: number) => {
+    setTodos(todos.filter(todo => todo.id !== todoId));
+  };
 
   const toggleTodoCondition = (todoId: number) => {
     // some time ago i can implement status for 'allToggleBtn'
@@ -81,7 +83,9 @@ export const TodosContextProvider: React.FC<ProviderProps> = ({
 
   const TodosProviderValue: TodosContextType = {
     todos,
-    reciveTodos,
+    addTodo,
+    removeTodo,
+    recieveTodos,
     filteredTodos,
     filterSelected,
     setFilterSelected,
