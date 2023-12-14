@@ -12,29 +12,37 @@ const USER_ID = 12037;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState('all');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(
     () => {
+      setErrorMessage(null);
+
       getTodos(USER_ID)
         .then((dataFromServer) => {
           setTodos(dataFromServer);
+        })
+        .catch((error) => {
+          setErrorMessage(`Unable to load todos. Please try again. ${error}`);
+          // console.error(error);
         });
-    },
-    [],
+    }, [],
   );
 
   const todosToRender = useMemo(
     () => {
       return todos.filter(todo => {
-        const statusMatches
-          = filterValue === 'all'
+        return filterValue === 'all'
           || (filterValue === 'completed' ? todo.completed : !todo.completed);
-
-        return statusMatches;
       });
     },
     [todos, filterValue],
   );
+
+  const hideErrorMessage = () => {
+    // Hide error notification
+    setErrorMessage(null);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -59,12 +67,25 @@ export const App: React.FC = () => {
           />
         )}
       </div>
+
+      {errorMessage && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          {errorMessage}
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={hideErrorMessage}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-// { /* </div> */ }
-//
 // { /* /!* Notification is shown in case of any error *!/ */ }
 //
 // { /* /!* Add the 'hidden' class to hide the message smoothly *!/ */ }
