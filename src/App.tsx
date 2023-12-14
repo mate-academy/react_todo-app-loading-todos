@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
-import { client } from './utils/fetchClient';
+import * as postServices from './api/todos';
 import { Todos } from './api/components/todos';
 import { Footer } from './api/components/footer';
 import { Error } from './api/components/error';
 
-const USER_ID = '12030';
+const USER_ID = 12030;
 
 function getPreparedTodos(todos: Todo[], filter: string): Todo[] {
   const preparedTodos = todos.filter(todo => {
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   function loadTodos() {
     setLoading(true);
 
-    return client.get<Todo[]>(USER_ID)
+    return postServices.getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setErrorMessage('load');
@@ -73,14 +73,10 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  function addTodos() {
+  function addTodos({ userId, title, completed }: Todo) {
     // setLoading(true);
 
-    client.post<Todo>(USER_ID, {
-      userId: USER_ID,
-      title: newTodo,
-      completed: false,
-    })
+    postServices.addTodo({ userId, title, completed })
       .then(nTodo => {
         setTodos((curTodos) => [...curTodos, nTodo]);
         setNewTodo('');
@@ -95,7 +91,12 @@ export const App: React.FC = () => {
   const handleSabmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    addTodos();
+    addTodos({
+      id: 0,
+      userId: USER_ID,
+      title: newTodo,
+      completed: false,
+    });
   };
 
   const visibleTodos = getPreparedTodos(todos, filter);
@@ -141,7 +142,7 @@ export const App: React.FC = () => {
 
             <section className="todoapp__main" data-cy="TodoList">
               {visibleTodos.map(todo => (
-                <Todos todo={todo} />
+                <Todos todo={todo} key={todo.id} />
               ))}
             </section>
 

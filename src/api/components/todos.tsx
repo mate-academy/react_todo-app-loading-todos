@@ -9,7 +9,6 @@ export const Todos: React.FC<Props> = ({
   todo,
 }) => (
   <div
-    key={todo.id}
     data-cy="Todo"
     className={todo.completed
       ? 'todo completed'
