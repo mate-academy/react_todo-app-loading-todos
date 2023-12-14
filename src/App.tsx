@@ -18,13 +18,14 @@ export const App: React.FC = () => {
   const [hasErrors, setHasErrors] = useState(false);
   const [error, setError] = useState<ErrorSpec | null>(null);
   const [status, setStatus] = useState<Status>(Status.ALL);
-  const [hasCompleted, setHasCompleted] = useState(false);
+  const [uncompletedTodosCount, setUncompletedTodosCount] = useState<number>(0);
 
   useEffect(() => {
     client
       .get<Todo[]>(ADDED_URL)
       .then((todos) => {
         setTodosFromServer(todos);
+
         if (todos.length === 0) {
           setError(ErrorSpec.EMPTY_TITLE);
         }
@@ -32,11 +33,15 @@ export const App: React.FC = () => {
       .catch(() => setError(ErrorSpec.NOT_LOADED));
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    if (todosFromServer.some(todo => todo.completed)) {
-      setHasCompleted(true);
-    }
+  useEffect(() => {
+    const completedCount = todosFromServer.filter(
+      todo => !todo.completed,
+    ).length;
 
+    setUncompletedTodosCount(completedCount);
+  }, [todosFromServer, status]);
+
+  const filteredTodos = useMemo(() => {
     switch (status) {
       case Status.ACTIVE:
         return todosFromServer.filter(todo => !todo.completed);
@@ -54,7 +59,7 @@ export const App: React.FC = () => {
   };
 
   const clearCompleted = () => {
-    setHasCompleted(false);
+    setUncompletedTodosCount(0);
   };
 
   if (!USER_ID) {
@@ -75,11 +80,11 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {todosFromServer.length > 0 && (
           <Footer
-            todosLength={filteredTodos.length}
             onStatus={handleStatus}
             status={status}
-            hasCompletedTodos={hasCompleted}
+            completedCount={uncompletedTodosCount}
             handleClear={clearCompleted}
+            isClearNeeded={uncompletedTodosCount === filteredTodos.length}
           />
         )}
       </div>

@@ -2,24 +2,24 @@ import classNames from 'classnames';
 import { Status } from '../../types/Status';
 
 type Props = {
-  todosLength: number;
   onStatus: (status: Status) => void;
   status: Status;
-  hasCompletedTodos: boolean;
+  completedCount: number;
+  isClearNeeded: boolean;
   handleClear: () => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  todosLength,
   onStatus,
   status,
-  hasCompletedTodos,
+  completedCount,
   handleClear,
+  isClearNeeded,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todosLength} items left`}
+        {`${completedCount} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -64,7 +64,7 @@ export const Footer: React.FC<Props> = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         onClick={() => handleClear()}
-        disabled={!hasCompletedTodos}
+        disabled={isClearNeeded}
       >
         Clear completed
       </button>
