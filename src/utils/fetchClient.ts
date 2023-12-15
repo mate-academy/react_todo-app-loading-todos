@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+import { ErrorContext } from '../components/ErrorsContext';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
@@ -43,4 +46,34 @@ export const client = {
   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
+};
+
+export const ShowErrorsMessage = (message:string) => {
+  const { setIsError } = useContext(ErrorContext);
+  const setAndStartTimer = () => {
+    setTimeout(() => {
+      setIsError(false);
+    }, 3000);
+  };
+
+  switch (message) {
+    case 'load':
+      setAndStartTimer();
+
+      return 'Unable to load todos';
+    case 'empty':
+      setAndStartTimer();
+
+      return 'Title should not be empty Unable to add a todo';
+    case 'delete':
+      setAndStartTimer();
+
+      return 'Unable to delete a todo';
+    case 'update':
+      setAndStartTimer();
+
+      return 'Unable to update a todo';
+    default:
+      return 'Unable to load todos';
+  }
 };
