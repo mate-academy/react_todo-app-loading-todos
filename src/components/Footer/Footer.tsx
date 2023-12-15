@@ -13,15 +13,14 @@ export const Footer = ({
   selectedFilter,
   setSelectedFilter,
 }: Props) => {
-  const AmountOfTodosToComplete = todosFromServer.reduce(
-    (sum, todo) => sum + +!todo.completed,
-    0,
-  );
+  const incompleteTodosCount = todosFromServer
+    .filter(todo => !todo.completed)
+    .length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${AmountOfTodosToComplete} items left`}
+        {`${incompleteTodosCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">

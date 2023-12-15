@@ -14,6 +14,7 @@ import { TodoList } from './components/TodoList';
 import { ErrorType } from './types/ErrorType';
 import { FilterType } from './types/FilterType';
 import { Todo } from './types/Todo';
+import { filterTodos } from './helper';
 
 const USER_ID = 12017;
 
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
   );
   const [errorMsg, setErrorMsg] = useState<ErrorType | null>(null);
 
-  const errorFound = (error: ErrorType) => {
+  const showError = (error: ErrorType) => {
     setErrorMsg(error);
     setTimeout(() => setErrorMsg(null), 3000);
   };
@@ -32,31 +33,17 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodosFromServer)
-      .catch(() => errorFound(ErrorType.TodosNotLoaded));
+      .catch(() => showError(ErrorType.TodosNotLoaded));
   }, []);
 
-  const filterTodos = useCallback(
-    (todos: Todo[]) => {
-      switch (selectedFilter) {
-        case FilterType.All:
-          return todos;
-
-        case FilterType.Active:
-          return todos.filter(todo => !todo.completed);
-
-        case FilterType.Completed:
-          return todos.filter(todo => todo.completed);
-
-        default:
-          return todos;
-      }
-    },
+  const filteredTodos = useCallback(
+    filterTodos,
     [selectedFilter],
   );
 
   const todosToView = useMemo(
-    () => filterTodos(todosFromServer),
-    [filterTodos, todosFromServer],
+    () => filteredTodos(todosFromServer, selectedFilter),
+    [filteredTodos, todosFromServer, selectedFilter],
   );
 
   if (!USER_ID) {
