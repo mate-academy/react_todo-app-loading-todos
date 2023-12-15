@@ -13,16 +13,20 @@ export const Footer: React.FC<Props> = ({
   filterBy,
 }) => {
   const handleFilterChange = (filterType: string) => {
-    onFilter(filterType);
+    const updatedFilter = filterBy === filterType ? '' : filterType;
+
+    onFilter(updatedFilter);
   };
+
+  const hasActiveTodos = todos.filter(todo => !todo.completed);
+  const hasComletedTodo = todos.filter(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.length} items left`}
+        {`${hasActiveTodos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -58,15 +62,17 @@ export const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-        onClick={() => handleFilterChange('active')}
-      >
-        Clear completed
-      </button>
+      {hasComletedTodo.length
+        ? (
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            data-cy="ClearCompletedButton"
+            onClick={() => handleFilterChange('active')}
+          >
+            Clear completed
+          </button>
+        ) : null}
     </footer>
   );
 };

@@ -14,8 +14,9 @@ const USER_ID = 12036;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('all');
+  const [filterBy, setFilterBy] = useState('');
   const [errorType, setErorType] = useState<ErrorType | null>(null);
+  const [isErrorMessage, setIsErrorMessage] = useState(true);
 
   const preparedTodos = filteredTodoList(todos, filterBy);
 
@@ -58,9 +59,13 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-      <Errors
-        error={errorType}
-      />
+      {isErrorMessage
+        && (
+          <Errors
+            error={errorType}
+            onError={setIsErrorMessage}
+          />
+        )}
     </div>
   );
 };

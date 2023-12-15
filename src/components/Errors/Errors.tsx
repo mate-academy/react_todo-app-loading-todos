@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { ErrorType } from '../../types/ErorTypes';
 
 type Props = {
   error: ErrorType | null;
+  onError: (errors: boolean) => void;
 };
 
-export const Errors: React.FC<Props> = ({ error }) => {
-  const [isErrorMessage, setIsErrorMessage] = useState(true);
-
+export const Errors: React.FC<Props> = ({ error, onError }) => {
   const getErrorMessage = () => {
     switch (error) {
       case ErrorType.LoadError:
@@ -31,11 +29,11 @@ export const Errors: React.FC<Props> = ({ error }) => {
   };
 
   const handleHideMessage = () => {
-    setIsErrorMessage(false);
+    onError(false);
   };
 
   return (
-    isErrorMessage && error ? (
+    error ? (
       <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"

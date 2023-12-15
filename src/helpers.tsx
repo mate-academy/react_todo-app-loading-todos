@@ -1,6 +1,7 @@
 import { Todo } from './types/Todo';
 
 enum FilteredBy {
+  DefaultType = '',
   All = 'all',
   Active = 'active',
   Completed = 'completed',
