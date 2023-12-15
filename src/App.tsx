@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React,
 {
   useCallback, useEffect, useMemo, useState,
@@ -12,6 +11,7 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorType } from './types/ErrorType';
 import { ErrorInfo } from './components/ErrorInfo/ErrorInfo';
+import { filterTodos } from './helpers/filterTodos';
 
 const USER_ID = 12034;
 
@@ -32,26 +32,17 @@ export const App: React.FC = () => {
       .catch(() => displayError(ErrorType.UnableToLoad));
   }, []);
 
-  const filterTodos = useCallback(
+  const memoizedFilterTodos = useCallback(
     (
       todos: Todo[],
-    ) => {
-      switch (filterBy) {
-        case FilterBy.Active:
-          return todos.filter(todo => !todo.completed);
-
-        case FilterBy.Completed:
-          return todos.filter(todo => todo.completed);
-
-        default:
-          return todos;
-      }
-    }, [filterBy],
+      filterByOption: FilterBy,
+    ) => filterTodos(todos, filterByOption),
+    [],
   );
 
   const todosToView = useMemo(
-    () => filterTodos(todosFromServer),
-    [filterTodos, todosFromServer],
+    () => memoizedFilterTodos(todosFromServer, filterBy),
+    [memoizedFilterTodos, todosFromServer, filterBy],
   );
 
   if (!USER_ID) {
