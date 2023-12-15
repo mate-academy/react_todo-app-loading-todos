@@ -62,6 +62,8 @@ export const App: React.FC = () => {
         setError('Unable to add todo');
         setTimeout(() => setError(''), 3000);
       });
+
+      setTodoNameInput('');
     } else {
       setError('Title should not be empty');
       setTimeout(() => setError(''), 3000);
