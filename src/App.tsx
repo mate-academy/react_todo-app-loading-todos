@@ -54,9 +54,6 @@ export const App: React.FC = () => {
       .catch(() => (onError(ErrorType.UnableToLoad)));
   }, []);
 
-  const [isBeingEdited] = useState(false);
-  const [isBeingSaved] = useState(false);
-
   const filteredTodos = filterTodos(todosFromServer, selectedFilter);
 
   const activeTodosCount = todosFromServer.reduce((acc, todo) => {
@@ -76,8 +73,6 @@ export const App: React.FC = () => {
 
         <TodoMain
           todos={filteredTodos}
-          isBeingEdited={isBeingEdited}
-          isBeingSaved={isBeingSaved}
         />
 
         {todosFromServer.length !== 0 && (

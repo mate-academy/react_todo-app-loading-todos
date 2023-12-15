@@ -4,16 +4,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[],
-  isBeingEdited: boolean,
-  isBeingSaved: boolean,
-
 };
 
 export const TodoMain: React.FC<Props> = ({
   todos,
-  isBeingEdited,
-  isBeingSaved,
 }) => {
+  const isBeingEdited = false;
+  const isBeingSaved = false;
+  const isLoading = false;
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => {
@@ -70,7 +69,7 @@ export const TodoMain: React.FC<Props> = ({
               className={cn(
                 'modal',
                 'overlay',
-                { 'is-active': false },
+                { 'is-active': isLoading },
               )}
             >
               <div className="modal-background has-background-white-ter" />

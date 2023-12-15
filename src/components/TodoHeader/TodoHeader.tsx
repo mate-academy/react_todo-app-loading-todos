@@ -19,7 +19,6 @@ export const TodoHeader: React.FC<Props> = ({
         data-cy="ToggleAllButton"
       />
 
-      {/* Add a todo on form submit (next task) */}
       <form>
         <input
           data-cy="NewTodoField"

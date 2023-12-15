@@ -64,7 +64,6 @@ export const TodoFooter: React.FC<Props> = ({
       >
         Clear completed
       </button>
-
     </footer>
   );
 };
