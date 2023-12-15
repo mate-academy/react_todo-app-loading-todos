@@ -5,7 +5,7 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[]
   status: Status
-  onStatus: React.Dispatch<React.SetStateAction<Status>>
+  onStatus: (status: Status) => void
 }
 
 export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
@@ -20,7 +20,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: status === 'all',
+            selected: status === Status.all,
           })}
           data-cy="FilterLinkAll"
           onClick={() => onStatus(Status.all)}
@@ -31,7 +31,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: status === 'active',
+            selected: status === Status.active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => onStatus(Status.active)}
