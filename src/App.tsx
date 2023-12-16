@@ -5,11 +5,12 @@ import { TodoAllChecked } from './components/TodoAllChecked';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoContext } from './components/TodoContext';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 
 export const USER_ID = 12048;
 
 export const App: React.FC = () => {
-  const { isError } = useContext(TodoContext);
+  const { errorMessage, closeErrorMessage } = useContext(TodoContext);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -46,16 +47,7 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {isError && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button data-cy="HideErrorButton" type="button" className="delete" />
-          {/* show only one message at a time */}
-          Unable to load todos
-        </div>
-      )}
+      <ErrorMessage message={errorMessage} onClose={closeErrorMessage} />
     </div>
   );
 };

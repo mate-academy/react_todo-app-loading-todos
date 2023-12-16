@@ -13,7 +13,8 @@ export const TodoContext = React.createContext({
   status: Status.All,
   /* eslint-disable-next-line */
   setStatus: (_status: Status) => {},
-  isError: null as string | null,
+  errorMessage: null as string | null,
+  closeErrorMessage: () => {},
 });
 
 interface Props {
@@ -23,17 +24,19 @@ interface Props {
 export const TodoProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<Status>(Status.All);
-  const [isError, setIsError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const showError = () => {
-    setIsError('Unable to load todos');
-    setTimeout(() => setIsError(null), 3000);
+  const showError = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(null), 3000);
   };
+
+  const closeErrorMessage = () => setErrorMessage(null);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => showError());
+      .catch(() => showError('Unable to load todos'));
   }, []);
 
   const value = {
@@ -41,7 +44,8 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     setTodos,
     status,
     setStatus,
-    isError,
+    errorMessage,
+    closeErrorMessage,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
