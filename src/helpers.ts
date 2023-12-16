@@ -1,7 +1,7 @@
 import { Progress } from './types/Progress';
 import { Todo } from './types/Todo';
 
-export const itemsLeft = (arr: Todo[]) => {
+export const getItemsLeft = (arr: Todo[]) => {
   return arr.filter(item => item.completed === false).length;
 };
 

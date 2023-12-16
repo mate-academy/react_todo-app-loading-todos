@@ -7,9 +7,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const ErrorBlock: React.FC<Props> = (props) => {
-  const { errMessage, onClose } = props;
-
+export const ErrorBlock: React.FC<Props> = ({ errMessage, onClose }) => {
   useEffect(() => {
     setTimeout(() => {
       onClose();

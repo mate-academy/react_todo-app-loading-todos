@@ -5,16 +5,13 @@ interface Props {
   setProgress: (type: Progress) => void;
 }
 
-export const Footer:React.FC<Props> = (props) => {
-  const { itemsLeft, setProgress } = props;
-
+export const Footer:React.FC<Props> = ({ itemsLeft, setProgress }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {`${itemsLeft} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -44,7 +41,6 @@ export const Footer:React.FC<Props> = (props) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

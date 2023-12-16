@@ -1,5 +1,3 @@
-/* eslint-disable quote-props */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
   useEffect,
@@ -11,7 +9,7 @@ import './styles/index.scss';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
-import { filterTodos, itemsLeft } from './helpers';
+import { filterTodos, getItemsLeft } from './helpers';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Progress } from './types/Progress';
@@ -22,7 +20,7 @@ const USER_ID = 12022;
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [prgoressStatus, setProgressStatus] = useState<Progress>(Progress.All);
+  const [progressStatus, setProgressStatus] = useState<Progress>(Progress.All);
   const [errorMessage, setErrorMessage] = useState<ErrorType | null>(null);
 
   useEffect(() => {
@@ -31,13 +29,13 @@ export const App: React.FC = () => {
       .catch(() => setErrorMessage(ErrorType.Loading));
   }, []);
 
-  const itemsLeftToShow = itemsLeft(todosFromServer);
+  const itemsLeftToShow = getItemsLeft(todosFromServer);
 
   const isAllTodosCompeted = todosFromServer.every(todo => todo.completed);
 
   const todosToRender = useMemo(
-    () => filterTodos(todosFromServer, prgoressStatus),
-    [todosFromServer, prgoressStatus],
+    () => filterTodos(todosFromServer, progressStatus),
+    [todosFromServer, progressStatus],
   );
 
   const closeError = useCallback(() => setErrorMessage(null), []);
@@ -55,7 +53,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={todosToRender} />
 
-        { todosFromServer.length > 0 && (
+        {todosFromServer.length > 0 && (
           <Footer
             itemsLeft={itemsLeftToShow}
             setProgress={setProgressStatus}

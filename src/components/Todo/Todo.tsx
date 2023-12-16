@@ -5,9 +5,7 @@ interface Props {
   todo: TodoType,
 }
 
-export const Todo: React.FC<Props> = (props) => {
-  const { todo } = props;
-
+export const Todo: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
@@ -29,7 +27,6 @@ export const Todo: React.FC<Props> = (props) => {
         {todo.title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"
