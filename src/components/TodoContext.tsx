@@ -4,6 +4,8 @@ import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
 import { getTodos } from '../api/todos';
 
+const USER_ID = 12048;
+
 export const TodoContext = React.createContext({
   todos: [] as Todo[],
   /* eslint-disable-next-line */
@@ -29,7 +31,7 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
   };
 
   useEffect(() => {
-    getTodos(12048)
+    getTodos(USER_ID)
       .then(setTodos)
       .catch(() => showError());
   }, []);

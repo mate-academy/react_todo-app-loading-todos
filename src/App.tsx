@@ -6,7 +6,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoContext } from './components/TodoContext';
 
-const USER_ID = 12048;
+export const USER_ID = 12048;
 
 export const App: React.FC = () => {
   const { isError } = useContext(TodoContext);
