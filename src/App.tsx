@@ -12,6 +12,7 @@ const USER_ID = 12035;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterByStatus, setFilterByStatus] = useState('all');
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   const [error, setError] = useState<null | string>(null);
   const [showError, setShowError] = useState(false);
@@ -21,9 +22,7 @@ export const App: React.FC = () => {
       setShowError(false);
       setError(null);
       getTodos(USER_ID)
-        .then((data) => {
-          setTodos(data);
-        })
+        .then(setTodos)
         .catch(() => {
           setShowError(true);
           setError('Unable to load todos');
@@ -33,24 +32,27 @@ export const App: React.FC = () => {
     loadData();
   }, []);
 
+  useEffect(() => {
+    const filterTodos = (filter: string) => {
+      switch (filter) {
+        case Status.Active:
+          return todos.filter(todo => !todo.completed);
+
+        case Status.Completed:
+          return todos.filter(todo => todo.completed);
+
+        default:
+          return todos;
+      }
+    };
+
+    setFilteredTodos(
+      filterTodos(filterByStatus),
+    );
+  }, [filterByStatus, todos]);
+
   if (!USER_ID) {
     return <UserWarning />;
-  }
-
-  let filteredTodos;
-
-  switch (filterByStatus) {
-    case Status.Active:
-      filteredTodos = todos.filter(currentTodo => !currentTodo.completed);
-      break;
-
-    case Status.Completed:
-      filteredTodos = todos.filter(currentTodo => currentTodo.completed);
-      break;
-
-    default:
-      filteredTodos = todos;
-      break;
   }
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
@@ -65,7 +67,8 @@ export const App: React.FC = () => {
     setShowError(false);
   };
 
-  const handleFilterChange = (newFilter: string) => {
+  const changeFilter = (newFilter: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
     setFilterByStatus(newFilter);
   };
 
@@ -193,10 +196,7 @@ export const App: React.FC = () => {
                 className={`filter__link  ${filterByStatus === 'all' ? 'selected' : ''}
                 }`}
                 data-cy="FilterLinkAll"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleFilterChange('all');
-                }}
+                onClick={changeFilter('all')}
               >
                 All
               </a>
@@ -206,10 +206,7 @@ export const App: React.FC = () => {
                 className={`filter__link  ${filterByStatus === 'active' ? 'selected' : ''}
                 }`}
                 data-cy="FilterLinkActive"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleFilterChange('active');
-                }}
+                onClick={changeFilter('active')}
               >
                 Active
               </a>
@@ -219,10 +216,7 @@ export const App: React.FC = () => {
                 className={`filter__link  ${filterByStatus === 'completed' ? 'selected' : ''}
                 }`}
                 data-cy="FilterLinkCompleted"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleFilterChange('completed');
-                }}
+                onClick={changeFilter('completed')}
               >
                 Completed
               </a>
@@ -232,10 +226,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              onClick={(e) => {
-                e.preventDefault();
-                removeCompletedTodos();
-              }}
+              onClick={removeCompletedTodos}
             >
               Clear completed
             </button>
@@ -246,34 +237,23 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {
-        showError && (
-          <div
-            data-cy="ErrorNotification"
-            id="errorMessage"
-            className="
+      {showError && (
+        <div
+          data-cy="ErrorNotification"
+          id="errorMessage"
+          className="
           notification is-danger is-light has-text-weight-normal
         "
-          >
-            <button
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={hideErrorMessage}
-            />
-            {/* show only one message at a time */}
-            {error && <span>{error}</span>}
-            {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-          </div>
-        )
-      }
+        >
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={hideErrorMessage}
+          />
+          {error && <span>{error}</span>}
+        </div>
+      )}
     </div>
   );
 };

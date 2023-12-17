@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -5,10 +6,17 @@ type Props = {
   key: number;
 };
 
-export const TodoItem = ({ todo, key }: Props) => {
+export const TodoItem: React.FC<Props> = ({ todo, key }) => {
   return (
     <div key={key}>
-      <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`} key={todo.id}>
+      <div
+        data-cy="Todo"
+        className={cn(
+          'todo',
+          { completed: todo.completed },
+        )}
+        key={todo.id}
+      >
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
