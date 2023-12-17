@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
 import { Header } from './components/Header/Header';
@@ -18,9 +20,7 @@ export const App: React.FC = () => {
   const [errorType, setErorType] = useState<ErrorType | null>(null);
   const [isErrorMessage, setIsErrorMessage] = useState(true);
 
-  const preparedTodos = filteredTodoList(todos, filterBy);
-
-  const loader = useCallback(() => {
+  useEffect(() => {
     setErorType(null);
     getTodos(USER_ID)
       .then(todosFromServer => {
@@ -31,9 +31,16 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    loader();
-  }, [loader]);
+  const preparedTodos = useCallback((
+    todosList: Todo[],
+    filterOrder: string,
+  ) => filteredTodoList(todosList, filterOrder),
+  []);
+
+  const todosToView = useMemo(
+    () => preparedTodos(todos, filterBy),
+    [preparedTodos, todos, filterBy],
+  );
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -46,15 +53,15 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {preparedTodos && (
+        {todosToView && (
           <TodoList
-            todos={preparedTodos}
+            todos={todosToView}
           />
         )}
         {todos && (
           <Footer
             onFilter={setFilterBy}
-            todos={preparedTodos}
+            todos={todosToView}
             filterBy={filterBy}
           />
         )}

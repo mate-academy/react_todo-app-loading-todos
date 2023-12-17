@@ -1,6 +1,6 @@
 import { Todo } from './types/Todo';
 
-enum FilteredBy {
+export enum FilteredBy {
   DefaultType = '',
   All = 'all',
   Active = 'active',

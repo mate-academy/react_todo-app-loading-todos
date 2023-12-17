@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FilteredBy } from '../../helpers';
 
 type Props = {
   onFilter: (filterType: string) => void;
@@ -19,7 +20,6 @@ export const Footer: React.FC<Props> = ({
   };
 
   const hasActiveTodos = todos.filter(todo => !todo.completed);
-  const hasComletedTodo = todos.filter(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -34,7 +34,7 @@ export const Footer: React.FC<Props> = ({
             'filter__link', { selected: filterBy === 'all' },
           )}
           data-cy="FilterLinkAll"
-          onClick={() => handleFilterChange('all')}
+          onClick={() => handleFilterChange(FilteredBy.All)}
         >
           All
         </a>
@@ -45,7 +45,7 @@ export const Footer: React.FC<Props> = ({
             'filter__link', { selected: filterBy === 'active' },
           )}
           data-cy="FilterLinkActive"
-          onClick={() => handleFilterChange('active')}
+          onClick={() => handleFilterChange(FilteredBy.Active)}
         >
           Active
         </a>
@@ -56,23 +56,20 @@ export const Footer: React.FC<Props> = ({
             'filter__link', { selected: filterBy === 'completed' },
           )}
           data-cy="FilterLinkCompleted"
-          onClick={() => handleFilterChange('completed')}
+          onClick={() => handleFilterChange(FilteredBy.Completed)}
         >
           Completed
         </a>
       </nav>
 
-      {hasComletedTodo.length
-        ? (
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-            onClick={() => handleFilterChange('active')}
-          >
-            Clear completed
-          </button>
-        ) : null}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        disabled={todos.every(todo => !todo.completed)}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
