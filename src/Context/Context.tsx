@@ -27,11 +27,11 @@ const TodoContext = createContext<TodoContextType>(
     selectedOption: '',
     setSelectedOption: () => {},
     errorMessage: {
-      load: true,
-      add: true,
-      remove: true,
-      title: true,
-      update: true,
+      load: '',
+      add: '',
+      remove: '',
+      title: '',
+      update: '',
     },
     setErrorMessage: () => {},
   },
@@ -45,24 +45,24 @@ type Props = {
 
 const USER_ID = 12023;
 
-export const errorMessages:Error = {
-  load: true,
-  title: true,
-  add: true,
-  remove: true,
-  update: true,
+export const defaultErrorMessages:Error = {
+  load: '',
+  title: '',
+  add: '',
+  remove: '',
+  update: '',
 };
 
 export const TodoContextProvider: FC<Props> = ({ children }) => {
   const [renderedTodos, setRenderedTodos] = useState<Todo[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>(States.All);
-  const [errorMessage, setErrorMessage] = useState<Error>(errorMessages);
+  const [errorMessage, setErrorMessage] = useState<Error>(defaultErrorMessages);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setRenderedTodos)
       .catch(() => setErrorMessage(currentMessage => (
-        { ...currentMessage, load: false })));
+        { ...currentMessage, load: 'Unable to load todos' })));
   }, []);
 
   const filteredList = getFilteredTodos(renderedTodos, selectedOption);

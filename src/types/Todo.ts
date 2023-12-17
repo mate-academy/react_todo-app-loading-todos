@@ -12,9 +12,9 @@ export enum States {
 }
 
 export interface Error {
-  load: boolean;
-  title: boolean;
-  add: boolean;
-  remove: boolean;
-  update: boolean;
+  load: string;
+  title: string;
+  add: string;
+  remove: string;
+  update: string;
 }

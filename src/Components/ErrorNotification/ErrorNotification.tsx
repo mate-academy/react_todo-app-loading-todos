@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useEffect } from 'react';
-import { errorMessages, useTodoContext } from '../../Context/Context';
+import { defaultErrorMessages, useTodoContext } from '../../Context/Context';
 
 export const ErrorNotification = () => {
   const { errorMessage, setErrorMessage } = useTodoContext();
@@ -11,11 +11,11 @@ export const ErrorNotification = () => {
     update,
     remove,
   } = errorMessage;
-  const isError = load && title && add && update && remove;
+  const hasError = load || title || add || update || remove;
 
   useEffect(() => {
     setTimeout(() => {
-      setErrorMessage(errorMessages);
+      setErrorMessage(defaultErrorMessages);
     }, 3000);
   });
 
@@ -23,24 +23,24 @@ export const ErrorNotification = () => {
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal',
-        { hidden: isError })}
+        { hidden: !hasError })}
     >
       <button
         aria-label="Hide Error Button"
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage(errorMessage)}
+        onClick={() => setErrorMessage(defaultErrorMessages)}
       />
-      { !load && 'Unable to load todos'}
+      { load }
       <br />
-      { !title && 'Title should not be empty'}
+      { title && 'Title should not be empty'}
       <br />
-      { !add && 'Unable to add a todo'}
+      { add && 'Unable to add a todo'}
       <br />
-      { !remove && 'Unable to delete a todo'}
+      { remove && 'Unable to delete a todo'}
       <br />
-      { !update && 'Unable to update a todo'}
+      { update && 'Unable to update a todo'}
     </div>
   );
 };
