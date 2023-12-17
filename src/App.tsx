@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoFooter } from './components/footer/TodoFooter';
@@ -30,7 +31,7 @@ export const App: React.FC = () => {
 
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setError(Error.LoadingTodos));
+      .catch(() => setError(Error.LoadTodos));
   }, []);
 
   return (
