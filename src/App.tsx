@@ -10,7 +10,7 @@ import { TodoError } from './components/TodoError/TodoError';
 import { Errors } from './types/Errors';
 import { Filter } from './types/Filter';
 
-const USER_ID = 10236;
+const USER_ID = 12054;
 
 const preparedTodos = (todosList: Todo[], selectedFilter: Filter): Todo[] => {
   let filteredTodos = [...todosList];
