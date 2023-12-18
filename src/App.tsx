@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -16,6 +17,12 @@ export const App: React.FC = () => {
 
   const [error, setError] = useState<null | string>(null);
   const [showError, setShowError] = useState(false);
+
+  enum Filter {
+    All = 'all',
+    Active = 'active',
+    Completed = 'completed',
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -193,30 +200,36 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link  ${filterByStatus === 'all' ? 'selected' : ''}
-                }`}
+                className={cn(
+                  'filter__link',
+                  { selected: filterByStatus === 'all' },
+                )}
                 data-cy="FilterLinkAll"
-                onClick={changeFilter('all')}
+                onClick={changeFilter(Filter.All)}
               >
                 All
               </a>
 
               <a
                 href="#/active"
-                className={`filter__link  ${filterByStatus === 'active' ? 'selected' : ''}
-                }`}
+                className={cn(
+                  'filter__link',
+                  { selected: filterByStatus === 'active' },
+                )}
                 data-cy="FilterLinkActive"
-                onClick={changeFilter('active')}
+                onClick={changeFilter(Filter.Active)}
               >
                 Active
               </a>
 
               <a
                 href="#/completed"
-                className={`filter__link  ${filterByStatus === 'completed' ? 'selected' : ''}
-                }`}
+                className={cn(
+                  'filter__link',
+                  { selected: filterByStatus === 'completed' },
+                )}
                 data-cy="FilterLinkCompleted"
-                onClick={changeFilter('completed')}
+                onClick={changeFilter(Filter.Completed)}
               >
                 Completed
               </a>
