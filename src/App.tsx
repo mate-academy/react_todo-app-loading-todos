@@ -18,12 +18,6 @@ export const App: React.FC = () => {
   const [error, setError] = useState<null | string>(null);
   const [showError, setShowError] = useState(false);
 
-  enum Filter {
-    All = 'all',
-    Active = 'active',
-    Completed = 'completed',
-  }
-
   useEffect(() => {
     const loadData = async () => {
       setShowError(false);
@@ -205,7 +199,7 @@ export const App: React.FC = () => {
                   { selected: filterByStatus === 'all' },
                 )}
                 data-cy="FilterLinkAll"
-                onClick={changeFilter(Filter.All)}
+                onClick={changeFilter('all')}
               >
                 All
               </a>
@@ -217,7 +211,7 @@ export const App: React.FC = () => {
                   { selected: filterByStatus === 'active' },
                 )}
                 data-cy="FilterLinkActive"
-                onClick={changeFilter(Filter.Active)}
+                onClick={changeFilter(Status.Active)}
               >
                 Active
               </a>
@@ -229,7 +223,7 @@ export const App: React.FC = () => {
                   { selected: filterByStatus === 'completed' },
                 )}
                 data-cy="FilterLinkCompleted"
-                onClick={changeFilter(Filter.Completed)}
+                onClick={changeFilter(Status.Completed)}
               >
                 Completed
               </a>
