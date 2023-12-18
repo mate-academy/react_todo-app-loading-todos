@@ -22,7 +22,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <>
-      {/* This todo is not completed / completed */}
       <div
         data-cy="Todo"
         className={cn('todo', { completed })}
@@ -35,7 +34,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           />
         </label>
 
-        {/* This form is shown instead of the title and remove button */}
         {isEditable ? (
           <form>
             <input
@@ -50,7 +48,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             />
           </form>
         ) : (
-          /* Remove button appears only on hover */
           <>
             <span
               data-cy="TodoTitle"
@@ -64,11 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             </button>
           </>
         )}
-        {/* 'is-active' class puts this modal on top of the todo */}
-        {/* This todo is in loadind state */}
-        {/* modal overlay is-active */}
 
-        {/* overlay will cover the todo while it is being updated */}
         <div data-cy="TodoLoader" className="modal overlay">
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />

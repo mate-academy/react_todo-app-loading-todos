@@ -3,9 +3,9 @@ export type Data = {
 };
 
 export enum FilterBy {
-  All = '',
-  Active = 0,
-  Completed = 1,
+  All,
+  Active,
+  Completed,
 }
 
 export enum ErrorMessage {

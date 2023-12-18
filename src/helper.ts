@@ -4,13 +4,17 @@ export const filteredData = <T>(
   data: Array<T & Data>,
   filter: FilterBy,
 ): T[] => {
-  if (filter === FilterBy.Active) {
-    return data.filter(({ completed }) => !completed);
-  }
+  switch (filter) {
+    case (FilterBy.Active):
+      return data.filter(({ completed }) => !completed);
 
-  if (filter === FilterBy.Completed) {
-    return data.filter(({ completed }) => completed);
-  }
+    case (FilterBy.Completed):
+      return data.filter(({ completed }) => completed);
 
-  return data;
+    case (FilterBy.All):
+      return data;
+
+    default:
+      return data;
+  }
 };
