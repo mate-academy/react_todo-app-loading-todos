@@ -10,12 +10,11 @@ interface Props {
 
 export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
   return (
-    <>
+    <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {`${todos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -42,7 +41,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: status === 'completed',
+            selected: status === Status.completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => onStatus(Status.completed)}
@@ -51,7 +50,6 @@ export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
@@ -59,6 +57,6 @@ export const TodoFooter: React.FC<Props> = ({ todos, status, onStatus }) => {
       >
         Clear completed
       </button>
-    </>
+    </footer>
   );
 };

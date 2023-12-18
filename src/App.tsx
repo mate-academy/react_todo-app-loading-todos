@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
@@ -6,6 +5,7 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { Status } from './types/Status';
+import { ErrorMsg } from './components/ErrorMsg/ErrorMsg';
 
 const USER_ID = 12042;
 
@@ -27,16 +27,16 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     switch (status) {
-      case 'all': {
+      case Status.all: {
         return todos;
       }
 
-      case 'active': {
-        return todos.filter(todo => todo);
+      case Status.active: {
+        return todos.filter(todo => !todo.completed);
       }
 
-      case 'completed': {
-        return todos.filter(todo => todo.completed === true);
+      case Status.completed: {
+        return todos.filter(todo => todo.completed);
       }
 
       default: {
@@ -55,14 +55,13 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
+            aria-label="Toggle Button"
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -75,47 +74,18 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <>
-            <section className="todoapp__main" data-cy="TodoList">
-              <TodoList todos={filteredTodos} />
-            </section>
+            <TodoList todos={filteredTodos} />
 
-            <footer className="todoapp__footer" data-cy="Footer">
-              <TodoFooter
-                todos={filteredTodos}
-                status={status}
-                onStatus={setStatus}
-              />
-            </footer>
+            <TodoFooter
+              todos={filteredTodos}
+              status={status}
+              onStatus={setStatus}
+            />
           </>
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {/* show only one message at a time */}
-      {error && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => (setError(null))}
-          />
-
-          <p>{error}</p>
-
-          {/* Title should not be empty
-          <br />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo */}
-        </div>
-      )}
+      {error && <ErrorMsg error={error} onError={setError} />}
 
     </div>
   );
