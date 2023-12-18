@@ -15,7 +15,7 @@ export const Errors: React.FC<Props> = ({
     setTimeout(() => {
       setError(null);
     }, 3000);
-  }, [error, setError]);
+  }, [error]);
 
   return (
     <div

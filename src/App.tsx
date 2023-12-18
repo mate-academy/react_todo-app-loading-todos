@@ -27,8 +27,6 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   useEffect(() => {
-    setError(null);
-
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => setError(Error.LoadTodos));
