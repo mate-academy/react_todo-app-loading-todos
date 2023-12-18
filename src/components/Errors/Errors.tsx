@@ -1,53 +1,35 @@
+import { useEffect } from 'react';
+import { getErrorMessage } from '../../helpers';
 import { ErrorType } from '../../types/ErorTypes';
 
 type Props = {
   error: ErrorType | null;
-  onError: (errors: boolean) => void;
+  onClose: () => void;
 };
 
-export const Errors: React.FC<Props> = ({ error, onError }) => {
-  const getErrorMessage = () => {
-    switch (error) {
-      case ErrorType.LoadError:
-        return 'Unable to load todos';
+export const Errors: React.FC<Props> = ({ error, onClose }) => {
+  const errorMessage = getErrorMessage(error);
 
-      case ErrorType.TitleError:
-        return 'Title should not be empty';
-
-      case ErrorType.AddError:
-        return 'Unable to add a todo';
-
-      case ErrorType.DeleteError:
-        return 'Unable to delete a todo';
-
-      case ErrorType.UpdateError:
-        return 'Unable to update a todo';
-
-      default:
-        return null;
-    }
-  };
-
-  const handleHideMessage = () => {
-    onError(false);
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      onClose();
+    }, 3000);
+  }, [onClose]);
 
   return (
-    error ? (
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+    <div
+      data-cy="ErrorNotification"
+      className="notification is-danger is-light has-text-weight-normal"
 
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleHideMessage}
-          aria-label="Close message"
-        />
-        {getErrorMessage()}
-      </div>
-    ) : null
+    >
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={onClose}
+        aria-label="Close message"
+      />
+      {errorMessage}
+    </div>
   );
 };

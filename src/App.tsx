@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback,
+  useEffect, useMemo, useState,
 } from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoList } from './components/TodoList/TodoList';
@@ -18,7 +19,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState('');
   const [errorType, setErorType] = useState<ErrorType | null>(null);
-  const [isErrorMessage, setIsErrorMessage] = useState(true);
 
   useEffect(() => {
     setErorType(null);
@@ -31,16 +31,13 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const preparedTodos = useCallback((
-    todosList: Todo[],
-    filterOrder: string,
-  ) => filteredTodoList(todosList, filterOrder),
-  []);
-
   const todosToView = useMemo(
-    () => preparedTodos(todos, filterBy),
-    [preparedTodos, todos, filterBy],
+    () => filteredTodoList(todos, filterBy),
+    [todos, filterBy],
   );
+
+  const closeError = useCallback(() => setErorType(null), []);
+  const isAllTodosCompleted = todos.every(todo => todo.completed);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -51,7 +48,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header
+          isAllCompleted={isAllTodosCompleted}
+        />
 
         {todosToView && (
           <TodoList
@@ -66,11 +65,11 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-      {isErrorMessage
+      {errorType
         && (
           <Errors
             error={errorType}
-            onError={setIsErrorMessage}
+            onClose={closeError}
           />
         )}
     </div>

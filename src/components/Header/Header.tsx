@@ -1,14 +1,18 @@
-export const Header: React.FC = () => (
+import cn from 'classnames';
+
+type Props = {
+  isAllCompleted: boolean;
+};
+
+export const Header: React.FC<Props> = ({ isAllCompleted }) => (
   <header className="todoapp__header">
-    {/* this buttons is active only if there are some active todos */}
     <button
       type="button"
-      className="todoapp__toggle-all active"
+      className={cn('todoapp__toggle-all', { active: isAllCompleted })}
       data-cy="ToggleAllButton"
       aria-labelledby="button-label"
     />
 
-    {/* Add a todo on form submit */}
     <form>
       <input
         data-cy="NewTodoField"
