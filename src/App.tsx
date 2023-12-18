@@ -9,7 +9,7 @@ import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { filteredTodoList } from './helpers';
+import { FilteredBy, filteredTodoList } from './helpers';
 import { Errors } from './components/Errors/Errors';
 import { ErrorType } from './types/ErorTypes';
 
@@ -17,7 +17,7 @@ const USER_ID = 12036;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState<FilteredBy>(FilteredBy.DefaultType);
   const [errorType, setErorType] = useState<ErrorType | null>(null);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { getErrorMessage } from '../../helpers';
 import { ErrorType } from '../../types/ErorTypes';
 
@@ -10,11 +10,25 @@ type Props = {
 export const Errors: React.FC<Props> = ({ error, onClose }) => {
   const errorMessage = getErrorMessage(error);
 
+  const timerRef = useRef<number | null>(null);
+
   useEffect(() => {
-    setTimeout(() => {
-      onClose();
-    }, 3000);
-  }, [onClose]);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    if (error) {
+      timerRef.current = window.setTimeout(() => {
+        onClose();
+      }, 3000);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [error, onClose]);
 
   return (
     <div

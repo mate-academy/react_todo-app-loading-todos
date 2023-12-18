@@ -3,9 +3,9 @@ import { Todo } from '../../types/Todo';
 import { FilteredBy } from '../../helpers';
 
 type Props = {
-  onFilter: (filterType: string) => void;
+  onFilter: (filterType: FilteredBy) => void;
   todos: Todo[];
-  filterBy: string;
+  filterBy: FilteredBy;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -13,8 +13,9 @@ export const Footer: React.FC<Props> = ({
   todos,
   filterBy,
 }) => {
-  const handleFilterChange = (filterType: string) => {
-    const updatedFilter = filterBy === filterType ? '' : filterType;
+  const handleFilterChange = (filterType: FilteredBy) => {
+    const updatedFilter: FilteredBy
+      = filterBy === filterType ? FilteredBy.DefaultType : filterType;
 
     onFilter(updatedFilter);
   };
@@ -67,6 +68,7 @@ export const Footer: React.FC<Props> = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={todos.every(todo => !todo.completed)}
+        onClick={() => handleFilterChange(FilteredBy.Active)}
       >
         Clear completed
       </button>
