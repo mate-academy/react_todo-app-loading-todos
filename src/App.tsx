@@ -9,26 +9,9 @@ import { Todo } from './types/Todo';
 import { TodoError } from './components/TodoError/TodoError';
 import { Errors } from './types/Errors';
 import { Filter } from './types/Filter';
+import { prepareTodos } from './utils/helpers';
 
 const USER_ID = 12054;
-
-const preparedTodos = (todosList: Todo[], selectedFilter: Filter): Todo[] => {
-  let filteredTodos = [...todosList];
-
-  switch (selectedFilter) {
-    case Filter.Active:
-      filteredTodos = todosList.filter(todo => !todo.completed);
-      break;
-
-    case Filter.Completed:
-      filteredTodos = todosList.filter(todo => todo.completed);
-      break;
-    default:
-      break;
-  }
-
-  return filteredTodos;
-};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -51,7 +34,7 @@ export const App: React.FC = () => {
 
   const isThereCompleted = todos.some(todo => todo.completed);
 
-  const filteredTodos = preparedTodos(todos, filterStatus);
+  const filteredTodos = prepareTodos(todos, filterStatus);
 
   return (
     <div className="todoapp">
