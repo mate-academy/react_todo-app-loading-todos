@@ -27,10 +27,8 @@ export const Filter: React.FC<Props> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          // className="filter__link selected"
           className={classNames('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': filterType === FilterType.All,
+            selected: filterType === FilterType.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => onFilterSelect(FilterType.All)}
@@ -40,10 +38,8 @@ export const Filter: React.FC<Props> = ({
 
         <a
           href="#/active"
-          // className="filter__link"
           className={classNames('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': filterType === FilterType.Active,
+            selected: filterType === FilterType.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => onFilterSelect(FilterType.Active)}
@@ -53,10 +49,8 @@ export const Filter: React.FC<Props> = ({
 
         <a
           href="#/completed"
-          // className="filter__link"
           className={classNames('filter__link', {
-            // eslint-disable-next-line quote-props
-            'selected': filterType === FilterType.Completed,
+            selected: filterType === FilterType.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => onFilterSelect(FilterType.Completed)}

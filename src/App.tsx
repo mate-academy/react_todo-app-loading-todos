@@ -7,7 +7,7 @@ import { Errors } from './types/Errors';
 import { ErrorNotify } from './components/ErrorNotify/ErrorNotify';
 import { Filter } from './components/Filter/Filter';
 import { FilterType } from './types/FilterType';
-import { filterTodos } from './utils/helpers';
+import { filterTodos, unsetError } from './utils/helpers';
 
 const USER_ID = 12041;
 
@@ -31,10 +31,10 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch (e) {
-        setError('Unable to load todos');
-        setTimeout(() => {
-          setError(null);
-        }, 3000);
+        setError(Errors.UnableToLoad);
+
+        unsetError(setError, null, 3000);
+
         throw e;
       }
     };
