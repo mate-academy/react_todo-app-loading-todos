@@ -4,7 +4,7 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './TodoList/TodoList';
-import { filterSelectedTodos } from './helpers/helpers';
+import { counterOfUncompleted, filterSelectedTodos } from './helpers/helpers';
 
 const USER_ID = 12057;
 
@@ -35,6 +35,7 @@ export const App: React.FC = () => {
   }, []);
 
   const todosForMap = filterSelectedTodos(filterType, todos);
+  const uncompletedCount = counterOfUncompleted(todos);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -46,7 +47,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className="todoapp__toggle-all active"
@@ -54,7 +54,6 @@ export const App: React.FC = () => {
             aria-label="Toggle All Button"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -69,15 +68,13 @@ export const App: React.FC = () => {
           && (
             <TodoList todos={todosForMap} />)}
 
-        {/* Hide the footer if there are no todos */}
         {hasTodosFromServer
           && (
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="TodosCounter">
-                3 items left
+                {`${uncompletedCount} items left`}
               </span>
 
-              {/* Active filter should have a 'selected' class */}
               <nav className="filter" data-cy="Filter">
                 <a
                   href="#/"
@@ -113,7 +110,6 @@ export const App: React.FC = () => {
                 </a>
               </nav>
 
-              {/* don't show this button if there are no completed todos */}
               <button
                 type="button"
                 className="todoapp__clear-completed"
@@ -125,8 +121,6 @@ export const App: React.FC = () => {
           )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={cn(
@@ -140,17 +134,9 @@ export const App: React.FC = () => {
           type="button"
           className="delete"
           aria-label="hide error button"
+          onClick={() => setError(null)}
         />
-        {/* show only one message at a time */}
         Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
       </div>
     </div>
   );

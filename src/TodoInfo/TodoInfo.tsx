@@ -13,7 +13,7 @@ export const TodoInfo: React.FC<Props> = memo(({ todo }) => {
     <div
       data-cy="Todo"
       className={cn('todo', {
-        completed: !completed,
+        completed: completed === true,
       })}
       key={id}
     >
@@ -22,7 +22,7 @@ export const TodoInfo: React.FC<Props> = memo(({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked
+          checked={completed}
         />
       </label>
 
@@ -30,12 +30,10 @@ export const TodoInfo: React.FC<Props> = memo(({ todo }) => {
         {title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
 
-      {/* overlay will cover the todo while it is being updated */}
       <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

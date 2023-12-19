@@ -10,3 +10,7 @@ export const filterSelectedTodos = (type: string, todos: Todo []) => {
       return [...todos];
   }
 };
+
+export const counterOfUncompleted = (todos: Todo []): number => {
+  return todos.filter(({ completed }) => completed === false).length;
+};
