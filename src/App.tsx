@@ -12,7 +12,7 @@ const USER_ID = 12035;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterByStatus, setFilterByStatus] = useState('all');
+  const [filterByStatus, setFilterByStatus] = useState<string>(Status.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   const [error, setError] = useState<null | string>(null);
@@ -196,10 +196,10 @@ export const App: React.FC = () => {
                 href="#/"
                 className={cn(
                   'filter__link',
-                  { selected: filterByStatus === 'all' },
+                  { selected: filterByStatus === Status.All },
                 )}
                 data-cy="FilterLinkAll"
-                onClick={changeFilter('all')}
+                onClick={changeFilter(Status.All)}
               >
                 All
               </a>
@@ -208,7 +208,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={cn(
                   'filter__link',
-                  { selected: filterByStatus === 'active' },
+                  { selected: filterByStatus === Status.Active },
                 )}
                 data-cy="FilterLinkActive"
                 onClick={changeFilter(Status.Active)}
@@ -220,7 +220,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={cn(
                   'filter__link',
-                  { selected: filterByStatus === 'completed' },
+                  { selected: filterByStatus === Status.Completed },
                 )}
                 data-cy="FilterLinkCompleted"
                 onClick={changeFilter(Status.Completed)}
