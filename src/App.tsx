@@ -4,19 +4,20 @@ import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { TodoList } from './TodoList/TodoList';
-import { counterOfUncompleted, filterSelectedTodos } from './helpers/helpers';
+import { applyUncompleted, applySelectedTodos } from './helpers/helpers';
+import { Filter } from './types/Selected-filter-enum';
 
 const USER_ID = 12057;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo []>([]);
   const [error, setError] = useState<string | null>(null);
-  const [filterType, setFilterType] = useState('All');
+  const [filterType, setFilterType] = useState<Filter>(Filter.all);
 
   const hasTodosFromServer = todos.length !== 0;
 
-  const handleFilterType = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    setFilterType(event.currentTarget.innerText);
+  const handleFilterType = (type: Filter) => {
+    setFilterType(type);
   };
 
   const handleError = (errorMessage: string) => {
@@ -34,8 +35,8 @@ export const App: React.FC = () => {
       .catch(() => handleError('Unable to load todos'));
   }, []);
 
-  const todosForMap = filterSelectedTodos(filterType, todos);
-  const uncompletedCount = counterOfUncompleted(todos);
+  const todosForMap = applySelectedTodos(filterType, todos);
+  const uncompletedCount = applyUncompleted(todos);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -76,38 +77,38 @@ export const App: React.FC = () => {
               </span>
 
               <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
+                <button
+                  type="button"
                   className={cn('filter__link', {
-                    selected: filterType === 'All',
+                    selected: filterType === Filter.all,
                   })}
                   data-cy="FilterLinkAll"
-                  onClick={handleFilterType}
+                  onClick={() => handleFilterType(Filter.all)}
                 >
-                  All
-                </a>
+                  {Filter.all}
+                </button>
 
-                <a
-                  href="#/active"
+                <button
+                  type="button"
                   className={cn('filter__link', {
-                    selected: filterType === 'Active',
+                    selected: filterType === Filter.active,
                   })}
                   data-cy="FilterLinkActive"
-                  onClick={handleFilterType}
+                  onClick={() => handleFilterType(Filter.active)}
                 >
-                  Active
-                </a>
+                  {Filter.active}
+                </button>
 
-                <a
-                  href="#/completed"
+                <button
+                  type="button"
                   className={cn('filter__link', {
-                    selected: filterType === 'Completed',
+                    selected: filterType === Filter.completed,
                   })}
                   data-cy="FilterLinkCompleted"
-                  onClick={handleFilterType}
+                  onClick={() => handleFilterType(Filter.completed)}
                 >
-                  Completed
-                </a>
+                  {Filter.completed}
+                </button>
               </nav>
 
               <button

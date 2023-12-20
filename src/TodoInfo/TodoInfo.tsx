@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const TodoInfo: React.FC<Props> = memo(({ todo }) => {
-  const { title, id, completed } = todo;
+  const { title, completed } = todo;
 
   return (
     <div
@@ -15,7 +15,6 @@ export const TodoInfo: React.FC<Props> = memo(({ todo }) => {
       className={cn('todo', {
         completed: completed === true,
       })}
-      key={id}
     >
       <label className="todo__status-label">
         <input

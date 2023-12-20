@@ -1,16 +1,17 @@
+import { Filter } from '../types/Selected-filter-enum';
 import { Todo } from '../types/Todo';
 
-export const filterSelectedTodos = (type: string, todos: Todo []) => {
+export const applySelectedTodos = (type: Filter, todos: Todo []) => {
   switch (type) {
-    case 'Active':
+    case Filter.active:
       return todos.filter(({ completed }) => completed === false);
-    case 'Completed':
+    case Filter.completed:
       return todos.filter(({ completed }) => completed === true);
     default:
       return [...todos];
   }
 };
 
-export const counterOfUncompleted = (todos: Todo []): number => {
+export const applyUncompleted = (todos: Todo []): number => {
   return todos.filter(({ completed }) => completed === false).length;
 };
