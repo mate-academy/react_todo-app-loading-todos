@@ -14,15 +14,17 @@ export const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>(Status.all);
 
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+    setTimeout(() => {
+      setError(null);
+    }, 3000);
+  };
+
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => (setError('Unable to load todos')))
-      .finally(() => (
-        setTimeout(() => {
-          setError(null);
-        }, 3000)
-      ));
+      .catch(() => (handleError('Unable to load todos')));
   }, []);
 
   const filteredTodos = useMemo(() => {

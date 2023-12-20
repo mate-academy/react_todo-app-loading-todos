@@ -1,3 +1,5 @@
+import cn from 'classnames';
+
 interface Props {
   error: string | null
   onError: React.Dispatch<React.SetStateAction<string | null>>
@@ -6,7 +8,9 @@ interface Props {
 export const ErrorMsg: React.FC<Props> = ({ error, onError }) => (
   <div
     data-cy="ErrorNotification"
-    className="notification is-danger is-light has-text-weight-normal"
+    className={cn('notification is-danger is-light has-text-weight-normal', {
+      hidden: error,
+    })}
   >
     <button
       aria-label="Hide Error Button"
