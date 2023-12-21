@@ -62,15 +62,13 @@ export const Footer: React.FC = () => {
         </a>
       </nav>
 
-      {completedTodosAmount > 0 && (
         <button
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
         >
-          Clear completed
+          {completedTodosAmount > 0 &&'Clear completed'}
         </button>
-      )}
     </footer>
   );
 };
