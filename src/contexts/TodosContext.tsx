@@ -37,9 +37,7 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     getTodos()
-      .then((todosFromServer) => {
-        setTodos(todosFromServer);
-      })
+      .then(setTodos)
       .catch(() => {
         setError('Something went wrong. Failed to load todos');
       });
