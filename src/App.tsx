@@ -3,29 +3,34 @@ import React, {
 } from 'react';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { Notification } from './components/Notifications';
-import { useShowErrorMesege } from
-  './components/ErrorContext/useShowErrorMesege';
 import { Footer } from './components/Footer';
 import { FilterBy } from './types/Filter';
 import { TodoList } from './components/TodoList';
 import { filterTodo } from './helpers/filterTodo';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
+import { ErrorType } from './types/Errors';
+import { Notifications } from './components/Errors';
 
 const USER_ID = 12065;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const showError = useShowErrorMesege();
+  const [errorMessage, steErrorMessage] = useState<ErrorType | null>(null);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
 
+  const visibleError = (error: ErrorType) => {
+    steErrorMessage(error);
+
+    setTimeout(() => steErrorMessage(null), 3000);
+  };
+
   useEffect(
-    (): void => {
+    () => {
       getTodos(USER_ID)
         .then(setTodos)
-        .catch(error => showError('load todos', error));
-    }, [showError],
+        .catch(() => visibleError(ErrorType.UnableToLoadTodo));
+    }, [],
   );
 
   const celectFilterTodo = useCallback(
@@ -60,7 +65,10 @@ export const App: React.FC = () => {
 
       </div>
 
-      <Notification />
+      <Notifications
+        errorMessage={errorMessage}
+        steErrorMessage={steErrorMessage}
+      />
     </div>
   );
 };
