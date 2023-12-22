@@ -2,11 +2,8 @@
 import React from 'react';
 import { TodoList } from './components/TodosList';
 import { Error } from './components/Error';
-import { useTodos } from './context/TodosProvider';
 
 export const App: React.FC = () => {
-  const { errorMessage } = useTodos();
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -33,7 +30,7 @@ export const App: React.FC = () => {
 
         <TodoList />
       </div>
-      {errorMessage && <Error />}
+      <Error />
     </div>
   );
 };
