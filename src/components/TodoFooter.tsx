@@ -3,12 +3,14 @@ import { useTodos } from '../context/TodosProvider';
 import { FilterBy } from '../types/filter';
 
 export const TodoFooter: React.FC = () => {
-  const { filter, setFilter } = useTodos();
+  const { filter, setFilter, counter } = useTodos();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {counter}
+        {' '}
+        items left
       </span>
 
       {/* Active filter should have a 'selected' class */}

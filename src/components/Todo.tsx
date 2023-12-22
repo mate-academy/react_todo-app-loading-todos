@@ -24,13 +24,18 @@ export const SingleTodo: React.FC<Props> = ({ todo }) => {
     <>
       <div
         data-cy="Todo"
-        className={cn('todo', { completed })}
+        className={cn(completed
+          ? 'todo completed'
+          : 'todo')}
       >
         <label className="todo__status-label">
           <input
             data-cy="TodoStatus"
             type="checkbox"
-            className="todo__status"
+            className={cn(completed
+              ? 'todo__status checked'
+              : 'todo__status')}
+            checked={completed}
           />
         </label>
 

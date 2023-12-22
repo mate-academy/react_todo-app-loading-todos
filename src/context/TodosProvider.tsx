@@ -20,6 +20,8 @@ type ContextType = {
   setFilter: (filter: FilterBy) => void;
   filteredTodos: Todo[];
   setFilteredTodos: (todo: Todo[]) => void;
+  counter: number;
+  setCounter: (counter: number) => void;
 };
 
 export const TodosContext = createContext<ContextType>({
@@ -31,6 +33,8 @@ export const TodosContext = createContext<ContextType>({
   setFilter: () => undefined,
   filteredTodos: [],
   setFilteredTodos: () => undefined,
+  counter: 0,
+  setCounter: () => undefined,
 });
 
 export const useTodos = () => {
@@ -55,9 +59,13 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterBy>(FilterBy.All);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
+  const [counter, setCounter] = useState<number>(0);
 
   useEffect(() => {
     setFilteredTodos(filterer(todos, filter));
+    const incompleteTodos = todos.filter(todo => !todo.completed);
+
+    setCounter(incompleteTodos.length);
   }, [todos, filter]);
 
   const values = {
@@ -69,6 +77,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setFilter,
     filteredTodos,
     setFilteredTodos,
+    counter,
+    setCounter,
   };
 
   return (
