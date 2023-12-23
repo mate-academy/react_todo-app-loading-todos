@@ -5,7 +5,9 @@ import { FilterOption } from '../../types/FilterOption';
 import { deleteTodo } from '../../api/todos';
 
 export const TodoList: React.FC = () => {
-  const { todos, filterOption, setTodos } = useContext(TodosContext);
+  const {
+    todos, filterOption, setTodos, setErrorMessage,
+  } = useContext(TodosContext);
 
   const filteredTodos = todos.filter(todo => {
     switch (filterOption) {
@@ -21,49 +23,59 @@ export const TodoList: React.FC = () => {
   });
 
   const handleDeleteTodo = (todoId: number) => {
-    deleteTodo(todoId);
-    setTodos(curentTodos => curentTodos.filter(todo => todo.id !== todoId));
+    deleteTodo(todoId)
+      .then(() => setTodos(
+        curentTodos => curentTodos.filter(todo => todo.id !== todoId),
+      ))
+      .catch((error) => {
+        setErrorMessage('Unable to delete a todo');
+        throw error;
+      });
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => (
-        <div
-          data-cy="Todo"
-          className={classNames('todo', {
-            completed: todo.completed,
-          })}
-          key={todo.id}
-        >
-          <label className="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              checked={todo.completed}
-            />
-          </label>
+      {filteredTodos.map(todo => {
+        const { id, title, completed } = todo;
 
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
-
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDelete"
-            onClick={() => handleDeleteTodo(todo.id)}
+        return (
+          <div
+            data-cy="Todo"
+            className={classNames('todo', {
+              completed: todo.completed,
+            })}
+            key={id}
           >
-            ×
-          </button>
+            <label className="todo__status-label">
+              <input
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                checked={completed}
+              />
+            </label>
 
-          {/* overlay will cover the todo while it is being updated */}
-          <div data-cy="TodoLoader" className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
+            <span data-cy="TodoTitle" className="todo__title">
+              {title}
+            </span>
+
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={() => handleDeleteTodo(id)}
+            >
+              ×
+            </button>
+
+            {/* overlay will cover the todo while it is being updated */}
+            <div data-cy="TodoLoader" className="modal overlay">
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </section>
   );
 };
