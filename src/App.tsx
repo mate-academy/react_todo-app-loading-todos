@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
@@ -7,16 +8,15 @@ import { Filter } from './types/Filter';
 
 const USER_ID = 12005;
 
-export const App: React.FC = () => {
+const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(true); // Initialize loading state
   const [filter, setFilter] = useState(Filter.All);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>(todos);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     setErrorMessage('');
-    setLoading(true);
 
     getTodos(USER_ID)
       .then((data) => {
@@ -28,13 +28,12 @@ export const App: React.FC = () => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      })
-      .finally(() => setLoading(false)); // Set loading to false in any case
+      });
   }, []);
 
   useEffect(() => {
     setVisibleTodos(filteredTodos);
-  }, [filter, todos, filteredTodos]);
+  }, [filter, todos]);
 
   const filteredTodos = useMemo(() => {
     let copyTodos = [...todos];
@@ -61,8 +60,123 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      {/* ... (your existing JSX code) ... */}
-      
+      <h1 className="todoapp__title">todos</h1>
+
+      <div className="todoapp__content">
+        <header className="todoapp__header">
+          {/* this button is active only if there are some active todos */}
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+            data-cy="ToggleAllButton"
+          />
+
+          {/* Add a todo on form submit */}
+          <form>
+            <input
+              data-cy="NewTodoField"
+              type="text"
+              className="todoapp__new-todo"
+              placeholder="What needs to be done?"
+            />
+          </form>
+        </header>
+
+        <section className="todoapp__main" data-cy="TodoList">
+          {visibleTodos.map(todo => (
+            <div
+              key={todo.id}  {/* Add a unique key */}
+              data-cy="Todo"
+              className={classNames('todo', { completed: todo.completed })}
+            >
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                  checked={todo.completed}
+                />
+              </label>
+
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
+
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+              >
+                ×
+              </button>
+
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Hide the footer if there are no todos */}
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {activeTodos === 1
+                ? '1 item left'
+                : `${activeTodos} items left`}
+            </span>
+
+            {/* Active filter should have a 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className={classNames('filter__link', {
+                  selected: filter === Filter.All,
+                })}
+                data-cy="FilterLinkAll"
+                onClick={() => setFilter(Filter.All)}
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className={classNames('filter__link', {
+                  selected: filter === Filter.Active,
+                })}
+                data-cy="FilterLinkActive"
+                onClick={() => setFilter(Filter.Active)}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={classNames('filter__link', {
+                  selected: filter === Filter.Completed,
+                })}
+                data-cy="FilterLinkCompleted"
+                onClick={() => setFilter(Filter.Completed)}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* don't show this button if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+            >
+              Clear completed
+            </button>
+          </footer>
+        )}
+      </div>
+
+      {/* Notification is shown in case of any error */}
+      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={classNames(
