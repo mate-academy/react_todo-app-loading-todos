@@ -28,7 +28,7 @@ const App: React.FC = () => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      });
+      }).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
