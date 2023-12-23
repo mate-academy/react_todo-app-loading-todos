@@ -17,7 +17,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setErrorMessage('');
-
+    setLoading(true);
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      });
+      }).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-           {visibleTodos.map(({ id, completed, ....... }) => (
+           {visibleTodos.map(({ id, completed, title }) => (
              <div
                 key={id}  
                 data-cy="Todo"
@@ -89,7 +89,6 @@ export const App: React.FC = () => {
             </div>
 
             >
-              const { completed } = todo;
 
                 <label className="todo__status-label">
                   <input
