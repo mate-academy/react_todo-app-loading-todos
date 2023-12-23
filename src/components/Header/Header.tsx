@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
           completed: false,
           userId: USER_ID,
         }).then((newTodo: Todo) => {
-          setTodos(currentTodos => [...currentTodos, newTodo]),
+          setTodos(currentTodos => [...currentTodos, newTodo]);
         }).catch(() => setErrorMessage('Unable to add a todo'));
 
         setTodoTitle('');
