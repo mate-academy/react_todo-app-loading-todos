@@ -7,7 +7,7 @@ export const ErrorMessages: React.FC = () => {
 
   let isErrorHidden = true;
 
-  if (errorMessage !== '') {
+  if (errorMessage) {
     isErrorHidden = false;
     setTimeout(() => {
       setErrorMessage('');
@@ -16,8 +16,6 @@ export const ErrorMessages: React.FC = () => {
   }
 
   return (
-    // {/* Notification is shown in case of any error */}
-    // {/* Add the 'hidden' class to hide the message smoothly */}
     <div
       data-cy="ErrorNotification"
       className={classNames('notification',
@@ -36,7 +34,6 @@ export const ErrorMessages: React.FC = () => {
           isErrorHidden = true;
         }}
       />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );
