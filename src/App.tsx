@@ -1,10 +1,26 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
+import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
 
-const USER_ID = 0;
+const USER_ID = 12078;
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loadingDone, setLoadingDone] = useState(false);
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      const data = await getTodos(USER_ID);
+
+      setTodos(data);
+      setLoadingDone(true);
+    };
+
+    loadTodos();
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
