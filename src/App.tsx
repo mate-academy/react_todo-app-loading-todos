@@ -27,6 +27,20 @@ export const App: React.FC = () => {
     setTodos(prev => [...prev, todo]);
   };
 
+  const onCompletionChange = (todoId: number) => {
+    const newTodos = todos.map(todo => {
+      const newTodo = { ...todo };
+
+      if (newTodo.id === todoId) {
+        newTodo.completed = !newTodo.completed;
+      }
+
+      return newTodo;
+    });
+
+    setTodos(newTodos);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -53,6 +67,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
             todos={todos}
+            onCompletionChange={onCompletionChange}
           />
           {/* This todo is being edited */}
           <div data-cy="Todo" className="todo">

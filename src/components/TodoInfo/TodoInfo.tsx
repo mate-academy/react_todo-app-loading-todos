@@ -2,24 +2,31 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo,
+  onCompletionChange: (todoId: number) => void,
 };
 
 export const TodoInfo: React.FC<Props> = (
   {
     todo,
+    onCompletionChange,
   },
 ) => {
-  const { title, completed } = todo;
+  const { title, completed, id } = todo;
+
+  function handleCheckboxChange() {
+    onCompletionChange(id);
+  }
 
   return (
     <div data-cy="Todo" className={completed ? 'todo completed' : 'todo'}>
       <label className="todo__status-label">
-      <input
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        checked
-      />
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          onClick={handleCheckboxChange}
+          className="todo__status"
+          checked
+        />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
