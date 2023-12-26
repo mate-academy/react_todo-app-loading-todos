@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { TodoInfo } from './components/TodoInfo';
 import { TodoList } from './components/TodoList';
+import { NewTodo } from './components/NewTodo';
 
 const USER_ID = 12078;
 
@@ -23,6 +23,10 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
+  const onAdd = (todo: Todo) => {
+    setTodos(prev => [...prev, todo]);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -39,16 +43,11 @@ export const App: React.FC = () => {
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <NewTodo
+            onAdd={onAdd}
+            todos={todos}
+            userId={USER_ID}
+          />
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
