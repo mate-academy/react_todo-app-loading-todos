@@ -77,6 +77,7 @@ export const App: React.FC = () => {
 
   const isCompletedTodo = todos.some(todo => todo.completed);
   const itemsLeft = todos.filter(todo => !todo.completed).length;
+  const noItems = (todos.length === 0);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -163,56 +164,59 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            {itemsLeft}
-            {' '}
-            items left
-          </span>
+        {!noItems
+        && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {itemsLeft}
+              {' '}
+              items left
+            </span>
 
-          {/* Active filter should have a 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={`filter__link ${todosActivityFilter === 'All' ? 'selected' : ''}`}
-              data-cy="FilterLinkAll"
-              onClick={() => setActivityFilter('All')}
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={`filter__link ${todosActivityFilter === 'Active' ? 'selected' : ''}`}
-              data-cy="FilterLinkActive"
-              onClick={() => setActivityFilter('Active')}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={`filter__link ${todosActivityFilter === 'Completed' ? 'selected' : ''}`}
-              data-cy="FilterLinkCompleted"
-              onClick={() => setActivityFilter('Completed')}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* don't show this button if there are no completed todos */}
-          { isCompletedTodo
-            && (
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                onClick={onClearCompleted}
+            {/* Active filter should have a 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className={`filter__link ${todosActivityFilter === 'All' ? 'selected' : ''}`}
+                data-cy="FilterLinkAll"
+                onClick={() => setActivityFilter('All')}
               >
-                Clear completed
-              </button>
-            )}
-        </footer>
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className={`filter__link ${todosActivityFilter === 'Active' ? 'selected' : ''}`}
+                data-cy="FilterLinkActive"
+                onClick={() => setActivityFilter('Active')}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={`filter__link ${todosActivityFilter === 'Completed' ? 'selected' : ''}`}
+                data-cy="FilterLinkCompleted"
+                onClick={() => setActivityFilter('Completed')}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* don't show this button if there are no completed todos */}
+            { isCompletedTodo
+              && (
+                <button
+                  type="button"
+                  className="todoapp__clear-completed"
+                  data-cy="ClearCompletedButton"
+                  onClick={onClearCompleted}
+                >
+                  Clear completed
+                </button>
+              )}
+          </footer>
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
