@@ -47,6 +47,14 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const onClearCompleted = () => {
+    const newTodos = todos.filter(todo => !todo.completed);
+
+    setTodos(newTodos);
+  };
+
+  const isCompletedTodo = todos.some(todo => todo.completed);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -165,13 +173,17 @@ export const App: React.FC = () => {
           </nav>
 
           {/* don't show this button if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
+          { isCompletedTodo
+            && (
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                data-cy="ClearCompletedButton"
+                onClick={onClearCompleted}
+              >
+                Clear completed
+              </button>
+            )}
         </footer>
       </div>
 
