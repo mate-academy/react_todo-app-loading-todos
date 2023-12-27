@@ -108,7 +108,7 @@ export const TodoApp: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
               onClick={handleClearCompleted}
-              disabled={!!competedCount}
+              disabled={!competedCount}
             >
               Clear completed
             </button>
