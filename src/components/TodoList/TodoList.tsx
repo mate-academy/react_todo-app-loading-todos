@@ -1,24 +1,22 @@
 import { FC } from 'react';
-import classnames from 'classnames';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todos: Todo[];
+  todos: Todo[],
 }
 
 export const TodoList: FC<Props> = (props) => {
-  const { todos } = props;
+  const {
+    todos,
+  } = props;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* <section className="todoapp__main" data-cy="TodoList"> */}
-      {todos.map((todo) => (
+      {todos.map(todo => (
         <div
           data-cy="Todo"
-          className={classnames('todo',
-            {
-              completed: todo.completed,
-            })}
+          className={cn('todo', { completed: todo.completed })}
           key={todo.id}
         >
           <label className="todo__status-label">
@@ -32,6 +30,7 @@ export const TodoList: FC<Props> = (props) => {
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
           </span>
+
           <button type="button" className="todo__remove" data-cy="TodoDelete">
             ×
           </button>

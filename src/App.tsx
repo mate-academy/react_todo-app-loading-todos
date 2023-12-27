@@ -6,6 +6,7 @@ import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
+import { ErrorNotification } from './components/ErrorNotification';
 
 const USER_ID = 12084;
 
@@ -17,9 +18,7 @@ export const App: React.FC = () => {
   useEffect(
     () => {
       getTodos(USER_ID)
-        .then((dataFromServer) => {
-          setTodos(dataFromServer);
-        })
+        .then(setTodos)
         .catch((error) => {
           setErrorMessage(`Unable to load todos. Please try again. ${error}`);
         });
@@ -30,9 +29,7 @@ export const App: React.FC = () => {
     () => {
       return todos.filter(todo => {
         return filterValue === 'all'
-          || (filterValue === 'completed'
-            ? todo.completed
-            : !todo.completed);
+          || (filterValue === 'completed' ? todo.completed : !todo.completed);
       });
     },
     [todos, filterValue],
@@ -56,6 +53,7 @@ export const App: React.FC = () => {
         <TodoList
           todos={todosToRender}
         />
+
         {todos.length > 0 && (
           <Footer
             todos={todosToRender}
@@ -66,19 +64,10 @@ export const App: React.FC = () => {
       </div>
 
       {errorMessage && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          {' '}
-          {errorMessage}
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={hideErrorMessage}
-          />
-        </div>
+        <ErrorNotification
+          hideErrorMessage={hideErrorMessage}
+          errorMessage={errorMessage}
+        />
       )}
     </div>
   );
