@@ -1,22 +1,23 @@
 import { FC } from 'react';
+import classnames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  todos: Todo[],
+  todos: Todo[];
 }
-export const TodoList: FC<Props> = (props) => {
-  const {
-    todos,
-  } = props;
 
-  // console.log(props, 'props');
+export const TodoList: FC<Props> = (props) => {
+  const { todos } = props;
 
   return (
     <div>
-      {todos.map(todo => (
+      {todos.map((todo) => (
         <div
           data-cy="Todo"
-          className="todo"
+          className={classnames('todo',
+            {
+              completed: todo.completed,
+            })}
           key={todo.id}
         >
           <label className="todo__status-label">
@@ -24,6 +25,7 @@ export const TodoList: FC<Props> = (props) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
+              checked
             />
           </label>
 
