@@ -10,7 +10,8 @@ export const TodoList: FC<Props> = (props) => {
   const { todos } = props;
 
   return (
-    <div>
+    <section className="todoapp__main" data-cy="TodoList">
+      {/* <section className="todoapp__main" data-cy="TodoList"> */}
       {todos.map((todo) => (
         <div
           data-cy="Todo"
@@ -25,7 +26,6 @@ export const TodoList: FC<Props> = (props) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
             />
           </label>
 
@@ -42,6 +42,6 @@ export const TodoList: FC<Props> = (props) => {
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 };
