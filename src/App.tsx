@@ -12,29 +12,35 @@ const USER_ID = 12084;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterValue, setFilterValue] = useState('all');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(
     () => {
       getTodos(USER_ID)
         .then((dataFromServer) => {
           setTodos(dataFromServer);
+        })
+        .catch((error) => {
+          setErrorMessage(`Unable to load todos. Please try again. ${error}`);
         });
-    },
-    [],
+    }, [],
   );
 
   const todosToRender = useMemo(
     () => {
       return todos.filter(todo => {
-        const statusMatches
-          = filterValue === 'all'
-          || (filterValue === 'completed' ? todo.completed : !todo.completed);
-
-        return statusMatches;
+        return filterValue === 'all'
+          || (filterValue === 'completed'
+            ? todo.completed
+            : !todo.completed);
       });
     },
     [todos, filterValue],
   );
+
+  const hideErrorMessage = () => {
+    setErrorMessage(null);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -58,6 +64,22 @@ export const App: React.FC = () => {
           />
         )}
       </div>
+
+      {errorMessage && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          {' '}
+          {errorMessage}
+          <button
+            data-cy="HideErrorButton"
+            type="button"
+            className="delete"
+            onClick={hideErrorMessage}
+          />
+        </div>
+      )}
     </div>
   );
 };
