@@ -8,9 +8,27 @@ import { NewTodo } from './components/NewTodo';
 
 const USER_ID = 12078;
 
+function filterTodos(todos: Todo[], todosActivityFilter: string) {
+  let resultTodos = [...todos];
+
+  switch (todosActivityFilter) {
+    case 'Completed':
+      resultTodos = resultTodos.filter(todo => todo.completed);
+      break;
+    case 'Active':
+      resultTodos = resultTodos.filter(todo => !todo.completed);
+      break;
+    default:
+      break;
+  }
+
+  return resultTodos;
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingDone, setLoadingDone] = useState(false);
+  const [todosActivityFilter, setTodosActivityFilter] = useState('All');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -53,6 +71,10 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const setActivityFilter = (filterValue: string) => {
+    setTodosActivityFilter(filterValue);
+  };
+
   const isCompletedTodo = todos.some(todo => todo.completed);
 
   if (!USER_ID) {
@@ -81,7 +103,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           {loadingDone && (
             <TodoList
-              todos={todos}
+              todos={filterTodos(todos, todosActivityFilter)}
               onCompletionChange={onCompletionChange}
               onRemoveTodo={onRemoveTodo}
             />
@@ -149,24 +171,27 @@ export const App: React.FC = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className="filter__link selected"
+              className={`filter__link ${todosActivityFilter === 'All' ? 'selected' : ''}`}
               data-cy="FilterLinkAll"
+              onClick={() => setActivityFilter('All')}
             >
               All
             </a>
 
             <a
               href="#/active"
-              className="filter__link"
+              className={`filter__link ${todosActivityFilter === 'Active' ? 'selected' : ''}`}
               data-cy="FilterLinkActive"
+              onClick={() => setActivityFilter('Active')}
             >
               Active
             </a>
 
             <a
               href="#/completed"
-              className="filter__link"
+              className={`filter__link ${todosActivityFilter === 'Completed' ? 'selected' : ''}`}
               data-cy="FilterLinkCompleted"
+              onClick={() => setActivityFilter('Completed')}
             >
               Completed
             </a>
