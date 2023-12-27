@@ -3,18 +3,24 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo,
   onCompletionChange: (todoId: number) => void,
+  onRemoveTodo: (todoId: number) => void,
 };
 
 export const TodoInfo: React.FC<Props> = (
   {
     todo,
     onCompletionChange,
+    onRemoveTodo,
   },
 ) => {
   const { title, completed, id } = todo;
 
   function handleCheckboxChange() {
     onCompletionChange(id);
+  }
+
+  function handleRemoveButton() {
+    onRemoveTodo(id);
   }
 
   return (
@@ -34,7 +40,12 @@ export const TodoInfo: React.FC<Props> = (
       </span>
 
       {/* Remove button appears only on hover */}
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={handleRemoveButton}
+      >
         ×
       </button>
 

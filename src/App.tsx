@@ -41,6 +41,12 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const onRemoveTodo = (todoId: number) => {
+    const newTodos = todos.filter(todo => todo.id !== todoId);
+
+    setTodos(newTodos);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -65,10 +71,13 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList
-            todos={todos}
-            onCompletionChange={onCompletionChange}
-          />
+          {loadingDone && (
+            <TodoList
+              todos={todos}
+              onCompletionChange={onCompletionChange}
+              onRemoveTodo={onRemoveTodo}
+            />
+          )}
           {/* This todo is being edited */}
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">

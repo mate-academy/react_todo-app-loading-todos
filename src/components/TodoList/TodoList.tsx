@@ -5,10 +5,11 @@ import { TodoInfo } from '../TodoInfo';
 type Props = {
   todos: Todo[],
   onCompletionChange: (todoId: number) => void,
+  onRemoveTodo: (todoId: number) => void,
 };
 
 export const TodoList: React.FC<Props> = (
-  { todos, onCompletionChange },
+  { todos, onCompletionChange, onRemoveTodo },
 ) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos
@@ -16,7 +17,7 @@ export const TodoList: React.FC<Props> = (
         <TodoInfo
           todo={todo}
           onCompletionChange={onCompletionChange}
-
+          onRemoveTodo={onRemoveTodo}
         />
       ))}
   </section>
