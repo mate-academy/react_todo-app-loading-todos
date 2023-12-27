@@ -76,6 +76,7 @@ export const App: React.FC = () => {
   };
 
   const isCompletedTodo = todos.some(todo => todo.completed);
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -164,7 +165,9 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            3 items left
+            {itemsLeft}
+            {' '}
+            items left
           </span>
 
           {/* Active filter should have a 'selected' class */}
