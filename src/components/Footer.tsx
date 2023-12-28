@@ -5,19 +5,20 @@ type Filter = 'All' | 'Active' | 'Completed';
 
 type Props = {
   activeTodosNum: number | undefined,
+  completedTodosNum: number,
   selectedFilter: Filter,
   handleFilterChange: (event: MouseEvent<HTMLAnchorElement>) => void
 };
 
 export const Footer: FC<Props> = ({
-  activeTodosNum = 0, selectedFilter, handleFilterChange,
+  activeTodosNum = 0, completedTodosNum = 0, selectedFilter, handleFilterChange,
 }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="TodosCounter">
       { `${activeTodosNum} items left`}
+      { `${completedTodosNum} completed` }
     </span>
 
-    {/* Active filter should have a 'selected' class */}
     <nav className="filter" data-cy="Filter">
       <a
         id="All"
@@ -56,11 +57,11 @@ export const Footer: FC<Props> = ({
       </a>
     </nav>
 
-    {/* don't show this button if there are no completed todos */}
     <button
       type="button"
       className="todoapp__clear-completed"
       data-cy="ClearCompletedButton"
+      disabled={completedTodosNum <= 0}
     >
       Clear completed
     </button>

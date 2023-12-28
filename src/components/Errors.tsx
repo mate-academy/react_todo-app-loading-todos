@@ -28,7 +28,6 @@ export const Errors: FC<Props> = ({
       className="delete"
       onClick={() => setShowError(false)}
     />
-    {/* show only one message at a time */}
     {errorMessage}
   </div>
 );

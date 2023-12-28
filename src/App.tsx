@@ -10,17 +10,18 @@ import { getTodos } from './api/todos';
 const USER_ID = 12107;
 
 export const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [showError, setShowError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [selectedFilter, setSelectedFilter] = useState<Filter>('All');
 
-  // CALCULATING NUMBER OF ACTIVE TASKS
-  const activeTodosNum = todos?.reduce((acc, curr) => {
+  const activeTodosNum = todos.reduce((acc, curr) => {
     return !curr.completed
       ? acc + 1
       : acc;
   }, 0);
+
+  const completedTodosNum = todos.length - activeTodosNum;
 
   const handleFilterChange = (event: MouseEvent<HTMLAnchorElement>) => {
     const { id } = event.target as HTMLAnchorElement;
@@ -33,7 +34,6 @@ export const App: FC = () => {
   };
 
   useEffect(() => {
-    // LOADING TODOS
     const loadData = async () => {
       try {
         const response = await getTodos(USER_ID);
@@ -50,8 +50,6 @@ export const App: FC = () => {
 
     loadData();
 
-    // CLEEARING ERRORS before next API call
-    // not sure if this is correct
     return () => {
       setShowError(false);
       setErrorMessage('');
@@ -62,10 +60,9 @@ export const App: FC = () => {
     return <UserWarning />;
   }
 
-  // FILTERING TODOS
   let filteredTodos;
 
-  if (todos?.length) {
+  if (todos.length) {
     filteredTodos = [...todos];
     switch (selectedFilter) {
       case 'Active':
@@ -86,13 +83,14 @@ export const App: FC = () => {
       <div className="todoapp__content">
         <Header />
         {
-          todos && !!todos.length && (
+          todos.length > 0 && (
             <>
               <TodoList
                 filteredTodos={filteredTodos}
               />
               <Footer
                 activeTodosNum={activeTodosNum}
+                completedTodosNum={completedTodosNum}
                 selectedFilter={selectedFilter}
                 handleFilterChange={handleFilterChange}
               />
@@ -101,7 +99,6 @@ export const App: FC = () => {
         }
       </div>
 
-      {/* Notification is shown in case of any error */}
       <Errors
         showError={showError}
         setShowError={setShowError}

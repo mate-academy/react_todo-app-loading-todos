@@ -9,7 +9,6 @@ type Props = {
 
 export const TodoList: FC<Props> = ({ filteredTodos }) => (
   <section className="todoapp__main" data-cy="TodoList">
-    {/* DISPLAYING TODOS */}
     {
       filteredTodos?.map(todo => (
         <div
