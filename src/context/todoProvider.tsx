@@ -3,16 +3,18 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
+import { ErrorType } from '../types/ErrorTypes';
+import { Filter } from '../types/Filter';
 
 type TodosProps = {
   todos: Todo[];
   taskName: string;
   setTaskName: (query: string) => void;
-  filterBy: string;
-  setFilterBy: (query: string) => void,
+  filterBy: Filter;
+  setFilterBy: (query: Filter) => void,
   count: number;
-  error: null | string;
-  setError: (err: string | null) => void;
+  error: null | ErrorType;
+  setError: (err: ErrorType | null) => void;
 };
 
 const TodosContext = createContext<TodosProps>({
@@ -44,9 +46,9 @@ const dataFilter = (data: Todo[], filtr: string) => {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [taskName, setTaskName] = useState<string>('');
-  const [filterBy, setFilterBy] = useState<string>('all');
+  const [filterBy, setFilterBy] = useState<Filter>('all');
   const [count, setCount] = useState<number>(0);
-  const [error, setError] = useState<null | string>(null);
+  const [error, setError] = useState<null | ErrorType>(null);
 
   const value = {
     todos,
@@ -64,10 +66,10 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       getTodos(12075)
         .then(data => setTodos(dataFilter(data, filterBy)));
     } catch (err) {
-      setError('Unable to load todos');
+      setError(ErrorType.Load);
     }
 
-    const counter = todos.filter(task => !task.completed).length;
+    const counter = dataFilter(todos, 'active').length;
 
     setCount(counter);
   }, [todos, filterBy, count]);
