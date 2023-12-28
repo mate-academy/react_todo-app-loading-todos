@@ -2,6 +2,7 @@ import {
   FC, MouseEvent, useEffect, useState,
 } from 'react';
 import { Todo, Filter } from './types';
+import { AppContext, AppContextType } from './context/AppContext';
 import {
   Header, TodoList, Footer, Errors, UserWarning,
 } from './components';
@@ -11,9 +12,9 @@ const USER_ID = 12107;
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<Filter>('All');
   const [showError, setShowError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [selectedFilter, setSelectedFilter] = useState<Filter>('All');
 
   const activeTodosNum = todos.reduce((acc, curr) => {
     return !curr.completed
@@ -60,50 +61,57 @@ export const App: FC = () => {
     return <UserWarning />;
   }
 
-  let filteredTodos;
+  let filteredTodos = [...todos];
 
   if (todos.length) {
-    filteredTodos = [...todos];
     switch (selectedFilter) {
       case 'Active':
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
+        filteredTodos = filteredTodos.filter(todo => !todo.completed) || [];
         break;
       case 'Completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
+        filteredTodos = filteredTodos.filter(todo => todo.completed) || [];
         break;
       default:
         break;
     }
   }
 
+  // context test
+  const appContextValue: AppContextType = {
+    todos,
+    setTodos,
+    selectedFilter,
+    setSelectedFilter,
+    showError,
+    setShowError,
+    errorMessage,
+    setErrorMessage,
+    filteredTodos,
+    activeTodosNum,
+    completedTodosNum,
+    handleFilterChange,
+  };
+  //
+
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+    <AppContext.Provider value={appContextValue}>
+      <div className="todoapp">
+        <h1 className="todoapp__title">todos</h1>
 
-      <div className="todoapp__content">
-        <Header />
-        {
-          todos.length > 0 && (
-            <>
-              <TodoList
-                filteredTodos={filteredTodos}
-              />
-              <Footer
-                activeTodosNum={activeTodosNum}
-                completedTodosNum={completedTodosNum}
-                selectedFilter={selectedFilter}
-                handleFilterChange={handleFilterChange}
-              />
-            </>
-          )
-        }
+        <div className="todoapp__content">
+          <Header />
+          {
+            todos.length > 0 && (
+              <>
+                <TodoList />
+                <Footer />
+              </>
+            )
+          }
+        </div>
+
+        <Errors />
       </div>
-
-      <Errors
-        showError={showError}
-        setShowError={setShowError}
-        errorMessage={errorMessage}
-      />
-    </div>
+    </AppContext.Provider>
   );
 };
