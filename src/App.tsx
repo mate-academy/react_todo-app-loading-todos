@@ -89,6 +89,18 @@ export const App: React.FC = () => {
     setTodosActivityFilter(filterValue);
   };
 
+  const setAllTodosStatus = (isActive: boolean) => {
+    const newTodos = todos.map(todo => {
+      const newTodo = { ...todo };
+
+      newTodo.completed = isActive;
+
+      return newTodo;
+    });
+
+    setTodos(newTodos);
+  };
+
   const isCompletedTodo = todos.some(todo => todo.completed);
   const itemsLeft = todos.filter(todo => !todo.completed).length;
   const noItems = (todos.length === 0);
@@ -106,8 +118,9 @@ export const App: React.FC = () => {
           {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={`todoapp__toggle-all ${itemsLeft === 0 ? 'active' : ''}`}
             data-cy="ToggleAllButton"
+            onClick={() => setAllTodosStatus(itemsLeft !== 0)}
           />
           <NewTodo
             onAdd={onAdd}
@@ -122,6 +135,7 @@ export const App: React.FC = () => {
               todos={filterTodos(todos, todosActivityFilter)}
               onCompletionChange={onCompletionChange}
               onRemoveTodo={onRemoveTodo}
+              onTodoEdited={onTodoEdited}
             />
           )}
 

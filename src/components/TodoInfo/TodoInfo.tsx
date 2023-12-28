@@ -5,6 +5,7 @@ type Props = {
   todo: Todo,
   onCompletionChange: (todoId: number) => void,
   onRemoveTodo: (todoId: number) => void,
+  onTodoEdited: (id: number, newTitle: string) => void,
 };
 
 export const TodoInfo: React.FC<Props> = (
@@ -12,6 +13,7 @@ export const TodoInfo: React.FC<Props> = (
     todo,
     onCompletionChange,
     onRemoveTodo,
+    onTodoEdited,
   },
 ) => {
   const [isEdited, setIsEdited] = useState(false);
@@ -35,6 +37,19 @@ export const TodoInfo: React.FC<Props> = (
     setEditedTitle(event.target.value);
   };
 
+  function handleOnBlur() {
+    onTodoEdited(id, editedTitle);
+    setIsEdited(false);
+  }
+
+  function handleKeyPressed(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onTodoEdited(id, editedTitle);
+      setIsEdited(false);
+    }
+  }
+
   return (
     <div data-cy="Todo" className={completed ? 'todo completed' : 'todo'}>
       <label className="todo__status-label">
@@ -56,6 +71,8 @@ export const TodoInfo: React.FC<Props> = (
             placeholder="Empty todo will be deleted"
             value={editedTitle}
             onChange={handleEdition}
+            onBlur={handleOnBlur}
+            onKeyDown={(event) => handleKeyPressed(event)}
           />
         </form>
       ) : (

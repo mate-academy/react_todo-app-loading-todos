@@ -6,10 +6,13 @@ type Props = {
   todos: Todo[],
   onCompletionChange: (todoId: number) => void,
   onRemoveTodo: (todoId: number) => void,
+  onTodoEdited: (id: number, newTitle: string) => void,
 };
 
 export const TodoList: React.FC<Props> = (
-  { todos, onCompletionChange, onRemoveTodo },
+  {
+    todos, onCompletionChange, onRemoveTodo, onTodoEdited,
+  },
 ) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos
@@ -18,6 +21,7 @@ export const TodoList: React.FC<Props> = (
           todo={todo}
           onCompletionChange={onCompletionChange}
           onRemoveTodo={onRemoveTodo}
+          onTodoEdited={onTodoEdited}
         />
       ))}
   </section>
