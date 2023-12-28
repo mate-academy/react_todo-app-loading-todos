@@ -40,8 +40,6 @@ export const App: React.FC = () => {
   const isSomeActive = todosFromServer.some(({ completed }) => !completed);
 
   useEffect(() => {
-    setIsError(false);
-
     getTodos(USER_ID)
       .then(setTodosFromServer)
       .catch(() => {
