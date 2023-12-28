@@ -10,7 +10,7 @@ export const ErrorList = () => {
     setTimeout(() => {
       setErrors(null);
     }, 3000);
-  }, [errors]);
+  }, [errors, setErrors]);
 
   const handleClick = () => {
     setErrors(null);
@@ -40,5 +40,3 @@ export const ErrorList = () => {
     </div>
   );
 };
-
-export default ErrorList;

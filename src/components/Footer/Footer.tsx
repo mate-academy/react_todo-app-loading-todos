@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { useTodos } from '../../context';
 import { FilterType } from '../../types/FilterType';
+import { useTodos } from '../../context';
 
 export const Footer = () => {
   const { filter, setFilter, inProgress } = useTodos();

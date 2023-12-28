@@ -23,7 +23,8 @@ export const TodoItem = ({ todo } : Props) => {
           className={classNames('todo__status', {
             'checked': completed,
           })}
-          checked={completed}
+          // checked={completed}
+          defaultChecked={completed}
         />
       </label>
 

@@ -2,6 +2,8 @@ import {
   createContext, FC, ReactNode, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { ErrorType, FilterType, Todo } from '../types';
+import { getTodos } from '../api/todos';
+import { useAuthContext } from './AuthContext';
 
 type Props = {
   children: ReactNode;
@@ -17,9 +19,7 @@ type TodoProviderType = {
   filter: FilterType;
   setFilter: (filter : FilterType) => void;
   filteredTodos: Todo[];
-  setFilteredTodos: (todos: Todo[]) => void;
   inProgress: number;
-  setinProgress: (inProgress : number) => void;
 };
 
 const TodoContext = createContext<TodoProviderType>({
@@ -32,37 +32,50 @@ const TodoContext = createContext<TodoProviderType>({
   filter: FilterType.All,
   setFilter: () => {},
   filteredTodos: [],
-  setFilteredTodos: () => {},
   inProgress: 0,
-  setinProgress: () => {},
 });
 
-export const filterTodos = (data: Todo[], filterType: FilterType) => {
-  switch (filterType) {
-    case FilterType.Completed:
-      return data.filter((todo) => todo.completed);
-    case FilterType.Active:
-      return data.filter((todo) => !todo.completed);
-    default:
-      return data;
-  }
-};
-
-const TodosProvider: FC<Props> = ({ children }) => {
+export const TodosProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errors, setErrors] = useState<ErrorType | null>(null);
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
-  const [inProgress, setinProgress] = useState<number>(0);
+
+  const userId = useAuthContext();
 
   useEffect(() => {
-    setFilteredTodos(filterTodos(todos, filter));
+    if (userId) {
+      setErrors(null);
+      setLoading(true);
+      getTodos(userId)
+        .then((data) => {
+          setTodos(data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setErrors(ErrorType.Load);
+          setLoading(false);
+        });
+    }
+  }, [userId]);
 
-    const uncompletedTodos = filterTodos(todos, FilterType.Active);
+  const filteredTodos = useMemo(() => {
+    return todos
+      .filter(todo => {
+        switch (filter) {
+          case FilterType.Active:
+            return !todo.completed;
+          case FilterType.Completed:
+            return todo.completed;
+          default:
+            return true;
+        }
+      });
+  }, [filter, todos]);
 
-    setinProgress(uncompletedTodos.length);
-  }, [todos, filter]);
+  const inProgress = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
 
   const value = useMemo(() => ({
     loading,
@@ -74,9 +87,7 @@ const TodosProvider: FC<Props> = ({ children }) => {
     filter,
     setFilter,
     filteredTodos,
-    setFilteredTodos,
     inProgress,
-    setinProgress,
   }), [errors, todos, filteredTodos, filter, loading, inProgress]);
 
   return (
@@ -85,7 +96,5 @@ const TodosProvider: FC<Props> = ({ children }) => {
     </TodoContext.Provider>
   );
 };
-
-export default TodosProvider;
 
 export const useTodos = () => useContext(TodoContext);

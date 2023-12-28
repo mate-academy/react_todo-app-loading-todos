@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const AuthProvider = ({ children } : Props) => {
+export const AuthProvider = ({ children } : Props) => {
   const USER_ID = 12061;
 
   if (!USER_ID) {
@@ -20,7 +20,5 @@ const AuthProvider = ({ children } : Props) => {
     </AuthContext.Provider>
   );
 };
-
-export default AuthProvider;
 
 export const useAuthContext = () => useContext(AuthContext);

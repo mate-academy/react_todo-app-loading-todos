@@ -1,38 +1,15 @@
-import { useEffect } from 'react';
-import { useAuthContext, useTodos } from '../../context';
-import { getTodos } from '../../api/todos';
-import { ErrorType, Todo } from '../../types';
+import { Todo } from '../../types';
 import { TodoItem } from '../TodoItem';
 import { Footer } from '../Footer';
 import { Loader } from '../Loader';
+import { useTodos } from '../../context';
 
 export const TodoList = () => {
   const {
     loading,
-    setLoading,
     todos,
-    setTodos,
     filteredTodos,
-    setErrors,
   } = useTodos();
-
-  const userId = useAuthContext();
-
-  useEffect(() => {
-    if (userId) {
-      setErrors(null);
-      setLoading(true);
-      getTodos(userId)
-        .then((data) => {
-          setTodos(data);
-          setLoading(false);
-        })
-        .catch(() => {
-          setErrors(ErrorType.Load);
-          setLoading(false);
-        });
-    }
-  }, [userId]);
 
   if (loading) {
     return <Loader />;
