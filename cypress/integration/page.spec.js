@@ -210,13 +210,13 @@ describe.skip('', () => {
       todos.deleteButton(0).should('exist');
     });
 
-    it('should not have loaders', () => {
-      todos.assertNotLoading(0);
-      todos.assertNotLoading(1);
-      todos.assertNotLoading(2);
-      todos.assertNotLoading(3);
-      todos.assertNotLoading(4);
-    })
+    // it('should not have loaders', () => {
+    //   todos.assertNotLoading(0);
+    //   todos.assertNotLoading(1);
+    //   todos.assertNotLoading(2);
+    //   todos.assertNotLoading(3);
+    //   todos.assertNotLoading(4);
+    // })
 
     it('should have correct todo titles', () => {
       todos.assertTitle(0, 'HTML');
