@@ -11,8 +11,8 @@ type TodosProps = {
   filterBy: string;
   setFilterBy: (query: string) => void,
   count: number;
-  error: string | null;
-  setError: (err: string) => void;
+  error: null | string;
+  setError: (err: string | null) => void;
 };
 
 const TodosContext = createContext<TodosProps>({
@@ -46,7 +46,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [filterBy, setFilterBy] = useState<string>('all');
   const [count, setCount] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<null | string>(null);
 
   const value = {
     todos,
