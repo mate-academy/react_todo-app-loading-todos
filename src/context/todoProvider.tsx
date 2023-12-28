@@ -5,6 +5,7 @@ import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
 import { ErrorType } from '../types/ErrorTypes';
 import { Filter } from '../types/Filter';
+import { USER_ID } from '../utils/userId';
 
 type TodosProps = {
   todos: Todo[];
@@ -63,7 +64,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     try {
-      getTodos(12075)
+      getTodos(USER_ID)
         .then(data => setTodos(dataFilter(data, filterBy)));
     } catch (err) {
       setError(ErrorType.Load);

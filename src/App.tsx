@@ -5,8 +5,7 @@ import { TodoFooter } from './components/todofooter/todofooter';
 import { TodoErr } from './components/todoerr/todoerr';
 import { TodoForm } from './components/todoform/todoform';
 import { TodoList } from './components/todolist/todolist';
-
-const USER_ID = 12075;
+import { USER_ID } from './utils/userId';
 
 export const App: React.FC = () => {
   if (!USER_ID) {
