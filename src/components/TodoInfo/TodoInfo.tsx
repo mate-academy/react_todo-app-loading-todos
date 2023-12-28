@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -13,6 +14,8 @@ export const TodoInfo: React.FC<Props> = (
     onRemoveTodo,
   },
 ) => {
+  const [isEdited, setIsEdited] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(todo.title);
   const { title, completed, id } = todo;
 
   function handleCheckboxChange() {
@@ -22,6 +25,15 @@ export const TodoInfo: React.FC<Props> = (
   function handleRemoveButton() {
     onRemoveTodo(id);
   }
+
+  function handleClickOnTodo() {
+    setIsEdited(true);
+  }
+
+  const handleEdition: React.ChangeEventHandler<HTMLInputElement>
+  = (event) => {
+    setEditedTitle(event.target.value);
+  };
 
   return (
     <div data-cy="Todo" className={completed ? 'todo completed' : 'todo'}>
@@ -35,19 +47,37 @@ export const TodoInfo: React.FC<Props> = (
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        { title }
-      </span>
+      {isEdited ? (
+        <form>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={editedTitle}
+            onChange={handleEdition}
+          />
+        </form>
+      ) : (
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={handleClickOnTodo}
+          >
+            { title }
+          </span>
 
-      {/* Remove button appears only on hover */}
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={handleRemoveButton}
-      >
-        ×
-      </button>
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={handleRemoveButton}
+          >
+            ×
+          </button>
+        </>
+      )}
 
       {/* overlay will cover the todo while it is being updated */}
       <div data-cy="TodoLoader" className="modal overlay">

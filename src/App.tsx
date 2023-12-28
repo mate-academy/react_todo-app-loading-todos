@@ -71,6 +71,20 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const onTodoEdited = (id: number, newTitle: string) => {
+    const newTodos = todos.map(todo => {
+      const newTodo = { ...todo };
+
+      if (newTodo.id === id) {
+        newTodo.title = newTitle;
+      }
+
+      return newTodo;
+    });
+
+    setTodos(newTodos);
+  };
+
   const setActivityFilter = (filterValue: string) => {
     setTodosActivityFilter(filterValue);
   };
@@ -110,32 +124,6 @@ export const App: React.FC = () => {
               onRemoveTodo={onRemoveTodo}
             />
           )}
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
 
           {/* This todo is in loadind state */}
           <div data-cy="Todo" className="todo">
