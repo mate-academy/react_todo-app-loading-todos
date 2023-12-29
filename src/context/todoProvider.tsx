@@ -1,5 +1,5 @@
 import {
-  ReactNode, createContext, useContext, useEffect, useState,
+  ReactNode, createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
@@ -78,13 +78,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const visible = dataFilter(todos, filterBy);
+  // useEffect(() => {
+  //   const visible = dataFilter(todos, filterBy);
 
-    setVisibleTodos(visible);
+  //   setVisibleTodos(visible);
+  //   const counter = dataFilter(todos, 'active').length;
+
+  //   setCount(counter);
+  // }, [filterBy, todos]);
+  useMemo(() => {
+    const visible = dataFilter(todos, filterBy);
     const counter = dataFilter(todos, 'active').length;
 
+    setVisibleTodos(visible);
     setCount(counter);
+    // return { visibleTodos, counter };
   }, [filterBy, todos]);
 
   return (
