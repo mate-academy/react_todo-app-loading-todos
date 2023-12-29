@@ -3,7 +3,7 @@ import {
 } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos, postTodo } from '../api/todos';
-import { Filter } from '../types/Filter';
+import { FilterType } from '../types/FilterType';
 import { ErrorType } from '../types/ErrorType';
 
 type TodoContextType = {
@@ -16,8 +16,8 @@ type TodoContextType = {
   modifiedTodo: number | null;
   setModifiedTodo: React.Dispatch<React.SetStateAction<number | null>>;
   todosLeft: number;
-  activeFilter: Filter;
-  setActiveFilter: React.Dispatch<React.SetStateAction<Filter>>;
+  activeFilter: FilterType;
+  setActiveFilter: React.Dispatch<React.SetStateAction<FilterType>>;
   error: ErrorType | null;
   setError: React.Dispatch<React.SetStateAction<ErrorType | null>>;
 };
@@ -34,7 +34,7 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   const [modifiedTodo, setModifiedTodo] = useState<number | null>(null);
   const [todosLeft, setTodosLeft] = useState<number>(0);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([] as Todo[]);
-  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [error, setError] = useState<ErrorType | null>(null);
 
   useEffect(() => {
@@ -59,9 +59,9 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   useMemo(() => {
     setVisibleTodos(todos.filter((todo) => {
       switch (activeFilter) {
-        case 'active':
+        case 'Active':
           return !todo.completed;
-        case 'completed':
+        case 'Completed':
           return todo.completed;
         default:
           return true;
