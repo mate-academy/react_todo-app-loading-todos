@@ -10,7 +10,6 @@ import React, {
 
 import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
-import { UserWarning } from '../UserWarning';
 
 type TodoContextType = {
   todos: Todo[];
