@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -11,14 +12,15 @@ export const TodoList:React.FC<Props> = ({ todos }) => {
         <div
           key={todo.id}
           data-cy="Todo"
-          className="todo completed"
+          className={classNames('todo',{
+            'completed': todo.completed
+          })}
         >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
             />
           </label>
 
