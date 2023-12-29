@@ -10,6 +10,7 @@ import React, {
 
 import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
+import { UserWarning } from '../UserWarning';
 
 type TodoContextType = {
   todos: Todo[];
@@ -62,7 +63,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = (
       });
   }, [setTodos, setMessageError]);
 
-  useEffect(() => {
+  useMemo(() => {
     switch (filterType) {
       case SortType.all:
         setFilteredTodos(todos);
