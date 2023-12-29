@@ -113,7 +113,7 @@ Cypress.on('fail', (e) => {
 
 describe.skip('', () => {
   beforeEach(() => {
-    // if (failed) Cypress.runner.stop();
+    if (failed) Cypress.runner.describe();
   });
 
   describe('Page with no todos', () => {

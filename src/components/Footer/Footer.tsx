@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import { FilterTodos } from "../../enum/FilterTodos";
-import { Todo } from "../../types/Todo";
+import classNames from 'classnames';
+import { FilterTodos } from '../../enum/FilterTodos';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   setChooseFilter: (value: string) => void,
@@ -12,18 +12,20 @@ export const Footer: React.FC<Props> = ({
   setChooseFilter,
   todos,
   chooseFilter,
-  }) => {
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.length} items left
+        {todos.length}
+        {' '}
+        items left
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={classNames('filter__link',{
-            'selected': chooseFilter === FilterTodos.All
+          className={classNames('filter__link', {
+            selected: chooseFilter === FilterTodos.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => setChooseFilter(FilterTodos.All)}
@@ -33,8 +35,8 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/active"
-          className={classNames('filter__link',{
-            'selected': chooseFilter === FilterTodos.Active
+          className={classNames('filter__link', {
+            selected: chooseFilter === FilterTodos.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => setChooseFilter(FilterTodos.Active)}
@@ -45,8 +47,8 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/completed"
-          className={classNames('filter__link',{
-            'selected': chooseFilter === FilterTodos.Completed
+          className={classNames('filter__link', {
+            selected: chooseFilter === FilterTodos.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => setChooseFilter(FilterTodos.Completed)}
