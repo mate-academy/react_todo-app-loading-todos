@@ -6,6 +6,8 @@ export const TodoFooter = () => {
     filterBy, setFilterBy, count, todos,
   } = useTodos();
 
+  const hiddenBtn = todos.filter(el => el.completed).length === 0;
+
   return (
     <>
       {todos.length > 0 && (
@@ -54,16 +56,14 @@ export const TodoFooter = () => {
           </nav>
 
           {/* don't show this button if there are no completed todos */}
-          {count > 0 && (
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          )}
-
+          <button
+            type="button"
+            className="todoapp__clear-completed"
+            data-cy="ClearCompletedButton"
+            disabled={hiddenBtn}
+          >
+            Clear completed
+          </button>
         </footer>
       )}
     </>
