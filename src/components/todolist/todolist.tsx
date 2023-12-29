@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { useTodos } from '../../context/todoProvider';
 
 export const TodoList = () => {
-  const { todos } = useTodos();
+  const { visibleTodos } = useTodos();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* <TodoInfo /> */}
-      {todos.map(task => (
+      {visibleTodos.map(task => (
         <div
           key={task.id}
           data-cy="Todo"
