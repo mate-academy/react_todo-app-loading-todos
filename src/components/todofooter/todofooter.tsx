@@ -3,7 +3,7 @@ import { useTodos } from '../../context/todoProvider';
 
 export const TodoFooter = () => {
   const {
-    filterBy, setFilterBy, count, todos,
+    filterBy, setFilterBy, countIncompleteTask, todos,
   } = useTodos();
 
   const hiddenBtn = todos.filter(el => el.completed).length === 0;
@@ -11,15 +11,13 @@ export const TodoFooter = () => {
   return (
     <>
       {todos.length > 0 && (
-      // Hide the footer if there are no todos
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {count}
+            {countIncompleteTask}
             {' '}
             items left
           </span>
 
-          {/* Active filter should have a 'selected' class */}
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
@@ -55,7 +53,6 @@ export const TodoFooter = () => {
             </a>
           </nav>
 
-          {/* don't show this button if there are no completed todos */}
           <button
             type="button"
             className="todoapp__clear-completed"

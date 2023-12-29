@@ -3,12 +3,12 @@ import classNames from 'classnames';
 import { useTodos } from '../../context/todoProvider';
 
 export const TodoList = () => {
-  const { visibleTodos } = useTodos();
+  const { visibleTasks } = useTodos();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* <TodoInfo /> */}
-      {visibleTodos.map(task => (
+      {visibleTasks.map(task => (
         <div
           key={task.id}
           data-cy="Todo"
@@ -29,7 +29,6 @@ export const TodoList = () => {
             {task.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove" data-cy="TodoDelete">
             ×
           </button>

@@ -14,9 +14,10 @@ type TodosProps = {
   setTaskName: (query: string) => void;
   filterBy: Filter;
   setFilterBy: (query: Filter) => void,
-  count: number;
+  countIncompleteTask: number;
   error: null | ErrorType;
   setError: (err: ErrorType | null) => void;
+  visibleTasks: Todo[];
 };
 
 const TodosContext = createContext<TodosProps>({
@@ -26,9 +27,10 @@ const TodosContext = createContext<TodosProps>({
   setTaskName: () => undefined,
   filterBy: 'all',
   setFilterBy: () => undefined,
-  count: 0,
+  countIncompleteTask: 0,
   error: null,
   setError: () => undefined,
+  visibleTasks: [],
 });
 
 type Props = {
@@ -51,8 +53,16 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [taskName, setTaskName] = useState<string>('');
   const [filterBy, setFilterBy] = useState<Filter>('all');
-  const [count, setCount] = useState<number>(0);
+  // const [count] = useState<number>(0);
   const [error, setError] = useState<null | ErrorType>(null);
+
+  const visibleTasks = useMemo(() => {
+    return dataFilter(todos, filterBy);
+  }, [todos, filterBy]);
+
+  const countIncompleteTask = useMemo(() => {
+    return dataFilter(todos, 'active').length;
+  }, [todos]);
 
   const value = {
     todos,
@@ -60,10 +70,11 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTaskName,
     filterBy,
     setFilterBy,
-    count,
+    countIncompleteTask,
     error,
     setError,
     visibleTodos,
+    visibleTasks,
   };
 
   useEffect(() => {
@@ -77,23 +88,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       setError(ErrorType.Load);
     }
   }, []);
-
-  // useEffect(() => {
-  //   const visible = dataFilter(todos, filterBy);
-
-  //   setVisibleTodos(visible);
-  //   const counter = dataFilter(todos, 'active').length;
-
-  //   setCount(counter);
-  // }, [filterBy, todos]);
-  useMemo(() => {
-    const visible = dataFilter(todos, filterBy);
-    const counter = dataFilter(todos, 'active').length;
-
-    setVisibleTodos(visible);
-    setCount(counter);
-    // return { visibleTodos, counter };
-  }, [filterBy, todos]);
 
   return (
     <TodosContext.Provider value={value}>
