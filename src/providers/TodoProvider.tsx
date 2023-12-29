@@ -70,7 +70,7 @@ export const TodoProvider: FC<Props> = ({ children }) => {
   }, [todos, activeFilter]);
 
   const addTodo = (todo: Todo) => {
-    postTodo(USER_ID, todo)
+    postTodo(todo)
       .then(data => {
         setTodos(prev => [data, ...prev]);
       })
