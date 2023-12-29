@@ -1,5 +1,5 @@
 import {
-  FC, createContext, useContext, useEffect, useState,
+  FC, createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Todo } from '../types/Todo';
 import { getTodos, postTodo } from '../api/todos';
@@ -43,7 +43,7 @@ export const TodoProvider: FC<Props> = ({ children }) => {
       .catch(() => setError('load'));
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     let uncompleted = 0;
 
     todos.forEach(todo => {
@@ -56,7 +56,7 @@ export const TodoProvider: FC<Props> = ({ children }) => {
     setVisibleTodos(todos);
   }, [todos]);
 
-  useEffect(() => {
+  useMemo(() => {
     setVisibleTodos(todos.filter((todo) => {
       switch (activeFilter) {
         case 'active':
