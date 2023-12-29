@@ -1,9 +1,9 @@
-import classNames from 'classnames';
 import { FilterType } from '../../types/FilterType';
 import { useTodos } from '../../context';
+import { Filter } from '../Filter';
 
 export const Footer = () => {
-  const { filter, setFilter, inProgress } = useTodos();
+  const { inProgress } = useTodos();
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -13,35 +13,10 @@ export const Footer = () => {
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link',
-            { selected: (filter === FilterType.All) })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter(FilterType.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link',
-            { selected: (filter === FilterType.Active) })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter(FilterType.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link',
-            { selected: (filter === FilterType.Completed) })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(FilterType.Completed)}
-        >
-          Completed
-        </a>
+        {(Object.keys(FilterType) as Array<keyof typeof FilterType>)
+          .map((key) => (
+            <Filter filterItem={key} key={key} />
+          ))}
       </nav>
 
       { inProgress > 0 && (
@@ -49,7 +24,6 @@ export const Footer = () => {
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          onClick={() => setFilter(FilterType.All)}
         >
           Clear completed
         </button>
