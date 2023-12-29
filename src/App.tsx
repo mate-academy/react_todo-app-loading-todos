@@ -2,14 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
-import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
+import { useTodoContext } from './context';
 
 const USER_ID = 12113;
 
 export const App: React.FC = () => {
-  const [allTodos, setAllTodos] = useState<Todo[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { setAllTodos } = useTodoContext();
 
   const errorHandler = (message: string) => {
     setErrorMessage(null);
@@ -36,7 +37,7 @@ export const App: React.FC = () => {
     };
 
     loadTodos();
-  }, []);
+  }, [setAllTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -67,9 +68,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList
-            todos={allTodos}
-          />
+          <TodoList />
         </section>
       </div>
 

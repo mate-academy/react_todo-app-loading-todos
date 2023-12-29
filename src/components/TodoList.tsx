@@ -1,41 +1,15 @@
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import { Todo } from '../types/Todo';
+import { useEffect } from 'react';
+import { useTodoContext } from '../context';
 
-type Props = {
-  todos: Todo[] | null,
-};
-
-export const TodoList = ({ todos }: Props) => {
-  const [visibleTodos, setVisibleTodos] = useState<Todo[] | null>(null);
-  const [activeFilter, setActiveFilter] = useState<string>('All');
+export const TodoList = () => {
+  const {
+    activeFilter, handleTodosFilter, visibleTodos, setVisibleTodos, allTodos,
+  } = useTodoContext();
 
   useEffect(() => {
-    setVisibleTodos(todos);
-  }, [todos]);
-
-  const handleTodosFilter = (filter: string) => {
-    setActiveFilter(filter);
-
-    if (!todos) {
-      return;
-    }
-
-    let filteredTodos = [...todos];
-
-    switch (filter) {
-      case 'Active':
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
-        break;
-      case 'Completed':
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
-        break;
-      default:
-        break;
-    }
-
-    setVisibleTodos(filteredTodos);
-  };
+    setVisibleTodos(allTodos);
+  }, [allTodos, setVisibleTodos]);
 
   return (
     <>
