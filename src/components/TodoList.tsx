@@ -13,13 +13,9 @@ export const TodoList = () => {
     setModifiedTodo,
   } = useTodo();
 
-  const handleClick = (todoId: number | null = null) => (
-    (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-      if (event.detail === 2) {
-        setModifiedTodo(todoId);
-      }
-    }
-  );
+  const handleDoubleClick = (todoId: number | null = null) => () => {
+    setModifiedTodo(todoId);
+  };
 
   const handleCheck = (todoId: number) => () => {
     setTodos(prev => (
@@ -43,7 +39,7 @@ export const TodoList = () => {
             className={classNames('todo', {
               completed: todo.completed,
             })}
-            onClick={handleClick(todo.id)}
+            onDoubleClick={handleDoubleClick(todo.id)}
           >
             <label className="todo__status-label">
               <input
