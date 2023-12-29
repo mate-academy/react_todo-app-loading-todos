@@ -56,7 +56,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <Footer
-            todos={todosToRender}
+            todos={todos}
             setFilterValue={setFilterValue}
             filterValue={filterValue}
           />
