@@ -37,6 +37,12 @@ const ERROR_MESSAGES = [
   'Unable to update a todo',
 ];
 
+enum SortType {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
+}
+
 export const TodoProvider: React.FC<{ children: ReactNode }> = (
   { children },
 ) => {
@@ -58,13 +64,13 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = (
 
   useEffect(() => {
     switch (filterType) {
-      case 'All':
+      case SortType.all:
         setFilteredTodos(todos);
         break;
-      case 'Active':
+      case SortType.active:
         setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
-      case 'Completed':
+      case SortType.completed:
         setFilteredTodos(todos.filter(todo => todo.completed));
         break;
       default:
