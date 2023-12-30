@@ -33,6 +33,8 @@ export const Error = () => {
     }
   };
 
+  const showError = errorMessage();
+
   return (
   //     {/* Notification is shown in case of any error */}
   // {/* Add the 'hidden' class to hide the message smoothly */}
@@ -55,7 +57,7 @@ export const Error = () => {
         }}
       />
       {/* show only one message at a time */}
-      {errorMessage()}
+      {showError}
     </div>
   );
 };

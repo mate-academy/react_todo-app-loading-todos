@@ -12,13 +12,17 @@ export const isError = signal<Error | null>(null);
 
 export const filteredTodos = computed<Todo[]>(() => {
   switch (filter.value) {
-    default:
     case FilterValues.All:
       return todos.value;
+
     case FilterValues.Active:
       return todos.value.filter(todo => !todo.completed);
+
     case FilterValues.Completed:
       return todos.value.filter(todo => todo.completed);
+
+    default:
+      return todos.value;
   }
 });
 
