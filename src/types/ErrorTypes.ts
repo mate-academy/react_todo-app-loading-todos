@@ -1,4 +1,4 @@
-export type ErrorType = '' | 'load' | 'title' | 'add' | 'delete' | 'update';
+export type ErrorType = 'load' | 'title' | 'add' | 'delete' | 'update';
 
 export enum Errors {
   load = 'Unable to load todos',

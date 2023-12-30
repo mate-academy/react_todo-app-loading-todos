@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Errors } from '../../types/ErrorTypes';
 
 function getId(todos: Todo[]):number {
   return todos.reduce((max, todo) => Math.max(todo.id, max), 0) + 1;
@@ -9,9 +10,14 @@ type Props = {
   onAdd: (todo: Todo) => void,
   todos: Todo[],
   userId: number,
+  setErrorMsg: (errorMsg: Errors | null) => void,
 };
 
-export const NewTodo: FC<Props> = ({ onAdd, todos, userId }) => {
+export const NewTodo: FC<Props> = (
+  {
+    onAdd, todos, userId, setErrorMsg,
+  },
+) => {
   const [inputTitle, setInputTitle] = useState('');
 
   const addTodo = (title: string) => {
@@ -28,8 +34,19 @@ export const NewTodo: FC<Props> = ({ onAdd, todos, userId }) => {
   function handleKeyPressed(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      addTodo(inputTitle);
-      setInputTitle('');
+      if (inputTitle.trim() === '') {
+        setErrorMsg(Errors.title);
+
+        return;
+      }
+
+      setErrorMsg(null);
+      try {
+        addTodo(inputTitle);
+        setInputTitle('');
+      } catch {
+        setErrorMsg(Errors.add);
+      }
     }
   }
 

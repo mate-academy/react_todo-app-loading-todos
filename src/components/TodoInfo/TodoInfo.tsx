@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { Errors } from '../../types/ErrorTypes';
 
 type Props = {
   todo: Todo,
   onCompletionChange: (todoId: number) => void,
   onRemoveTodo: (todoId: number) => void,
   onTodoEdited: (id: number, newTitle: string) => void,
+  setErrorMsg: (errorMsg: Errors | null) => void,
 };
 
 export const TodoInfo: React.FC<Props> = (
@@ -14,6 +16,7 @@ export const TodoInfo: React.FC<Props> = (
     onCompletionChange,
     onRemoveTodo,
     onTodoEdited,
+    setErrorMsg,
   },
 ) => {
   const [isEdited, setIsEdited] = useState(false);
@@ -25,7 +28,11 @@ export const TodoInfo: React.FC<Props> = (
   }
 
   function handleRemoveButton() {
-    onRemoveTodo(id);
+    try {
+      onRemoveTodo(id);
+    } catch {
+      setErrorMsg(Errors.delete);
+    }
   }
 
   function handleClickOnTodo() {
@@ -34,7 +41,11 @@ export const TodoInfo: React.FC<Props> = (
 
   const handleEdition: React.ChangeEventHandler<HTMLInputElement>
   = (event) => {
-    setEditedTitle(event.target.value);
+    try {
+      setEditedTitle(event.target.value);
+    } catch {
+      setErrorMsg(Errors.update);
+    }
   };
 
   function handleOnBlur() {

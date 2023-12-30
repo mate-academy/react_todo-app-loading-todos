@@ -6,7 +6,7 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
 import { Error } from './components/Error';
-import { ErrorType } from './types/ErrorTypes';
+import { Errors } from './types/ErrorTypes';
 
 const USER_ID = 12078;
 
@@ -31,17 +31,13 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingDone, setLoadingDone] = useState(false);
   const [todosActivityFilter, setTodosActivityFilter] = useState('All');
-  const [errorMessage, setErrorMessage] = useState<ErrorType>('');
+  const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
 
   useEffect(() => {
-    const loadTodos = async () => {
-      const data = await getTodos(USER_ID);
-
-      setTodos(data);
-      setLoadingDone(true);
-    };
-
-    loadTodos();
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => setErrorMessage(Errors.load));
+    setLoadingDone(true);
   }, []);
 
   const onAdd = (todo: Todo) => {
@@ -104,6 +100,10 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const setErrorMsg = (errorMsg: Errors | null) => {
+    setErrorMessage(errorMsg);
+  };
+
   const isCompletedTodo = todos.some(todo => todo.completed);
   const itemsLeft = todos.filter(todo => !todo.completed).length;
   const noItems = (todos.length === 0);
@@ -129,6 +129,7 @@ export const App: React.FC = () => {
             onAdd={onAdd}
             todos={todos}
             userId={USER_ID}
+            setErrorMsg={setErrorMsg}
           />
         </header>
 
@@ -139,33 +140,9 @@ export const App: React.FC = () => {
               onCompletionChange={onCompletionChange}
               onRemoveTodo={onRemoveTodo}
               onTodoEdited={onTodoEdited}
+              setErrorMsg={setErrorMsg}
             />
           )}
-
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
         </section>
 
         {/* Hide the footer if there are no todos */}
@@ -225,6 +202,7 @@ export const App: React.FC = () => {
       </div>
       <Error
         errorMessage={errorMessage}
+        setErrorMsg={setErrorMsg}
       />
     </div>
   );
