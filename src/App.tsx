@@ -5,6 +5,8 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
+import { Error } from './components/Error';
+import { ErrorType } from './types/ErrorTypes';
 
 const USER_ID = 12078;
 
@@ -29,6 +31,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadingDone, setLoadingDone] = useState(false);
   const [todosActivityFilter, setTodosActivityFilter] = useState('All');
+  const [errorMessage, setErrorMessage] = useState<ErrorType>('');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -220,25 +223,9 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Error
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };
