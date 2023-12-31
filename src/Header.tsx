@@ -6,7 +6,7 @@ type Props = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Header: React.FC<Props> = ({ todos }) => {
+export const Header: React.FC<Props> = () => {
   return (
     <header className="todoapp__header">
       <form>
