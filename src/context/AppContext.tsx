@@ -1,21 +1,31 @@
 import {
-  Dispatch, SetStateAction, createContext, MouseEvent,
+  createContext, useContext,
 } from 'react';
-import { Todo, Filter } from '../types';
+import { AppContextType, Filter } from '../types';
 
-export interface AppContextType {
-  todos: Todo[],
-  setTodos: Dispatch<SetStateAction<Todo[]>>,
-  selectedFilter: Filter,
-  setSelectedFilter: Dispatch<SetStateAction<Filter>>,
-  showError: boolean,
-  setShowError: Dispatch<SetStateAction<boolean>>,
-  errorMessage: string,
-  setErrorMessage: Dispatch<SetStateAction<string>>,
-  filteredTodos: Todo[],
-  activeTodosNum: number,
-  completedTodosNum: number,
-  handleFilterChange: (event: MouseEvent<HTMLAnchorElement>) => void,
-}
+const AppContextDefault = {
+  todos: [],
+  setTodos: () => {},
+  selectedFilter: 'All' as Filter,
+  setSelectedFilter: () => {},
+  showError: false,
+  setShowError: () => {},
+  errorMessage: '',
+  setErrorMessage: () => {},
+  filteredTodos: [],
+  activeTodosNum: 0,
+  completedTodosNum: 0,
+  handleFilterChange: () => {},
+};
 
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType>(AppContextDefault);
+
+export const useAppContext = () => {
+  const context = useContext(AppContext);
+
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppContextProvider');
+  }
+
+  return context;
+};

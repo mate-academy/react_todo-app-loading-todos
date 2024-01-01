@@ -1,15 +1,9 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import cn from 'classnames';
-import { AppContext } from '../context/AppContext';
+import { useAppContext } from '../context/AppContext';
 
 export const Errors: FC = () => {
-  const context = useContext(AppContext);
-
-  if (!context) {
-    return <p>Context not provided.</p>;
-  }
-
-  const { showError, setShowError, errorMessage } = context;
+  const { showError, setShowError, errorMessage } = useAppContext();
 
   return (
     <div

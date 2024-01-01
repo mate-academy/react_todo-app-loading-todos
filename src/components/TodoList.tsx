@@ -1,16 +1,10 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import cn from 'classnames';
 import { SingleTodo } from './SingleTodo';
-import { AppContext } from '../context/AppContext';
+import { useAppContext } from '../context/AppContext';
 
 export const TodoList: FC = () => {
-  const context = useContext(AppContext);
-
-  if (!context) {
-    return <p>Context not provided.</p>;
-  }
-
-  const { filteredTodos } = context;
+  const { filteredTodos } = useAppContext();
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

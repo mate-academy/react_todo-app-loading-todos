@@ -1,17 +1,19 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import cn from 'classnames';
-import { AppContext } from '../context/AppContext';
+import { useAppContext } from '../context/AppContext';
 
 export const Footer: FC = () => {
-  const context = useContext(AppContext);
-
-  if (!context) {
-    return <p>Context not provided.</p>;
-  }
-
   const {
-    selectedFilter, activeTodosNum, completedTodosNum, handleFilterChange,
-  } = context;
+    todos, selectedFilter, handleFilterChange,
+  } = useAppContext();
+
+  const activeTodosNum = todos.reduce((acc, curr) => {
+    return !curr.completed
+      ? acc + 1
+      : acc;
+  }, 0);
+
+  const completedTodosNum = todos.length - activeTodosNum;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
