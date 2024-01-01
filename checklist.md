@@ -3,7 +3,7 @@
 ## Basic React Checklist.
 1. PropTypes should describe objects and arrays, which are passed in the component.
 1. Use destructuring wherever possible. It makes code more readable.
-1. Functions should do one thing. Don't make monsters!)
+1. Functions should do one thing. Don't make monsters!
 1. A variable name should describe what is stored in it.
 1. Use functional components with React Hooks.
 1. A function name should describe the result and starts from a verb.
