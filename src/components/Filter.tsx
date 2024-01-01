@@ -14,13 +14,15 @@ export const Filter: FC<Props> = ({ filter }) => {
     setActiveFilter(selectedFilter);
   };
 
+  const path = filter === 'All' ? '#/' : `#/${filter}`;
+
   return (
     <a
-      href="#/completed"
+      href={path}
       className={classNames('filter__link', {
         selected: activeFilter === filter,
       })}
-      data-cy="FilterLinkCompleted"
+      data-cy={`FilterLink${filter}`}
       onClick={handleClick(filter)}
     >
       {filter}
