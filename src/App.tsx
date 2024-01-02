@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [visibleTodos, setVisibleTodos] = useState(todos);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
 
-  const onAllclick = useCallback(() => {
+  const onAllClick = useCallback(() => {
     if (filterBy !== Status.all) {
       setFilterBy(Status.all);
     }
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header todos={todos} />
 
         {todos.length > 0 && (
           <>
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
             <Footer
               todos={todos}
               filterBy={filterBy}
-              onAllclick={onAllclick}
+              onAllClick={onAllClick}
               onActiveClick={onActiveClick}
               onCompletedClick={onCompletedClick}
             />

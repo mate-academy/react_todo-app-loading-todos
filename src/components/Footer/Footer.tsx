@@ -6,7 +6,7 @@ import { Filter } from '../Filter';
 interface Props {
   todos: Todo[];
   filterBy: Status;
-  onAllclick: () => void;
+  onAllClick: () => void;
   onActiveClick: () => void;
   onCompletedClick: () => void;
 }
@@ -14,7 +14,7 @@ interface Props {
 export const Footer: React.FC<Props> = React.memo(({
   todos,
   filterBy,
-  onAllclick,
+  onAllClick,
   onActiveClick,
   onCompletedClick,
 }) => {
@@ -24,22 +24,22 @@ export const Footer: React.FC<Props> = React.memo(({
         {`${todos.filter(todo => !todo.completed).length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <Filter
         currentStatus={filterBy}
-        handleFilterAll={onAllclick}
+        handleFilterAll={onAllClick}
         handleFilterActive={onActiveClick}
         handleFilterCompleted={onCompletedClick}
       />
 
-      {/* don't show this button if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
+      {todos.some(todo => todo.completed) && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 });

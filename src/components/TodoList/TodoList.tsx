@@ -8,8 +8,8 @@ interface Props {
 
 export const TodoList: React.FC<Props> = React.memo(({ todos }) => {
   return (
-    <section className="todoapp__main" data-cy="TodoList">
+    <ul className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => <TodoItem key={todo.id} todo={todo} />)}
-    </section>
+    </ul>
   );
 });
