@@ -1,28 +1,69 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos } from './api/todos';
+import { getTodos, addTodo } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { useTodoContext } from './context';
+import { Todo } from './types/Todo';
 
 const USER_ID = 12113;
 
 export const App: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>('');
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { setAllTodos } = useTodoContext();
+  const {
+    setAllTodos,
+    visibleTodos,
+    errorHandler,
+    errorMessage,
+    setErrorMessage,
+    inputRef,
+  } = useTodoContext();
 
-  const errorHandler = (message: string) => {
-    setErrorMessage(null);
-    setErrorMessage(message);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const trimmedTitle = query.trim();
 
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, 3000);
+    if (trimmedTitle === '') {
+      errorHandler('Title should not be empty');
+
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      setTempTodo({
+        id: 0,
+        userId: USER_ID,
+        title: trimmedTitle,
+        completed: false,
+      });
+
+      const addedTodo = await addTodo({
+        userId: USER_ID,
+        title: trimmedTitle,
+        completed: false,
+      });
+
+      setAllTodos((prevTodos: Todo[] | null) => {
+        return prevTodos ? [...prevTodos, addedTodo] : [addedTodo];
+      });
+
+      setTempTodo(null);
+      setQuery('');
+      setIsLoading(false);
+    } catch (error) {
+      setTempTodo(null);
+      setIsLoading(false);
+      errorHandler('Unable to add Todo');
+    }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
   };
 
   useEffect(() => {
@@ -39,6 +80,12 @@ export const App: React.FC = () => {
     loadTodos();
   }, [setAllTodos]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [tempTodo, inputRef]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -50,25 +97,32 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this buttons is active only if there are some active todos */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+          {visibleTodos?.some(todo => !todo.completed)
+          && (
+            <button
+              type="button"
+              className="todoapp__toggle-all active"
+              data-cy="ToggleAllButton"
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form onSubmit={handleSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
+              value={query}
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              ref={inputRef}
+              onChange={handleQuery}
+              disabled={isLoading}
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList />
+          <TodoList tempTodo={tempTodo} />
         </section>
       </div>
 
@@ -87,8 +141,7 @@ export const App: React.FC = () => {
         />
         {/* show only one message at a time */}
         {errorMessage && <span>{errorMessage}</span>}
-        {/* Title should not be empty
-        <br />
+        {/*
         Unable to add a todo
         <br />
         Unable to delete a todo
