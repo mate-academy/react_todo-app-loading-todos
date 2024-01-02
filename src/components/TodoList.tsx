@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTodoContext } from '../context';
 import { Todo } from '../types/Todo';
 import { deleteTodo } from '../api/todos';
+import { Errors } from '../types/Errors';
 
 type Props = {
   tempTodo: Todo | null
@@ -34,7 +35,7 @@ export const TodoList = ({ tempTodo }: Props) => {
           setAllTodos(updatedTodo);
         }
       } catch (error) {
-        errorHandler('Unable to delete todo');
+        errorHandler(Errors.deleteError);
       } finally {
         setIsLoading(false);
       }
@@ -51,7 +52,7 @@ export const TodoList = ({ tempTodo }: Props) => {
         await Promise.all(completedTodos.map(todo => deleteTodo(todo.id)));
         setAllTodos(allTodos.filter(todo => !todo.completed));
       } catch (error) {
-        errorHandler('Unable to delete todo');
+        errorHandler(Errors.deleteError);
       }
     }
   };

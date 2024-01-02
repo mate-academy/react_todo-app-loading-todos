@@ -5,6 +5,7 @@ import { getTodos, addTodo } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { useTodoContext } from './context';
 import { Todo } from './types/Todo';
+import { Errors } from './types/Errors';
 
 const USER_ID = 12113;
 
@@ -27,7 +28,7 @@ export const App: React.FC = () => {
     const trimmedTitle = query.trim();
 
     if (trimmedTitle === '') {
-      errorHandler('Title should not be empty');
+      errorHandler(Errors.titleError);
 
       return;
     }
@@ -58,7 +59,7 @@ export const App: React.FC = () => {
     } catch (error) {
       setTempTodo(null);
       setIsLoading(false);
-      errorHandler('Unable to add Todo');
+      errorHandler(Errors.addError);
     }
   };
 
@@ -73,12 +74,12 @@ export const App: React.FC = () => {
 
         setAllTodos(todos);
       } catch (error) {
-        errorHandler('Unable to load todos');
+        errorHandler(Errors.loadError);
       }
     };
 
     loadTodos();
-  }, [setAllTodos]);
+  }, [setAllTodos, errorHandler]);
 
   useEffect(() => {
     if (inputRef.current) {

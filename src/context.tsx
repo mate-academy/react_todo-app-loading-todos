@@ -27,7 +27,7 @@ React.FC<{ children: ReactNode }> = ({ children }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutId = useRef<NodeJS.Timeout>();
 
-  const errorHandler = (message: string) => {
+  const errorHandler = useCallback((message: string) => {
     setErrorMessage(null);
     setErrorMessage(message);
 
@@ -38,7 +38,7 @@ React.FC<{ children: ReactNode }> = ({ children }) => {
     timeoutId.current = setTimeout(() => {
       setErrorMessage(null);
     }, 3000);
-  };
+  }, []);
 
   const handleTodosFilter = useCallback((filter: string) => {
     setActiveFilter(filter);
@@ -77,7 +77,14 @@ React.FC<{ children: ReactNode }> = ({ children }) => {
       setErrorMessage,
       inputRef,
     };
-  }, [activeFilter, allTodos, handleTodosFilter, visibleTodos, errorMessage]);
+  }, [
+    activeFilter,
+    allTodos,
+    handleTodosFilter,
+    visibleTodos,
+    errorMessage,
+    errorHandler,
+  ]);
 
   return (
     <TodoContext.Provider value={value}>
