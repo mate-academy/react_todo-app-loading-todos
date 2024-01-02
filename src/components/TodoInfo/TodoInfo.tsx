@@ -31,7 +31,7 @@ export const TodoInfo: React.FC<Props> = (
     try {
       onRemoveTodo(id);
     } catch {
-      setErrorMsg(Errors.delete);
+      setErrorMsg(Errors.DELETE);
     }
   }
 
@@ -44,7 +44,7 @@ export const TodoInfo: React.FC<Props> = (
     try {
       setEditedTitle(event.target.value);
     } catch {
-      setErrorMsg(Errors.update);
+      setErrorMsg(Errors.UPDATE);
     }
   };
 

@@ -35,7 +35,7 @@ export const NewTodo: FC<Props> = (
     if (event.key === 'Enter') {
       event.preventDefault();
       if (inputTitle.trim() === '') {
-        setErrorMsg(Errors.title);
+        setErrorMsg(Errors.TITLE);
 
         return;
       }
@@ -45,7 +45,7 @@ export const NewTodo: FC<Props> = (
         addTodo(inputTitle);
         setInputTitle('');
       } catch {
-        setErrorMsg(Errors.add);
+        setErrorMsg(Errors.ADD);
       }
     }
   }

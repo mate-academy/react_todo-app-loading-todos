@@ -36,7 +36,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setErrorMessage(Errors.load));
+      .catch(() => setErrorMessage(Errors.LOAD));
     setLoadingDone(true);
   }, []);
 
