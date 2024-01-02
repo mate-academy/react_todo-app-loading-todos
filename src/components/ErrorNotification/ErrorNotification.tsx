@@ -10,17 +10,17 @@ export const ErrorNotification: React.FC<Props> = (props) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (errorMessage) {
-      setIsVisible(true);
-
-      const timeout = setTimeout(() => {
-        hideErrorMessage();
-      }, 3000);
-
-      return () => clearTimeout(timeout);
+    if (!errorMessage) {
+      return undefined;
     }
 
-    return () => {};
+    setIsVisible(true);
+
+    const timeout = setTimeout(() => {
+      hideErrorMessage();
+    }, 3000);
+
+    return () => clearTimeout(timeout);
   }, [errorMessage, hideErrorMessage]);
 
   return (
