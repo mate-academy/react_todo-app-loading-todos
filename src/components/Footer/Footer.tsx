@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 import { Filter } from '../Filter';
@@ -18,10 +18,18 @@ export const Footer: React.FC<Props> = React.memo(({
   onActiveClick,
   onCompletedClick,
 }) => {
+  const getActiveTodosLength = useCallback(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
+  const hasCompleted = useCallback(() => {
+    return todos.some(todo => todo.completed);
+  }, [todos]);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${getActiveTodosLength()} items left`}
       </span>
 
       <Filter
@@ -31,7 +39,7 @@ export const Footer: React.FC<Props> = React.memo(({
         handleFilterCompleted={onCompletedClick}
       />
 
-      {todos.some(todo => todo.completed) && (
+      {hasCompleted() && (
         <button
           type="button"
           className="todoapp__clear-completed"
