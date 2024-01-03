@@ -19,13 +19,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await getTodos(USER_ID);
+        const response = await getTodos(USER_ID);
 
-        if (!Array.isArray(result) || !result.length) {
-          throw new Error('incorrect url');
+        if (response.status === 200) {
+          setTodos(response);
+        } else {
+          throw new Error('incorrect response');
         }
-
-        setTodos(result);
       } catch (error) {
         setIsErrorsClosed(false);
       }
