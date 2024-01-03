@@ -19,7 +19,6 @@ const USER_ID = 12130;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(Status.all);
-  // const [visibleTodos, setVisibleTodos] = useState(todos);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
 
   const onAllClick = useCallback(() => {
