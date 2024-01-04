@@ -9,31 +9,32 @@ interface Props {
 }
 
 export const TodoList: React.FC<Props> = ({ todos, filter }) => {
+  const filteredTodos =
+    todos.filter((todo) => {
+      switch (filter) {
+        case Filter.active:
+          return !todo.completed;
+
+        case Filter.completed:
+          return todo.completed;
+
+        case Filter.all:
+          return todo;
+
+        default:
+          return true;
+      }
+    })
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {
-        todos
-          .filter((todo) => {
-            switch (filter) {
-              case Filter.active:
-                return !todo.completed;
-
-              case Filter.completed:
-                return todo.completed;
-
-              case Filter.all:
-                return todo;
-
-              default:
-                return true;
-            }
-          })
-          .map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todoItem={todo}
-            />
-          ))
+        filteredTodos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todoItem={todo}
+          />
+        ))
       }
     </section>
   );
