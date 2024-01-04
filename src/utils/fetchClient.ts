@@ -30,7 +30,7 @@ function request<T>(
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
-      if (!response.ok) {
+      if (!response.ok || response.status !== 200) {
         throw new Error();
       }
 

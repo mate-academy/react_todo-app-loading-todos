@@ -9,7 +9,7 @@ import { Todo } from './types/Todo';
 import { TasksFilter } from './types/tasksFilter';
 import { Errors } from './components/Errors';
 
-const USER_ID = 12138;
+const USER_ID = 12147;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,10 +20,6 @@ export const App: React.FC = () => {
     async function fetchData() {
       try {
         const result = await getTodos(USER_ID);
-
-        if (!Array.isArray(result) || !result.length) {
-          throw new Error('incorrect url');
-        }
 
         setTodos(result);
       } catch (error) {
