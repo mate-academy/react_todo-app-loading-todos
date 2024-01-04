@@ -16,20 +16,22 @@ export const Section:React.FC<Props> = ({
     case TasksFilter.active:
       filteringTodos = todos.filter((todo) => !todo.completed);
       break;
+
     case TasksFilter.completed:
       filteringTodos = todos.filter((todo) => todo.completed);
       break;
+
     default:
       filteringTodos = todos;
   }
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteringTodos.map((todo) => (
+      {filteringTodos.map(({ title, id, completed }) => (
         <div
           data-cy="Todo"
-          className={`todo ${todo.completed ? 'completed' : ''}`}
-          key={todo.id}
+          className={`todo ${completed ? 'completed' : ''}`}
+          key={id}
         >
           <label className="todo__status-label">
             <input
@@ -43,7 +45,7 @@ export const Section:React.FC<Props> = ({
             data-cy="TodoTitle"
             className="todo__title"
           >
-            {todo.title}
+            {title}
           </span>
           <button type="button" className="todo__remove" data-cy="TodoDelete">
             ×

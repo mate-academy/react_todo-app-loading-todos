@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import cn from 'classnames';
 import { TasksFilter } from '../types/tasksFilter';
 
 interface Props {
@@ -35,7 +36,8 @@ export const Footer: React.FC<Props> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${tasksFilter === 'all' && 'selected'}`}
+          className={cn('filter__link',
+            { selected: TasksFilter.all })}
           data-cy="FilterLinkAll"
           onClick={handleAll}
         >
@@ -44,7 +46,8 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/active"
-          className={`filter__link ${tasksFilter === 'active' && 'selected'}`}
+          className={cn('filter__link',
+            { selected: tasksFilter === TasksFilter.active })}
           data-cy="FilterLinkActive"
           onClick={handleActive}
         >
@@ -53,7 +56,8 @@ export const Footer: React.FC<Props> = ({
 
         <a
           href="#/completed"
-          className={`filter__link ${tasksFilter === 'completed' && 'selected'}`}
+          className={cn('filter__link',
+            { selected: tasksFilter === TasksFilter.completed })}
           data-cy="FilterLinkCompleted"
           onClick={handleCompleted}
         >
