@@ -9,22 +9,21 @@ interface Props {
 }
 
 export const TodoList: React.FC<Props> = ({ todos, filter }) => {
-  const filteredTodos =
-    todos.filter((todo) => {
-      switch (filter) {
-        case Filter.active:
-          return !todo.completed;
+  const filteredTodos = todos.filter((todo) => {
+    switch (filter) {
+      case Filter.active:
+        return !todo.completed;
 
-        case Filter.completed:
-          return todo.completed;
+      case Filter.completed:
+        return todo.completed;
 
-        case Filter.all:
-          return todo;
+      case Filter.all:
+        return todo;
 
-        default:
-          return true;
-      }
-    })
+      default:
+        return true;
+    }
+  });
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
