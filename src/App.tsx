@@ -59,7 +59,7 @@ export const App: React.FC = () => {
       dispatch({
         type: Actions.addNew,
         todo: {
-          userId: 777,
+          userId: USER_ID,
           id: +new Date(),
           title: todoTitle,
           completed: false,
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
             id: +new Date(),
             title: todoTitle,
             completed: false,
-            userId: 777,
+            userId: USER_ID,
           },
         });
         setTodoTitle('');
