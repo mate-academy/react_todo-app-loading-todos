@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer/Footer';
@@ -12,7 +12,7 @@ import { Error } from './components/Error/Error';
 
 const USER_ID = 12106;
 
-export const App: React.FC = () => {
+export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorType | null>(null);
   const [filterBy, setFilterBy] = useState(FilterBy.All);
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     () => {
       getTodos(USER_ID)
         .then(setTodos)
-        .catch(() => displayError(ErrorType.UnableToLoadTodo));
+        .catch(() => displayError(ErrorType.LOAD));
     }, [],
   );
 
