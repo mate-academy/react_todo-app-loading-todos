@@ -13,17 +13,11 @@ import {
   Keys,
   StateContext,
 } from './Components/Store';
-
-enum TodosType {
-  all = 'All',
-  active = 'Active',
-  completed = 'Completed',
-}
+import { TodosType } from './enums/TodosType';
 
 export const App: React.FC = () => {
   const dispatch = useContext(DispatchContext);
   const [todoTitle, setTodoTitle] = useState('');
-  const [USER_ID] = useState(12123);
   const {
     allTodos,
     loadingError,
@@ -32,6 +26,11 @@ export const App: React.FC = () => {
   const completedTodos = allTodos?.filter(todo => todo.completed) || [];
   const [visibleTodosType, setVisibleTodosType] = useState(TodosType.all);
   const [errorMessage, setErrorMessage] = useState(loadingError);
+  const USER_ID = 12123;
+
+  const itemsLeft = activeTodos.length === 1
+    ? `${activeTodos.length} item left`
+    : `${activeTodos.length} items left`;
 
   useEffect(() => {
     dispatch({
@@ -42,12 +41,15 @@ export const App: React.FC = () => {
 
   let visibleTodos = allTodos;
 
-  if (visibleTodosType === TodosType.all) {
-    visibleTodos = allTodos;
-  } else if (visibleTodosType === TodosType.active) {
-    visibleTodos = activeTodos;
-  } else {
-    visibleTodos = completedTodos;
+  switch (visibleTodosType) {
+    case TodosType.active:
+      visibleTodos = activeTodos;
+      break;
+    case TodosType.completed:
+      visibleTodos = completedTodos;
+      break;
+    default:
+      visibleTodos = allTodos;
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,9 +165,7 @@ export const App: React.FC = () => {
         {!!allTodos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="todosCounter">
-              {activeTodos.length === 1
-                ? `${activeTodos.length} item left`
-                : `${activeTodos.length} items left`}
+              {itemsLeft}
             </span>
 
             <nav className="filter" data-cy="Filter">
