@@ -27,10 +27,16 @@ export const App: React.FC = () => {
   const [visibleTodosType, setVisibleTodosType] = useState(TodosType.all);
   const [errorMessage, setErrorMessage] = useState(loadingError);
   const USER_ID = 12123;
+  const ErrorClases = 'notification is-danger '
+    + 'is-light has-text-weight-normal';
 
   const itemsLeft = activeTodos.length === 1
     ? `${activeTodos.length} item left`
     : `${activeTodos.length} items left`;
+
+  useEffect(() => {
+    setErrorMessage(loadingError);
+  }, [loadingError]);
 
   useEffect(() => {
     dispatch({
@@ -38,6 +44,14 @@ export const App: React.FC = () => {
       userId: USER_ID,
     });
   }, [USER_ID, dispatch]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    }
+  }, [errorMessage]);
 
   let visibleTodos = allTodos;
 
@@ -51,6 +65,10 @@ export const App: React.FC = () => {
     default:
       visibleTodos = allTodos;
   }
+
+  const handleErrorCanceling = () => {
+    setErrorMessage('');
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodoTitle(event.target.value);
@@ -164,7 +182,7 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {!!allTodos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="todosCounter">
+            <span className="todo-count" data-cy="TodosCounter">
               {itemsLeft}
             </span>
 
@@ -217,22 +235,25 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {errorMessage && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button data-cy="HideErrorButton" type="button" className="delete" />
-          {/* show only one message at a time */}
-          <p>{errorMessage}</p>
-          {/* Title should not be empty */}
-          {/* Unable to add a todo */}
-          {/* Unable to delete a todo */}
-          {/* Unable to update a todo */}
-        </div>
-      )}
+      <div
+        data-cy="ErrorNotification"
+        className={cn(ErrorClases, {
+          hidden: !errorMessage,
+        })}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={handleErrorCanceling}
+        />
+        {/* show only one message at a time */}
+        <p>{errorMessage}</p>
+        {/* Title should not be empty */}
+        {/* Unable to add a todo */}
+        {/* Unable to delete a todo */}
+        {/* Unable to update a todo */}
+      </div>
     </div>
   );
 };
