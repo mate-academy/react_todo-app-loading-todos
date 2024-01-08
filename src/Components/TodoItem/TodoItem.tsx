@@ -112,7 +112,11 @@ export const TodoItem: React.FC<Props> = ({
           </button>
         </>
       ) : (
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <input
             ref={inputRef}
             data-cy="TodoTitleField"

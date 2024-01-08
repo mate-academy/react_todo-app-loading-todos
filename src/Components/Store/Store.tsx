@@ -58,21 +58,10 @@ function reducer(state: State, action: Action): State {
     case Actions.markAll: {
       const completedTodos = state.allTodos.filter(todo => todo.completed);
 
-      if (state.allTodos.length === completedTodos.length) {
-        const updatedTodos = state.allTodos.map((todo: Todo) => {
-          return {
-            ...todo,
-            completed: false,
-          };
-        });
-
-        return saveTodos(state, updatedTodos);
-      }
-
       const updatedTodos = state.allTodos.map((todo: Todo) => {
         return {
           ...todo,
-          completed: true,
+          completed: !(state.allTodos.length === completedTodos.length),
         };
       });
 
