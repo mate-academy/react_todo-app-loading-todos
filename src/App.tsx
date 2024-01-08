@@ -21,14 +21,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -40,9 +38,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.length !== 0 && (
-            <TodoList />
-          )}
+          <TodoList />
 
         </section>
 
@@ -52,10 +48,8 @@ export const App: React.FC = () => {
               {`${uncompletedCounter} items left`}
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <TodoFilter />
 
-            {/* don't show this button if there are no completed todos */}
             <button
               type="button"
               className="todoapp__clear-completed"
@@ -68,8 +62,6 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <Errors />
     </div>
   );

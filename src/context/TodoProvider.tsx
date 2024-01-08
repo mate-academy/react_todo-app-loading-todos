@@ -62,7 +62,7 @@ const TodoProvider: FC<Props> = ({ children }) => {
       });
   }, [option, todos]);
 
-  const value = useMemo(() => ({
+  const value = {
     todos,
     setTodos,
     errorMessage,
@@ -71,7 +71,7 @@ const TodoProvider: FC<Props> = ({ children }) => {
     setOption,
     visibleTodos,
     uncompletedCounter,
-  }), [todos, errorMessage, option, visibleTodos, uncompletedCounter]);
+  };
 
   return (
     <TodoContext.Provider value={value}>
