@@ -82,8 +82,7 @@ export const App: React.FC = () => {
             <TodoList todos={filteredTodos} />
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="TodosCounter">
-                {numberOfUncompletedTodos}
-                {' items left'}
+                {`${numberOfUncompletedTodos} items left`}
               </span>
 
               <TodoFilter changeFilter={setFilterBy} />
