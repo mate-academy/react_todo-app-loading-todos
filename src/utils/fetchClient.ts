@@ -11,12 +11,18 @@ function wait(delay: number) {
 // To have autocompletion and avoid mistypes
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-function request<T>(
+interface ErrorResponse {
+  message: string;
+}
+
+async function request<T>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
+  userId?: number | null,
+  data: any = null,
 ): Promise<T> {
   const options: RequestInit = { method };
+  const finalUrl = userId ? `${BASE_URL + url}?userId=${userId}` : BASE_URL + url;
 
   if (data) {
     // We add body and Content-Type only for the requests with data
@@ -27,20 +33,32 @@ function request<T>(
   }
 
   // DON'T change the delay it is required for tests
-  return wait(100)
-    .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error();
-      }
+  await wait(100);
 
-      return response.json();
-    });
+  const response = await fetch(finalUrl, options);
+
+  if (!response.ok) {
+    // Attempt to parse error details from response
+    try {
+      const errorResponse: ErrorResponse = await response.json();
+
+      throw new Error(errorResponse.message || 'Unknown error occurred');
+    } catch (error) {
+      // If parsing fails, throw a generic error
+      throw new Error('Network error occurred');
+    }
+  }
+
+  return response.json();
 }
 
 export const client = {
-  get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  get: <T>(url: string, userId?: number
+  | null) => request<T>(url, 'GET', userId),
+  post: <T>(url: string, userId: number
+  | null, data: any) => request<T>(url, 'POST', userId, data),
+  patch: <T>(url: string, userId: number
+  | null, data: any) => request<T>(url, 'PATCH', userId, data),
+  delete: (url: string, userId: number
+  | null) => request(url, 'DELETE', userId),
 };
