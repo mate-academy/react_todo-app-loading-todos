@@ -7,16 +7,16 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Errors } from './types/Errors';
-import { filterOptions } from './types/FilterOptions';
+import { FilterOptions } from './types/FilterOptions';
 
 const USER_ID = 12166;
-const getFilteredTodos = (todos: Todo[], filterBy: filterOptions) => {
+const getFilteredTodos = (todos: Todo[], filterBy: FilterOptions) => {
   switch (filterBy) {
-    case filterOptions.All:
+    case FilterOptions.All:
       return todos;
-    case filterOptions.Active:
+    case FilterOptions.Active:
       return todos.filter(todo => !todo.completed);
-    case filterOptions.Completed:
+    case FilterOptions.Completed:
       return todos.filter(todo => todo.completed);
     default:
       return todos;
@@ -26,7 +26,7 @@ const getFilteredTodos = (todos: Todo[], filterBy: filterOptions) => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMasage, setErrorMasage] = useState(Errors.allGood);
-  const [filterBy, setFilterBy] = useState(filterOptions.All);
+  const [filterBy, setFilterBy] = useState(FilterOptions.All);
   const filteredTodos = getFilteredTodos(todos, filterBy);
   const numberOfUncompletedTodos = todos.filter(todo => !todo.completed).length;
 
@@ -40,6 +40,7 @@ export const App: React.FC = () => {
       .catch(() => setErrorMasage(Errors.cantGetArray));
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(loadTodos, [USER_ID]);
 
   useEffect(() => {

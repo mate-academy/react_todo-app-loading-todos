@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import { filterOptions } from '../types/FilterOptions';
+import { FilterOptions } from '../types/FilterOptions';
 
 type Props = {
-  changeFilter: React.Dispatch<React.SetStateAction<filterOptions>>
+  changeFilter: React.Dispatch<React.SetStateAction<FilterOptions>>
 };
 
 export const TodoFilter: React.FC<Props> = ({ changeFilter }) => {
   /* Active filter should have a 'selected' class */
-  const [filter, setFilter] = useState(filterOptions.All);
-  const handelFilterChange = (field: filterOptions) => {
+  const [filter, setFilter] = useState(FilterOptions.All);
+  const handelFilterChange = (field: FilterOptions) => {
     setFilter(field);
     changeFilter(field);
   };
@@ -19,34 +19,34 @@ export const TodoFilter: React.FC<Props> = ({ changeFilter }) => {
       <a
         href="#/"
         className={classNames('filter__link', {
-          'filter__link selected': filter === filterOptions.All,
+          'filter__link selected': filter === FilterOptions.All,
         })}
         data-cy="FilterLinkAll"
-        onClick={() => handelFilterChange(filterOptions.All)}
+        onClick={() => handelFilterChange(FilterOptions.All)}
       >
-        {filterOptions.All}
+        {FilterOptions.All}
       </a>
 
       <a
         href="#/active"
         className={classNames('filter__link', {
-          'filter__link selected': filter === filterOptions.Active,
+          'filter__link selected': filter === FilterOptions.Active,
         })}
         data-cy="FilterLinkActive"
-        onClick={() => handelFilterChange(filterOptions.Active)}
+        onClick={() => handelFilterChange(FilterOptions.Active)}
       >
-        {filterOptions.Active}
+        {FilterOptions.Active}
       </a>
 
       <a
         href="#/completed"
         className={classNames('filter__link', {
-          'filter__link selected': filter === filterOptions.Completed,
+          'filter__link selected': filter === FilterOptions.Completed,
         })}
         data-cy="FilterLinkCompleted"
-        onClick={() => handelFilterChange(filterOptions.Completed)}
+        onClick={() => handelFilterChange(FilterOptions.Completed)}
       >
-        {filterOptions.Completed}
+        {FilterOptions.Completed}
       </a>
     </nav>
   );
