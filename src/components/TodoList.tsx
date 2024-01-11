@@ -15,6 +15,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         <div
           data-cy="Todo"
           className={classNames('todo', todo.completed && 'completed')}
+          key={todo.id}
         >
           <label className="todo__status-label">
             <input
