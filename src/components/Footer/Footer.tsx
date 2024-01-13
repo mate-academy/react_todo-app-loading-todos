@@ -1,23 +1,42 @@
+import { memo } from 'react';
 import { TodosFilter } from '../TodosFilter';
+import { ShowTodos } from '../../types/StatusTodo';
 
-export const Footer = () => {
+type Props = {
+  activeTodosCounter: number,
+  complitedTodosCounter: number,
+  selectedTodos: ShowTodos,
+  handleSelectedTodos: (event: React.MouseEvent<HTMLAnchorElement>) => void,
+};
+export const Footer:React.FC<Props> = memo(({
+  activeTodosCounter,
+  complitedTodosCounter,
+  selectedTodos,
+  handleSelectedTodos,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {activeTodosCounter === 1
+          ? `${activeTodosCounter} item left`
+          : `${activeTodosCounter} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
-      <TodosFilter />
+      <TodosFilter
+        selectedTodos={selectedTodos}
+        handleSelectedTodos={handleSelectedTodos}
+      />
 
       {/* don't show this button if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
+      {complitedTodosCounter > 0 && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
-};
+});

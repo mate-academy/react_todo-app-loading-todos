@@ -1,4 +1,4 @@
-export const enum ShowError {
+export enum ShowError {
   fetchTodos = 'Unable to load todos',
   createTodo = 'Title should not be empty',
   addTodo = 'Unable to add a todo',

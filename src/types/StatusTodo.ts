@@ -1,4 +1,4 @@
-export const enum StatusTodo {
+export enum ShowTodos {
   All,
   Active,
   Completed,

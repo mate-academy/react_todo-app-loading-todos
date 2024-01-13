@@ -1,25 +1,30 @@
-export const Notification = () => {
+import cn from 'classnames';
+import { ShowError } from '../../types/ShowErrors';
+import { showErrors } from '../../utils/showError';
+
+type Props = {
+  error: ShowError | null,
+  hideError: () => void,
+};
+export const Notification: React.FC<Props> = ({ error, hideError }) => {
+  const currentError = error && showErrors(error);
+
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={cn(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: error === null },
+      )}
     >
       <button
         className="delete"
         data-cy="HideErrorButton"
         type="button"
         aria-label="hide-error"
+        onClick={hideError}
       />
-      {/* show only one message at a time */}
-      Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {currentError}
     </div>
   );
 };

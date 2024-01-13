@@ -1,10 +1,24 @@
-export const Header = () => {
+import { useMemo } from 'react';
+import cn from 'classnames';
+import { Todo } from '../../types/Todo';
+
+type Props = {
+  todos: Todo[]
+};
+export const Header:React.FC<Props> = ({ todos }) => {
+  const completedAll = useMemo(
+    () => todos.every(todo => todo.completed),
+    [todos],
+  );
+
   return (
     <header className="todoapp__header">
-      {/* this buttons is active only if there are some active todos */}
       <button
+        className={cn(
+          'todoapp__toggle-all',
+          { active: completedAll },
+        )}
         type="button"
-        className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
         aria-label="toggle-all"
       />
