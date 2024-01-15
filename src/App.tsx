@@ -17,15 +17,13 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setErrorMessage('');
-
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => setErrorMessage(Error.get))
       .finally(() => wait(3000).then(() => setErrorMessage('')));
   }, []);
 
-  const completedLength = todos?.filter(todo => todo.completed).length;
+  const completedLength = todos.filter(todo => todo.completed).length;
 
   return (
     <div className="todoapp">

@@ -11,6 +11,11 @@ export const TodoFilter: React.FC<Props> = ({
   filterBy,
   setFilterBy,
 }) => {
+  const onFilterChange = (filter: Filter) => (e: Event) => {
+    e.preventDefault();
+    setFilterBy(filter);
+  };
+
   return (
     <nav className="filter" data-cy="Filter">
       <a
@@ -19,10 +24,9 @@ export const TodoFilter: React.FC<Props> = ({
           selected: filterBy === 'all',
         })}
         data-cy="FilterLinkAll"
-        onClick={(e) => {
-          e.preventDefault();
-          setFilterBy(Filter.all);
-        }}
+        onClick={
+          () => onFilterChange(Filter.all)
+        }
       >
         All
       </a>
@@ -33,10 +37,9 @@ export const TodoFilter: React.FC<Props> = ({
           selected: filterBy === 'active',
         })}
         data-cy="FilterLinkActive"
-        onClick={(e) => {
-          e.preventDefault();
-          setFilterBy(Filter.active);
-        }}
+        onClick={
+          () => onFilterChange(Filter.active)
+        }
       >
         Active
       </a>
@@ -47,10 +50,9 @@ export const TodoFilter: React.FC<Props> = ({
           selected: filterBy === 'completed',
         })}
         data-cy="FilterLinkCompleted"
-        onClick={(e) => {
-          e.preventDefault();
-          setFilterBy(Filter.completed);
-        }}
+        onClick={
+          () => onFilterChange(Filter.completed)
+        }
       >
         Completed
       </a>
