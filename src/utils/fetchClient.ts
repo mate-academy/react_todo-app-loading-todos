@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
-
 // returns a promise resolved after a given delay
+
 function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });
 }
-
 // To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
@@ -26,7 +25,6 @@ function request<T>(
     };
   }
 
-  // DON'T change the delay it is required for tests
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
@@ -34,7 +32,7 @@ function request<T>(
         throw new Error();
       }
 
-      return response.json();
+      return response.json() as unknown as T;
     });
 }
 
