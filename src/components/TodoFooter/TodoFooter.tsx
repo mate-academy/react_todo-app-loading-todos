@@ -17,19 +17,20 @@ export const TodoFooter: React.FC<Props> = ({
     return count + +!todo.completed;
   }, 0);
 
+  const countMessage = `${activeItems} item${activeItems === 1 ? '' : 's'} left`;
+
   const hasCompleted = !!(todos.length - activeItems);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${activeItems} item${activeItems === 1 ? '' : 's'} left`}
+        {countMessage}
       </span>
       <TodoFilter
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
       />
 
-      {/* don't show this button if there are no completed todos */}
       {hasCompleted && (
         <button
           type="button"
