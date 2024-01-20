@@ -10,7 +10,7 @@ implement the functionality saving all the changes to [the API](https://mate-aca
 ## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
 
 ## General info
-
+ 
 - register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
 - save the received `userId` in the `App` and use it to load todos
 - log in to the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/) with your email
