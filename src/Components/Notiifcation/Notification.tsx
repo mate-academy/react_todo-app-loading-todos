@@ -6,6 +6,7 @@ export const Notification: React.FC = () => {
       data-cy="ErrorNotification"
       className="notification is-danger is-light has-text-weight-normal"
     >
+      {/* eslint-disable-next-line */}
       <button data-cy="HideErrorButton" type="button" className="delete" />
       {/* show only one message at a time */}
       Unable to load todos
