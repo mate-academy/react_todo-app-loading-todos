@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
+import { Filter } from '../types/Filter';
 // import { getCompletedTodo } from '../services/todos';
 
 type State = {
@@ -7,23 +8,29 @@ type State = {
   errorMessage: string | null;
   todos: Todo[];
   clearAll: boolean;
+  filterBy: Filter;
+  isSubmitting: boolean;
 };
 
 type Props = {
   children: React.ReactNode;
 };
 
-type Action
+export type Action
   = { type: 'updatedAt' }
   | { type: 'setError', payload: string | null }
   | { type: 'clearAll', payload: boolean }
-  | { type: 'saveTodos', payload: Todo[] };
+  | { type: 'saveTodos', payload: Todo[] }
+  | { type: 'setFilter', payload: Filter }
+  | { type: 'setIsSubmitting', payload: boolean };
 
 export const initialState: State = {
   updatedAt: new Date(),
   errorMessage: null,
   todos: [],
   clearAll: false,
+  filterBy: Filter.all,
+  isSubmitting: false,
 };
 
 function reducer(state: State, action: Action): State {
@@ -50,6 +57,18 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         errorMessage: action.payload,
+      };
+
+    case 'setFilter':
+      return {
+        ...state,
+        filterBy: action.payload,
+      };
+
+    case 'setIsSubmitting':
+      return {
+        ...state,
+        isSubmitting: action.payload,
       };
 
     default:

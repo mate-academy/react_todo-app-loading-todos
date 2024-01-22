@@ -8,11 +8,14 @@ import { client } from './utils/fetchClient';
 import { USER_ID } from './constants/user';
 import { Todo } from './types/Todo';
 import { DispatchContext, StateContext } from './State/State';
+import { getPreparedTodos } from './services/todosServices';
 
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const { updatedAt } = useContext(StateContext);
+  const { updatedAt, filterBy } = useContext(StateContext);
   const distatch = useContext(DispatchContext);
+
+  const preparedTodos = getPreparedTodos(todos, filterBy);
 
   useEffect(() => {
     client.get<Todo[]>(`/todos?userId=${USER_ID}`)
@@ -33,7 +36,7 @@ export const App: React.FC = () => {
         <Header />
 
         <main>
-          <TodoList todos={todos} />
+          <TodoList todos={preparedTodos} />
         </main>
 
         <Footer />

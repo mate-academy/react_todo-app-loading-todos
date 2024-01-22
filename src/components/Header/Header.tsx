@@ -1,10 +1,14 @@
-import { useContext, useState } from 'react';
+import cn from 'classnames';
+import { useContext, useEffect, useState } from 'react';
 import { createTodo } from '../../api/todos';
 import { USER_ID } from '../../constants/user';
-import { DispatchContext } from '../../State/State';
+import { DispatchContext, StateContext } from '../../State/State';
+import { isCompletedTodo } from '../../services/todosServices';
 
 export const Header = () => {
   const [todo, setTodo] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { todos } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   function handleOnSubmit(event: React.FormEvent) {
@@ -12,6 +16,8 @@ export const Header = () => {
     if (!todo.length) {
       return;
     }
+
+    setIsSubmitting(true);
 
     const newTodo = {
       title: todo.trim(),
@@ -23,18 +29,23 @@ export const Header = () => {
       .then(() => {
         dispatch({ type: 'updatedAt' });
         setTodo('');
+        setIsSubmitting(false);
       })
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to add a todo' },
       ));
   }
 
+  useEffect(() => {}, [todos]);
+
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
       <button
         type="button"
-        className="todoapp__toggle-all active"
+        className={cn('todoapp__toggle-all', {
+          active: !isCompletedTodo(todos),
+        })}
         data-cy="ToggleAllButton"
         aria-label="Set all"
       />
@@ -48,6 +59,7 @@ export const Header = () => {
           placeholder="What needs to be done?"
           value={todo}
           onChange={event => setTodo(event.target.value)}
+          disabled={isSubmitting}
         />
       </form>
     </header>
