@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { createTodo } from '../../api/todos';
 import { USER_ID } from '../../constants/user';
 import { DispatchContext, StateContext } from '../../State/State';
@@ -36,7 +36,13 @@ export const Header = () => {
       ));
   }
 
-  useEffect(() => {}, [todos]);
+  const inputTodo = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputTodo.current) {
+      inputTodo.current.focus();
+    }
+  }, [todos]);
 
   return (
     <header className="todoapp__header">
@@ -60,6 +66,7 @@ export const Header = () => {
           value={todo}
           onChange={event => setTodo(event.target.value)}
           disabled={isSubmitting}
+          ref={inputTodo}
         />
       </form>
     </header>

@@ -1,6 +1,5 @@
 import {
   ChangeEvent,
-  FormEvent,
   useContext,
   useEffect,
   useRef,
@@ -21,8 +20,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const dispatch = useContext(DispatchContext);
-  const { clearAll } = useContext(StateContext);
-
+  const { clearAll, isEscapeKeyup } = useContext(StateContext);
   const edit = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -36,6 +34,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       edit.current.focus();
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    if (isEscapeKeyup) {
+      setIsEditing(false);
+      setCurrentTitle(title);
+      dispatch({ type: 'setEscape', payload: false });
+    }
+  }, [isEscapeKeyup, dispatch, title]);
 
   function handleIsChecked(event: ChangeEvent<HTMLInputElement>) {
     setIsLoading(true);
@@ -64,9 +70,41 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   function handleOnSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setIsLoading(true);
 
-    updateTodo({ title: currertTitle, id })
-      .then(() => setIsEditing(false));
+    const promise: Promise<void> = new Promise((resolve) => {
+      if (currertTitle.length) {
+        updateTodo({ title: currertTitle, id })
+          .then(() => {
+            setIsEditing(false);
+            dispatch({ type: 'updatedAt' });
+          })
+
+          .catch(() => dispatch(
+            { type: 'setError', payload: 'Unable to update a todo' },
+          ));
+
+        resolve();
+
+        return;
+      }
+
+      deleteTodo(`/todos/${id}`)
+        .then(() => {
+          setIsEditing(false);
+          dispatch({ type: 'updatedAt' });
+        })
+        .catch(() => dispatch(
+          { type: 'setError', payload: 'Unable to delete a todo' },
+        ));
+
+      resolve();
+    });
+
+    promise.finally(() => {
+      setIsLoading(false);
+      setIsEditing(false);
+    });
   }
 
   return (
@@ -141,11 +179,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                   placeholder="Empty todo will be deleted"
                   value={currertTitle}
                   onChange={event => setCurrentTitle(event.target.value)}
-                  // onBlur={() => setIsEditing(false)}
+                  onBlur={handleOnSubmit}
                 />
               </form>
 
-              <div data-cy="TodoLoader" className="modal overlay is-overlay">
+              <div
+                data-cy="TodoLoader"
+                className={cn('modal overlay', {
+                  'is-active': isLoading,
+                })}
+              >
                 <div className="modal-background has-background-white-ter" />
                 <div className="loader" />
               </div>

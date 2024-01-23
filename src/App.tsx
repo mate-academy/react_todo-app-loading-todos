@@ -10,31 +10,37 @@ import { Todo } from './types/Todo';
 import { DispatchContext, StateContext } from './State/State';
 import { getPreparedTodos } from './services/todosServices';
 
-// function pressKey(event: KeyboardEvent) {
-//   console.log(event);
-// }
-
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
   const { updatedAt, filterBy } = useContext(StateContext);
-  const distatch = useContext(DispatchContext);
+  const dispatch = useContext(DispatchContext);
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
+
+  function pressKey(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      dispatch({ type: 'setEscape', payload: true });
+    }
+  }
 
   useEffect(() => {
     client.get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(res => {
         setTodo(res);
-        distatch({ type: 'saveTodos', payload: res });
+        dispatch({ type: 'saveTodos', payload: res });
       })
-      .catch(() => distatch(
+      .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to load todos' },
       ));
-  }, [updatedAt, distatch]);
+  }, [updatedAt, dispatch]);
 
   useEffect(() => {
-    // document.addEventListener('keyup', pressKey);
-  }, []);
+    document.addEventListener('keyup', pressKey);
+
+    return () => {
+      document.removeEventListener('keyup', pressKey);
+    };
+  });
 
   return (
     <div className="todoapp">
