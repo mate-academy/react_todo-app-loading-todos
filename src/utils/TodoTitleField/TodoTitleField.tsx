@@ -113,6 +113,10 @@ export const TodoTitleField:React.FC<Props> = (
               >
                 ×
               </button>
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
             </>
           )
           : (

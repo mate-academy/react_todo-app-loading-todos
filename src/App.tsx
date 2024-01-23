@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filt, setFilt] = useState(FilterStatus.All);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleError = (errorMessage: string) => {
@@ -33,14 +33,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then((todo) => {
-        setLoading(true);
+        // setLoading(true);
         setTodos(todo);
       })
       .catch((errorToThrow) => {
         handleError('Unable to load todos');
         throw errorToThrow;
       })
-      .finally(() => setLoading(false));
+      // .finally(() => setLoading(false));
   }, []);
 
   const updateChecked = (todo: Todo) => {
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
         handleError('Unable to update a todo');
         throw fetchError;
       })
-      .finally(() => setLoading(false));
+      // .finally(() => setLoading(false));
   };
 
   const filteredTodos = todos.filter((todo: { completed: boolean; }) => {
@@ -95,7 +95,6 @@ export const App: React.FC = () => {
 
         <TodoList
           filteredTodos={filteredTodos}
-          loading={loading}
           handleError={handleError}
           updateChecked={updateChecked}
         />
