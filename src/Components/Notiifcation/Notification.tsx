@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
@@ -10,7 +11,9 @@ export const Notification: React.FC<Props> = ({ errorMessege, close }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={cn('notification is-danger is-light has-text-weight-normal', {
+        hidden: errorMessege === ErrorMessage.NONE,
+      })}
     >
       {/* eslint-disable-next-line */}
       <button
