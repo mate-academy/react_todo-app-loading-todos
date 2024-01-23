@@ -34,17 +34,15 @@ export const App: React.FC = () => {
       .then((todo) => {
         setTodos(todo);
       })
-      .catch((errorToThrow) => {
+      .catch(() => {
         handleError('Unable to load todos');
-        throw errorToThrow;
       });
   }, []);
 
   const updateChecked = (todo: Todo) => {
     updateTodoStatus(todo.id, todo.completed)
-      .catch((fetchError) => {
+      .catch(() => {
         handleError('Unable to update a todo');
-        throw fetchError;
       });
   };
 

@@ -50,14 +50,16 @@ export const TodoTitleField:React.FC<Props> = (
   const clickEnterOrEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
 
+    if (changedTodo.trim() === '') {
+      handleDeleteTodo();
+      setIsEditing(false);
+    }
+
     if (event.key === 'Enter') {
-      if (changedTodo.trim() === '') {
-        handleDeleteTodo();
-        setIsEditing(false);
-      } else {
-        handleSave();
-      }
-    } else if (event.key === 'Escape') {
+      handleSave();
+    }
+
+    if (event.key === 'Escape') {
       setIsEditing(false);
     }
 
