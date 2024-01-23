@@ -39,8 +39,8 @@ export const App: React.FC = () => {
       .catch((errorToThrow) => {
         handleError('Unable to load todos');
         throw errorToThrow;
-      })
-      // .finally(() => setLoading(false));
+      });
+    // .finally(() => setLoading(false));
   }, []);
 
   const updateChecked = (todo: Todo) => {
@@ -62,8 +62,8 @@ export const App: React.FC = () => {
       .catch((fetchError) => {
         handleError('Unable to update a todo');
         throw fetchError;
-      })
-      // .finally(() => setLoading(false));
+      });
+    // .finally(() => setLoading(false));
   };
 
   const filteredTodos = todos.filter((todo: { completed: boolean; }) => {

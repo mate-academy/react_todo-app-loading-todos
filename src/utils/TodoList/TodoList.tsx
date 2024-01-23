@@ -31,5 +31,5 @@ export const TodoList:React.FC<Props> = (
         </form>
       )}
     </section>
-  )
+  );
 };
