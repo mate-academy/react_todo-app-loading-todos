@@ -1,26 +1,29 @@
 import {
-  ChangeEvent,
   useContext,
   useEffect,
   useRef,
   useState,
+  ChangeEvent,
 } from 'react';
+
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { deleteTodo, updateTodo } from '../../api/todos';
 import { DispatchContext, StateContext } from '../../State/State';
+import { deleteTodo, updateTodo } from '../../api/todos';
 
 type Props = {
   todo: Todo;
 };
+
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
+
   const [currertTitle, setCurrentTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
-  const { isSubmitting } = useContext(StateContext);
 
   const dispatch = useContext(DispatchContext);
-  const { clearAll, isEscapeKeyup } = useContext(StateContext);
+  const { isSubmitting, clearAll, isEscapeKeyup } = useContext(StateContext);
+
   const edit = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -43,32 +46,38 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     }
   }, [isEscapeKeyup, dispatch, title]);
 
-  function handleIsChecked(event: ChangeEvent<HTMLInputElement>) {
-    dispatch({ type: 'setIsSubmitting', payload: true });
+  function toggleTodoStatus(event: ChangeEvent<HTMLInputElement>) {
     const updatedTodo = {
       completed: event.target.checked,
       id,
     };
+
+    dispatch({ type: 'setIsSubmitting', payload: true });
 
     updateTodo(updatedTodo)
       .then(() => dispatch({ type: 'updatedAt' }))
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to update a todo' },
       ))
-      .finally(() => dispatch({ type: 'setIsSubmitting', payload: false }));
+      .finally(() => dispatch(
+        { type: 'setIsSubmitting', payload: false },
+      ));
   }
 
-  function handleDelete() {
+  function handleDeleteTodo() {
     dispatch({ type: 'setIsSubmitting', payload: true });
+
     deleteTodo(`/todos/${id}`)
       .then(() => dispatch({ type: 'updatedAt' }))
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to delete a todo' },
       ))
-      .finally(() => dispatch({ type: 'setIsSubmitting', payload: false }));
+      .finally(() => dispatch(
+        { type: 'setIsSubmitting', payload: false },
+      ));
   }
 
-  function handleOnSubmit(event: React.FormEvent) {
+  function editTodo(event: React.FormEvent) {
     event.preventDefault();
     dispatch({ type: 'setIsSubmitting', payload: true });
 
@@ -122,7 +131,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                onChange={handleIsChecked}
+                onChange={toggleTodoStatus}
                 checked={completed}
               />
             </label>
@@ -140,7 +149,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={handleDelete}
+              onClick={handleDeleteTodo}
             >
               ×
             </button>
@@ -170,7 +179,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               </label>
 
               {/* This form is shown instead of the title and remove button */}
-              <form onSubmit={handleOnSubmit}>
+              <form onSubmit={editTodo}>
                 <input
                   ref={edit}
                   data-cy="TodoTitleField"
@@ -179,7 +188,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
                   placeholder="Empty todo will be deleted"
                   value={currertTitle}
                   onChange={event => setCurrentTitle(event.target.value)}
-                  onBlur={handleOnSubmit}
+                  onBlur={editTodo}
                 />
               </form>
 

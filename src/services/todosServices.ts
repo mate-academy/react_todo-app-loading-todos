@@ -1,5 +1,5 @@
 import { Action } from '../State/State';
-import { deleteAllCompleted } from '../api/todos';
+import { deleteAllCompleted, updateTodo } from '../api/todos';
 import { Filter } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
@@ -44,4 +44,39 @@ export function isCompletedTodo(todos: Todo[]): boolean {
 
 export function isActiveTodo(todos: Todo[]): boolean {
   return todos.some(todo => !todo.completed);
+}
+
+export function handleToggleAll(
+  dispatch: React.Dispatch<Action>,
+  todos: Todo[],
+  setAllCompleted: boolean,
+) {
+  const promises = todos.reduce((prev, el) => {
+    if (el.completed === setAllCompleted) {
+      return [
+        ...prev,
+        updateTodo({ completed: !setAllCompleted, id: el.id }),
+      ];
+    }
+
+    return prev;
+  }, [] as Promise<Partial<Todo>>[]);
+
+  dispatch({ type: 'setIsSubmitting', payload: true });
+
+  Promise.all(promises)
+    .then(() => {
+      dispatch({
+        type: 'setTodosStatus',
+        payload: !setAllCompleted,
+      });
+    })
+    .catch(() => dispatch({
+      type: 'setError',
+      payload: 'Unable to update a todos',
+    }))
+    .finally(() => dispatch({
+      type: 'setIsSubmitting',
+      payload: false,
+    }));
 }

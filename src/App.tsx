@@ -12,7 +12,7 @@ import { getPreparedTodos } from './services/todosServices';
 
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const { updatedAt, filterBy, todosStatus } = useContext(StateContext);
+  const { updatedAt, filterBy, setAllCompleted } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to load todos' },
       ));
-  }, [updatedAt, dispatch, todosStatus]);
+  }, [updatedAt, dispatch, setAllCompleted]);
 
   useEffect(() => {
     document.addEventListener('keyup', pressKey);
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
           <TodoList todos={preparedTodos} />
         </main>
 
-        <Footer />
+        {!!todos.length && <Footer />}
       </div>
 
       <Notification />

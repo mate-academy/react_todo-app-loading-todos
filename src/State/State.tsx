@@ -10,7 +10,7 @@ type State = {
   filterBy: Filter;
   isSubmitting: boolean;
   isEscapeKeyup: boolean;
-  todosStatus: Omit<Filter, 'all'>,
+  setAllCompleted: boolean,
 };
 
 type Props = {
@@ -25,7 +25,7 @@ export type Action
   | { type: 'setFilter', payload: Filter }
   | { type: 'setIsSubmitting', payload: boolean }
   | { type: 'setEscape', payload: boolean }
-  | { type: 'setTodosStatus', payload: Omit<Filter, 'all'> };
+  | { type: 'setTodosStatus', payload: boolean };
 
 export const initialState: State = {
   updatedAt: new Date(),
@@ -35,7 +35,7 @@ export const initialState: State = {
   filterBy: Filter.all,
   isSubmitting: false,
   isEscapeKeyup: false,
-  todosStatus: Filter.active,
+  setAllCompleted: false,
 };
 
 function reducer(state: State, action: Action): State {
@@ -85,7 +85,7 @@ function reducer(state: State, action: Action): State {
     case 'setTodosStatus':
       return {
         ...state,
-        todosStatus: action.payload,
+        setAllCompleted: action.payload,
       };
 
     default:
