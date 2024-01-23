@@ -6,3 +6,10 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+
+export const updateTodoStatus = (
+  id: number,
+  completed: boolean,
+): Promise<Todo> => {
+  return client.patch<Todo>(`/todos/${id}`, completed);
+};
