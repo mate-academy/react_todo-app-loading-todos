@@ -16,7 +16,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(FilterType.ALL);
   const [isError, setIsError] = useState(false);
-  const [errorMessege, setErrorMessege] = useState('' as ErrorMessage);
+  const [errorMessege, setErrorMessege] = useState(ErrorMessage.NONE);
 
   useEffect(() => {
     client.get<Todo[]>('/todos?userId=13')
@@ -40,6 +40,11 @@ export const App: React.FC = () => {
   });
 
   const itemsLeft = todos.filter((todo) => !todo.completed).length;
+
+  const closeErrorMsg = () => {
+    setIsError(false);
+    setErrorMessege(ErrorMessage.NONE);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -65,7 +70,12 @@ export const App: React.FC = () => {
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {isError && (<Notification errorMessege={errorMessege} />)}
+      {isError && (
+        <Notification
+          errorMessege={errorMessege}
+          close={closeErrorMsg}
+        />
+      )}
     </div>
   );
 };
