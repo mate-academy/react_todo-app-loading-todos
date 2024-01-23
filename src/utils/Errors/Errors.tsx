@@ -13,10 +13,6 @@ export const Errors:React.FC<Props> = ({
     setError(null);
   };
 
-  if (!error) {
-    return null;
-  }
-
   return (
     <div
       data-cy="ErrorNotification"
