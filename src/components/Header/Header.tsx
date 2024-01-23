@@ -79,6 +79,10 @@ export const Header = () => {
             : Filter.active,
         });
       })
+      .catch(() => dispatch({
+        type: 'setError',
+        payload: 'Unable to update a todos',
+      }))
       .finally(() => dispatch({
         type: 'setIsSubmitting',
         payload: false,
