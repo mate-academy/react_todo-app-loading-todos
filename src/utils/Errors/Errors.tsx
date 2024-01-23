@@ -9,15 +9,13 @@ export const Errors:React.FC<Props> = ({
   error,
   setError,
 }) => {
-  const unableToLoad = 'Unable to load todos';
-  const shouldNotBeEmpty = 'Title should not be empty';
-  const unableToAdd = 'Unable to add a todo';
-  const unableToDelete = 'Unable to delete a todo';
-  const unableToUpdate = 'Unable to update a todo';
-
   const handelClearError = () => {
     setError(null);
   };
+
+  if (!error) {
+    return null;
+  }
 
   return (
     <div
@@ -27,18 +25,14 @@ export const Errors:React.FC<Props> = ({
         { hidden: error === null },
       )}
     >
-      {/* eslint-disable-next-line  */}
+      {/* eslint-disable-next-line */}
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
         onClick={handelClearError}
       />
-      {error === unableToLoad && 'Unable to load todos'}
-      {error === shouldNotBeEmpty && 'Title should not be empty'}
-      {error === unableToAdd && 'Unable to add a todo'}
-      {error === unableToDelete && 'Unable to delete a todo'}
-      {error === unableToUpdate && 'Unable to update a todo'}
+      {error}
     </div>
   );
 };

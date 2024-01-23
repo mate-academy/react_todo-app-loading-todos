@@ -20,7 +20,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filt, setFilt] = useState(FilterStatus.All);
-  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleError = (errorMessage: string) => {
@@ -33,37 +32,20 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then((todo) => {
-        // setLoading(true);
         setTodos(todo);
       })
       .catch((errorToThrow) => {
         handleError('Unable to load todos');
         throw errorToThrow;
       });
-    // .finally(() => setLoading(false));
   }, []);
 
   const updateChecked = (todo: Todo) => {
     updateTodoStatus(todo.id, todo.completed)
-    // .then(newTodo => {
-    //   setLoading(true);
-    //     setTodos((currentTodos) => {
-    //       const newTodos = [...currentTodos];
-
-    //       const found = newTodos.find((item) => item.id === newTodo.id);
-    //       const newItem = { ...found, completed: !found?.completed};
-    //       const index = newTodos.findIndex(el => el.id === found?.id);
-
-    //       newTodos.splice(index, 1, newItem);
-
-      //       return newTodos;
-      //     });
-      // })
       .catch((fetchError) => {
         handleError('Unable to update a todo');
         throw fetchError;
       });
-    // .finally(() => setLoading(false));
   };
 
   const filteredTodos = todos.filter((todo: { completed: boolean; }) => {

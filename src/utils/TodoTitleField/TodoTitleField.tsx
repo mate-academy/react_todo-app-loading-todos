@@ -65,9 +65,9 @@ export const TodoTitleField:React.FC<Props> = (
   };
 
   const handleBlur = () => {
-    // handleSave();
-    // setIsEditing(false);
-    // setFocus(false);
+    handleSave();
+    setIsEditing(false);
+    setFocus(false);
   };
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export const TodoTitleField:React.FC<Props> = (
               onKeyUp={clickEnterOrEsc}
               value={changedTodo}
               onChange={handleTitle}
-              onBlur={() => handleBlur()}
+              onBlur={handleBlur}
             />
           )}
       </div>
