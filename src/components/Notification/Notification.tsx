@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react';
+import classNames from 'classnames';
 import { DispatchContext, StateContext } from '../../State/State';
 
 export const Notification = () => {
@@ -15,30 +16,22 @@ export const Notification = () => {
     // {/* Notification is shown in case of any error */}
     // {/* Add the 'hidden' class to hide the message smoothly */}
     <>
-      {errorMessage && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            aria-label="hide notification"
-          />
-          {errorMessage}
-
-          {/* show only one message at a time */}
-          {/* Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br /> */}
-        </div>
-      )}
+      <div
+        data-cy="ErrorNotification"
+        className={
+          classNames('notification is-danger is-light has-text-weight-normal', {
+            hidden: !errorMessage,
+          })
+        }
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          aria-label="hide notification"
+        />
+        {errorMessage}
+      </div>
     </>
   );
 };

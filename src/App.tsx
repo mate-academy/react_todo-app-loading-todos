@@ -12,8 +12,8 @@ import { getPreparedTodos } from './services/todosServices';
 
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const { updatedAt, filterBy, setAllCompleted } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+  const { updatedAt, filterBy, setAllCompleted } = useContext(StateContext);
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
 
