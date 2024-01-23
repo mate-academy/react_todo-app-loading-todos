@@ -10,6 +10,10 @@ import { Todo } from './types/Todo';
 import { DispatchContext, StateContext } from './State/State';
 import { getPreparedTodos } from './services/todosServices';
 
+// function pressKey(event: KeyboardEvent) {
+//   console.log(event);
+// }
+
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
   const { updatedAt, filterBy } = useContext(StateContext);
@@ -27,6 +31,10 @@ export const App: React.FC = () => {
         { type: 'setError', payload: 'Unable to load todos' },
       ));
   }, [updatedAt, distatch]);
+
+  useEffect(() => {
+    // document.addEventListener('keyup', pressKey);
+  }, []);
 
   return (
     <div className="todoapp">

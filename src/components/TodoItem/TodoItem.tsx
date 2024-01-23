@@ -1,7 +1,9 @@
 import {
   ChangeEvent,
+  FormEvent,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import cn from 'classnames';
@@ -14,16 +16,26 @@ type Props = {
 };
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
+  const [currertTitle, setCurrentTitle] = useState(title);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const dispatch = useContext(DispatchContext);
   const { clearAll } = useContext(StateContext);
+
+  const edit = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (clearAll && completed) {
       setIsLoading(true);
     }
   }, [clearAll, completed]);
+
+  useEffect(() => {
+    if (edit.current) {
+      edit.current.focus();
+    }
+  }, [isEditing]);
 
   function handleIsChecked(event: ChangeEvent<HTMLInputElement>) {
     setIsLoading(true);
@@ -50,80 +62,96 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       .finally(() => setIsLoading(false));
   }
 
+  function handleOnSubmit(event: React.FormEvent) {
+    event.preventDefault();
+
+    updateTodo({ title: currertTitle, id })
+      .then(() => setIsEditing(false));
+  }
+
   return (
     <>
-      <div
-        data-cy="Todo"
-        className={cn('todo', {
-          completed,
-        })}
-      >
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            onChange={handleIsChecked}
-            checked={completed}
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          {title}
-        </span>
-
-        {/* Remove button appears only on hover */}
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={handleDelete}
-        >
-          ×
-        </button>
-
-        {/* overlay will cover the todo while it is being updated */}
-        <div
-          data-cy="TodoLoader"
-          className={cn('modal overlay', {
-            'is-active': isLoading,
-          })}
-        >
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      </div>
-
-      {false && (
-        <>
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
+      {!isEditing
+        ? (
+          <div
+            data-cy="Todo"
+            className={cn('todo item-enter-done', {
+              completed,
+            })}
+          >
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
+                onChange={handleIsChecked}
+                checked={completed}
               />
             </label>
 
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
+            <span
+              data-cy="TodoTitle"
+              className="todo__title"
+              onDoubleClick={() => setIsEditing(true)}
+            >
+              {currertTitle}
+            </span>
 
-            <div data-cy="TodoLoader" className="modal overlay">
+            {/* Remove button appears only on hover */}
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={handleDelete}
+            >
+              ×
+            </button>
+
+            {/* overlay will cover the todo while it is being updated */}
+            <div
+              data-cy="TodoLoader"
+              className={cn('modal overlay', {
+                'is-active': isLoading,
+              })}
+            >
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
           </div>
-        </>
-      )}
+        )
+        : (
+          <>
+            {/* This todo is being edited */}
+            <div data-cy="Todo" className="todo">
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                />
+              </label>
+
+              {/* This form is shown instead of the title and remove button */}
+              <form onSubmit={handleOnSubmit}>
+                <input
+                  ref={edit}
+                  data-cy="TodoTitleField"
+                  type="text"
+                  className="todo__title-field"
+                  placeholder="Empty todo will be deleted"
+                  value={currertTitle}
+                  onChange={event => setCurrentTitle(event.target.value)}
+                  // onBlur={() => setIsEditing(false)}
+                />
+              </form>
+
+              <div data-cy="TodoLoader" className="modal overlay is-overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
+            </div>
+          </>
+        )}
     </>
   );
 };
