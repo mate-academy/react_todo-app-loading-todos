@@ -3,9 +3,10 @@ import { FilterType } from '../../types/Filter';
 
 type Props = {
   setFilter: (filterType: FilterType) => void;
+  itemsLeft: number;
 };
 
-export const Footer: React.FC<Props> = ({ setFilter }) => {
+export const Footer: React.FC<Props> = ({ setFilter, itemsLeft }) => {
   const handleFilterChange = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const name = event.currentTarget.dataset.name as FilterType;
 
@@ -15,7 +16,7 @@ export const Footer: React.FC<Props> = ({ setFilter }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${itemsLeft} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}

@@ -1,6 +1,11 @@
 import React from 'react';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
-export const Notification: React.FC = () => {
+type Props = {
+  errorMessege: ErrorMessage;
+};
+
+export const Notification: React.FC<Props> = ({ errorMessege }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -9,15 +14,7 @@ export const Notification: React.FC = () => {
       {/* eslint-disable-next-line */}
       <button data-cy="HideErrorButton" type="button" className="delete" />
       {/* show only one message at a time */}
-      Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
+      {errorMessege}
     </div>
   );
 };

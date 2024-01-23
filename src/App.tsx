@@ -8,23 +8,25 @@ import { Notification } from './Components/Notiifcation';
 import { Todo } from './types/Todo';
 import { client } from './utils/fetchClient';
 import { FilterType } from './types/Filter';
+import { ErrorMessage } from './types/ErrorMessage';
 
 const USER_ID = 13;
 
 export const App: React.FC = () => {
-  // #region useState();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(FilterType.ALL);
-  // #endregion
+  const [isError, setIsError] = useState(false);
+  const [errorMessege, setErrorMessege] = useState('' as ErrorMessage);
 
-  // #region loadTodos
   useEffect(() => {
     client.get<Todo[]>('/todos?userId=13')
-      .then(setTodos);
-  }, [todos, filter]);
-  // #endregion
+      .then(setTodos)
+      .catch(() => {
+        setIsError(true);
+        setErrorMessege(ErrorMessage.CANNOT_LOAD_TODOS);
+      });
+  }, [todos]);
 
-  // #region filterTodos
   const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case FilterType.ACTIVE:
@@ -36,7 +38,8 @@ export const App: React.FC = () => {
         return true;
     }
   });
-  // #endregion
+
+  const itemsLeft = todos.filter((todo) => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -52,12 +55,17 @@ export const App: React.FC = () => {
         <TodoList todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer setFilter={setFilter} />
+        {itemsLeft !== 0 && (
+          <Footer
+            setFilter={setFilter}
+            itemsLeft={itemsLeft}
+          />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Notification />
+      {isError && (<Notification errorMessege={errorMessege} />)}
     </div>
   );
 };
