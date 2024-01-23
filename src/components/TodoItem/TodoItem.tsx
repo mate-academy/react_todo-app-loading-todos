@@ -16,8 +16,8 @@ type Props = {
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed, id } = todo;
   const [currertTitle, setCurrentTitle] = useState(title);
-  const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { isSubmitting } = useContext(StateContext);
 
   const dispatch = useContext(DispatchContext);
   const { clearAll, isEscapeKeyup } = useContext(StateContext);
@@ -25,9 +25,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   useEffect(() => {
     if (clearAll && completed) {
-      setIsLoading(true);
+      dispatch({ type: 'setIsSubmitting', payload: true });
     }
-  }, [clearAll, completed]);
+  }, [clearAll, completed, dispatch]);
 
   useEffect(() => {
     if (edit.current) {
@@ -44,7 +44,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   }, [isEscapeKeyup, dispatch, title]);
 
   function handleIsChecked(event: ChangeEvent<HTMLInputElement>) {
-    setIsLoading(true);
+    dispatch({ type: 'setIsSubmitting', payload: true });
     const updatedTodo = {
       completed: event.target.checked,
       id,
@@ -55,22 +55,22 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to update a todo' },
       ))
-      .finally(() => setIsLoading(false));
+      .finally(() => dispatch({ type: 'setIsSubmitting', payload: false }));
   }
 
   function handleDelete() {
-    setIsLoading(true);
+    dispatch({ type: 'setIsSubmitting', payload: true });
     deleteTodo(`/todos/${id}`)
       .then(() => dispatch({ type: 'updatedAt' }))
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to delete a todo' },
       ))
-      .finally(() => setIsLoading(false));
+      .finally(() => dispatch({ type: 'setIsSubmitting', payload: false }));
   }
 
   function handleOnSubmit(event: React.FormEvent) {
     event.preventDefault();
-    setIsLoading(true);
+    dispatch({ type: 'setIsSubmitting', payload: true });
 
     const promise: Promise<void> = new Promise((resolve) => {
       if (currertTitle.length) {
@@ -102,7 +102,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
 
     promise.finally(() => {
-      setIsLoading(false);
+      dispatch({ type: 'setIsSubmitting', payload: false });
       setIsEditing(false);
     });
   }
@@ -149,7 +149,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             <div
               data-cy="TodoLoader"
               className={cn('modal overlay', {
-                'is-active': isLoading,
+                'is-active': isSubmitting,
               })}
             >
               <div className="modal-background has-background-white-ter" />
@@ -186,7 +186,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               <div
                 data-cy="TodoLoader"
                 className={cn('modal overlay', {
-                  'is-active': isLoading,
+                  'is-active': isSubmitting,
                 })}
               >
                 <div className="modal-background has-background-white-ter" />

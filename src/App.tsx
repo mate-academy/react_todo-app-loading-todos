@@ -1,9 +1,9 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { Notification } from './components/Notification';
+
 import { client } from './utils/fetchClient';
 import { USER_ID } from './constants/user';
 import { Todo } from './types/Todo';
@@ -12,7 +12,7 @@ import { getPreparedTodos } from './services/todosServices';
 
 export const App: React.FC = () => {
   const [todos, setTodo] = useState<Todo[]>([]);
-  const { updatedAt, filterBy } = useContext(StateContext);
+  const { updatedAt, filterBy, todosStatus } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
@@ -32,7 +32,7 @@ export const App: React.FC = () => {
       .catch(() => dispatch(
         { type: 'setError', payload: 'Unable to load todos' },
       ));
-  }, [updatedAt, dispatch]);
+  }, [updatedAt, dispatch, todosStatus]);
 
   useEffect(() => {
     document.addEventListener('keyup', pressKey);

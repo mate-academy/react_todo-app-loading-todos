@@ -41,3 +41,7 @@ export function getPreparedTodos(todos: Todo[], filterBy: Filter): Todo[] {
 export function isCompletedTodo(todos: Todo[]): boolean {
   return todos.some(todo => todo.completed);
 }
+
+export function isActiveTodo(todos: Todo[]): boolean {
+  return todos.some(todo => !todo.completed);
+}

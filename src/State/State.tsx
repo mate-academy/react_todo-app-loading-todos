@@ -1,7 +1,6 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';
-// import { getCompletedTodo } from '../services/todos';
 
 type State = {
   updatedAt: Date;
@@ -11,6 +10,7 @@ type State = {
   filterBy: Filter;
   isSubmitting: boolean;
   isEscapeKeyup: boolean;
+  todosStatus: Omit<Filter, 'all'>,
 };
 
 type Props = {
@@ -24,7 +24,8 @@ export type Action
   | { type: 'saveTodos', payload: Todo[] }
   | { type: 'setFilter', payload: Filter }
   | { type: 'setIsSubmitting', payload: boolean }
-  | { type: 'setEscape', payload: boolean };
+  | { type: 'setEscape', payload: boolean }
+  | { type: 'setTodosStatus', payload: Omit<Filter, 'all'> };
 
 export const initialState: State = {
   updatedAt: new Date(),
@@ -34,6 +35,7 @@ export const initialState: State = {
   filterBy: Filter.all,
   isSubmitting: false,
   isEscapeKeyup: false,
+  todosStatus: Filter.active,
 };
 
 function reducer(state: State, action: Action): State {
@@ -78,6 +80,12 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         isEscapeKeyup: action.payload,
+      };
+
+    case 'setTodosStatus':
+      return {
+        ...state,
+        todosStatus: action.payload,
       };
 
     default:
