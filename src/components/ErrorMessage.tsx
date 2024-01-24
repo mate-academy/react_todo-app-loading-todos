@@ -8,6 +8,10 @@ interface Props {
 
 export const ErrorMessage: React.FC<Props> = ({ error, close }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const handleClick = () => {
+    setIsVisible(false);
+    close();
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -29,10 +33,7 @@ export const ErrorMessage: React.FC<Props> = ({ error, close }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => {
-          setIsVisible(false);
-          close();
-        }}
+        onClick={handleClick}
       />
       <p>{error}</p>
     </div>
