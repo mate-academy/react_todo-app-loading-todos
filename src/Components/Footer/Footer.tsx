@@ -1,8 +1,16 @@
+import { useContext } from 'react';
+
+import { Context } from '../../Context';
+
 export const Footer = () => {
+  const { todos, handleStatusEdit } = useContext(Context);
+
+  const itemsLeft = todos.filter((todo) => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${itemsLeft} items left`}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -29,6 +37,7 @@ export const Footer = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={handleStatusEdit}
       >
         Clear completed
       </button>
