@@ -10,7 +10,7 @@ export const Header = () => {
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    handleErrorChange(ErrorMessage.NULL);
+    handleErrorChange('');
     setQuery(value);
   };
 

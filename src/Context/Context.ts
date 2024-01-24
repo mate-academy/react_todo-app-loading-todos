@@ -1,14 +1,13 @@
 import { createContext } from 'react';
 
 import { Todo } from '../types/Todo';
-import { ErrorMessage } from '../types/ErrorMessage';
 import { Filter } from '../types/Filter';
 
 interface ContextProps {
   todos: Todo[];
   filteredTodos: Todo[];
-  errorMessage: ErrorMessage;
-  handleErrorChange: (value: ErrorMessage) => void;
+  errorMessage: string;
+  handleErrorChange: (value: string) => void;
   handleStatusEdit: () => void;
   handleActiveTodos: number;
   filter: Filter;
@@ -18,7 +17,7 @@ interface ContextProps {
 export const Context = createContext<ContextProps>({
   todos: [],
   filteredTodos: [],
-  errorMessage: ErrorMessage.NULL,
+  errorMessage: '',
   handleErrorChange: () => {},
   handleStatusEdit: () => {},
   handleActiveTodos: 0,

@@ -25,7 +25,7 @@ export const ContextProvider: FC<Props> = ({ children }) => {
   const [
     errorMessage,
     setErrorMessage,
-  ] = useState<ErrorMessage>(ErrorMessage.NULL);
+  ] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
@@ -33,7 +33,7 @@ export const ContextProvider: FC<Props> = ({ children }) => {
       .catch(() => setErrorMessage(ErrorMessage.UNABLE_TO_LOAD));
   }, [todos]);
 
-  const handleErrorChange = (value: ErrorMessage) => {
+  const handleErrorChange = (value: string) => {
     setErrorMessage(value);
   };
 

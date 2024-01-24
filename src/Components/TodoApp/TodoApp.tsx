@@ -6,7 +6,6 @@ import { Main } from '../Main';
 import { Notification } from '../Notification';
 
 import { Context } from '../../Context';
-import { ErrorMessage } from '../../types/ErrorMessage';
 
 export const TodoApp = () => {
   const { todos, errorMessage } = useContext(Context);
@@ -26,7 +25,7 @@ export const TodoApp = () => {
         )}
       </div>
 
-      {errorMessage !== ErrorMessage.NULL && <Notification />}
+      {errorMessage.length > 0 && <Notification />}
     </div>
   );
 };
