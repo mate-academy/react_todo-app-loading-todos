@@ -1,26 +1,11 @@
-import { useContext, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useContext } from 'react';
 
 import { TodoItem } from '../TodoItem';
 
 import { Context } from '../../Context';
 
 export const Main = () => {
-  const { todos } = useContext(Context);
-
-  const location = useLocation().pathname.slice(1);
-
-  const filteredTodos = useMemo(() => {
-    if (location === 'active') {
-      return todos.filter((item) => !item.completed);
-    }
-
-    if (location === 'completed') {
-      return todos.filter((item) => item.completed);
-    }
-
-    return todos;
-  }, [location, todos]);
+  const { filteredTodos } = useContext(Context);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
