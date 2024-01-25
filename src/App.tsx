@@ -73,7 +73,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={getFilterTodos()} />
 
-        {todos?.length !== 0 && (
+        {!!todos?.length && (
           <Footer
             activeTodos={activeTodos?.length}
             completedTodos={completedTodos?.length}

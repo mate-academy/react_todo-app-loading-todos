@@ -12,7 +12,7 @@ export const Filter: React.FC<Props> = ({ setFilter, filter }) => {
       <a
         href="#/"
         className={cn('filter__link', {
-          selected: filter === 'all',
+          selected: filter === FilterItem.All,
         })}
         data-cy="FilterLinkAll"
         onClick={() => setFilter(FilterItem.All)}
@@ -23,7 +23,7 @@ export const Filter: React.FC<Props> = ({ setFilter, filter }) => {
       <a
         href="#/active"
         className={cn('filter__link', {
-          selected: filter === 'active',
+          selected: filter === FilterItem.Active,
         })}
         data-cy="FilterLinkActive"
         onClick={() => setFilter(FilterItem.Active)}
@@ -34,7 +34,7 @@ export const Filter: React.FC<Props> = ({ setFilter, filter }) => {
       <a
         href="#/completed"
         className={cn('filter__link', {
-          selected: filter === 'completed',
+          selected: filter === FilterItem.Completed,
         })}
         data-cy="FilterLinkCompleted"
         onClick={() => setFilter(FilterItem.Completed)}
