@@ -20,9 +20,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
-      .catch(() => setErrorMessage(ErrorMessage.CANNOT_LOAD_TODOS));
-
-    setTimeout(setErrorMessage, 3000, '');
+      .catch(() => {
+        setErrorMessage(ErrorMessage.CANNOT_LOAD_TODOS);
+        setTimeout(() => setErrorMessage(ErrorMessage.NONE), 3000);
+      });
   }, []);
 
   const filteredTodos = todos.filter((todo) => {
@@ -38,7 +39,6 @@ export const App: React.FC = () => {
   });
 
   const itemsLeft = todos.filter((todo) => !todo.completed).length;
-  const isAllItemsLeft = (todos.length > 0);
 
   const closeErrorMsg = () => {
     setErrorMessage(ErrorMessage.NONE);
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         <Header />
         <TodoList todos={filteredTodos} />
         {/* Hide the footer if there are no todos */}
-        {isAllItemsLeft && (
+        {todos.length > 0 && (
           <Footer
             filter={filter}
             setFilter={setFilter}
