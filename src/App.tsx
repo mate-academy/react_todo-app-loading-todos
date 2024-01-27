@@ -76,8 +76,7 @@ export const App: React.FC = () => {
         <TodosList todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {!!todos.length
-        && (
+        {!!todos.length && (
           <Footer
             todos={filteredTodos}
             currentFilter={currentFilter}

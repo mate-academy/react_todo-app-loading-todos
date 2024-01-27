@@ -17,7 +17,7 @@ export const ErrorMessage: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (isErrorVisible === true) {
+    if (isErrorVisible) {
       setTimeout(() => {
         setIsErrorVisible(false);
       }, 3000);
@@ -39,8 +39,6 @@ export const ErrorMessage: React.FC<Props> = ({
         onClick={handleCloseErrorOnClick}
         aria-label="Close Error"
       />
-
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );
