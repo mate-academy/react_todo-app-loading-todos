@@ -97,7 +97,7 @@ export const App: React.FC = () => {
             setShowState={setShowState}
           />
         )}
-        {error && <Error error={error} />}
+        {error && <Error error={error} setError={setError} />}
       </div>
     </div>
   );

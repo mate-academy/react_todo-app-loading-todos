@@ -1,10 +1,12 @@
+import { Dispatch, SetStateAction } from 'react';
 import { ErrorTypes } from '../types/ErrorTypes';
 
 type Props = {
-  error: ErrorTypes
+  error: ErrorTypes,
+  setError: Dispatch<SetStateAction<ErrorTypes | null>>,
 };
 
-export const Error: React.FC<Props> = ({ error }) => {
+export const Error: React.FC<Props> = ({ error, setError }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,6 +17,7 @@ export const Error: React.FC<Props> = ({ error }) => {
         type="button"
         className="delete"
         aria-label="Error Notification"
+        onClick={() => setError(null)}
       />
       {/* show only one message at a time */}
       {/* Unable to load todos */}
