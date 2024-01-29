@@ -32,7 +32,7 @@ function request<T>(
     .then(response => {
       if (!response.ok) {
         throw new Error();
-      } 
+      }
 
       return response.json();
     });

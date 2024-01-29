@@ -46,13 +46,13 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <Main posts={visibleTodos} />
-        {!!posts.length(
+        {!!posts.length && (
           <Footer
             posts={posts}
             setPosts={setPosts}
             filter={filter}
             setFilter={setFilter}
-          />,
+          />
         )}
       </div>
 
