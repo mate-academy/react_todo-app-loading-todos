@@ -1,15 +1,24 @@
-import React from "react";
-import { Todo } from "../../types/Todo";
-import classNames from "classnames";
+import classNames from 'classnames';
+import React from 'react';
+
+import { Todo } from '../../types/Todo';
 
 type Props = {
   posts: Todo[];
   setPosts: React.Dispatch<React.SetStateAction<Todo[]>>;
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
+};
+
+enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
-export const Footer: React.FC<Props> = ({ posts, setPosts, filter, setFilter }) => {
+export const Footer: React.FC<Props> = ({
+  posts, setPosts, filter, setFilter,
+}) => {
   const activeTodos = posts.filter(todo => todo.completed === false);
   const todosCounter = activeTodos.length;
   const completedTodos = posts.filter(todo => todo.completed);
@@ -29,7 +38,7 @@ export const Footer: React.FC<Props> = ({ posts, setPosts, filter, setFilter }) 
         <a
           href="#/"
           className={classNames('filter__link', {
-            'selected': filter === 'all'
+            selected: filter === Filter.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => setFilter('all')}
@@ -40,7 +49,7 @@ export const Footer: React.FC<Props> = ({ posts, setPosts, filter, setFilter }) 
         <a
           href="#/active"
           className={classNames('filter__link', {
-            'selected': filter === 'active',
+            selected: filter === Filter.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => setFilter('active')}
@@ -51,7 +60,7 @@ export const Footer: React.FC<Props> = ({ posts, setPosts, filter, setFilter }) 
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            'selected': filter === 'completed',
+            selected: filter === Filter.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => setFilter('completed')}
@@ -72,5 +81,5 @@ export const Footer: React.FC<Props> = ({ posts, setPosts, filter, setFilter }) 
       </button>
       {/* )} */}
     </footer>
-  )
+  );
 };
