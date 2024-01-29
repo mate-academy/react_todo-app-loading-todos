@@ -7,6 +7,7 @@ You are given the markup of the Todo App. Split it into components and
 implement the functionality saving all the changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
+
 ## ❗️❗️❗️ Please implement ONLY todos loading, errors, and filtering. All the rest will be implemented in the next tasks ❗️❗️❗️
 
 ## General info
@@ -21,7 +22,8 @@ implement the functionality saving all the changes to [the API](https://mate-aca
     ```
 - hide the list and the footer if there are no todos yet;
 
-> The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with the API. If you want to implement it yourself you can delete the `fetchClient`.
+> The API client is already implemented in the `src/utils/fetchClient.ts`. Learn it to understand how to interact with
+> the API. If you want to implement it yourself you can delete the `fetchClient`.
 
 ## Error messages
 
@@ -40,11 +42,14 @@ Filter todos by status `All` / `Active` / `Completed`:
 - use the `selected` class to highlight a selected link;
 
 ## If you want to enable tests
+
 - open `cypress/integration/page.spec.js`
 - replace `describe.skip` with `describe` for the root `describe`
 
 ## Instructions
 
-- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
+- Implement a solution following
+  the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in
+  the [DEMO LINK](https://khviktoriia.github.io/react_todo-app-loading-todos/) and add it to the PR description.
