@@ -60,9 +60,12 @@ export const App: React.FC = () => {
         <div
           data-cy="ErrorNotification"
           className={
-            classNames('notification is-danger is-light has-text-weight-normal', {
-              hidden: !errorLoad,
-            })
+            classNames(
+              'notification is-danger is-light has-text-weight-normal',
+              {
+                hidden: !errorLoad,
+              },
+            )
           }
         >
           <button
@@ -70,6 +73,8 @@ export const App: React.FC = () => {
             type="button"
             className="delete"
             onClick={() => setErrorLoad(false)}
+            aria-label="delete"
+
           />
           {/* show only one message at a time */}
           Unable to load todos
