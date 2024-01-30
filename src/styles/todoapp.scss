@@ -122,6 +122,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: opacity 0.3s;
+    opacity: 1;
 
     &:hover {
       text-decoration: underline;
@@ -135,4 +136,15 @@
       visibility: hidden;
     }
   }
+
+  &__clear-completed.disabled {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.notification {
+  height: 76px;
+
+  border-radius: 10px;
 }
