@@ -24,20 +24,20 @@ export const App: React.FC = () => {
   }, 0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let timeout: NodeJS.Timeout;
 
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Error');
-        interval = setInterval(() => {
+        timeout = setTimeout(() => {
           setErrorMessage('');
-          clearInterval(interval);
+          clearInterval(timeout);
         }, 3000);
       });
 
     return () => {
-      clearInterval(interval);
+      clearInterval(timeout);
     };
   }, []);
 
