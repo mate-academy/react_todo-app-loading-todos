@@ -2,7 +2,7 @@
 import React from 'react';
 import { UserWarning } from './UserWarning';
 
-const USER_ID = 0;
+const USER_ID = 'https://mate.academy/users/109';
 
 export const App: React.FC = () => {
   if (!USER_ID) {
