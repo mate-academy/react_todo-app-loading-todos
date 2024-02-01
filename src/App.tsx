@@ -14,7 +14,7 @@ const USER_ID = 92;
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [query, setQuery] = useState<FilterBy>('all');
-  const [errorMessage, setErrorMessage] = useState('g');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTodos(USER_ID)
