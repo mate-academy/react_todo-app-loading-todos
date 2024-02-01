@@ -1,7 +1,8 @@
 /* eslint-disable import/no-cycle */
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { Status, TodosContext } from '../TodoContext/TodoContext';
+import { TodosContext } from '../TodoContext/TodoContext';
+import { Status } from '../types/Status';
 
 export const Footer: React.FC = () => {
   const {
@@ -11,9 +12,9 @@ export const Footer: React.FC = () => {
     query,
   } = useContext(TodosContext);
 
-  const unCompletedTodos = todos.filter(todo => todo.completed === false);
+  const unCompletedTodos = todos.filter(({ completed }) => !completed);
 
-  const completedTodos = todos.filter(todo => todo.completed === true);
+  const completedTodos = todos.filter(({ completed }) => completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -32,7 +33,7 @@ export const Footer: React.FC = () => {
             setQuery(Status.All);
           }}
         >
-          All
+          {Status.All}
         </a>
 
         <a
@@ -45,7 +46,7 @@ export const Footer: React.FC = () => {
             setQuery(Status.Active);
           }}
         >
-          Active
+          {Status.Active}
         </a>
 
         <a
@@ -58,16 +59,16 @@ export const Footer: React.FC = () => {
             setQuery(Status.Completed);
           }}
         >
-          Completed
+          {Status.Completed}
         </a>
       </nav>
 
-      {completedTodos.length > 0 && (
+      {!!completedTodos.length && (
         <button
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          onClick={() => deleteCompletedTodos()}
+          onClick={deleteCompletedTodos}
         >
           Clear completed
         </button>

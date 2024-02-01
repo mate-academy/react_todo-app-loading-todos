@@ -6,20 +6,29 @@ import { USER_ID } from '../variables/UserID';
 export const Header: React.FC = () => {
   const {
     addTodo,
-    setAllCompletedOrRemoveCompleted,
+    makeAllCompleted,
     todos,
   } = useContext(TodosContext);
+
   const [todoTitle, setTodoTitle] = useState('');
-  const newTodo = {
-    userId: USER_ID,
-    id: +new Date(),
-    title: todoTitle.trim(),
-    completed: false,
-  };
-  const isAllTodosCompleted = todos.every(todo => todo.completed === true);
+
+  const isAllTodosCompleted = todos.every(({ completed }) => completed);
 
   const handleToggleAll = () => {
-    setAllCompletedOrRemoveCompleted(todos);
+    makeAllCompleted(todos);
+  };
+
+  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const newTodo = {
+      userId: USER_ID,
+      id: +new Date(),
+      title: todoTitle.trim(),
+      completed: false,
+    };
+
+    setTodoTitle('');
+    addTodo(newTodo, event);
+    event.preventDefault();
   };
 
   return (
@@ -36,10 +45,7 @@ export const Header: React.FC = () => {
 
       {/* Add a todo on form submit */}
       <form
-        onSubmit={(event) => {
-          setTodoTitle('');
-          addTodo(newTodo, event);
-        }}
+        onSubmit={(event) => handleOnSubmit(event)}
       >
         <input
           data-cy="NewTodoField"

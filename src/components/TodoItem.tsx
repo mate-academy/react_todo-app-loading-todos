@@ -37,6 +37,33 @@ export const TodoItem: React.FC<TodoItems> = ({ todo }) => {
     }
   }, [isEdeting]);
 
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (editingTitle.trim()) {
+        saveEditingTitle(todo.id, editingTitle.trim());
+        setEditingTitle(editingTitle.trim());
+        setIsEditing(false);
+      } else {
+        deleteTodo(todo.id);
+      }
+    }
+
+    if (event.key === 'Escape') {
+      if (!editingTitle.trim()) {
+        setIsEditing(false);
+        setEditingTitle(todo.title);
+      } else {
+        setIsEditing(false);
+        setEditingTitle(todo.title);
+      }
+    }
+  };
+
+  const handleOnBlur = () => {
+    setIsEditing(false);
+    saveEditingTitle(todo.id, editingTitle.trim());
+  };
+
   return (
     <div
       key={todo.id}
@@ -62,32 +89,9 @@ export const TodoItem: React.FC<TodoItems> = ({ todo }) => {
             placeholder="Empty todo will be deleted"
             value={editingTitle.trim()}
             onChange={(event) => setEditingTitle(event.currentTarget.value)}
-            onBlur={() => {
-              setIsEditing(false);
-              saveEditingTitle(todo.id, editingTitle.trim());
-            }}
+            onBlur={handleOnBlur}
             ref={titleFocus}
-            onKeyUp={(event) => {
-              if (event.key === 'Enter') {
-                if (editingTitle.trim()) {
-                  saveEditingTitle(todo.id, editingTitle.trim());
-                  setEditingTitle(editingTitle.trim());
-                  setIsEditing(false);
-                } else {
-                  deleteTodo(todo.id);
-                }
-              }
-
-              if (event.key === 'Escape') {
-                if (!editingTitle.trim()) {
-                  setIsEditing(false);
-                  setEditingTitle(todo.title);
-                } else {
-                  setIsEditing(false);
-                  setEditingTitle(todo.title);
-                }
-              }
-            }}
+            onKeyUp={(event) => handleOnKeyUp(event)}
           />
         </form>
       ) : (

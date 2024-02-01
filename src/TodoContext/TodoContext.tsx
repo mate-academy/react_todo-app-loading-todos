@@ -1,42 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { filterForTodos } from '../services/chooseFilterForTodos';
 import { getTodos } from '../api/todos';
 import { USER_ID } from '../variables/UserID';
 import { Todo } from '../types/Todo';
-
-export enum Status {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-interface TodoContext {
-  todos: Todo[],
-  addTodo: (todo: Todo, event: React.FormEvent<HTMLFormElement>) => void,
-  setCompleted: (todoID: number) => void,
-  setAllCompletedOrRemoveCompleted: (todos: Todo[]) => void,
-  query: string,
-  setQuery: React.Dispatch<React.SetStateAction<string>>,
-  filteredTodosForList: Todo[],
-  deleteCompletedTodos: () => void,
-  deleteTodo: (id: number) => void,
-  saveEditingTitle: (todoId: number, todoNewTitle: string) => void,
-  errorMessage: string,
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
-}
+import { TodoContext } from '../types/TodoContext.1';
+import { wait } from '../utils/fetchClient';
 
 export const TodosContext = React.createContext<TodoContext>({
   todos: [],
   addTodo: () => { },
   setCompleted: () => { },
-  setAllCompletedOrRemoveCompleted: () => { },
+  makeAllCompleted: () => { },
   query: '',
   setQuery: () => { },
-  filteredTodosForList: [],
+  filteredTodos: [],
   deleteCompletedTodos: () => { },
   deleteTodo: () => { },
   saveEditingTitle: () => { },
   errorMessage: '',
-  setErrorMessage: () => {},
+  setErrorMessage: () => { },
 });
 
 interface Props {
@@ -46,27 +28,19 @@ interface Props {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('error');
-        timeout = setTimeout(() => {
-          setErrorMessage('');
-          clearTimeout(timeout);
-        }, 3000);
-      });
+        setErrorMessage('Error');
 
-    return () => clearTimeout(timeout);
+        wait(3000).then(() => setErrorMessage(''));
+      });
   }, []);
 
-  function addTodo(todo: Todo, event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function addTodo(todo: Todo) {
     if (todo.title.trim().length) {
       setTodos(prevTodos => [
         ...prevTodos,
@@ -85,22 +59,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(changeCompletedTodos);
   }
 
-  function chooseFilterForTodos(queryForFilter: string) {
-    return todos.filter(todo => {
-      switch (queryForFilter) {
-        case Status.Active:
-          return todo.completed === false;
-
-        case Status.Completed:
-          return todo.completed === true;
-
-        default:
-          return true;
-      }
-    });
-  }
-
-  const filteredTodosForList = chooseFilterForTodos(query);
+  const filteredTodos = filterForTodos(query, todos);
 
   function saveEditingTitle(todoID: number, changedTitle: string) {
     let changedTodos = [...todos];
@@ -115,8 +74,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setTodos(changedTodos);
   }
 
-  function setAllCompletedOrRemoveCompleted(todosToComplete: Todo[]) {
-    const checkForAllTodosCompleted = todosToComplete.every(
+  function makeAllCompleted(todosToComplete: Todo[]) {
+    const isTodoCompleted = todosToComplete.every(
       todo => todo.completed === true,
     );
 
@@ -124,7 +83,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
     todosPrepare = todosPrepare.map(
       todo => (
-        { ...todo, completed: !checkForAllTodosCompleted }
+        { ...todo, completed: !isTodoCompleted }
       ),
     );
 
@@ -136,23 +95,23 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }
 
   function deleteCompletedTodos() {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(({ completed }) => !completed));
   }
 
   const value = useMemo(() => ({
     todos,
     addTodo,
     setCompleted,
-    setAllCompletedOrRemoveCompleted,
+    makeAllCompleted,
     query,
     setQuery,
-    filteredTodosForList,
+    filteredTodos,
     deleteCompletedTodos,
     deleteTodo,
     saveEditingTitle,
     errorMessage,
     setErrorMessage,
-  }), [todos, filteredTodosForList, query, errorMessage]);
+  }), [todos, filteredTodos, query, errorMessage]);
 
   return (
     <TodosContext.Provider value={value}>
