@@ -72,6 +72,7 @@ export const App: React.FC = () => {
         />
 
         <Main todos={filteredTodos} />
+
         {todos.length > 0 && (
           <>
             <Footer

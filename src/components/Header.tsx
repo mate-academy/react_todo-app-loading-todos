@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState } from 'react';
+import { useState, SetStateAction } from 'react';
 import { Todo } from '../types/Todo';
 import { addTodo } from '../api/todos';
 
 type Props = {
-  setTodos: (todos: Todo[]) => void;
+  setTodos: (todos: SetStateAction<Todo[]>) => void;
   setErrorMessage: (message: string) => void;
   setIsError: (isError: boolean) => void;
   ID: number;
@@ -32,11 +32,7 @@ export const Header: React.FC<Props> = ({
       return;
     }
 
-    setTimeout(() => {
-      setIsError(false);
-    }, 3000);
-
-    const newTodo: Todo = {
+    const newTodo = {
       id: +Date.now(),
       userId: ID,
       title,
@@ -50,9 +46,10 @@ export const Header: React.FC<Props> = ({
       .catch(() => {
         setErrorMessage('Unable to add todo');
         setIsError(true);
+      })
+      .finally(() => {
+        setTitle('');
       });
-
-    setTitle('');
   };
 
   return (
