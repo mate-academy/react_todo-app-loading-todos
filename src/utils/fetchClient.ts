@@ -1,7 +1,5 @@
-import { Todo } from '../types/Todo';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api/todos?userId=109';
+const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -46,11 +44,3 @@ export const client = {
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
 };
-
-export function getUsers() {
-  return client.get<Todo[]>('/users');
-}
-
-export function getUserById(userId: number) {
-  return client.get<Todo>(`/users/${userId}`);
-}
