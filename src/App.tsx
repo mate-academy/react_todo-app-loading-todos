@@ -6,6 +6,7 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 import { getFilteredTodos } from './services/getFilteredTodos';
+import { wait } from './utils/fetchClient';
 
 const USER_ID = 87;
 
@@ -24,20 +25,16 @@ export const App: React.FC = () => {
   }, 0);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Error');
-        timeout = setTimeout(() => {
-          setErrorMessage('');
-          clearInterval(timeout);
-        }, 3000);
+
+        return wait(3000).then(() => setErrorMessage(''));
       });
 
     return () => {
-      clearInterval(timeout);
+      setErrorMessage('');
     };
   }, []);
 
@@ -59,14 +56,11 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
-
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -124,7 +118,6 @@ export const App: React.FC = () => {
               {`${activeTodosCount} items left`}
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
@@ -157,7 +150,6 @@ export const App: React.FC = () => {
               </a>
             </nav>
 
-            {/* don't show this button if there are no completed todos */}
             <button
               type="button"
               className="todoapp__clear-completed"
@@ -170,8 +162,6 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={cn(
@@ -185,16 +175,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={handleCloseError}
         />
-        {/* show only one message at a time */}
         Unable to load todos
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );
