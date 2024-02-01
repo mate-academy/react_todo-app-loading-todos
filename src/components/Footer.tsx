@@ -21,11 +21,9 @@ export const Footer: React.FC = () => {
         {`${uncompletedTodos.length} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          // className="filter__link selected"
           className={classNames(
             'filter__link',
             { selected: selectedFilter === 'all' },
@@ -61,7 +59,6 @@ export const Footer: React.FC = () => {
         </a>
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

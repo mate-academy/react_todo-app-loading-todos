@@ -20,7 +20,6 @@ export const Error: React.FC = () => {
         className="delete"
         onClick={() => setErrorMessage('')}
       />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );
