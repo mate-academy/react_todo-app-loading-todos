@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { useState } from 'react';
 import { Todo } from '../types/Todo';
+import { addTodo } from '../api/todos';
 
 type Props = {
   setTodos: (todos: Todo[]) => void;
@@ -35,14 +36,21 @@ export const Header: React.FC<Props> = ({
       setIsError(false);
     }, 3000);
 
-    const newTodo = {
+    const newTodo: Todo = {
+      id: +Date.now(),
+      userId: ID,
       title,
       completed: false,
-      userId: ID,
-      id: Math.random(),
     };
 
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    addTodo(newTodo)
+      .then(
+        (createdTodo) => setTodos((prev) => [...prev, createdTodo]),
+      )
+      .catch(() => {
+        setErrorMessage('Unable to add todo');
+        setIsError(true);
+      });
 
     setTitle('');
   };
