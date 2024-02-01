@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
@@ -12,7 +13,6 @@ import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
   const {
-    errorMessage,
     setErrorMessage,
     todos,
     setTodos,
