@@ -43,12 +43,16 @@ export const App: React.FC = () => {
     switch (selectedStatus) {
       case Status.active:
         return !todo.completed;
+
       case Status.completed:
         return todo.completed;
+
       default:
         return true;
     }
   });
+
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -80,15 +84,15 @@ export const App: React.FC = () => {
         {
           !loadingTodos
           && !errorMessage
-          && todos.length > 0
+          && !!todos.length
           && (
             <TodoList todos={visibleTodos} setTodos={setTodos} />
           )
         }
-        {todos.length > 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {`${todos.filter(todo => !todo.completed).length} items left`}
+              {`${activeTodos} items left`}
             </span>
 
             <TodoFilter
@@ -123,14 +127,3 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
-// hasErrorLoadingTodos
-// ? 'Unable to load todos'
-// : hasErrorEmptyTodo
-// ? 'Title should not be empty'
-// : hasErrorAddingTodo
-// ? 'Unable to add a todo'
-// : hasErrorDeletingTodo
-// ? 'Unable to delete a todo'
-// : hasErrorUpdatingTodo
-// ? 'Unable to update a todo'
