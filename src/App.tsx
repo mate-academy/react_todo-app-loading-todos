@@ -64,7 +64,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header
+          setTodos={setTodos}
+          setErrorMessage={setErrorMessage}
+          setIsError={setIsError}
+          ID={USER_ID}
+        />
 
         <Main todos={filteredTodos} />
         {todos.length > 0 && (

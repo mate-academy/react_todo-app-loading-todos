@@ -1,5 +1,52 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-export const Header = () => {
+import { useState } from 'react';
+import { Todo } from '../types/Todo';
+
+type Props = {
+  setTodos: (todos: Todo[]) => void;
+  setErrorMessage: (message: string) => void;
+  setIsError: (isError: boolean) => void;
+  ID: number;
+};
+
+export const Header: React.FC<Props> = ({
+  setTodos,
+  setErrorMessage,
+  setIsError,
+  ID,
+}) => {
+  const [title, setTitle] = useState('');
+
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!title) {
+      setErrorMessage('Title should not be empty');
+      setIsError(true);
+
+      return;
+    }
+
+    setTimeout(() => {
+      setIsError(false);
+    }, 3000);
+
+    const newTodo = {
+      title,
+      completed: false,
+      userId: ID,
+      id: Math.random(),
+    };
+
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
+
+    setTitle('');
+  };
+
   return (
     <header className="todoapp__header">
       {/* this buttons is active only if there are some active todos */}
@@ -10,12 +57,16 @@ export const Header = () => {
       />
 
       {/* Add a todo on form submit */}
-      <form>
+      <form
+        onSubmit={handleFormSubmit}
+      >
         <input
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          value={title}
+          onChange={handleChangeTitle}
         />
       </form>
     </header>
