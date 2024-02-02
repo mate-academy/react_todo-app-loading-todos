@@ -15,7 +15,6 @@ export const Footer: React.FC = () => {
         {`${uncompletedTodos.length} ${uncompletedTodos.length === 1 ? 'item' : 'items'} left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <TodosFilter filter={Status.ALL} setFilter={() => {}} />
 
       {/* don't show this button if there are no completed todos */}

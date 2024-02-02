@@ -33,12 +33,9 @@ export const App: React.FC = () => {
 
         {todos && <TodoList />}
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && <Footer />}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={
@@ -52,7 +49,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={() => setErrorMessage('')}
         />
-        {/* show only one message at a time */}
+
         {errorMessage}
       </div>
     </div>
