@@ -4,11 +4,9 @@ import classNames from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
+import { USER_ID, getTodos } from './api/todos';
 import { TodoComponent } from './components/TodoComponent/TodoComponent';
 import { Filter } from './types/Filter';
-
-const USER_ID = 89;
 
 function prepareTodos(todos: Todo[], filter: Filter): Todo[] {
   let todosCopy = [...todos];
@@ -55,6 +53,7 @@ export const App: React.FC = () => {
     const timerId = setTimeout(setErrorHide, 3000);
 
     return () => clearTimeout(timerId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMessage]);
 
   if (!USER_ID) {
