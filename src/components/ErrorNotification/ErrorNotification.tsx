@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ErrorType } from '../../types';
+import { ErrorType, ErrorWords } from '../../types';
 
 interface ErrorNotificationProps {
   errorType: ErrorType | null;
@@ -29,15 +29,15 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = (
   const getErrorMessage = () => {
     switch (errorType) {
       case ErrorType.LoadError:
-        return 'Unable to load todos';
+        return ErrorWords.LoadError;
       case ErrorType.EmptyTitle:
-        return 'Title should not be empty';
+        return ErrorWords.EmptyTitle;
       case ErrorType.AddTodoError:
-        return 'Unable to add a todo';
+        return ErrorWords.AddTodoError;
       case ErrorType.DeleteTodoError:
-        return 'Unable to delete a todo';
+        return ErrorWords.DeleteTodoError;
       case ErrorType.UpdateTodoError:
-        return 'Unable to update a todo';
+        return ErrorWords.UpdateTodoError;
       default:
         return null;
     }
@@ -60,31 +60,5 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = (
         <br />
       </div>
     ) : null
-  );
-};
-
-export const ErrorNotificationExample: React.FC = () => {
-  return (
-    <div
-      data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
-    >
-      <button
-        data-cy="HideErrorButton"
-        type="button"
-        className="delete"
-        aria-label="Hide error"
-      />
-      {/* show only one message at a time */}
-      Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo
-    </div>
   );
 };

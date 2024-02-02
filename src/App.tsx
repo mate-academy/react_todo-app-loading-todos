@@ -27,8 +27,10 @@ export const App: React.FC = () => {
     switch (currentFilter) {
       case TodoFilter.All:
         return todos.filter(todo => !todo.completed);
+
       case TodoFilter.Completed:
         return todos.filter(todo => todo.completed);
+
       default:
         return todos;
     }
