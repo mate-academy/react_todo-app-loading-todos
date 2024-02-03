@@ -12,6 +12,7 @@ import {
 } from './TodosContext/TodosContext';
 import { InputForm } from './components/InputForm/InputForm';
 import { Status } from './types/Status';
+import { Error } from './components/Error/Error';
 
 export const USER_ID = 105;
 
@@ -19,9 +20,14 @@ export const AppContent: React.FC = () => {
   const { addTodo, changeTodo, removeTodo } = useContext(TodoUpdateContext);
   const { todos } = useContext(TodosContext);
   const [status, setStatus] = useState<Status>(Status.All);
+  const [isClicked, setIsClicked] = useState(true);
 
   const handleStatusChange = (newStatus: Status) => {
     setStatus(newStatus);
+  };
+
+  const handleSetIsClicked = (clicked: boolean) => {
+    setIsClicked(!clicked);
   };
 
   if (!USER_ID) {
@@ -46,7 +52,7 @@ export const AppContent: React.FC = () => {
           />
         )}
       </div>
-
+      {isClicked && (<Error onIsClicked={handleSetIsClicked} />)}
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
     </div>
