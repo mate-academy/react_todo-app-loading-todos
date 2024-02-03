@@ -1,31 +1,44 @@
+/* eslint-disable react/style-prop-object */
 /* eslint-disable import/no-cycle */
 /* eslint-disable quote-props */
 import { useContext } from 'react';
-import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext/TodosContext';
-import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
+import { reduceItems } from '../../services/reduceItems';
+import { filterByStatus } from '../../services/filterByStatus';
 
 interface FilterProps {
   onChangeStatus: (newStatus: Status) => void;
   status: Status
+  onClearCompleted: (id: number) => void;
 }
 
-export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
+export const Filter: React.FC<FilterProps> = ({
+  onChangeStatus,
+  status,
+  onClearCompleted,
+}) => {
   const { todos } = useContext(TodosContext);
   const handleStatusChange = (newStatus: Status) => {
     onChangeStatus(newStatus);
   };
 
-  const itemsLeft = todos.reduce((left: number, value: Todo) => {
-    let result = left;
+  const handleClearCompleted = () => {
+    const onlyActiveTodos = filterByStatus(todos, Status.Completed);
 
-    if (!value.completed) {
-      result += 1;
-    }
+    return onlyActiveTodos.map(todo => {
+      const { id } = todo;
 
-    return result;
-  }, 0);
+      return onClearCompleted(id);
+    });
+  };
+
+  const itemsLeft = reduceItems(todos, false);
+
+  const itemsDone = reduceItems(todos, true);
+  const clearCompletedStyle: React.CSSProperties = {
+    visibility: itemsDone > 0 ? 'visible' : 'hidden',
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -37,10 +50,9 @@ export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={classNames({
-            'filter__link selected': status === Status.All,
-            'filter__link': status !== Status.All,
-          })}
+          className={status === Status.All
+            ? 'filter__link selected'
+            : 'filter__link'}
           data-cy="FilterLinkAll"
           onClick={() => handleStatusChange(Status.All)}
         >
@@ -49,10 +61,9 @@ export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
 
         <a
           href="#/active"
-          className={classNames({
-            'filter__link selected': status === Status.Active,
-            'filter__link': status !== Status.Active,
-          })}
+          className={status === Status.Active
+            ? 'filter__link selected'
+            : 'filter__link'}
           data-cy="FilterLinkActive"
           onClick={() => handleStatusChange(Status.Active)}
         >
@@ -61,10 +72,9 @@ export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
 
         <a
           href="#/completed"
-          className={classNames({
-            'filter__link selected': status === Status.Completed,
-            'filter__link': status !== Status.Completed,
-          })}
+          className={status === Status.Completed
+            ? 'filter__link selected'
+            : 'filter__link'}
           data-cy="FilterLinkCompleted"
           onClick={() => handleStatusChange(Status.Completed)}
         >
@@ -75,8 +85,10 @@ export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
       {/* don't show this button if there are no completed todos */}
       <button
         type="button"
-        className="todoapp__clear-completed"
+        style={clearCompletedStyle}
+        className="todoapp__clear-completed hidden"
         data-cy="ClearCompletedButton"
+        onClick={handleClearCompleted}
       >
         Clear completed
       </button>

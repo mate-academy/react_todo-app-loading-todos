@@ -16,7 +16,7 @@ import { Status } from './types/Status';
 export const USER_ID = 105;
 
 export const AppContent: React.FC = () => {
-  const { addTodo, changeTodo } = useContext(TodoUpdateContext);
+  const { addTodo, changeTodo, removeTodo } = useContext(TodoUpdateContext);
   const { todos } = useContext(TodosContext);
   const [status, setStatus] = useState<Status>(Status.All);
 
@@ -39,7 +39,11 @@ export const AppContent: React.FC = () => {
 
         {/* Hide the footer if there are no todos */}
         {todos.length && (
-          <Filter onChangeStatus={handleStatusChange} status={status} />
+          <Filter
+            onChangeStatus={handleStatusChange}
+            status={status}
+            onClearCompleted={removeTodo}
+          />
         )}
       </div>
 
