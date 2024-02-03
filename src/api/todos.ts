@@ -6,3 +6,10 @@ export const getTodos = (userId: number) => {
 };
 
 // Add more methods here
+export const removeTodo = (postId: number) => {
+  return client.delete(`/todos/${postId}`);
+};
+
+export const postTodo = (userId: number, todoBody:Todo) => {
+  return client.post(`/todos?userId=${userId}`, todoBody);
+};
