@@ -29,7 +29,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const isCompleted = classNames({
     'todo completed': todo.completed,
     // eslint-disable-next-line quote-props
-    todo: todo.completed === false,
+    'todo': todo.completed === false,
   });
 
   return (

@@ -1,19 +1,28 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-cycle */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Filter } from './components/Filter/Filter';
 import { TodoList } from './components/TodoList/TodoList';
 import {
   TodoUpdateContext,
+  TodosContext,
   TodosProvider,
 } from './TodosContext/TodosContext';
 import { InputForm } from './components/InputForm/InputForm';
+import { Status } from './types/Status';
 
 export const USER_ID = 105;
 
 export const AppContent: React.FC = () => {
-  const { addTodo } = useContext(TodoUpdateContext);
+  const { addTodo, changeTodo } = useContext(TodoUpdateContext);
+  const { todos } = useContext(TodosContext);
+  const [status, setStatus] = useState<Status>(Status.All);
+
+  const handleStatusChange = (newStatus: Status) => {
+    setStatus(newStatus);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -24,32 +33,18 @@ export const AppContent: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <InputForm onSubmit={addTodo} />
+        <InputForm onSubmit={addTodo} onCompleted={changeTodo} />
 
-        <TodoList />
+        <TodoList status={status} />
 
         {/* Hide the footer if there are no todos */}
-        <Filter />
+        {todos.length && (
+          <Filter onChangeStatus={handleStatusChange} status={status} />
+        )}
       </div>
 
       {/* Notification is shown in case of any error */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
     </div>
   );
 };

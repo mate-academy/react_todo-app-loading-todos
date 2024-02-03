@@ -1,10 +1,21 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable quote-props */
 import { useContext } from 'react';
-// eslint-disable-next-line import/no-cycle
+import classNames from 'classnames';
 import { TodosContext } from '../../TodosContext/TodosContext';
 import { Todo } from '../../types/Todo';
+import { Status } from '../../types/Status';
 
-export const Filter: React.FC = () => {
+interface FilterProps {
+  onChangeStatus: (newStatus: Status) => void;
+  status: Status
+}
+
+export const Filter: React.FC<FilterProps> = ({ onChangeStatus, status }) => {
   const { todos } = useContext(TodosContext);
+  const handleStatusChange = (newStatus: Status) => {
+    onChangeStatus(newStatus);
+  };
 
   const itemsLeft = todos.reduce((left: number, value: Todo) => {
     let result = left;
@@ -24,18 +35,38 @@ export const Filter: React.FC = () => {
 
       {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={classNames({
+            'filter__link selected': status === Status.All,
+            'filter__link': status !== Status.All,
+          })}
+          data-cy="FilterLinkAll"
+          onClick={() => handleStatusChange(Status.All)}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={classNames({
+            'filter__link selected': status === Status.Active,
+            'filter__link': status !== Status.Active,
+          })}
+          data-cy="FilterLinkActive"
+          onClick={() => handleStatusChange(Status.Active)}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={classNames({
+            'filter__link selected': status === Status.Completed,
+            'filter__link': status !== Status.Completed,
+          })}
           data-cy="FilterLinkCompleted"
+          onClick={() => handleStatusChange(Status.Completed)}
         >
           Completed
         </a>
