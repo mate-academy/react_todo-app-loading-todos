@@ -1,73 +1,71 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
-  useContext, useState,
+  useContext, useEffect, useState, useRef,
 } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
-import { TodosContext } from '../../contexts/TodosProvider';
-import { TodoAction } from '../../types/TodoAction';
-import { customDebounce } from '../../utils/useDebounce';
+import { TodosContext, TodosUpdateContext } from '../../contexts/TodosProvider';
 import { EditTodoForm } from '../EditTodoForm';
 
 interface Props {
   todo: Todo,
+  isLoading?: boolean
 }
 
 export const TodoItem: React.FC<Props> = React.memo(
-  ({ todo }) => {
+  ({ todo, isLoading = false }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const { dispatch } = useContext(TodosContext);
-    const { title, completed } = todo;
+    const { deleteTodo, updateTodo } = useContext(TodosUpdateContext);
+    const { operatingTodoIds } = useContext(TodosContext);
+    const { title, completed, id } = todo;
+    const todoTitleSpan = useRef<HTMLSpanElement | null>(null);
 
     const handleTodoChanged = (newTitle: string) => {
       const normalizedTitle = newTitle.trim();
 
       if (normalizedTitle !== title) {
         if (normalizedTitle === '') {
-          dispatch({
-            type: TodoAction.Delete,
-            todo,
-          });
+          deleteTodo(id)
+            .then(() => {
+              setIsEditing(false);
+            });
         } else {
-          dispatch({
-            type: TodoAction.Update,
-            todo: {
-              ...todo,
-              title: normalizedTitle,
-            },
-          });
+          updateTodo(id, { title: normalizedTitle })
+            .then(() => {
+              setIsEditing(false);
+            });
         }
+      } else {
+        setIsEditing(false);
       }
-
-      setIsEditing(false);
     };
 
     const handleTodoChangeCancelled = () => {
       setIsEditing(false);
-    }
-
-    const handleTodoStatusChanged = () => {
-      dispatch({
-        type: TodoAction.Update,
-        todo: {
-          ...todo,
-          completed: !todo.completed,
-        },
-      });
     };
 
-    const handleDblclick = customDebounce(() => {
+    const handleTodoStatusChanged = () => {
+      updateTodo(id, { completed: !completed });
+    };
+
+    const handleDblclick = () => {
       if (!isEditing) {
         setIsEditing(true);
       }
-    }, 300);
+    };
 
     const handleDeleteButtonClicked = () => {
-      dispatch({
-        type: TodoAction.Delete,
-        todo,
-      });
+      deleteTodo(id);
     };
+
+    useEffect(() => {
+      todoTitleSpan.current?.addEventListener('dblclick', handleDblclick);
+
+      return () => (
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        todoTitleSpan.current?.removeEventListener('dblclick', handleDblclick)
+      );
+    });
 
     return (
       <div
@@ -78,7 +76,7 @@ export const TodoItem: React.FC<Props> = React.memo(
       >
         <label className="todo__status-label">
           <input
-            defaultChecked={completed}
+            checked={completed}
             onChange={handleTodoStatusChanged}
             data-cy="TodoStatus"
             type="checkbox"
@@ -98,9 +96,9 @@ export const TodoItem: React.FC<Props> = React.memo(
             <>
               {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
               <span
+                ref={todoTitleSpan}
                 data-cy="TodoTitle"
                 className="todo__title"
-                onClick={handleDblclick}
               >
                 {todo.title}
               </span>
@@ -118,7 +116,8 @@ export const TodoItem: React.FC<Props> = React.memo(
         <div
           data-cy="TodoLoader"
           className={cn('modal overlay', {
-            'is-active': false,
+            'is-active': isLoading
+              || operatingTodoIds.includes(id),
           })}
         >
           <div className="modal-background has-background-white-ter" />

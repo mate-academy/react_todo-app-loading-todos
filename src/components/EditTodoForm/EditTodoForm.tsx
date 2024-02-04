@@ -21,6 +21,9 @@ export const EditTodoForm: React.FC<Props> = ({
     event.preventDefault();
 
     onTodoChanged(newTitle);
+
+    // eslint-disable-next-line no-param-reassign
+    onTodoChanged = () => {};
   };
 
   const keyboardListener = (event: KeyboardEvent) => {
@@ -33,6 +36,7 @@ export const EditTodoForm: React.FC<Props> = ({
     window.addEventListener('keyup', keyboardListener);
 
     return () => window.removeEventListener('keyup', keyboardListener);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
