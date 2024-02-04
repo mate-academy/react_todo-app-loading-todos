@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { getTodos } from './api/todos';
@@ -18,7 +19,7 @@ const USER_ID = 96;
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState(Status.all);
-  const [visibleTodos, setVisibleTodos] = useState(todos);
+  //  const [visibleTodos, setVisibleTodos] = useState(todos);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
 
   const onAllClick = useCallback(() => {
@@ -39,22 +40,19 @@ export const App: React.FC = () => {
     }
   }, [filterBy]);
 
-  useEffect(() => {
+  const visibleTodos = useMemo(() => {
     switch (filterBy) {
       case Status.all:
-        setVisibleTodos(todos);
-        break;
+        return todos;
 
       case Status.active:
-        setVisibleTodos(todos.filter(todo => !todo.completed));
-        break;
+        return todos.filter(todo => !todo.completed);
 
       case Status.completed:
-        setVisibleTodos(todos.filter(todo => todo.completed));
-        break;
+        return todos;
 
       default:
-        setVisibleTodos(todos);
+        return todos;
     }
   }, [filterBy, todos]);
   const hideError = useCallback(() => {
@@ -81,16 +79,16 @@ export const App: React.FC = () => {
         <h1 className="todoapp__title">todos</h1>
 
         <div className="todoapp__content" />
-        <Header />
+        <Header todos={todos} />
 
-        {todos.length && (
+        {!!todos.length && (
           <>
             <TodoList todos={visibleTodos} />
 
             <Footer
               todos={todos}
               filterBy={filterBy}
-              onAllclick={onAllClick}
+              onAllClick={onAllClick}
               onActiveClick={onActiveClick}
               onCompletedClick={onCompletedClick}
             />

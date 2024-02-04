@@ -7,11 +7,13 @@ interface Props {
 }
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, id, completed } = todo;
+
   return (
     <div
       data-cy="Todo"
       className={classNames('todo', {
-        completed: todo.completed,
+        completed,
       })}
     >
       <label className="todo__status-label">
@@ -19,14 +21,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
-      {todo.id > 0 ? (
+      {id > 0 ? (
         <>
           <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
+            {title}
           </span>
 
           <button type="button" className="todo__remove" data-cy="TodoDelete">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 import { Filter } from '../Filter';
@@ -6,7 +6,7 @@ import { Filter } from '../Filter';
 interface Props {
   todos: Todo[];
   filterBy: Status;
-  onAllclick: () => void;
+  onAllClick: () => void;
   onActiveClick: () => void;
   onCompletedClick: () => void;
 }
@@ -14,30 +14,39 @@ interface Props {
 export const Footer: React.FC<Props> = React.memo(({
   todos,
   filterBy,
-  onAllclick,
+  onAllClick,
   onActiveClick,
   onCompletedClick,
 }) => {
+  const activeTodosLength = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
+  const hasCompleted = useMemo(() => {
+    return todos.some(todo => todo.completed);
+  }, [todos]);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.filter(todo => !todo.completed).length} items left`}
+        {`${activeTodosLength} items left`}
       </span>
       <Filter
         currentStatus={filterBy}
-        handleFilterAll={onAllclick}
+        handleFilterAll={onAllClick}
         handleFilterActive={onActiveClick}
         handleFilterCompleted={onCompletedClick}
       />
 
-      {/* don't show this button if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
+      {hasCompleted && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 });
