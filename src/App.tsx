@@ -23,18 +23,20 @@ export const App: React.FC = () => {
       .catch(() => setErrorMessage(true));
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
+  const todosFilter = (allTodos: Todo[]) => {
     switch (filterStatus) {
       case Status.Active:
-        return !todo.completed;
+        return todos.filter(todo => !todo.completed);
 
       case Status.Completed:
-        return todo.completed;
+        return todos.filter(todo => todo.completed);
 
       default:
-        return true;
+        return allTodos;
     }
-  });
+  };
+
+  const filteredTodos = todosFilter(todos);
 
   if (!USER_ID) {
     return <UserWarning />;
