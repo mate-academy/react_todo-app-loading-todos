@@ -38,7 +38,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {isEditing && (
+      {!!isEditing && (
         <form>
           <input
             data-cy="TodoTitleField"
@@ -61,7 +61,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         type="button"
         className="todo__remove"
         data-cy="TodoDelete"
-        onClick={() => handleDeleteTodo}
+        onClick={handleDeleteTodo}
       >
         ×
       </button>
