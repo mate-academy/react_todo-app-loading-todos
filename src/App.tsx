@@ -7,21 +7,22 @@ import { Todo } from './types/Todo';
 import { Errors } from './types/Errors';
 import { SortType } from './types/SortType';
 import { TodoList } from './components/TodoList';
+import { USER_ID, filterTodoList } from './utils/variables';
 
-const USER_ID = 103;
+// const USER_ID = 103;
 
-function filterTodoList(todos: Todo[], sortKey: SortType) {
-  switch (sortKey) {
-    case SortType.Completed:
-      return todos.filter(todo => todo.completed);
+// function filterTodoList(todos: Todo[], sortKey: SortType) {
+//   switch (sortKey) {
+//     case SortType.Completed:
+//       return todos.filter(todo => todo.completed);
 
-    case SortType.Active:
-      return todos.filter(todo => !todo.completed);
+//     case SortType.Active:
+//       return todos.filter(todo => !todo.completed);
 
-    default:
-      return todos;
-  }
-}
+//     default:
+//       return todos;
+//   }
+// }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -30,9 +31,8 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortType>(SortType.All);
 
   const filteredTodos = filterTodoList(todos, sortBy);
-
-  const ACTIVE_TODO
-    = todos.length - filterTodoList(todos, SortType.Completed).length;
+  // const completedTodo = filterTodoList(todos, SortType.Completed);
+  const activeTodo = filterTodoList(todos, SortType.Active);
 
   useEffect(() => {
     setErrorMessage('');
@@ -81,20 +81,18 @@ export const App: React.FC = () => {
           <TodoList todos={filteredTodos} />
         )}
 
-        {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {`${ACTIVE_TODO} items left`}
+              {`${activeTodo.length} items left`}
             </span>
 
-            {/* Active filter should have a 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
                 className={classNames(
                   'filter__link',
-                  { selected: sortBy === SortType.All },
+                  { 'filter__link selected': sortBy === SortType.All },
                 )}
                 data-cy="FilterLinkAll"
                 onClick={() => setSortBy(SortType.All)}
@@ -106,7 +104,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={classNames(
                   'filter__link',
-                  { selected: sortBy === SortType.All },
+                  { 'filter__link selected': sortBy === SortType.Active },
                 )}
                 data-cy="FilterLinkActive"
                 onClick={() => setSortBy(SortType.Active)}
@@ -118,7 +116,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={classNames(
                   'filter__link',
-                  { selected: sortBy === SortType.All },
+                  { 'filter__link selected': sortBy === SortType.Completed },
                 )}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setSortBy(SortType.Completed)}
@@ -141,25 +139,24 @@ export const App: React.FC = () => {
 
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      {!!errorMessage.length && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
-          {/* show only one message at a time */}
-          {errorMessage}
-          <br />
-        </div>
-      )}
-
+      <div
+        data-cy="ErrorNotification"
+        className={
+          classNames('notification is-danger is-light has-text-weight-normal',
+            {
+              hidden: !errorMessage,
+            })
+        }
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
+        {errorMessage}
+        <br />
+      </div>
     </div>
   );
 };
