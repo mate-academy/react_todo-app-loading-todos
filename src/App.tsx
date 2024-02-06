@@ -9,21 +9,6 @@ import { SortType } from './types/SortType';
 import { TodoList } from './components/TodoList';
 import { USER_ID, filterTodoList } from './utils/variables';
 
-// const USER_ID = 103;
-
-// function filterTodoList(todos: Todo[], sortKey: SortType) {
-//   switch (sortKey) {
-//     case SortType.Completed:
-//       return todos.filter(todo => todo.completed);
-
-//     case SortType.Active:
-//       return todos.filter(todo => !todo.completed);
-
-//     default:
-//       return todos;
-//   }
-// }
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [inputText, setInputText] = useState('');
@@ -31,7 +16,7 @@ export const App: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortType>(SortType.All);
 
   const filteredTodos = filterTodoList(todos, sortBy);
-  // const completedTodo = filterTodoList(todos, SortType.Completed);
+  const completedTodo = filterTodoList(todos, SortType.Completed);
   const activeTodo = filterTodoList(todos, SortType.Active);
 
   useEffect(() => {
@@ -126,10 +111,11 @@ export const App: React.FC = () => {
               </a>
             </nav>
 
-            {/* don't show this button if there are no completed todos */}
             <button
               type="button"
-              className="todoapp__clear-completed"
+              className={classNames('todoapp__clear-completed', {
+                hidden: !!completedTodo.length,
+              })}
               data-cy="ClearCompletedButton"
             >
               Clear completed
