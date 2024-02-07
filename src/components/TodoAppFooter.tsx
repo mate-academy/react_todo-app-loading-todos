@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import classNames from 'classnames';
 import { Status } from '../types/Status';
 import { TodosContext } from '../providers/TodosProvider';
 
@@ -11,6 +12,7 @@ export const TodoAppFooter: React.FC<Props> = ({ status, onStatusChange }) => {
   const { todos } = useContext(TodosContext);
 
   const remainingTodos = todos.filter((todo) => !todo.completed).length;
+  const canClearCompleted = todos.some((todo) => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -18,13 +20,15 @@ export const TodoAppFooter: React.FC<Props> = ({ status, onStatusChange }) => {
         {`${remainingTodos} items left`}
       </span>
 
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         {Object.entries(Status).map(([statusName, value]) => (
           <a
             key={statusName}
             href={value}
-            className={`filter__link${value === status ? ' selected' : ''}`}
+            className={classNames(
+              'filter__link',
+              { selected: status === value },
+            )}
             data-cy={`filterLink${statusName}`}
             onClick={() => onStatusChange(value)}
           >
@@ -33,14 +37,16 @@ export const TodoAppFooter: React.FC<Props> = ({ status, onStatusChange }) => {
         ))}
       </nav>
 
-      {/* don't show this button if there are no completed todos */}
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
+      {/* Should delete all completed todos onClick */}
+      {canClearCompleted && (
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+        >
+          Clear completed
+        </button>
+      )}
     </footer>
   );
 };

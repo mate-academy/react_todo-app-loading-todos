@@ -14,15 +14,15 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.All);
 
   const filteredTodos = todos.filter((todo) => {
-    if (status === Status.Active) {
-      return !todo.completed;
+    switch (status) {
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      case Status.All:
+      default:
+        return true;
     }
-
-    if (status === Status.Completed) {
-      return todo.completed;
-    }
-
-    return true;
   });
 
   if (!USER_ID) {
@@ -40,8 +40,7 @@ export const App: React.FC = () => {
           todos={filteredTodos}
         />
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <TodoAppFooter
             status={status}
             onStatusChange={setStatus}
@@ -49,8 +48,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Notification is shown in case of any error */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification />
     </div>
   );
