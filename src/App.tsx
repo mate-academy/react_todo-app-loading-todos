@@ -15,7 +15,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
+          {/* this buttons should be active only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
@@ -54,14 +54,14 @@ export const App: React.FC = () => {
               ×
             </button>
 
-            {/* overlay will cover the todo while it is being updated */}
+            {/* overlay will cover the todo while it is being deleted or updated */}
             <div data-cy="TodoLoader" className="modal overlay">
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
             </div>
           </div>
 
-          {/* This todo is not completed */}
+          {/* This todo is an active todo */}
           <div data-cy="Todo" className="todo">
             <label className="todo__status-label">
               <input
@@ -143,7 +143,7 @@ export const App: React.FC = () => {
             3 items left
           </span>
 
-          {/* Active filter should have a 'selected' class */}
+          {/* Active link should have the 'selected' class */}
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
@@ -170,7 +170,7 @@ export const App: React.FC = () => {
             </a>
           </nav>
 
-          {/* don't show this button if there are no completed todos */}
+          {/* this button should be disabled if there are no completed todos */}
           <button
             type="button"
             className="todoapp__clear-completed"
