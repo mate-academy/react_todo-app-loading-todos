@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { ErrorContext } from '../providers/TodosProvider';
 
-type Props = {};
-
-export const ErrorNotification: React.FC<Props> = () => {
+export const ErrorNotification: React.FC = () => {
   const { errorMessage, setErrorMessage } = useContext(ErrorContext);
   const [isVisible, setIsVisible] = useState(false);
 

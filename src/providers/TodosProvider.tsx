@@ -33,9 +33,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     getTodos(USER_ID)
-      .then((data) => {
-        setTodos(data);
-      })
+      .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
       });
