@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
-import { USER_ID } from './api/todos';
 import { UserWarning } from './UserWarning';
+
 import { Header } from './components/Header';
 import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { Error } from './components/Error';
 import { StateContext } from './management/TodoContext';
+
+import { USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
   const { todos } = useContext(StateContext);
