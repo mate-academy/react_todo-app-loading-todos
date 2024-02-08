@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { State } from '../types/State';
 import { Action, reducer } from './reducer';
 import { Filter } from '../types/Filter';
-import { getTodos } from '../api/todos';
+import { USER_ID, getTodos } from '../api/todos';
 
 const initialState: State = {
-  // userId: 120,
   todos: [],
   filterBy: Filter.all,
   errorMessage: '',
@@ -21,7 +20,7 @@ type Props = {
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { userId } = useContext(StateContext);
+  const userId = USER_ID;
 
   useEffect(() => {
     dispatch({ type: 'errorMessage', payload: '' });
