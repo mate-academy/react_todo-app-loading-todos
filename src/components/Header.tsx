@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import classNames from 'classnames';
 import { DispatchContext, StateContext } from '../management/TodoContext';
+import { USER_ID } from '../api/todos';
 
 export const Header: React.FC = () => {
   const dispatch = useContext(DispatchContext);
-  const { userId, todos } = useContext(StateContext);
+  const userId = USER_ID;
+  const { todos } = useContext(StateContext);
   const [title, setTitle] = useState('');
 
   const completedAll = todos.every(todo => todo.completed);

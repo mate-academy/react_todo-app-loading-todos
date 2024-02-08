@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { USER_ID } from './api/todos';
 import { UserWarning } from './UserWarning';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
@@ -7,9 +8,9 @@ import { Error } from './components/Error';
 import { StateContext } from './management/TodoContext';
 
 export const App: React.FC = () => {
-  const { userId, todos } = useContext(StateContext);
+  const { todos } = useContext(StateContext);
 
-  if (!userId) {
+  if (!USER_ID) {
     return <UserWarning />;
   }
 

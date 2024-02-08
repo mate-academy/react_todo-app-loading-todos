@@ -5,7 +5,7 @@ import { Filter } from '../types/Filter';
 import { getTodos } from '../api/todos';
 
 const initialState: State = {
-  userId: 120,
+  // userId: 120,
   todos: [],
   filterBy: Filter.all,
   errorMessage: '',
