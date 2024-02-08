@@ -20,7 +20,7 @@ In this 1st part you will:
 
 ## General principles
 
-Keep your logic as simple as possible!
+> Keep your logic as simple as possible!
 
 Improve user experience:
 - hide or disable elements that can't be used at the moment
