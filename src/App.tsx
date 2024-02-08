@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { UserWarning } from './UserWarning';
-
-const USER_ID = 0;
+import { USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
   if (!USER_ID) {
@@ -15,7 +14,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons should be active only if all todos are completed */}
+          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
@@ -181,13 +180,14 @@ export const App: React.FC = () => {
         </footer>
       </div>
 
-      {/* Notification is shown in case of any error */}
+      {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
+
         {/* show only one message at a time */}
         Unable to load todos
         <br />
