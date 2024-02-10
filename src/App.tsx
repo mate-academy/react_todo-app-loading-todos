@@ -2,8 +2,9 @@
 import React from 'react';
 import { UserWarning } from './UserWarning';
 import { TodoApp } from './components/TodoApp/TodoApp';
+import { USER_ID } from './utils/fetchClient';
 
-const USER_ID = 130;
+// export const USER_ID = 130;
 
 export const App: React.FC = () => {
   if (!USER_ID) {
@@ -11,7 +12,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <TodoApp userId={USER_ID} />
+    <TodoApp />
     // <div className="todoapp">
     //   <h1 className="todoapp__title">todos</h1>
 

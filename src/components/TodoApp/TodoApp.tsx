@@ -7,12 +7,13 @@ import { Notification } from '../Notification/Notification';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { Status } from '../../types/Status';
+import { USER_ID } from '../../utils/fetchClient';
 
-type Props = {
-  userId: number,
-};
+// type Props = {
+//   userId: number,
+// };
 
-export const TodoApp: React.FC<Props> = ({ userId }) => {
+export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Status>(Status.All);
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,13 +21,13 @@ export const TodoApp: React.FC<Props> = ({ userId }) => {
   useEffect(() => {
     setErrorMessage('');
 
-    getTodos(userId)
+    getTodos(USER_ID)
       .then(setTodos)
       .catch((error) => {
         setErrorMessage('Unable to load todos');
         throw error;
       });
-  }, [userId]);
+  }, []);
 
   let filteredTodos: Todo[] = [];
 
