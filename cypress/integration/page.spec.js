@@ -34,31 +34,31 @@ const page = {
    * { statusCode: 503: body: 'Service Unavailable' }
    * spy = cy.stub().callsFake(req => req.reply(response)).as('alias')
    */
-  mockLoad: (response = { fixture: 'todos' }) => {
+  mockLoad: (response = {fixture: 'todos'}) => {
     return cy.intercept('**/todos?userId=*', response);
   },
   mockCreate: (response) => {
-    const options = { method: 'POST', url: '**/todos' };
+    const options = {method: 'POST', url: '**/todos'};
 
     const spy = cy.stub()
       .callsFake(req => req.reply({
         statusCode: 201,
-        body: { ...req.body, id: Math.random() },
+        body: {...req.body, id: Math.random()},
       }))
       .as('createCallback');
 
     return cy.intercept(options, response || spy);
   },
   mockDelete: (id, response) => {
-    const options = { method: 'DELETE', url: `**/todos/${id}` };
+    const options = {method: 'DELETE', url: `**/todos/${id}`};
 
-    return cy.intercept(options, response || { body: '1' });
+    return cy.intercept(options, response || {body: '1'});
   },
   mockUpdate: (id, response) => {
-    const options = { method: 'PATCH', url: `**/todos/${id}` };
+    const options = {method: 'PATCH', url: `**/todos/${id}`};
 
     const spy = cy.stub()
-      .callsFake(req => req.reply({ body: { ...req.body, id } }))
+      .callsFake(req => req.reply({body: {...req.body, id}}))
       .as('updateCallback');
 
     return cy.intercept(options, response || spy);
@@ -111,7 +111,7 @@ Cypress.on('fail', (e) => {
   throw e;
 });
 
-describe.skip('', () => {
+describe('', () => {
   beforeEach(() => {
     // if (failed) Cypress.runner.stop();
   });
@@ -119,7 +119,7 @@ describe.skip('', () => {
   describe('Page with no todos', () => {
     it('should send 1 todos request', () => {
       const spy = cy.stub()
-        .callsFake(req => req.reply({ body: [] }))
+        .callsFake(req => req.reply({body: []}))
         .as('loadCallback')
 
       page.mockLoad(spy).as('loadRequest');
@@ -133,7 +133,7 @@ describe.skip('', () => {
 
     describe('', () => {
       beforeEach(() => {
-        page.mockLoad({ body: [] }).as('loadRequest');
+        page.mockLoad({body: []}).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
       });
@@ -162,7 +162,7 @@ describe.skip('', () => {
         // to prevent Cypress from failing the test on uncaught exception
         cy.once('uncaught:exception', () => false);
 
-        page.mockLoad({ statusCode: 404, body: 'Not found' }).as('loadRequest');
+        page.mockLoad({statusCode: 404, body: 'Not found'}).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
       });
@@ -342,7 +342,7 @@ describe.skip('', () => {
 
     describe('with active todos only', () => {
       beforeEach(() => {
-        page.mockLoad({ fixture: 'active-todos' }).as('loadRequest');
+        page.mockLoad({fixture: 'active-todos'}).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
       });
@@ -366,7 +366,7 @@ describe.skip('', () => {
 
     describe('with completed todos only', () => {
       beforeEach(() => {
-        page.mockLoad({ fixture: 'completed-todos' }).as('loadRequest');
+        page.mockLoad({fixture: 'completed-todos'}).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
       });
