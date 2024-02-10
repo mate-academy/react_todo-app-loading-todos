@@ -9,10 +9,6 @@ import { getTodos } from '../../api/todos';
 import { Status } from '../../types/Status';
 import { USER_ID } from '../../utils/fetchClient';
 
-// type Props = {
-//   userId: number,
-// };
-
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Status>(Status.All);
