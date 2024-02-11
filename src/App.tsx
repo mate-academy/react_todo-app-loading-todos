@@ -9,13 +9,13 @@ import { Status } from './types/Status';
 import { Footer } from './api/Footer';
 import { Header } from './api/Header';
 
-const USER_ID = 136;
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<Status>(Status.All);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const USER_ID = 136;
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,21 +27,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    switch (status) {
-      case Status.All:
-        getTodos(USER_ID).then(setTodos);
-        break;
+  const filterTodos = (filterStatus: Status, todoList: Todo[]): Todo[] => {
+    switch (filterStatus) {
       case Status.Active:
-        setTodos(prevTodos => prevTodos.filter(t => !t.completed));
-        break;
+        return todoList.filter(todo => !todo.completed);
+
       case Status.Completed:
-        setTodos(prevTodos => prevTodos.filter(t => t.completed));
-        break;
+        return todoList.filter(todo => todo.completed);
+
       default:
-        break;
+        return todoList;
     }
-  }, [status]);
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -66,28 +63,28 @@ export const App: React.FC = () => {
           todos={todos}
         />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
               {/* This is a completed todo */}
-              {todos.map(todo => (
+              {filterTodos(status, todos).map(({ completed, id, title }) => (
                 <div
                   data-cy="Todo"
-                  className={cn('todo', { completed: todo.completed })}
-                  key={todo.id}
+                  className={cn('todo', { completed })}
+                  key={id}
                 >
                   <label className="todo__status-label">
                     <input
                       data-cy="TodoStatus"
                       type="checkbox"
                       className="todo__status"
-                      checked={todo.completed}
-                      onChange={() => handleCheckTodo(todo.id)}
+                      checked={completed}
+                      onChange={() => handleCheckTodo(id)}
                     />
                   </label>
 
                   <span data-cy="TodoTitle" className="todo__title">
-                    {todo.title}
+                    {title}
                   </span>
 
                   {/* Remove button appears only on hover */}

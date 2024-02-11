@@ -16,13 +16,14 @@ export const Footer: React.FC<Props> = ({
 }) => {
   const someTodosToggle = todos.some(todo => todo.completed);
   const notTodosToggle = todos.filter(todo => !todo.completed);
+  const itemsLeft = notTodosToggle.length === 1
+    ? '1 item left'
+    : `${notTodosToggle.length} items left`;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {notTodosToggle.length === 1
-          ? '1 item left'
-          : `${notTodosToggle.length} items left`}
+        {itemsLeft}
       </span>
 
       {/* Active filter should have a 'selected' class */}
@@ -42,9 +43,7 @@ export const Footer: React.FC<Props> = ({
           className={cn('filter__link',
             { selected: status === Status.Active })}
           data-cy="FilterLinkActive"
-          onClick={() => {
-            setStatus(Status.Active);
-          }}
+          onClick={() => setStatus(Status.Active)}
         >
           Active
         </a>
@@ -61,15 +60,14 @@ export const Footer: React.FC<Props> = ({
       </nav>
 
       {/* don't show this button if there are no completed todos */}
-      {someTodosToggle && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        disabled={!someTodosToggle}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
