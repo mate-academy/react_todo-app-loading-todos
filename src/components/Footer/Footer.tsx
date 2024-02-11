@@ -11,11 +11,12 @@ type Props = {
 export const Footer: React.FC<Props> = ({ activeFilter }) => {
   const { todos } = useContext(StateContext);
   const todosCount = todos.filter(todo => !todo.completed).length;
+  const isOnlyOneActiveTodo = todosCount === 1;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todosCount} items left`}
+        {`${todosCount} item${isOnlyOneActiveTodo ? '' : 's'} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -26,6 +27,7 @@ export const Footer: React.FC<Props> = ({ activeFilter }) => {
               selected: activeFilter.type === type,
             })}
             data-cy={`FilterLink${name}`}
+            key={name}
           >
             {name}
           </a>

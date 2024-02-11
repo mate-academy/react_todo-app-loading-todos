@@ -5,13 +5,15 @@ import { StateContext } from '../../store/State';
 export const Header: React.FC = () => {
   const { todos } = useContext(StateContext);
 
+  const isActiveButton = todos.some(({ completed }) => !completed);
+
   return (
     <header className="todoapp__header">
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
-          active: todos.some(({ completed }) => !completed),
+          active: isActiveButton,
         })}
         data-cy="ToggleAllButton"
       />
