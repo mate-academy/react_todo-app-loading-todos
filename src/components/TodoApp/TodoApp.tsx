@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { TodoList } from '../TodoList/TodoList';
 import { TodosFilter } from '../TodosFilter/TodosFilter';
@@ -25,30 +25,42 @@ export const TodoApp: React.FC = () => {
       });
   }, []);
 
-  let filteredTodos: Todo[] = [];
+  const filteredTodos = useMemo(() => {
+    const filterTodos = (currentFilter: Status): Todo[] => {
+      let currentTodos = todos;
 
-  switch (filter) {
-    case Status.All:
-      filteredTodos = todos;
+      switch (currentFilter) {
+        case Status.All:
+          currentTodos = todos;
 
-      break;
+          break;
 
-    case Status.Active:
-      filteredTodos = todos.filter(todo => !todo.completed);
+        case Status.Active:
+          currentTodos = todos.filter(todo => !todo.completed);
 
-      break;
+          break;
 
-    case Status.Completed:
-      filteredTodos = todos.filter(todo => todo.completed);
+        case Status.Completed:
+          currentTodos = todos.filter(todo => todo.completed);
 
-      break;
+          break;
 
-    default: break;
-  }
+        default: break;
+      }
 
-  const numberOfNonCompleted = todos.filter(todo => !todo.completed).length;
+      return currentTodos;
+    };
 
-  const activeTodos = todos.filter(todo => !todo.completed);
+    return filterTodos(filter);
+  }, [todos, filter]);
+
+  const numberOfNotCompleted = useMemo(() => {
+    return todos.filter(todo => !todo.completed).length;
+  }, [todos]);
+
+  const numberOfCompleted = useMemo(() => {
+    return todos.filter(todo => todo.completed).length;
+  }, [todos]);
 
   return (
     <div className="todoapp">
@@ -56,12 +68,11 @@ export const TodoApp: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this buttons is active only if there are some active todos */}
           {todos.length > 0 && (
             <button
               type="button"
               className={cn('todoapp__toggle-all', {
-                active: activeTodos.length === 0,
+                active: !numberOfNotCompleted,
               })}
               data-cy="ToggleAllButton"
             />
@@ -81,7 +92,8 @@ export const TodoApp: React.FC = () => {
           <TodosFilter
             filter={filter}
             setFilter={setFilter}
-            numberOfNonCompleted={numberOfNonCompleted}
+            numberOfNotCompleted={numberOfNotCompleted}
+            numberOfCompleted={numberOfCompleted}
           />
         )}
       </div>

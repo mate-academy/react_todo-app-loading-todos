@@ -1,27 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Status } from '../../types/Status';
 
 type Props = {
   filter: Status,
   setFilter: (item: Status) => void,
-  numberOfNonCompleted: number,
+  numberOfNotCompleted: number,
+  numberOfCompleted: number,
 };
 
 export const TodosFilter: React.FC<Props> = (
   {
     filter,
     setFilter,
-    numberOfNonCompleted,
+    numberOfNotCompleted,
+    numberOfCompleted,
   },
 ) => {
+  const [clearCompletedDisabled, setClearCompletedDisabled] = useState(true);
+
+  useEffect(() => {
+    if (numberOfCompleted) {
+      setClearCompletedDisabled(false);
+    }
+
+    if (!numberOfCompleted) {
+      setClearCompletedDisabled(true);
+    }
+  }, [numberOfCompleted]);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${numberOfNonCompleted} items left`}
+        {`${numberOfNotCompleted} items left`}
       </span>
-
-      {/* Active filter should have a 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -56,15 +68,15 @@ export const TodosFilter: React.FC<Props> = (
           Completed
         </a>
       </nav>
-
-      {/* don't show this button if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={clearCompletedDisabled}
       >
         Clear completed
       </button>
+
     </footer>
   );
 };

@@ -16,8 +16,6 @@ export const Notification: React.FC<Props> = (
   setTimeout(() => setHidden(true), (3000));
 
   return (
-  // {/* Notification is shown in case of any error */}
-  // {/* Add the 'hidden' class to hide the message smoothly */}
     <div
       data-cy="ErrorNotification"
       className={cn('is-light has-text-weight-normal', {
