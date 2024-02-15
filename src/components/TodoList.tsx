@@ -13,6 +13,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           title={title}
           completed={completed}
           id={id}
+          key={id}
         />
       ))}
     </section>

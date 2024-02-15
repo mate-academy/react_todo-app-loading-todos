@@ -65,7 +65,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList todos={filteredTodos} />
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             filterTodos={setFilter}
             currentFilter={filter}
