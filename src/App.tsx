@@ -1,5 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
@@ -12,6 +16,21 @@ import { Footer } from './components/Footer';
 import './styles/index.scss';
 
 const USER_ID = 27;
+
+export const filterTodos = (currentTodos: Todo[], query: Filter) => {
+  return currentTodos.filter(todo => {
+    switch (query) {
+      case Filter.All:
+        return todo;
+      case Filter.Completed:
+        return todo.completed;
+      case Filter.Active:
+        return !todo.completed;
+      default:
+        return todo;
+    }
+  });
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -26,22 +45,13 @@ export const App: React.FC = () => {
       .catch(() => setError(Error.UnableToLoadAll));
   }, []);
 
-  const filterTodos = useCallback((currentTodos: Todo[], query: Filter) => {
-    return currentTodos.filter(todo => {
-      switch (query) {
-        case Filter.All:
-          return todo;
-        case Filter.Completed:
-          return todo.completed;
-        case Filter.Active:
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    });
-  }, []);
+  const filteredTodos = useMemo(() => filterTodos(todos, filter),
+    [todos, filter]);
 
-  const filteredTodos = filterTodos(todos, filter);
+  const activeTodosCount = useMemo(() => {
+    return todos.filter(todo => todo.completed !== true).length;
+  }, [todos]);
+
   const isCompletedTodos = !!todos
     .filter(todo => todo.completed === true).length;
 
@@ -55,14 +65,17 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList todos={filteredTodos} />
-        <Footer
-          filterTodos={setFilter}
-          currentFilter={filter}
-          isCompletedTodos={isCompletedTodos}
-        />
+        {todos.length > 0 && (
+          <Footer
+            filterTodos={setFilter}
+            currentFilter={filter}
+            isCompletedTodos={isCompletedTodos}
+            activeTodosCount={activeTodosCount}
+          />
+        )}
       </div>
       {error
-        && <ErrorMessage error={error} close={() => setError(null)} />}
+        && <ErrorMessage error={error} close={() => setError(null)} /> }
     </div>
   );
 };

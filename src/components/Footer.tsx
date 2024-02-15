@@ -5,18 +5,18 @@ interface Props {
   filterTodos: (filter: Filter) => void,
   currentFilter: Filter,
   isCompletedTodos: boolean,
+  activeTodosCount: number,
 }
 
-export const Footer: React.FC<Props> = (
-  {
-    filterTodos,
-    currentFilter,
-    isCompletedTodos,
-  },
-) => (
+export const Footer: React.FC<Props> = ({
+  filterTodos,
+  currentFilter,
+  isCompletedTodos,
+  activeTodosCount,
+}) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="TodosCounter">
-      3 items left
+      {`${activeTodosCount} items left`}
     </span>
 
     <nav className="filter" data-cy="Filter">
