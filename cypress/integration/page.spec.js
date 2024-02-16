@@ -57,7 +57,7 @@ const page = {
     return cy.intercept(options, response || { body: '1' });
   },
   mockUpdate: (id, response) => {
-    const todo = mixedTodos.find(todo => todo.id === id);
+    const todo = mixedTodos.find(todo => todo.id === id) || {};
     const options = { method: 'PATCH', url: `**/todos/${id}` };
 
     const spy = cy.stub()
