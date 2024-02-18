@@ -29,7 +29,6 @@ type Action =
   | { type: 'deleteTodo'; payload: number | undefined }
   | { type: 'setError'; payload: string | null }
   | { type: 'loading'; payload: { load: boolean; id: number } }
-  // | { type: 'setCheckTodo'; completed: boolean }
   | { type: 'toggleTodo'; payload?: number };
 
 function reducer(state: State, action: Action): State {
