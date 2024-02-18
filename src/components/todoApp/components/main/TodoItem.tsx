@@ -40,7 +40,6 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
                 type: 'setError',
                 payload: 'Unable to update a todo',
               });
-              // dispatch({ type: 'deleteTodo', payload: todo.id });
             })
             .finally(() => {
               dispatch({
@@ -113,6 +112,7 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
         <span hidden={editing} data-cy="TodoTitle" className="todo__title">
           {todo.title}
         </span>
+
         <button
           hidden={editing}
           type="button"
@@ -124,7 +124,7 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
           ×
         </button>
       </>
-      {/* overlay will cover the todo while it is being deleted or updated */}
+
       <div
         data-cy="TodoLoader"
         className={cn('modal', 'overlay', {

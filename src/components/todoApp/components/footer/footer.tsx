@@ -7,6 +7,7 @@ export const Footer: React.FC = () => {
   const { todos } = useContext(TodosContext);
   const dispatch = useContext(DispatchContext);
   const isCompletedTodos = todos.some(todo => todo.completed);
+  const counter = `${todos.filter(todo => !todo.completed).length} ${todos.filter(todo => !todo.completed).length > 1 ? 'items' : 'item'} left`;
 
   const handleClearCompleted = () => {
     todos.forEach(todo => {
@@ -43,15 +44,11 @@ export const Footer: React.FC = () => {
     <>
       {!!todos.length && (
         <footer className="todoapp__footer" data-cy="Footer">
-          {/* {(!isCompletedTodos || todos.length) && ( */}
           <span className="todo-count" data-cy="TodosCounter">
-            {todos.filter(todo => !todo.completed).length}
-            {` ${todos.filter(todo => !todo.completed).length > 1 ? 'items' : 'item'} left`}
+            {counter}
           </span>
-          {/* )} */}
-          {/* {!!todos.length && */}
+
           <TodosFilter />
-          {/* } */}
 
           <div>
             {isCompletedTodos && (

@@ -25,17 +25,6 @@ export const ErrorNotification: React.FC = () => {
         onClick={() => dispatch({ type: 'setError', payload: null })}
       />
       {error}
-      {/* show only one message at a time */}
-      {/* Unable to load todos
-      <br />
-      Title should not be empty!!!!!
-      <br />
-      Unable to add a todo !!!!
-      <br />
-      Unable to delete a todo !!!!!
-      <br />
-      Unable to update a todo!!!!!!
-      */}
     </div>
   );
 };

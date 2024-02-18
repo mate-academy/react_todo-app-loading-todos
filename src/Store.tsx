@@ -139,14 +139,12 @@ export const TodosContext = createContext(initialState);
 export const DispatchContext = createContext<(action: Action) => void>(
   () => {},
 );
-// export const ErrorContext = createContext<string | null>(null);
 
 type Props = {
   children: ReactNode;
 };
 
 export const Store: React.FC<Props> = ({ children }) => {
-  // const [error, setError] = React.useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState, getLocalStorege);
   const { todos } = state;
 
@@ -158,11 +156,7 @@ export const Store: React.FC<Props> = ({ children }) => {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <TodosContext.Provider value={state}>
-        {/* <ErrorContext.Provider value={{ error, setError }}> */}
-        {children}
-        {/* </ErrorContext.Provider> */}
-      </TodosContext.Provider>
+      <TodosContext.Provider value={state}>{children}</TodosContext.Provider>
     </DispatchContext.Provider>
   );
 };

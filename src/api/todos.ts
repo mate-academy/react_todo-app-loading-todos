@@ -22,5 +22,3 @@ export const updateTodo = ({ id, userId, title, completed }: Todo) => {
     completed,
   });
 };
-
-// Add more methods here
