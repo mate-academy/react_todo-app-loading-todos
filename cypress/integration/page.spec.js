@@ -168,6 +168,11 @@ describe('', () => {
         page.mockLoad({ statusCode: 404, body: 'Not found' }).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
+
+        // just in case
+        cy.wait(50);
+
+        cy.clock();
       });
 
       it('should show error', () => {
@@ -179,10 +184,6 @@ describe('', () => {
       });
 
       it('should hide error after 3 seconds', () => {
-        // just in case
-        cy.wait(50);
-
-        cy.clock();
         cy.tick(2500);
         errorMessage.assertVisible();
 
@@ -1540,7 +1541,7 @@ describe('', () => {
           todos.assertTitle(0, 'Something');
         });
 
-        it('should show trim the new title', () => {
+        it('should trim the new title', () => {
           todos.titleField(0).type('   Some new title      {enter}');
           cy.wait('@renameRequest');
           page.flushJSTimers();
@@ -1561,12 +1562,12 @@ describe('', () => {
           cy.wait('@renameRequest');
         });
 
-        it('should cancel loading on fail', () => {
+        it('should cancel loading', () => {
           page.flushJSTimers();
           todos.assertNotLoading(0);
         });
 
-        it('should stay open on fail', () => {
+        it('should stay open', () => {
           todos.titleField(0).should('exist');
         });
 
