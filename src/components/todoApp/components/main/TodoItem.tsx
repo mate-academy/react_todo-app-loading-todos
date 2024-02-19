@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../../../types/Todo';
 import { DispatchContext, TodosContext } from '../../../../Store';
-import { updateTodo } from '../../../../api/todos';
+import { deleteTodo, updateTodo } from '../../../../api/todos';
 
 export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
   const dispatch = useContext(DispatchContext);
@@ -18,8 +18,6 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
           dispatch({ type: 'deleteTodo', payload: todo.id });
           setEditing(false);
         } else {
-          const prevTodo = todo;
-
           const updatedTodo = {
             id: todo.id,
             userId: todo.userId,
@@ -27,15 +25,16 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
             completed: todo.completed,
           };
 
-          dispatch({ type: 'editTodo', payload: updatedTodo });
           dispatch({
             type: 'loading',
             payload: { load: true, id: updatedTodo.id || 0 },
           });
 
           updateTodo(updatedTodo)
+            .then(() => {
+              dispatch({ type: 'editTodo', payload: updatedTodo });
+            })
             .catch(() => {
-              dispatch({ type: 'editTodo', payload: prevTodo });
               dispatch({
                 type: 'setError',
                 payload: 'Unable to update a todo',
@@ -66,6 +65,62 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
     }
   };
 
+  const handleDelete = () => {
+    dispatch({
+      type: 'loading',
+      payload: { load: true, id: todo.id || 0 },
+    });
+    deleteTodo(todo.id)
+      .then(() => {
+        dispatch({ type: 'deleteTodo', payload: todo.id });
+      })
+      .catch(() => {
+        dispatch({ type: 'setError', payload: null });
+        dispatch({
+          type: 'setError',
+          payload: 'Unable to delete a todo',
+        });
+      })
+      .finally(() => {
+        dispatch({
+          type: 'loading',
+          payload: { load: false, id: todo.id || 0 },
+        });
+        const timeout = setTimeout(() => {
+          dispatch({ type: 'setError', payload: null });
+          clearTimeout(timeout);
+        }, 3000);
+      });
+  };
+
+  const handleToggleTodo = () => {
+    updateTodo({ ...todo, completed: !todo.completed })
+      .then(() => {
+        dispatch({ type: 'toggleTodo', payload: todo.id });
+      })
+      .catch(() => {
+        dispatch({ type: 'toggleTodo', payload: todo.id });
+        dispatch({
+          type: 'setError',
+          payload: 'Unable to toggle a todo',
+        });
+        const timeout = setTimeout(() => {
+          dispatch({ type: 'toggleTodo', payload: todo.id });
+          clearTimeout(timeout);
+        }, 100);
+      })
+      .finally(() => {
+        dispatch({
+          type: 'loading',
+          payload: { load: false, id: todo.id || 0 },
+        });
+        const timeout = setTimeout(() => {
+          dispatch({ type: 'setError', payload: null });
+          clearTimeout(timeout);
+        }, 3000);
+      });
+  };
+
   useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
@@ -85,7 +140,7 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
           className="todo__status"
           checked={todo.completed}
           id={`toggle-view-${todo.id}`}
-          onChange={() => dispatch({ type: 'toggleTodo', payload: todo.id })}
+          onChange={handleToggleTodo}
         />
       </label>
 
@@ -119,7 +174,7 @@ export const TodoItem = React.memo(({ todo }: { todo: Todo }) => {
           className="todo__remove "
           data-cy="TodoDelete"
           aria-label="Delete Todo"
-          onClick={() => dispatch({ type: 'deleteTodo', payload: todo.id })}
+          onClick={handleDelete}
         >
           ×
         </button>

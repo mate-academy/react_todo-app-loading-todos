@@ -29,7 +29,7 @@ type Action =
   | { type: 'deleteTodo'; payload: number | undefined }
   | { type: 'setError'; payload: string | null }
   | { type: 'loading'; payload: { load: boolean; id: number } }
-  | { type: 'toggleTodo'; payload?: number };
+  | { type: 'toggleTodo'; payload: number };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -93,8 +93,6 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: state.todos.map(todo => {
           if (todo.id === action.payload) {
-            updateTodo({ id: todo.id, completed: !todo.completed });
-
             return {
               ...todo,
               completed: !todo.completed,
@@ -110,7 +108,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         todos: state.todos.map(todo => {
           updateTodo({
-            id: todo.id,
+            ...todo,
             completed: !action.payload,
           });
 
