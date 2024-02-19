@@ -61,7 +61,13 @@ export const App: React.FC = () => {
           <>
             <section className="todoapp__main" data-cy="TodoList">
               {filteredTodos.map(({ id, title, completed }) => (
-                <div key={id} data-cy="Todo" className="todo completed">
+                <div
+                  key={id}
+                  data-cy="Todo"
+                  className={classNames('todo', {
+                    completed,
+                  })}
+                >
                   <label className="todo__status-label">
                     <input
                       data-cy="TodoStatus"
