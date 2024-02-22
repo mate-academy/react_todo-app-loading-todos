@@ -59,7 +59,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <section className="todoapp__main" data-cy="TodoList">
             <ul className="todolist">
               {filteredTodos.map(({ id, title, completed }) => (
@@ -105,7 +105,7 @@ export const App: React.FC = () => {
           </section>
         )}
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {hasActive === 1 ? '1 item left' : `${hasActive} items left`}
