@@ -13,6 +13,12 @@ export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
   const uncompletedTodosAmount = todos.filter(todo => !todo.completed).length;
   const hasCompleted = todos.some(todo => todo.completed);
 
+  const filterTypes = [
+    { href: '', status: Status.All, dataCy: 'All' },
+    { href: 'active', status: Status.Active, dataCy: 'Active' },
+    { href: 'comleted', status: Status.Completed, dataCy: 'Completed' },
+  ];
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -20,38 +26,25 @@ export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', {
-            selected: selected === Status.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setSelected(Status.All)}
-        >
-          All
-        </a>
+        {filterTypes.map(item => {
+          const { href, status, dataCy } = item;
+          const handleStatusChange = () => {
+            setSelected(status);
+          };
 
-        <a
-          href="#/active"
-          className={cn('filter__link', {
-            selected: selected === Status.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setSelected(Status.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', {
-            selected: selected === Status.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setSelected(Status.Completed)}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              href={`#/${href}`}
+              className={cn('filter__link', {
+                selected: selected === status,
+              })}
+              data-cy={`FilterLink${dataCy}`}
+              onClick={handleStatusChange}
+            >
+              {dataCy}
+            </a>
+          );
+        })}
       </nav>
 
       {hasCompleted && (

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Header } from './components/Header';
@@ -15,13 +15,15 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errorHidden, setErrorHidden] = useState(true);
 
-  function showError() {
+  const showErrorCallback = useCallback(() => {
     setErrorHidden(false);
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setErrorHidden(true);
-    }, 2000);
-  }
+    }, 3000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     getTodos()
@@ -30,9 +32,9 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        showError();
+        showErrorCallback();
       });
-  }, []);
+  }, [showErrorCallback]);
 
   const filteredTodos = useMemo(() => {
     switch (filterSelected) {
