@@ -8,23 +8,7 @@ type Props = {
 };
 
 export const Filter: React.FC<Props> = ({ setFilter, filter }) => {
-  const choiceFilter = (st: Status) => {
-    switch (st) {
-      case Status.COMPLETED:
-        setFilter(Status.COMPLETED);
-
-        break;
-
-      case Status.ACTIVE:
-        setFilter(Status.ACTIVE);
-
-        break;
-
-      default:
-        setFilter(Status.ALL);
-        break;
-    }
-  };
+  const choiceFilter = (st: Status) => setFilter(st);
 
   return (
     <nav className="filter" data-cy="Filter">

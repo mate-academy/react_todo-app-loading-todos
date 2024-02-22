@@ -8,12 +8,35 @@ import { Filter } from './components/Filter';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 
+function filteredTodos(
+  allTodos: Todo[] | undefined,
+  filter: Status,
+): Todo[] | null {
+  if (!allTodos) {
+    return null;
+  }
+
+  return allTodos.filter(t => {
+    switch (filter) {
+      case Status.ACTIVE:
+        return !t.completed;
+
+      case Status.COMPLETED:
+        return t.completed;
+
+      default:
+        return true;
+    }
+  });
+}
+
 export const App: React.FC = () => {
   const [filter, setFilter] = useState(Status.ALL);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>();
   const [todos, setTodos] = useState<Todo[]>();
   const [errorMessage, setErrorMessage] = useState('');
   const ref = useRef<HTMLInputElement>(null);
+
+  const visibleTodos = filteredTodos(todos, filter);
 
   useEffect(() => {
     ref.current?.focus();
@@ -21,23 +44,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(allTodos => {
-        setTodos(allTodos);
-        const filteredTodos = allTodos.filter(t => {
-          switch (filter) {
-            case Status.ACTIVE:
-              return !t.completed;
-
-            case Status.COMPLETED:
-              return t.completed;
-
-            default:
-              return true;
-          }
-        });
-
-        setVisibleTodos(filteredTodos);
-      })
+      .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
         setTimeout(() => {
