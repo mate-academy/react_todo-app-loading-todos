@@ -11,7 +11,7 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [search, setSearch] = useState<string>('');
+  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
   const [sortBy, setSortBy] = useState<Status>(Status.All);
 
   const titleInput = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   let visibleTodos = todos.filter(todo =>
-    todo.title.toLowerCase().includes(search.toLowerCase()),
+    todo.title.toLowerCase().includes(newTodoTitle.toLowerCase()),
   );
 
   switch (sortBy) {
@@ -37,6 +37,11 @@ export const App: React.FC = () => {
       break;
   }
 
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    wait(3000).then(() => setErrorMessage(''));
+  };
+
   useEffect(() => {
     if (titleInput.current) {
       titleInput.current.focus();
@@ -44,10 +49,7 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => {
-        wait(3000).then(() => setErrorMessage(''));
-      });
+      .catch(() => handleError('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
@@ -78,10 +80,10 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              name="search-todo"
+              name="new-todo"
               ref={titleInput}
-              value={search}
-              onChange={e => setSearch(e.target.value)}
+              value={newTodoTitle}
+              onChange={e => setNewTodoTitle(e.target.value)}
             />
           </form>
         </header>
