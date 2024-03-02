@@ -1,119 +1,60 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { wait } from './utils/fetchClient';
-import { ErrorMessages } from './types/ErrorMessages';
+import { USER_ID, getTodos } from './api/todos';
+import { TodoList } from './services/TodoList';
 import { Todo } from './types/Todo';
+import { wait } from './utils/fetchClient';
 import { Status } from './types/FilterStatus';
-import * as postService from './api/todos';
-import { getFilteredTodos } from './services/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoTitle, setTodoTitle] = useState('');
-  const [filterStatus, setFilterStatus] = useState(Status.All);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
+  const [sortBy, setSortBy] = useState<Status>(Status.All);
 
-  const filteredTodos = getFilteredTodos(todos, filterStatus);
-  const remainingTodos = todos.filter(todo => !todo.completed).length;
-  const hasCompletedTodos = todos.some(todo => todo.completed);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const titleInput = useRef<HTMLInputElement>(null);
 
-  const USER_ID = 196;
+  const isAllCompleted = todos.every(todo => todo.completed);
 
-  function clearError() {
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+
+  let visibleTodos = todos.filter(todo =>
+    todo.title.toLowerCase().includes(newTodoTitle.toLowerCase()),
+  );
+
+  switch (sortBy) {
+    case Status.Active:
+      visibleTodos = visibleTodos.filter(todo => !todo.completed);
+      break;
+
+    case Status.Completed:
+      visibleTodos = visibleTodos.filter(todo => todo.completed);
+      break;
+
+    default:
+      break;
+  }
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
     wait(3000).then(() => setErrorMessage(''));
-  }
-
-  function addTodo({ title, completed, userId }: Omit<Todo, 'id'>) {
-    postService
-      .createTodo({ title, completed, userId })
-      .then(newTodo => {
-        setTodos(currentTodos => [...currentTodos, newTodo]);
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.UnableToAddaTodo);
-        clearError();
-      });
-  }
-
-  function deleteTodo(todoId: number) {
-    postService
-      .deleteTodo(todoId)
-      .then(() => {
-        setTodos(currentTodos =>
-          currentTodos.filter(todo => todo.id !== todoId),
-        );
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.UnableToDeleteaTodo);
-        clearError();
-      });
-  }
+  };
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (titleInput.current) {
+      titleInput.current.focus();
     }
-  }, []);
 
-  useEffect(() => {
-    postService
-      .getTodos()
+    getTodos()
       .then(setTodos)
-      .catch(() => {
-        setErrorMessage(ErrorMessages.UnableToLoadTodos);
-        clearError();
-      });
+      .catch(() => handleError('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTodoTitle(event.target.value);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (todoTitle.trim() !== '') {
-      addTodo({
-        title: todoTitle,
-        completed: false,
-        userId: postService.USER_ID,
-      });
-      setTodoTitle('');
-    }
-  };
-
-  const handleChangeStatus = (todoId: number) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
-    );
-
-    setTodos(updatedTodos);
-
-    const todoToUpdate = updatedTodos.find(todo => todo.id === todoId);
-
-    if (todoToUpdate) {
-      postService
-        .updateTodo(todoToUpdate)
-        .then(updatedTodo => {
-          setTodos(currentTodos =>
-            currentTodos.map(todo =>
-              todo.id === updatedTodo.id ? updatedTodo : todo,
-            ),
-          );
-        })
-        .catch(() => {
-          setErrorMessage(ErrorMessages.UnableToUpdateaTodo);
-          clearError();
-        });
-    }
-  };
 
   return (
     <div className="todoapp">
@@ -122,115 +63,73 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form onSubmit={handleSubmit}>
+          {!!todos.length && (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: isAllCompleted,
+              })}
+              data-cy="ToggleAllButton"
+            />
+          )}
+          <form>
             <input
               data-cy="NewTodoField"
-              ref={inputRef}
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={todoTitle}
-              onChange={handleChange}
+              name="new-todo"
+              ref={titleInput}
+              value={newTodoTitle}
+              onChange={e => setNewTodoTitle(e.target.value)}
             />
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          <div className="todo-list" data-cy="todosList">
-            {filteredTodos.map(todo => (
-              <div
-                key={todo.id}
-                data-cy="Todo"
-                className={classNames('todo', {
-                  completed: todo.completed,
-                })}
-              >
-                <label className="todo__status-label">
-                  <input
-                    data-cy="TodoStatus"
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                    onChange={() => handleChangeStatus(todo.id)}
-                  />
-                </label>
-
-                <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
-                </span>
-
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                  onClick={() => deleteTodo(todo.id)}
-                >
-                  ×
-                </button>
-
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
-              </div>
-            ))}
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
+        <TodoList todos={visibleTodos} />
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {remainingTodos} items left
+              {activeTodosCount} items left
             </span>
 
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: filterStatus === Status.All,
+                  selected: !sortBy,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilterStatus(Status.All)}
+                onClick={() => setSortBy(Status.All)}
               >
-                {Status.All}
+                All
               </a>
 
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: filterStatus === Status.Active,
+                  selected: sortBy === Status.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilterStatus(Status.Active)}
+                onClick={() => setSortBy(Status.Active)}
               >
-                {Status.Active}
+                Active
               </a>
 
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: filterStatus === Status.Completed,
+                  selected: sortBy === Status.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilterStatus(Status.Completed)}
+                onClick={() => setSortBy(Status.Completed)}
               >
-                {Status.Completed}
+                Completed
               </a>
             </nav>
 
-            {hasCompletedTodos && (
+            {visibleTodos && (
               <button
                 type="button"
                 className="todoapp__clear-completed"
