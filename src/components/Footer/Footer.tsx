@@ -34,6 +34,7 @@ export const Footer: React.FC<Props> = ({ todos, selected, setSelected }) => {
 
           return (
             <a
+              key={href}
               href={`#/${href}`}
               className={cn('filter__link', {
                 selected: selected === status,

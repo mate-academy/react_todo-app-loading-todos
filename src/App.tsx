@@ -51,7 +51,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const hasTodos = todos.length > 0;
+  const hasTodos = !!todos.length;
 
   return (
     <div className="todoapp">
