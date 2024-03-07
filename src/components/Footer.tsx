@@ -22,27 +22,29 @@ export const Footer: React.FC<FooterProps> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={cn('filter__link', { selected: filter === 'all' })}
+          className={cn('filter__link', { selected: filter === Status.All })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
+          onClick={() => setFilter(Status.All)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={cn('filter__link', { selected: filter === 'active' })}
+          className={cn('filter__link', { selected: filter === Status.Active })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
+          onClick={() => setFilter(Status.Active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={cn('filter__link', { selected: filter === 'completed' })}
+          className={cn('filter__link', {
+            selected: filter === Status.Completed,
+          })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
+          onClick={() => setFilter(Status.Completed)}
         >
           Completed
         </a>

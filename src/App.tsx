@@ -13,7 +13,7 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string>('');
-  const [filter, setFilter] = useState<Status>('all');
+  const [filter, setFilter] = useState<Status>(Status.All);
 
   useEffect(() => {
     getTodos()
@@ -29,8 +29,6 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
-
-    return () => {};
   }, [error]);
 
   if (!USER_ID) {
@@ -50,7 +48,7 @@ export const App: React.FC = () => {
         <TodoList todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             filter={filter}
             setFilter={setFilter}
