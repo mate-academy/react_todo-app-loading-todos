@@ -20,16 +20,6 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => setError('Unable to load todos'));
   }, []);
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError('');
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -59,7 +49,7 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Error error={error} />
+      <Error error={error} setError={setError} />
     </div>
   );
 };
