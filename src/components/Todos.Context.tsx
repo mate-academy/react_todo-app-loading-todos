@@ -52,7 +52,7 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
         setError('Unable to load todos');
         setTimeout(() => {
           setError('');
-        }, 3000); // Встановлюємо повідомлення про помилку
+        }, 3000);
 
         // eslint-disable-next-line no-console
         console.error('Error loading todos:', err);
