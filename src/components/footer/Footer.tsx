@@ -5,19 +5,21 @@ import { Filtering } from '../../types/Filtering';
 interface Props {
   filterType: Filtering;
   handleClick: (arg: Filtering) => void;
+  itemLeft: string
 }
 
-export const Footer: React.FC<Props> = ({ filterType, handleClick }) => {
+export const Footer: React.FC<Props> = ({ filterType, handleClick , itemLeft}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {itemLeft}
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
+          data-cy="FilterLinkAll"
           className={classNames('filter__link', {
             selected: filterType === Filtering.ALL,
           })}

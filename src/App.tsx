@@ -17,6 +17,7 @@ export const App: React.FC = () => {
 
   const hasItems = data.length > 0;
   const allTodosCompleted = data.every(elem => elem.completed);
+  const itemsLeft = `${data.length - data.filter((elem: Todo) => elem.completed).length} items left`;
 
   useEffect(() => {
     const dataFromServer = getTodos();
@@ -92,7 +93,7 @@ export const App: React.FC = () => {
           <>
             <TodoList data={filtering(fitlerType)} />
 
-            <Footer filterType={fitlerType} handleClick={handleClick} />
+            <Footer filterType={fitlerType} handleClick={handleClick} itemLeft={itemsLeft}/>
           </>
         )}
       </div>
