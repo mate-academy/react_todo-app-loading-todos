@@ -28,7 +28,7 @@ export const CustomError: React.FC<Props> = ({ errorMassage, removeError }) => {
         { hidden: !errorMassage },
       )}
     >
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         data-cy="HideErrorButton"
         type="button"

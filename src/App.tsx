@@ -93,7 +93,11 @@ export const App: React.FC = () => {
           <>
             <TodoList data={filtering(fitlerType)} />
 
-            <Footer filterType={fitlerType} handleClick={handleClick} itemLeft={itemsLeft}/>
+            <Footer
+              filterType={fitlerType}
+              handleClick={handleClick}
+              itemLeft={itemsLeft}
+            />
           </>
         )}
       </div>

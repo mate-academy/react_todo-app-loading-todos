@@ -5,17 +5,20 @@ import { Filtering } from '../../types/Filtering';
 interface Props {
   filterType: Filtering;
   handleClick: (arg: Filtering) => void;
-  itemLeft: string
+  itemLeft: string;
 }
 
-export const Footer: React.FC<Props> = ({ filterType, handleClick , itemLeft}) => {
+export const Footer: React.FC<Props> = ({
+  filterType,
+  handleClick,
+  itemLeft,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {itemLeft}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -51,7 +54,6 @@ export const Footer: React.FC<Props> = ({ filterType, handleClick , itemLeft}) =
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
