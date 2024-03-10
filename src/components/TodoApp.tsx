@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import classNames from 'classnames';
 import { USER_ID } from '../api/todos';
 import { Todo } from '../types/Todo';
@@ -18,47 +24,54 @@ export const TodoApp: React.FC<Props> = ({
   addErrorText,
 }) => {
   const [query, setQuery] = useState<string>('');
-  const newTodoField = useRef<HTMLInputElement | null>(null);
-
-  const isEveryTodoCompleted = todos.every(todoItem => todoItem.completed);
+  const addingTodoField = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (newTodoField.current) {
-      newTodoField.current.focus();
+    if (addingTodoField.current) {
+      addingTodoField.current.focus();
     }
   }, []);
 
-  const handleQueryChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    setQuery(event.target.value);
-  };
+  const isEveryTodoCompleted = useMemo(
+    () => todos.every(todoItem => todoItem.completed),
+    [todos],
+  );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
+  const handleQueryChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      setQuery(event.target.value);
+    },
+    [],
+  );
 
-    if (!query.trim()) {
-      addErrorText(Errors.emptyTitle);
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>): void => {
+      event.preventDefault();
 
-      window.setTimeout(() => addErrorText(null), 3000);
+      if (!query.trim()) {
+        addErrorText(Errors.emptyTitle);
 
-      return;
-    }
+        window.setTimeout(() => addErrorText(null), 3000);
 
-    updateTodos([
-      ...todos,
-      {
-        id: +new Date(),
-        userId: USER_ID,
-        title: query.trim(),
-        completed: false,
-      },
-    ]);
+        return;
+      }
 
-    setQuery('');
-  };
+      updateTodos([
+        ...todos,
+        {
+          id: +new Date(),
+          userId: USER_ID,
+          title: query.trim(),
+          completed: false,
+        },
+      ]);
 
-  const handleToggleAllTodos = () => {
+      setQuery('');
+    },
+    [query, todos, updateTodos, addErrorText],
+  );
+
+  const handleToggleAllTodos = useCallback(() => {
     if (isEveryTodoCompleted) {
       updateTodos(
         todos.map(todoItem => ({
@@ -74,12 +87,10 @@ export const TodoApp: React.FC<Props> = ({
         })),
       );
     }
-  };
+  }, [isEveryTodoCompleted, todos, updateTodos]);
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-
       {!!todos.length && (
         <button
           type="button"
@@ -93,7 +104,7 @@ export const TodoApp: React.FC<Props> = ({
 
       <form onSubmit={handleSubmit}>
         <input
-          ref={newTodoField}
+          ref={addingTodoField}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { FilterOptions } from '../types/FilterOptions';
@@ -16,27 +16,33 @@ export const TodosFilter: React.FC<Props> = ({
   filterOption,
   selectFilterOption,
 }) => {
-  const handleClearCompletedTodos = (): void => {
+  const handleClearCompletedTodos = useCallback((): void => {
     updateTodos(todos.filter(todoItem => !todoItem.completed));
-  };
+  }, [todos, updateTodos]);
 
-  let notCompletedTodosCount = 0;
+  const notCompletedTodosCount = useCallback((): number => {
+    let count = 0;
 
-  todos.forEach(todo => {
-    if (!todo.completed) {
-      notCompletedTodosCount += 1;
-    }
-  });
+    todos.forEach(todo => {
+      if (!todo.completed) {
+        count += 1;
+      }
+    });
 
-  const completedTodosCount = todos.length - notCompletedTodosCount;
+    return count;
+  }, [todos]);
+
+  const completedTodosQuantity = useMemo(
+    () => todos.length - notCompletedTodosCount(),
+    [todos, notCompletedTodosCount],
+  );
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {notCompletedTodosCount} items left
+        {notCompletedTodosCount()} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -72,12 +78,11 @@ export const TodosFilter: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!completedTodosCount}
+        disabled={!completedTodosQuantity}
         onClick={handleClearCompletedTodos}
       >
         Clear completed

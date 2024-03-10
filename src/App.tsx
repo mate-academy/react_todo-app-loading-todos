@@ -1,7 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-// import { UserWarning } from './UserWarning';
-// import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { FilterOptions } from './types/FilterOptions';
 import { Errors } from './types/Errors';
@@ -12,10 +10,6 @@ import { TodoError } from './components/TodoError';
 import { getTodos } from './api/todos';
 
 export const App: React.FC = () => {
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterOption, setFilterOption] = useState<FilterOptions>(
     FilterOptions.all,
