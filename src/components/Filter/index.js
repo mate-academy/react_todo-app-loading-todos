@@ -1,1 +1,3 @@
-export * from './Filter';
+// export * from './Filter';
+
+export { Filter } from './Filter';
