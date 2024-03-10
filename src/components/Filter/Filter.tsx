@@ -10,7 +10,9 @@ export const Filter: React.FC = () => {
     <nav className="filter" data-cy="Filter">
       <a
         href={Status.All}
-        className="filter__link"
+        className={cn('filter__link', {
+          selected: filterValue === Status.All,
+        })}
         data-cy="FilterLinkAll"
         onClick={() => setFilterValue(Status.All)}
       >
@@ -30,7 +32,9 @@ export const Filter: React.FC = () => {
 
       <a
         href={Status.Completed}
-        className="filter__link"
+        className={cn('filter__link', {
+          selected: filterValue === Status.Completed,
+        })}
         data-cy="FilterLinkCompleted"
         onClick={() => setFilterValue(Status.Completed)}
       >
@@ -39,5 +43,3 @@ export const Filter: React.FC = () => {
     </nav>
   );
 };
-
-// Active link should have the 'selected' class

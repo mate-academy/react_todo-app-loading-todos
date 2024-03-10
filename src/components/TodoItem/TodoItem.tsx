@@ -7,8 +7,6 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  // const [isLoading, setIsLoading] = useState(false);
-
   return (
     <div
       data-cy="Todo"
@@ -21,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked
+          checked={todo.completed}
         />
       </label>
 

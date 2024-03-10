@@ -9,7 +9,7 @@ type TodosContextType = {
   filterValue: Status;
   setFilterValue: React.Dispatch<React.SetStateAction<Status>>;
   errorMessage: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<Status>>;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const TodoContext = React.createContext<TodosContextType>({
@@ -30,12 +30,6 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(() => setErrorMessage(`Unable to load todos`));
-  }, []);
-
   const [filterValue, setFilterValue] = useState<Status>(Status.All);
 
   const value = {
@@ -44,7 +38,19 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
     filterValue,
     setFilterValue,
     errorMessage,
+    setErrorMessage,
   };
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
+        setErrorMessage(`Unable to load todos`);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      });
+  }, []);
 
   return (
     <TodoContext.Provider value={value}> {children} </TodoContext.Provider>

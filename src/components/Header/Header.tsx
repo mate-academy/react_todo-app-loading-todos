@@ -23,32 +23,3 @@ export const Header: React.FC = () => {
     </header>
   );
 };
-
-// import { Todo } from '../../types/Todo';
-// type Props = {
-//   todos: Todo[];
-//   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-// };
-// { todos, setTodos }
-// <Props>
-// const [title, setTitle] = useState('');
-
-// const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-//   setTitle(event.target.value);
-// };
-// const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-//     event.preventDefault();
-
-//     setTodos([
-//       ...todos,
-//       {
-//         id: +new Date(),
-//         userId,
-//         title,
-//         completed: false,
-//       },
-//     ]);
-//   };
-// onSubmit={onSubmit}
-// value={title}
-// onChange={handleTitle}
