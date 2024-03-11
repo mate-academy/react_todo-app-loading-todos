@@ -9,7 +9,7 @@ function wait(delay: number) {
 }
 
 // To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 
 function request<T>(
   url: string,
@@ -43,4 +43,5 @@ export const client = {
   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
+  put: (url: string, data: any) => request(url, 'PUT', data),
 };
