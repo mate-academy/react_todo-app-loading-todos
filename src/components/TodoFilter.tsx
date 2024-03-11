@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import classNames from 'classnames';
 import { Select } from '../types/Select';
 import { DispatchContext, StateContext } from './MainContext';
 import { Todo } from '../types/Todo';
@@ -30,55 +31,40 @@ const getItemsLeft = (todosList: Todo[]): number => {
 };
 
 export const TodoFilter = () => {
-  const { todos } = useContext(StateContext);
+  const { todos, selectPage } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const itemsLeft = getItemsLeft(todos);
 
   return (
-    // {/* Hide the footer if there are no todos */}
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {itemsLeft} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         {filterValues.map(value => (
           <a
             href={value.link}
-            className="filter__link selected"
+            className={classNames('filter__link', {
+              selected: value.title === selectPage,
+            })}
             data-cy={value['data-cy']}
             key={value.id}
             onClick={() =>
               dispatch({
-                type: ActionTypes.SetTypeOfFilter,
-                payload: value.title,
+                type: ActionTypes.SetValuesByKeys,
+                payload: {
+                  selectPage: value.title as Select,
+                },
               })
             }
           >
             {value.title}
           </a>
         ))}
-
-        {/* <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
-          All
-        </a>
-
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className="filter__link"
-          data-cy="FilterLinkCompleted"
-        >
-          Completed
-        </a> */}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

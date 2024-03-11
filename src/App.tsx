@@ -7,24 +7,31 @@ import { TodoFilter } from './components/TodoFilter';
 import { USER_ID, getTodos } from './api/todos';
 import { DispatchContext, StateContext } from './components/MainContext';
 import { ActionTypes } from './types/ActionTypes';
+import { Header } from './components/Header';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
-  const { errorMessage } = useContext(StateContext);
+  const { todos, errorMessage } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+
+  const hasTodos = !!todos.length;
 
   useEffect(() => {
     getTodos()
       .then(responce =>
         dispatch({
-          type: ActionTypes.SetTodos,
-          payload: responce,
+          type: ActionTypes.SetValuesByKeys,
+          payload: {
+            todos: responce,
+          },
         }),
       )
       .catch(() =>
         dispatch({
-          type: ActionTypes.SetErrorMessage,
-          payload: 'Unable to load todos',
+          type: ActionTypes.SetValuesByKeys,
+          payload: {
+            errorMessage: 'Unable to load todos',
+          },
         }),
       );
   }, [dispatch]);
@@ -33,49 +40,20 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  // const handleSubmitTodo = (event: React.FormEvent) => {
-  //   event.preventDefault();
-
-  //   if (query.trim()) {
-  //   }
-  // };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-            />
-          </form>
-        </header>
+        <Header query={query} setQuery={setQuery} />
 
         <TodoList />
 
-        <TodoFilter />
+        {hasTodos && <TodoFilter />}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        // className="notification is-danger is-light has-text-weight-normal"
         className={classNames(
           'notification',
           'is-danger',
@@ -92,23 +70,14 @@ export const App: React.FC = () => {
           className="delete"
           onClick={() =>
             dispatch({
-              type: ActionTypes.SetErrorMessage,
-              payload: '',
+              type: ActionTypes.SetValuesByKeys,
+              payload: {
+                errorMessage: '',
+              },
             })
           }
         />
-        {/* show only one message at a time */}
         {errorMessage}
-        {/* <br />
-          Unable to load todos
-          <br />
-          Title should not be empty
-          <br />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo */}
       </div>
     </div>
   );

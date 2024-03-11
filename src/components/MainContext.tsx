@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { Select } from '../types/Select';
 import { ActionTypes } from '../types/ActionTypes';
@@ -7,10 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-type Action =
-  | { type: ActionTypes.SetTodos; payload: Todo[] }
-  | { type: ActionTypes.SetTypeOfFilter; payload: Select }
-  | { type: ActionTypes.SetErrorMessage; payload: ErrorMessage };
+type Action = { type: ActionTypes.SetValuesByKeys; payload: Partial<State> };
 
 type DispatchType = (action: Action) => void;
 
@@ -44,22 +41,10 @@ export const DispatchContext = React.createContext<DispatchType>(() => {});
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case ActionTypes.SetTodos:
+    case ActionTypes.SetValuesByKeys:
       return {
         ...state,
-        todos: action.payload,
-      };
-
-    case ActionTypes.SetTypeOfFilter:
-      return {
-        ...state,
-        selectPage: action.payload,
-      };
-
-    case ActionTypes.SetErrorMessage:
-      return {
-        ...state,
-        errorMessage: action.payload,
+        ...action.payload,
       };
 
     default:
@@ -69,6 +54,23 @@ const reducer = (state: State, action: Action): State => {
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialValues);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (state.errorMessage) {
+      timeout = setTimeout(() => {
+        dispatch({
+          type: ActionTypes.SetValuesByKeys,
+          payload: {
+            errorMessage: '',
+          },
+        });
+      }, 3000);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [state.errorMessage]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

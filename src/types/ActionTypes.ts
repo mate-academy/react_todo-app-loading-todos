@@ -1,4 +1,5 @@
 export enum ActionTypes {
+  SetValuesByKeys = 'SetValuesByKeys',
   SetTodos = 'SetTodos',
   SetAddTodo = 'Add',
   SetDeleteTodo = 'DeleteTodo',
