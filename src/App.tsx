@@ -154,7 +154,6 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
