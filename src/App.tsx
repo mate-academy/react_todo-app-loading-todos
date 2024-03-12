@@ -28,13 +28,21 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filteringType, setFilteringType] = useState<FilterTypes>('all');
   const [value, setValue] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const unCompletedTodos = todos.filter(todo => todo.completed === false);
   const allCompletedTodos = todos.length - unCompletedTodos.length;
 
   function getAllTodos() {
+    setLoading(true);
     getTodos()
-      .then(setTodos)
-      .catch(() => setErrorMessage(`Unable to load todos`));
+      .then(receivedTodos => {
+        setTodos(receivedTodos);
+        setLoading(false);
+      })
+      .catch(() => {
+        setErrorMessage(`Unable to load todos`);
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -132,14 +140,20 @@ export const App: React.FC = () => {
                 >
                   ×
                 </button>
-              </div>
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div
+                    className={classNames(
+                      'modal-background has-background-white-ter',
+                      { 'is-active': loading },
+                    )}
+                  />
+                  <div className="loader" />
+                </div>
               </div>
             </div>
           ))}
         </section>
+
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
@@ -191,9 +205,8 @@ export const App: React.FC = () => {
               Clear completed
             </button>
           </footer>
-        )
-        }
-      </div >
+        )}
+      </div>
       <div
         data-cy="ErrorNotification"
         className={classNames(
@@ -204,7 +217,7 @@ export const App: React.FC = () => {
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {errorMessage && <div>{errorMessage}</div>}
       </div>
-    </div >
+    </div>
   );
 };
 
