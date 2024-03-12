@@ -28,9 +28,8 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filteringType, setFilteringType] = useState<FilterTypes>('all');
   const [value, setValue] = useState<string>('');
-  const [editing, setEditing] = useState<number | null>(null);
-  const [saving, setSaving] = useState<boolean>(false);
   const unCompletedTodos = todos.filter(todo => todo.completed === false);
+  const allCompletedTodos = todos.length - unCompletedTodos.length;
 
   function getAllTodos() {
     getTodos()
@@ -71,12 +70,7 @@ export const App: React.FC = () => {
     }
 
     e.preventDefault();
-    setSaving(true);
     setValue('');
-  };
-
-  const handleEditTodo = (id: number) => {
-    setEditing(id);
   };
 
   const handleFiltering = (type: FilterTypes) => {
@@ -92,7 +86,7 @@ export const App: React.FC = () => {
           <button
             type="button"
             className={classNames('todoapp__toggle-all', {
-              'is-active': unCompletedTodos.length === 0,
+              active: allCompletedTodos,
             })}
             data-cy="ToggleAllButton"
           />
@@ -115,17 +109,16 @@ export const App: React.FC = () => {
             <div key={todo.id}>
               <div
                 data-cy="Todo"
-                className={classNames(
-                  todo.completed ? 'todo completed' : 'todo',
-                )}
-                onDoubleClick={() => handleEditTodo(todo.id)}
+                className={classNames('todo', {
+                  completed: todo.completed,
+                })}
               >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked
+                    checked={todo.completed}
                   />
                 </label>
 
@@ -140,35 +133,6 @@ export const App: React.FC = () => {
                   ×
                 </button>
               </div>
-
-              {editing === todo.id ? (
-                <div data-cy="Todo" className="todo">
-                  <form>
-                    <input
-                      data-cy="TodoTitleField"
-                      type="text"
-                      className="todo__title-field"
-                      placeholder="Empty todo will be deleted"
-                      value={todo.title}
-                    />
-                  </form>
-                </div>
-              ) : (
-                <>
-                  <span data-cy="TodoTitle" className="todo__title">
-                    {todo.title}
-                  </span>
-
-                  <button
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                  >
-                    ×
-                  </button>
-                </>
-              )}
-
               <div data-cy="TodoLoader" className="modal overlay">
                 <div className="modal-background has-background-white-ter" />
                 <div className="loader" />
@@ -227,8 +191,9 @@ export const App: React.FC = () => {
               Clear completed
             </button>
           </footer>
-        )}
-      </div>
+        )
+        }
+      </div >
       <div
         data-cy="ErrorNotification"
         className={classNames(
@@ -239,7 +204,7 @@ export const App: React.FC = () => {
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {errorMessage && <div>{errorMessage}</div>}
       </div>
-    </div>
+    </div >
   );
 };
 
