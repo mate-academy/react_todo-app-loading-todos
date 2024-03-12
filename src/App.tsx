@@ -29,8 +29,7 @@ export const App: React.FC = () => {
   const [filteringType, setFilteringType] = useState<FilterTypes>('all');
   const [value, setValue] = useState<string>('');
   const [editing, setEditing] = useState<number | null>(null);
-  const [saving, setSaving] = useState<number | null>(null);
-  const allCompleted = todos.map(todo => todo.completed === true);
+  const [saving, setSaving] = useState<boolean>(false);
   const unCompletedTodos = todos.filter(todo => todo.completed === false);
 
   function getAllTodos() {
@@ -72,15 +71,12 @@ export const App: React.FC = () => {
     }
 
     e.preventDefault();
+    setSaving(true);
     setValue('');
   };
 
   const handleEditTodo = (id: number) => {
     setEditing(id);
-  };
-
-  const handleSaveTodo = (id: number) => {
-    setSaving(id);
   };
 
   const handleFiltering = (type: FilterTypes) => {
@@ -96,7 +92,7 @@ export const App: React.FC = () => {
           <button
             type="button"
             className={classNames('todoapp__toggle-all', {
-              allCompleted: 'active',
+              'is-active': unCompletedTodos.length === 0,
             })}
             data-cy="ToggleAllButton"
           />
@@ -114,9 +110,9 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {filteredTodos.map(todo => (
-          <section className="todoapp__main" data-cy="TodoList">
-            {!editing && !saving && (
+        <section className="todoapp__main" data-cy="TodoList">
+          {filteredTodos.map(todo => (
+            <div key={todo.id}>
               <div
                 data-cy="Todo"
                 className={classNames(
@@ -144,62 +140,42 @@ export const App: React.FC = () => {
                   ×
                 </button>
               </div>
-            )}
 
-            {editing === todo.id && (
-              <div data-cy="Todo" className="todo">
-                <form onSubmit={() => handleSaveTodo(todo.id)}>
-                  <input
-                    data-cy="TodoTitleField"
-                    type="text"
-                    className="todo__title-field"
-                    placeholder="Empty todo will be deleted"
-                    value={todo.title}
-                  />
-                </form>
-
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
+              {editing === todo.id ? (
+                <div data-cy="Todo" className="todo">
+                  <form>
+                    <input
+                      data-cy="TodoTitleField"
+                      type="text"
+                      className="todo__title-field"
+                      placeholder="Empty todo will be deleted"
+                      value={todo.title}
+                    />
+                  </form>
                 </div>
+              ) : (
+                <>
+                  <span data-cy="TodoTitle" className="todo__title">
+                    {todo.title}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="todo__remove"
+                    data-cy="TodoDelete"
+                  >
+                    ×
+                  </button>
+                </>
+              )}
+
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
               </div>
-            )}
-
-            {saving === todo.id && (
-              <div data-cy="Todo" className="todo">
-                <label className="todo__status-label">
-                  <input
-                    data-cy="TodoStatus"
-                    type="checkbox"
-                    className="todo__status"
-                  />
-                </label>
-
-                <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title} is being saved now
-                </span>
-
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                >
-                  ×
-                </button>
-
-                <div
-                  data-cy="TodoLoader"
-                  className={classNames('modal overlay', {
-                    'is-active': saving === todo.id,
-                  })}
-                >
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
-              </div>
-            )}
-          </section>
-        ))}
+            </div>
+          ))}
+        </section>
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
@@ -263,7 +239,7 @@ export const App: React.FC = () => {
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {errorMessage && <div>{errorMessage}</div>}
       </div>
-    </div >
+    </div>
   );
 };
 
