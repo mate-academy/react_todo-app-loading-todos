@@ -7,8 +7,6 @@ import { TodoProvide } from './components/Store/TodoContext';
 import { Error } from './components/Error/Error';
 
 export const App: React.FC = () => {
-  console.log(USER_ID);
-
   if (!USER_ID) {
     return <UserWarning />;
   }
