@@ -7,12 +7,12 @@ export const Footer: React.FC = () => {
 
   const hasEnoughTodos = todos.length > 0;
 
-  const uncompletedTodos = todos.filter(todo => todo.completed === false);
+  const uncompletedTodos = todos.filter(todo => !todo.completed);
 
-  const hasEnoughCompletedTodo = todos.some(todo => todo.completed === true);
+  const hasEnoughCompletedTodo = todos.some(todo => todo.completed);
 
   const handleTodoCleaning = () => {
-    setTodos(todos.filter(todo => todo.completed === false));
+    setTodos(todos.filter(todo => !todo.completed));
   };
 
   return (

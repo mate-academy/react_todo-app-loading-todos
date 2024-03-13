@@ -8,7 +8,7 @@ export const TodoList: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     if (filterValue === Status.Active) {
-      return todo.completed === false;
+      return !todo.completed;
     }
 
     if (filterValue === Status.Completed) {
