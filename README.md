@@ -41,7 +41,7 @@ Tests help you to check if your implementation is correct.
 - if you can't fix failed test ask mentors for help
 - delays are important for tests, so make sure every request has `100` - `200` ms delay
 
-## Load Todos by userID
+## Load Todos by
 
 1. Register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
 1. Save the received `userId` in the `api/todos.ts` and use it to load todos
@@ -70,4 +70,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://alionazherdetska.github.io/react_todo-app-loading-todos/) and add it to the PR description.
