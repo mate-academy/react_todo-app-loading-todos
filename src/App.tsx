@@ -5,18 +5,20 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
-type FilterTypes = 'all' | 'active' | 'completed';
+enum FilterTypes {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 function prepareGoods(todos: Todo[], filteringType: FilterTypes): Todo[] {
   const allTodos = [...todos];
 
   switch (filteringType) {
-    case 'all':
-      return allTodos;
-    case 'active':
-      return allTodos.filter(todo => todo.completed === false);
-    case 'completed':
-      return allTodos.filter(todo => todo.completed === true);
+    case FilterTypes.Active:
+      return allTodos.filter(todo => !todo.completed);
+    case FilterTypes.Completed:
+      return allTodos.filter(todo => todo.completed);
     default:
       return allTodos;
   }
@@ -26,7 +28,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [filteringType, setFilteringType] = useState<FilterTypes>('all');
+  const [filteringType, setFilteringType] = useState<FilterTypes>(
+    FilterTypes.All,
+  );
   const [value, setValue] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const unCompletedTodos = todos.filter(todo => todo.completed === false);
@@ -113,12 +117,12 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodos.map(todo => (
-            <div key={todo.id}>
+          {filteredTodos.map(({ id, title, completed }) => (
+            <div key={id}>
               <div
                 data-cy="Todo"
                 className={classNames('todo', {
-                  completed: todo.completed,
+                  completed,
                 })}
               >
                 <label className="todo__status-label">
@@ -126,12 +130,12 @@ export const App: React.FC = () => {
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked={todo.completed}
+                    checked={completed}
                   />
                 </label>
 
                 <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
+                  {title}
                 </span>
                 <button
                   type="button"
@@ -167,7 +171,7 @@ export const App: React.FC = () => {
                   selected: filteringType === 'all',
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => handleFiltering('all')}
+                onClick={() => handleFiltering(FilterTypes.All)}
               >
                 All
               </a>
@@ -178,7 +182,7 @@ export const App: React.FC = () => {
                   selected: filteringType === 'active',
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => handleFiltering('active')}
+                onClick={() => handleFiltering(FilterTypes.Active)}
               >
                 Active
               </a>
@@ -189,7 +193,7 @@ export const App: React.FC = () => {
                   selected: filteringType === 'completed',
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => handleFiltering('completed')}
+                onClick={() => handleFiltering(FilterTypes.Completed)}
               >
                 Completed
               </a>
