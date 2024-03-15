@@ -10,8 +10,6 @@ import { useTodos } from './context/TodosContext';
 export const App: React.FC = () => {
   const { todos } = useTodos();
 
-  console.log(todos);
-
   if (!USER_ID) {
     return <UserWarning />;
   }

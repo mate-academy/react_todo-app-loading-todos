@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
       <button
+        aria-label="toggle all active todos"
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"

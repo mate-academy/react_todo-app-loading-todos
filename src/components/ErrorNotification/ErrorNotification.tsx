@@ -1,14 +1,9 @@
-import { useTodos } from '../../context/TodosContext';
 import cn from 'classnames';
+import { useTodos } from '../../context/TodosContext';
+
 export const ErrorNotification: React.FC = () => {
   const { todosError, handleRemoveError } = useTodos();
 
-  {
-    /* DON'T use conditional rendering to hide the notification */
-  }
-  {
-    /* Add the 'hidden' class to hide the message smoothly */
-  }
   return (
     <div
       data-cy="ErrorNotification"
@@ -17,6 +12,7 @@ export const ErrorNotification: React.FC = () => {
       })}
     >
       <button
+        aria-label="remove error"
         data-cy="HideErrorButton"
         type="button"
         className="delete"

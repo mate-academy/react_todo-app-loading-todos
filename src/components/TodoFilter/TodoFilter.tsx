@@ -1,8 +1,10 @@
+import cn from 'classnames';
 import { useTodos } from '../../context/TodosContext';
 import { Status } from '../../types/Status';
-import cn from 'classnames';
+
 export const TodoFilter: React.FC = () => {
   const { filterStatus, handleFilterTodo } = useTodos();
+
   return (
     <nav className="filter" data-cy="Filter">
       {Object.entries(Status).map(([key, value]) => (

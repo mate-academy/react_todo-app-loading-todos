@@ -1,5 +1,6 @@
-import { Todo } from '../../types/Todo';
 import cn from 'classnames';
+import { Todo } from '../../types/Todo';
+
 type Props = {
   todo: Todo;
 };

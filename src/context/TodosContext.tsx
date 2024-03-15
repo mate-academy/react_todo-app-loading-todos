@@ -67,6 +67,10 @@ const TodosProvider: React.FC<Props> = ({ children }) => {
     initialState,
   );
 
+  const handleRemoveError = () => {
+    dispatch({ type: 'todos/removeError' });
+  };
+
   useEffect(() => {
     const fetchTodos = async () => {
       dispatch({ type: 'loading', payload: true });
@@ -86,10 +90,6 @@ const TodosProvider: React.FC<Props> = ({ children }) => {
 
     fetchTodos();
   }, []);
-
-  const handleRemoveError = () => {
-    dispatch({ type: 'todos/removeError' });
-  };
 
   const handleFilterTodo = (status: FilterStatus) => {
     dispatch({ type: 'todos/setFilterStatus', payload: status });
