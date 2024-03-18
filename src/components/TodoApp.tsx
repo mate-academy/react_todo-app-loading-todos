@@ -7,7 +7,7 @@ import { TodoFooter } from './TodoFooter';
 import { TodosContext } from './Todos-Context';
 
 export const TodoApp: React.FC = () => {
-  const { newTodo, errorMessage } = useContext(TodosContext);
+  const { todos, errorMessage } = useContext(TodosContext);
 
   return (
     <div className="todoapp">
@@ -18,7 +18,7 @@ export const TodoApp: React.FC = () => {
 
         <TodoList />
 
-        {newTodo.length > 0 && <TodoFooter />}
+        {todos.length > 0 && <TodoFooter />}
       </div>
 
       <div

@@ -11,7 +11,7 @@ export const filterTodo = (todos: Todo[], filter: Status): Todo[] => {
 
   switch (filter) {
     case Status.All:
-      return todos;
+      return allTodos;
     case Status.Active:
       return allTodos.filter(todo => !todo.completed);
     case Status.Completed:
