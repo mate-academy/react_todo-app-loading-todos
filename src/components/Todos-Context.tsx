@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { USER_ID, getTodos } from '../api/todos';
 import { UserWarning } from '../UserWarning';
-import { Status, filterTodo } from './TodosFilter';
+import { Status, filterTodo } from '../utils/TodosFilter';
 
 type TodosContextType = {
   todos: Todo[];
