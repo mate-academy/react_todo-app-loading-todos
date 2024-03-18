@@ -6,11 +6,15 @@ export const TodoHeader: React.FC = () => {
   const { query, setQuery, setErrorMessage } = useContext(TodosContext);
 
   const handlerInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+    event.preventDefault();
+  };
+
+  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     if (!query) {
       setErrorMessage('Title should not be empty');
     }
 
-    setQuery(event.target.value);
     event.preventDefault();
     setQuery('');
   };
@@ -25,7 +29,7 @@ export const TodoHeader: React.FC = () => {
       />
 
       {/* Add a todo on form submit */}
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
