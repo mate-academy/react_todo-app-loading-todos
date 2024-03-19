@@ -1,34 +1,10 @@
-import { useEffect } from 'react';
-
 import TodoItem from '../TodoItem/TodoItem';
 
-import { getTodos } from '../../api/todos';
 import { useTodos } from '../../hooks/useTodos';
-import { wait } from '../../utils/fetchClient';
 import { Filter } from '../../types';
 
 export const TodoList: React.FC = () => {
-  const { todos, setTodos, filter, setError, setIsLoading } = useTodos();
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        setIsLoading(true);
-        const fetchedTodos = await getTodos();
-
-        setTodos(fetchedTodos);
-      } catch {
-        setError('Unable to load todos');
-        setIsLoading(false);
-
-        wait(3000).then(() => {
-          setError('');
-        });
-      }
-    };
-
-    fetchTodos();
-  }, []);
+  const { todos, filter } = useTodos();
 
   const filteredTodos = todos.filter(todo => {
     switch (filter) {

@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getTodos } from '../api/todos';
 import { Filter, State, Todo } from '../types';
+import { wait } from '../utils/fetchClient';
 
 const initialTodos: Todo[] = [];
 
 export const TodosContext = React.createContext<State>({
   todos: initialTodos,
-  setTodos: () => {},
+  setTodos: () => { },
   filter: Filter.All,
-  setFilter: () => {},
+  setFilter: () => { },
   error: '',
-  setError: () => {},
+  setError: () => { },
   isLoading: false,
-  setIsLoading: () => {},
+  setIsLoading: () => { },
 });
 
 interface Props {
@@ -34,6 +36,31 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     isLoading,
     setIsLoading,
   };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+
+    wait(3000).then(() => {
+      setError('');
+    });
+  };
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        setIsLoading(true);
+        const fetchedTodos = await getTodos();
+
+        setTodos(fetchedTodos);
+      } catch {
+        handleError('Unable to load todos');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   return (
     <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
