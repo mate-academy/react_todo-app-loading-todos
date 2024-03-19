@@ -1,9 +1,10 @@
 import { createContext, useState } from 'react';
 import { Todo } from '../types';
 
+type SetTodosContextType = React.Dispatch<React.SetStateAction<Todo[]>>;
+
 export const TodosContext = createContext<Todo[]>([]);
-// eslint-disable-next-line
-export const SetTodosContext = createContext<React.Dispatch<React.SetStateAction<Todo[]>>>(() => []);
+export const SetTodosContext = createContext<SetTodosContextType>(() => []);
 
 type Props = {
   children: React.ReactNode;
