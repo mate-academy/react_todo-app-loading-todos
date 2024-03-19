@@ -11,26 +11,32 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todosToShow }) => {
   const setTodos = useContext(SetTodosContext);
 
-  const handleStatusChange = useCallback((todo: Todo) => {
-    patchTodo({
-      ...todo,
-      completed: !todo.completed,
-    }).then(patchedTodo => {
-      setTodos(prevTodos => {
-        return prevTodos.map(prevTodo => {
-          return prevTodo.id === patchedTodo.id ? patchedTodo : prevTodo;
+  const handleStatusChange = useCallback(
+    (todo: Todo) => {
+      patchTodo({
+        ...todo,
+        completed: !todo.completed,
+      }).then(patchedTodo => {
+        setTodos(prevTodos => {
+          return prevTodos.map(prevTodo => {
+            return prevTodo.id === patchedTodo.id ? patchedTodo : prevTodo;
+          });
         });
       });
-    });
-  }, [setTodos]);
+    },
+    [setTodos],
+  );
 
-  const handleTodoDelete = useCallback((todoId: number) => {
-    deleteTodo(todoId);
+  const handleTodoDelete = useCallback(
+    (todoId: number) => {
+      deleteTodo(todoId);
 
-    setTodos(prevTodos => {
-      return prevTodos.filter(prevTodo => prevTodo.id !== todoId);
-    });
-  }, [setTodos]);
+      setTodos(prevTodos => {
+        return prevTodos.filter(prevTodo => prevTodo.id !== todoId);
+      });
+    },
+    [setTodos],
+  );
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
