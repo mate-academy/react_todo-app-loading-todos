@@ -6,5 +6,3 @@ export const USER_ID = 296;
 export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
-
-// Add more methods here https://mate.academy/students-api/todos?userId=296
