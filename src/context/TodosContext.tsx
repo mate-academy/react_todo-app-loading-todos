@@ -7,13 +7,13 @@ const initialTodos: Todo[] = [];
 
 export const TodosContext = React.createContext<State>({
   todos: initialTodos,
-  setTodos: () => { },
+  setTodos: () => {},
   filter: Filter.All,
-  setFilter: () => { },
+  setFilter: () => {},
   error: '',
-  setError: () => { },
+  setError: () => {},
   isLoading: false,
-  setIsLoading: () => { },
+  setIsLoading: () => {},
 });
 
 interface Props {

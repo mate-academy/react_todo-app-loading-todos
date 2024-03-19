@@ -38,7 +38,7 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
-          onClick={handleCheckbox}
+          onChange={handleCheckbox}
         />
       </label>
 
