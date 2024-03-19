@@ -22,7 +22,7 @@ export const TodoList: React.FC<Props> = ({ todosToShow }) => {
         });
       });
     });
-  }, []);
+  }, [setTodos]);
 
   const handleTodoDelete = useCallback((todoId: number) => {
     deleteTodo(todoId);
@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({ todosToShow }) => {
     setTodos(prevTodos => {
       return prevTodos.filter(prevTodo => prevTodo.id !== todoId);
     });
-  }, []);
+  }, [setTodos]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

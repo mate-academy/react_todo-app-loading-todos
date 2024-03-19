@@ -34,7 +34,7 @@ export const Header: React.FC<Props> = ({ setErrorMessage }) => {
     });
 
     setTodos(updatedTodos);
-  }, [todos]);
+  }, [todos, toggledAllCompleted, setTodos]);
 
   const submitTodo = (e: React.FormEvent) => {
     e.preventDefault();

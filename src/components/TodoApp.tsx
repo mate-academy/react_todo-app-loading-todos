@@ -40,7 +40,7 @@ export const TodoApp: React.FC = () => {
       .catch(() => {
         setErrorMessage('Unable to load todos');
       });
-  }, []);
+  }, [setTodos]);
 
   useEffect(() => {
     setErrorMessage('');
