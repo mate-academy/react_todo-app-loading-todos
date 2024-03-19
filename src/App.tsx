@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getCount, getTodos } from './api/todos';
-import { Todo } from './types/Todo';
+import { Todo, Status } from './types/Todo';
 import { TodoList } from './components/todoList';
 import { Footer } from './components/footer';
 import { ErrorNotifications } from './components/errorNotifications';
@@ -10,7 +10,7 @@ import { ErrorNotifications } from './components/errorNotifications';
 export const App: React.FC = () => {
   const [preparedTodos, setPreparedTodos] = useState<Todo[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [selectedFilter, setSelectedFilter] = useState<string>('All');
+  const [selectedFilter, setSelectedFilter] = useState<string>(Status.all);
 
   if (errorMessage) {
     setTimeout(() => {
@@ -22,10 +22,10 @@ export const App: React.FC = () => {
     getTodos()
       .then(todosFromServer => {
         switch (selectedFilter) {
-          case 'Active':
+          case Status.active:
             setPreparedTodos(todosFromServer.filter(todo => !todo.completed));
             break;
-          case 'Completed':
+          case Status.complited:
             setPreparedTodos(todosFromServer.filter(todo => todo.completed));
             break;
           default:
@@ -63,22 +63,19 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {preparedTodos && preparedTodos.length > 0 && (
+        {!!preparedTodos?.length && (
           <>
             <TodoList todos={preparedTodos} />
             <Footer
               selectedFilter={selectedFilter}
-              onSelect={(a: string) => setSelectedFilter(a)}
+              onSelect={setSelectedFilter}
               count={getCount(preparedTodos)}
             />
           </>
         )}
       </div>
 
-      <ErrorNotifications
-        message={errorMessage}
-        onClose={(a: string) => setErrorMessage(a)}
-      />
+      <ErrorNotifications message={errorMessage} onClose={setErrorMessage} />
     </div>
   );
 };
