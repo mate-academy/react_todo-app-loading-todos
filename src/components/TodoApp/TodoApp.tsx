@@ -1,17 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { getTodos } from '../../api/todos';
-import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList';
-import { ErrorMessage } from '../../enums/ErrorMessage';
+import { Errors } from '../../enums/Errors';
 import { TodoFilter } from '../TodoFilter';
-import { FilterStatus } from '../../enums/FilterStatus';
 import { filterTodos } from '../../helpers/filterTodos';
+import { useTodosContext } from '../../hooks/useTodosContext';
 
 export const TodoApp = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
-  const [error, setError] = useState(ErrorMessage.Default);
+  const { todos, setTodos, filter, setFilter, error, setError } =
+    useTodosContext();
 
   const notCompletedCount = todos.filter(todo => !todo.completed).length;
   const completedCount = todos.length - notCompletedCount;
@@ -28,12 +26,12 @@ export const TodoApp = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setError(ErrorMessage.LoadTodos);
+        setError(Errors.LoadTodos);
         setTimeout(() => {
-          setError(ErrorMessage.Default);
+          setError(Errors.Default);
         }, 3000);
       });
-  }, []);
+  }, [setTodos, setError]);
 
   return (
     <div className="todoapp">
@@ -88,14 +86,14 @@ export const TodoApp = () => {
         data-cy="ErrorNotification"
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
-          { hidden: error === ErrorMessage.Default },
+          { hidden: error === Errors.Default },
         )}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setError(ErrorMessage.Default)}
+          onClick={() => setError(Errors.Default)}
         />
         {error}
       </div>

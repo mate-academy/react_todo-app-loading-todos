@@ -1,21 +1,21 @@
 import classNames from 'classnames';
-import { FilterStatus } from '../../enums/FilterStatus';
+import { Status } from '../../enums/Status';
 
 type Props = {
   filter: string;
-  onFilterChange: (value: FilterStatus) => void;
+  onFilterChange: (value: Status) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange }) => {
   return (
     <nav className="filter" data-cy="Filter">
-      {Object.entries(FilterStatus).map(type => {
+      {Object.entries(Status).map(type => {
         const [key, value] = type;
 
         return (
           <a
             key={key}
-            href={filter === FilterStatus.All ? '#/' : `#/${filter}`}
+            href={filter === Status.All ? '#/' : `#/${filter}`}
             className={classNames('filter__link', {
               selected: filter === value,
             })}

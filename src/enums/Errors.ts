@@ -1,4 +1,4 @@
-export enum ErrorMessage {
+export enum Errors {
   Default = '',
   LoadTodos = 'Unable to load todos',
   EmptyTitle = 'Title should not be empty',

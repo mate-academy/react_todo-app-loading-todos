@@ -3,11 +3,16 @@ import React from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { TodoApp } from './components/TodoApp';
+import { TodosContextProvider } from './context/TodosContext';
 
 export const App: React.FC = () => {
   if (!USER_ID) {
     return <UserWarning />;
   } else {
-    return <TodoApp />;
+    return (
+      <TodosContextProvider>
+        <TodoApp />
+      </TodosContextProvider>
+    );
   }
 };

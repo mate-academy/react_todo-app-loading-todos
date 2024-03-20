@@ -1,11 +1,11 @@
-import { FilterStatus } from '../enums/FilterStatus';
+import { Status } from '../enums/Status';
 import { Todo } from '../types/Todo';
 
-export const filterTodos = (todos: Todo[], filter: FilterStatus): Todo[] => {
+export const filterTodos = (todos: Todo[], filter: Status): Todo[] => {
   switch (filter) {
-    case FilterStatus.Active:
+    case Status.Active:
       return todos.filter(todo => !todo.completed);
-    case FilterStatus.Completed:
+    case Status.Completed:
       return todos.filter(todo => todo.completed);
     default:
       return todos;
