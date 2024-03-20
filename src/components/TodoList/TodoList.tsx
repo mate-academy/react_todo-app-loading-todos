@@ -10,7 +10,7 @@ export const TodoList: React.FC<Props> = ({ todos }) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos.map(({ id, title, completed }) => (
       <div data-cy="Todo" key={id} className={cn('todo', { completed })}>
-        <label className="todo__status-label">
+        <label className="todo__status-label" aria-label="status-checkbox">
           <input
             data-cy="TodoStatus"
             type="checkbox"
