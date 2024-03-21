@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { getTodos } from '../../api/todos';
 import { TodoList } from '../TodoList';
 import { Errors } from '../../enums/Errors';
+import { TodoFilter } from '../TodoFilter';
 import { filterTodos } from '../../helpers/filterTodos';
 import { useTodosContext } from '../../hooks/useTodosContext';
-import { TodoFilter } from '../TodoFilter/TodoFilter';
 
 export const TodoApp = () => {
   const { todos, setTodos, filter, setFilter, error, setError } =
