@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { USER_ID, getTodos } from '../../api/todos';
 import { UserWarning } from '../../UserWarning';
-import { Header } from '../Header';
-import { Footer } from '../Footer';
 import { SetTodosContext, TodosContext } from '../TodosContext/TodosContext';
 import { Filter } from '../../types/Filter';
 import { TodoList } from '../TodoList/TodoList';
+import { Header } from '../Header/Header';
+import { Footer } from '../Footer/Footer';
 
 export const TodoApp: React.FC = () => {
   const todos = useContext(TodosContext);
