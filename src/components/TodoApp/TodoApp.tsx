@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { USER_ID, getTodos } from '../../api/todos';
 import { UserWarning } from '../../UserWarning';
 import { Header } from '../Header';
-import { TodoList } from '../TodoList';
 import { Footer } from '../Footer';
 import { SetTodosContext, TodosContext } from '../TodosContext/TodosContext';
 import { Filter } from '../../types/Filter';
+import { TodoList } from '../TodoList/TodoList';
 
 export const TodoApp: React.FC = () => {
   const todos = useContext(TodosContext);
