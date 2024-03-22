@@ -25,6 +25,9 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <TodosContext.Provider value={value}>{children}</TodosContext.Provider>
+    // eslint-disable-next-line prettier/prettier
+    <TodosContext.Provider value={value}>
+      {children}
+    </TodosContext.Provider>
   );
 };

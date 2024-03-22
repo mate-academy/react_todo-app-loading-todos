@@ -11,9 +11,9 @@ export const TodoApp: React.FC = () => {
     useContext(TodosContext);
 
   const todoInput = useRef<HTMLInputElement | null>(null);
-  const isCompletedInTodos = todos.some(todo => todo.completed === true);
+  const isCompletedInTodos = todos.some(todo => todo.completed);
   const totalIncomplete = todos.reduce(
-    (acc, curr) => (curr.completed === false ? acc + 1 : acc),
+    (acc, curr) => (!curr.completed ? acc + 1 : acc),
     0,
   );
 
