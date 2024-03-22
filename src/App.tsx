@@ -6,13 +6,11 @@ import { TodoApp } from './components/TodoApp';
 import { TodosContextProvider } from './context/TodosContext';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  } else {
-    return (
-      <TodosContextProvider>
-        <TodoApp />
-      </TodosContextProvider>
-    );
-  }
+  return USER_ID ? (
+    <TodosContextProvider>
+      <TodoApp />
+    </TodosContextProvider>
+  ) : (
+    <UserWarning />
+  );
 };

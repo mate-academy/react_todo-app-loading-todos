@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { TodoContext } from '../types/TodoContext';
 import { Todo } from '../types/Todo';
 import { Status } from '../enums/Status';
@@ -15,6 +15,17 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [filter, setFilter] = useState<Status>(Status.All);
   const [error, setError] = useState(Errors.Default);
 
+  const notCompletedCount = todos.filter(todo => !todo.completed).length;
+  const completedCount = todos.length - notCompletedCount;
+
+  const showError = useCallback((message: Errors) => {
+    setError(message);
+
+    setTimeout(() => {
+      setError(Errors.Default);
+    }, 3000);
+  }, []);
+
   const contextValue = {
     todos,
     setTodos,
@@ -22,6 +33,9 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
     setFilter,
     error,
     setError,
+    showError,
+    notCompletedCount,
+    completedCount,
   };
 
   return (

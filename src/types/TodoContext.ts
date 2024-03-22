@@ -10,4 +10,7 @@ export type TodoContext = {
   setFilter: Dispatch<SetStateAction<Status>>;
   error: Errors;
   setError: Dispatch<SetStateAction<Errors>>;
+  showError: (message: Errors) => void;
+  notCompletedCount: number;
+  completedCount: number;
 };
