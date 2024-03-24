@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import * as todoService from './api/todos';
@@ -14,17 +14,16 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState(Status.All);
   const [selectAllTodos, setSelectAllTodos] = useState(false);
   const [loaderId, setLoaderId] = useState<number | null>(null);
-  const [isNotCompletedTodoVisible, setIsNotCompletedTodoVisible] =
-    useState(false);
-  const [isEditingTodoVisible, setIsEditingTodoVisible] = useState(false);
-  const [isLoadingTodoVisible, setIsLoadingTodoVisible] = useState(false);
-  // const [isEditing, setIsEditing] = useState(false);
-  // const [editingTitle, setEditingTitle] = useState('');
+  const [isNotCompletedTodoVisible] = useState(false);
+  const [isEditingTodoVisible] = useState(false);
+  const [isLoadingTodoVisible] = useState(false);
+  const titleField = useRef<HTMLInputElement>(null);
 
-  // const handleDoubleClickEdit = (todoId: number, todoTitle: string) => {
-  //   setIsEditing(true);
-  //   setEditingTitle(todoTitle);
-  // };
+  useEffect(() => {
+    if (titleField.current && todos) {
+      titleField.current.focus();
+    }
+  }, [todos]);
 
   const handleChangeStatus = (
     status: Status,
@@ -36,9 +35,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     todoService.getTodos().then(setTodos);
-    setIsNotCompletedTodoVisible(false);
-    setIsEditingTodoVisible(false);
-    setIsLoadingTodoVisible(false);
   }, []);
 
   function addTodos({ title, userId, completed }: Todo) {
@@ -67,7 +63,7 @@ export const App: React.FC = () => {
         title: titleTodo,
         userId: todoService.USER_ID,
         completed: false,
-        id: Date.now(),
+        id: 0,
       };
 
       addTodos(newTodo);
@@ -195,6 +191,7 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              ref={titleField}
               value={titleTodo}
               onChange={e => {
                 setTitleTodo(e.target.value);
@@ -221,16 +218,10 @@ export const App: React.FC = () => {
                   className="todo__status"
                   placeholder="Empty todo will be deleted"
                   checked={areAllCompleted}
-                  // value={editingTitle}
-                  // onChange={(e) => setEditingTitle(e.target.value)}
                 />
               </label>
 
-              <span
-                data-cy="TodoTitle"
-                className="todo__title"
-                // onDoubleClick={() => handleDoubleClickEdit(todo.id, todo.title)}
-              >
+              <span data-cy="TodoTitle" className="todo__title">
                 {todo.title}
               </span>
 
@@ -430,8 +421,4 @@ export const App: React.FC = () => {
       </div>
     </div>
   );
-  {
-    /*
-        Unable to update a todo */
-  }
 };
