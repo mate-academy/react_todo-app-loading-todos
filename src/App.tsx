@@ -10,32 +10,20 @@ import { ErrorNotification } from './components/ErrorNotification';
 import { TodoFilter } from './components/TodoFilter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-
-function handleFilteredTodos(todos: Todo[], filterSelected: string) {
-  const filteredTodos = [...todos];
-
-  switch (filterSelected) {
-    case FilterTodos.active:
-      return filteredTodos.filter(todo => !todo.completed);
-    case FilterTodos.completed:
-      return filteredTodos.filter(todo => todo.completed);
-    default:
-      return filteredTodos;
-  }
-}
+import { handleFilteredTodos } from './utils/handleFiltredTodos';
+import { handleRequestError } from './utils/handleRequestError';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterSelected, setFilterSelected] = useState('All');
+  const [filterSelected, setFilterSelected] = useState<FilterTodos>(
+    FilterTodos.all,
+  );
   const [error, setError] = useState<Errors>(Errors.default);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setError(Errors.loadTodo));
-    setTimeout(() => {
-      setError(Errors.default);
-    }, 300);
+      .catch(() => handleRequestError(Errors.loadTodo, setError));
   }, [setTodos, setError]);
 
   if (!USER_ID) {
