@@ -10,11 +10,7 @@ export const TodoFilter: React.FC<Props> = ({
   filterSelected,
   setFilterSelected,
 }) => {
-  const filterMenu = [
-    FilterTodos.all,
-    FilterTodos.active,
-    FilterTodos.completed,
-  ];
+  const filterMenu = Object.values(FilterTodos);
 
   return (
     <nav className="filter" data-cy="Filter">

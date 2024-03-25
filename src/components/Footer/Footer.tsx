@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = ({
           data-cy="ClearCompletedButton"
           disabled={completedTodos.length < 1}
         >
-          {FilterTodos.clearCompleted}
+          Clear completed
         </button>
       </footer>
     </div>
