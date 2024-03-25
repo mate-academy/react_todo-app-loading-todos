@@ -3,11 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-
 import { FilterTodos } from './types/FilterTodos';
 import { Errors } from './types/Errors';
 import { ErrorNotification } from './components/ErrorNotification';
-// import { TodoFilter } from './components/TodoFilter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { handleFilteredTodos } from './utils/handleFiltredTodos';
