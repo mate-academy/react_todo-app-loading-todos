@@ -7,11 +7,12 @@ import { Todo } from './types/Todo';
 import { FilterTodos } from './types/FilterTodos';
 import { Errors } from './types/Errors';
 import { ErrorNotification } from './components/ErrorNotification';
-import { TodoFilter } from './components/TodoFilter';
+// import { TodoFilter } from './components/TodoFilter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { handleFilteredTodos } from './utils/handleFiltredTodos';
 import { handleRequestError } from './utils/handleRequestError';
+import { Footer } from './components/Footer/Footer';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -48,24 +49,12 @@ export const App: React.FC = () => {
           <>
             <TodoList todos={preparedTodos} />
 
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {activeTodos.length} items left
-              </span>
-              <TodoFilter
-                filterSelected={filterSelected}
-                setFilterSelected={filter => setFilterSelected(filter)}
-              />
-              {/* Active link should have the 'selected' class */}
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                disabled={completedTodos.length < 1}
-              >
-                {FilterTodos.clearCompleted}
-              </button>
-            </footer>
+            <Footer
+              filterSelected={filterSelected}
+              setFilterSelected={setFilterSelected}
+              completedTodos={completedTodos}
+              activeTodos={activeTodos}
+            />
           </>
         )}
       </div>
