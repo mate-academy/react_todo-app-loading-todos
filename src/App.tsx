@@ -58,14 +58,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -76,17 +74,15 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <>
             <TodoList todos={filteredTodos} />
 
-            {/* Hide the footer if there are no todos */}
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="TodosCounter">
                 {todos.filter(todo => !todo.completed).length} items left
               </span>
 
-              {/* Active link should have the 'selected' class */}
               <nav className="filter" data-cy="Filter">
                 <a
                   href="#/"
@@ -94,9 +90,7 @@ export const App: React.FC = () => {
                     selected: selectedFilter === Filter.All,
                   })}
                   data-cy="FilterLinkAll"
-                  onClick={() => {
-                    setSelectedFilter(Filter.All);
-                  }}
+                  onClick={() => setSelectedFilter(Filter.All)}
                 >
                   All
                 </a>
@@ -107,9 +101,7 @@ export const App: React.FC = () => {
                     selected: selectedFilter === Filter.Active,
                   })}
                   data-cy="FilterLinkActive"
-                  onClick={() => {
-                    setSelectedFilter(Filter.Active);
-                  }}
+                  onClick={() => setSelectedFilter(Filter.Active)}
                 >
                   Active
                 </a>
@@ -120,15 +112,12 @@ export const App: React.FC = () => {
                     selected: selectedFilter === Filter.Completed,
                   })}
                   data-cy="FilterLinkCompleted"
-                  onClick={() => {
-                    setSelectedFilter(Filter.Completed);
-                  }}
+                  onClick={() => setSelectedFilter(Filter.Completed)}
                 >
                   Completed
                 </a>
               </nav>
 
-              {/* this button should be disabled if there are no completed todos */}
               <button
                 type="button"
                 className="todoapp__clear-completed"
@@ -141,8 +130,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={classNames(
@@ -154,16 +141,7 @@ export const App: React.FC = () => {
         )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
         {error}
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );

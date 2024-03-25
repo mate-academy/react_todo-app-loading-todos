@@ -7,10 +7,12 @@ type Props = {
 };
 
 export const TodoElement: React.FC<Props> = ({ todo }) => {
+  const { title, completed } = todo;
+
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames('todo', { completed: completed })}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
@@ -18,32 +20,18 @@ export const TodoElement: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
 
-      {/* FOR EDITING This form is shown instead of the title and remove button */}
-      {/* <form>
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form> */}
-
-      {/* overlay will cover the todo while it is being deleted or updated */}
-      {/* 'is-active' class puts this modal on top of the todo */}
       <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
