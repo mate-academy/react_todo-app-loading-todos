@@ -6,7 +6,7 @@ import { TodoItem } from './TodoItem';
 export const TodoList: FC = () => {
   const { todos, filter } = useTodos();
 
-  const visibleTodos = filterTodos([...todos], filter);
+  const visibleTodos = filterTodos(todos, filter);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

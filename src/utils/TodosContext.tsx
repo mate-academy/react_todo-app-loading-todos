@@ -31,12 +31,7 @@ type Props = {
 };
 
 export const TodosProvider: FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const stored = localStorage.getItem('todos');
-
-    return stored ? JSON.parse(stored) : [];
-  });
-
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
   const [error, setError] = useState<Error>(null);
