@@ -33,7 +33,6 @@ export const TodoHeader: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
         className="todoapp__toggle-all active"
@@ -41,7 +40,6 @@ export const TodoHeader: React.FC = () => {
         onClick={toggleCompletedAll}
       />
 
-      {/* Add a todo on form submit */}
       <form name="todo-text" onSubmit={handleSubmit}>
         <input
           value={query}

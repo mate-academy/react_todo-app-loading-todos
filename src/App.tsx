@@ -1,11 +1,11 @@
 import React from 'react';
-import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { TodoHeader } from './components/TodoHeader';
 import { useTodos } from './utils/TodoContext';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
+import { TodoError } from './components/TodoError';
 
 export const App: React.FC = () => {
   const { todos, isLoading, error } = useTodos();
@@ -27,18 +27,7 @@ export const App: React.FC = () => {
         {!isLoading && !error && isTodos && <TodoFooter />}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          {
-            hidden: !error,
-          },
-        )}
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {error?.message}
-      </div>
+      <TodoError />
     </div>
   );
 };

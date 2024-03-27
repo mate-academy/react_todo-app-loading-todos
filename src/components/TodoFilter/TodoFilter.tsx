@@ -5,41 +5,23 @@ import { Filter } from '../../types/Filter';
 
 export const TodoFilter: React.FC = () => {
   const { filter, setFilter } = useTodos();
+  const filterMenu = Object.values(Filter);
 
   return (
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        data-cy="FilterLinkAll"
-        className={cn('filter__link', {
-          selected: filter === Filter.ALL,
-        })}
-        onClick={() => setFilter(Filter.ALL)}
-      >
-        All
-      </a>
-
-      <a
-        href="#/active"
-        data-cy="FilterLinkActive"
-        className={cn('filter__link', {
-          selected: filter === Filter.ACTIVE,
-        })}
-        onClick={() => setFilter(Filter.ACTIVE)}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        data-cy="FilterLinkCompleted"
-        className={cn('filter__link', {
-          selected: filter === Filter.COMPLETED,
-        })}
-        onClick={() => setFilter(Filter.COMPLETED)}
-      >
-        Completed
-      </a>
+      {filterMenu.map(filterOption => (
+        <a
+          key={filterOption}
+          href={filterOption === Filter.ALL ? '#/' : `#/` + filterOption}
+          data-cy={`FilterLink${filterOption}`}
+          className={cn('filter__link', {
+            selected: filter === filterOption,
+          })}
+          onClick={() => setFilter(filterOption)}
+        >
+          {filterOption}
+        </a>
+      ))}
     </nav>
   );
 };

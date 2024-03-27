@@ -43,7 +43,7 @@ export const TodosProvider: FC<Props> = ({ children }) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const addTodo = (newTodo: Todo) => {
-    setTodos([...todos, newTodo]);
+    setTodos(prevTodos => [...prevTodos, newTodo]);
   };
 
   const removeTodo = (id: number) => {
