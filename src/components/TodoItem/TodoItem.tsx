@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -62,12 +60,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       })}
       onDoubleClick={() => toggleEditTodo(todo.id)}
     >
-      <label className="todo__status-label">
+      <label className="todo__status-label" aria-label="todo__status">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          id={`toggle-view-${todo.id}`}
           checked={todo.completed}
           onChange={() => toggleCompletedTodo(todo.id)}
         />
@@ -102,7 +99,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         </form>
       )}
 
-      {/* overlay will cover the todo while it is being deleted or updated */}
       <div
         data-cy="TodoLoader"
         className={cn('modal overlay', {

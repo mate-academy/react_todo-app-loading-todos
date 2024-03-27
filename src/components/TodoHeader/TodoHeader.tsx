@@ -4,7 +4,7 @@ import { USER_ID } from '../../api/todos';
 
 export const TodoHeader: React.FC = () => {
   const [query, setQuery] = useState<string>('');
-  const { addTodo, setTodos, todos, isLoading } = useTodos();
+  const { addTodo, setTodos, isLoading } = useTodos();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!query || isLoading) {
@@ -22,13 +22,15 @@ export const TodoHeader: React.FC = () => {
   };
 
   const toggleCompletedAll = () => {
-    const allCompleted = todos.every(todo => todo.completed);
-    const updatedTodos = todos.map(todo => ({
-      ...todo,
-      completed: !allCompleted,
-    }));
+    setTodos(prevTodos => {
+      const allCompleted = prevTodos.every(todo => todo.completed);
+      const updatedTodos = prevTodos.map(todo => ({
+        ...todo,
+        completed: !allCompleted,
+      }));
 
-    setTodos(updatedTodos);
+      return updatedTodos;
+    });
   };
 
   return (

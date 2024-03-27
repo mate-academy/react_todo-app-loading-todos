@@ -47,16 +47,8 @@ export const TodosProvider: FC<Props> = ({ children }) => {
   };
 
   const removeTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
   };
-
-  useEffect(() => {
-    const clearError = setTimeout(() => {
-      setError(null);
-    }, 3000);
-
-    return () => clearTimeout(clearError);
-  }, [error]);
 
   useEffect(() => {
     const fetchTodos = async () => {

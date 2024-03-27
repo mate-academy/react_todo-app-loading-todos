@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import cn from 'classnames';
 import { useTodos } from '../../utils/TodoContext';
 
 export const TodoError: React.FC = () => {
-  const { error } = useTodos();
+  const { error, setError } = useTodos();
+
+  useEffect(() => {
+    const clearError = setTimeout(() => {
+      setError(null);
+    }, 3000);
+
+    return () => clearTimeout(clearError);
+  }, [error, setError]);
 
   return (
     <div
