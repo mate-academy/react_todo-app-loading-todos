@@ -10,7 +10,6 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo, onToggle }) => {
   const [editing, setEditing] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [editedTitle, setEditedTitle] = useState(todo.title);
 
   const handleDoubleClick = () => {
@@ -20,6 +19,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onToggle }) => {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' || event.key === 'Escape') {
       event.preventDefault();
+      setEditedTitle(todo.title);
       setEditing(false);
     }
   };
@@ -64,7 +64,6 @@ export const TodoItem: React.FC<Props> = ({ todo, onToggle }) => {
             ×
           </button>
 
-          {/* overlay will cover the todo while it is being deleted or updated */}
           <div data-cy="TodoLoader" className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />

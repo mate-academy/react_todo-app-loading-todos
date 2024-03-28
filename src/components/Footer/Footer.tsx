@@ -1,27 +1,20 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Filter } from '../Filter';
-import { FilterStatus } from '../../types/FilterStatus';
+import { useTodos } from '../../TodosContext';
 
-type Props = {
-  filterStatus: string;
-  setFilterStatus: Dispatch<SetStateAction<FilterStatus>>;
-  quantityTodos: number;
-};
+export const Footer: React.FC = () => {
+  const { todos } = useTodos();
 
-export const Footer: React.FC<Props> = ({
-  filterStatus,
-  setFilterStatus,
-  quantityTodos,
-}) => {
+  const quantityTodos: number = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {quantityTodos} items left
       </span>
 
-      <Filter filterStatus={filterStatus} setFilterStatus={setFilterStatus} />
+      <Filter />
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

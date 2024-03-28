@@ -1,13 +1,23 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { TodoItem } from '../TodoItem';
 import { Todo } from '../../types/Todo';
+import { useTodos } from '../../TodosContext';
+import { FilterStatus } from '../../types/FilterStatus';
 
-type Props = {
-  todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
-};
+export const TodoList: React.FC = () => {
+  const { todos, setTodos, filterStatus } = useTodos();
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
+  const filteredTodos = todos.filter(todo => {
+    switch (filterStatus) {
+      case FilterStatus.Active:
+        return !todo.completed;
+      case FilterStatus.Completed:
+        return todo.completed;
+      default:
+        return true;
+    }
+  });
+
   const handleToggleTodo = (id: number) => {
     setTodos((prevTodos: Todo[]) => {
       const updatedTodos = prevTodos.map(todo =>
@@ -20,7 +30,7 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
 
   return (
     <>
-      {todos.map(todo => (
+      {filteredTodos.map(todo => (
         <TodoItem
           key={todo.id}
           todo={todo}

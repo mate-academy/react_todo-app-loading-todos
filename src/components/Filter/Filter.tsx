@@ -1,13 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import cn from 'classnames';
 import { FilterStatus } from '../../types/FilterStatus';
+import { useTodos } from '../../TodosContext';
 
-type Props = {
-  filterStatus: string;
-  setFilterStatus: Dispatch<SetStateAction<FilterStatus>>;
-};
+export const Filter: React.FC = () => {
+  const { filterStatus, setFilterStatus } = useTodos();
 
-export const Filter: React.FC<Props> = ({ filterStatus, setFilterStatus }) => {
   return (
     <>
       {Object.values(FilterStatus).map(status => (
