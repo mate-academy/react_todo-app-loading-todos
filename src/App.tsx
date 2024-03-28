@@ -5,15 +5,14 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { Filter, Footer } from './components/Footer';
 import { ErrorMessage, Notification } from './components/Notification';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
-  const [filterValue, setFilterValue] = useState('all');
+  const [filterValue, setFilterValue] = useState<Filter>(Filter.all);
   const timerId = useRef(0);
 
   function showError(message: ErrorMessage | null) {
@@ -38,25 +37,24 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useMemo(() => {
-    setFilteredTodos(
-      todos.filter(todo =>
-        filterValue === 'completed'
-          ? todo.completed
-          : filterValue === 'active'
-            ? !todo.completed
-            : true,
-      ),
-    );
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterValue) {
+        case Filter.completed:
+          return todo.completed;
+        case Filter.active:
+          return !todo.completed;
+        default:
+          return true;
+      }
+    });
   }, [filterValue, todos]);
 
   const onClearMessageHandler = () => {
     showError(null);
   };
 
-  const onFilterHandler = (value: string) => {
-    setFilterValue(value);
-  };
+  const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -73,8 +71,8 @@ export const App: React.FC = () => {
             <TodoList todos={filteredTodos} />
             <Footer
               value={filterValue}
-              itemsLeft={todos.filter(todo => !todo.completed).length}
-              onFilter={onFilterHandler}
+              itemsLeft={itemsLeft}
+              onFilter={setFilterValue}
             />
           </>
         )}

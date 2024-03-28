@@ -1,10 +1,16 @@
 import classNames from 'classnames';
 import React from 'react';
 
+export enum Filter {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 type Props = {
-  value: string;
+  value: Filter;
   itemsLeft: number;
-  onFilter: (value: string) => void;
+  onFilter: (value: Filter) => void;
 };
 
 export const Footer: React.FC<Props> = ({ value, itemsLeft, onFilter }) => {
@@ -19,10 +25,12 @@ export const Footer: React.FC<Props> = ({ value, itemsLeft, onFilter }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={classNames('filter__link', { selected: value === 'all' })}
+          className={classNames('filter__link', {
+            selected: value === Filter.all,
+          })}
           data-cy="FilterLinkAll"
           onClick={() => {
-            onFilter('all');
+            onFilter(Filter.all);
           }}
         >
           All
@@ -31,11 +39,11 @@ export const Footer: React.FC<Props> = ({ value, itemsLeft, onFilter }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: value === 'active',
+            selected: value === Filter.active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => {
-            onFilter('active');
+            onFilter(Filter.active);
           }}
         >
           Active
@@ -44,11 +52,11 @@ export const Footer: React.FC<Props> = ({ value, itemsLeft, onFilter }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: value === 'completed',
+            selected: value === Filter.completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => {
-            onFilter('completed');
+            onFilter(Filter.completed);
           }}
         >
           Completed
