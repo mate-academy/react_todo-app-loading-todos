@@ -2,7 +2,7 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
-import { ErrorContext, TodosContext } from './TodoContext';
+import { ErrorContext, LoadingContext, TodosContext } from './TodoContext';
 import { deleteTodos, editTodos } from '../api/todos';
 import { Status } from '../types/Status';
 import { getFilteredItems } from '../services/getFilteredItems';
@@ -14,6 +14,7 @@ type Props = {
 export const Main: React.FC<Props> = ({ query }) => {
   const { list, setList } = useContext(TodosContext);
   const { setErrorMessage } = useContext(ErrorContext);
+  const { isLoading } = useContext(LoadingContext);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const listToGo = useMemo(() => {
     return getFilteredItems(list, query);
@@ -133,16 +134,18 @@ export const Main: React.FC<Props> = ({ query }) => {
 
           {/* This todo is in loadind state */}
           {/* 'is-active' class puts this modal on top of the todo */}
-          {/* <div data-cy="TodoLoader" className="modal overlay is-active">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div> */}
-
           {/* overlay will cover the todo while it is being deleted or updated */}
-          <div data-cy="TodoLoader" className="modal overlay">
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
+          {isLoading ? (
+            <div data-cy="TodoLoader" className="modal overlay is-active">
+              <div className="modal-background has-background-white-ter" />
+              <div className={classNames({ loader: isLoading })} />
+            </div>
+          ) : (
+            <div data-cy="TodoLoader" className="modal overlay">
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
+          )}
         </div>
       ))}
     </section>

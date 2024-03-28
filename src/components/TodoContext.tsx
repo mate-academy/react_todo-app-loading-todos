@@ -17,6 +17,11 @@ export const ErrorContext = createContext({
   setErrorMessage: (() => {}) as Dispatch<React.SetStateAction<string>>,
 });
 
+export const LoadingContext = createContext({
+  isLoading: false,
+  setIsLoading: (() => {}) as Dispatch<React.SetStateAction<boolean>>,
+});
+
 type Props = {
   children: React.ReactNode;
 };
@@ -24,6 +29,7 @@ type Props = {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [list, setList] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const todosState = useMemo(
     () => ({
@@ -41,6 +47,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     [errorMessage],
   );
 
+  const loadingState = useMemo(
+    () => ({
+      isLoading,
+      setIsLoading,
+    }),
+    [isLoading],
+  );
+
   useEffect(() => {
     const timeoutId = setTimeout(() => setErrorMessage(''), 3000);
 
@@ -48,10 +62,12 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
   }, [errorMessage]);
 
   return (
-    <ErrorContext.Provider value={errorState}>
-      <TodosContext.Provider value={todosState}>
-        {children}
-      </TodosContext.Provider>
-    </ErrorContext.Provider>
+    <LoadingContext.Provider value={loadingState}>
+      <ErrorContext.Provider value={errorState}>
+        <TodosContext.Provider value={todosState}>
+          {children}
+        </TodosContext.Provider>
+      </ErrorContext.Provider>
+    </LoadingContext.Provider>
   );
 };
