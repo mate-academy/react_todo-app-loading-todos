@@ -11,7 +11,7 @@ import { useTodos } from './utils/TodosContext';
 
 export const App: React.FC = () => {
   const { todos, isLoading, error } = useTodos();
-  const shouldRenderTodos = !isLoading && !error && todos.length > 0;
+  const isTodosPresent = !isLoading && !error && todos.length > 0;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -23,8 +23,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoHeader />
-        {shouldRenderTodos && <TodoList />}
-        {shouldRenderTodos && <TodoFooter />}
+        {isTodosPresent && (
+          <>
+            <TodoList />
+            <TodoFooter />
+          </>
+        )}
       </div>
       <ErrorNotification error={error} />
     </div>

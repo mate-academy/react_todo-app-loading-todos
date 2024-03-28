@@ -46,14 +46,6 @@ export const TodosProvider: FC<Props> = ({ children }) => {
   };
 
   useEffect(() => {
-    const clearError = setTimeout(() => {
-      setError(null);
-    }, 3000);
-
-    return () => clearTimeout(clearError);
-  }, [error]);
-
-  useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
       try {

@@ -1,13 +1,22 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import cn from 'classnames';
 import { useTodos } from '../utils/TodosContext';
+import { Error } from '../types';
 
 interface ErrorNotificationProps {
-  error: { message: string } | null;
+  error: Error;
 }
 
 export const ErrorNotification: FC<ErrorNotificationProps> = ({ error }) => {
   const { setError } = useTodos();
+
+  useEffect(() => {
+    const clearError = setTimeout(() => {
+      setError(null);
+    }, 3000);
+
+    return () => clearTimeout(clearError);
+  }, [error, setError]);
 
   return (
     <div

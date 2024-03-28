@@ -4,3 +4,4 @@ export * from './TodoHeader';
 export * from './TodoFooter';
 export * from './TodoFilter';
 export * from './ErrorNotification';
+export * from './FilterLink';
