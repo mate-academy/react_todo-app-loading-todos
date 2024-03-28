@@ -1,6 +1,6 @@
 import React from 'react';
 import { Filter } from '../Filter';
-import { useTodos } from '../../TodosContext';
+import { useTodos } from '../TodosProvider';
 
 export const Footer: React.FC = () => {
   const { todos } = useTodos();

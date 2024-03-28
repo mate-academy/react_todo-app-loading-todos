@@ -1,15 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import cn from 'classnames';
+import { useTodos } from '../TodosProvider';
 
-type Props = {
-  errorMessage: string;
-  setErrorMessage: Dispatch<SetStateAction<string>>;
-};
+export const ErrorNotification: React.FC = () => {
+  const { errorMessage, setErrorMessage } = useTodos();
 
-export const ErrorNotification: React.FC<Props> = ({
-  errorMessage,
-  setErrorMessage,
-}) => {
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 

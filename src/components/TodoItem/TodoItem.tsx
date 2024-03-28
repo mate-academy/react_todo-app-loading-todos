@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -53,6 +52,7 @@ export const TodoItem: React.FC<Props> = ({ todo, onToggle }) => {
               className="todo__status"
               checked={todo.completed}
               onChange={onToggle}
+              aria-label="Todo status"
             />
           </label>
 

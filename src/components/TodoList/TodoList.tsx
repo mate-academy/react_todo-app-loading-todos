@@ -1,25 +1,12 @@
 import React from 'react';
 import { TodoItem } from '../TodoItem';
-import { Todo } from '../../types/Todo';
-import { useTodos } from '../../TodosContext';
-import { FilterStatus } from '../../types/FilterStatus';
+import { useTodos } from '../TodosProvider';
 
-export const TodoList: React.FC = () => {
-  const { todos, setTodos, filterStatus } = useTodos();
-
-  const filteredTodos = todos.filter(todo => {
-    switch (filterStatus) {
-      case FilterStatus.Active:
-        return !todo.completed;
-      case FilterStatus.Completed:
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+export const TodoList: React.FC = React.memo(function TodoList() {
+  const { filteredTodos, setTodos } = useTodos();
 
   const handleToggleTodo = (id: number) => {
-    setTodos((prevTodos: Todo[]) => {
+    setTodos(prevTodos => {
       const updatedTodos = prevTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       );
@@ -39,4 +26,4 @@ export const TodoList: React.FC = () => {
       ))}
     </>
   );
-};
+});
