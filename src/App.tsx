@@ -24,7 +24,7 @@ export const App: React.FC = () => {
       .then(setList)
       .catch(() => setErrorMessage('Unable to load todos'))
       .finally(() => {
-        setErrorMessage('');
+        setTimeout(() => setErrorMessage(''), 3000);
         setIsLoading(false);
       });
   }, [setErrorMessage, setIsLoading, setList]);
