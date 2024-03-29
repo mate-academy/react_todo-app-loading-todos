@@ -8,7 +8,6 @@ import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 import { getFilterTodos } from './utils/getFilterTodos';
-import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,8 +20,7 @@ export const App: React.FC = () => {
       .catch(() => {
         setErrorMessage('Unable to load todos');
 
-        // setTimeout(() => setErrorMessage(''), 3000);
-        return wait(3000).then(() => setErrorMessage(''));
+        setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
 
