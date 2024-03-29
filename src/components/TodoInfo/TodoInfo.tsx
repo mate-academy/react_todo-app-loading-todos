@@ -13,8 +13,6 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({
   todo,
-  // setInputTodo,
-  // inputTodo,
 }) => {
   const { removeTodo, handleCheck } = useContext(TodosControlContext);
   const [isLoading] = useState(false);
