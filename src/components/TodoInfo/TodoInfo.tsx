@@ -11,9 +11,7 @@ type Props = {
   setInputTodo: (value: string) => void;
 };
 
-export const TodoInfo: React.FC<Props> = ({
-  todo,
-}) => {
+export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const { removeTodo, handleCheck } = useContext(TodosControlContext);
   const [isLoading] = useState(false);
   const inputId = `todo-status-${todo.id}`;
