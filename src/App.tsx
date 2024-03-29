@@ -10,7 +10,7 @@ import { getFilterTodos } from './utils/getFilterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [title, setTitle] = useState('');
+  const [titles, setTitles] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState<Status>(Status.All);
 
@@ -32,28 +32,28 @@ export const App: React.FC = () => {
     });
   }
 
-  let visibleTodos = getFilterTodos([...todos], filter);
+  const visibleTodos = getFilterTodos([...todos], filter);
 
-  const getMaxTodoId = (todos: Todo[]) => {
-    const ids = todos.map(todo => todo.id);
+  const getMaxTodoId = (todo: Todo[]) => {
+    const ids = todo.map(item => item.id);
 
     return Math.max(...ids, 0);
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+    setTitles(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     addTodo({
       id: getMaxTodoId(todos) + 1,
-      title: title,
+      title: titles,
       completed: false,
       userId: getMaxTodoId(todos) + 1,
     });
 
-    setTitle('');
+    setTitles('');
   };
 
   if (!todosApi.USER_ID) {
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={title}
+              value={titles}
               onChange={handleTitleChange}
             />
           </form>
