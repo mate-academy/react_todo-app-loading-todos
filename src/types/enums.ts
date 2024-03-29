@@ -3,8 +3,17 @@ export enum Status {
   'Active' = 'Active',
   'Completed' = 'Completed',
 }
+
 export enum State {
-  'edit' = 'edit',
-  'loading' = 'loading',
-  active = 'active',
+  Edit = 'edit',
+  Loading = 'loading',
+  Active = 'active',
+}
+
+export enum Errors {
+  LoadTodos = 'Unable to load todos',
+  EmptyTitle = 'Title should not be empty',
+  AddTodo = 'Unable to add a todo',
+  DeleteTodo = 'Unable to delete a todo',
+  UpdateTodo = 'Unable to update a todo',
 }

@@ -4,10 +4,10 @@ module.exports = {
     'plugin:cypress/recommended',
   ],
   rules: {
-      "jsx-a11y/label-has-associated-control": [ 0, {
-        "required": {
-          "some": [ "nesting", "id" ]
-        }
-      }]
+      // "jsx-a11y/label-has-associated-control": [ 0, {
+      //   "required": {
+      //     "some": [ "nesting", "id" ]
+      //   }
+      // }]
   },
 };

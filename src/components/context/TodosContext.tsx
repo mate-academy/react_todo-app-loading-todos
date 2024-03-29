@@ -8,11 +8,11 @@ export const TodosContext = React.createContext<Todo[]>([]);
 
 export const TodosControlContext = React.createContext({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeTodo: (todoId: number) => {},
+  removeTodo: (_todoId: number) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addTodo: (todo: Todo) => {},
+  addTodo: (_todo: Todo) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleCheck: (updatedTodo: Todo) => {},
+  handleCheck: (_updatedTodo: Todo) => {},
   handleClearAll: () => {},
   handleCheckAll: () => {},
 });
