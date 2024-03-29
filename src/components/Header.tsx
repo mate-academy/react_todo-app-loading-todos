@@ -13,9 +13,14 @@ const Header: React.FC<Props> = ({
   handleInputChange,
   todosLength,
 }) => {
+  const handleClearInput = () => {
+    handleInputChange({
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
   return (
     <header className="todoapp__header">
-      {/* This button should have `active` class only if all todos are completed */}
       {todosLength > 0 && (
         <button
           type="button"
@@ -24,14 +29,11 @@ const Header: React.FC<Props> = ({
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form
         onSubmit={e => {
           e.preventDefault();
           onAddTodo(e);
-          handleInputChange({
-            target: { value: '' },
-          } as React.ChangeEvent<HTMLInputElement>);
+          handleClearInput();
         }}
       >
         <input

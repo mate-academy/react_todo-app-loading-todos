@@ -50,7 +50,7 @@ export const App: React.FC = () => {
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (todo.trim() !== '') {
+    if (!!todo.trim()) {
       const newTodo: Todo = {
         id: todos.length + 1,
         userId: USER_ID,

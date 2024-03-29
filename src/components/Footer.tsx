@@ -1,6 +1,7 @@
 import React from 'react';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
+import Filter from './Filter';
 
 interface Props {
   todos: Todo[];
@@ -35,22 +36,8 @@ const Footer: React.FC<Props> = ({
         {itemsLeft} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
-      <nav className="filter" data-cy="Filter">
-        {Object.values(Status).map(value => (
-          <a
-            key={value}
-            href={`#${value}`}
-            className={`filter__link ${status === value ? 'selected' : ''}`}
-            onClick={() => onStatusChange(value)}
-            data-cy={`FilterLink${value}`}
-          >
-            {value}
-          </a>
-        ))}
-      </nav>
+      <Filter status={status} onStatusChange={onStatusChange} />
 
-      {/* this button should be disabled if there are no completed todos */}
       {haveCompletedTodos && (
         <button
           type="button"
