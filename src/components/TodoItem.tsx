@@ -35,16 +35,7 @@ const TodoItem: React.FC<Props> = ({ todo, onDeleteTodo }) => {
           checked={todo.completed}
         />
       </label>
-
-      <span
-        data-cy="TodoTitle"
-        className={cn('todo__title', { hidden: isEditing })}
-        onClick={handleEditToggle}
-      >
-        {todo.title}
-      </span>
-
-      {isEditing && (
+      {isEditing ? (
         <form onSubmit={handleSaveEdit}>
           <input
             data-cy="TodoTitleField"
@@ -56,12 +47,17 @@ const TodoItem: React.FC<Props> = ({ todo, onDeleteTodo }) => {
             onBlur={handleSaveEdit}
           />
         </form>
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className={cn('todo__title', { hidden: isEditing })}
+          onClick={handleEditToggle}
+        >
+          {todo.title}
+        </span>
       )}
 
-      <div
-        data-cy="TodoLoader"
-        className={cn('modal overlay', { 'is-active': isEditing })}
-      >
+      <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
