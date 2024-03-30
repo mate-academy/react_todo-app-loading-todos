@@ -15,7 +15,7 @@ export const ErrorNotification: React.FC = () => {
 
     const delay = setTimeout(() => {
       setIsVisible(false);
-      setErrorMessage('');
+      setErrorMessage(null);
     }, 3000);
 
     return () => clearTimeout(delay);

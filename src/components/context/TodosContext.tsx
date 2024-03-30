@@ -1,20 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo, useState } from 'react';
 
 import * as todosServices from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { useError } from './ErrorContext';
+import { Status, TodoError } from '../../types/enums';
 
-export const TodosContext = React.createContext<Todo[]>([]);
+interface TodosContextType {
+  todos: Todo[];
+  statusTodo: Status;
+  inputTodo: string;
+}
+
+const contextValue = {
+  todos: [],
+  statusTodo: Status.All,
+  inputTodo: '',
+};
+
+export const TodosContext = React.createContext<TodosContextType>(contextValue);
 
 export const TodosControlContext = React.createContext({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeTodo: (_todoId: number) => {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addTodo: (_todo: Todo) => {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleCheck: (_updatedTodo: Todo) => {},
   handleClearAll: () => {},
-  handleCheckAll: () => {},
+  toggleAll: () => {},
+  setStatusTodo: (_statusTodo: Status) => {},
+  setInputTodo: (_inputTodo: string) => {},
 });
 
 export function getMaxTodoId(todos: Todo[]) {
@@ -29,6 +42,9 @@ interface Props {
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [inputTodo, setInputTodo] = useState('');
+  const [statusTodo, setStatusTodo] = useState(Status.All);
+
   const { setErrorMessage } = useError();
   const [, setIsLoading] = useState(false);
 
@@ -40,14 +56,14 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
         setTodos(fetchedTodos);
       } catch (error) {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(TodoError.UnableToLoad);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchTodos();
-  }, []);
+  }, [setErrorMessage]);
 
   const removeTodo = (todoId: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
@@ -72,19 +88,29 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     setIsLoading(false);
   };
 
-  const allCompleted = todos.every(todo => todo.completed);
+  const toggleAll = () => {
+    setTodos(prevTodos => {
+      const allCompleted = prevTodos.every(todo => todo.completed);
 
-  const handleCheckAll = () => {
-    const updatedTodo = todos.map(todo => {
-      return { ...todo, completed: !allCompleted };
+      return prevTodos.map(todo => ({
+        ...todo,
+        completed: !allCompleted,
+      }));
     });
-
-    setTodos(updatedTodo);
   };
 
   const handleClearAll = () => {
     setTodos([]);
   };
+
+  const contextValueMemo = useMemo(
+    () => ({
+      todos,
+      statusTodo,
+      inputTodo,
+    }),
+    [todos, statusTodo, inputTodo],
+  );
 
   const methods = useMemo(
     () => ({
@@ -92,14 +118,18 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       addTodo,
       handleCheck,
       handleClearAll,
-      handleCheckAll,
+      toggleAll,
+      setStatusTodo,
+      setInputTodo,
     }),
     [],
   );
 
   return (
     <TodosControlContext.Provider value={methods}>
-      <TodosContext.Provider value={todos}>{children}</TodosContext.Provider>
+      <TodosContext.Provider value={contextValueMemo}>
+        {children}
+      </TodosContext.Provider>
     </TodosControlContext.Provider>
   );
 };

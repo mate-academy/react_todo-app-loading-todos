@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-
 import React, { useContext, useState } from 'react';
 
 import { Todo } from '../../types/Todo';

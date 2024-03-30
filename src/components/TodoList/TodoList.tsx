@@ -1,28 +1,26 @@
-import React from 'react';
-import { Todo } from '../../types/Todo';
+import React, { useContext } from 'react';
 import { TodoInfo } from '../TodoInfo/TodoInfo';
+import { TodosContext, TodosControlContext } from '../context/TodosContext';
+import { getPreparedTodos } from '../../api/todos';
 
-type Props = {
-  todos: Todo[];
-  inputTodo: string;
-  setInputTodo: (value: string) => void;
-};
+export const TodoList: React.FC = () => {
+  const { todos, statusTodo, inputTodo } = useContext(TodosContext);
+  const { setInputTodo } = useContext(TodosControlContext);
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  inputTodo,
-  setInputTodo,
-}) => {
+  const visibleTodos = getPreparedTodos(todos, { statusTodo });
+
   return (
-    <div>
-      {todos.map(todo => (
-        <TodoInfo
-          key={todo.id}
-          todo={todo}
-          inputTodo={inputTodo}
-          setInputTodo={setInputTodo}
-        />
-      ))}
-    </div>
+    <section className="todoapp__main" data-cy="TodoList">
+      <div>
+        {visibleTodos.map(todo => (
+          <TodoInfo
+            key={todo.id}
+            todo={todo}
+            inputTodo={inputTodo}
+            setInputTodo={setInputTodo}
+          />
+        ))}
+      </div>
+    </section>
   );
 };

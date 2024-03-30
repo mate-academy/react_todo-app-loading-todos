@@ -8,28 +8,15 @@ export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-// export const addTodos = (todo: Todo) => {
-//   return client.post<Todo[]>(`/todos?userId=${USER_ID}`);
-// };
-
-// export const deleteTodos = () => {
-//   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
-// };
-
-// export const updateTodos = () => {
-//   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
-// };
-
-// Add more methods here
 type Params = {
-  status: Status;
+  statusTodo: Status;
 };
 
-export const getPreparedTodos = (todos: Todo[], { status }: Params) => {
+export const getPreparedTodos = (todos: Todo[], { statusTodo }: Params) => {
   const preparedTodos = [...todos];
 
   return preparedTodos.filter(todo => {
-    switch (status) {
+    switch (statusTodo) {
       case Status.Active:
         return !todo.completed;
       case Status.Completed:

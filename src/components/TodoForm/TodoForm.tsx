@@ -2,22 +2,22 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import React, { useContext } from 'react';
-import { TodosControlContext } from '../context/TodosContext';
+import { TodosContext, TodosControlContext } from '../context/TodosContext';
 import { useError } from '../context/ErrorContext';
+import { TodoError } from '../../types/enums';
 
-type Props = {
-  inputTodo: string;
-  setInputTodo: (value: string) => void;
-};
-
-export const TodoForm: React.FC<Props> = ({ inputTodo, setInputTodo }) => {
-  const { addTodo } = useContext(TodosControlContext);
+export const TodoForm: React.FC = () => {
+  const { addTodo, setInputTodo } = useContext(TodosControlContext);
+  const { inputTodo } = useContext(TodosContext);
   const { setErrorMessage } = useError();
 
   const handleSumbmitTodo = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!inputTodo.trim()) {
-      setErrorMessage('Title should not be empty');
+
+    const trimmedInput = inputTodo.trim();
+
+    if (!trimmedInput) {
+      setErrorMessage(TodoError.NoTitle);
 
       return;
     }
@@ -25,11 +25,11 @@ export const TodoForm: React.FC<Props> = ({ inputTodo, setInputTodo }) => {
     const newTodo = {
       id: 0,
       userId: 1,
-      title: inputTodo.trim().length ? inputTodo.trim() : 'error',
+      title: trimmedInput,
       completed: false,
     };
 
-    setErrorMessage('');
+    setErrorMessage(null);
     addTodo(newTodo);
     setInputTodo('');
   };

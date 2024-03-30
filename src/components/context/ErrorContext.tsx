@@ -1,18 +1,25 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
+import { TodoError } from '../../types/enums';
 
 interface ErrorContextType {
-  errorMessage: string;
-  setErrorMessage: (message: string) => void;
+  errorMessage: TodoError | null;
+  setErrorMessage: Dispatch<SetStateAction<TodoError | null>>;
 }
 
-const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
+const ErrorContext = createContext<ErrorContextType | null>(null);
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const ErrorProvider: React.FC<Props> = ({ children }) => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<TodoError | null>(null);
 
   return (
     <ErrorContext.Provider value={{ errorMessage, setErrorMessage }}>
@@ -24,7 +31,7 @@ export const ErrorProvider: React.FC<Props> = ({ children }) => {
 export const useError = () => {
   const context = useContext(ErrorContext);
 
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useError must be used within an ErrorProvider');
   }
 
