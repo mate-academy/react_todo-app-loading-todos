@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 
 interface Props {
   onAddTodo: (e: React.FormEvent) => void;
@@ -14,9 +15,11 @@ const Header: React.FC<Props> = ({
   todosLength,
 }) => {
   const handleClearInput = () => {
-    handleInputChange({
+    const event = {
       target: { value: '' },
-    } as React.ChangeEvent<HTMLInputElement>);
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    handleInputChange(event);
   };
 
   return (
@@ -24,7 +27,9 @@ const Header: React.FC<Props> = ({
       {todosLength > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${isAllCompleted ? 'active' : ''}`}
+          className={cn('todoapp__toggle-all', {
+            active: isAllCompleted,
+          })}
           data-cy="ToggleAllButton"
         />
       )}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import cn from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
@@ -8,7 +9,6 @@ import TodoList from './components/TodoList';
 import { Status } from './types/Status';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
@@ -16,13 +16,18 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState<Status>(Status.All);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  const handleError = (ErrorNotification: string) => {
+    setErrorMessage(ErrorNotification);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
+
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-
-        return wait(3000).then(() => setErrorMessage(''));
+        handleError('Unable to load todos');
       });
   }, []);
 
@@ -31,9 +36,7 @@ export const App: React.FC = () => {
   }
 
   const itemsLeft = todos.filter(({ completed }) => !completed).length;
-
   const haveCompletedTodos = todos.some(({ completed }) => completed);
-
   const allCompleted = todos.every(({ completed }) => completed);
 
   const filteredTodos = todos.filter(task => {
@@ -51,23 +54,23 @@ export const App: React.FC = () => {
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!!todo.trim()) {
-      const newTodo: Todo = {
-        id: todos.length + 1,
-        userId: USER_ID,
-        title: todo,
-        completed: false,
-        status: status,
-      };
+      setTodos(prevTodos => {
+        const newTodo: Todo = {
+          id: prevTodos.length + 1,
+          userId: USER_ID,
+          title: todo,
+          completed: false,
+          status: status,
+        };
 
-      setTodos([...todos, newTodo]);
+        return [...prevTodos, newTodo];
+      });
       setTodo('');
     }
   };
 
   const deleteTodo = (id: number) => {
-    const newTodos = todos.filter(todoItem => todoItem.id !== id);
-
-    setTodos(newTodos);
+    setTodos(prevTodos => prevTodos.filter(todoItem => todoItem.id !== id));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,9 +78,7 @@ export const App: React.FC = () => {
   };
 
   const clearCompleted = () => {
-    const newTodos = todos.filter(todoItem => !todoItem.completed);
-
-    setTodos(newTodos);
+    setTodos(prevTodos => prevTodos.filter(todoItem => !todoItem.completed));
   };
 
   return (
@@ -106,7 +107,12 @@ export const App: React.FC = () => {
       </div>
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${errorMessage ? '' : 'hidden'}`}
+        className={cn(
+          'notification is-danger is-light has-text-weight-normal',
+          {
+            hidden: !errorMessage,
+          },
+        )}
       >
         <button
           data-cy="HideErrorButton"

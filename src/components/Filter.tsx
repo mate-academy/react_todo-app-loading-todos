@@ -1,5 +1,6 @@
 import React from 'react';
 import { Status } from '../types/Status';
+import cn from 'classnames';
 
 interface FilterProps {
   status: Status;
@@ -13,7 +14,7 @@ const Filter: React.FC<FilterProps> = ({ status, onStatusChange }) => {
         <a
           key={value}
           href={`#${value}`}
-          className={`filter__link ${status === value ? 'selected' : ''}`}
+          className={cn('filter__link', { selected: status === value })}
           onClick={() => onStatusChange(value)}
           data-cy={`FilterLink${value}`}
         >

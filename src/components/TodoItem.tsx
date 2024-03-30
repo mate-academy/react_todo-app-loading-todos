@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
+import cn from 'classnames';
 
 interface Props {
   todo: Todo;
@@ -24,7 +25,7 @@ const TodoItem: React.FC<Props> = ({ todo, onDeleteTodo }) => {
   };
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
       <label className="todo__status-label" htmlFor={`TodoStatus-${todo.id}`}>
         <input
           id={`TodoStatus-${todo.id}`}
@@ -37,7 +38,7 @@ const TodoItem: React.FC<Props> = ({ todo, onDeleteTodo }) => {
 
       <span
         data-cy="TodoTitle"
-        className={`todo__title ${isEditing ? 'hidden' : ''}`}
+        className={cn('todo__title', { hidden: isEditing })}
         onClick={handleEditToggle}
       >
         {todo.title}
@@ -59,7 +60,7 @@ const TodoItem: React.FC<Props> = ({ todo, onDeleteTodo }) => {
 
       <div
         data-cy="TodoLoader"
-        className={`modal overlay ${isEditing ? 'is-active' : ''}`}
+        className={cn('modal overlay', { 'is-active': isEditing })}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
