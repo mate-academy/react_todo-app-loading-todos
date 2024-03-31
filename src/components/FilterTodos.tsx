@@ -10,36 +10,17 @@ interface Props {
 export const FilterTodos: React.FC<Props> = ({ status, setStatus }) => {
   return (
     <>
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: status === Status.All,
-        })}
-        data-cy="FilterLinkAll"
-        onClick={() => setStatus(Status.All)}
-      >
-        All
-      </a>
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: status === Status.Active,
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => setStatus(Status.Active)}
-      >
-        Active
-      </a>
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: status === Status.Completed,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => setStatus(Status.Completed)}
-      >
-        Completed
-      </a>
+      {Object.values(Status).map(value => (
+        <a
+          key={value}
+          href={`#${value}`}
+          className={classNames('filter__link', { selected: status === value })}
+          onClick={() => setStatus(value)}
+          data-cy={`FilterLink${value}`}
+        >
+          {value}
+        </a>
+      ))}
     </>
   );
 };
