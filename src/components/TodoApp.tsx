@@ -8,25 +8,14 @@ import { Todo } from '../types/Todo';
 import { getTodos } from '../api/todos';
 import { ErrorMessages } from '../types/ErrorMessages';
 import { FilterOptions } from '../types/FilterOptions';
+import { filterTodos } from '../utils/filterTodos';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorMessages | null>(null);
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
 
-  const visibleTodos = [...todos].filter(todo => {
-    switch (filter) {
-      case FilterOptions.Active:
-        return !todo.completed;
-
-      case FilterOptions.Completed:
-        return todo.completed;
-
-      case FilterOptions.All:
-      default:
-        return true;
-    }
-  });
+  const visibleTodos = filterTodos(todos, filter);
 
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
