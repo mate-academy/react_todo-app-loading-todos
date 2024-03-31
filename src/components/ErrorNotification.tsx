@@ -1,19 +1,9 @@
-{
-  /* DON'T use conditional rendering to hide the notification */
-}
-
-{
-  /* Add the 'hidden' class to hide the message smoothly */
-}
-
-import React, { useContext } from 'react';
-import { ErrorContext } from './TodoContext';
+import React from 'react';
 import classNames from 'classnames';
+import { useTodosContext } from './useTodosContext';
 
-type Props = {};
-
-export const ErrorNotification: React.FC<Props> = () => {
-  const { errorMessage, setErrorMessage } = useContext(ErrorContext);
+export const ErrorNotification: React.FC = () => {
+  const { errorMessage, setErrorMessage } = useTodosContext();
 
   return (
     <div
@@ -30,11 +20,6 @@ export const ErrorNotification: React.FC<Props> = () => {
         onClick={() => setErrorMessage('')}
       />
       {errorMessage}
-      {/* Unable to load todos
-        Title should not be empty
-        Unable to add a todo
-        Unable to delete a todo
-        Unable to update a todo */}
     </div>
   );
 };

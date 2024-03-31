@@ -1,23 +1,21 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import classNames from 'classnames';
-import { ErrorContext, TodosContext } from './TodoContext';
-import { addTodos } from '../api/todos';
+import { USER_ID, addTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
+import { useTodosContext } from './useTodosContext';
 
-type Props = {};
-
-export const Header: React.FC<Props> = () => {
-  const { list, setList } = useContext(TodosContext);
-  const { setErrorMessage } = useContext(ErrorContext);
+export const Header: React.FC = () => {
+  const { list, setList, setTempTodo, handleError, setLoadingTodosIds } =
+    useTodosContext();
   const [title, setTitle] = useState('');
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const focusField = useRef<HTMLInputElement>(null);
   const allCompleted = useMemo(() => {
     return list.every((todo: Todo) => todo.completed);
@@ -31,20 +29,39 @@ export const Header: React.FC<Props> = () => {
 
   const handleKeyPress = (event: React.FormEvent) => {
     event.preventDefault();
+    setIsFormSubmitted(true);
 
     if (!title.trim()) {
-      setErrorMessage('Title should not be empty');
+      handleError('Title should not be empty');
+      setIsFormSubmitted(false);
 
       return;
     }
 
-    addTodos({ title })
-      .then(newTodo => {
-        setList(currentTodos => [...currentTodos, newTodo]);
+    const newTodo = {
+      title: title.trim(),
+      completed: false,
+      userId: USER_ID,
+    };
+
+    const tempTodo0 = {
+      id: 0,
+      ...newTodo,
+    };
+
+    setTempTodo(tempTodo0);
+    setLoadingTodosIds([tempTodo0.id]);
+
+    addTodos(newTodo)
+      .then(todoFromResponse => {
+        setList(currentTodos => [...currentTodos, todoFromResponse]);
       })
-      .catch(() => setErrorMessage('Unable to add a todo'))
+      .catch(() => handleError('Unable to add a todo'))
       .finally(() => {
         setTitle('');
+        setIsFormSubmitted(false);
+        setTempTodo(null);
+        setLoadingTodosIds([]);
       });
   };
 
@@ -56,7 +73,7 @@ export const Header: React.FC<Props> = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    setErrorMessage('');
+    handleError('');
   };
 
   const toggleAllTodos = useCallback(() => {
@@ -90,6 +107,7 @@ export const Header: React.FC<Props> = () => {
           value={title}
           onChange={handleInputChange}
           onKeyUp={handleKeyUp}
+          disabled={isFormSubmitted}
         />
       </form>
     </header>

@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Status } from '../types/Status';
-import { TodosContext } from './TodoContext';
 import { Todo } from '../types/Todo';
 import { deleteCompletedTodos } from '../api/todos';
+import { useTodosContext } from './useTodosContext';
 
 type Props = {
   query: Status;
@@ -11,19 +11,27 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ query, setQuery }) => {
-  const { list, setList } = useContext(TodosContext);
-  const containsCompleted = list.some(item => item.completed === true);
+  const { list, setList, setLoadingTodosIds, handleError } = useTodosContext();
+  const completedIds = list
+    .filter(item => item.completed === true)
+    .map(item => item.id);
   const notCompletedQuantity = list.filter(
     (todo: Todo) => !todo.completed,
   ).length;
 
   const handleClearCompleted = () => {
-    const todosToDelete = list.filter(todo => todo.completed);
+    setLoadingTodosIds(completedIds);
 
-    deleteCompletedTodos(todosToDelete);
-    setList(currentTodos => {
-      return currentTodos.filter(todo => !todo.completed);
-    });
+    deleteCompletedTodos(completedIds)
+      .then(() => {
+        setList(currentTodos => {
+          return currentTodos.filter(todo => !todo.completed);
+        });
+      })
+      .catch(() => handleError('Unable to delete completed todos'))
+      .finally(() => {
+        setLoadingTodosIds([]);
+      });
   };
 
   return (
@@ -72,7 +80,7 @@ export const Footer: React.FC<Props> = ({ query, setQuery }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!containsCompleted}
+        disabled={!completedIds}
         onClick={handleClearCompleted}
       >
         Clear completed

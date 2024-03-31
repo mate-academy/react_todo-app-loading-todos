@@ -1,7 +1,7 @@
 import React, {
   Dispatch,
   createContext,
-  useEffect,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -10,16 +10,15 @@ import { Todo } from '../types/Todo';
 export const TodosContext = createContext({
   list: [] as Todo[],
   setList: (() => {}) as Dispatch<React.SetStateAction<Todo[]>>,
-});
-
-export const ErrorContext = createContext({
   errorMessage: '',
   setErrorMessage: (() => {}) as Dispatch<React.SetStateAction<string>>,
-});
-
-export const LoadingContext = createContext({
-  isLoading: false,
-  setIsLoading: (() => {}) as Dispatch<React.SetStateAction<boolean>>,
+  tempTodo: {} as Todo | null,
+  setTempTodo: (() => {}) as Dispatch<React.SetStateAction<Todo | null>>,
+  editingTodo: {} as Todo | null,
+  setEditingTodo: (() => {}) as Dispatch<React.SetStateAction<Todo | null>>,
+  handleError: (_message: string) => undefined,
+  loadingTodosIds: [] as number[],
+  setLoadingTodosIds: (() => {}) as Dispatch<React.SetStateAction<number[]>>,
 });
 
 type Props = {
@@ -29,45 +28,36 @@ type Props = {
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [list, setList] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [loadingTodosIds, setLoadingTodosIds] = useState<number[]>([]);
+
+  const handleError = useCallback((message: string): undefined => {
+    setErrorMessage(message);
+
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  }, []);
 
   const todosState = useMemo(
     () => ({
       list,
       setList,
-    }),
-    [list],
-  );
-
-  const errorState = useMemo(
-    () => ({
       errorMessage,
       setErrorMessage,
+      handleError,
+      tempTodo,
+      setTempTodo,
+      editingTodo,
+      setEditingTodo,
+      loadingTodosIds,
+      setLoadingTodosIds,
     }),
-    [errorMessage],
+    [list, errorMessage, handleError, , tempTodo, editingTodo, loadingTodosIds],
   );
-
-  const loadingState = useMemo(
-    () => ({
-      isLoading,
-      setIsLoading,
-    }),
-    [isLoading],
-  );
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => setErrorMessage(''), 3000);
-
-    return () => clearTimeout(timeoutId);
-  }, [errorMessage]);
 
   return (
-    <LoadingContext.Provider value={loadingState}>
-      <ErrorContext.Provider value={errorState}>
-        <TodosContext.Provider value={todosState}>
-          {children}
-        </TodosContext.Provider>
-      </ErrorContext.Provider>
-    </LoadingContext.Provider>
+    <TodosContext.Provider value={todosState}>{children}</TodosContext.Provider>
   );
 };

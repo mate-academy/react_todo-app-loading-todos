@@ -28,8 +28,8 @@ export const deleteTodos = (todoId: number) => {
   return client.delete(`/todos/${todoId}?userId=${USER_ID}`);
 };
 
-export const deleteCompletedTodos = ([...todos]: Todo[]) => {
-  return todos.map(todo =>
-    client.delete(`/todos/${todo.id}?userId=${USER_ID}`),
+export const deleteCompletedTodos = (todoIds: number[]) => {
+  return Promise.all(
+    todoIds.map(todoId => client.delete(`/todos/${todoId}?userId=${USER_ID}`)),
   );
 };
