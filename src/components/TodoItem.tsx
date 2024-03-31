@@ -11,33 +11,34 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const {
-    list,
-    setList,
+    setTodos,
     editingTodo,
     setEditingTodo,
     handleError,
     setLoadingTodosIds,
-    setErrorMessage,
     loadingTodosIds,
+    setIsInputFocused,
   } = useTodosContext();
 
   const handleCheckbox = (checkedTodo: Todo) => {
-    const updatedList = list.map((item: Todo) => {
-      if (item.id === checkedTodo.id) {
-        return { ...item, completed: !item.completed };
-      }
+    setTodos(currentTodos => {
+      const updatedTodos = currentTodos.map((item: Todo) => {
+        if (item.id === checkedTodo.id) {
+          return { ...item, completed: !item.completed };
+        }
 
-      return item;
+        return item;
+      });
+
+      return updatedTodos;
     });
-
-    setList(updatedList);
   };
 
   const handleTodoDelete = useCallback(
     (todoId: number) => {
       deleteTodos(todoId)
         .then(() => {
-          setList(currentTodos => {
+          setTodos(currentTodos => {
             return currentTodos.filter(
               currentTodo => currentTodo.id !== todoId,
             );
@@ -45,13 +46,14 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           setLoadingTodosIds([]);
         })
         .catch(() => {
-          setErrorMessage('Unable to delete a todo');
+          handleError('Unable to delete a todo');
           setLoadingTodosIds([]);
         });
 
-      setLoadingTodosIds([todoId]);
+      setLoadingTodosIds(currentIds => [...currentIds, todoId]);
+      setIsInputFocused(true);
     },
-    [setErrorMessage, setList, setLoadingTodosIds],
+    [handleError, setIsInputFocused, setTodos, setLoadingTodosIds],
   );
 
   const handleTodoUpdate = useCallback(
@@ -65,7 +67,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
       editTodos(updatedTodo)
         .then(() => {
-          setList(currentTodos =>
+          setTodos(currentTodos =>
             currentTodos.map(currentTodo =>
               currentTodo.id === updatedTodo.id ? updatedTodo : currentTodo,
             ),
@@ -74,7 +76,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         })
         .catch(() => handleError('Unable to update a todo'));
     },
-    [handleTodoDelete, setEditingTodo, handleError, setList],
+    [handleTodoDelete, setEditingTodo, handleError, setTodos],
   );
 
   return (

@@ -11,15 +11,15 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ query }) => {
-  const { list, tempTodo } = useTodosContext();
+  const { todos, tempTodo } = useTodosContext();
 
-  const listToGo = useMemo(() => {
-    return getFilteredItems(list, query);
-  }, [list, query]);
+  const todosToGo = useMemo(() => {
+    return getFilteredItems(todos, query);
+  }, [todos, query]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {listToGo.map((todo: Todo) => (
+      {todosToGo.map((todo: Todo) => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
       {tempTodo && <TodoItem todo={tempTodo} />}

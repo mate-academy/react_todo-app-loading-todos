@@ -12,20 +12,28 @@ import { Todo } from '../types/Todo';
 import { useTodosContext } from './useTodosContext';
 
 export const Header: React.FC = () => {
-  const { list, setList, setTempTodo, handleError, setLoadingTodosIds } =
-    useTodosContext();
+  const {
+    todos,
+    setTodos,
+    setTempTodo,
+    handleError,
+    setLoadingTodosIds,
+    isInputFocused,
+    setIsInputFocused,
+  } = useTodosContext();
   const [title, setTitle] = useState('');
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const focusField = useRef<HTMLInputElement>(null);
   const allCompleted = useMemo(() => {
-    return list.every((todo: Todo) => todo.completed);
-  }, [list]);
+    return todos.every((todo: Todo) => todo.completed);
+  }, [todos]);
 
   useEffect(() => {
-    if (focusField.current) {
+    if (isInputFocused && focusField.current) {
       focusField.current.focus();
+      setIsInputFocused(false);
     }
-  }, []);
+  }, [isInputFocused, setIsInputFocused]);
 
   const handleKeyPress = (event: React.FormEvent) => {
     event.preventDefault();
@@ -50,11 +58,11 @@ export const Header: React.FC = () => {
     };
 
     setTempTodo(tempTodo0);
-    setLoadingTodosIds([tempTodo0.id]);
+    setLoadingTodosIds(currentIds => [...currentIds, tempTodo0.id]);
 
     addTodos(newTodo)
       .then(todoFromResponse => {
-        setList(currentTodos => [...currentTodos, todoFromResponse]);
+        setTodos(currentTodos => [...currentTodos, todoFromResponse]);
       })
       .catch(() => handleError('Unable to add a todo'))
       .finally(() => {
@@ -62,28 +70,31 @@ export const Header: React.FC = () => {
         setIsFormSubmitted(false);
         setTempTodo(null);
         setLoadingTodosIds([]);
+        setIsInputFocused(true);
       });
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
       setTitle('');
+      setIsInputFocused(true);
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     handleError('');
+    setIsInputFocused(true);
   };
 
   const toggleAllTodos = useCallback(() => {
-    const updatedList = list.map((todo: Todo) => ({
-      ...todo,
-      completed: !allCompleted,
-    }));
-
-    setList(updatedList);
-  }, [list, allCompleted, setList]);
+    setTodos(currentTodos =>
+      currentTodos.map((todo: Todo) => ({
+        ...todo,
+        completed: !allCompleted,
+      })),
+    );
+  }, [allCompleted, setTodos]);
 
   return (
     <header className="todoapp__header">
@@ -94,7 +105,7 @@ export const Header: React.FC = () => {
         })}
         data-cy="ToggleAllButton"
         onClick={toggleAllTodos}
-        disabled={list.length === 0}
+        disabled={todos.length === 0}
       />
 
       <form onSubmit={handleKeyPress}>

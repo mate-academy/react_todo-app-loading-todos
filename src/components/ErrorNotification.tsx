@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useTodosContext } from './useTodosContext';
 
 export const ErrorNotification: React.FC = () => {
-  const { errorMessage, setErrorMessage } = useTodosContext();
+  const { errorMessage, handleError, setIsInputFocused } = useTodosContext();
 
   return (
     <div
@@ -17,7 +17,10 @@ export const ErrorNotification: React.FC = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => {
+          handleError('');
+          setIsInputFocused(true);
+        }}
       />
       {errorMessage}
     </div>

@@ -1,25 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { USER_ID, getTodos } from './api/todos';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
-import { TodosContext } from './components/TodoContext';
 import { Status } from './types/Status';
 import { ErrorNotification } from './components/ErrorNotification';
 import { UserWarning } from './UserWarning';
+import { useTodosContext } from './components/useTodosContext';
 
 export const App: React.FC = () => {
-  const { list, setList, setErrorMessage } = useContext(TodosContext);
+  const { todos, setTodos, handleError, setIsInputFocused } = useTodosContext();
   const [query, setQuery] = useState<Status>(Status.All);
 
   useEffect(() => {
+    setIsInputFocused(true);
+
     getTodos()
-      .then(setList)
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => {
-        setTimeout(() => setErrorMessage(''), 3000);
-      });
-  }, [setErrorMessage, setList]);
+      .then(setTodos)
+      .catch(() => handleError('Unable to load todos'));
+  }, [setTodos, handleError, setIsInputFocused]);
 
   return USER_ID ? (
     <div className="todoapp">
@@ -28,7 +27,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList query={query} />
-        {list.length !== 0 && <Footer query={query} setQuery={setQuery} />}
+        {todos.length !== 0 && <Footer query={query} setQuery={setQuery} />}
       </div>
 
       <ErrorNotification />

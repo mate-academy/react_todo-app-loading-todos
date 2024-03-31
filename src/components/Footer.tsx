@@ -11,26 +11,33 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ query, setQuery }) => {
-  const { list, setList, setLoadingTodosIds, handleError } = useTodosContext();
-  const completedIds = list
+  const {
+    todos,
+    setTodos,
+    setLoadingTodosIds,
+    handleError,
+    setIsInputFocused,
+  } = useTodosContext();
+  const completedIds = todos
     .filter(item => item.completed === true)
     .map(item => item.id);
-  const notCompletedQuantity = list.filter(
+  const notCompletedQuantity = todos.filter(
     (todo: Todo) => !todo.completed,
   ).length;
 
   const handleClearCompleted = () => {
-    setLoadingTodosIds(completedIds);
+    setLoadingTodosIds(currentIds => [...currentIds, ...completedIds]);
 
     deleteCompletedTodos(completedIds)
       .then(() => {
-        setList(currentTodos => {
+        setTodos(currentTodos => {
           return currentTodos.filter(todo => !todo.completed);
         });
       })
       .catch(() => handleError('Unable to delete completed todos'))
       .finally(() => {
         setLoadingTodosIds([]);
+        setIsInputFocused(true);
       });
   };
 
@@ -40,40 +47,20 @@ export const Footer: React.FC<Props> = ({ query, setQuery }) => {
         {notCompletedQuantity} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: query === Status.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setQuery(Status.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: query === Status.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setQuery(Status.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: query === Status.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setQuery(Status.Completed)}
-        >
-          Completed
-        </a>
+        {Object.values(Status).map(status => (
+          <a
+            key={status}
+            href={`#/${status.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: query === status,
+            })}
+            data-cy={`FilterLink${status}`}
+            onClick={() => setQuery(status)}
+          >
+            {status}
+          </a>
+        ))}
       </nav>
 
       <button

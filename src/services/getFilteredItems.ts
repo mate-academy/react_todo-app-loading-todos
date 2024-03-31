@@ -2,18 +2,12 @@ import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
 export const getFilteredItems = (list: Todo[], query: Status) => {
-  let filteredItems = [...list];
-
   switch (query) {
     case Status.Active:
-      filteredItems = filteredItems.filter(item => !item.completed);
-      break;
+      return list.filter(item => !item.completed);
     case Status.Completed:
-      filteredItems = filteredItems.filter(item => item.completed);
-      break;
+      return list.filter(item => item.completed);
     default:
-      break;
+      return list;
   }
-
-  return filteredItems;
 };

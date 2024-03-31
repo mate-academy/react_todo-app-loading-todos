@@ -1,36 +1,22 @@
-import React, {
-  Dispatch,
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
+import { TodosContextType } from '../types/TodosContextType';
 
-export const TodosContext = createContext({
-  list: [] as Todo[],
-  setList: (() => {}) as Dispatch<React.SetStateAction<Todo[]>>,
-  errorMessage: '',
-  setErrorMessage: (() => {}) as Dispatch<React.SetStateAction<string>>,
-  tempTodo: {} as Todo | null,
-  setTempTodo: (() => {}) as Dispatch<React.SetStateAction<Todo | null>>,
-  editingTodo: {} as Todo | null,
-  setEditingTodo: (() => {}) as Dispatch<React.SetStateAction<Todo | null>>,
-  handleError: (_message: string) => undefined,
-  loadingTodosIds: [] as number[],
-  setLoadingTodosIds: (() => {}) as Dispatch<React.SetStateAction<number[]>>,
-});
+export const TodosContext = createContext<TodosContextType | undefined>(
+  undefined,
+);
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
-  const [list, setList] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [loadingTodosIds, setLoadingTodosIds] = useState<number[]>([]);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleError = useCallback((message: string): undefined => {
     setErrorMessage(message);
@@ -42,8 +28,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
 
   const todosState = useMemo(
     () => ({
-      list,
-      setList,
+      todos,
+      setTodos,
       errorMessage,
       setErrorMessage,
       handleError,
@@ -53,8 +39,19 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       setEditingTodo,
       loadingTodosIds,
       setLoadingTodosIds,
+      isInputFocused,
+      setIsInputFocused,
     }),
-    [list, errorMessage, handleError, , tempTodo, editingTodo, loadingTodosIds],
+    [
+      todos,
+      errorMessage,
+      handleError,
+      tempTodo,
+      editingTodo,
+      loadingTodosIds,
+      isInputFocused,
+      setIsInputFocused,
+    ],
   );
 
   return (
