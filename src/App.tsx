@@ -1,12 +1,18 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { wait } from './utils/fetchClient';
-import classNames from 'classnames';
-import { FilterTodos } from './components/FilterTodos';
 import { Status } from './types/Status';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
+import { ErrorNotification } from './components/ErrorNotification';
+
+function hasError(message: string, setErrorMessage: (value: string) => void) {
+  setErrorMessage(message);
+
+  return wait(3000).then(() => setErrorMessage(''));
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,9 +23,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-
-        return wait(3000).then(() => setErrorMessage(''));
+        hasError('Unable to load todos', setErrorMessage);
       });
   }, []);
 
@@ -64,72 +68,17 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {preparedTodos.map((todo: Todo) => (
-            <div
-              data-cy="Todo"
-              className={classNames('todo', { completed: todo.completed })}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                />
-              </label>
-
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
-
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section>
+        <TodoList preparedTodos={preparedTodos} />
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {completedTodosCount} items left
-            </span>
-
-            <nav className="filter" data-cy="Filter">
-              <FilterTodos status={status} setStatus={setStatus} />
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            completedTodosCount={completedTodosCount}
+            status={status}
+            setStatus={setStatus}
+          />
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {errorMessage}
-      </div>
+      <ErrorNotification errorMessage={errorMessage} />
     </div>
   );
 };
