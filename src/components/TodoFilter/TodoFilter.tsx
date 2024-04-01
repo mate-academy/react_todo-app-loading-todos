@@ -1,49 +1,32 @@
 import classNames from 'classnames';
-import { FilteredTodos } from '../../enums/FilteredTodo';
+import { FilterOptions } from '../../enums/FilteredTodo';
 
 interface TodoFilterProps {
-  filterSelected: FilteredTodos;
-  setFilterSelected: (filterSelected: FilteredTodos) => void;
+  filterSelected: FilterOptions;
+  setFilterSelected: (filterSelected: FilterOptions) => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   filterSelected,
   setFilterSelected,
 }) => {
+  const filteringOptions = Object.values(FilterOptions);
+
   return (
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: filterSelected === FilteredTodos.all,
-        })}
-        data-cy="FilterLinkAll"
-        onClick={() => setFilterSelected(FilteredTodos.all)}
-      >
-        {FilteredTodos.all}
-      </a>
-
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: filterSelected === FilteredTodos.active,
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => setFilterSelected(FilteredTodos.active)}
-      >
-        {FilteredTodos.active}
-      </a>
-
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: filterSelected === FilteredTodos.completed,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => setFilterSelected(FilteredTodos.completed)}
-      >
-        {FilteredTodos.completed}
-      </a>
+      {filteringOptions.map(link => (
+        <a
+          href="#/"
+          key={link}
+          className={classNames('filter__link', {
+            selected: filterSelected === link,
+          })}
+          data-cy={`FilterLink${link}`}
+          onClick={() => setFilterSelected(link)}
+        >
+          {link}
+        </a>
+      ))}
     </nav>
   );
 };

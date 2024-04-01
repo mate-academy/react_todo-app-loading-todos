@@ -8,14 +8,3 @@ export const getTodos = () => {
 };
 
 // Add more methods here
-
-export const processRequest = <T>(
-  request: () => Promise<T>,
-  beforeRequest?: () => void,
-) => {
-  if (beforeRequest) {
-    beforeRequest();
-  }
-
-  return request();
-};

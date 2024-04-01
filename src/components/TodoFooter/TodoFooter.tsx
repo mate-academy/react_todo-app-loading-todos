@@ -1,12 +1,12 @@
-import { FilteredTodos } from '../../enums/FilteredTodo';
+import { FilterOptions } from '../../enums/FilteredTodo';
 import { Todo } from '../../types/Todo';
 import { TodoFilter } from '../TodoFilter/TodoFilter';
 
 interface TodoFooterProps {
   activeTodos: Todo[];
   completedTodos: Todo[];
-  filterSelected: FilteredTodos;
-  setFilterSelected: (filterSelected: FilteredTodos) => void;
+  filterSelected: FilterOptions;
+  setFilterSelected: (filterSelected: FilterOptions) => void;
 }
 
 export const TodoFooter: React.FC<TodoFooterProps> = ({

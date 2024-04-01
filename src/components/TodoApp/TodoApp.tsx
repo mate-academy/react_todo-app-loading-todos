@@ -1,36 +1,24 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { FormEvent, useEffect, useState } from 'react';
-import { getTodos, processRequest } from '../../api/todos';
+import { getTodos } from '../../api/todos';
 import { TodoForm } from '../TodoForm/TodoForm';
 import { Todo } from '../../types/Todo';
 import { TodoList } from '../TodoList/TodoList';
 import { TodoFooter } from '../TodoFooter/TodoFooter';
 import { ErrorNotification } from '../ErrorNotification/ErrorNotification';
 import { Errors } from '../../enums/Errors';
-import { FilteredTodos } from '../../enums/FilteredTodo';
-
-const handleFilteredTodos = (todos: Todo[], filterSelected: FilteredTodos) => {
-  switch (filterSelected) {
-    case FilteredTodos.active:
-      return todos.filter(todo => !todo.completed);
-    case FilteredTodos.completed:
-      return todos.filter(todo => todo.completed);
-    default:
-      return todos;
-  }
-};
+import { FilterOptions } from '../../enums/FilteredTodo';
+import { hendleFilteredTodos } from '../../helpers/hendleFilteredTodos';
 
 export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
-  const [filterSelected, setFilterSelected] = useState<FilteredTodos>(
-    FilteredTodos.all,
+  const [filterSelected, setFilterSelected] = useState<FilterOptions>(
+    FilterOptions.all,
   );
 
-  const preparedTodos = handleFilteredTodos(todos, filterSelected);
-  const activeTodos = handleFilteredTodos(todos, FilteredTodos.active);
-  const completedTodos = handleFilteredTodos(todos, FilteredTodos.completed);
+  const preparedTodos = hendleFilteredTodos(todos, filterSelected);
+  const activeTodos = hendleFilteredTodos(todos, FilterOptions.active);
+  const completedTodos = hendleFilteredTodos(todos, FilterOptions.completed);
 
   const clearErrorMessage = () => {
     setErrorMessage(null);
@@ -45,7 +33,8 @@ export const TodoApp: React.FC = () => {
   };
 
   useEffect(() => {
-    processRequest(getTodos, clearErrorMessage)
+    clearErrorMessage();
+    getTodos()
       .then(setTodos)
       .catch(() => {
         showError(Errors.LoadTodos);
@@ -54,14 +43,6 @@ export const TodoApp: React.FC = () => {
 
   const addTodo = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const formData = new FormData(event.target as HTMLFormElement);
-
-    const name = formData.get('name');
-
-    if (!name) {
-      showError(Errors.EmptyTitle);
-    }
   };
 
   return (
