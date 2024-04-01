@@ -17,17 +17,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(Errors.Load);
-        throw error;
+        setTimeout(() => setErrorMessage(null), 3000);
       });
   }, []);
-
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => setErrorMessage(null), 3000);
-    }
-  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -36,20 +30,25 @@ export const App: React.FC = () => {
   const filterTodos = (todosToFilter: Todo[]) => {
     let filteredTodos: Todo[] = [];
 
-    if (selectedTasks === SelectedTasks.All) {
-      filteredTodos = todosToFilter;
-    }
-
-    if (selectedTasks === SelectedTasks.Completed) {
-      filteredTodos = todosToFilter.filter(todo => todo.completed === true);
-    }
-
-    if (selectedTasks === SelectedTasks.Active) {
-      filteredTodos = todosToFilter.filter(todo => todo.completed === false);
+    switch (selectedTasks) {
+      case SelectedTasks.All:
+        filteredTodos = todosToFilter;
+        break;
+      case SelectedTasks.Completed:
+        filteredTodos = todosToFilter.filter(todo => todo.completed === true);
+        break;
+      case SelectedTasks.Active:
+        filteredTodos = todosToFilter.filter(todo => todo.completed === false);
+        break;
+      default:
+        filteredTodos = todosToFilter;
+        break;
     }
 
     return filteredTodos;
   };
+
+  const filteredTodos = filterTodos(todos);
 
   return (
     <div className="todoapp">
@@ -58,9 +57,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <HeaderInput />
 
-        <TodoList todos={filterTodos(todos)} />
+        <TodoList todos={filteredTodos} />
 
-        {todos.length !== 0 && (
+        {!!todos?.length && (
           <Footer
             todos={todos}
             setTodos={setTodos}
