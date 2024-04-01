@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import { USER_ID, getTodos } from './api/todos';
+import { UserWarning } from './UserWarning';
 
 import { Todo } from './types/Todo';
 import { ErrorMessages } from './types/ErrorMessages';
 import { FilterOptions } from './types/FilterOptions';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
-import { Errors } from './components/Errors/Errors';
+//eslint-disable-next-line max-len
+import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Main } from './components/Main/Main';
-import { UserWarning } from './UserWarning';
 
 const getPreparedTodos = (todos: Todo[], filterOption: FilterOptions) => {
   let preparedTodos = todos;
@@ -25,10 +26,6 @@ const getPreparedTodos = (todos: Todo[], filterOption: FilterOptions) => {
 };
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterOption, setFilterOption] = useState<FilterOptions>(
     FilterOptions.All,
@@ -56,6 +53,10 @@ export const App: React.FC = () => {
     handleRemoveError();
   }, []);
 
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -73,7 +74,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <Errors message={errorMessage} onRemoveError={handleRemoveError} />
+      <ErrorNotification
+        message={errorMessage}
+        onRemoveError={handleRemoveError}
+      />
     </div>
   );
 };

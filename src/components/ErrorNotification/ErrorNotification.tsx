@@ -8,7 +8,10 @@ type Props = {
   onRemoveError: () => void;
 };
 
-export const Errors: React.FC<Props> = ({ message, onRemoveError }) => {
+export const ErrorNotification: React.FC<Props> = ({
+  message,
+  onRemoveError,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
