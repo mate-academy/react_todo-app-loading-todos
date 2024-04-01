@@ -8,11 +8,7 @@ type Props = {
 };
 
 export const Filter: React.FC<Props> = ({ filter, setFilter }) => {
-  const filterOptionsArray = [];
-
-  for (const value of Object.values(FilterOptions)) {
-    filterOptionsArray.push(value);
-  }
+  const filterOptionsArray = Object.values(FilterOptions);
 
   return (
     <nav className="filter" data-cy="Filter">
