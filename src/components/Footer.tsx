@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
-import { deleteCompletedTodos } from '../api/todos';
+import { deleteTodos } from '../api/todos';
 import { useTodosContext } from './useTodosContext';
 
 type Props = {
@@ -28,7 +28,7 @@ export const Footer: React.FC<Props> = ({ query, setQuery }) => {
   const handleClearCompleted = () => {
     setLoadingTodosIds(currentIds => [...currentIds, ...completedIds]);
 
-    deleteCompletedTodos(completedIds)
+    deleteTodos(completedIds)
       .then(() => {
         setTodos(currentTodos => {
           return currentTodos.filter(todo => !todo.completed);
@@ -36,7 +36,9 @@ export const Footer: React.FC<Props> = ({ query, setQuery }) => {
       })
       .catch(() => handleError('Unable to delete completed todos'))
       .finally(() => {
-        setLoadingTodosIds([]);
+        setLoadingTodosIds(currentIds =>
+          currentIds.filter(id => !completedIds.includes(id)),
+        );
         setIsInputFocused(true);
       });
   };

@@ -24,11 +24,11 @@ export const editTodos = ({ id, userId, title, completed }: Todo) => {
   });
 };
 
-export const deleteTodos = (todoId: number) => {
+export const deleteTodo = (todoId: number) => {
   return client.delete(`/todos/${todoId}?userId=${USER_ID}`);
 };
 
-export const deleteCompletedTodos = (todoIds: number[]) => {
+export const deleteTodos = (todoIds: number[]) => {
   return Promise.all(
     todoIds.map(todoId => client.delete(`/todos/${todoId}?userId=${USER_ID}`)),
   );

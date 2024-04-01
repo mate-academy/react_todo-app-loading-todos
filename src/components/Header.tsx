@@ -1,11 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { USER_ID, addTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
@@ -69,7 +63,9 @@ export const Header: React.FC = () => {
         setTitle('');
         setIsFormSubmitted(false);
         setTempTodo(null);
-        setLoadingTodosIds([]);
+        setLoadingTodosIds(currentIds =>
+          currentIds.filter(id => id !== tempTodo0.id),
+        );
         setIsInputFocused(true);
       });
   };
@@ -87,14 +83,14 @@ export const Header: React.FC = () => {
     setIsInputFocused(true);
   };
 
-  const toggleAllTodos = useCallback(() => {
+  const toggleAllTodos = () => {
     setTodos(currentTodos =>
       currentTodos.map((todo: Todo) => ({
         ...todo,
         completed: !allCompleted,
       })),
     );
-  }, [allCompleted, setTodos]);
+  };
 
   return (
     <header className="todoapp__header">

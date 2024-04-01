@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodosContextType } from '../types/TodosContextType';
 
@@ -26,33 +26,21 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }, 3000);
   }, []);
 
-  const todosState = useMemo(
-    () => ({
-      todos,
-      setTodos,
-      errorMessage,
-      setErrorMessage,
-      handleError,
-      tempTodo,
-      setTempTodo,
-      editingTodo,
-      setEditingTodo,
-      loadingTodosIds,
-      setLoadingTodosIds,
-      isInputFocused,
-      setIsInputFocused,
-    }),
-    [
-      todos,
-      errorMessage,
-      handleError,
-      tempTodo,
-      editingTodo,
-      loadingTodosIds,
-      isInputFocused,
-      setIsInputFocused,
-    ],
-  );
+  const todosState = {
+    todos,
+    setTodos,
+    errorMessage,
+    setErrorMessage,
+    handleError,
+    tempTodo,
+    setTempTodo,
+    editingTodo,
+    setEditingTodo,
+    loadingTodosIds,
+    setLoadingTodosIds,
+    isInputFocused,
+    setIsInputFocused,
+  };
 
   return (
     <TodosContext.Provider value={todosState}>{children}</TodosContext.Provider>

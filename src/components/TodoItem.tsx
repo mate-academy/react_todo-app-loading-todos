@@ -1,8 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useCallback } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
-import { deleteTodos, editTodos } from '../api/todos';
+import { deleteTodo, editTodos } from '../api/todos';
 import { useTodosContext } from './useTodosContext';
 
 type Props = {
@@ -34,50 +32,46 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     });
   };
 
-  const handleTodoDelete = useCallback(
-    (todoId: number) => {
-      deleteTodos(todoId)
-        .then(() => {
-          setTodos(currentTodos => {
-            return currentTodos.filter(
-              currentTodo => currentTodo.id !== todoId,
-            );
-          });
-          setLoadingTodosIds([]);
-        })
-        .catch(() => {
-          handleError('Unable to delete a todo');
-          setLoadingTodosIds([]);
+  const handleTodoDelete = (todoId: number) => {
+    deleteTodo(todoId)
+      .then(() => {
+        setTodos(currentTodos => {
+          return currentTodos.filter(currentTodo => currentTodo.id !== todoId);
         });
+        setLoadingTodosIds(currentIds =>
+          currentIds.filter(id => id !== todoId),
+        );
+      })
+      .catch(() => {
+        handleError('Unable to delete a todo');
+        setLoadingTodosIds(currentIds =>
+          currentIds.filter(id => id !== todoId),
+        );
+      });
 
-      setLoadingTodosIds(currentIds => [...currentIds, todoId]);
-      setIsInputFocused(true);
-    },
-    [handleError, setIsInputFocused, setTodos, setLoadingTodosIds],
-  );
+    setLoadingTodosIds(currentIds => [...currentIds, todoId]);
+    setIsInputFocused(true);
+  };
 
-  const handleTodoUpdate = useCallback(
-    (updatedTodo: Todo) => {
-      if (!updatedTodo.title.trim()) {
-        handleTodoDelete(updatedTodo.id);
-        handleError('Unable to add a todo');
+  const handleTodoUpdate = (updatedTodo: Todo) => {
+    if (!updatedTodo.title.trim()) {
+      handleTodoDelete(updatedTodo.id);
+      handleError('Unable to add a todo');
 
-        return;
-      }
+      return;
+    }
 
-      editTodos(updatedTodo)
-        .then(() => {
-          setTodos(currentTodos =>
-            currentTodos.map(currentTodo =>
-              currentTodo.id === updatedTodo.id ? updatedTodo : currentTodo,
-            ),
-          );
-          setEditingTodo(null);
-        })
-        .catch(() => handleError('Unable to update a todo'));
-    },
-    [handleTodoDelete, setEditingTodo, handleError, setTodos],
-  );
+    editTodos(updatedTodo)
+      .then(() => {
+        setTodos(currentTodos =>
+          currentTodos.map(currentTodo =>
+            currentTodo.id === updatedTodo.id ? updatedTodo : currentTodo,
+          ),
+        );
+        setEditingTodo(null);
+      })
+      .catch(() => handleError('Unable to update a todo'));
+  };
 
   return (
     <div
@@ -88,14 +82,16 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       })}
       key={todo.id}
     >
-      <label className="todo__status-label">
+      <label className="todo__status-label" htmlFor="checkbox">
         <input
+          id="checkbox"
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
           onChange={() => handleCheckbox(todo)}
         />
+        {}
       </label>
 
       {editingTodo?.id !== todo.id ? (
