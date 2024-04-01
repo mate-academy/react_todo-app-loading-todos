@@ -4,7 +4,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { USER_ID, getTodos } from './api/todos';
-
 import { UserWarning } from './UserWarning';
 import { TodoAppHeader } from './components/TodoAppHeader';
 import { TodoAppMain } from './components/TodoAppMain';
@@ -12,8 +11,8 @@ import { TodoAppFooter } from './components/TodoAppFooter';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Todo } from './types/Todo';
 import { ErrorText } from './types/ErrorText';
-
 import { StatusFilter } from './types/StatusFilter';
+import { wait } from './utils/fetchClient';
 
 const getFilteredTodos = (
   todos: Todo[],
@@ -39,7 +38,15 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    getTodos().then(setTodos, () => setErrorText(ErrorText.Loading));
+    getTodos().then(
+      data => {
+        wait(150).then(() => setTodos(data));
+      },
+      () => {
+        setErrorText(ErrorText.Loading);
+        wait(3000).then(() => setErrorText(ErrorText.NoError));
+      },
+    );
   }, []);
 
   const preparedTodos = getFilteredTodos(todos, statusFilter);
