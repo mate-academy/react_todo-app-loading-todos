@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Todo } from './types/Todo';
@@ -68,13 +66,13 @@ export const App: React.FC = () => {
         </header>
 
         <TodoList filteredTodos={filteredTodos} />
-
-        <Footer
-          todos={todos}
-          onFilter={handleSetStatus}
-          onUncompletedTodos={filterUncompletedTodos}
-          currentFilterStatus={status}
-        />
+        {!!todos.length && (
+          <Footer
+            onFilter={handleSetStatus}
+            onUncompletedTodos={filterUncompletedTodos}
+            currentFilterStatus={status}
+          />
+        )}
       </div>
 
       <ErrorNotification errorMessage={errorMessage} />

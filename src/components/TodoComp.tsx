@@ -1,32 +1,30 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import cn from 'classnames';
+import { Todo } from '../types/Todo';
 
 type Props = {
-  id: number;
-  completed: boolean;
-  title: string;
+  todo: Todo;
 };
 
-export const TodoComp: React.FC<Props> = ({ id, completed, title }) => {
+export const TodoComp: React.FC<Props> = ({ todo }) => {
   return (
     <>
       <div
-        key={id}
+        key={todo.id}
         data-cy="Todo"
-        className={cn('todo', { completed: completed })}
+        className={cn('todo', { completed: todo.completed })}
       >
-        <label className="todo__status-label">
+        <label aria-label="todo-status" className="todo__status-label">
           <input
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            checked={completed}
+            checked={todo.completed}
           />
         </label>
 
         <span data-cy="TodoTitle" className="todo__title">
-          {title}
+          {todo.title}
         </span>
 
         <button type="button" className="todo__remove" data-cy="TodoDelete">

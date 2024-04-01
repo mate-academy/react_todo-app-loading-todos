@@ -10,12 +10,7 @@ export const TodoList: React.FC<Props> = ({ filteredTodos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
-        <TodoComp
-          key={todo.id}
-          id={todo.id}
-          completed={todo.completed}
-          title={todo.title}
-        />
+        <TodoComp key={todo.id} todo={todo} />
       ))}
     </section>
   );
