@@ -14,7 +14,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState(Status.ALL);
+  const [status, setStatus] = useState(Status.All);
 
   useEffect(() => {
     todosServices
@@ -39,7 +39,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        {!errorMessage && todos.length > 0 && (
+        {!errorMessage && !!todos.length && (
           <>
             <TodoList visibleTodos={visibleTodos} />
             <Footer todos={todos} status={status} setStatus={setStatus} />

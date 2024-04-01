@@ -3,10 +3,12 @@ import { Todo } from '../types/Todo';
 
 export const getVisibleTodos = (todos: Todo[], status: Status) => {
   switch (status) {
-    case Status.ACTIVE:
+    case Status.Active:
       return todos.filter(todo => !todo.completed);
-    case Status.COMPLETED:
+
+    case Status.Completed:
       return todos.filter(todo => todo.completed);
+
     default:
       return todos;
   }
