@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
@@ -11,7 +10,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const [status, setStatus] = useState<TodoStatus>(TodoStatus.Default);
+  const [status] = useState<TodoStatus>(TodoStatus.Default);
 
   return (
     <div className={cn('todo', { completed: todo.completed })}>

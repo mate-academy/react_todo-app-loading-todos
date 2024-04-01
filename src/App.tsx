@@ -15,10 +15,6 @@ import { ErrorText } from './types/ErrorText';
 
 import { StatusFilter } from './types/StatusFilter';
 
-import mockData from './api/mockTodos.json';
-
-const LOAD_MOCK_DATA = false;
-
 const getFilteredTodos = (
   todos: Todo[],
   statusFilter: StatusFilter,
@@ -43,11 +39,7 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    if (LOAD_MOCK_DATA) {
-      setTodos(mockData.todos);
-    } else {
-      getTodos().then(setTodos, () => setErrorText(ErrorText.Loading));
-    }
+    getTodos().then(setTodos, () => setErrorText(ErrorText.Loading));
   }, []);
 
   const preparedTodos = getFilteredTodos(todos, statusFilter);
