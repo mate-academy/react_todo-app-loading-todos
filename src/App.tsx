@@ -60,7 +60,6 @@ export const App: React.FC = () => {
 
         <TodoList todos={filterTodos(todos)} />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (
           <Footer
             todos={todos}
@@ -70,8 +69,6 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-
-      {/* Show error notification only when errorMessage is not null */}
 
       <div
         data-cy="ErrorNotification"
@@ -89,7 +86,6 @@ export const App: React.FC = () => {
           className="delete"
           onClick={() => setErrorMessage(null)}
         />
-        {/* Show only one message at a time */}
         {errorMessage}
       </div>
     </div>
