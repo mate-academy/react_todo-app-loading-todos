@@ -43,10 +43,6 @@ export const Main: React.FC<Props> = ({ todos }) => {
           </div>
         );
       })}
-
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
-        ×
-      </button>
     </section>
   );
 };
