@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
-import * as todosServices from '../../utils/todos';
+import * as todosServices from '../../api/api';
 import { Todo } from '../../types/Todo';
 import { useError } from './ErrorContext';
 import { Status, TodoError } from '../../types/enums';

@@ -35,6 +35,7 @@ export const TodoForm: React.FC = () => {
   return (
     <form onSubmit={handleSumbmitTodo}>
       <input
+        aria-label="NewTodoField"
         data-cy="NewTodoField"
         type="text"
         className="todoapp__new-todo"

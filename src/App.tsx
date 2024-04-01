@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './utils/todos';
 
-import { Loader } from './components/Loader';
 import { TodoList } from './components/TodoList/TodoList';
 
 import { ErrorNotification } from './components/ErrorNotification';
@@ -13,8 +12,6 @@ import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 
 export const App: React.FC = () => {
-  const [isLoading] = useState(false);
-
   const { todos } = useTodos();
 
   if (!USER_ID) {
@@ -27,7 +24,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoHeader />
-        {isLoading ? <Loader /> : <TodoList />}
+        <TodoList />
         {todos.length > 0 && <TodoFooter />}
       </div>
 

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 import { Todo } from '../../types/Todo';
@@ -21,6 +19,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
     <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
       <label htmlFor={inputId} className="todo__status-label">
         <input
+          aria-label="TodoStatus"
           id={inputId}
           data-cy="TodoStatus"
           type="checkbox"

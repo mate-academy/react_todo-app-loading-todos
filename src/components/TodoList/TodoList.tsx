@@ -10,11 +10,9 @@ export const TodoList: React.FC = () => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <div>
-        {visibleTodos.map(todo => (
-          <TodoInfo key={todo.id} todo={todo} />
-        ))}
-      </div>
+      {visibleTodos.map(todo => (
+        <TodoInfo key={todo.id} todo={todo} />
+      ))}
     </section>
   );
 };
