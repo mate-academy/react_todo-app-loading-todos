@@ -1,14 +1,12 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
-import React, { useContext } from 'react';
-import { TodosContext, TodosControlContext } from '../context/TodosContext';
+import React, { useContext, useState } from 'react';
+import { TodosContext } from '../context/TodosContext';
 import { useError } from '../context/ErrorContext';
 import { TodoError } from '../../types/enums';
 
 export const TodoForm: React.FC = () => {
-  const { addTodo, setInputTodo } = useContext(TodosControlContext);
-  const { inputTodo } = useContext(TodosContext);
+  const { addTodo } = useContext(TodosContext);
+  const [inputTodo, setInputTodo] = useState('');
+
   const { setErrorMessage } = useError();
 
   const handleSumbmitTodo = (event: React.FormEvent) => {

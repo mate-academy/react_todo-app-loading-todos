@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext } from 'react';
+import React from 'react';
 
 import cn from 'classnames';
-import { TodosContext, TodosControlContext } from '../context/TodosContext';
+import { useTodos } from '../context/TodosContext';
 import { Status } from '../../types/enums';
 
 export const TodoFooter: React.FC = () => {
-  const { todos, statusTodo } = useContext(TodosContext);
+  const { todos, statusTodo, handleClearAll, setStatusTodo } = useTodos();
 
-  const { handleClearAll, setStatusTodo } = useContext(TodosControlContext);
+  const disabledTodos = todos.some(todo => !todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -39,7 +39,7 @@ export const TodoFooter: React.FC = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={todos.some(todo => !todo.completed)}
+        disabled={disabledTodos}
         onClick={handleClearAll}
       >
         Clear completed

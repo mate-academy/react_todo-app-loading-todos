@@ -1,6 +1,6 @@
 import { Todo } from '../types/Todo';
 import { Status } from '../types/enums';
-import { client } from '../utils/fetchClient';
+import { client } from './fetchClient';
 
 export const USER_ID = 339;
 

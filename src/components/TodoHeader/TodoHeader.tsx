@@ -1,12 +1,10 @@
-import { useContext } from 'react';
 import { TodoForm } from '../TodoForm/TodoForm';
 
 import cn from 'classnames';
-import { TodosContext, TodosControlContext } from '../context/TodosContext';
+import { useTodos } from '../context/TodosContext';
 
 export const TodoHeader = () => {
-  const { todos } = useContext(TodosContext);
-  const { toggleAll } = useContext(TodosControlContext);
+  const { todos, toggleAll } = useTodos();
   const allCompleted = todos.every(todo => todo.completed);
 
   return (

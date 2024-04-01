@@ -1,21 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { USER_ID } from './utils/todos';
 
 import { Loader } from './components/Loader';
 import { TodoList } from './components/TodoList/TodoList';
 
 import { ErrorNotification } from './components/ErrorNotification';
 
-import { TodosContext } from './components/context/TodosContext';
+import { useTodos } from './components/context/TodosContext';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 
 export const App: React.FC = () => {
   const [isLoading] = useState(false);
 
-  const { todos } = useContext(TodosContext);
+  const { todos } = useTodos();
 
   if (!USER_ID) {
     return <UserWarning />;
