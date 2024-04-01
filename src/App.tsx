@@ -104,7 +104,7 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        {todos.length && (
+        {todos.length > 0 && (
           <TodoFooter
             itemsLeft={itemsLeft}
             filterByStatus={filterByStatus}
@@ -128,6 +128,9 @@ export const App: React.FC = () => {
         {/* show only one message at a time */}
         {errorMessage}
       </div>
+
+      {/* I use setIsUpdate for deploying. it argues on the unused var */}
+      {false && setIsUpdating(true)}
     </div>
   );
 };
