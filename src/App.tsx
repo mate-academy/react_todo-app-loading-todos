@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -11,6 +10,7 @@ import { TodoList } from './TodoList';
 import { Footer } from './Footer';
 import { Errors } from './types/Errors';
 import { FilterBy } from './types/FiilterBy';
+import { ErrorNotification } from './ErrorNotification';
 
 type FilterTheTodos = (todos: Todo[], filterBy: FilterBy) => Todo[];
 
@@ -21,9 +21,9 @@ const getFilteredTodos: FilterTheTodos = (todos, filterBy) => {
     filteredTodos = filteredTodos.filter(todo => {
       switch (filterBy) {
         case FilterBy.Active:
-          return todo.completed === false;
+          return !todo.completed;
         case FilterBy.Completed:
-          return todo.completed === true;
+          return todo.completed;
         default:
           throw new Error('Unknown filter type');
       }
@@ -45,9 +45,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(Errors.Load);
-        throw error;
       });
   }, []);
 
@@ -104,21 +103,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleClearingError}
-        />
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onDeleteClick={handleClearingError}
+      />
     </div>
   );
 };
