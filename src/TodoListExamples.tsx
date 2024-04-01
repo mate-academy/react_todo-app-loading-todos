@@ -1,12 +1,9 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 {
   /* This is a completed todo */
 }
 
 <div data-cy="Todo" className="todo completed">
-  <label className="todo__status-label">
+  <label aria-label="Todo-status" className="todo__status-label">
     <input
       data-cy="TodoStatus"
       type="checkbox"
@@ -36,7 +33,7 @@
 }
 
 <div data-cy="Todo" className="todo">
-  <label className="todo__status-label">
+  <label aria-label="Todo-status" className="todo__status-label">
     <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
   </label>
 
@@ -62,7 +59,7 @@
 }
 
 <div data-cy="Todo" className="todo">
-  <label className="todo__status-label">
+  <label aria-label="Todo-status" className="todo__status-label">
     <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
   </label>
 

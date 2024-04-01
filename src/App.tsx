@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
 
 import { UserWarning } from './UserWarning';
@@ -34,10 +31,6 @@ const getFilteredTodos: FilterTheTodos = (todos, filterBy) => {
 };
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
@@ -64,6 +57,10 @@ export const App: React.FC = () => {
   const visibleTodos = getFilteredTodos(todos, filterBy);
 
   const activeTodosCount: number = todos.filter(todo => !todo.completed).length;
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
