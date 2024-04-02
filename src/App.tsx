@@ -1,124 +1,83 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
 
-import { UserWarning } from './UserWarning';
+import React, { useEffect, useState } from 'react';
 import { USER_ID, getTodos } from './api/todos';
+import { UserWarning } from './UserWarning';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { Footer } from './components/Footer';
+import { Error } from './components/Error';
 import { Todo } from './types/Todo';
-import { TodoList } from './TodoList';
-import { Footer } from './Footer';
 import { Errors } from './types/Errors';
 import { FilterBy } from './types/FilterBy';
+import { wait } from './utils/fetchClient';
 
-type FilterTheTodos = (todos: Todo[], filterBy: FilterBy) => Todo[];
-
-const getFilteredTodos: FilterTheTodos = (todos, filterBy) => {
-  let filteredTodos = todos;
-
-  if (filterBy !== FilterBy.All) {
-    filteredTodos = filteredTodos.filter(todo => {
-      switch (filterBy) {
-        case FilterBy.Active:
-          return todo.completed === false;
-        case FilterBy.Completed:
-          return todo.completed === true;
-        default:
-          throw new Error('Unknown filter type');
-      }
-    });
+const getFilteredTodos = (todos: Todo[], filterBy: FilterBy): Todo[] => {
+  switch (filterBy) {
+    case FilterBy.All:
+      return todos;
+    case FilterBy.Active:
+      return todos.filter(todo => !todo.completed);
+    case FilterBy.Completed:
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
   }
-
-  return filteredTodos;
 };
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorText, setErrorText] = useState<Errors>(Errors.NoError);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
+
+  useEffect(() => {
+    getTodos().then(
+      data => {
+        wait(150).then(() => setTodos(data));
+      },
+      () => {
+        setErrorText(Errors.Loading);
+        wait(3000).then(() => setErrorText(Errors.NoError));
+      },
+    );
+  }, []);
+
+  const preparedTodos = getFilteredTodos(todos, filterBy);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
-  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
+  const handleFilterByClick = (filterByValue: FilterBy) => {
+    setFilterBy(filterByValue);
+  };
 
-  useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(error => {
-        setErrorMessage(Errors.Load);
-        throw error;
-      });
-  }, []);
-
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => setErrorMessage(null), 3000);
-    }
-  }, [errorMessage]);
-
-  const handleClearingError = () => setErrorMessage(null);
-  const handleChangingFilterBy = (value: FilterBy) => setFilterBy(value);
-  const handleClearingCompletedTodos = () =>
-    setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
-
-  const visibleTodos = getFilteredTodos(todos, filterBy);
-
-  const activeTodosCount: number = todos.filter(todo => !todo.completed).length;
+  const handleHideError = () => {
+    setErrorText(Errors.NoError);
+  };
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
+        <Header />
+
+        <Main todos={preparedTodos} />
+
+        {!!todos.length && (
+          <Footer
+            onFilterByClick={handleFilterByClick}
+            todos={todos}
+            filterBy={filterBy}
           />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
-        {todos.length > 0 && (
-          <>
-            <TodoList todos={visibleTodos} />
-
-            <Footer
-              onFilterClick={handleChangingFilterBy}
-              activeTodosCount={activeTodosCount}
-              onClearCompleted={handleClearingCompletedTodos}
-              selectedFilterBy={filterBy}
-            />
-          </>
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleClearingError}
-        />
-        {errorMessage}
-      </div>
+      <Error errorText={errorText} onHideError={handleHideError} />
     </div>
   );
 };
