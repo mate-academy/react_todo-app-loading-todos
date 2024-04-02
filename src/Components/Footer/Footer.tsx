@@ -34,7 +34,7 @@ export const Footer: React.FC<Props> = ({
               onSetFilter(state);
             }}
           >
-            {state.charAt(0).toUpperCase() + state.slice(1)}
+            {capitalizeFirstLetter(state)}
           </a>
         ))}
       </nav>

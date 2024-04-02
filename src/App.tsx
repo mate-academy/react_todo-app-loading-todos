@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { TodoList } from './Components/TodoList/TodoList';
@@ -7,31 +8,25 @@ import { Footer } from './Components/Footer/Footer';
 import { StatesOfFilter } from './types/StatesOfFilter';
 import { getFilteredTodos } from './utils/getFilteredTodos';
 import { ErrorNotification } from './Components/ErrorNotification';
-
-import { handlerErrorShow } from './utils/handlerErrorShow';
-
-function getCountOfActiveTodos(todos: Todo[]): number {
-  const countOfActiveTodos = todos.reduce((acc, todo) => {
-    if (!todo.completed) {
-      return acc + 1;
-    }
-
-    return acc;
-  }, 0);
-
-  return countOfActiveTodos;
-}
+import { getCountOfActiveTodos } from './utils/getCountOfActiveTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterBy, setFilterBy] = useState<StatesOfFilter>(StatesOfFilter.All);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  const handlerErrorShow = (error: string): void => {
+    setErrorMessage(error);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
+
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        handlerErrorShow('Unable to load todos', setErrorMessage);
+        handlerErrorShow('Unable to load todos');
       });
   }, []);
 
