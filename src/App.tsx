@@ -1,21 +1,24 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import * as todosApi from './api/todos';
 import { Todo } from './types/Todo';
-import cn from 'classnames';
 import { Status } from './types/Status';
-import { getFilterTodos } from './utils/getFilterTodos';
+import { getFilteredTodos } from './utils/getFilterTodos';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { wait } from './utils/fetchClient';
+import { Error } from './components/Error';
+
+const getNextTodoId = (todo: Todo[]) => {
+  const ids = todo.map(item => item.id);
+
+  return Math.max(...ids, 0) + 1;
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [titles, setTitles] = useState('');
-  const [errorMessage, setErrorMessage] =
-    useState<string>('');
+  const [todoTitle, setTodoTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState<Status>(Status.All);
 
   useEffect(() => {
@@ -40,35 +43,35 @@ export const App: React.FC = () => {
       });
   }
 
-  const visibleTodos = getFilterTodos([...todos], filter);
-
-  const getMaxTodoId = (todo: Todo[]) => {
-    const ids = todo.map(item => item.id);
-
-    return Math.max(...ids, 0);
-  };
+  const visibleTodos = getFilteredTodos([...todos], filter);
 
   const handleTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setTitles(event.target.value);
+    setTodoTitle(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     addTodo({
-      id: getMaxTodoId(todos) + 1,
-      title: titles,
+      id: getNextTodoId(todos),
+      title: todoTitle,
       completed: false,
-      userId: getMaxTodoId(todos) + 1,
+      userId: getNextTodoId(todos),
     });
 
-    setTitles('');
+    setTodoTitle('');
   };
 
   if (!todosApi.USER_ID) {
     return <UserWarning />;
   }
+
+  const itemLeft = (items: Todo[]): number => {
+    const item = items.filter(i => !i.completed);
+
+    return item.length;
+  };
 
   return (
     <div className="todoapp">
@@ -76,21 +79,19 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form onSubmit={handleSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={titles}
+              value={todoTitle}
               onChange={handleTitleChange}
             />
           </form>
@@ -98,32 +99,19 @@ export const App: React.FC = () => {
 
         <TodoList todos={visibleTodos} />
 
-        {visibleTodos.length > 0 && (
+        {todos.length > 0 && (
           <Footer
-            todos={todos}
+            itemsLeft={itemLeft(todos)}
             filter={filter}
             setFilter={setFilter}
           />
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {errorMessage}
-      </div>
+      <Error
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
