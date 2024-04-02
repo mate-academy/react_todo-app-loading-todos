@@ -1,7 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
 
-export default function Error({ message, show, setError }) {
+interface Props {
+  message: string;
+  show: boolean;
+  setError: (show: boolean) => void;
+}
+
+export default function Error({ message, show, setError }: Props) {
   return (
     <div
       data-cy="ErrorNotification"

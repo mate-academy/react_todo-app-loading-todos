@@ -16,18 +16,19 @@ export const App: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const getFilteredTodos = () => {
-    switch (filter) {
-      case 'active':
-        return todos.filter(todo => !todo.completed);
-      case 'completed':
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
-    }
+  const getFilteredTodos = (status: string) => {
+    return todos.filter(todo => {
+      if (status === 'active') {
+        return !todo.completed;
+      } else if (status === 'completed') {
+        return todo.completed;
+      } else {
+        return true;
+      }
+    });
   };
 
-  const tod = getFilteredTodos();
+  const filteredTodos = getFilteredTodos(filter);
 
   useEffect(() => {
     setError(false);
@@ -57,7 +58,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <Main todos={tod} />
+        <Main todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
