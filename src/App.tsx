@@ -17,13 +17,7 @@ export const App: React.FC = () => {
   const [filterField, setFilterField] = useState<Progress>(Progress.All);
 
   const filteredTodos = prepareTodos(todos, filterField);
-  const activeTodosAmount = todos.reduce((acc, cur) => {
-    if (!cur.completed) {
-      return acc + 1;
-    }
-
-    return acc;
-  }, 0);
+  const activeTodosAmount = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     getTodos(USER_ID)
