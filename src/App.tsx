@@ -10,7 +10,6 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/Todolist';
-import './index.scss';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
