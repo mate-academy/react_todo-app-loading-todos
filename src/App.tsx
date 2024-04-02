@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { USER_ID, getTodos } from './api/todos';
 import { UserWarning } from './UserWarning';
+import { getPreparedTodos } from './utils/getPreparedTodos';
 
 import { Todo } from './types/Todo';
 import { ErrorMessages } from './types/ErrorMessages';
@@ -12,26 +13,13 @@ import { Footer } from './components/Footer/Footer';
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Main } from './components/Main/Main';
 
-const getPreparedTodos = (todos: Todo[], filterOption: FilterOptions) => {
-  let preparedTodos = todos;
-
-  switch (filterOption) {
-    case FilterOptions.Active:
-      return (preparedTodos = todos.filter(todo => !todo.completed));
-    case FilterOptions.Completed:
-      return (preparedTodos = todos.filter(todo => todo.completed));
-    default:
-      return preparedTodos;
-  }
-};
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterOption, setFilterOption] = useState<FilterOptions>(
     FilterOptions.All,
   );
   const [errorMessage, setErrorMessage] = useState<ErrorMessages>(
-    ErrorMessages.noError,
+    ErrorMessages.NoError,
   );
 
   const visibleTodos = getPreparedTodos(todos, filterOption);
@@ -42,15 +30,17 @@ export const App: React.FC = () => {
     setFilterOption(value);
   };
 
-  const handleRemoveError = () => {
-    setTimeout(() => setErrorMessage(ErrorMessages.noError), 3000);
+  const handleShowError = (message: ErrorMessages) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(ErrorMessages.NoError);
+    }, 3000);
   };
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage(ErrorMessages.cantLoadTodos));
-    handleRemoveError();
+      .catch(() => handleShowError(ErrorMessages.Load));
   }, []);
 
   if (!USER_ID) {
@@ -76,7 +66,7 @@ export const App: React.FC = () => {
 
       <ErrorNotification
         message={errorMessage}
-        onRemoveError={handleRemoveError}
+        setErrorMessage={setErrorMessage}
       />
     </div>
   );

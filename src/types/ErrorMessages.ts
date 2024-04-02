@@ -1,8 +1,8 @@
 export enum ErrorMessages {
-  noError = '',
-  cantLoadTodos = 'Unable to load todos',
-  emptyTitle = 'Title should not be empty',
-  cantAddTodo = 'Unable to add a todo',
-  cantDeleteTodo = 'Unable to delete a todo',
-  cantUpdateTodo = 'Unable to update a todo',
+  NoError = '',
+  Load = 'Unable to load todos',
+  EmptyTitle = 'Title should not be empty',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
 }

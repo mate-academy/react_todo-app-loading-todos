@@ -5,19 +5,19 @@ import { ErrorMessages } from '../../types/ErrorMessages';
 
 type Props = {
   message: string;
-  onRemoveError: () => void;
+  setErrorMessage: (message: ErrorMessages) => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
   message,
-  onRemoveError,
+  setErrorMessage,
 }) => {
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        message === ErrorMessages.noError ? ' hidden' : '',
+        { hidden: message === ErrorMessages.NoError },
       )}
     >
       {message}
@@ -25,7 +25,7 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={onRemoveError}
+        onClick={() => setErrorMessage(ErrorMessages.NoError)}
       />
     </div>
   );
