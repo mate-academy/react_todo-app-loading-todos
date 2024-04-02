@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
 import cn from 'classnames';
@@ -11,17 +10,18 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [status] = useState<TodoStatus>(TodoStatus.Default);
+  // useState here is only a placeholder for next part of task.
 
   return (
     <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
-      <label className="todo__status-label">
+      <div className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
         />
-      </label>
+      </div>
 
       {status === TodoStatus.Editing ? (
         <form>
