@@ -5,11 +5,11 @@ import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[];
-  isLoading: boolean;
+  isLoading?: boolean;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, isLoading, setTodos }) => {
+export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
   const [updatingTodo, setUpdatingTodo] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
