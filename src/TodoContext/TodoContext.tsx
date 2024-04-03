@@ -12,10 +12,10 @@ type ContextType = {
 
 export const TodoContext = React.createContext<ContextType>({
   error: null,
-  setError: (value: ErrorMessages | null) => {},
+  setError: (_value: ErrorMessages | null) => {},
   showError: false,
-  setShowError: (value: boolean) => {},
-  displayError: (message: ErrorMessages) => {},
+  setShowError: (_value: boolean) => {},
+  displayError: (_message: ErrorMessages) => {},
 });
 
 type Props = {
