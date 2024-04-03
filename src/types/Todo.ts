@@ -5,7 +5,11 @@ export interface Todo {
   completed: boolean;
 }
 
-export type StatusFilterValue = 'all' | 'completed' | 'active';
+export enum StatusFilterValue {
+  All = 'all',
+  Complited = 'completed',
+  Active = 'active',
+}
 
 export enum ErrorMessages {
   TodosLoad = 'Unable to load todos',

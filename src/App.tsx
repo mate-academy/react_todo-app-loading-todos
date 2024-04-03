@@ -8,35 +8,25 @@ import { TodoList } from './components/TodoList/TodoList';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import { Footer } from './components/Footer/Footer';
 import { TodoContext } from './TodoContext/TodoContext';
+import { getPreparedTodos } from './utils/helpers';
 
 export const App: React.FC = () => {
-  const { error, showError, setShowError, displayError } =
-    useContext(TodoContext);
+  const { error, setError, displayError } = useContext(TodoContext);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>(
+    StatusFilterValue.All,
+  );
 
-  const getPreparedTodos = () => {
-    let result = [...todos];
-
-    if (statusFilter === 'completed') {
-      result = result.filter(todo => todo.completed);
-    } else if (statusFilter === 'active') {
-      result = result.filter(todo => !todo.completed);
-    }
-
-    return result;
-  };
-
-  const preparedTodos = getPreparedTodos();
+  const preparedTodos = getPreparedTodos(todos, statusFilter);
 
   useEffect(() => {
-    setShowError(false);
+    setError(null);
     getTodos()
       .then(setTodos)
       .catch(() => {
         displayError(ErrorMessages.TodosLoad);
       });
-  }, [displayError, setShowError]);
+  }, [displayError, setError]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -73,12 +63,8 @@ export const App: React.FC = () => {
             statusFilter={statusFilter}
           />
         )}
-        {/* Hide the footer if there are no todos */}
       </div>
-      <ErrorMessage message={error} show={showError} setShow={setShowError} />
-
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
+      <ErrorMessage message={error} setError={setError} />
     </div>
   );
 };

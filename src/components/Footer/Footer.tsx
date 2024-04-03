@@ -14,7 +14,6 @@ export const Footer: React.FC<Props> = ({
   setStatusFilter,
   statusFilter,
 }) => {
-  const filterValues: StatusFilterValue[] = ['all', 'completed', 'active'];
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
@@ -26,7 +25,7 @@ export const Footer: React.FC<Props> = ({
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        {filterValues.map(value => {
+        {Object.values(StatusFilterValue).map(value => {
           const label = `${value[0].toUpperCase()}${value.slice(1)}`;
 
           return (
@@ -48,7 +47,6 @@ export const Footer: React.FC<Props> = ({
         })}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

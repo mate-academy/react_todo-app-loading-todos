@@ -4,16 +4,15 @@ import { ErrorMessages } from '../../types/Todo';
 
 interface Props {
   message: ErrorMessages | null;
-  show: boolean;
-  setShow: (value: boolean) => void;
+  setError: (message: ErrorMessages | null) => void;
 }
 
-export const ErrorMessage: React.FC<Props> = ({ message, show, setShow }) => (
+export const ErrorMessage: React.FC<Props> = ({ message, setError }) => (
   <div
     data-cy="ErrorNotification"
     className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { hidden: !show },
+      { hidden: !message },
     )}
   >
     <button
@@ -21,18 +20,9 @@ export const ErrorMessage: React.FC<Props> = ({ message, show, setShow }) => (
       type="button"
       className="delete"
       onClick={() => {
-        setShow(false);
+        setError(null);
       }}
     />
-    {/* show only one message at a time */}
     {message}
-    {/* <br /> */}
-    {/* Title should not be empty
-  <br />
-  Unable to add a todo
-  <br />
-  Unable to delete a todo
-  <br />
-  Unable to update a todo */}
   </div>
 );
