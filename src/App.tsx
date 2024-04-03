@@ -39,6 +39,7 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = getFilteredTodos(todos, query);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -101,57 +102,56 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+            <span className="todo-count" data-cy="TodosCounter">
+              3 items left
+            </span>
 
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={cn('filter__link', {
-                'selected': query === 'all'
-              })}
-              data-cy="FilterLinkAll"
-              onClick={() => setQuery('all')}
+            {/* Active link should have the 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className={cn('filter__link', {
+                  selected: query === 'all',
+                })}
+                data-cy="FilterLinkAll"
+                onClick={() => setQuery('all')}
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className={cn('filter__link', {
+                  selected: query === 'active',
+                })}
+                data-cy="FilterLinkActive"
+                onClick={() => setQuery('active')}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={cn('filter__link', {
+                  selected: query === 'completed',
+                })}
+                data-cy="FilterLinkCompleted"
+                onClick={() => setQuery('completed')}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={cn('filter__link', {
-                'selected': query === 'active'
-              })}
-              data-cy="FilterLinkActive"
-              onClick={() => setQuery('active')}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={cn('filter__link', {
-                'selected': query === 'completed'
-              })}
-              data-cy="FilterLinkCompleted"
-              onClick={() => setQuery('completed')}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
         )}
-        
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
