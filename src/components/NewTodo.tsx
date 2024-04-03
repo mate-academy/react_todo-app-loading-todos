@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 type Props = {
-  onSubmit: (post: Todo) => Promise<void>;
+  onSubmit: (post: Omit<Todo, 'id'>) => Promise<void>;
   userId: number;
   onError: (_: string) => void;
 };
@@ -13,9 +13,6 @@ export const NewTodoForm: React.FC<Props> = ({
   onError = () => {},
 }) => {
   const [title, setTitle] = useState('');
-  const [idCount, setIdCount] = useState(1);
-
-  const [hasTitleErrorMessage, setHasTitleErrorMessage] = useState('');
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -25,23 +22,12 @@ export const NewTodoForm: React.FC<Props> = ({
     event.preventDefault();
 
     if (!title) {
-      setHasTitleErrorMessage('Title should not be empty');
-      onError(hasTitleErrorMessage);
+      onError('Title should not be empty');
 
       return;
     }
 
-    const id = idCount;
-
-    const reset = () => {
-      setTitle('');
-    };
-
-    onSubmit({ id, title, userId, completed: false })
-      .then(reset)
-      .finally(() => {
-        setIdCount(currentCount => currentCount + 1);
-      });
+    onSubmit({ userId, completed: false, title }).then(() => setTitle(''));
   };
 
   return (
