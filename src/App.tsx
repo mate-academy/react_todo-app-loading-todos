@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -27,6 +25,10 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const dismissError = () => {
+    setError('');
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -39,14 +41,12 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -59,7 +59,6 @@ export const App: React.FC = () => {
 
         <TodoList filteredTodos={filteredTodos} />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
             filterType={filterType}
@@ -69,7 +68,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification error={error} todos={todos} />
+      <ErrorNotification error={error} onDismiss={dismissError} />
     </div>
   );
 };

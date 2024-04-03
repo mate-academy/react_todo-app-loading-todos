@@ -1,23 +1,31 @@
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
 
 type Props = {
   error: string;
-  todos: Todo[];
+  onDismiss: () => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({ error, todos }) => {
+export const ErrorNotification: React.FC<Props> = ({ error, onDismiss }) => {
+  const handleDismiss = () => {
+    onDismiss();
+  };
+
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
         {
-          hidden: !error || todos.length > 0,
+          hidden: !error,
         },
       )}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={handleDismiss}
+      />
       {error}
     </div>
   );

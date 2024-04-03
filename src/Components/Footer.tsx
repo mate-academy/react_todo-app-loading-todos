@@ -13,6 +13,11 @@ export const Footer: React.FC<Props> = ({
   todos,
   setFilterType,
 }) => {
+  const disableClearButton = todos.filter(todo => todo.completed).length === 0;
+  const handleFilterClick = (type: FilterType) => {
+    setFilterType(type);
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -20,45 +25,26 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filterType === FilterType.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilterType(FilterType.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filterType === FilterType.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilterType(FilterType.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filterType === FilterType.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilterType(FilterType.Completed)}
-        >
-          Completed
-        </a>
+        {Object.values(FilterType).map((type, index) => (
+          <a
+            key={index}
+            href={`#/${type.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: filterType === type,
+            })}
+            data-cy={`FilterLink${type}`}
+            onClick={() => handleFilterClick(type)}
+          >
+            {type}
+          </a>
+        ))}
       </nav>
 
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={todos.filter(todo => todo.completed).length === 0}
+        disabled={disableClearButton}
       >
         Clear completed
       </button>
