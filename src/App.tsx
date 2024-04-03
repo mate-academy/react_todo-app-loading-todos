@@ -8,12 +8,7 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { wait } from './utils/fetchClient';
 import { Error } from './components/Error';
-
-const getNextTodoId = (todo: Todo[]) => {
-  const ids = todo.map(item => item.id);
-
-  return Math.max(...ids, 0) + 1;
-};
+import { countIncompleteItems } from './utils/countIncompleteItems';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,27 +16,21 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filter, setFilter] = useState<Status>(Status.All);
 
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    wait(3000).then(() => {
+      setErrorMessage('');
+    });
+  };
+
   useEffect(() => {
     todosApi
       .getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage(`Unable to load todos`);
-        wait(3000).then(() => {
-          setErrorMessage('');
-        });
+        handleError(`Unable to load todos`);
       });
   }, []);
-
-  function addTodo({ title, completed, userId }: Todo) {
-    todosApi
-      .createTodos({ title, completed, userId })
-      .then(newTodo => {
-        setTodos(currentTodos => {
-          return [...currentTodos, newTodo];
-        });
-      });
-  }
 
   const visibleTodos = getFilteredTodos([...todos], filter);
 
@@ -51,27 +40,9 @@ export const App: React.FC = () => {
     setTodoTitle(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    addTodo({
-      id: getNextTodoId(todos),
-      title: todoTitle,
-      completed: false,
-      userId: getNextTodoId(todos),
-    });
-
-    setTodoTitle('');
-  };
-
   if (!todosApi.USER_ID) {
     return <UserWarning />;
   }
-
-  const itemLeft = (items: Todo[]): number => {
-    const item = items.filter(i => !i.completed);
-
-    return item.length;
-  };
 
   return (
     <div className="todoapp">
@@ -85,7 +56,7 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <input
               data-cy="NewTodoField"
               type="text"
@@ -101,7 +72,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <Footer
-            itemsLeft={itemLeft(todos)}
+            itemsLeft={countIncompleteItems(todos)}
             filter={filter}
             setFilter={setFilter}
           />
