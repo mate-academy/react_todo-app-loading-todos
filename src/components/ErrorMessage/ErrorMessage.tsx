@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import React from 'react';
+import { ErrorMessages } from '../../types/Todo';
 
 interface Props {
-  message: string;
+  message: ErrorMessages | null;
   show: boolean;
   setShow: (value: boolean) => void;
 }
