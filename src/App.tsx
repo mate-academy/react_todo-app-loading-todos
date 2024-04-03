@@ -5,10 +5,11 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import Header from './components/Header';
 import { Footer } from './components/Footer';
-import TodoList from './components/todoList';
+import TodoList from './components/TodoList';
 import { Status } from './types/Status';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { filteredTodos } from './utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
@@ -39,17 +40,6 @@ export const App: React.FC = () => {
   const haveCompletedTodos = todos.some(({ completed }) => completed);
   const allCompleted = todos.every(({ completed }) => completed);
 
-  const filteredTodos = todos.filter(task => {
-    switch (status) {
-      case Status.Active:
-        return !task.completed;
-      case Status.Completed:
-        return task.completed;
-      case Status.All:
-      default:
-        return true;
-    }
-  });
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
