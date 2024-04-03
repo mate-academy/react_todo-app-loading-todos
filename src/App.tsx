@@ -25,7 +25,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
-  const [checkCompleted, setCheckCompleted] = useState(false)
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   useEffect(() => {
     getTodos()
@@ -72,11 +72,11 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {visibleTodos.map(todo => (
-            <div 
-              data-cy="Todo" 
+            <div
+              data-cy="Todo"
               className={cn('todo', {
-                'completed': checkCompleted,
-              })} 
+                completed: checkCompleted,
+              })}
               key={todo.id}
             >
               <label className="todo__status-label">
@@ -85,7 +85,7 @@ export const App: React.FC = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={checkCompleted}
-                  onChange={(event) => setCheckCompleted(event.target.checked)}
+                  onChange={event => setCheckCompleted(event.target.checked)}
                 />
               </label>
 
