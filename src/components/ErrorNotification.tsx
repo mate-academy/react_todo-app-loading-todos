@@ -27,4 +27,4 @@ export const ErrorNotification: React.FC<Props> = ({
       {errorMessage}
     </div>
   );
-};  
+};
