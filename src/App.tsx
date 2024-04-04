@@ -22,9 +22,14 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
+  }, [errorMessage]);
 
   const visibleTodos = getVisibleTodos(todos, status);
 

@@ -17,7 +17,6 @@ export const Header: React.FC = () => {
         data-cy="ToggleAllButton"
       />
 
-      {/* Add a todo on form submit */}
       <form>
         <input
           data-cy="NewTodoField"
