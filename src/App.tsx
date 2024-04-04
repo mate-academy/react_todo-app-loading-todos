@@ -39,7 +39,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        {!ErrorStatus.NoError && todos.length > 0 && (
+        {todos.length > 0 && (
           <>
             <TodoList todos={visibleTodos} />
             <Footer status={status} setStatus={setStatus} todos={todos} />
