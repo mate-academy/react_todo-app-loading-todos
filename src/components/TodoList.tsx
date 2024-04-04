@@ -1,34 +1,41 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { deleteTodos, updateTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+import { ErrorTypes } from '../types/enums';
+import { handleError } from '../utils/services';
 
 type Props = {
   todos: Todo[];
   isLoading?: boolean;
+  loading: number[];
+  setLoading: React.Dispatch<React.SetStateAction<number[]>>;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  setErrorMessage: (errorMessage: ErrorTypes) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
-  const [updatingTodo, setUpdatingTodo] = useState<number | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+export const TodoList: React.FC<Props> = ({
+  todos,
+  loading,
+  setLoading,
+  setTodos,
+  setErrorMessage,
+}) => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const onDelete = (id: number) => {
-    setIsDeleting(true);
+    setLoading(prev => [...prev, id]);
 
     deleteTodos(id)
       .then(() => setTodos(todos.filter(todo => todo.id !== id)))
-      .finally(() => setIsDeleting(false));
+      .catch(() => handleError(ErrorTypes.delErr, setErrorMessage))
+      .finally(() => setLoading(prev => prev.filter(item => item !== id)));
   };
 
-  const onPatch = (
-    event: React.FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>,
-    todo: Todo,
-  ) => {
-    event.preventDefault();
+  const onPatch = (todo: Todo, event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
 
-    setUpdatingTodo(todo.id);
+    setLoading(prev => [...prev, todo.id]);
 
     updateTodos(todo.id, todo)
       .then((updatedTodo: Todo) =>
@@ -38,9 +45,10 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
           ),
         ),
       )
+      .catch(() => handleError(ErrorTypes.updErr, setErrorMessage))
       .finally(() => {
-        setUpdatingTodo(null);
         setSelectedTodo(null);
+        setLoading(prev => prev.filter(item => item !== todo.id));
       });
   };
 
@@ -51,19 +59,12 @@ export const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
           todo={todo}
           key={todo.id}
           setSelectedTodo={setSelectedTodo}
-          setUpdatingTodo={setUpdatingTodo}
-          updatingTodo={updatingTodo}
-          isDeleting={isDeleting}
+          loading={loading}
           selectedTodo={selectedTodo}
           onDelete={onDelete}
           onPatch={onPatch}
         />
       ))}
-
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
     </section>
   );
 };

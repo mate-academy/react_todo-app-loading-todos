@@ -1,80 +1,72 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import cn from 'classnames';
 
 import { Todo } from '../types/Todo';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { Loader } from './Loader';
 
 type Props = {
   todo: Todo;
-  setSelectedTodo: (todo: Todo) => void;
-  setUpdatingTodo: (updatingTodo: number | null) => void;
-  updatingTodo: number | null;
-  isDeleting?: boolean;
+  setSelectedTodo: (todo: Todo | null) => void;
+  loading: number[];
   selectedTodo: Todo | null;
   onDelete: (id: number) => void;
-  onPatch: (
-    event: React.FormEvent<HTMLFormElement> | ChangeEvent<HTMLInputElement>,
-    todo: Todo,
-  ) => void;
+  onPatch: (todo: Todo, event?: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   setSelectedTodo,
-  setUpdatingTodo,
-  updatingTodo,
+  loading,
   selectedTodo,
   onDelete,
   onPatch,
 }) => {
-  const [isDoubleClicked, setIsDoubleClicked] = useState(false);
+  const [isDoubleClicked, setIsDoubleClicked] = useState<boolean>(false);
 
-  const onSelect = (todoItem: Todo) => {
-    setUpdatingTodo(todoItem.id);
-    setSelectedTodo(todoItem);
-  };
-
-  const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    if (selectedTodo) {
+  const onFormSubmit = (event?: FormEvent<HTMLFormElement>) => {
+    if (
+      selectedTodo &&
+      (todo.title !== selectedTodo.title ||
+        selectedTodo.completed !== todo.completed)
+    ) {
       setIsDoubleClicked(false);
-      onPatch(event, selectedTodo);
+      if (event) {
+        onPatch(selectedTodo, event);
+
+        return;
+      }
+
+      onPatch(selectedTodo);
+    } else {
+      setIsDoubleClicked(false);
+      setSelectedTodo(null);
     }
   };
 
-  const isUpdatingTodo = !updatingTodo || updatingTodo !== todo.id;
-  const isSelectedTodo = !selectedTodo || selectedTodo.id !== todo.id;
-
   return (
     <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
-      <label className="todo__status-label">
+      <label
+        aria-label="todo-status"
+        className="todo__status-label"
+        onClick={() => {
+          setSelectedTodo({
+            ...todo,
+            completed: !todo.completed,
+          });
+        }}
+      >
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
           onChange={() => {
-            {
-              setSelectedTodo({
-                ...todo,
-                completed: !todo.completed,
-              });
-            }
+            onFormSubmit();
           }}
         />
       </label>
 
-      {isUpdatingTodo && isSelectedTodo && !isDoubleClicked ? (
-        <span
-          data-cy="TodoTitle"
-          className="todo__title"
-          onDoubleClick={() => {
-            onSelect(todo);
-            setIsDoubleClicked(true);
-          }}
-        >
-          {todo.title}
-        </span>
-      ) : (
+      {selectedTodo?.id === todo.id && isDoubleClicked ? (
         <form
           onSubmit={event => onFormSubmit(event)}
           onBlur={event => onFormSubmit(event)}
@@ -85,19 +77,28 @@ export const TodoItem: React.FC<Props> = ({
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             autoFocus
-            value={selectedTodo?.title}
+            value={selectedTodo.title}
             onChange={event => {
-              if (selectedTodo) {
-                setSelectedTodo({
-                  ...selectedTodo,
-                  title: event.target.value,
-                });
-              }
+              setSelectedTodo({
+                ...selectedTodo,
+                title: event.target.value,
+              });
             }}
           />
         </form>
+      ) : (
+        <span
+          data-cy="TodoTitle"
+          className="todo__title"
+          onDoubleClick={() => {
+            setSelectedTodo(todo);
+            setIsDoubleClicked(true);
+          }}
+        >
+          {todo.title}
+        </span>
       )}
-      {isUpdatingTodo && (
+      {!isDoubleClicked && (
         <button
           type="button"
           className="todo__remove"
@@ -107,11 +108,7 @@ export const TodoItem: React.FC<Props> = ({
           ×
         </button>
       )}
-
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      <Loader loading={loading} id={todo.id} />
     </div>
   );
 };
