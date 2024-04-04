@@ -4,14 +4,10 @@ import { Todo } from '../types/Todo';
 type Props = {
   onSubmit: (post: Omit<Todo, 'id'>) => Promise<void>;
   userId: number;
-  onError: (_: string) => void;
+  onError: (error: string) => void;
 };
 
-export const NewTodoForm: React.FC<Props> = ({
-  onSubmit,
-  userId,
-  onError = () => {},
-}) => {
+export const NewTodoForm: React.FC<Props> = ({ onSubmit, userId, onError }) => {
   const [title, setTitle] = useState('');
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

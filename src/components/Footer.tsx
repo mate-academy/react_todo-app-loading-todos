@@ -10,11 +10,7 @@ type Props = {
   todos: Todo[];
 };
 
-export const Footer: React.FC<Props> = ({
-  filter,
-  onFilter = () => {},
-  todos,
-}) => {
+export const Footer: React.FC<Props> = ({ filter, onFilter, todos }) => {
   const filterOptions = Object.values(FILTERS);
 
   return (
