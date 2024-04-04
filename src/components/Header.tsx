@@ -5,6 +5,8 @@ interface Props {
   todos: Todo[];
 }
 
+const DEFAULT_USER_ID = 418;
+
 export const Header: React.FC<Props> = ({ todos }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isAllCompleted, setIsAllCompleted] = useState(false);
@@ -39,7 +41,7 @@ export const Header: React.FC<Props> = ({ todos }) => {
     if (newTodoValue) {
       const newTodo = {
         id: todosState.length + 1,
-        userId: 418,
+        userId: DEFAULT_USER_ID,
         title: newTodoValue,
         completed: false,
       };
