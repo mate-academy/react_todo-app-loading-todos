@@ -52,8 +52,10 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  const completedTodos = todos.filter(todo => todo.completed).length;
+
   const headerButton = cn('todoapp__toggle-all', {
-    active: todos.filter(todo => todo.completed).length > 0,
+    active: completedTodos > 0,
   });
 
   return (
@@ -88,7 +90,7 @@ export const App: React.FC = () => {
 
             <TodoFilter setFilter={setFilter} filter={filter} />
 
-            {todos.filter(todo => todo.completed).length > 0 && (
+            {completedTodos > 0 && (
               <button
                 type="button"
                 className="todoapp__clear-completed"
