@@ -12,20 +12,20 @@ import { Header } from './components/Header';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState<number[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes>(ErrorTypes.def);
   const [filterBy, setFilterBy] = useState<FilterTypes>(FilterTypes.All);
+  const [tempTodo, setTempTodo] = useState<Todo[]>([]);
+  const [isFocused, setIsFocused] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(tempTodo.map(todo => todo.id));
+  }, [tempTodo]);
 
+  useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => handleError(ErrorTypes.loadErr, setErrorMessage))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch(() => handleError(ErrorTypes.loadErr, setErrorMessage));
   }, []);
 
   if (!USER_ID) {
@@ -39,18 +39,23 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           todos={todos}
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
           setTodos={setTodos}
           setErrorMessage={setErrorMessage}
+          setLoading={setLoading}
+          setTempTodo={setTempTodo}
         />
-        {todos.length > 0 && (
+        {(todos.length > 0 || tempTodo.length > 0) && (
           <>
             <TodoList
               todos={prepareVisibleTodos(todos, filterBy)}
-              isLoading={isLoading}
               loading={loading}
               setLoading={setLoading}
               setTodos={setTodos}
               setErrorMessage={setErrorMessage}
+              tempTodo={tempTodo}
+              setIsFocused={setIsFocused}
             />
             <Footer
               filterBy={filterBy}
@@ -58,6 +63,8 @@ export const App: React.FC = () => {
               todos={todos}
               setLoading={setLoading}
               setTodos={setTodos}
+              setIsFocused={setIsFocused}
+              setErrorMessage={setErrorMessage}
             />
           </>
         )}
@@ -70,7 +77,12 @@ export const App: React.FC = () => {
           { hidden: errorMessage === ErrorTypes.def },
         )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => handleError(ErrorTypes.def, setErrorMessage)}
+        />
         {errorMessage}
       </div>
     </div>

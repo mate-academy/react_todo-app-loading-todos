@@ -4,12 +4,12 @@ import { ErrorTypes, FilterTypes } from '../types/enums';
 export function prepareVisibleTodos(todos: Todo[], filterBy: FilterTypes) {
   let visibleTodos: Todo[] = [...todos];
 
-  if (filterBy !== 'All') {
+  if (filterBy !== FilterTypes.All) {
     visibleTodos = visibleTodos.filter(item => {
       switch (filterBy) {
-        case 'Active':
+        case FilterTypes.Active:
           return !item.completed;
-        case 'Completed':
+        case FilterTypes.Completed:
           return item.completed;
         default:
           return item;
@@ -26,4 +26,8 @@ export const handleError = (
 ) => {
   setErrorMessage(message);
   setTimeout(() => setErrorMessage(ErrorTypes.def), 3000);
+};
+
+export const itemsLeft = (todos: Todo[]) => {
+  return todos.filter(item => !item.completed).length;
 };
