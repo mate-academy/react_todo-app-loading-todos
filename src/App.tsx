@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
 import { Todo } from './types/Todo';
-import { createTodo, deleteTodo, getTodos } from './api/todos';
+import { createTodo, deleteTodo, getTodos, updateTodo } from './api/todos';
 import classNames from 'classnames';
 import { TodoItem } from './TodoItem';
 
@@ -15,6 +15,7 @@ enum FilterStatus {
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = React.useState('');
+
   const [status, setStatus] = React.useState(FilterStatus.all);
   const [tempTodo, setTempTodo] = React.useState<Todo | null>(null);
   const [processingIds, setProcessingIds] = React.useState<number[]>([]);
@@ -23,16 +24,8 @@ export const App: React.FC = () => {
 
   const [title, setTitle] = React.useState('');
 
-  let visibleTodos = todos;
-
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
-
-  if (status === FilterStatus.active) {
-    visibleTodos = activeTodos;
-  } else if (status === FilterStatus.completed) {
-    visibleTodos = completedTodos;
-  }
 
   useEffect(() => {
     getTodos()
@@ -87,7 +80,64 @@ export const App: React.FC = () => {
       .finally(() => setTempTodo(null));
   };
 
+  const toggleTodo = (todoToUpdate: Todo) => {
+    setErrorMessage('');
+    setProcessingIds(prevIds => [...prevIds, todoToUpdate.id]);
+
+    updateTodo({ ...todoToUpdate, completed: !todoToUpdate.completed })
+      .then(updatedTodo => {
+        setTodos(prevTodos =>
+          prevTodos.map(todo =>
+            todo.id === todoToUpdate.id ? updatedTodo : todo,
+          ),
+        );
+      })
+      .catch(() => setErrorMessage('Unable to update a todo'))
+      .finally(() =>
+        setProcessingIds(prevIds =>
+          prevIds.filter(id => id !== todoToUpdate.id),
+        ),
+      );
+  };
+
+  const toggleAll = () => {
+    if (activeTodos.length !== 0) {
+      activeTodos.forEach(todo => toggleTodo(todo));
+    } else {
+      completedTodos.forEach(todo => toggleTodo(todo));
+    }
+  };
+
+  const renameTodo = (todoToRename: Todo, newTitle: string) => {
+    setErrorMessage('');
+    setProcessingIds(prevIds => [...prevIds, todoToRename.id]);
+
+    return updateTodo({
+      ...todoToRename,
+      title: newTitle,
+    })
+      .then(updatedTodo => {
+        setTodos(prevTodos =>
+          prevTodos.map(todo =>
+            todo.id === todoToRename.id ? updatedTodo : todo,
+          ),
+        );
+
+        inputRef.current?.focus();
+      })
+      .catch(error => {
+        setErrorMessage('Unable to update a todo');
+        throw error;
+      })
+      .finally(() =>
+        setProcessingIds(prevIds =>
+          prevIds.filter(id => id !== todoToRename.id),
+        ),
+      );
+  };
+
   const handleDeletingTodo = (todoIdToDelete: number) => {
+    setErrorMessage('');
     setProcessingIds(prevIds => [...prevIds, todoIdToDelete]);
 
     deleteTodo(todoIdToDelete)
@@ -109,6 +159,14 @@ export const App: React.FC = () => {
     completedTodos.forEach(todo => handleDeletingTodo(todo.id));
   };
 
+  let visibleTodos = todos;
+
+  if (status === FilterStatus.active) {
+    visibleTodos = activeTodos;
+  } else if (status === FilterStatus.completed) {
+    visibleTodos = completedTodos;
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -116,12 +174,16 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
+          {todos.length > 0 && (
+            <button
+              data-cy="ToggleAllButton"
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: activeTodos.length === 0,
+              })}
+              onClick={toggleAll}
+            />
+          )}
           {/* Add a todo on form submit */}
           <form onSubmit={handleSubmit}>
             <input
@@ -145,44 +207,13 @@ export const App: React.FC = () => {
                   key={todo.id}
                   todo={todo}
                   onDelete={() => handleDeletingTodo(todo.id)}
+                  onToggle={() => toggleTodo(todo)}
+                  onRename={newTitle => renameTodo(todo, newTitle)}
                   loading={processingIds.includes(todo.id)}
                 />
               ))}
 
               {tempTodo && <TodoItem todo={tempTodo} loading={true} />}
-
-              {/* This todo is being edited */}
-              {false && (
-                <div data-cy="Todo" className="todo">
-                  <label className="todo__status-label">
-                    <input
-                      data-cy="TodoStatus"
-                      type="checkbox"
-                      className="todo__status"
-                    />
-                  </label>
-
-                  {/* This form is shown instead of the title and remove button */}
-                  <form>
-                    <input
-                      data-cy="TodoTitleField"
-                      type="text"
-                      className="todo__title-field"
-                      placeholder="Empty todo will be deleted"
-                      value="Todo is being edited now"
-                    />
-                  </form>
-
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    <div
-                      className="
-                        modal-background has-background-white-ter
-                      "
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              )}
             </section>
 
             {/* Hide the footer if there are no todos */}
