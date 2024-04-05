@@ -7,12 +7,6 @@ export type Props = {
 };
 
 export const TodoItem: FC<Props> = ({ todo }) => {
-  // const handleDoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   // const { checked } = e.target;
-  //
-  //   setIsProgress(true);
-  // };
-
   const { title, completed } = todo;
 
   return (
