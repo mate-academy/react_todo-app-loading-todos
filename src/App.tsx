@@ -27,6 +27,14 @@ export const App: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState(FilterOptions.ALL);
   const [newTodo, setNewTodo] = useState('');
 
+  const handleErrorMessage = (error: Error | null) => {
+    setErrorMessage(error);
+
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+  };
+
   useEffect(() => {
     const fetchTodos = async () => {
       try {
@@ -34,7 +42,7 @@ export const App: React.FC = () => {
 
         dispatch({ type: 'SET_TODOS', payload: todosFromServer });
       } catch {
-        setErrorMessage('Unable to load todos');
+        handleErrorMessage('Unable to load todos');
       }
     };
 
@@ -51,14 +59,6 @@ export const App: React.FC = () => {
 
   const completedTodosCount = todos.filter(todo => todo.completed).length;
   const itemsLeft = todos.length - completedTodosCount;
-
-  const handleErrorMessage = (error: Error | null) => {
-    setErrorMessage(error);
-
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, 3000);
-  };
 
   const handleFilterClick = (filter: FilterOptions) => {
     setActiveFilter(filter);
