@@ -10,7 +10,8 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
 
   return (
     <div data-cy="Todo" className="todo completed" id="todo">
-      <label className="todo__status-label" htmlFor={`${id}`}>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
