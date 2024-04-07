@@ -12,7 +12,7 @@ import { FilterBy } from '../../types/FilterBy';
 
 type TodoContextType = {
   filteredTodos: Todo[];
-  setTodos: (todo: Todo) => void;
+  setTodos: (todo: Todo[]) => void;
   errorMessage: string;
   setErrorMessage: (textError: string) => void;
   filter: FilterBy;
@@ -76,6 +76,8 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       setFilter,
       filteredTodos,
       clearCompleted,
+      setTodos,
+      setErrorMessage,
     }),
     [todos, errorMessage, filter, filteredTodos, clearCompleted],
   );
