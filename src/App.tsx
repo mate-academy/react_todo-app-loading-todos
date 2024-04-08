@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { UserWarning } from './UserWarning';
-import { USER_ID, getTodos } from './api/todos';
+import * as todoService from './api/todos';
+//import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
 function getFilteredTodos(todos: Todo[], query: string) {
@@ -25,10 +26,11 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
-  const [checkCompleted, setCheckCompleted] = useState(false);
+  const [completedLoading, setCompletedLoading] = useState(false);
 
   useEffect(() => {
-    getTodos()
+    todoService
+      .getTodos()
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
@@ -39,9 +41,35 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  function updateTodo(updatedTodo: Todo) {
+    setCompletedLoading(true);
+    todoService
+      .updateTodo(updatedTodo)
+      .then(todo => {
+        setTodos(currentTodos => {
+          const newTodo = todo;
+          const newTodos = [...currentTodos];
+          const index = newTodos.findIndex(todoOpt => todoOpt.id === updatedTodo.id);
+
+          if (todo.completed === false) {
+            newTodo.completed = true;
+            newTodos.splice(index, 1, newTodo);
+
+            return newTodos;
+          } else {
+            newTodo.completed = false;
+            newTodos.splice(index, 1, newTodo);
+
+            return newTodos;
+          }
+        });
+      })
+      .finally(() => setCompletedLoading(false));
+  }
+
   const visibleTodos = getFilteredTodos(todos, query);
 
-  if (!USER_ID) {
+  if (!todoService.USER_ID) {
     return <UserWarning />;
   }
 
@@ -75,7 +103,7 @@ export const App: React.FC = () => {
             <div
               data-cy="Todo"
               className={cn('todo', {
-                completed: checkCompleted,
+                completed: todo.completed === true,
               })}
               key={todo.id}
             >
@@ -84,8 +112,9 @@ export const App: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  checked={checkCompleted}
-                  onChange={event => setCheckCompleted(event.target.checked)}
+                  onChange={() => {
+                    updateTodo(todo);
+                  }}
                 />
               </label>
 
@@ -100,7 +129,12 @@ export const App: React.FC = () => {
                 ×
               </button>
 
-              <div data-cy="TodoLoader" className="modal overlay">
+              <div
+                data-cy="TodoLoader"
+                className={cn('modal', 'overlay', {
+                  'is-active': completedLoading,
+                })}
+              >
                 <div className="modal-background has-background-white-ter" />
                 <div className="loader" />
               </div>
