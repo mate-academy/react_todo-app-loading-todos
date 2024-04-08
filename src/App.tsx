@@ -15,12 +15,8 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState<number[]>([]);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes>(ErrorTypes.def);
   const [filterBy, setFilterBy] = useState<FilterTypes>(FilterTypes.All);
-  const [tempTodo, setTempTodo] = useState<Todo[]>([]);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [isFocused, setIsFocused] = useState(true);
-
-  useEffect(() => {
-    setLoading(tempTodo.map(todo => todo.id));
-  }, [tempTodo]);
 
   useEffect(() => {
     getTodos()
@@ -45,6 +41,7 @@ export const App: React.FC = () => {
           setErrorMessage={setErrorMessage}
           setLoading={setLoading}
           setTempTodo={setTempTodo}
+          tempTodo={tempTodo}
         />
         <TodoList
           todos={prepareVisibleTodos(todos, filterBy)}
@@ -55,7 +52,7 @@ export const App: React.FC = () => {
           tempTodo={tempTodo}
           setIsFocused={setIsFocused}
         />
-        {(todos.length > 0 || tempTodo.length > 0) && (
+        {(todos.length > 0 || tempTodo) && (
           <Footer
             filterBy={filterBy}
             setFilterBy={setFilterBy}

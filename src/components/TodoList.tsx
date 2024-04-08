@@ -12,7 +12,7 @@ type Props = {
   setLoading: React.Dispatch<React.SetStateAction<number[]>>;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMessage: (errorMessage: ErrorTypes) => void;
-  tempTodo: Todo[];
+  tempTodo: Todo | null;
   setIsFocused: (isFocused: boolean) => void;
 };
 
@@ -57,22 +57,21 @@ export const TodoList: React.FC<Props> = ({
             />
           </CSSTransition>
         ))}
-        {tempTodo.length !== 0 &&
-          tempTodo.map(tTodo => (
-            <CSSTransition key={0} timeout={300} classNames="temp-item">
-              <TodoItem
-                todo={tTodo}
-                key={tTodo.id}
-                setSelectedTodo={setSelectedTodo}
-                loading={loading}
-                selectedTodo={selectedTodo}
-                onDelete={onDelete}
-                setTodos={setTodos}
-                setErrorMessage={setErrorMessage}
-                setLoading={setLoading}
-              />
-            </CSSTransition>
-          ))}
+        {tempTodo && (
+          <CSSTransition key={0} timeout={300} classNames="temp-item">
+            <TodoItem
+              todo={tempTodo}
+              key={tempTodo.id}
+              setSelectedTodo={setSelectedTodo}
+              loading={loading}
+              selectedTodo={selectedTodo}
+              onDelete={onDelete}
+              setTodos={setTodos}
+              setErrorMessage={setErrorMessage}
+              setLoading={setLoading}
+            />
+          </CSSTransition>
+        )}
       </TransitionGroup>
     </section>
   );
