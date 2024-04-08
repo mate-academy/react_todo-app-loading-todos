@@ -49,7 +49,9 @@ export const App: React.FC = () => {
         setTodos(currentTodos => {
           const newTodo = todo;
           const newTodos = [...currentTodos];
-          const index = newTodos.findIndex(todoOpt => todoOpt.id === updatedTodo.id);
+          const index = newTodos.findIndex(
+            todoOpt => todoOpt.id === updatedTodo.id,
+          );
 
           if (todo.completed === false) {
             newTodo.completed = true;
