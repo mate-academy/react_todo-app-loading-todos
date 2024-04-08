@@ -33,6 +33,11 @@ export const App: React.FC = () => {
     [todos],
   );
 
+  const completedTodos = useMemo(
+    () => todos.filter(todo => todo.completed).length,
+    [todos],
+  );
+
   const handleCancel = () => {
     if (cancelRef.current) {
       cancelRef.current.classList.add('hidden');
@@ -44,7 +49,7 @@ export const App: React.FC = () => {
   }
 
   const headerButtonClassName = cn('todoapp__toggle-all', {
-    active: todos.filter(todo => todo.completed).length > 0,
+    active: completedTodos > 0,
   });
 
   return (
@@ -79,7 +84,7 @@ export const App: React.FC = () => {
 
             <TodoFilter setFilter={setFilter} filter={filter} />
 
-            {todos.filter(todo => todo.completed).length > 0 && (
+            {completedTodos > 0 && (
               <button
                 type="button"
                 className="todoapp__clear-completed"

@@ -1,12 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { Todo } from '../../types/Todo';
-import { Loader } from '../Loader/Loader';
+import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
 };
-
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
