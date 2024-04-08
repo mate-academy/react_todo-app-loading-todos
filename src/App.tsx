@@ -6,11 +6,12 @@ import { USER_ID, getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { TodoFilter } from './components/TodoFilter';
-import { Filter } from './types/Filter';
+import { TodoFilterType } from './types/TodoFilterType';
+import { filterTodos } from './utils/FilterTodo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filter>(Filter.all);
+  const [filter, setFilter] = useState<TodoFilterType>(TodoFilterType.all);
   const [error, setError] = useState('');
   const cancelRef = useRef<HTMLDivElement>(null);
 
@@ -23,23 +24,13 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filteredTodos = () => {
-    switch (filter) {
-      case Filter.active:
-        return todos.filter(todo => !todo.completed);
-
-      case Filter.completed:
-        return todos.filter(todo => todo.completed);
-
-      default:
-        return todos;
-    }
-  };
-
-  const memorizedTodos = useMemo(filteredTodos, [filter, todos]);
-  const todosCounter = todos.reduce(
-    (prev, current) => prev + +!current.completed,
-    0,
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, filter),
+    [filter, todos],
+  );
+  const todosCounter = useMemo(
+    () => todos.reduce((prev, current) => prev + +!current.completed, 0),
+    [todos],
   );
 
   const handleCancel = () => {
@@ -52,7 +43,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const headerButton = cn('todoapp__toggle-all', {
+  const headerButtonClassName = cn('todoapp__toggle-all', {
     active: todos.filter(todo => todo.completed).length > 0,
   });
 
@@ -64,7 +55,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className={headerButton}
+            className={headerButtonClassName}
             data-cy="ToggleAllButton"
           />
 
@@ -78,7 +69,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={memorizedTodos} />
+        <TodoList todos={filteredTodos} />
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
