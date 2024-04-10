@@ -1,17 +1,25 @@
-import React, { useContext } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useContext, useState } from 'react';
 import { Todo as TodoType } from '../../types/Todo';
 import classNames from 'classnames';
 import { DispatchContext } from '../../Store';
+import { wait } from '../../utils/fetchClient';
 
 type Props = {
   todo: TodoType;
 };
 
 export const Todo: React.FC<Props> = ({ todo }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useContext(DispatchContext);
 
   const isCompleted = () => {
-    dispatch({ type: 'markCompleted', id: todo.id });
+    setIsLoading(true);
+
+    return wait(300).then(() => {
+      setIsLoading(false);
+      dispatch({ type: 'markCompleted', id: todo.id });
+    });
   };
 
   return (
@@ -22,8 +30,9 @@ export const Todo: React.FC<Props> = ({ todo }) => {
         completed: todo.completed,
       })}
     >
-      <label className="todo__status-label">
+      <label htmlFor="todo-status" className="todo__status-label">
         <input
+          id="todo-status"
           data-cy="TodoStatus"
           type="checkbox"
           onChange={isCompleted}
@@ -42,7 +51,10 @@ export const Todo: React.FC<Props> = ({ todo }) => {
       </button>
 
       {/* overlay will cover the todo while it is being deleted or updated */}
-      <div data-cy="TodoLoader" className="modal overlay">
+      <div
+        data-cy="TodoLoader"
+        className={classNames('modal overlay', { 'is-active': isLoading })}
+      >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

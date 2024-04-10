@@ -7,6 +7,7 @@ import { Header } from './Components/Header/Header';
 import { TodoList } from './Components/TodoList/TodoList';
 import classNames from 'classnames';
 import { Footer } from './Components/Footer/Footer';
+import { wait } from './utils/fetchClient';
 
 export const App: React.FC = () => {
   const { errorLoad } = useContext(StateContext);
@@ -23,9 +24,9 @@ export const App: React.FC = () => {
     setIsErrorLoading('');
   };
 
-  setTimeout(() => {
+  wait(3000).then(() => {
     setIsErrorLoading('');
-  }, 3000);
+  });
 
   return (
     <div className="todoapp">
