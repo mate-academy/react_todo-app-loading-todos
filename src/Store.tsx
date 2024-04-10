@@ -1,16 +1,18 @@
 import React, { useReducer } from 'react';
 import { Todo } from './types/Todo';
 
+export enum Actions {
+  markCompleted = 'markCompleted',
+  changeTodosStatus = 'changeTodosStatus',
+  setErrorLoad = 'setErrorLoad',
+  loadTodos = 'loadTodos',
+}
+
 type Action =
-  | { type: 'loadTodos'; todos: Todo[] }
-  | { type: 'addTodo'; todo: Todo }
-  | { type: 'markCompleted'; id: number }
-  | { type: 'removeTodo'; id: number }
-  | { type: 'changeTodosStatus'; filterValue: string }
-  | { type: 'updateTodo'; id: number; title: string }
-  | { type: 'toggleAll' }
-  | { type: 'removeAll' }
-  | { type: 'setErrorLoad'; payload: string };
+  | { type: Actions.loadTodos; todos: Todo[] }
+  | { type: Actions.markCompleted; id: number }
+  | { type: Actions.changeTodosStatus; filterValue: string }
+  | { type: Actions.setErrorLoad; payload: string };
 
 export enum FilterValue {
   All = 'all',
@@ -28,54 +30,24 @@ function reducer(state: State, action: Action) {
   const { todos } = state;
 
   switch (action.type) {
-    case 'addTodo':
-      return {
-        ...state,
-        todos: [...todos, action.todo],
-      };
-    case 'markCompleted':
+    case Actions.markCompleted:
       return {
         ...state,
         todos: todos.map(t =>
           t.id === action.id ? { ...t, completed: !t.completed } : t,
         ),
       };
-    case 'removeTodo':
-      return {
-        ...state,
-        todos: todos.filter(todo => todo.id !== action.id),
-      };
-    case 'removeAll':
-      return {
-        ...state,
-        todos: todos.filter(todo => !todo.completed),
-      };
-    case 'changeTodosStatus':
+    case Actions.changeTodosStatus:
       return {
         ...state,
         filterStatus: action.filterValue,
       };
-    case 'updateTodo':
-      return {
-        ...state,
-        todos: todos.map(t =>
-          t.id === action.id ? { ...t, title: action.title } : t,
-        ),
-      };
-    case 'toggleAll':
-      return {
-        ...state,
-        todos: todos.map(todo => ({
-          ...todo,
-          completed: !todos.every(t => t.completed),
-        })),
-      };
-    case 'setErrorLoad':
+    case Actions.setErrorLoad:
       return {
         ...state,
         errorLoad: action.payload,
       };
-    case 'loadTodos':
+    case Actions.loadTodos:
       return { ...state, todos: action.todos };
     default:
       return state;

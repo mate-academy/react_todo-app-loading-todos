@@ -1,8 +1,12 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import { DispatchContext, FilterValue, StateContext } from '../../Store';
-import { client } from '../../utils/fetchClient';
+import {
+  Actions,
+  DispatchContext,
+  FilterValue,
+  StateContext,
+} from '../../Store';
 import { Todo as TodoType } from '../../types/Todo';
-import { USER_ID } from '../../api/todos';
+import { getTodos } from '../../api/todos';
 import { Todo } from '../Todo';
 
 export const TodoList: React.FC = () => {
@@ -10,18 +14,18 @@ export const TodoList: React.FC = () => {
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
-    client
-      .get<TodoType[]>('/todos?userId=' + USER_ID)
+    getTodos()
       .then(items => {
-        setTimeout(() => {
-          return dispatch({
-            type: 'loadTodos',
-            todos: items,
-          });
-        }, 300);
+        return dispatch({
+          type: Actions.loadTodos,
+          todos: items,
+        });
       })
       .catch(() => {
-        dispatch({ type: 'setErrorLoad', payload: 'Unable to load todos' });
+        dispatch({
+          type: Actions.setErrorLoad,
+          payload: 'Unable to load todos',
+        });
       });
   }, [dispatch]);
 

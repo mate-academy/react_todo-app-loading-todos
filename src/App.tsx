@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useContext, useEffect, useState } from 'react';
-// import { UserWarning } from './UserWarning';
 import { StateContext } from './Store';
 import { Header } from './Components/Header/Header';
 import { TodoList } from './Components/TodoList/TodoList';
@@ -12,9 +11,6 @@ import { wait } from './utils/fetchClient';
 export const App: React.FC = () => {
   const { errorLoad } = useContext(StateContext);
   const [isErrorLoading, setIsErrorLoading] = useState(errorLoad);
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
 
   useEffect(() => {
     setIsErrorLoading(errorLoad);

@@ -1,19 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import { Todo } from '../../types/Todo';
-// import { DispatchContext, StateContext } from '../../Store';
-// import { USER_ID } from '../../api/todos';
-// import { client } from '../../utils/fetchClient';
-
-// const getMaxId = (todos: Todo[]) => {
-//   const maxId = Math.max(...todos.map(todo => todo.id));
-
-//   return maxId + 1;
-// };
-
 export const Header: React.FC = () => {
   const [title, setTitle] = useState('');
-  // const { todos } = useContext(StateContext);
-  // const dispatch = useContext(DispatchContext);
   const textField = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -21,21 +8,6 @@ export const Header: React.FC = () => {
       textField.current.focus();
     }
   }, []);
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const data = {
-  //     id: getMaxId(todos) || 0,
-  //     title: title,
-  //     completed: false,
-  //     userId: USER_ID,
-  //   };
-
-  //   client.post('/todos', data).then(() => {
-  //     dispatch({ type: 'addTodo', todo: data });
-  //     setTitle('');
-  //   });
-  // };
 
   return (
     <header className="todoapp__header">
