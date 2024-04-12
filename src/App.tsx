@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -9,12 +8,8 @@ import { TodoFooter } from './components/TodoFooter';
 import { CompletedStatus } from './types/CompletedStatus';
 import { getPreparedTodos } from './utils/getPreparedTodos';
 import { ErrorNotification } from './components/ErrorNotification';
-
-const countItemsLeft = (todos: Todo[]): number => {
-  const items = todos.filter(item => !item.completed);
-
-  return items.length;
-};
+import { countItemsLeft } from './utils/countItemsLeft';
+import { TodoHeader } from './components/TodoHeader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -49,26 +44,11 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            type="button"
-            className={classNames('todoapp__toggle-all', {
-              active: todos.every(todo => todo.completed),
-            })}
-            data-cy="ToggleAllButton"
-          />
-
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              onChange={event => setTitleField(event.target.value)}
-              value={titleField}
-            />
-          </form>
-        </header>
+        <TodoHeader
+          todos={preparedTodos}
+          titleField={titleField}
+          onTitleField={setTitleField}
+        />
 
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList todos={preparedTodos} />
@@ -83,7 +63,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification errorMessage={errorMessage} />
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

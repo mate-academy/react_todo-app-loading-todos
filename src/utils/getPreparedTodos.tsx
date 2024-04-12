@@ -5,17 +5,19 @@ export const getPreparedTodos = (
   todos: Todo[],
   { filterByStatus }: { filterByStatus: CompletedStatus },
 ) => {
-  let preparedTodos = [...todos];
+  let preparedTodos;
 
-  if (filterByStatus) {
-    switch (filterByStatus) {
-      case CompletedStatus.Active:
-        preparedTodos = preparedTodos.filter(todo => !todo.completed);
-        break;
+  switch (filterByStatus) {
+    case CompletedStatus.Active:
+      preparedTodos = todos.filter(todo => !todo.completed);
+      break;
 
-      case CompletedStatus.Completed:
-        preparedTodos = preparedTodos.filter(todo => todo.completed);
-    }
+    case CompletedStatus.Completed:
+      preparedTodos = todos.filter(todo => todo.completed);
+      break;
+
+    default:
+      preparedTodos = todos;
   }
 
   return preparedTodos;
