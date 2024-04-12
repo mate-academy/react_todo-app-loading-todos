@@ -15,15 +15,9 @@ export const Footer: React.FC<Props> = ({ todos, status, setStatus }) => {
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
-      {todosLeft === 1 ? (
-        <span className="todo-count" data-cy="TodosCounter">
-          {`${todosLeft} item left`}
-        </span>
-      ) : (
-        <span className="todo-count" data-cy="TodosCounter">
-          {`${todosLeft} items left`}
-        </span>
-      )}
+      <span className="todo-count" data-cy="TodosCounter">
+        {`${todosLeft} item${todosLeft === 1 ? '' : 's'} left`}
+      </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
