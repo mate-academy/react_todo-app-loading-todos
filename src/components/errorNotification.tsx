@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 interface ErrorProps {
   errorText: string;
   setErrorText: (errorText: string) => void;
@@ -7,11 +9,16 @@ export const ErrorNotification: React.FC<ErrorProps> = ({
   errorText,
   setErrorText,
 }) => {
+  const errorTextClass = classNames({
+    notification: true,
+    'is-danger': true,
+    'is-light': true,
+    'has-text-weight-normal': true,
+    hidden: errorText === '',
+  });
+
   return (
-    <div
-      data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${errorText === '' && 'hidden'}`}
-    >
+    <div data-cy="ErrorNotification" className={errorTextClass}>
       <button
         onClick={() => setErrorText('')}
         data-cy="HideErrorButton"

@@ -6,6 +6,7 @@ import { TodosList } from './components/todosList';
 import { TodosFilter } from './components/todoFeilter';
 import { ManageCheckboxContext } from './components/manageCheckboxContext';
 import { ErrorNotification } from './components/errorNotification';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const { todos, setTodos } = useContext(TodosContext);
@@ -49,12 +50,17 @@ export const App: React.FC = () => {
   };
 
   const isClearHiden = () => {
-    return todos.some(elem => elem.completed === true);
+    return todos.some(elem => elem.completed);
   };
 
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const toggleAllClass = classNames({
+    'todoapp__toggle-all': true,
+    active: isChecked,
+  });
 
   return (
     <div className="todoapp">
@@ -64,7 +70,7 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className={`todoapp__toggle-all ${isChecked && 'active'}`}
+            className={toggleAllClass}
             data-cy="ToggleAllButton"
             onClick={handleButtonCheckAll}
           />
@@ -84,7 +90,7 @@ export const App: React.FC = () => {
           <TodosList items={todos} />
         </section>
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {handleHowManyLeft()}

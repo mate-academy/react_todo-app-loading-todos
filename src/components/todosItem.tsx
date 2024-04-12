@@ -5,6 +5,7 @@ import { Todo } from '../types/Todo';
 import { TodosContext } from './todosContext';
 import { ActiveContext, AllContext, CompletedContext } from './filterContext';
 import { ManageCheckboxContext } from './manageCheckboxContext';
+import classNames from 'classnames';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 interface ItemProps {
@@ -40,7 +41,7 @@ export const TodosItem: React.FC<ItemProps> = ({ item }) => {
   const toRender = () => {
     if (isAllSelected === true) {
       return true;
-    } else if (isActiveSelected === true && item.completed === false) {
+    } else if (isActiveSelected && !item.completed) {
       return true;
     } else if (isCompletedSelected === true && item.completed === true) {
       return true;
@@ -49,14 +50,16 @@ export const TodosItem: React.FC<ItemProps> = ({ item }) => {
     }
   };
 
+  const isTodoCompletedClass = classNames({
+    todo: true,
+    completed: item.completed,
+  });
+
   return (
     <>
       {toRender() === true && (
         <li>
-          <div
-            data-cy="Todo"
-            className={`todo ${item.completed && 'completed'}`}
-          >
+          <div data-cy="Todo" className={isTodoCompletedClass}>
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
