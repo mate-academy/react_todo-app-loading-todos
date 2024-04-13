@@ -4,17 +4,23 @@ import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import * as todoService from './api/todos';
-//import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+
+enum FilterStatus {
+  Active = 'active',
+  All = 'all',
+  Completed = 'completed',
+}
 
 function getFilteredTodos(todos: Todo[], query: string) {
   const preparedTodos = todos.filter(todo => {
-    if (query === 'active') {
-      return todo.completed === false;
-    } else if (query === 'completed') {
-      return todo.completed === true;
-    } else {
-      return todos;
+    switch (query) {
+      case FilterStatus.Active:
+        return !todo.completed;
+      case FilterStatus.Completed:
+        return todo.completed;
+      default:
+        return todos;
     }
   });
 
@@ -22,16 +28,16 @@ function getFilteredTodos(todos: Todo[], query: string) {
 }
 
 function isCompleted(todo: Todo) {
-  return todo.completed === true;
+  return todo.completed;
 }
 
 function isUncompleted(todo: Todo) {
-  return todo.completed === false;
+  return !todo.completed;
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('all');
+  const [query, setQuery] = useState(FilterStatus.All);
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
@@ -121,7 +127,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          {todos.length !== 0 && (
+          {!!todos.length && (
             <button
               type="button"
               className={cn('todoapp__toggle-all', {
@@ -149,7 +155,7 @@ export const App: React.FC = () => {
             <div
               data-cy="Todo"
               className={cn('todo', {
-                completed: todo.completed === true,
+                completed: todo.completed,
               })}
               key={todo.id}
             >
@@ -158,10 +164,8 @@ export const App: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  onChange={() => {
-                    updateTodo(todo);
-                  }}
-                  checked={todo.completed === true}
+                  onChange={() => updateTodo(todo)}
+                  checked={todo.completed}
                 />
               </label>
 
@@ -190,7 +194,7 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {`${completedTodos.length} items left`}
@@ -201,10 +205,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={cn('filter__link', {
-                  selected: query === 'all',
+                  selected: query === FilterStatus.All,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setQuery('all')}
+                onClick={() => setQuery(FilterStatus.All)}
               >
                 All
               </a>
@@ -212,10 +216,10 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={cn('filter__link', {
-                  selected: query === 'active',
+                  selected: query === FilterStatus.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setQuery('active')}
+                onClick={() => setQuery(FilterStatus.Active)}
               >
                 Active
               </a>
@@ -223,10 +227,10 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={cn('filter__link', {
-                  selected: query === 'completed',
+                  selected: query === FilterStatus.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setQuery('completed')}
+                onClick={() => setQuery(FilterStatus.Completed)}
               >
                 Completed
               </a>
