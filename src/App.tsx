@@ -21,12 +21,20 @@ function getFilteredTodos(todos: Todo[], query: string) {
   return preparedTodos;
 }
 
+function isCompleted(todo: Todo) {
+  return todo.completed === true;
+}
+
+function isUncompleted(todo: Todo) {
+  return todo.completed === false;
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
-  const [completedLoading, setCompletedLoading] = useState(false);
+  const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
 
   useEffect(() => {
     todoService
@@ -42,7 +50,7 @@ export const App: React.FC = () => {
   }, []);
 
   function updateTodo(updatedTodo: Todo) {
-    setCompletedLoading(true);
+    setLoadingTodoIds(prevIds => [...prevIds, updatedTodo.id]);
     todoService
       .updateTodo(updatedTodo)
       .then(todo => {
@@ -66,10 +74,41 @@ export const App: React.FC = () => {
           }
         });
       })
-      .finally(() => setCompletedLoading(false));
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
+        setErrorVisible(true);
+        setTimeout(() => {
+          setErrorVisible(false);
+        }, 3000);
+      })
+      .finally(() =>
+        setLoadingTodoIds(prevIds =>
+          prevIds.filter(id => id !== updatedTodo.id),
+        ),
+      );
+  }
+
+  function checkAllTodos(todosAll: Todo[]) {
+    const todosNotCompleted = todosAll.filter(todo => todo.completed === false);
+
+    if (todosNotCompleted.length > 0) {
+      todosNotCompleted.forEach(todo => updateTodo(todo));
+    } else {
+      todos.forEach(todo => updateTodo(todo));
+    }
   }
 
   const visibleTodos = getFilteredTodos(todos, query);
+  let todosAllCompleted;
+
+  if (visibleTodos.length > 0) {
+    todosAllCompleted = visibleTodos.every(isCompleted);
+  } else {
+    todosAllCompleted = false;
+  }
+
+  const todosAllUncomplited = visibleTodos.every(isUncompleted);
+  const completedTodos = todos.filter(todo => todo.completed === false);
 
   if (!todoService.USER_ID) {
     return <UserWarning />;
@@ -82,11 +121,16 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+          {todos.length !== 0 && (
+            <button
+              type="button"
+              className={cn('todoapp__toggle-all', {
+                active: todosAllCompleted,
+              })}
+              data-cy="ToggleAllButton"
+              onClick={() => checkAllTodos(visibleTodos)}
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form>
@@ -117,6 +161,7 @@ export const App: React.FC = () => {
                   onChange={() => {
                     updateTodo(todo);
                   }}
+                  checked={todo.completed === true}
                 />
               </label>
 
@@ -134,7 +179,7 @@ export const App: React.FC = () => {
               <div
                 data-cy="TodoLoader"
                 className={cn('modal', 'overlay', {
-                  'is-active': completedLoading,
+                  'is-active': loadingTodoIds.includes(todo.id),
                 })}
               >
                 <div className="modal-background has-background-white-ter" />
@@ -148,7 +193,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {`${completedTodos.length} items left`}
             </span>
 
             {/* Active link should have the 'selected' class */}
@@ -192,6 +237,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
+              disabled={todosAllUncomplited}
             >
               Clear completed
             </button>
