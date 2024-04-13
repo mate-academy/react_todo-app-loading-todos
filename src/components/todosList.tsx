@@ -10,17 +10,13 @@ interface ListProps {
 export const TodosList: React.FC<ListProps> = ({ items }) => {
   const { todos } = useContext(TodosContext);
 
-  const isListShown = () => {
-    return todos.length > 0;
-  };
-
   return (
-    isListShown() === true && (
-      <ul>
+    !!todos.length && (
+      <>
         {items.map(item => (
           <TodosItem key={item.id} item={item} />
         ))}
-      </ul>
+      </>
     )
   );
 };

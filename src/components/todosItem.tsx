@@ -58,33 +58,31 @@ export const TodosItem: React.FC<ItemProps> = ({ item }) => {
   return (
     <>
       {toRender() === true && (
-        <li>
-          <div data-cy="Todo" className={isTodoCompletedClass}>
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                onChange={() => setTodos(changePersonalComplete())}
-                checked={item.completed}
-              />
-            </label>
+        <div data-cy="Todo" className={isTodoCompletedClass}>
+          <label className="todo__status-label">
+            <input
+              data-cy="TodoStatus"
+              type="checkbox"
+              className="todo__status"
+              onChange={() => setTodos(changePersonalComplete())}
+              checked={item.completed}
+            />
+          </label>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              {item.title}
-            </span>
+          <span data-cy="TodoTitle" className="todo__title">
+            {item.title}
+          </span>
 
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+          <button type="button" className="todo__remove" data-cy="TodoDelete">
+            ×
+          </button>
 
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
+          {/* overlay will cover the todo while it is being deleted or updated */}
+          <div data-cy="TodoLoader" className="modal overlay">
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
           </div>
-        </li>
+        </div>
       )}
     </>
   );
