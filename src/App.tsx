@@ -7,6 +7,7 @@ import { Todo } from './types/Todo';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Status } from './enums/status';
+import { Title } from './Title';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<number | null>(null);
@@ -200,23 +201,11 @@ export const App: React.FC = () => {
               </label>
 
               {!isEdited && (
-                <>
-                  <span
-                    data-cy="TodoTitle"
-                    onDoubleClick={() => setIsEdited(todo.id)}
-                    className="todo__title"
-                  >
-                    {todo.title}
-                  </span>
-                  <button
-                    onClick={event => handleRemoveButton(todo, event)}
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                  >
-                    ×
-                  </button>
-                </>
+                <Title
+                  handleRemoveButton={handleRemoveButton}
+                  todo={todo}
+                  setIsEdited={setIsEdited}
+                />
               )}
 
               {isEdited === todo.id && (
