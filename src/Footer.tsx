@@ -1,15 +1,15 @@
 import { Todo } from './types/Todo';
 import { Status } from './enums/status';
 import cn from 'classnames';
-import { useState } from 'react';
 
 type Props = {
   todos: Todo[];
   isAnyCompleted: boolean;
+  stat: Status;
+  setStat: (x: Status) => void;
 };
 
-export const Footer = ({ todos, isAnyCompleted }: Props) => {
-  const [stat, setStat] = useState('All');
+export const Footer = ({ todos, isAnyCompleted, setStat, stat }: Props) => {
   const notActive = todos.reduce(
     (acc, todo) => (todo.completed === false ? acc + 1 : acc),
     0,

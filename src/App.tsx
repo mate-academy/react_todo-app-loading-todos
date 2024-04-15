@@ -6,6 +6,7 @@ import { deleteTodo, getTodos, patchTodo, postTodo } from './api/todos';
 import { Todo } from './types/Todo';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { Status } from './enums/status';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<number | null>(null);
@@ -14,7 +15,21 @@ export const App: React.FC = () => {
   const [editedTitle, setEditedTitle] = useState('');
   const [newTitle, setNewTitle] = useState('');
   const [errMessage, setErrMessage] = useState('');
+  const [stat, setStat] = useState(Status.all);
 
+  const filteredTodos = (tod: Todo[], type: Status) => {
+    switch (type) {
+      case Status.active:
+        return tod.filter(todo => !todo.completed);
+      case Status.completed:
+        return tod.filter(todo => todo.completed);
+
+      default:
+        return tod;
+    }
+  };
+
+  const visibleTodos = filteredTodos(todos, stat);
   const editSelectedInput = useRef<HTMLInputElement>(null);
   const isAnyCompleted = todos.some(todo => todo.completed);
 
@@ -168,7 +183,7 @@ export const App: React.FC = () => {
         />
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.map(todo => (
+          {visibleTodos.map(todo => (
             <div
               key={todo.id}
               data-cy="Todo"
@@ -233,7 +248,12 @@ export const App: React.FC = () => {
         </section>
 
         {todos.length > 0 && (
-          <Footer todos={todos} isAnyCompleted={isAnyCompleted} />
+          <Footer
+            stat={stat}
+            todos={todos}
+            isAnyCompleted={isAnyCompleted}
+            setStat={setStat}
+          />
         )}
       </div>
 
