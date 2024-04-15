@@ -1,6 +1,4 @@
 import { Todo } from './types/Todo';
-import { Status } from './enums/status';
-import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -16,17 +14,7 @@ export const Footer = ({ todos, isAnyCompleted }: Props) => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        {/* {Object.values(Status).map(status => {
-          <a
-            key={status}
-            href="#/"
-            className="filter__link selected"
-            data-cy="FilterLinkAll"
-          >
-            {status}
-          </a>;
-        })} */}
-        {/* <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
           All
         </a>
 
@@ -40,7 +28,7 @@ export const Footer = ({ todos, isAnyCompleted }: Props) => {
           data-cy="FilterLinkCompleted"
         >
           Completed
-        </a> */}
+        </a>
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}

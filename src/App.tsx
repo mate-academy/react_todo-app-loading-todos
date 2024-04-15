@@ -94,7 +94,6 @@ export const App: React.FC = () => {
       await postTodo(newTodo);
 
       setTodos(prevTodos => [...prevTodos, newTodo]);
-      console.info('success!!!, todo added');
     } catch (error) {
       setErrMessage('Unable to add a todo');
       resetErr();
@@ -113,7 +112,6 @@ export const App: React.FC = () => {
       setTodos(prevTodos => {
         return prevTodos.filter(todo => todo.id !== todoToRmove.id);
       });
-      console.info('success!!!, todo deleted');
     } catch {
       setErrMessage('Unable to delete a todo');
       resetErr();
