@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { deleteTodo, getTodos, patchTodo, postTodo } from './api/todos';
 import { Todo } from './types/Todo';
 import { Footer } from './Footer';
+import { Header } from './Header';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<number | null>(null);
@@ -63,15 +64,17 @@ export const App: React.FC = () => {
 
       await patchTodo(newTodo);
 
-      setTodos(prevTodos => {
-        return prevTodos.map(todo => {
-          if (todo.id === updatedTodo.id) {
-            return { ...todo, ...newTodo };
-          }
+      getTodos().then(setTodos);
 
-          return todo;
-        });
-      });
+      // setTodos(prevTodos => {
+      //   return prevTodos.map(todo => {
+      //     if (todo.id === updatedTodo.id) {
+      //       return { ...todo, ...newTodo };
+      //     }
+
+      //     return todo;
+      //   });
+      // });
     } catch {
       setErrMessage('Unable to update a todo');
       resetErr();
@@ -81,8 +84,7 @@ export const App: React.FC = () => {
   };
 
   const addTodo = async () => {
-    const newTodo: Todo = {
-      id: 0,
+    const newTodo: Partial<Todo> = {
       userId: 472,
       title: newTitle,
       completed: false,
@@ -93,7 +95,8 @@ export const App: React.FC = () => {
 
       await postTodo(newTodo);
 
-      setTodos(prevTodos => [...prevTodos, newTodo]);
+      getTodos().then(setTodos);
+      // setTodos(prevTodos => [...prevTodos, newTodo]);
     } catch (error) {
       setErrMessage('Unable to add a todo');
       resetErr();
@@ -109,9 +112,10 @@ export const App: React.FC = () => {
 
       await deleteTodo(todoToRmove.id);
 
-      setTodos(prevTodos => {
-        return prevTodos.filter(todo => todo.id !== todoToRmove.id);
-      });
+      getTodos().then(setTodos);
+      // setTodos(prevTodos => {
+      //   return prevTodos.filter(todo => todo.id !== todoToRmove.id);
+      // });
     } catch {
       setErrMessage('Unable to delete a todo');
       resetErr();
@@ -156,26 +160,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form onSubmit={handleSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={newTitle}
-              onChange={event => setNewTitle(event.target.value)}
-            />
-          </form>
-        </header>
+        <Header
+          todos={todos}
+          handleSubmit={handleSubmit}
+          newTitle={newTitle}
+          setNewTitle={setNewTitle}
+        />
 
         <section className="todoapp__main" data-cy="TodoList">
           {todos.map(todo => (
@@ -242,8 +232,9 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        <Footer todos={todos} isAnyCompleted={isAnyCompleted} />
+        {todos.length > 0 && (
+          <Footer todos={todos} isAnyCompleted={isAnyCompleted} />
+        )}
       </div>
 
       <div

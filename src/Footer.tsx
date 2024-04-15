@@ -1,4 +1,7 @@
 import { Todo } from './types/Todo';
+import { Status } from './enums/status';
+import cn from 'classnames';
+import { useState } from 'react';
 
 type Props = {
   todos: Todo[];
@@ -6,37 +9,42 @@ type Props = {
 };
 
 export const Footer = ({ todos, isAnyCompleted }: Props) => {
+  const [stat, setStat] = useState('All');
+  const notActive = todos.reduce(
+    (acc, todo) => (todo.completed === false ? acc + 1 : acc),
+    0,
+  );
+
+  const handleDeleteActiv = () => {
+    //delete all active
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.length} items left
+        {notActive} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
-          All
-        </a>
-
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className="filter__link"
-          data-cy="FilterLinkCompleted"
-        >
-          Completed
-        </a>
+        {Object.values(Status).map(status => (
+          <a
+            key={status}
+            href={status === Status.all ? '#/' : `#/${status}`}
+            className={cn('filter__link', { selected: stat === status })}
+            data-cy={`FilterLink${status}`}
+            onClick={() => setStat(status)}
+          >
+            {status}
+          </a>
+        ))}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!isAnyCompleted}
+        onClick={handleDeleteActiv}
       >
         Clear completed
       </button>
