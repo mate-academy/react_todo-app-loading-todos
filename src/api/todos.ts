@@ -20,7 +20,7 @@ export const getTodosCompleted = () => {
 };
 
 export const addTodo = (newTodo: Omit<Todo, 'id'>) => {
-  return client.post<Todo[]>(`/todos?userId=${USER_ID}`, newTodo);
+  return client.post<Todo>(`/todos?userId=${USER_ID}`, newTodo);
 };
 
 export const deleteTodo = (currentId: number) => {

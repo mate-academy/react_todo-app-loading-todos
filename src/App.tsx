@@ -24,12 +24,10 @@ export const App: React.FC = () => {
         <TodoAppHeader />
 
         <TodoAppMain />
-        {/* Hide the footer if there are no todos */}
+
         {(todoApi.length !== 0 || select !== 'All') && <TodoAppFooter />}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <TodoAppError />
     </div>
   );
