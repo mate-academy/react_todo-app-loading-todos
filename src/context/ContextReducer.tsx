@@ -306,7 +306,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
       mounted = false;
       controller.abort();
     };
-  }, [state.error, state.fetch, state.select, state.showError]);
+  }, [state.fetch, state.select]);
 
   return (
     <StateContext.Provider value={state}>
