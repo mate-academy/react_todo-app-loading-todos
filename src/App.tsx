@@ -45,9 +45,13 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        {todos.length > 0 && <TodoList todos={displayedTodos} />}
+        {!!todos.length && (
+          <>
+            <TodoList todos={displayedTodos} />
+            <Footer />
+          </>
+        )}
       </div>
-      {todos.length > 0 && <Footer />}
 
       <div
         data-cy="ErrorNotification"

@@ -30,13 +30,15 @@ export const Header: React.FC = () => {
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', {
-          active: allTodosAreCompleted,
-        })}
-        data-cy="ToggleAllButton"
-      />
+      {false && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', {
+            active: allTodosAreCompleted,
+          })}
+          data-cy="ToggleAllButton"
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>

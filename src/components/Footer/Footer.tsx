@@ -14,6 +14,7 @@ export const Footer: React.FC = () => {
         {todosCount} items left
       </span>
       <FilterContainer />
+
       <button
         type="button"
         className="todoapp__clear-completed"
