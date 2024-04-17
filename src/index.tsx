@@ -6,4 +6,10 @@ import './styles/index.scss';
 
 import { App } from './App';
 
-createRoot(document.getElementById('root') as HTMLDivElement).render(<App />);
+import { BrowserRouter } from 'react-router-dom';
+
+createRoot(document.getElementById('root') as HTMLDivElement).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+);
