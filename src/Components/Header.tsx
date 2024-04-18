@@ -49,11 +49,11 @@ export const Header = () => {
 
       setNewTodoProcessing(true);
 
-      if (newTodo.title.trim() === '') {
+      if (!newTodo.title.trim()) {
         setErrorMessage('Title should not be empty');
       }
 
-      if (newTodo.title.trim() !== '') {
+      if (!!newTodo.title.trim()) {
         const { title, userId, completed } = newTodo;
 
         addTodo({
@@ -74,7 +74,7 @@ export const Header = () => {
   };
 
   const allCompleteCheck = () => {
-    if (todosList.length === 0) {
+    if (!todosList.length) {
       return false;
     }
 
@@ -125,7 +125,7 @@ export const Header = () => {
 
   return (
     <header className="todoapp__header">
-      {todosList.length > 0 && (
+      {!!todosList.length && (
         <button
           type="button"
           className={classNames('todoapp__toggle-all', {

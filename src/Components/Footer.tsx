@@ -13,8 +13,8 @@ export const Footer = () => {
     setErrorMessage,
   } = useContext(TodoContext);
 
-  const completedTodos = todosList.filter(todo => todo.completed === true);
-  const unCompletedTodos = todosList.filter(todo => todo.completed !== true);
+  const completedTodos = todosList.filter(todo => todo.completed);
+  const unCompletedTodos = todosList.filter(todo => !todo.completed);
 
   const handleFiltering = (value: FilterSettings) => {
     setFilterSettings(value);
@@ -34,7 +34,7 @@ export const Footer = () => {
   };
 
   return (
-    todosList.length > 0 && (
+    !!todosList.length && (
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="TodosCounter">
           {unCompletedTodos.length} items left
@@ -44,7 +44,7 @@ export const Footer = () => {
           <a
             href="#/"
             className={classNames('filter__link', {
-              selected: filterSettings === 'all',
+              selected: filterSettings === FilterSettings.all,
             })}
             data-cy="FilterLinkAll"
             onClick={() => handleFiltering(FilterSettings.all)}
@@ -55,7 +55,7 @@ export const Footer = () => {
           <a
             href="#/active"
             className={classNames('filter__link', {
-              selected: filterSettings === 'active',
+              selected: filterSettings === FilterSettings.active,
             })}
             data-cy="FilterLinkActive"
             onClick={() => handleFiltering(FilterSettings.active)}
@@ -66,7 +66,7 @@ export const Footer = () => {
           <a
             href="#/completed"
             className={classNames('filter__link', {
-              selected: filterSettings === 'completed',
+              selected: filterSettings === FilterSettings.completed,
             })}
             data-cy="FilterLinkCompleted"
             onClick={() => handleFiltering(FilterSettings.completed)}
@@ -80,7 +80,7 @@ export const Footer = () => {
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
           onClick={handleClearCompleted}
-          disabled={completedTodos.length < 1}
+          disabled={!completedTodos.length}
         >
           Clear completed
         </button>
