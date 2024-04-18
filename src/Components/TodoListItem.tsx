@@ -127,7 +127,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onClick={changeStatus}
+          onChange={changeStatus}
           checked={todo.completed}
         />
       </label>

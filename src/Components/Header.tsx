@@ -11,14 +11,13 @@ export const Header = () => {
     newTodo,
     setNewTodo,
     setErrorMessage,
-    setNewTodoProcessing,
+    setNewTodosProcessing,
   } = useContext(TodoContext);
 
   const headerInput = useRef<HTMLInputElement>(null);
 
   const isAllComplete =
-    todosList.length ===
-    todosList.filter(todo => todo.completed === true).length;
+    todosList.length === todosList.filter(todo => todo.completed).length;
 
   useEffect(() => {
     if (headerInput.current) {
@@ -47,7 +46,7 @@ export const Header = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
 
-      setNewTodoProcessing(true);
+      setNewTodosProcessing(true);
 
       if (!newTodo.title.trim()) {
         setErrorMessage('Title should not be empty');
@@ -67,7 +66,7 @@ export const Header = () => {
           .catch(() => setErrorMessage('Unable to add a todo'))
           .finally(() => {
             resetNewTodo();
-            setNewTodoProcessing(false);
+            setNewTodosProcessing(false);
           });
       }
     }

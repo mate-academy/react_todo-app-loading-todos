@@ -11,6 +11,7 @@ export const Footer = () => {
     filterSettings,
     setFilterSettings,
     setErrorMessage,
+    setNewTodosProcessing,
   } = useContext(TodoContext);
 
   const completedTodos = todosList.filter(todo => todo.completed);
@@ -21,6 +22,8 @@ export const Footer = () => {
   };
 
   const handleClearCompleted = () => {
+    setNewTodosProcessing(true);
+
     todosList.map(todo => {
       if (todo.completed) {
         deleteTodo(todo.id)
@@ -28,7 +31,7 @@ export const Footer = () => {
             setTodosList(todosList.filter(item => item.id !== todo.id));
           })
           .catch(() => setErrorMessage('Unable to delete a todo'))
-          .finally(() => setTodosList(unCompletedTodos));
+          .finally(() => setNewTodosProcessing(false));
       }
     });
   };

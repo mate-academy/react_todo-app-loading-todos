@@ -25,8 +25,8 @@ type TodoContextType = {
   errorMessage: string;
   setErrorMessage: (v: string) => void;
 
-  newTodoProcessing: boolean;
-  setNewTodoProcessing: (v: boolean) => void;
+  newTodosProcessing: boolean;
+  setNewTodosProcessing: (v: boolean) => void;
 };
 
 export const todoPattern = {
@@ -45,8 +45,8 @@ export const TodoContext = React.createContext<TodoContextType>({
   setFilterSettings: () => {},
   errorMessage: '',
   setErrorMessage: () => {},
-  newTodoProcessing: false,
-  setNewTodoProcessing: () => {},
+  newTodosProcessing: false,
+  setNewTodosProcessing: () => {},
 });
 
 export const TodoProvider: React.FC<Props> = ({ children }) => {
@@ -58,26 +58,20 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [newTodoProcessing, setNewTodoProcessing] = useState(false);
-
-  const [firstRender, setFirstRender] = useState(true);
+  const [newTodosProcessing, setNewTodosProcessing] = useState(false);
 
   const initialTodosList = () => {
     getTodos()
       .then(todos => setTodosList(todos))
       .catch(() => {
-        if (firstRender) {
-          setErrorMessage('Unable to load todos');
-          setTimeout(() => setErrorMessage(''), 3000);
-        }
+        setErrorMessage('Unable to load todos');
+        setTimeout(() => setErrorMessage(''), 3000);
       });
-    setFirstRender(false);
   };
 
   useEffect(() => {
     initialTodosList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newTodoProcessing]);
+  }, [newTodosProcessing]);
 
   const value = useMemo<TodoContextType>(
     () => ({
@@ -89,10 +83,10 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
       setFilterSettings,
       errorMessage,
       setErrorMessage,
-      newTodoProcessing,
-      setNewTodoProcessing,
+      newTodosProcessing,
+      setNewTodosProcessing,
     }),
-    [todosList, newTodo, filterSettings, errorMessage, newTodoProcessing],
+    [todosList, newTodo, filterSettings, errorMessage, newTodosProcessing],
   );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

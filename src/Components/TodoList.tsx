@@ -12,8 +12,10 @@ function filterList(list: Todo[], settings: FilterSettings): Todo[] {
         return item.completed === false;
       case 'completed':
         return item.completed === true;
+      case 'all':
+        return item;
       default:
-        return list;
+        return;
     }
   });
 }
