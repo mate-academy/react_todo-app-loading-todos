@@ -4,7 +4,6 @@ import { USER_ID } from '../api/todos';
 
 interface State {
   todos: Todo[];
-  newTodo: string;
   focusNewTodo: boolean;
   useTodos: 'All' | 'Active' | 'Completed';
   changerTodo: string;
@@ -15,16 +14,14 @@ interface State {
 
 export type Action =
   | { type: 'setAllTodos'; todos: Todo[] }
-  | { type: 'add' }
-  | { type: 'changeTodo'; text: string }
-  | { type: 'remove'; id: number }
-  | { type: 'checked'; id: number }
-  | { type: 'setChanged'; id: number }
-  | { type: 'changed'; id: number; text: string }
+  | { type: 'AddTodo'; title: string }
+  | { type: 'removeTodo'; id: number }
+  | { type: 'SetCheckedTodo'; id: number }
+  | { type: 'setChangedTodoId'; id: number }
+  | { type: 'changedTodoFromId'; id: number; text: string }
   | { type: 'setAllCompleate'; use: boolean }
   | { type: 'setUseTodos'; name: 'All' | 'Active' | 'Completed' }
-  | { type: 'clearAll' }
-  | { type: 'setTodos'; tod: Todo[] }
+  | { type: 'removeAllCompeted' }
   | { type: 'setFocudNewTodo' }
   | { type: 'escapeChangedText'; id: number }
   | { type: 'setError'; error: string }
@@ -38,13 +35,7 @@ const reducer = (state: State, action: Action): State => {
         todos: action.todos,
       };
 
-    case 'changeTodo':
-      return {
-        ...state,
-        newTodo: action.text,
-      };
-
-    case 'add':
+    case 'AddTodo':
       const todoId = +new Date();
 
       return {
@@ -53,7 +44,7 @@ const reducer = (state: State, action: Action): State => {
           ...state.todos,
           {
             id: todoId,
-            title: state.newTodo.trim(),
+            title: action.title.trim(),
             completed: false,
             userId: USER_ID,
           },
@@ -61,7 +52,7 @@ const reducer = (state: State, action: Action): State => {
         idTodoSubmitting: todoId,
       };
 
-    case 'remove':
+    case 'removeTodo':
       return {
         ...state,
         todos: [
@@ -74,7 +65,7 @@ const reducer = (state: State, action: Action): State => {
         focusNewTodo: !state.focusNewTodo,
       };
 
-    case 'checked':
+    case 'SetCheckedTodo':
       return {
         ...state,
         todos: [
@@ -91,7 +82,7 @@ const reducer = (state: State, action: Action): State => {
         ],
       };
 
-    case 'setChanged':
+    case 'setChangedTodoId':
       return {
         ...state,
         changerId: action.id,
@@ -99,7 +90,7 @@ const reducer = (state: State, action: Action): State => {
           state.todos.find(todo => todo.id === action.id)?.title || '',
       };
 
-    case 'changed':
+    case 'changedTodoFromId':
       return {
         ...state,
         todos: [
@@ -135,7 +126,7 @@ const reducer = (state: State, action: Action): State => {
         useTodos: action.name,
       };
 
-    case 'clearAll':
+    case 'removeAllCompeted':
       return {
         ...state,
         todos: [
@@ -144,12 +135,6 @@ const reducer = (state: State, action: Action): State => {
           }),
         ],
         focusNewTodo: !state.focusNewTodo,
-      };
-
-    case 'setTodos':
-      return {
-        ...state,
-        todos: [...action.tod],
       };
 
     case 'setFocudNewTodo':
@@ -194,7 +179,6 @@ const reducer = (state: State, action: Action): State => {
 
 const initialState: State = {
   todos: [],
-  newTodo: '',
   useTodos: 'All',
   focusNewTodo: true,
   changerTodo: '',
