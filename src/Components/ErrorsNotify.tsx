@@ -1,23 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import classNames from 'classnames';
-import { TodoContext } from '../TodoContext/TodoContext';
+import { TodoContext } from './TodoContext';
 
 export const ErrorsNotify = () => {
   const { errorMessage, setErrorMessage } = useContext(TodoContext);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-
-  useEffect(() => {
-    if (errorMessage !== '') {
-      setShowErrorMessage(true);
-    } else {
-      setShowErrorMessage(false);
-    }
-  }, [errorMessage]);
+  const showErrorMessage = !!errorMessage;
 
   const closeErrorMessage = () => {
-    setShowErrorMessage(false);
     setErrorMessage('');
   };
+
+  useEffect(() => {
+    setTimeout(() => setErrorMessage(''), 3000);
+  }, [errorMessage, setErrorMessage]);
 
   return (
     <div

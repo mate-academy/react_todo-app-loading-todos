@@ -3,11 +3,11 @@
 import React from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
-import { TodoProvider } from './Components/TodoContext/TodoContext';
-import { Header } from './Components/Header/Header';
-import { TodoList } from './Components/TodoList/TodoList';
-import { Footer } from './Components/Footer/Footer';
-import { ErrorsNotify } from './Components/ErrorsNotify/ErrorsNotify';
+import { TodoProvider } from './Components/TodoContext';
+import { Header } from './Components/Header';
+import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+import { ErrorsNotify } from './Components/ErrorsNotify';
 
 export const App: React.FC = () => {
   if (!USER_ID) {

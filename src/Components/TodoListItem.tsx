@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useContext } from 'react';
-import { Todo } from '../../types/Todo';
-import { TodoContext } from '../TodoContext/TodoContext';
+import { Todo } from '../types/Todo';
+import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { deleteTodo, updateTodo } from '../../api/todos';
+import { deleteTodo, updateTodo } from '../api/todos';
 
 type Props = {
   todo: Todo;
@@ -15,7 +15,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
 
   const { id, title, completed } = todo;
 
-  const [editable, setEditable] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [newTitle, setNewTitle] = useState(title);
 
@@ -57,7 +57,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleEditing = () => {
-    setEditable(true);
+    setIsEditing(true);
   };
 
   const editingNewTitle = (event: React.FormEvent<HTMLInputElement>) => {
@@ -66,7 +66,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
   };
 
   const applyNewTitle = () => {
-    if (newTitle.trim() !== '') {
+    if (newTitle.trim()) {
       const targetTodo = todosList.find(item => item.id === id);
 
       if (targetTodo) {
@@ -74,7 +74,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
       }
 
       setNewTitle(trimmedTitle);
-      setEditable(false);
+      setIsEditing(false);
 
       updateTodo({ ...todo })
         .then(() => {
@@ -108,7 +108,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
 
   const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Escape') {
-      setEditable(false);
+      setIsEditing(false);
       setNewTitle(title);
       setTrimmedTitle(title);
       setTodosList([...todosList]);
@@ -128,10 +128,11 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           onClick={changeStatus}
+          checked={todo.completed}
         />
       </label>
 
-      {editable ? (
+      {isEditing ? (
         <form>
           <input
             data-cy="TodoTitleField"
@@ -159,6 +160,11 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
           >
             ×
           </button>
+
+          <div data-cy="TodoLoader" className="modal overlay">
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
+          </div>
         </>
       )}
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api/todos';
+import { Todo } from '../types/Todo';
+import { getTodos } from '../api/todos';
 
 export enum FilterSettings {
   all = 'all',
@@ -17,12 +17,7 @@ type TodoContextType = {
   setTodosList: (v: Todo[]) => void;
 
   newTodo: Todo;
-  setNewTodo: (v: {
-    title: string;
-    id: number;
-    completed: boolean;
-    userId: number;
-  }) => void;
+  setNewTodo: (newTodo: Todo) => void;
 
   filterSettings: FilterSettings;
   setFilterSettings: (v: FilterSettings) => void;
@@ -65,14 +60,23 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
   const [newTodoProcessing, setNewTodoProcessing] = useState(false);
 
+  const [firstRender, setFirstRender] = useState(true);
+
   const initialTodosList = () => {
     getTodos()
       .then(todos => setTodosList(todos))
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => {
+        if (firstRender) {
+          setErrorMessage('Unable to load todos');
+          setTimeout(() => setErrorMessage(''), 3000);
+        }
+      });
+    setFirstRender(false);
   };
 
   useEffect(() => {
     initialTodosList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newTodoProcessing]);
 
   const value = useMemo<TodoContextType>(

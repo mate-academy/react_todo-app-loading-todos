@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
-import { TodoListItem } from '../Todo/TodoListItem';
-import { Todo } from '../../types/Todo';
+import { TodoContext } from './TodoContext';
+import { TodoListItem } from './TodoListItem';
+import { Todo } from '../types/Todo';
 
 type FilterSettings = string;
 

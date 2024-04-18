@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
+import { TodoContext } from './TodoContext';
 import classNames from 'classnames';
-import { FilterSettings } from '../TodoContext/TodoContext';
-import { deleteTodo } from '../../api/todos';
+import { FilterSettings } from './TodoContext';
+import { deleteTodo } from '../api/todos';
 
 export const Footer = () => {
   const {

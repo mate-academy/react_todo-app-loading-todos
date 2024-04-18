@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef } from 'react';
-import { TodoContext } from '../TodoContext/TodoContext';
-import { todoPattern } from '../TodoContext/TodoContext';
+import { TodoContext } from './TodoContext';
+import { todoPattern } from './TodoContext';
 import classNames from 'classnames';
-import { addTodo, updateTodo } from '../../api/todos';
+import { addTodo, updateTodo } from '../api/todos';
 
 export const Header = () => {
   const {
@@ -65,10 +65,11 @@ export const Header = () => {
             setTodosList([...todosList, newTodo]);
           })
           .catch(() => setErrorMessage('Unable to add a todo'))
-          .finally(() => resetNewTodo());
+          .finally(() => {
+            resetNewTodo();
+            setNewTodoProcessing(false);
+          });
       }
-
-      setNewTodoProcessing(false);
     }
   };
 
@@ -103,9 +104,7 @@ export const Header = () => {
               ),
             );
           })
-          .catch(() => {
-            setErrorMessage('Unable to update a todos');
-          }),
+          .catch(() => setErrorMessage('Unable to update a todos')),
       );
     } else {
       toggleAll(false);
@@ -119,9 +118,7 @@ export const Header = () => {
               ),
             );
           })
-          .catch(() => {
-            setErrorMessage('Unable to update a todos');
-          }),
+          .catch(() => setErrorMessage('Unable to update a todos')),
       );
     }
   };
