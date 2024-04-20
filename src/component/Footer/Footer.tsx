@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 import cn from 'classnames';
+import { IsUseTodos } from '../../types/IsUseTodos';
 
 export const Footer = () => {
   const dispatch = useContext(DispatchContext);
@@ -20,9 +21,13 @@ export const Footer = () => {
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
-              className={cn('filter__link', { selected: useTodos === 'All' })}
+              className={cn('filter__link', {
+                selected: useTodos === IsUseTodos.All,
+              })}
               data-cy="FilterLinkAll"
-              onClick={() => dispatch({ type: 'setUseTodos', name: 'All' })}
+              onClick={() =>
+                dispatch({ type: 'setUseTodos', name: IsUseTodos.All })
+              }
             >
               All
             </a>
@@ -30,10 +35,12 @@ export const Footer = () => {
             <a
               href="#/active"
               className={cn('filter__link', {
-                selected: useTodos === 'Active',
+                selected: useTodos === IsUseTodos.Active,
               })}
               data-cy="FilterLinkActive"
-              onClick={() => dispatch({ type: 'setUseTodos', name: 'Active' })}
+              onClick={() =>
+                dispatch({ type: 'setUseTodos', name: IsUseTodos.Active })
+              }
             >
               Active
             </a>
@@ -41,11 +48,11 @@ export const Footer = () => {
             <a
               href="#/completed"
               className={cn('filter__link', {
-                selected: useTodos === 'Completed',
+                selected: useTodos === IsUseTodos.Completed,
               })}
               data-cy="FilterLinkCompleted"
               onClick={() =>
-                dispatch({ type: 'setUseTodos', name: 'Completed' })
+                dispatch({ type: 'setUseTodos', name: IsUseTodos.Completed })
               }
             >
               Completed

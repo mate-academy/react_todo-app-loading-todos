@@ -22,11 +22,11 @@ export const TodoList = () => {
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todosFilter.map(todo => (
+      {todosFilter.map(({ id, title, completed }) => (
         <div
           data-cy="Todo"
-          className={cn('todo', { completed: todo.completed })}
-          key={todo.id}
+          className={cn('todo', { completed: completed })}
+          key={id}
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="todo__status-label">
@@ -34,24 +34,24 @@ export const TodoList = () => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
-              onChange={() => dispatch({ type: 'SetCheckedTodo', id: todo.id })}
+              checked={completed}
+              onChange={() => dispatch({ type: 'SetCheckedTodo', id: id })}
             />
           </label>
 
-          {todo.id !== changerId && (
+          {id !== changerId && (
             <span
               data-cy="TodoTitle"
               className="todo__title"
               onDoubleClick={() =>
-                dispatch({ type: 'setChangedTodoId', id: todo.id })
+                dispatch({ type: 'setChangedTodoId', id: id })
               }
             >
-              {todo.title}
+              {title}
             </span>
           )}
 
-          {todo.id === changerId && (
+          {id === changerId && (
             <form
               onSubmit={e => {
                 e.preventDefault();
@@ -63,10 +63,10 @@ export const TodoList = () => {
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
-                value={todo.title}
+                value={title}
                 onKeyUp={e => {
                   if (e.key === 'Escape') {
-                    dispatch({ type: 'escapeChangedText', id: todo.id });
+                    dispatch({ type: 'escapeChangedText', id: id });
                     dispatch({ type: 'setChangedTodoId', id: 0 });
                   }
                 }}
@@ -74,7 +74,7 @@ export const TodoList = () => {
                 onChange={e =>
                   dispatch({
                     type: 'changedTodoFromId',
-                    id: todo.id,
+                    id: id,
                     text: e.target.value,
                   })
                 }
@@ -84,12 +84,12 @@ export const TodoList = () => {
           )}
 
           {/* Remove button appears only on hover */}
-          {todo.id !== changerId && (
+          {id !== changerId && (
             <button
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => dispatch({ type: 'removeTodo', id: todo.id })}
+              onClick={() => dispatch({ type: 'removeTodo', id: id })}
             >
               ×
             </button>
@@ -98,7 +98,7 @@ export const TodoList = () => {
           <div
             data-cy="TodoLoader"
             className={cn('modal overlay', {
-              'is-active': idTodoSubmitting === todo.id,
+              'is-active': idTodoSubmitting === id,
             })}
           >
             <div className="modal-background has-background-white-ter" />

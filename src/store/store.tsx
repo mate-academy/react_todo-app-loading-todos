@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { Todo } from '../types/Todo';
 import { USER_ID } from '../api/todos';
+import { IsUseTodos } from '../types/IsUseTodos';
 
 interface State {
   todos: Todo[];
@@ -20,7 +21,7 @@ export type Action =
   | { type: 'setChangedTodoId'; id: number }
   | { type: 'changedTodoFromId'; id: number; text: string }
   | { type: 'setAllCompleate'; use: boolean }
-  | { type: 'setUseTodos'; name: 'All' | 'Active' | 'Completed' }
+  | { type: 'setUseTodos'; name: IsUseTodos }
   | { type: 'removeAllCompeted' }
   | { type: 'setFocudNewTodo' }
   | { type: 'escapeChangedText'; id: number }
