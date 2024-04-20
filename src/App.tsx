@@ -50,38 +50,42 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.map(todo => (
-            <div
-              key={todo.id}
-              data-cy="Todo"
-              className={classNames('todo', { completed: todo.completed })}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                />
-              </label>
+          {todos.map(todo => {
+            const { id, completed, title } = todo;
 
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
+            return (
+              <div
+                key={id}
+                data-cy="Todo"
+                className={classNames('todo', { completed: completed })}
               >
-                ×
-              </button>
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                    checked={completed}
+                  />
+                </label>
 
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
+                <span data-cy="TodoTitle" className="todo__title">
+                  {title}
+                </span>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
+                  ×
+                </button>
+
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
 
         <footer className="todoapp__footer" data-cy="Footer">
