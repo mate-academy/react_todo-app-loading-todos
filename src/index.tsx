@@ -10,5 +10,5 @@ import { GlobalStateProvider } from './components/GlobalStateProvider';
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <GlobalStateProvider>
     <App />
-  </GlobalStateProvider>
+  </GlobalStateProvider>,
 );

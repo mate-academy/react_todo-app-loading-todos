@@ -16,21 +16,18 @@ import {
 } from './components/GlobalStateProvider';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
   const { error } = useStateContext();
   const dispatch = useDispatchContext();
 
-  const handleClearError = () => {
+  const handleClearError = React.useCallback(() => {
     dispatch({
       type: 'SET_ERROR',
       payload: '',
     });
-  };
+  }, [dispatch]);
 
   React.useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;;
+    let timer: ReturnType<typeof setTimeout>;
 
     if (error) {
       timer = setTimeout(() => {
@@ -39,8 +36,11 @@ export const App: React.FC = () => {
     }
 
     return () => clearTimeout(timer);
+  }, [error, handleClearError]);
 
-  }, [error]);
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
