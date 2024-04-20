@@ -30,13 +30,16 @@ export const App: React.FC = () => {
   };
 
   React.useEffect(() => {
-    let timer;
+    let timer: ReturnType<typeof setTimeout>;;
 
     if (error) {
       timer = setTimeout(() => {
         handleClearError();
       }, 3000);
     }
+
+    return () => clearTimeout(timer);
+
   }, [error]);
 
   return (

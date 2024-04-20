@@ -17,10 +17,10 @@ export const addTodo = (title: string) => {
 };
 
 export const updateTodo = (todo: Todo) => {
-  const { title, id } = todo;
+  const { title, id, completed } = todo;
   console.log(id)
 
-  return client.patch<Todo>(`/todos/${id}`, { title });
+  return client.patch<Todo>(`/todos/${id}`, { title, completed });
 };
 
 export const deleteTodo = (id: number) => {
