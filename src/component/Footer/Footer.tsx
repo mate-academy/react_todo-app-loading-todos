@@ -11,7 +11,7 @@ export const Footer = () => {
 
   return (
     <>
-      {todos.length !== 0 && (
+      {!!todos.length && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
             {todosLeft} items left

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { DispatchContext, StateContext } from '../../store/store';
 import cn from 'classnames';
+import { IsUseTodos } from '../../types/IsUseTodos';
 
 export const TodoList = () => {
   const dispatch = useContext(DispatchContext);
@@ -9,10 +10,10 @@ export const TodoList = () => {
 
   const todosFilter = todos.filter(todo => {
     switch (useTodos) {
-      case 'Active':
+      case IsUseTodos.Active:
         return !todo.completed;
 
-      case 'Completed':
+      case IsUseTodos.Completed:
         return todo.completed;
 
       default:
