@@ -66,11 +66,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         setEditingId(todo.id.toString());
       }}
     >
-      <label className="todo__status-label">
+      <label className="todo__status-label" htmlFor={todo.id.toString()}>
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          id={todo.id.toString()}
           checked={todo.completed}
           onChange={event => {
             handleTodoCompleted(+event.target.id, todo.completed);
