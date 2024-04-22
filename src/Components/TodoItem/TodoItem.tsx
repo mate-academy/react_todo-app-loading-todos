@@ -66,7 +66,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         setEditingId(todo.id.toString());
       }}
     >
-      {/* eslint-disable-next-line react-hooks/exhaustive-deps */}
+      {/* eslint-disable-next-line */}
       <label className="todo__status-label" htmlFor={todo.id.toString()}>
         <input
           data-cy="TodoStatus"
