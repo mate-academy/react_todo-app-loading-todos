@@ -36,6 +36,8 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timeout);
     }
+
+    return;
   }, [errorMessage, todos, loading]);
 
   const filterTodos = () => {
