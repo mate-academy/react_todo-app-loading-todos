@@ -53,11 +53,13 @@ export const TodoApp: React.FC = () => {
 
         <TodoList todos={todos} statusFilter={statusFilter} />
 
-        <Footer
-          todos={todos}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-        />
+        {todos.length > 0 && (
+          <Footer
+            todos={todos}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+          />
+        )}
       </div>
 
       <div
