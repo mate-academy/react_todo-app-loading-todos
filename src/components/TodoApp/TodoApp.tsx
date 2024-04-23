@@ -18,9 +18,7 @@ export const TodoApp: React.FC = () => {
     setLoading(true);
 
     getTodos()
-      .then(data => {
-        setTodos(data);
-      })
+      .then(setTodos)
       .catch(error => {
         setErrorMessage(`Unable to load todos`);
         throw error;
@@ -53,7 +51,7 @@ export const TodoApp: React.FC = () => {
 
         <TodoList todos={todos} statusFilter={statusFilter} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             statusFilter={statusFilter}
