@@ -19,15 +19,14 @@ export const TodoApp: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(`Unable to load todos`);
-        throw error;
       })
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    if (errorMessage || (todos.length === 0 && !loading)) {
+    if (errorMessage || (!todos.length && !loading)) {
       const timeout = setTimeout(() => {
         setErrorMessage('');
       }, 3000);

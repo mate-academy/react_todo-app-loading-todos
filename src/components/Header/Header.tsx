@@ -7,12 +7,14 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ todos }) => {
+  const allTodosCompleted = todos.every(todo => todo.completed);
+
   return (
     <header className="todoapp__header">
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
-          active: todos.every(todo => todo.completed),
+          active: allTodosCompleted,
         })}
         data-cy="ToggleAllButton"
       />
