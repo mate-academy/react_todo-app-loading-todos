@@ -17,7 +17,7 @@ const ErrorNotification = () => {
         type="button"
         className="delete"
         aria-label="delete error"
-        onClick={() => handleErrorMessage(TodosError.NONE)}
+        onClick={handleErrorMessage(TodosError.NONE)}
       />
       {errorMessage}
     </div>

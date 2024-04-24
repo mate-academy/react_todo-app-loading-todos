@@ -9,7 +9,7 @@ export type TodosContextType = {
   filter: FilterType;
   handleFilterChange: (filterStatus: FilterType) => VoidFunction;
   errorMessage: TodosError;
-  handleErrorMessage: (error: TodosError) => {};
+  handleErrorMessage: (error: TodosError) => VoidFunction;
 }
 export const TodosContext = createContext({
   todos: [] as Todo[],

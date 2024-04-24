@@ -8,7 +8,7 @@ export const Footer = () => {
     let todosCopy = [...todos]
     return todosCopy.filter(todo => !todo.completed)
 
-  },[todos]);
+  }, [todos]);
   const completedTodos = useMemo(() => {
     let todosCopy = [...todos]
     return todosCopy.filter(todo => todo.completed)
@@ -24,8 +24,9 @@ export const Footer = () => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={cn('filter__link', { selected: filter==='All' })}
+          className={cn('filter__link', { selected: filter === 'All' })}
           data-cy="FilterLinkAll"
+          onClick={handleFilterChange('All')}
         >
           All
         </a>
@@ -34,6 +35,7 @@ export const Footer = () => {
           href="#/active"
           className={cn('filter__link', { selected: filter === 'Active' })}
           data-cy="FilterLinkActive"
+          onClick={handleFilterChange('Active')}
         >
           Active
         </a>
@@ -42,6 +44,7 @@ export const Footer = () => {
           href="#/completed"
           className={cn('filter__link', { selected: filter === 'Completed' })}
           data-cy="FilterLinkCompleted"
+          onClick={handleFilterChange('Completed')}
         >
           Completed
         </a>

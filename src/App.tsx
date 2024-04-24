@@ -12,26 +12,12 @@ import { TodosError } from './types/TodosErrors';
 
 export const App: React.FC = () => {
   const { todos, handleErrorMessage, setTodos } = useTodosContext();
-  // useEffect(() => {
-  //   getTodos()
-  //     .then(data => setTodos(data))
-  //     .catch(() => {
-  //       console.log("error")
-  //       return handleErrorMessage(TodosError.LOAD_TODOS)
-  //     })
-  // }, [])
   useEffect(() => {
-    console.log("useEffect triggered");
     getTodos()
-      .then(data => {
-        console.log("Data received:", data);
-        setTodos(data);
-      })
-      .catch(error => {
-        console.error("Error occurred:", error);
-        return handleErrorMessage(TodosError.LOAD_TODOS);
-      });
+      .then(data => setTodos(data))
+      .catch(handleErrorMessage(TodosError.LOAD_TODOS))
   }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
