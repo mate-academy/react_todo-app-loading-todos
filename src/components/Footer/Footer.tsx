@@ -1,19 +1,20 @@
-import { useMemo } from "react";
-import { useTodosContext } from "../../context/TodosProvider";
+import { useMemo } from 'react';
+import { useTodosContext } from '../../context/TodosProvider';
 import cn from 'classnames';
 
 export const Footer = () => {
   const { todos, filter, handleFilterChange } = useTodosContext();
   const activeTodos = useMemo(() => {
-    let todosCopy = [...todos]
-    return todosCopy.filter(todo => !todo.completed)
+    const todosCopy = [...todos];
 
+    return todosCopy.filter(todo => !todo.completed);
   }, [todos]);
   const completedTodos = useMemo(() => {
-    let todosCopy = [...todos]
-    return todosCopy.filter(todo => todo.completed)
+    const todosCopy = [...todos];
 
+    return todosCopy.filter(todo => todo.completed);
   }, [todos]);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -60,5 +61,5 @@ export const Footer = () => {
         </button>
       )}
     </footer>
-  )
-}
+  );
+};

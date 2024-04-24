@@ -24,5 +24,4 @@ const ErrorNotification = () => {
   );
 };
 
-
 export default ErrorNotification;

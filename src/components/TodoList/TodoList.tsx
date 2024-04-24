@@ -17,7 +17,7 @@ const TodoList = () => {
     }
 
     return filtered;
-  },[filter, todos]);
+  }, [filter, todos]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

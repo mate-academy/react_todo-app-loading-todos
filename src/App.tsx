@@ -5,17 +5,18 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Header } from './components/Header/Header';
 import TodoList from './components/TodoList';
-import ErrorNotification from './components/ErrorNotification/ErrorNotification';
+import ErrorNotification from './components/ErrorNotification';
 import { Footer } from './components/Footer/Footer';
 import { useTodosContext } from './context/TodosProvider';
 import { TodosError } from './types/TodosErrors';
 
 export const App: React.FC = () => {
   const { todos, handleErrorMessage, setTodos } = useTodosContext();
+
   useEffect(() => {
     getTodos()
       .then(data => setTodos(data))
-      .catch(handleErrorMessage(TodosError.LOAD_TODOS))
+      .catch(handleErrorMessage(TodosError.LOAD_TODOS));
   }, []);
 
   if (!USER_ID) {
