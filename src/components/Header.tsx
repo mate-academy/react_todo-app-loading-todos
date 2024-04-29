@@ -35,7 +35,7 @@ export const Header: React.FC = () => {
   const handleToggleAllClick = () => {
     if (allCompleted) {
       dispatch({
-        type: 'changeTodos',
+        type: 'setTodos',
         payload: todos.map(todo => ({
           ...todo,
           completed: false,
@@ -46,7 +46,7 @@ export const Header: React.FC = () => {
     }
 
     dispatch({
-      type: 'changeTodos',
+      type: 'setTodos',
       payload: todos.map(todo => ({
         ...todo,
         completed: true,
