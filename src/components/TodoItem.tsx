@@ -7,7 +7,7 @@ interface Props {
   todoData: Todo;
 }
 export const TodoItem: React.FC<Props> = ({ todoData }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const { dispatch } = useAppContext();
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState(todoData.title);
@@ -77,6 +77,7 @@ export const TodoItem: React.FC<Props> = ({ todoData }) => {
       className={cn('todo', { completed: todoData.completed })}
       onDoubleClick={handleDoubleClick}
     >
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
