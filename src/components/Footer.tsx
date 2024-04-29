@@ -65,9 +65,7 @@ export const Footer: React.FC = () => {
             type="button"
             className="todoapp__clear-completed"
             data-cy="ClearCompletedButton"
-            onClick={() =>
-              dispatch({ type: 'changeTodos', payload: notComleted })
-            }
+            onClick={() => dispatch({ type: 'setTodos', payload: notComleted })}
             disabled={!completed.length}
           >
             Clear completed
