@@ -68,7 +68,8 @@ export default function TodosFooter({
         disabled={todos.every(({ completed }) => !completed)}
         type="button"
         className={
-          'todoapp__clear' + (completeFilter === false ? 'selected' : '')
+          'todoapp__clear-completed' +
+          (completeFilter === false ? ' selected' : '')
         }
         data-cy="ClearCompletedButton"
       >

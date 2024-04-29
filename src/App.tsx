@@ -35,23 +35,11 @@ export const App: React.FC = () => {
   }, []);
 
   function addTodo(newPostTitle: string) {
-    if (newPostTitle.trim() === '') {
-      setFailCaseStates(prevCases => ({
-        ...prevCases,
-        titleLength: true,
-      }));
-    } else {
-      postTodo({ title: newPostTitle, userId: USER_ID, completed: false }).then(
-        newTodo => {
-          setTodos(prevTodos => [{ ...newTodo, isFake: false }, ...prevTodos]);
-        },
-      );
-
-      setFailCaseStates(prevCases => ({
-        ...prevCases,
-        titleLength: false,
-      }));
-    }
+    postTodo({ title: newPostTitle, userId: USER_ID, completed: false }).then(
+      newTodo => {
+        setTodos(prevTodos => [...prevTodos, { ...newTodo, isFake: false }]);
+      },
+    );
   }
 
   const displayTodos = todos.filter(
@@ -62,7 +50,11 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">Todos</h1>
       <div className="todoapp__content">
-        <TodoForm displayTodos={displayTodos} addTodo={addTodo} />
+        <TodoForm
+          todos={todos}
+          addTodo={addTodo}
+          setFailCaseStates={setFailCaseStates}
+        />
         <TodoList displayTodos={displayTodos} />
         {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (

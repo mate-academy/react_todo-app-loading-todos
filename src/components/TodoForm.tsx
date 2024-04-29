@@ -3,16 +3,29 @@ import React, { useState } from 'react';
 import { LocalTodosArrayType } from '../types/Todo';
 
 type Props = {
-  displayTodos: LocalTodosArrayType;
+  todos: LocalTodosArrayType;
   addTodo: (newTodoTitle: string) => void;
+  setFailCaseStates: (prevCases: {}) => void;
 };
 
-export default function TodoForm({ displayTodos, addTodo }: Props) {
+export default function TodoForm({ todos, addTodo, setFailCaseStates }: Props) {
   const [newPostTitle, setNewPostTitle] = useState<string>('');
 
-  function handleNewTodoForm(e: React.FormEvent) {
+  function handleTodoSubmit(e: React.FormEvent) {
     e.preventDefault();
-    addTodo(newPostTitle);
+    if (newPostTitle.trim() === '') {
+      setFailCaseStates((prevCases: {}) => ({
+        ...prevCases,
+        titleLength: true,
+      }));
+    } else {
+      addTodo(newPostTitle);
+      setFailCaseStates((prevCases: {}) => ({
+        ...prevCases,
+        titleLength: false,
+      }));
+      setNewPostTitle('');
+    }
   }
 
   return (
@@ -22,13 +35,13 @@ export default function TodoForm({ displayTodos, addTodo }: Props) {
         type="button"
         className={
           'todoapp__toggle-all ' +
-          (displayTodos.every(({ completed }) => completed) ? 'active' : '')
+          (todos.every(({ completed }) => completed) ? 'active' : '')
         }
         data-cy="ToggleAllButton"
       />
 
       {/* Add a todo on form submit */}
-      <form onSubmit={handleNewTodoForm}>
+      <form onSubmit={handleTodoSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
