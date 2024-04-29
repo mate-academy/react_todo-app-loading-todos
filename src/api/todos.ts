@@ -7,7 +7,7 @@ export const getTodos = () => {
   return client.get<TodoType[]>(`/todos?userId=${USER_ID}`);
 };
 
-export const postTodo = (newTodo: any) => {
+export const postTodo = (newTodo: Partial<TodoType>) => {
   return client.post<TodoType>(`/todos`, newTodo);
 };
 

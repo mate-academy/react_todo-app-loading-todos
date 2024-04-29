@@ -1,10 +1,12 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { LocalTodoType } from '../types/Todo';
 import { useState } from 'react';
 
 type Props = { todo: LocalTodoType };
 
 export default function Todo({ todo }: Props) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing] = useState(false);
 
   return (
     <div
@@ -23,7 +25,7 @@ export default function Todo({ todo }: Props) {
         </form>
       ) : (
         <>
-          <label className="todo__status-label">
+          <label className="todo__status-label" htmlFor="input">
             <input
               data-cy="TodoStatus"
               type="checkbox"

@@ -29,9 +29,10 @@ export default function ErrorNotification({
           updateTodo: false,
         });
       }, 3000);
+
       return failMsgs[singleFail[0][0] as keyof typeof failMsgs];
     }
-  }, [failCaseStates]);
+  }, [failCaseStates, setFailCaseStates]);
 
   /* DON'T use conditional rendering to hide the notification */
   /* Add the 'hidden' class to hide the message smoothly */

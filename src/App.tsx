@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/l  abel-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { USER_ID, getTodos, postTodo } from './api/todos';
 
@@ -22,9 +20,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todos => {
+      .then(serverTodos => {
         setTodos(
-          todos.map(todo => ({
+          serverTodos.map(todo => ({
             ...todo,
             isFromServer: true,
           })),
