@@ -1,26 +1,21 @@
-// import React, { useContext, useEffect, useState } from 'react';
-// import cn from 'classnames';
-// import { Context } from 'mocha';
+import React from 'react';
+import cn from 'classnames';
+import { useAppContext } from '../context/Context';
 
-// export const ErrorMessage: React.FC = () => {
-//   const { errorMessage } = useContext(Context);
-//   const [lastErrorMessage, setLastErrorMessage] = useState('');
+export const Error: React.FC = () => {
+  const {
+    state: { error },
+  } = useAppContext();
 
-//   useEffect(() => {
-//     if (errorMessage !== '') {
-//       setLastErrorMessage(errorMessage);
-//     }
-//   }, [errorMessage]);
-
-//   return (
-//     <div
-//       data-cy="ErrorNotification"
-//       className={cn('notification is-danger is-light has-text-weight-normal', {
-//         hidden: !errorMessage,
-//       })}
-//     >
-//       <button data-cy="HideErrorButton" type="button" className="delete" />
-//       {lastErrorMessage}
-//     </div>
-//   );
-// };
+  return (
+    <div
+      data-cy="ErrorNotification"
+      className={cn('notification is-danger is-light has-text-weight-normal', {
+        hidden: !error,
+      })}
+    >
+      <button data-cy="HideErrorButton" type="button" className="delete" />
+      {error}
+    </div>
+  );
+};
