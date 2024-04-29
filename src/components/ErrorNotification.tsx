@@ -21,18 +21,25 @@ export default function ErrorNotification({
       return null;
     } else {
       setTimeout(() => {
-        setFailCaseStates({
-          todoLoad: false,
-          titleLength: false,
-          addTodo: false,
-          deleteTodo: false,
-          updateTodo: false,
-        });
+        setFailCaseStates((prevStates: {}) => ({
+          ...prevStates,
+          [singleFail[0][0] as keyof typeof failMsgs]: false,
+        }));
       }, 3000);
 
       return failMsgs[singleFail[0][0] as keyof typeof failMsgs];
     }
   }, [failCaseStates, setFailCaseStates]);
+
+  function handleHideMsg() {
+    setFailCaseStates({
+      todoLoad: false,
+      titleLength: false,
+      addTodo: false,
+      deleteTodo: false,
+      updateTodo: false,
+    });
+  }
 
   /* DON'T use conditional rendering to hide the notification */
   /* Add the 'hidden' class to hide the message smoothly */
@@ -44,7 +51,12 @@ export default function ErrorNotification({
         (currentFailCase === null ? 'hidden' : '')
       }
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={handleHideMsg}
+      />
       {currentFailCase}
     </div>
   );
