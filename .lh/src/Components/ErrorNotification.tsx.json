@@ -1,0 +1,634 @@
+{
+    "sourceFile": "src/Components/ErrorNotification.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 154,
+            "patches": [
+                {
+                    "date": 1714379437302,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714379445994,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,3 @@\n-export \n+export\n+const\n+Err\n"
+                },
+                {
+                    "date": 1714379451325,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,1 @@\n-export\n-const\n-Err\n+export const ErrorNotification\n"
+                },
+                {
+                    "date": 1714379457622,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,3 @@\n-export const ErrorNotification\n+export const ErrorNotification = () => {\n+  \n+}\n"
+                },
+                {
+                    "date": 1714379462979,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,20 @@\n export const ErrorNotification = () => {\n-  \n+  return (\n+    <div\n+    data-cy=\"ErrorNotification\"\n+    className=\"notification is-danger is-light has-text-weight-normal\"\n+  >\n+    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+    {/* show only one message at a time */}\n+    Unable to load todos\n+    <br />\n+    Title should not be empty\n+    <br />\n+    Unable to add a todo\n+    <br />\n+    Unable to delete a todo\n+    <br />\n+    Unable to update a todo\n+  </div>\n+  )\n }\n"
+                },
+                {
+                    "date": 1714379637080,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,6 @@\n+\n+\n export const ErrorNotification = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714379642930,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n+import React; from \"react\"\n \n-\n export const ErrorNotification = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714383338222,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n-import React; from \"react\"\n-\n+import React from \"react\";\n+ty\n export const ErrorNotification = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714383347048,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from \"react\";\n-ty\n+type Props = \n export const ErrorNotification = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714383352455,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,8 @@\n import React from \"react\";\n-type Props = \n+type Props = {\n+  error: \n+}\n export const ErrorNotification = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714383357843,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from \"react\";\n type Props = {\n-  error: \n+  error: string | null;\n }\n export const ErrorNotification = () => {\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714383362902,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification = () => {\n+export const ErrorNotification<></> = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383370668,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification<></> = () => {\n+export const ErrorNotification<Props> = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383376229,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification<Props> = () => {\n+export const ErrorNotification fc\\<Props> = () => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383385796,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification fc\\<Props> = () => {\n+export const ErrorNotification FC<Props> = ({}) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383404934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification FC<Props> = ({}) => {\n+export const ErrorNotification:  FC<Props> = ({error}) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383411284,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification:  FC<Props> = ({error}) => {\n+export const ErrorNotification: React.FC<Props> = ({error}) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383418704,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification: React.FC<Props> = ({error}) => {\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383469795,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+export const ErrorNotification: React.FC<Props> = ( }) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383523416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification: React.FC<Props> = ( }) => {\n+export const ErrorNotification: React.FC<Props> = () => {\n   return (\n-    <div\n+    {<div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n   >\n     <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n"
+                },
+                {
+                    "date": 1714383548467,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n }\n export const ErrorNotification: React.FC<Props> = () => {\n   return (\n-    {<div\n+    {error<div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n   >\n     <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n"
+                },
+                {
+                    "date": 1714383562980,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,22 +3,22 @@\n   error: string | null;\n }\n export const ErrorNotification: React.FC<Props> = () => {\n   return (\n-    {error<div\n-    data-cy=\"ErrorNotification\"\n-    className=\"notification is-danger is-light has-text-weight-normal\"\n-  >\n-    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-    {/* show only one message at a time */}\n-    Unable to load todos\n-    <br />\n-    Title should not be empty\n-    <br />\n-    Unable to add a todo\n-    <br />\n-    Unable to delete a todo\n-    <br />\n-    Unable to update a todo\n-  </div>\n+    { error && <div\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      Unable to load todos\n+      <br />\n+      Title should not be empty\n+      <br />\n+      Unable to add a todo\n+      <br />\n+      Unable to delete a todo\n+      <br />\n+      Unable to update a todo\n+    </div>}\n   )\n }\n"
+                },
+                {
+                    "date": 1714383569153,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   error: string | null;\n }\n-export const ErrorNotification: React.FC<Props> = () => {\n+export const ErrorNotification: React.FC<Props> = ({error}) => {\n   return (\n     { error && <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714383577653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n }\n export const ErrorNotification: React.FC<Props> = ({error}) => {\n   return (\n-    { error && <div\n+    <></>{ error && <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n"
+                },
+                {
+                    "date": 1714383587699,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n }\n export const ErrorNotification: React.FC<Props> = ({error}) => {\n   return (\n-    <></>{ error && <div\n+    <>{ error && <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n@@ -19,6 +19,7 @@\n       Unable to delete a todo\n       <br />\n       Unable to update a todo\n     </div>}\n+      \n   )\n }\n"
+                },
+                {
+                    "date": 1714383608943,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,28 @@\n+import React from 'react';\n+type Props = {\n+  error: string | null;\n+};\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+  return (\n+    <>\n+      {!error && (\n+        <div\n+          data-cy=\"ErrorNotification\"\n+          className=\"notification is-danger is-light has-text-weight-normal\"\n+        >\n+          <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {/* show only one message at a time */}\n+          Unable to load todos\n+          <br />\n+          Title should not be empty\n+          <br />\n+          Unable to add a todo\n+          <br />\n+          Unable to delete a todo\n+          <br />\n+          Unable to update a todo\n+        </div>\n+      )}\n+    </>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714383619575,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <>\n-      {!error && (\n+      {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n         >\n@@ -25,29 +25,4 @@\n       )}\n     </>\n   );\n };\n-import React from \"react\";\n-type Props = {\n-  error: string | null;\n-}\n-export const ErrorNotification: React.FC<Props> = ({error}) => {\n-  return (\n-    <>{ error && <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      Unable to load todos\n-      <br />\n-      Title should not be empty\n-      <br />\n-      Unable to add a todo\n-      <br />\n-      Unable to delete a todo\n-      <br />\n-      Unable to update a todo\n-    </div>}\n-      \n-  )\n-}\n"
+                },
+                {
+                    "date": 1714384302542,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <>\n-      {error && (\n+      {!error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n         >\n"
+                },
+                {
+                    "date": 1714385348309,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <>\n-      {!error && (\n+      {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n         >\n"
+                },
+                {
+                    "date": 1714385358067,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <>\n+    <div>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n@@ -22,7 +22,7 @@\n           <br />\n           Unable to update a todo\n         </div>\n       )}\n-    </>\n+    </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385371100,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div>\n+    <div classn>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385378273,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div classn>\n+    <div className={`no`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385384116,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`no`}>\n+    <div className={`notification is-`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385392731,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-`}>\n+    <div className={`notification is-danger is-light`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385398413,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light`}>\n+    <div className={`notification is-danger is-light has-text-we`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385405232,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-we`}>\n+    <div className={`notification is-danger is-light has-text-weight`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385411522,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-weight`}>\n+    <div className={`notification is-danger is-light has-text-weight-normal $`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385416643,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-weight-normal $`}>\n+    <div className={`notification is-danger is-light has-text-weight-normal ${!error}`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385422918,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-weight-normal ${!error}`}>\n+    <div className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' }`}>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385438842,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,11 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' }`}>\n+    <div className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}>\n       {error && (\n-        <div\n+        <>\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n         >\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n@@ -20,9 +20,9 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo\n-        </div>\n+        </>\n       )}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385444760,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}>\n       {error && (\n-        <>\n+        <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n         >\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n@@ -20,9 +20,9 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo\n-        </>\n+        </div>\n       )}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385462052,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}>\n+    <div className=>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385467830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div className=>\n+    <div></div>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714385475824,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <div></div>\n+    <>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className=\"notification is-danger is-light has-text-weight-normal\"\n@@ -22,7 +22,7 @@\n           <br />\n           Unable to update a todo\n         </div>\n       )}\n-    </div>\n+    </>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385496096,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n-          className=\"notification is-danger is-light has-text-weight-normal\"\n+          className=\"notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`\n         >\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n"
+                },
+                {
+                    "date": 1714385502160,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     <>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n-          className=\"notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`\n+          className={notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n         >\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n"
+                },
+                {
+                    "date": 1714385510326,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,11 +7,11 @@\n     <>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n-          className={notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n+          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n         >\n-          <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {<button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n           <br />\n           Title should not be empty\n"
+                },
+                {
+                    "date": 1714385515917,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n         <div\n           data-cy=\"ErrorNotification\"\n           className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n         >\n-          {<button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {error && <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n           <br />\n           Title should not be empty\n"
+                },
+                {
+                    "date": 1714385521413,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,10 @@\n         <div\n           data-cy=\"ErrorNotification\"\n           className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n         >\n-          {error && <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {error && (\n+            <></><button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n           <br />\n           Title should not be empty\n"
+                },
+                {
+                    "date": 1714385526971,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,10 @@\n           data-cy=\"ErrorNotification\"\n           className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n         >\n           {error && (\n-            <></><button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+            <>\n+              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           Unable to load todos\n           <br />\n           Title should not be empty\n"
+                },
+                {
+                    "date": 1714385556331,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-    <>\n+    <dic>\n       {error && (\n         <div\n           data-cy=\"ErrorNotification\"\n           className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n"
+                },
+                {
+                    "date": 1714385569124,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,30 @@\n+import React from 'react';\n+type Props = {\n+  error: string | null;\n+};\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+  return (\n+    <div>\n+    \n+        <div\n+          data-cy=\"ErrorNotification\"\n+          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n+        >\n+          {error && (\n+            <>\n+              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {/* show only one message at a time */}\n+          Unable to load todos\n+          <br />\n+          Title should not be empty\n+          <br />\n+          Unable to add a todo\n+          <br />\n+          Unable to delete a todo\n+          <br />\n+          Unable to update a todo\n+        </div>\n+      )}\n+    </>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714385589383,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,28 @@\n+import React from 'react';\n+type Props = {\n+  error: string | null;\n+};\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+  return (\n+        <div\n+          data-cy=\"ErrorNotification\"\n+          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n+        >\n+          {error && (\n+            <>\n+              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {/* show only one message at a time */}\n+          {error}\n+          <br />\n+          Title should not be empty\n+          <br />\n+          Unable to add a todo\n+          <br />\n+          Unable to delete a todo\n+          <br />\n+          Unable to update a todo\n+        </div>\n+      )}\n+    </>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714385595476,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,69 +20,8 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo\n-        </div>\n       )}\n     </>\n   );\n };\n-import React from 'react';\n-type Props = {\n-  error: string | null;\n-};\n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n-  return (\n-    <div>\n-    \n-        <div\n-          data-cy=\"ErrorNotification\"\n-          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n-        >\n-          {error && (\n-            <>\n-              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-          {/* show only one message at a time */}\n-          Unable to load todos\n-          <br />\n-          Title should not be empty\n-          <br />\n-          Unable to add a todo\n-          <br />\n-          Unable to delete a todo\n-          <br />\n-          Unable to update a todo\n-        </div>\n-      )}\n-    </>\n-  );\n-};\n-import React from 'react';\n-type Props = {\n-  error: string | null;\n-};\n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n-  return (\n-    <dic>\n-      {error && (\n-        <div\n-          data-cy=\"ErrorNotification\"\n-          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n-        >\n-          {error && (\n-            <>\n-              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-          {/* show only one message at a time */}\n-          Unable to load todos\n-          <br />\n-          Title should not be empty\n-          <br />\n-          Unable to add a todo\n-          <br />\n-          Unable to delete a todo\n-          <br />\n-          Unable to update a todo\n-        </div>\n-      )}\n-    </>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714385602975,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,8 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo\n-      )}\n+  )}\n     </>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385608620,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,16 +12,16 @@\n             <>\n               <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           {error}\n-          <br />\n+          {/* <br />\n           Title should not be empty\n           <br />\n           Unable to add a todo\n           <br />\n           Unable to delete a todo\n           <br />\n-          Unable to update a todo\n+          Unable to update a todo */}\n   )}\n     </>\n   );\n };\n"
+                },
+                {
+                    "date": 1714385622496,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,6 +22,6 @@\n           <br />\n           Unable to update a todo */}\n   )}\n     </>\n-  );\n+div\n };\n"
+                },
+                {
+                    "date": 1714385633809,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,27 @@\n+import React from 'react';\n+type Props = {\n+  error: string | null;\n+};\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+  return (\n+        <div\n+          data-cy=\"ErrorNotification\"\n+          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n+        >\n+          {error && (\n+            <>\n+              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+          {/* show only one message at a time */}\n+          {error}\n+          {/* <br />\n+          Title should not be empty\n+          <br />\n+          Unable to add a todo\n+          <br />\n+          Unable to delete a todo\n+          <br />\n+          Unable to update a todo */}\n+  )}\n+   \n+</div>\n+};\n"
+                },
+                {
+                    "date": 1714385643520,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,35 +20,9 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo */}\n+           </>\n   )}\n-   \n+\n </div>\n-};\n-import React from 'react';\n-type Props = {\n-  error: string | null;\n-};\n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n-  return (\n-        <div\n-          data-cy=\"ErrorNotification\"\n-          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n-        >\n-          {error && (\n-            <>\n-              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-          {/* show only one message at a time */}\n-          {error}\n-          {/* <br />\n-          Title should not be empty\n-          <br />\n-          Unable to add a todo\n-          <br />\n-          Unable to delete a todo\n-          <br />\n-          Unable to update a todo */}\n-  )}\n-    </>\n-div\n-};\n+)};\n"
+                },
+                {
+                    "date": 1714385651387,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,15 +3,15 @@\n   error: string | null;\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n-        <div\n-          data-cy=\"ErrorNotification\"\n-          className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n-        >\n-          {error && (\n-            <>\n-              <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n+    >\n+      {error && (\n+        <>\n+          <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           {error}\n           {/* <br />\n           Title should not be empty\n@@ -20,9 +20,9 @@\n           <br />\n           Unable to delete a todo\n           <br />\n           Unable to update a todo */}\n-           </>\n-  )}\n-\n-</div>\n-)};\n+        </>\n+      )}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714386034325,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,16 +12,9 @@\n         <>\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           {error}\n-          {/* <br />\n-          Title should not be empty\n-          <br />\n-          Unable to add a todo\n-          <br />\n-          Unable to delete a todo\n-          <br />\n-          Unable to update a todo */}\n+      \n         </>\n       )}\n     </div>\n   );\n"
+                },
+                {
+                    "date": 1714393137629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,14 +8,13 @@\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n     >\n       {error && (\n-        <>\n+        <div>\n           <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n           {/* show only one message at a time */}\n           {error}\n-      \n-        </>\n+        </div>\n       )}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714393167312,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,17 +4,21 @@\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n-      data-cy=\"ErrorNotification\"\n-      className={`notification is-danger is-light has-text-weight-normal ${!error ? 'hidden' : ''}`}\n-    >\n-      {error && (\n-        <div>\n-          <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-          {/* show only one message at a time */}\n-          {error}\n-        </div>\n-      )}\n-    </div>\n+    data-cy=\"ErrorNotification\"\n+    className=\"notification is-danger is-light has-text-weight-normal\"\n+  >\n+    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+    {/* show only one message at a time */}\n+    Unable to load todos\n+    <br />\n+    Title should not be empty\n+    <br />\n+    Unable to add a todo\n+    <br />\n+    Unable to delete a todo\n+    <br />\n+    Unable to update a todo\n+  </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714393631448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,21 +4,21 @@\n };\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n-    data-cy=\"ErrorNotification\"\n-    className=\"notification is-danger is-light has-text-weight-normal\"\n-  >\n-    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-    {/* show only one message at a time */}\n-    Unable to load todos\n-    <br />\n-    Title should not be empty\n-    <br />\n-    Unable to add a todo\n-    <br />\n-    Unable to delete a todo\n-    <br />\n-    Unable to update a todo\n-  </div>\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      Unable to load todos\n+      <br />\n+      Title should not be empty\n+      <br />\n+      Unable to add a todo\n+      <br />\n+      Unable to delete a todo\n+      <br />\n+      Unable to update a todo\n+    </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714393653864,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n-      Unable to load todos\n+      {Unable to load todos}\n       <br />\n       Title should not be empty\n       <br />\n       Unable to add a todo\n"
+                },
+                {
+                    "date": 1714393673672,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,15 @@\n import React from 'react';\n-type Props = {\n-  error: string | null;\n-};\n+\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n-      {Unable to load todos}\n+      Unable to load todos\n       <br />\n       Title should not be empty\n       <br />\n       Unable to add a todo\n"
+                },
+                {
+                    "date": 1714393678867,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n \n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+export const ErrorNotification: React.FC = ( ) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714396683081,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,13 @@\n+import React from 'react';\n+\n+export const ErrorNotification: React.FC = ( ) => {\n+  return (\n+    <div\n+    data-cy=\"ErrorNotification\"\n+    className=\"notification is-danger is-light has-text-weight-normal\"\n+  >\n+    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+    <p>{message}</p>\n+  </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714396695877,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import React from 'react';\n \n+\n export const ErrorNotification: React.FC = ( ) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n@@ -10,26 +11,4 @@\n     <p>{message}</p>\n   </div>\n   );\n };\n-import React from 'react';\n-\n-export const ErrorNotification: React.FC = ( ) => {\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      Unable to load todos\n-      <br />\n-      Title should not be empty\n-      <br />\n-      Unable to add a todo\n-      <br />\n-      Unable to delete a todo\n-      <br />\n-      Unable to update a todo\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714396702600,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,9 @@\n import React from 'react';\n \n+interface Props {\n+  message: string;\n+}\n \n export const ErrorNotification: React.FC = ( ) => {\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714396708600,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   message: string;\n }\n \n-export const ErrorNotification: React.FC = ( ) => {\n+export const ErrorNotification: React.FC<> = ( ) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714396714834,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   message: string;\n }\n \n-export const ErrorNotification: React.FC<> = ( ) => {\n+export const ErrorNotification: React.FC<Props> = ({message} ) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400351664,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,10 @@\n import React from 'react';\n \n-interface Props {\n+interface ErrorNotificationProps {\n   message: string;\n }\n-\n-export const ErrorNotification: React.FC<Props> = ({message} ) => {\n+export const ErrorNotification: React.FC = ( ) => {\n   return (\n     <div\n     data-cy=\"ErrorNotification\"\n     className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400378441,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,22 @@\n import React from 'react';\n \n-interface ErrorNotificationProps {\n-  message: string;\n-}\n-export const ErrorNotification: React.FC = ( ) => {\n+export const ErrorNotification: React.FC<Props> = ({eror  }) => {\n   return (\n     <div\n-    data-cy=\"ErrorNotification\"\n-    className=\"notification is-danger is-light has-text-weight-normal\"\n-  >\n-    <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-    <p>{message}</p>\n-  </div>\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      Unable to load todos\n+      <br />\n+      Title should not be empty\n+      <br />\n+      Unable to add a todo\n+      <br />\n+      Unable to delete a todo\n+      <br />\n+      Unable to update a todo\n+    </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714400383954,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-\n+interfac\\\n export const ErrorNotification: React.FC<Props> = ({eror  }) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714400389368,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,8 @@\n import React from 'react';\n-interfac\\\n+interface Props {\n+  \n+}\n export const ErrorNotification: React.FC<Props> = ({eror  }) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714400395230,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n interface Props {\n-  \n+  error: boolean\n }\n export const ErrorNotification: React.FC<Props> = ({eror  }) => {\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714400405013,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from 'react';\n interface Props {\n-  error: boolean\n+  error: boolean;\n }\n-export const ErrorNotification: React.FC<Props> = ({eror  }) => {\n+export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400512302,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n interface Props {\n-  error: boolean;\n+  errorTy: boolean;\n }\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714400522646,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n interface Props {\n-  errorTy: boolean;\n+  errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ error }) => {\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714400528861,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from 'react';\n interface Props {\n   errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n-export const ErrorNotification: React.FC<Props> = ({ error }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400535499,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,9 @@\n interface Props {\n   errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n+  \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400540619,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n interface Props {\n   errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n-  \n+  let error\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400547448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n interface Props {\n   errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n-  let error\n+  let errorMessage = ''\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400560421,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,31 @@\n interface Props {\n   errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n-  let errorMessage = ''\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714400578729,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,16 +32,16 @@\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n-      Unable to load todos\n+      {Unable to load todos\n       <br />\n       Title should not be empty\n       <br />\n       Unable to add a todo\n       <br />\n       Unable to delete a todo\n       <br />\n-      Unable to update a todo\n+      Unable to update a todo}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714401145273,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n interface Props {\n-  errorType: 'load' | 'empty' | 'add' | 'delete' | 'update';\n+  errorType:null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n   let errorMessage = '';\n \n@@ -32,16 +32,8 @@\n       className=\"notification is-danger is-light has-text-weight-normal\"\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n-      {Unable to load todos\n-      <br />\n-      Title should not be empty\n-      <br />\n-      Unable to add a todo\n-      <br />\n-      Unable to delete a todo\n-      <br />\n-      Unable to update a todo}\n+      {errorMessage}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714401240712,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,10 +21,10 @@\n     case 'update':\n       errorMessage = 'Unable to update a todo';\n       break;\n     default:\n-      errorMessage = 'Unknown error';\n-      break;\n+      errorMessage = 'No error';\n+      break; // Add default case for null value\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714401335419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,39 @@\n+import React from 'react';\n+interface Props {\n+  errorType: null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n+}\n+export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714401553584,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,7 @@\n import React from 'react';\n+\n+\n interface Props {\n   errorType: null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n@@ -36,43 +38,4 @@\n       {errorMessage}\n     </div>\n   );\n };\n-import React from 'react';\n-interface Props {\n-  errorType:null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n-}\n-export const ErrorNotification: React.FC<Props> = ({ errorType  }) => {\n-  let errorMessage = '';\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'No error';\n-      break; // Add default case for null value\n-  }\n-\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714401558838,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n+import { Error } from '../types/Todo';\n \n-\n interface Props {\n   errorType: null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n"
+                },
+                {
+                    "date": 1714401567028,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n-  errorType: null | 'load' | 'empty' | 'add' | 'delete' | 'update';\n+  errorType: Error | null\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714401958309,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,41 @@\n+import React, from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+}\n+export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714401965176,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React, from 'react';\n+import React, { PropsWithChildren } from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n@@ -38,45 +38,4 @@\n       {errorMessage}\n     </div>\n   );\n };\n-import React from 'react';\n-import { Error } from '../types/Todo';\n-\n-interface Props {\n-  errorType: Error | null\n-}\n-export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n-  let errorMessage = '';\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n-  }\n-\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714401980699,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<><Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714401986216,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<><Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<propswith><Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714401995824,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<propswith><Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<PropsWithChildren<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714402017623,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,10 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<PropsWithChildren<Props> = ({ errorType }) => {\n-  let errorMessage = '';\n+export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType }) => {\n+  let errorMessage = ;\n \n   switch (errorType) {\n     case 'load':\n       errorMessage = 'Unable to load todos';\n"
+                },
+                {
+                    "date": 1714402023820,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,41 @@\n+import React, { PropsWithChildren } from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+}\n+export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType }) => {\n+  let errorMessage = children as string;\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714402034593,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,10 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType }) => {\n-  let errorMessage = children as string;\n+export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, ch }) => {\n+  let errorMessage = children as string;;\n \n   switch (errorType) {\n     case 'load':\n       errorMessage = 'Unable to load todos';\n@@ -38,45 +38,4 @@\n       {errorMessage}\n     </div>\n   );\n };\n-import React, { PropsWithChildren } from 'react';\n-import { Error } from '../types/Todo';\n-\n-interface Props {\n-  errorType: Error | null;\n-}\n-export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType }) => {\n-  let errorMessage = ;\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n-  }\n-\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714402064822,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,12 @@\n \n interface Props {\n   errorType: Error | null;\n }\n-export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, ch }) => {\n+export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n   let errorMessage = children as string;;\n \n+  \n   switch (errorType) {\n     case 'load':\n       errorMessage = 'Unable to load todos';\n       break;\n"
+                },
+                {
+                    "date": 1714402070770,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n   let errorMessage = children as string;;\n \n-  \n+  if(errorTy)\n   switch (errorType) {\n     case 'load':\n       errorMessage = 'Unable to load todos';\n       break;\n"
+                },
+                {
+                    "date": 1714402080120,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,28 +6,29 @@\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n   let errorMessage = children as string;;\n \n-  if(errorTy)\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n+  if (errorType) {\n+    switch (errorType) {\n+      case 'load':\n+        errorMessage = 'Unable to load todos';\n+        break;\n+      case 'empty':\n+        errorMessage = 'Title should not be empty';\n+        break;\n+      case 'add':\n+        errorMessage = 'Unable to add a todo';\n+        break;\n+      case 'delete':\n+        errorMessage = 'Unable to delete a todo';\n+        break;\n+      case 'update':\n+        errorMessage = 'Unable to update a todo';\n+        break;\n+      default:\n+        errorMessage = 'Unknown error';\n+        break;\n+    }\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714402234014,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   errorType: Error | null;\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = children as string;;\n+  let errorMessage = 'u';\n \n   if (errorType) {\n     switch (errorType) {\n       case 'load':\n"
+                },
+                {
+                    "date": 1714402241664,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   errorType: Error | null;\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = 'u';\n+  let errorMessage = 'Unknown ';\n \n   if (errorType) {\n     switch (errorType) {\n       case 'load':\n"
+                },
+                {
+                    "date": 1714402278228,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   errorType: Error | null;\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = 'Unknown ';\n+  let errorMessage = 'Unknown error';\n \n   if (errorType) {\n     switch (errorType) {\n       case 'load':\n@@ -24,9 +24,9 @@\n       case 'update':\n         errorMessage = 'Unable to update a todo';\n         break;\n       default:\n-        errorMessage = 'Unknown error';\n+        errorMessage = children as string;\n         break;\n     }\n   }\n \n"
+                },
+                {
+                    "date": 1714402285768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   errorType: Error | null;\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = 'Unknown error';\n+  let errorMessage = 'Unknown err';\n \n   if (errorType) {\n     switch (errorType) {\n       case 'load':\n@@ -24,9 +24,9 @@\n       case 'update':\n         errorMessage = 'Unable to update a todo';\n         break;\n       default:\n-        errorMessage = children as string;\n+        errorMessage = 'Unknown error';\n         break;\n     }\n   }\n \n"
+                },
+                {
+                    "date": 1714402516461,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,31 +4,29 @@\n interface Props {\n   errorType: Error | null;\n }\n export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = 'Unknown err';\n+  let errorMessage = children as string;;\n \n-  if (errorType) {\n-    switch (errorType) {\n-      case 'load':\n-        errorMessage = 'Unable to load todos';\n-        break;\n-      case 'empty':\n-        errorMessage = 'Title should not be empty';\n-        break;\n-      case 'add':\n-        errorMessage = 'Unable to add a todo';\n-        break;\n-      case 'delete':\n-        errorMessage = 'Unable to delete a todo';\n-        break;\n-      case 'update':\n-        errorMessage = 'Unable to update a todo';\n-        break;\n-      default:\n-        errorMessage = 'Unknown error';\n-        break;\n-    }\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714402523034,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,41 @@\n+import React, { PropsWithChildren } from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+}\n+export const ErrorNotification: React.FC<propswith><Props> = ({ errorType }) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className=\"notification is-danger is-light has-text-weight-normal\"\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714402528716,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n-import React, { PropsWithChildren } from 'react';\n+import React from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n-  errorType: Error | null;\n+  errorType: Error | null\n }\n-export const ErrorNotification: React.FC<propswith><Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n@@ -38,45 +38,4 @@\n       {errorMessage}\n     </div>\n   );\n };\n-import React, { PropsWithChildren } from 'react';\n-import { Error } from '../types/Todo';\n-\n-interface Props {\n-  errorType: Error | null;\n-}\n-export const ErrorNotification: React.FC<PropsWithChildren<Props>> = ({ errorType, children }) => {\n-  let errorMessage = children as string;;\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n-  }\n-\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714403133681,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n-  errorType: Error | null\n+  errorType: Error | null;\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n@@ -22,11 +22,9 @@\n       break;\n     case 'update':\n       errorMessage = 'Unable to update a todo';\n       break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n+    default\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714403151736,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n       break;\n     case 'update':\n       errorMessage = 'Unable to update a todo';\n       break;\n-    default\n+    default;\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714403165767,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,11 @@\n       break;\n     case 'update':\n       errorMessage = 'Unable to update a todo';\n       break;\n-    default;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n   }\n \n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714404741088,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,8 +8,9 @@\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n+      \n       errorMessage = 'Unable to load todos';\n       break;\n     case 'empty':\n       errorMessage = 'Title should not be empty';\n"
+                },
+                {
+                    "date": 1714404753773,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n-      \n+      setError(true)\n       errorMessage = 'Unable to load todos';\n       break;\n     case 'empty':\n       errorMessage = 'Title should not be empty';\n"
+                },
+                {
+                    "date": 1714404762191,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,9 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n+  set\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714404767697,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  set\n+  setError: boolea\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714404773958,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,11 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  setError: boolea\n+  setError: boolean;\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType, seterr }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714404792782,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,11 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  setError: boolean;\n+  setError: (boolean);\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType, seterr }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType, setError }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714404797885,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  setError: (boolean);\n+  setError: ()=> ;\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType, setError }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714404805848,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,16 +2,16 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  setError: ()=> ;\n+  setError: ()=> void;\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType, setError }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n-      setError(true)\n+      setError()\n       errorMessage = 'Unable to load todos';\n       break;\n     case 'empty':\n       errorMessage = 'Title should not be empty';\n"
+                },
+                {
+                    "date": 1714404813774,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,8 @@\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n-      setError()\n       errorMessage = 'Unable to load todos';\n       break;\n     case 'empty':\n       errorMessage = 'Title should not be empty';\n"
+                },
+                {
+                    "date": 1714405103977,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,11 +2,10 @@\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n-  setError: ()=> void;\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType, setError }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n@@ -27,9 +26,9 @@\n     default:\n       errorMessage = 'Unknown error';\n       break;\n   }\n-\n+  console.log('ErrorType:', errorType);\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className=\"notification is-danger is-light has-text-weight-normal\"\n"
+                },
+                {
+                    "date": 1714406179477,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n   console.log('ErrorType:', errorType);\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n-      className=\"notification is-danger is-light has-text-weight-normal\"\n+      className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n       {errorMessage}\n"
+                },
+                {
+                    "date": 1714406202441,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import React from 'react';\n import { Error } from '../types/Todo';\n+import { error } from 'cypress/types/jquery';\n \n interface Props {\n   errorType: Error | null;\n }\n"
+                },
+                {
+                    "date": 1714406215604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import { error } from 'cypress/types/jquery';\n \n interface Props {\n   errorType: Error | null;\n+  error\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714406229202,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { error } from 'cypress/types/jquery';\n \n interface Props {\n   errorType: Error | null;\n-  error\n+  error: boolean\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714406234916,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,11 @@\n import { error } from 'cypress/types/jquery';\n \n interface Props {\n   errorType: Error | null;\n-  error: boolean\n+  error: boolean;\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType, error }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714406277805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n import React from 'react';\n import { Error } from '../types/Todo';\n-import { error } from 'cypress/types/jquery';\n \n interface Props {\n   errorType: Error | null;\n   error: boolean;\n"
+                },
+                {
+                    "date": 1714406315803,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n     default:\n       errorMessage = 'Unknown error';\n       break;\n   }\n-  console.log('ErrorType:', errorType);\n+ \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406392816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,10 @@\n     default:\n       errorMessage = 'Unknown error';\n       break;\n   }\n- \n+\n+  \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406398558,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React from 'react';\n+import React, { useEffect } from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n@@ -28,9 +28,9 @@\n       errorMessage = 'Unknown error';\n       break;\n   }\n \n-  \n+  useEffect(() )\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406404829,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,11 @@\n       errorMessage = 'Unknown error';\n       break;\n   }\n \n-  useEffect(() )\n+  useEffect(() => {\n+    const time\n+  })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406412090,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-    const time\n+    const timeoutError\n   })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406417387,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-    const timeoutError\n+    const timeoutError = setTimeout\n   })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406434873,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-    const timeoutError = setTimeout\n+    const timeoutError = setTimeoutError(())\n   })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406442655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-    const timeoutError = setTimeoutError(())\n+    const timeoutError = setTimeoutError(() => hide)\n   })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406448317,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-    const timeoutError = setTimeoutError(() => hide)\n+    const timeoutError = setTimeoutError(() => hideError();)\n   })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406476823,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,43 @@\n+import React, { useEffect } from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+  error: boolean;\n+}\n+export const ErrorNotification: React.FC<Props> = ({ errorType, error }) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714406565824,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n       errorMessage = 'Unknown error';\n       break;\n   }\n \n-\n+useeffect\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n@@ -40,49 +40,4 @@\n       {errorMessage}\n     </div>\n   );\n };\n-import React, { useEffect } from 'react';\n-import { Error } from '../types/Todo';\n-\n-interface Props {\n-  errorType: Error | null;\n-  error: boolean;\n-}\n-export const ErrorNotification: React.FC<Props> = ({ errorType, error }) => {\n-  let errorMessage = '';\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n-  }\n-\n-  useEffect(() => {\n-    const timeoutError = setTimeoutError(() => hideError();)\n-  })\n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714406571498,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n       errorMessage = 'Unknown error';\n       break;\n   }\n \n-useeffect\n+useEffect(() =)\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406577474,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,11 @@\n       errorMessage = 'Unknown error';\n       break;\n   }\n \n-useEffect(() =)\n+  useEffect(() => {\n+  const time\n+})\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406584257,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,9 @@\n       break;\n   }\n \n   useEffect(() => {\n-  const time\n+  const timeout = setTimeout\n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406590311,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,11 @@\n       break;\n   }\n \n   useEffect(() => {\n-  const timeout = setTimeout\n+    const timeout = setTimeout(() => {\n+    hidde\n+  })\n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406597023,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,9 @@\n   }\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n-    hidde\n+    hideError()\n   })\n })\n   return (\n     <div\n"
+                },
+                {
+                    "date": 1714406602953,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,10 +30,10 @@\n   }\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n-    hideError()\n-  })\n+      hideError();\n+  }, 3000)\n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406610028,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,10 @@\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n-  }, 3000)\n+    }, 3000);\n+    return \n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406616179,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n-    return \n+    return () => clear\n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406621425,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n-    return () => clear\n+    return () => clearTimeout()\n })\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714406629328,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,10 +32,10 @@\n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n-    return () => clearTimeout()\n-})\n+    return () => clearTimeout(timeout)\n+}, )\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406637702,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,9 +33,10 @@\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n     return () => clearTimeout(timeout)\n-}, )\n+  }, [errorType]);\n+  \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n"
+                },
+                {
+                    "date": 1714406714129,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   errorType: Error | null;\n   error: boolean;\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType, error }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType, error,  }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n@@ -32,15 +32,15 @@\n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n-    return () => clearTimeout(timeout)\n+    return () => clearTimeout(timeout);\n   }, [errorType]);\n-  \n+\n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n-      className={`notification is-danger is-light has-text-weight-normal ${error? '' : 'hidden'}`}\n+      className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n     >\n       <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n       {/* show only one message at a time */}\n       {errorMessage}\n"
+                },
+                {
+                    "date": 1714406764713,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,11 @@\n \n interface Props {\n   errorType: Error | null;\n   error: boolean;\n+  hide\n }\n-export const ErrorNotification: React.FC<Props> = ({ errorType, error,  }) => {\n+export const ErrorNotification: React.FC<Props> = ({ errorType, error, hideError }) => {\n   let errorMessage = '';\n \n   switch (errorType) {\n     case 'load':\n"
+                },
+                {
+                    "date": 1714406778618,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n interface Props {\n   errorType: Error | null;\n   error: boolean;\n-  hide\n+  hideError: ()\n }\n export const ErrorNotification: React.FC<Props> = ({ errorType, error, hideError }) => {\n   let errorMessage = '';\n \n"
+                },
+                {
+                    "date": 1714406784900,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,50 @@\n+import React, { useEffect } from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+  error: boolean;\n+  hideError: () => void;\n+}\n+export const ErrorNotification: React.FC<Props> = ({ errorType, error, hideError }) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  useEffect(() => {\n+    const timeout = setTimeout(() => {\n+      hideError();\n+    }, 3000);\n+    return () => clearTimeout(timeout);\n+  }, [errorType]);\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                }
+            ],
+            "date": 1714379437302,
+            "name": "Commit-0",
+            "content": "export \n"
+        }
+    ]
+}
