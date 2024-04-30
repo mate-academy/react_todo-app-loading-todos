@@ -33,7 +33,7 @@ async function request<T>(
   if (!response.ok) {
     throw new Error();
   }
-  return response.json();
+  return await response.json();
 }
 
 export const client = {
