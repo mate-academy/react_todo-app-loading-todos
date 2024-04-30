@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 38,
+            "activePatchIndex": 41,
             "patches": [
                 {
                     "date": 1714380102924,
@@ -160,6 +160,18 @@
                 {
                     "date": 1714473546072,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  return response.json();\n+  return await response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485616035,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  return await response.json();\n+  returnit response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485624973,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,10 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  returnit response.json();\n+\n+  return response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485636427,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,4 @@\n-\n /* eslint-disable @typescript-eslint/no-explicit-any */\n const BASE_URL = 'https://mate.academy/students-api';\n \n // returns a promise resolved after a given delay\n@@ -29,8 +28,9 @@\n \n   // DON'T change the delay it is required for tests\n   await wait(100);\n   const response = await fetch(BASE_URL + url, options);\n+\n   if (!response.ok) {\n     throw new Error();\n   }\n \n"
                 }
             ],
             "date": 1714380102924,

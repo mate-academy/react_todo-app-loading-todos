@@ -6,7 +6,11 @@ interface Props {
   error: boolean;
   hideError: () => void;
 }
-export const ErrorNotification: React.FC<Props> = ({ errorType, error, hideError }) => {
+export const ErrorNotification: React.FC<Props> = ({
+  errorType,
+  error,
+  hideError,
+}) => {
   let errorMessage = '';
 
   switch (errorType) {
@@ -34,6 +38,7 @@ export const ErrorNotification: React.FC<Props> = ({ errorType, error, hideError
     const timeout = setTimeout(() => {
       hideError();
     }, 3000);
+
     return () => clearTimeout(timeout);
   }, [errorType]);
 

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 56,
+            "activePatchIndex": 58,
             "patches": [
                 {
                     "date": 1714384924565,
@@ -232,6 +232,14 @@
                 {
                     "date": 1714398463524,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n import React from 'react';\n \n-\n interface Props {\n   id: number;\n   title: string;\n   completed: boolean;\n@@ -16,9 +15,9 @@\n   onDelete,\n   onToggle,\n }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${completed ? 'completed' : ''}`}>\n+    <div data-cy=\"Todo\"  className={`todo ${completed ? 'completed' : ''}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714485675675,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,13 @@\n   onDelete,\n   onToggle,\n }) => {\n   return (\n-    <div data-cy=\"Todo\"  className={`todo ${completed ? 'completed' : ''}`}>\n+    <div\n+      data-cy=\"Todo\"\n+      data-id={id}\n+      className={`todo ${completed ? 'completed' : ''}`}\n+    >\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714486389007,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       data-cy=\"Todo\"\n       data-id={id}\n       className={`todo ${completed ? 'completed' : ''}`}\n     >\n-      <label className=\"todo__status-label\">\n+      {/* eslint-disable jsx-a11y/label-has-associated-control */}<label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n           className=\"todo__status\"\n"
                 }
             ],
             "date": 1714384924565,

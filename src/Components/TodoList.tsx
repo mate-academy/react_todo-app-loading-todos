@@ -15,16 +15,17 @@ export const TodoList: React.FC<Props> = ({
   onDeleteTodo,
   filter,
 }) => {
+  const filteredTodos =
+    filter === 'active'
+      ? todos.filter(todo => !todo.completed)
+      : filter === 'completed'
+        ? todos.filter(todo => todo.completed)
+        : todos;
 
-  const filteredTodos = filter === 'active'
-    ? todos.filter(todo => !todo.completed)
-    : filter === 'completed'
-      ? todos.filter(todo => todo.completed)
-      : todos;
-
-      const noTodosMessage = filter !== 'all' && filteredTodos.length === 0 ? (
-        <p className="todoapp__empty-list-message">No todos to display</p>
-      ) : null;
+  const noTodosMessage =
+    filter !== 'all' && filteredTodos.length === 0 ? (
+      <p className="todoapp__empty-list-message">No todos to display</p>
+    ) : null;
 
   return (
     <section className="todoapp__main" data-cy="TodoList">

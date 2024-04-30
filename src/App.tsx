@@ -11,10 +11,6 @@ import { Status, Todoo } from './types/Todo';
 import { Error } from './types/Todo';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todoo[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [errorType, setErrorType] = useState<Error | null>(null);
@@ -24,17 +20,27 @@ export const App: React.FC = () => {
     const fetchTodos = async () => {
       try {
         const todosData = await getTodos();
+
         setTodos(todosData);
       } catch (err) {
         setError(true);
         setErrorType('load');
       }
     };
+
     fetchTodos();
   }, []);
 
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
   const handleDeleteTodo = (id: number) => {
     setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+
+    setError(true);
+
+    setErrorType('delete');
   };
 
   const handleToggleTodo = (id: number) => {
@@ -47,6 +53,7 @@ export const App: React.FC = () => {
 
   const handleToggleAllTodos = () => {
     const allCompleted = todos.every(todo => todo.completed);
+
     setTodos(prev =>
       prev.map(todo => ({
         ...todo,
@@ -62,6 +69,7 @@ export const App: React.FC = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const newTodoTitle = event.currentTarget.value.trim();
+
       if (newTodoTitle) {
         const newTodo: Todoo = {
           id: todos.length + 1,
@@ -69,6 +77,7 @@ export const App: React.FC = () => {
           title: newTodoTitle,
           completed: false,
         };
+
         setTodos(prevTodos => [...prevTodos, newTodo]);
       } else {
         setError(true);

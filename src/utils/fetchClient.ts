@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
@@ -30,10 +29,12 @@ async function request<T>(
   // DON'T change the delay it is required for tests
   await wait(100);
   const response = await fetch(BASE_URL + url, options);
+
   if (!response.ok) {
     throw new Error();
   }
-  return await response.json();
+
+  return response.json();
 }
 
 export const client = {
