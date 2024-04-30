@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 10,
             "patches": [
                 {
                     "date": 1714472436224,
@@ -32,6 +32,22 @@
                 {
                     "date": 1714472863358,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n     \"test\": \"mate-scripts test -l\",\n     \"style-format\": \"npx stylelint 'src/**/*.scss' --fix --allow-empty-input\",\n-    \"lint-js\": \"mate-scripts lint -j\",\n+    \"lint-js\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"lint-css\": \"mate-scripts lint -s\",\n     \"format\": \"prettier --write './src/**/*.{ts,tsx}'\",\n     \"update\": \"mate-scripts update\",\n     \"postinstall\": \"npm run update && cypress verify\",\n"
+                },
+                {
+                    "date": 1714477873106,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,9 @@\n     \"prettier\": \"^3.2.5\",\n     \"sass\": \"^1.72.0\",\n     \"stylelint\": \"^15.11.0\",\n     \"typescript\": \"^5.4.5\"\n-  },\n+}\n   \"scripts\": {\n     \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n"
+                },
+                {
+                    "date": 1714477886541,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,10 +36,11 @@\n     \"postcss\": \"^8.4.12\",\n     \"prettier\": \"^3.2.5\",\n     \"sass\": \"^1.72.0\",\n     \"stylelint\": \"^15.11.0\",\n-    \"typescript\": \"^5.4.5\"\n+    \"typescript\": \"^4.5.0\"\n }\n+\n   \"scripts\": {\n     \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n"
+                },
+                {
+                    "date": 1714477892522,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,10 +37,9 @@\n     \"prettier\": \"^3.2.5\",\n     \"sass\": \"^1.72.0\",\n     \"stylelint\": \"^15.11.0\",\n     \"typescript\": \"^4.5.0\"\n-}\n-\n+  },\n   \"scripts\": {\n     \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n"
+                },
+                {
+                    "date": 1714477924253,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n     \"postcss\": \"^8.4.12\",\n     \"prettier\": \"^3.2.5\",\n     \"sass\": \"^1.72.0\",\n     \"stylelint\": \"^15.11.0\",\n-    \"typescript\": \"^4.5.0\"\n+    \"typescript\": \"4.5.0\"\n   },\n   \"scripts\": {\n     \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n"
                 }
             ],
             "date": 1714472436224,
