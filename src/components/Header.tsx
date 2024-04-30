@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import React = require('react');
+import React from 'react';
 
 import { TodoType } from '../types/Todo';
 

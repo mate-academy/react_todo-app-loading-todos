@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 
 import { useTimeout } from './useTimeout';
-import React = require('react');
+import React from 'react';
 
 export const errors = {
   load: {

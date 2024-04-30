@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1714483400862,
@@ -16,6 +16,10 @@
                 {
                     "date": 1714484242230,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, FormEvent, useMemo } from 'react';\n-const React = require('react');\n+import React = require('react');\n \n import { Todo } from '../types/Todo';\n import { Filter } from '../types/Filter';\n \n"
+                },
+                {
+                    "date": 1714485960019,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, FormEvent, useMemo } from 'react';\n-import React = require('react');\n+import React from 'react';\n \n import { Todo } from '../types/Todo';\n import { Filter } from '../types/Filter';\n \n"
                 }
             ],
             "date": 1714483400862,

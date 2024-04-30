@@ -1,5 +1,5 @@
 import { FC, FormEvent, useMemo } from 'react';
-import React = require('react');
+import React from 'react';
 
 import { Todo } from '../types/Todo';
 import { Filter } from '../types/Filter';

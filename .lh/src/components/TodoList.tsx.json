@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1714483380760,
@@ -16,6 +16,10 @@
                 {
                     "date": 1714484244428,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,18 @@\n+import { FC } from 'react';\n+import React = require('react');\n+\n+import { Todo } from '../types/Todo';\n+import { TodoItem } from '../components/TodoItem';\n+\n+type Props = {\n+  todos: Todo[];\n+};\n+export const TodoList: FC<Props> = ({ todos }) => {\n+  return (\n+    <section className=\"todoapp__main\" data-cy=\"TodoList\">\n+      {todos.map(todo => (\n+        <TodoItem key={todo.id} todo={todo} />\n+      ))}\n+    </section>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714485964811,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC } from 'react';\n-import React = require('react');\n+import React from 'react';\n \n import { Todo } from '../types/Todo';\n import { TodoItem } from '../components/TodoItem';\n \n@@ -15,22 +15,4 @@\n       ))}\n     </section>\n   );\n };\n-import { FC } from 'react';\n-const React = require('react');\n-\n-import { Todo } from '../types/Todo';\n-import { TodoItem } from '../components/TodoItem';\n-\n-type Props = {\n-  todos: Todo[];\n-};\n-export const TodoList: FC<Props> = ({ todos }) => {\n-  return (\n-    <section className=\"todoapp__main\" data-cy=\"TodoList\">\n-      {todos.map(todo => (\n-        <TodoItem key={todo.id} todo={todo} />\n-      ))}\n-    </section>\n-  );\n-};\n"
                 }
             ],
             "date": 1714483380760,

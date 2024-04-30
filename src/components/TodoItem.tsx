@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Todo } from '../types/Todo';
-import React = require('react');
+import React from 'react';
 
 type Props = {
   todo: Todo;
