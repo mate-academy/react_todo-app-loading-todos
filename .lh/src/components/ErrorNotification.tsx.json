@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/components/ErrorNotification.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1714483406001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714483604914,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, useEffect } from 'react';\n-import React = require('react');\n+const React = require('react');\n \n import { useTimeout } from './useTimeout';\n \n export const errors = {\n"
+                },
+                {
+                    "date": 1714484232484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { FC, useEffect } from 'react';\n-const React = require('react');\n \n import { useTimeout } from './useTimeout';\n+import React = require('react');\n \n export const errors = {\n   load: {\n     message: 'Unable to load todos',\n"
+                }
+            ],
+            "date": 1714483406001,
+            "name": "Commit-0",
+            "content": "import { FC, useEffect } from 'react';\nimport React = require('react');\n\nimport { useTimeout } from './useTimeout';\n\nexport const errors = {\n  load: {\n    message: 'Unable to load todos',\n  },\n  add: {\n    message: 'Unable to add todo',\n  },\n  delete: {\n    message: 'Unable to delete todo',\n  },\n  update: {\n    message: 'Unable to update todo',\n  },\n  empty: {\n    message: 'Title cannot be empty',\n  },\n};\n\nexport type ErrorType = keyof typeof errors;\n\ntype Props = {\n  errorType: ErrorType | null;\n  handleClosingError: () => void;\n};\n\nexport const ErrorNotification: FC<Props> = ({\n  errorType,\n  handleClosingError,\n}) => {\n  const [startTimeout] = useTimeout(handleClosingError, 3000);\n\n  useEffect(() => {\n    startTimeout();\n  }, [errorType, startTimeout]);\n  const message = errorType ? errors[errorType].message : '';\n\n  return (\n    <div\n      data-cy=\"ErrorNotification\"\n      className={`notification is-danger is-light has-text-weight-normal ${!message ? 'hidden' : ''}`}\n    >\n      <button\n        data-cy=\"HideErrorButton\"\n        type=\"button\"\n        className=\"delete\"\n        onClick={handleClosingError}\n      />\n      {message}\n    </div>\n  );\n};\n"
+        }
+    ]
+}

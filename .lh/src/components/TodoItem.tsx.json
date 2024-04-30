@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/components/TodoItem.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1714483270817,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714483367552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n-import React, { FC } from 'react';\n+import { FC } from 'react';\n import { Todo } from '../types/Todo';\n+import React = require('react');\n \n type Props = {\n   todo: Todo;\n };\n"
+                },
+                {
+                    "date": 1714483605891,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import { FC } from 'react';\n import { Todo } from '../types/Todo';\n-import React = require('react');\n+const React = require('react');\n \n type Props = {\n   todo: Todo;\n };\n"
+                },
+                {
+                    "date": 1714484252758,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import { FC } from 'react';\n import { Todo } from '../types/Todo';\n-const React = require('react');\n+import React = require('react');\n \n type Props = {\n   todo: Todo;\n };\n"
+                },
+                {
+                    "date": 1714485693993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,37 @@\n+import { FC } from 'react';\n+import { Todo } from '../types/Todo';\n+import React = require('react');\n+\n+type Props = {\n+  todo: Todo;\n+};\n+\n+export const TodoItem: FC<Props> = ({ todo }) => {\n+  return (\n+    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n+      {/* eslint-disable jsx-a11y/label-has-associated-control */}\n+      <label className=\"todo__status-label\" htmlFor=\"TodoStatus\">\n+        <input\n+          id=\"TodoStatus\"\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+          checked={todo.completed}\n+        />\n+      </label>\n+\n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        {todo.title}\n+      </span>\n+\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n+      {/*loader is required for tests, since updating todos not implemeted yet it has no effect on displayed todo*/}\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n+  );\n+};\n"
+                }
+            ],
+            "date": 1714483270817,
+            "name": "Commit-0",
+            "content": "import React, { FC } from 'react';\nimport { Todo } from '../types/Todo';\n\ntype Props = {\n  todo: Todo;\n};\n\nexport const TodoItem: FC<Props> = ({ todo }) => {\n  return (\n    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n      <label className=\"todo__status-label\" htmlFor=\"TodoStatus\">\n        <input\n          id=\"TodoStatus\"\n          data-cy=\"TodoStatus\"\n          type=\"checkbox\"\n          className=\"todo__status\"\n          checked={todo.completed}\n        />\n      </label>\n\n      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n        {todo.title}\n      </span>\n\n      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n        ×\n      </button>\n      {/*loader is required for tests, since updating todos not implemeted yet it has no effect on displayed todo*/}\n      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n        <div className=\"modal-background has-background-white-ter\" />\n        <div className=\"loader\" />\n      </div>\n    </div>\n  );\n};\n"
+        }
+    ]
+}
