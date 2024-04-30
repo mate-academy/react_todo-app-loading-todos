@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 22,
+            "activePatchIndex": 23,
             "patches": [
                 {
                     "date": 1714472436224,
@@ -96,6 +96,10 @@
                 {
                     "date": 1714479374931,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,10 +42,9 @@\n   \"scripts\": {\n     \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n-    \"test\": \"mate-scripts test -l\",\n-    \"style-format\": \"npx stylelint 'src/**/*.scss' --fix --allow-empty-input\",\n+    \"test\": \"react-scripts start & cypress run --config eslintConfig=none\"    \"style-format\": \"npx stylelint 'src/**/*.scss' --fix --allow-empty-input\",\n     \"lint-js\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"lint-css\": \"mate-scripts lint -s\",\n     \"format\": \"prettier --write './src/**/*.{ts,tsx}'\",\n     \"update\": \"mate-scripts update\",\n"
+                },
+                {
+                    "date": 1714487301157,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,29 +25,29 @@\n     \"@types/node\": \"^16.18.80\",\n     \"@types/react\": \"^18.2.55\",\n     \"@types/react-dom\": \"^18.2.19\",\n     \"cypress\": \"^12.17.4\",\n-    \"eslint\": \"^9.1.1\",\n+    \"eslint\": \"^7.32.0\",\n     \"eslint-plugin-cypress\": \"^2.11.2\",\n-    \"eslint-plugin-prettier\": \"^5.1.3\",\n     \"gh-pages\": \"^6.1.1\",\n     \"mochawesome\": \"^7.1.3\",\n     \"mochawesome-merge\": \"^4.2.0\",\n     \"mochawesome-report-generator\": \"^6.2.0\",\n     \"postcss\": \"^8.4.12\",\n     \"prettier\": \"^3.2.5\",\n     \"sass\": \"^1.72.0\",\n     \"stylelint\": \"^15.11.0\",\n-    \"typescript\": \"^4.5.0\"\n+    \"typescript\": \"5.1.6\"\n   },\n   \"scripts\": {\n-    \"lint\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n     \"start\": \"mate-scripts start -l\",\n     \"build\": \"mate-scripts build\",\n-    \"test\": \"react-scripts start & cypress run --config eslintConfig=none\"    \"style-format\": \"npx stylelint 'src/**/*.scss' --fix --allow-empty-input\",\n-    \"lint-js\": \"eslint 'src/**/*.{js,jsx,ts,tsx}'\",\n+    \"test\": \"mate-scripts test -l\",\n+    \"style-format\": \"npx stylelint 'src/**/*.scss' --fix --allow-empty-input\",\n+    \"lint-js\": \"mate-scripts lint -j\",\n     \"lint-css\": \"mate-scripts lint -s\",\n     \"format\": \"prettier --write './src/**/*.{ts,tsx}'\",\n+    \"lint\": \"npm run style-format && npm run format && npm run lint-js && npm run lint-css\",\n     \"update\": \"mate-scripts update\",\n     \"postinstall\": \"npm run update && cypress verify\",\n     \"predeploy\": \"npm run build\",\n     \"deploy\": \"mate-scripts deploy\"\n"
                 }
             ],
             "date": 1714472436224,
