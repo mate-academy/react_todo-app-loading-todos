@@ -5,22 +5,20 @@ import { Todo } from '../types/Todo';
 import * as clientService from '../api/todos';
 import { TodoListContext } from './TodoListContext';
 
-import { KEY_STORAGE } from '../constants/constants';
+// import { KEY_STORAGE } from '../constants/constants';
+import { Filters } from '../types/Filters';
+import { ERROR_LOAD } from '../constants/constants';
 
 type TodoListProviderType = {
   children: React.ReactNode;
 };
 
-const ERROR_LOAD = 'Unable to load todos';
-
 export const TodoListProvider: React.FC<TodoListProviderType> = ({
   children,
 }) => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    return JSON.parse(String(localStorage.getItem(KEY_STORAGE))) || [];
-  });
-
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentFilter, setCurrentFilter] = useState<string>(Filters.All);
 
   useEffect(() => {
     const errorMessagePoint = setTimeout(() => {
@@ -35,47 +33,18 @@ export const TodoListProvider: React.FC<TodoListProviderType> = ({
       .getTodos()
       .then(data => {
         setTodos(data);
-        localStorage.setItem(KEY_STORAGE, JSON.stringify(data));
       })
       .catch(() => {
         setErrorMessage(ERROR_LOAD);
       });
   }, []);
 
-  const loadAllTodos = () => {
-    clientService
-      .getTodos()
-      .then(setTodos)
-      .catch(() => {
-        setErrorMessage(ERROR_LOAD);
-      });
-  };
-
-  const loadCompletedTodos = () => {
-    clientService
-      .getCompletedTodos()
-      .then(data => setTodos(data))
-      .catch(() => {
-        setErrorMessage(ERROR_LOAD);
-      });
-  };
-
-  const loadActiveTodos = () => {
-    clientService
-      .getActiveTodos()
-      .then(data => setTodos(data))
-      .catch(() => {
-        setErrorMessage(ERROR_LOAD);
-      });
-  };
-
   const getValue = () => {
     return {
       todos,
       errorMessage,
-      loadCompletedTodos,
-      loadActiveTodos,
-      loadAllTodos,
+      currentFilter,
+      setCurrentFilter,
     };
   };
 

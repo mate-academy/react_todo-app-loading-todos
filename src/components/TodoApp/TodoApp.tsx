@@ -3,20 +3,14 @@ import React, { useContext } from 'react';
 import { TodoList } from '../TodoList';
 import { TodoFooter } from '../TodoFooter';
 import { TodoHeader } from '../TodoHeader';
-import { KEY_STORAGE } from '../../constants/constants';
+
+import { getFilteredTodos } from '../../utils/utils';
 import { ErrorNotification } from '../ErrorNotification';
 import { TodoListContext } from '../../contexts/TodoListContext';
 
 export const TodoApp = () => {
-  const {
-    todos,
-    errorMessage,
-    loadCompletedTodos,
-    loadActiveTodos,
-    loadAllTodos,
-  } = useContext(TodoListContext);
-
-  const globalTodoList = JSON.parse(String(localStorage.getItem(KEY_STORAGE)));
+  const { todos, errorMessage, currentFilter } = useContext(TodoListContext);
+  const filteredTodos = getFilteredTodos(todos, currentFilter);
 
   return (
     <div className="todoapp">
@@ -24,16 +18,9 @@ export const TodoApp = () => {
 
       <div className="todoapp__content">
         <TodoHeader />
-        <TodoList />
+        <TodoList todos={filteredTodos} />
 
-        {!!globalTodoList.length && (
-          <TodoFooter
-            loadCompletedTodos={loadCompletedTodos}
-            loadActiveTodos={loadActiveTodos}
-            loadAllTodos={loadAllTodos}
-            todos={todos}
-          />
-        )}
+        {!!todos.length && <TodoFooter todos={todos} />}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}

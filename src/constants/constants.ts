@@ -1,1 +1,1 @@
-export const KEY_STORAGE = 'todos';
+export const ERROR_LOAD = 'Unable to load todos';

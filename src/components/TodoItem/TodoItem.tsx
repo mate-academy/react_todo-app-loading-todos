@@ -3,16 +3,17 @@ import React from 'react';
 import cn from 'classnames';
 
 type Props = {
+  // id
   title: string;
-  status: boolean;
+  completed: boolean;
 };
 
-export const TodoItem: React.FC<Props> = ({ title, status }) => {
+export const TodoItem: React.FC<Props> = ({ title, completed }) => {
   return (
     <div
       data-cy="Todo"
       className={cn('todo', {
-        completed: status,
+        completed: completed,
       })}
     >
       <label className="todo__status-label">
@@ -20,7 +21,7 @@ export const TodoItem: React.FC<Props> = ({ title, status }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked={status}
+          defaultChecked={completed}
         />
       </label>
 

@@ -1,39 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 import { Filters } from '../../types/Filters';
 
+import { TodoListContext } from '../../contexts/TodoListContext';
+
 type Props = {
   todos: Todo[];
-  loadCompletedTodos: () => void;
-  loadActiveTodos: () => void;
-  loadAllTodos: () => void;
 };
 
-export const TodoFooter: React.FC<Props> = ({
-  todos,
-  loadCompletedTodos,
-  loadActiveTodos,
-  loadAllTodos,
-}) => {
+export const TodoFooter: React.FC<Props> = ({ todos }) => {
   const uncompletedTodos = todos.filter(item => item.completed).length;
   const filtersStatus = Object.keys(Filters);
-  const [currentFilter, setCurrentFilter] = useState<string>(Filters.All);
 
-  useEffect(() => {
-    switch (currentFilter) {
-      case Filters.All: {
-        return loadAllTodos();
-      }
-      case Filters.Completed: {
-        return loadCompletedTodos();
-      }
-      case Filters.Active: {
-        return loadActiveTodos();
-      }
-    }
-  }, [currentFilter]);
+  const { currentFilter, setCurrentFilter } = useContext(TodoListContext);
 
   return (
     <>
