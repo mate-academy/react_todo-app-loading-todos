@@ -3,7 +3,7 @@ import React from 'react';
 import cn from 'classnames';
 
 type Props = {
-  // id
+  // id.
   title: string;
   completed: boolean;
 };
