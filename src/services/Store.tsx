@@ -87,7 +87,6 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
       filter,
       setFilter,
       allTodosButton,
-      // setAllTodosButton,
     ],
   );
 

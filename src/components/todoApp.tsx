@@ -30,25 +30,25 @@ export const TodoApp: React.FC = () => {
   //   return <UserWarning />;
   // }
 
-  const loadTodos = async () => {
-    try {
-      const todosFromServer = await todoService.getTodos(USER_ID);
-
-      setTodos(todosFromServer);
-    } catch (error) {
-      setLoadErrorMessage("Unable to load todos");
-      setIsHidden(false);
-    } finally {
-      setTimeout(() => {
-        setIsHidden(true);
-        setLoadErrorMessage("");
-      }, 3000);
-    }
-  };
-
   useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const todosFromServer = await todoService.getTodos(USER_ID);
+
+        setTodos(todosFromServer);
+      } catch (error) {
+        setLoadErrorMessage("Unable to load todos");
+        setIsHidden(false);
+      } finally {
+        setTimeout(() => {
+          setIsHidden(true);
+          setLoadErrorMessage("");
+        }, 3000);
+      }
+    };
+
     loadTodos();
-  });
+  }, [setIsHidden, setLoadErrorMessage,setTodos]);
 
   function reset() {
     setTitle("");
@@ -184,8 +184,6 @@ export const TodoApp: React.FC = () => {
           onClick={() => setIsHidden(true)}
         />
         {loadErrorMessage}
-        {/* <br />
-        Unable to update a todo */}
       </div>
     </div>
   );

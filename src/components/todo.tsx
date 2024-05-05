@@ -43,7 +43,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         todoElem.completed = !todoElem.completed;
       }
 
-      return copiedTodos;
+      return todoElem;
     });
 
     setTodos(copiedTodos);
@@ -70,7 +70,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           setLoadErrorMessage("");
         }, 3000);
         setIsSubmiting(false);
-        setSelectedtodoId(null); // here
+        setSelectedtodoId(null);
       });
   };
 
@@ -122,7 +122,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           completed: todo.completed,
         })}
       >
-        <div className="todo__status-label">
+        <label className="todo__status-label">
+          <p style={{display: 'none'}}>hidden text</p>
+
           <input
             data-cy="TodoStatus"
             type="checkbox"
@@ -135,7 +137,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
               }
             }}
           />
-        </div>
+        </label>
 
         {isEditing ? (
           <>
