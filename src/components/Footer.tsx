@@ -30,7 +30,6 @@ export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {
         {counter} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"

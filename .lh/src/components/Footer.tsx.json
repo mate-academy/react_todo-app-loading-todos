@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 3,
+            "activePatchIndex": 4,
             "patches": [
                 {
                     "date": 1714483400862,
@@ -20,6 +20,10 @@
                 {
                     "date": 1714485960019,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, FormEvent, useMemo } from 'react';\n-import React = require('react');\n+import React from 'react';\n \n import { Todo } from '../types/Todo';\n import { Filter } from '../types/Filter';\n \n"
+                },
+                {
+                    "date": 1714987982488,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,8 @@\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {counter} items left\n       </span>\n \n-      {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n"
                 }
             ],
             "date": 1714483400862,
