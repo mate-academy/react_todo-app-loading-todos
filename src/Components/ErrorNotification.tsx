@@ -40,7 +40,7 @@ export const ErrorNotification: React.FC<Props> = ({
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [error, errorType]);
+  }, [error, errorType, hideError]);
 
   return (
     <div

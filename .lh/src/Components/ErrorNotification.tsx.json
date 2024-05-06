@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 168,
+            "activePatchIndex": 169,
             "patches": [
                 {
                     "date": 1714379437302,
@@ -680,6 +680,10 @@
                 {
                     "date": 1714978649934,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n-    }, 5000);\n+    }, 3000);\n \n     return () => clearTimeout(timeout);\n   }, [error, errorType]);\n \n"
+                },
+                {
+                    "date": 1714979155994,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n       hideError();\n     }, 3000);\n \n     return () => clearTimeout(timeout);\n-  }, [error, errorType]);\n+  }, [error, errorType, hide]);\n \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
                 }
             ],
             "date": 1714379437302,

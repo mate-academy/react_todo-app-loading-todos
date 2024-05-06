@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [errorType, setErrorType] = useState<Error | null>(null);
   const [filter, setFilter] = useState<Status>('all');
+  const [newTodoTitle, setNewTodoTitle] = useState('');
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -66,25 +67,30 @@ export const App: React.FC = () => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const trimmedTodo = newTodoTitle.trim();
+
     if (event.key === 'Enter') {
       event.preventDefault();
-      const newTodoTitle = event.currentTarget.value.trim();
 
-      if (newTodoTitle) {
+      if (trimmedTodo) {
         const newTodo: Todoo = {
           id: todos.length + 1,
           userId: USER_ID,
-          title: newTodoTitle,
+          title: trimmedTodo,
           completed: false,
         };
 
         setTodos(prevTodos => [...prevTodos, newTodo]);
-        event.currentTarget.value = '';
+        setNewTodoTitle('');
       } else {
         setError(true);
         setErrorType('empty');
       }
     }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodoTitle(event.target.value);
   };
 
   const onClearCompleted = () => {
@@ -118,6 +124,8 @@ export const App: React.FC = () => {
                 className="todoapp__new-todo"
                 placeholder="What needs to be done?"
                 onKeyDown={handleKeyDown}
+                value={newTodoTitle}
+                onChange={handleChange}
               />
             </form>
           </header>
