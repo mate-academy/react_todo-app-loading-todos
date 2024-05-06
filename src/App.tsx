@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
@@ -8,24 +7,18 @@ import { Header } from './components/Header';
 import { USER_ID } from './constants';
 import { Footer } from './components/Footer';
 import { ErrorComponent } from './components/ErrorComponent';
+import { handleErrorWithTimeout } from './utils/handleError';
 
 export const App: React.FC = () => {
   const { todos, setTodos, setErrorMessage } = useContext(TodosContext);
-
-  const handleCatch = useCallback(() => {
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-  }, [setErrorMessage]);
 
   useEffect(() => {
     getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-        handleCatch();
+        handleErrorWithTimeout('Unable to load todos', setErrorMessage);
       });
-  }, [setTodos, setErrorMessage, handleCatch]);
+  }, [setTodos, setErrorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -37,9 +30,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-
         <TodoList />
-
         {todos.length > 0 && <Footer />}
       </div>
 
