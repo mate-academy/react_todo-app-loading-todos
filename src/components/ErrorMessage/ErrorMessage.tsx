@@ -26,7 +26,9 @@ export const ErrorMessage = () => {
         clearTimeout(timoutId);
       };
     }
-  }, [error]);
+
+    return () => {};
+  }, [error, dispatch]);
 
   return (
     <div
