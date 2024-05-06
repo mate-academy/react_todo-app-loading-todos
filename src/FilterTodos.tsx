@@ -1,5 +1,5 @@
-import { Filter } from '../types/Filter';
-import { Todo } from '../types/Todo';
+import { Filter } from './types/Filter';
+import { Todo } from './types/Todo';
 
 export const getFilteredTodos = (todos: Todo[], currentFilter: Filter) => {
   let filteredTodos;

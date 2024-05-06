@@ -5,7 +5,7 @@ import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { Error } from './types/Error';
 import { Filter } from './types/Filter';
-import { getFilteredTodos } from './components/FilterTodos';
+import { getFilteredTodos } from './FilterTodos';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -15,12 +15,16 @@ export const App: React.FC = () => {
   const [currentError, setCurrentError] = useState<Error | null>(null);
   const [currentFilter, setCurrentFilter] = useState<Filter>(Filter.All);
 
+  const handleSetCurrentError = (error: Error | null) => {
+    setCurrentError(error);
+  };
+
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setCurrentError(Error.CannotLoad);
-        setTimeout(() => setCurrentError(null), 3000);
+        handleSetCurrentError(Error.CannotLoad);
+        setTimeout(() => handleSetCurrentError(null), 3000);
       });
   }, []);
 
@@ -55,7 +59,7 @@ export const App: React.FC = () => {
       </div>
       <ErrorNotification
         currentError={currentError}
-        setCurrentError={setCurrentError}
+        setCurrentError={handleSetCurrentError}
       />
     </div>
   );
