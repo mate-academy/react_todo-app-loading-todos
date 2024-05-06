@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { TodoList } from './components/TodoList';
@@ -12,23 +12,24 @@ import { ErrorComponent } from './components/ErrorComponent';
 export const App: React.FC = () => {
   const { todos, setTodos, setErrorMessage } = useContext(TodosContext);
 
-  const handleCatch = () => {
+  const handleCatch = useCallback(() => {
     setTimeout(() => {
       setErrorMessage('');
     }, 3000);
-  };
+  }, [setErrorMessage]);
+
+  useEffect(() => {
+    getTodos(USER_ID)
+      .then(setTodos)
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        handleCatch();
+      });
+  }, [setTodos, setErrorMessage, handleCatch]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    getTodos(USER_ID)
-      .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => handleCatch());
-  }, []);
 
   return (
     <div className="todoapp">

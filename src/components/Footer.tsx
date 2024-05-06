@@ -25,23 +25,26 @@ export const Footer = () => {
 
   const handleAllChange = useCallback(() => {
     setStatus(Filtering.ALL);
-  }, []);
+  }, [setStatus]);
 
   const handleActiveChange = useCallback(() => {
     setStatus(Filtering.ACTIVE);
-  }, []);
+  }, [setStatus]);
 
   const handleCompletedChange = useCallback(() => {
     setStatus(Filtering.COMPLETED);
-  }, []);
+  }, [setStatus]);
 
-  const handleDelete = useCallback((ids: number[]) => {
-    Promise.all(ids.map(id => deleteTodo(id))).then(() => {
-      setTodos(prev => prev.filter(todo => !todo.completed));
-    });
+  const handleDelete = useCallback(
+    (ids: number[]) => {
+      Promise.all(ids.map(id => deleteTodo(id))).then(() => {
+        setTodos(prev => prev.filter(todo => !todo.completed));
+      });
 
-    setLoading(true);
-  }, []);
+      setLoading(true);
+    },
+    [setTodos, setLoading],
+  );
 
   const hasCompleted = todos.some(t => t.completed);
 

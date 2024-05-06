@@ -44,12 +44,12 @@ export const Header: React.FC = () => {
 
     createTodo(newTodo)
       .then((createdTodo: Todo) => setTodos(prev => [...prev, createdTodo]))
-      .catch(() => setErrorMessage('Unable to add a todo'))
-      .then(() =>
+      .catch(() => {
+        setErrorMessage('Unable to add a todo');
         setTimeout(() => {
           setErrorMessage('');
-        }, 3000),
-      );
+        }, 3000);
+      });
 
     setTitle('');
   };

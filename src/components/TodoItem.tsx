@@ -22,9 +22,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleDeleteTodo = (todoId: number) => {
-    deleteTodo(todoId)
-      .catch(() => setErrorMessage('Unable to delete a todo'))
-      .finally(() => handleCatch());
+    deleteTodo(todoId).catch(() => {
+      setErrorMessage('Unable to load todos');
+      handleCatch();
+    });
 
     setTodos(prev => prev.filter(item => item.id !== todoId));
   };

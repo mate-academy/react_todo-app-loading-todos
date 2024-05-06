@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { TodoItem } from './TodoItem';
 import { TodosContext } from '../TodosContext';
 import { Filtering } from '../types/Filtering';
@@ -6,8 +6,8 @@ import { Filtering } from '../types/Filtering';
 export const TodoList: React.FC = () => {
   const { todos, filtering } = useContext(TodosContext);
 
-  const visibleTodos = (currentFiltering: Filtering) => {
-    switch (currentFiltering) {
+  const visibleTodos = useMemo(() => {
+    switch (filtering) {
       case Filtering.ALL:
         return todos;
       case Filtering.ACTIVE:
@@ -17,11 +17,11 @@ export const TodoList: React.FC = () => {
       default:
         return todos;
     }
-  };
+  }, [todos, filtering]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {visibleTodos(filtering).map(todo => (
+      {visibleTodos.map(todo => (
         <TodoItem todo={todo} key={todo.id} />
       ))}
     </section>
