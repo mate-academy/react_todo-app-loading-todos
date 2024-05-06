@@ -20,8 +20,8 @@ export const App: React.FC = () => {
         <NewTodo />
         <TodoList />
         <Filter />
-        <Error />
       </div>
+      <Error />
     </div>
   );
 };
