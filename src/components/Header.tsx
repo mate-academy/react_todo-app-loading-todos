@@ -39,7 +39,7 @@ export const Header: FC<Props> = ({ todos, addTodo }) => {
         <input
           data-cy="NewTodoField"
           type="text"
-          className="todoapp__new-todos"
+          className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={newTodoTitle}
           onChange={e => {

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 4,
+            "activePatchIndex": 5,
             "patches": [
                 {
                     "date": 1714483392186,
@@ -24,6 +24,10 @@
                 {
                     "date": 1714987675795,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,8 @@\n   };\n \n   return (\n     <header className=\"todoapp__header\">\n-      {/* this button should have `active` class only if all todos are completed */}\n       <button\n         type=\"button\"\n         className={\n           'todoapp__toggle-all ' +\n"
+                },
+                {
+                    "date": 1714998627242,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n       <form onSubmit={handleNewTodoForm}>\n         <input\n           data-cy=\"NewTodoField\"\n           type=\"text\"\n-          className=\"todoapp__new-todos\"\n+          className=\"todoapp__new-todo\"\n           placeholder=\"What needs to be done?\"\n           value={newTodoTitle}\n           onChange={e => {\n             setNewTodoTitle(e.target.value);\n"
                 }
             ],
             "date": 1714483392186,

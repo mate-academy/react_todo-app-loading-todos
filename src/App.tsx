@@ -40,12 +40,19 @@ export const App: React.FC = () => {
 
   const handleClosingError = useCallback(() => setError(null), [setError]);
 
+  const generateId = () => {
+    return Math.floor(Math.random() * 2137);
+  };
+
   const addTodo = (newTodoTitle: string) => {
-    postTodo({ title: newTodoTitle, userId: USER_ID, completed: false }).then(
-      newTodo => {
-        setTodos(prevTodos => [...prevTodos, newTodo]);
-      },
-    );
+    postTodo({
+      title: newTodoTitle,
+      userId: USER_ID,
+      completed: false,
+      id: generateId(),
+    }).then(newTodo => {
+      setTodos(prevTodos => [...prevTodos, newTodo]);
+    });
   };
 
   if (!USER_ID) {
