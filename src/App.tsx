@@ -8,73 +8,81 @@ import { Main } from './components/Main/Main';
 import { Footer } from './components/Footer/Footer';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
+import { Filter } from './types/filter';
+
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
   const [loader, setLoader] = useState(false);
   const [tempId, setTempId] = useState<number>(0);
-  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [filtered, setFiltered] = useState(Filter.all);
 
   useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    } else {
-      getTodos().then(todos => {
-        setTodos(todos);
-        localStorage.setItem('todos', JSON.stringify(todos));
-      }).catch(() => setError('load'));
-    }
+    getTodos()
+      .then(todoses => {
+        setTodos(todoses);
+      })
+      .catch(() => setError('load'));
   }, []);
-
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const setPosts = (newPost: Omit<Todo, "id">) => {
+  const setPosts = (newPost: Omit<Todo, 'id'>) => {
     setLoader(true);
-    const savedTodos = localStorage.getItem('todos');
-    const initialTodos = savedTodos ? JSON.parse(savedTodos) : [];
-    const updatedTodos = [...initialTodos, newPost];
-    localStorage.setItem('todos', JSON.stringify(updatedTodos));
 
-    const newTempId = (Math.floor(Math.random() * 1000000));
+    const newTempId = Math.floor(Math.random() * 1000000);
+
     setTempId(newTempId);
 
-    setTodos((prevTodos) => [...prevTodos, { ...newPost, id: newTempId }]);
+    setTodos(prevTodos => [
+      ...(prevTodos || []),
+      { ...newPost, id: newTempId },
+    ]);
 
     setInput('');
 
     setPost(newPost)
-      .then((Post) => {
-        setTodos((prevTodos) =>
-          prevTodos.map((todo) =>
-            todo.id === newTempId ? { ...Post } : todo
-          )
+      .then(Post => {
+        setTodos(prevTodos =>
+          prevTodos
+            ? prevTodos.map(todo =>
+                todo.id === newTempId ? { ...Post } : todo,
+              )
+            : [],
         );
-
         setError('');
       })
+
       .catch(() => setError('add'))
       .finally(() => {
         setLoader(false);
       });
   };
 
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header input={input} setInput={setInput} setError={setError} setPosts={setPosts} todos={todos} />
-        <Main todos={filteredTodos} loader={loader} tempId={tempId} />
-        {todos.length !== 0 && <Footer todos={todos} setFilteredTodos={setFilteredTodos} setTodos={setTodos} />}
+        <Header
+          input={input}
+          setInput={setInput}
+          setError={setError}
+          setPosts={setPosts}
+          todos={todos || []}
+        />
+        <Main todos={todos} loader={loader} tempId={tempId} />
+        {todos && (
+          <Footer
+            todos={todos}
+            setTodos={setTodos}
+            filtered={filtered}
+            setFiltered={setFiltered}
+          />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
@@ -85,7 +93,12 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className="notification is-danger is-light has-text-weight-normal"
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" onClick={() => setError('')} />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError('')}
+        />
         {/* show only one message at a time */}
         {error === 'load' && (
           <div>

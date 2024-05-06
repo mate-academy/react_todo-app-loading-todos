@@ -1,27 +1,40 @@
-import React from "react";
-import { Todo } from "../../types/Todo";
+import React from 'react';
+import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 interface Props {
   input: string;
   setInput: (b: string) => void;
   setError: (b: string) => void;
-  setPosts: (b: Omit<Todo, "id">) => void;
+  setPosts: (b: Omit<Todo, 'id'>) => void;
   todos: Todo[];
 }
 
-export const Header = ({ input, setInput, setError, setPosts, todos }: Props) => {
+export const Header = ({
+  input,
+  setInput,
+  setError,
+  setPosts,
+  todos,
+}: Props) => {
   const AddPost = () => {
-    const newPost = { title: input, userId: Math.floor(Math.random() * 12), completed: false } // изменять userId
+    const newPost = {
+      title: input,
+      userId: 583,
+      completed: false,
+    };
+
     setPosts(newPost);
-  }
+  };
 
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
-        className={cn('todoapp__toggle-all', {'active': todos.every(todo => todo.completed)})}
+        className={cn('todoapp__toggle-all', {
+          active: todos.every(todo => todo.completed),
+        })}
         data-cy="ToggleAllButton"
       />
 
@@ -34,13 +47,13 @@ export const Header = ({ input, setInput, setError, setPosts, todos }: Props) =>
           placeholder="What needs to be done?"
           value={input}
           onChange={event => setInput(event.target.value)}
-          onKeyDown={(event) => {
+          onKeyDown={event => {
             if (event.key === 'Enter') {
               event.preventDefault();
               if (input.trim()) {
                 event.preventDefault();
                 AddPost();
-              } else { 
+              } else {
                 setInput('');
                 setError('empty');
               }
@@ -50,4 +63,4 @@ export const Header = ({ input, setInput, setError, setPosts, todos }: Props) =>
       </form>
     </header>
   );
-}
+};
