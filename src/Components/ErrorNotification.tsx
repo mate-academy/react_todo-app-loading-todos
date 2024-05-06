@@ -40,14 +40,19 @@ export const ErrorNotification: React.FC<Props> = ({
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [errorType]);
+  }, [error, errorType]);
 
   return (
     <div
       data-cy="ErrorNotification"
       className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={hideError}
+      />
       {/* show only one message at a time */}
       {errorMessage}
     </div>

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 156,
+            "activePatchIndex": 168,
             "patches": [
                 {
                     "date": 1714379437302,
@@ -632,6 +632,54 @@
                 {
                     "date": 1714486074291,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,55 @@\n+import React, { useEffect } from 'react';\n+import { Error } from '../types/Todo';\n+\n+interface Props {\n+  errorType: Error | null;\n+  error: boolean;\n+  hideError: () => void;\n+}\n+export const ErrorNotification: React.FC<Props> = ({\n+  errorType,\n+  error,\n+  hideError,\n+}) => {\n+  let errorMessage = '';\n+\n+  switch (errorType) {\n+    case 'load':\n+      errorMessage = 'Unable to load todos';\n+      break;\n+    case 'empty':\n+      errorMessage = 'Title should not be empty';\n+      break;\n+    case 'add':\n+      errorMessage = 'Unable to add a todo';\n+      break;\n+    case 'delete':\n+      errorMessage = 'Unable to delete a todo';\n+      break;\n+    case 'update':\n+      errorMessage = 'Unable to update a todo';\n+      break;\n+    default:\n+      errorMessage = 'Unknown error';\n+      break;\n+  }\n+\n+  useEffect(() => {\n+    const timeout = setTimeout(() => {\n+      hideError();\n+    }, 3000);\n+  \n+    return () => clearTimeout(timeout);\n+  }, [errorType]);\n+\n+  return (\n+    <div\n+      data-cy=\"ErrorNotification\"\n+      className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n+    >\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      {/* show only one message at a time */}\n+      {errorMessage}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714974906321,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React, { useEffect } from 'react';\n+import React, { useEffect, usesta } from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n@@ -37,63 +37,9 @@\n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n     }, 3000);\n-  \n-    return () => clearTimeout(timeout);\n-  }, [errorType]);\n \n-  return (\n-    <div\n-      data-cy=\"ErrorNotification\"\n-      className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n-    >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-      {/* show only one message at a time */}\n-      {errorMessage}\n-    </div>\n-  );\n-};\n-import React, { useEffect } from 'react';\n-import { Error } from '../types/Todo';\n-\n-interface Props {\n-  errorType: Error | null;\n-  error: boolean;\n-  hideError: () => void;\n-}\n-export const ErrorNotification: React.FC<Props> = ({\n-  errorType,\n-  error,\n-  hideError,\n-}) => {\n-  let errorMessage = '';\n-\n-  switch (errorType) {\n-    case 'load':\n-      errorMessage = 'Unable to load todos';\n-      break;\n-    case 'empty':\n-      errorMessage = 'Title should not be empty';\n-      break;\n-    case 'add':\n-      errorMessage = 'Unable to add a todo';\n-      break;\n-    case 'delete':\n-      errorMessage = 'Unable to delete a todo';\n-      break;\n-    case 'update':\n-      errorMessage = 'Unable to update a todo';\n-      break;\n-    default:\n-      errorMessage = 'Unknown error';\n-      break;\n-  }\n-\n-  useEffect(() => {\n-    const timeout = setTimeout(() => {\n-      hideError();\n-    }, 3000);\n     return () => clearTimeout(timeout);\n   }, [errorType]);\n \n   return (\n"
+                },
+                {
+                    "date": 1714974938658,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React, { useEffect, usesta } from 'react';\n+import React, { useEffect } from 'react';\n import { Error } from '../types/Todo';\n \n interface Props {\n   errorType: Error | null;\n"
+                },
+                {
+                    "date": 1714975687831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,9 @@\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n     >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" on/>\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n   );\n"
+                },
+                {
+                    "date": 1714975693524,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,9 @@\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n     >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" on/>\n+      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" onClick={}/>\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n   );\n"
+                },
+                {
+                    "date": 1714975716467,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,14 @@\n     <div\n       data-cy=\"ErrorNotification\"\n       className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}\n     >\n-      <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" onClick={}/>\n+      <button\n+        data-cy=\"HideErrorButton\"\n+        type=\"button\"\n+        className=\"delete\"\n+        onClick={hideError}\n+      />\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n   );\n"
+                },
+                {
+                    "date": 1714975799672,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n       hideError();\n     }, 3000);\n \n     return () => clearTimeout(timeout);\n-  }, [errorType]);\n+  }, [erroerrorType]);\n \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n"
+                },
+                {
+                    "date": 1714975823411,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n       hideError();\n     }, 3000);\n \n     return () => clearTimeout(timeout);\n-  }, [erroerrorType]);\n+  }, [error, errorType]);\n \n   return (\n     <div\n       data-cy=\"ErrorNotification\"\n@@ -50,9 +50,9 @@\n       <button\n         data-cy=\"HideErrorButton\"\n         type=\"button\"\n         className=\"delete\"\n-        onClick={hideError}\n+        // onClick={hideError}\n       />\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n"
+                },
+                {
+                    "date": 1714975874592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       <button\n         data-cy=\"HideErrorButton\"\n         type=\"button\"\n         className=\"delete\"\n-        // onClick={hideError}\n+        onClick={hideError}\n       />\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n"
+                },
+                {
+                    "date": 1714978586150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       <button\n         data-cy=\"HideErrorButton\"\n         type=\"button\"\n         className=\"delete\"\n-        onClick={hideError}\n+        // onClick={hideError}\n       />\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n"
+                },
+                {
+                    "date": 1714978594205,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       <button\n         data-cy=\"HideErrorButton\"\n         type=\"button\"\n         className=\"delete\"\n-        // onClick={hideError}\n+        onClick={hideError}\n       />\n       {/* show only one message at a time */}\n       {errorMessage}\n     </div>\n"
+                },
+                {
+                    "date": 1714978631035,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n-    }, 3000);\n+    }, 5000);\n \n     return () => clearTimeout(timeout);\n   }, [error, errorType]);\n \n"
+                },
+                {
+                    "date": 1714978649934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n \n   useEffect(() => {\n     const timeout = setTimeout(() => {\n       hideError();\n-    }, 5000);\n+    }, 3000);\n \n     return () => clearTimeout(timeout);\n   }, [error, errorType]);\n \n"
                 }
             ],
             "date": 1714379437302,

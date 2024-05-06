@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -68,6 +67,7 @@ export const App: React.FC = () => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       const newTodoTitle = event.currentTarget.value.trim();
 
       if (newTodoTitle) {
@@ -79,6 +79,7 @@ export const App: React.FC = () => {
         };
 
         setTodos(prevTodos => [...prevTodos, newTodo]);
+        event.currentTarget.value = '';
       } else {
         setError(true);
         setErrorType('empty');
