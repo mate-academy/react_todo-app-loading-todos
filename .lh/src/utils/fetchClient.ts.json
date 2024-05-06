@@ -1,0 +1,182 @@
+{
+    "sourceFile": "src/utils/fetchClient.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 41,
+            "patches": [
+                {
+                    "date": 1714380102924,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714380676030,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,4 +40,6 @@\n   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n+\n+\n"
+                },
+                {
+                    "date": 1714380682177,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,4 +42,7 @@\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n \n+export\n+asy\n+nc \n"
+                },
+                {
+                    "date": 1714380687402,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,5 +44,7 @@\n \n \n export\n asy\n-nc \n+nc\n+function\n+fetch\n"
+                },
+                {
+                    "date": 1714380693977,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -47,4 +47,5 @@\n asy\n nc\n function\n fetch\n+Todos()\n"
+                },
+                {
+                    "date": 1714380701527,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,7 +45,5 @@\n \n export\n asy\n nc\n-function\n-fetch\n-Todos()\n+function fetchTodos()\n"
+                },
+                {
+                    "date": 1714380707047,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,7 +43,5 @@\n };\n \n \n export\n-asy\n-nc\n-function fetchTodos()\n+async function fetchTodos()\n"
+                },
+                {
+                    "date": 1714380716112,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,46 @@\n+/* eslint-disable @typescript-eslint/no-explicit-any */\n+const BASE_URL = 'https://mate.academy/students-api';\n+\n+// returns a promise resolved after a given delay\n+function wait(delay: number) {\n+  return new Promise(resolve => {\n+    setTimeout(resolve, delay);\n+  });\n+}\n+\n+// To have autocompletion and avoid mistypes\n+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n+\n+async function request<T>(\n+  url: string,\n+  method: RequestMethod = 'GET',\n+  data: any = null, // we can send any data to the server\n+): Promise<T> {\n+  const options: RequestInit = { method };\n+\n+  if (data) {\n+    // We add body and Content-Type only for the requests with data\n+    options.body = JSON.stringify(data);\n+    options.headers = {\n+      'Content-Type': 'application/json; charset=UTF-8',\n+    };\n+  }\n+\n+  // DON'T change the delay it is required for tests\n+  await wait(100);\n+  const response = await fetch(BASE_URL + url, options);\n+  if (!response.ok) {\n+    throw new Error();\n+  }\n+  return await response.json();\n+}\n+\n+export const client = {\n+  get: <T>(url: string) => request<T>(url),\n+  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n+  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n+  delete: (url: string) => request(url, 'DELETE'),\n+};\n+\n+\n+export async function fetchTodos(){}\n"
+                },
+                {
+                    "date": 1714380748583,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,52 +42,7 @@\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n \n-export async function fetchTodos(){}\n-/* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n-\n-// returns a promise resolved after a given delay\n-function wait(delay: number) {\n-  return new Promise(resolve => {\n-    setTimeout(resolve, delay);\n-  });\n+export async function fetchTodos() {\n+  return \n }\n-\n-// To have autocompletion and avoid mistypes\n-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n-\n-async function request<T>(\n-  url: string,\n-  method: RequestMethod = 'GET',\n-  data: any = null, // we can send any data to the server\n-): Promise<T> {\n-  const options: RequestInit = { method };\n-\n-  if (data) {\n-    // We add body and Content-Type only for the requests with data\n-    options.body = JSON.stringify(data);\n-    options.headers = {\n-      'Content-Type': 'application/json; charset=UTF-8',\n-    };\n-  }\n-\n-  // DON'T change the delay it is required for tests\n-  await wait(100);\n-  const response = await fetch(BASE_URL + url, options);\n-  if (!response.ok) {\n-    throw new Error();\n-  }\n-  return await response.json();\n-}\n-\n-export const client = {\n-  get: <T>(url: string) => request<T>(url),\n-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n-  delete: (url: string) => request(url, 'DELETE'),\n-};\n-\n-\n-export\n-async function fetchTodos()\n"
+                },
+                {
+                    "date": 1714380754854,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,6 +43,6 @@\n };\n \n \n export async function fetchTodos() {\n-  return \n+  return ax\n }\n"
+                },
+                {
+                    "date": 1714380856064,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,6 +43,6 @@\n };\n \n \n export async function fetchTodos() {\n-  return ax\n+  return fet\n }\n"
+                },
+                {
+                    "date": 1714380877371,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,6 +43,6 @@\n };\n \n \n export async function fetchTodos() {\n-  return fet\n+  return fetch(`$`)\n }\n"
+                },
+                {
+                    "date": 1714380882879,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,6 +43,6 @@\n };\n \n \n export async function fetchTodos() {\n-  return fetch(`$`)\n+  return fetch(`${BASE}`)\n }\n"
+                },
+                {
+                    "date": 1714380888091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,6 +43,6 @@\n };\n \n \n export async function fetchTodos() {\n-  return fetch(`${BASE}`)\n+  return fetch(`${BASE_URL}/todos`)\n }\n"
+                },
+                {
+                    "date": 1714381758483,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,4 @@\n   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n-\n-\n-export async function fetchTodos() {\n-  return fetch(`${BASE_URL}/todos`)\n-}\n"
+                },
+                {
+                    "date": 1714382740160,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,4 +40,5 @@\n   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n+\n"
+                },
+                {
+                    "date": 1714382748362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,4 +41,5 @@\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n+export async\n"
+                },
+                {
+                    "date": 1714382754387,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,5 +41,5 @@\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n-export async\n+export async function fetch\n"
+                },
+                {
+                    "date": 1714382759678,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,5 +41,5 @@\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n-export async function fetch\n+export async function fetchTodos() \n"
+                },
+                {
+                    "date": 1714382790720,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,47 @@\n+/* eslint-disable @typescript-eslint/no-explicit-any */\n+const BASE_URL = 'https://mate.academy/students-api';\n+\n+// returns a promise resolved after a given delay\n+function wait(delay: number) {\n+  return new Promise(resolve => {\n+    setTimeout(resolve, delay);\n+  });\n+}\n+\n+// To have autocompletion and avoid mistypes\n+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n+\n+async function request<T>(\n+  url: string,\n+  method: RequestMethod = 'GET',\n+  data: any = null, // we can send any data to the server\n+): Promise<T> {\n+  const options: RequestInit = { method };\n+\n+  if (data) {\n+    // We add body and Content-Type only for the requests with data\n+    options.body = JSON.stringify(data);\n+    options.headers = {\n+      'Content-Type': 'application/json; charset=UTF-8',\n+    };\n+  }\n+\n+  // DON'T change the delay it is required for tests\n+  await wait(100);\n+  const response = await fetch(BASE_URL + url, options);\n+  if (!response.ok) {\n+    throw new Error();\n+  }\n+  return await response.json();\n+}\n+\n+export const client = {\n+  get: <T>(url: string) => request<T>(url),\n+  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n+  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n+  delete: (url: string) => request(url, 'DELETE'),\n+};\n+\n+export async function fetchTodos() {\n+  try\n+}\n"
+                },
+                {
+                    "date": 1714382795984,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,51 +42,8 @@\n   delete: (url: string) => request(url, 'DELETE'),\n };\n \n export async function fetchTodos() {\n-  try\n-}\n-/* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n-\n-// returns a promise resolved after a given delay\n-function wait(delay: number) {\n-  return new Promise(resolve => {\n-    setTimeout(resolve, delay);\n-  });\n-}\n-\n-// To have autocompletion and avoid mistypes\n-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n-\n-async function request<T>(\n-  url: string,\n-  method: RequestMethod = 'GET',\n-  data: any = null, // we can send any data to the server\n-): Promise<T> {\n-  const options: RequestInit = { method };\n-\n-  if (data) {\n-    // We add body and Content-Type only for the requests with data\n-    options.body = JSON.stringify(data);\n-    options.headers = {\n-      'Content-Type': 'application/json; charset=UTF-8',\n-    };\n+  try {\n+    const todos\n   }\n-\n-  // DON'T change the delay it is required for tests\n-  await wait(100);\n-  const response = await fetch(BASE_URL + url, options);\n-  if (!response.ok) {\n-    throw new Error();\n-  }\n-  return await response.json();\n }\n-\n-export const client = {\n-  get: <T>(url: string) => request<T>(url),\n-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n-  delete: (url: string) => request(url, 'DELETE'),\n-};\n-\n-export async function fetchTodos() \n"
+                },
+                {
+                    "date": 1714382804042,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,7 +43,7 @@\n };\n \n export async function fetchTodos() {\n   try {\n-    const todos\n+    const todos = await client\n   }\n }\n"
+                },
+                {
+                    "date": 1714382809938,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,7 +43,7 @@\n };\n \n export async function fetchTodos() {\n   try {\n-    const todos = await client\n+    const todos = await client.get<Todo>\n   }\n }\n"
+                },
+                {
+                    "date": 1714382815798,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,7 +43,7 @@\n };\n \n export async function fetchTodos() {\n   try {\n-    const todos = await client.get<Todo>\n+    const todos = await client.get<Todo[]>('')\n   }\n }\n"
+                },
+                {
+                    "date": 1714382823762,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,51 @@\n+import { Todo } from \"../types/Todo\";\n+\n+/* eslint-disable @typescript-eslint/no-explicit-any */\n+const BASE_URL = 'https://mate.academy/students-api';\n+\n+// returns a promise resolved after a given delay\n+function wait(delay: number) {\n+  return new Promise(resolve => {\n+    setTimeout(resolve, delay);\n+  });\n+}\n+\n+// To have autocompletion and avoid mistypes\n+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n+\n+async function request<T>(\n+  url: string,\n+  method: RequestMethod = 'GET',\n+  data: any = null, // we can send any data to the server\n+): Promise<T> {\n+  const options: RequestInit = { method };\n+\n+  if (data) {\n+    // We add body and Content-Type only for the requests with data\n+    options.body = JSON.stringify(data);\n+    options.headers = {\n+      'Content-Type': 'application/json; charset=UTF-8',\n+    };\n+  }\n+\n+  // DON'T change the delay it is required for tests\n+  await wait(100);\n+  const response = await fetch(BASE_URL + url, options);\n+  if (!response.ok) {\n+    throw new Error();\n+  }\n+  return await response.json();\n+}\n+\n+export const client = {\n+  get: <T>(url: string) => request<T>(url),\n+  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n+  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n+  delete: (url: string) => request(url, 'DELETE'),\n+};\n+\n+export async function fetchTodos() {\n+  try {\n+    const todos = await client.get<Todo[]>('/todos')\n+  }\n+}\n"
+                },
+                {
+                    "date": 1714382832195,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,51 @@\n+import { Todo } from \"../types/Todo\";\n+\n+/* eslint-disable @typescript-eslint/no-explicit-any */\n+const BASE_URL = 'https://mate.academy/students-api';\n+\n+// returns a promise resolved after a given delay\n+function wait(delay: number) {\n+  return new Promise(resolve => {\n+    setTimeout(resolve, delay);\n+  });\n+}\n+\n+// To have autocompletion and avoid mistypes\n+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n+\n+async function request<T>(\n+  url: string,\n+  method: RequestMethod = 'GET',\n+  data: any = null, // we can send any data to the server\n+): Promise<T> {\n+  const options: RequestInit = { method };\n+\n+  if (data) {\n+    // We add body and Content-Type only for the requests with data\n+    options.body = JSON.stringify(data);\n+    options.headers = {\n+      'Content-Type': 'application/json; charset=UTF-8',\n+    };\n+  }\n+\n+  // DON'T change the delay it is required for tests\n+  await wait(100);\n+  const response = await fetch(BASE_URL + url, options);\n+  if (!response.ok) {\n+    throw new Error();\n+  }\n+  return await response.json();\n+}\n+\n+export const client = {\n+  get: <T>(url: string) => request<T>(url),\n+  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n+  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n+  delete: (url: string) => request(url, 'DELETE'),\n+};\n+\n+export async function fetchTodos() {\n+  try {\n+    const todos = await client.get<Todo[]>('/todos');\n+  }\n+};\n"
+                },
+                {
+                    "date": 1714382838185,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,106 +46,7 @@\n \n export async function fetchTodos() {\n   try {\n     const todos = await client.get<Todo[]>('/todos');\n+    return todos\n   }\n };\n-import { Todo } from \"../types/Todo\";\n-\n-/* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n-\n-// returns a promise resolved after a given delay\n-function wait(delay: number) {\n-  return new Promise(resolve => {\n-    setTimeout(resolve, delay);\n-  });\n-}\n-\n-// To have autocompletion and avoid mistypes\n-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n-\n-async function request<T>(\n-  url: string,\n-  method: RequestMethod = 'GET',\n-  data: any = null, // we can send any data to the server\n-): Promise<T> {\n-  const options: RequestInit = { method };\n-\n-  if (data) {\n-    // We add body and Content-Type only for the requests with data\n-    options.body = JSON.stringify(data);\n-    options.headers = {\n-      'Content-Type': 'application/json; charset=UTF-8',\n-    };\n-  }\n-\n-  // DON'T change the delay it is required for tests\n-  await wait(100);\n-  const response = await fetch(BASE_URL + url, options);\n-  if (!response.ok) {\n-    throw new Error();\n-  }\n-  return await response.json();\n-}\n-\n-export const client = {\n-  get: <T>(url: string) => request<T>(url),\n-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n-  delete: (url: string) => request(url, 'DELETE'),\n-};\n-\n-export async function fetchTodos() {\n-  try {\n-    const todos = await client.get<Todo[]>('/todos')\n-  }\n-}\n-/* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n-\n-// returns a promise resolved after a given delay\n-function wait(delay: number) {\n-  return new Promise(resolve => {\n-    setTimeout(resolve, delay);\n-  });\n-}\n-\n-// To have autocompletion and avoid mistypes\n-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n-\n-async function request<T>(\n-  url: string,\n-  method: RequestMethod = 'GET',\n-  data: any = null, // we can send any data to the server\n-): Promise<T> {\n-  const options: RequestInit = { method };\n-\n-  if (data) {\n-    // We add body and Content-Type only for the requests with data\n-    options.body = JSON.stringify(data);\n-    options.headers = {\n-      'Content-Type': 'application/json; charset=UTF-8',\n-    };\n-  }\n-\n-  // DON'T change the delay it is required for tests\n-  await wait(100);\n-  const response = await fetch(BASE_URL + url, options);\n-  if (!response.ok) {\n-    throw new Error();\n-  }\n-  return await response.json();\n-}\n-\n-export const client = {\n-  get: <T>(url: string) => request<T>(url),\n-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n-  delete: (url: string) => request(url, 'DELETE'),\n-};\n-\n-export async function fetchTodos() {\n-  try {\n-    const todos = await client.get<Todo[]>('')\n-  }\n-}\n"
+                },
+                {
+                    "date": 1714382846774,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,7 +46,7 @@\n \n export async function fetchTodos() {\n   try {\n     const todos = await client.get<Todo[]>('/todos');\n-    return todos\n-  }\n+    return todos;\n+  } catch\n };\n"
+                },
+                {
+                    "date": 1714382853950,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,11 +42,4 @@\n   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n   delete: (url: string) => request(url, 'DELETE'),\n };\n-\n-export async function fetchTodos() {\n-  try {\n-    const todos = await client.get<Todo[]>('/todos');\n-    return todos;\n-  } catch\n-};\n"
+                },
+                {
+                    "date": 1714385216560,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { Todo } from \"../types/Todo\";\n+import { Todoo } from \"../types/Todo\";\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n const BASE_URL = 'https://mate.academy/students-api';\n \n"
+                },
+                {
+                    "date": 1714385224549,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,4 @@\n-import { Todoo } from \"../types/Todo\";\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n const BASE_URL = 'https://mate.academy/students-api';\n \n"
+                },
+                {
+                    "date": 1714403349638,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n+const BASE_URL = 'https://mate.academy/students-apii';\n \n // returns a promise resolved after a given delay\n function wait(delay: number) {\n   return new Promise(resolve => {\n"
+                },
+                {
+                    "date": 1714403452760,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-apii';\n+const BASE_URL = 'https://mate.academy/students-api';\n \n // returns a promise resolved after a given delay\n function wait(delay: number) {\n   return new Promise(resolve => {\n"
+                },
+                {
+                    "date": 1714403642447,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n+const BASE_URL = 'https://mate.academy/students-apii';\n \n // returns a promise resolved after a given delay\n function wait(delay: number) {\n   return new Promise(resolve => {\n"
+                },
+                {
+                    "date": 1714404461318,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,44 @@\n+\n+/* eslint-disable @typescript-eslint/no-explicit-any */\n+const BASE_URL = 'https://mate.academy/students-api';\n+\n+// returns a promise resolved after a given delay\n+function wait(delay: number) {\n+  return new Promise(resolve => {\n+    setTimeout(resolve, delay);\n+  });\n+}\n+\n+// To have autocompletion and avoid mistypes\n+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n+\n+async function request<T>(\n+  url: string,\n+  method: RequestMethod = 'GET',\n+  data: any = null, // we can send any data to the server\n+): Promise<T> {\n+  const options: RequestInit = { method };\n+\n+  if (data) {\n+    // We add body and Content-Type only for the requests with data\n+    options.body = JSON.stringify(data);\n+    options.headers = {\n+      'Content-Type': 'application/json; charset=UTF-8',\n+    };\n+  }\n+\n+  // DON'T change the delay it is required for tests\n+  await wait(100);\n+  const response = await fetch(BASE_URL + url, options);\n+  if (!response.ok) {\n+    throw new Error();\n+  }\n+  return await response.json();\n+}\n+\n+export const client = {\n+  get: <T>(url: string) => request<T>(url),\n+  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n+  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n+  delete: (url: string) => request(url, 'DELETE'),\n+};\n"
+                },
+                {
+                    "date": 1714405190730,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,50 +1,6 @@\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-api';\n-\n-// returns a promise resolved after a given delay\n-function wait(delay: number) {\n-  return new Promise(resolve => {\n-    setTimeout(resolve, delay);\n-  });\n-}\n-\n-// To have autocompletion and avoid mistypes\n-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n-\n-async function request<T>(\n-  url: string,\n-  method: RequestMethod = 'GET',\n-  data: any = null, // we can send any data to the server\n-): Promise<T> {\n-  const options: RequestInit = { method };\n-\n-  if (data) {\n-    // We add body and Content-Type only for the requests with data\n-    options.body = JSON.stringify(data);\n-    options.headers = {\n-      'Content-Type': 'application/json; charset=UTF-8',\n-    };\n-  }\n-\n-  // DON'T change the delay it is required for tests\n-  await wait(100);\n-  const response = await fetch(BASE_URL + url, options);\n-  if (!response.ok) {\n-    throw new Error();\n-  }\n-  return await response.json();\n-}\n-\n-export const client = {\n-  get: <T>(url: string) => request<T>(url),\n-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n-  delete: (url: string) => request(url, 'DELETE'),\n-};\n-\n-/* eslint-disable @typescript-eslint/no-explicit-any */\n const BASE_URL = 'https://mate.academy/students-apii';\n \n // returns a promise resolved after a given delay\n function wait(delay: number) {\n"
+                },
+                {
+                    "date": 1714405228829,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n \n /* eslint-disable @typescript-eslint/no-explicit-any */\n-const BASE_URL = 'https://mate.academy/students-apii';\n+const BASE_URL = 'https://mate.academy/students-api';\n \n // returns a promise resolved after a given delay\n function wait(delay: number) {\n   return new Promise(resolve => {\n"
+                },
+                {
+                    "date": 1714470141021,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  return await response.json();\n+  return response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714473546072,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  return response.json();\n+  return await response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485616035,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  return await response.json();\n+  returnit response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485624973,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,10 @@\n   const response = await fetch(BASE_URL + url, options);\n   if (!response.ok) {\n     throw new Error();\n   }\n-  returnit response.json();\n+\n+  return response.json();\n }\n \n export const client = {\n   get: <T>(url: string) => request<T>(url),\n"
+                },
+                {
+                    "date": 1714485636427,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,4 @@\n-\n /* eslint-disable @typescript-eslint/no-explicit-any */\n const BASE_URL = 'https://mate.academy/students-api';\n \n // returns a promise resolved after a given delay\n@@ -29,8 +28,9 @@\n \n   // DON'T change the delay it is required for tests\n   await wait(100);\n   const response = await fetch(BASE_URL + url, options);\n+\n   if (!response.ok) {\n     throw new Error();\n   }\n \n"
+                }
+            ],
+            "date": 1714380102924,
+            "name": "Commit-0",
+            "content": "/* eslint-disable @typescript-eslint/no-explicit-any */\nconst BASE_URL = 'https://mate.academy/students-api';\n\n// returns a promise resolved after a given delay\nfunction wait(delay: number) {\n  return new Promise(resolve => {\n    setTimeout(resolve, delay);\n  });\n}\n\n// To have autocompletion and avoid mistypes\ntype RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';\n\nasync function request<T>(\n  url: string,\n  method: RequestMethod = 'GET',\n  data: any = null, // we can send any data to the server\n): Promise<T> {\n  const options: RequestInit = { method };\n\n  if (data) {\n    // We add body and Content-Type only for the requests with data\n    options.body = JSON.stringify(data);\n    options.headers = {\n      'Content-Type': 'application/json; charset=UTF-8',\n    };\n  }\n\n  // DON'T change the delay it is required for tests\n  await wait(100);\n  const response = await fetch(BASE_URL + url, options);\n  if (!response.ok) {\n    throw new Error();\n  }\n  return await response.json();\n}\n\nexport const client = {\n  get: <T>(url: string) => request<T>(url),\n  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),\n  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),\n  delete: (url: string) => request(url, 'DELETE'),\n};\n"
+        }
+    ]
+}

@@ -1,0 +1,478 @@
+{
+    "sourceFile": "src/App.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 115,
+            "patches": [
+                {
+                    "date": 1714379206408,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714379211628,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n             />\n           </form>\n         </header>\n \n-       \n+       <TodoList/>\n \n         {/* Hide the footer if there are no todos */}\n         <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n           <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714379280678,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,9 @@\n /* eslint-disable jsx-a11y/control-has-associated-label */\n import React from 'react';\n import { UserWarning } from './UserWarning';\n import { USER_ID } from './api/todos';\n+import { TodoList } from './Components/TodoList';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n"
+                },
+                {
+                    "date": 1714379374780,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -81,23 +81,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-      <div\n-        data-cy=\"ErrorNotification\"\n-        className=\"notification is-danger is-light has-text-weight-normal\"\n-      >\n-        <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n-        {/* show only one message at a time */}\n-        Unable to load todos\n-        <br />\n-        Title should not be empty\n-        <br />\n-        Unable to add a todo\n-        <br />\n-        Unable to delete a todo\n-        <br />\n-        Unable to update a todo\n-      </div>\n+\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714379397117,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -81,8 +81,6 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-\n-    </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714379419078,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -81,6 +81,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n+     \n+    </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714379424490,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -81,8 +81,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-     \n+     <ErrorNo\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714379432751,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -81,8 +81,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-     <ErrorNo\n+     <ErrorNotification/>\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714379470485,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import React from 'react';\n import { UserWarning } from './UserWarning';\n import { USER_ID } from './api/todos';\n import { TodoList } from './Components/TodoList';\n+import { ErrorNotification } from './Components/ErrorNotification';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n"
+                },
+                {
+                    "date": 1714379524830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,49 +37,9 @@\n \n        <TodoList/>\n \n         {/* Hide the footer if there are no todos */}\n-        <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-          <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-            3 items left\n-          </span>\n-\n-          {/* Active link should have the 'selected' class */}\n-          <nav className=\"filter\" data-cy=\"Filter\">\n-            <a\n-              href=\"#/\"\n-              className=\"filter__link selected\"\n-              data-cy=\"FilterLinkAll\"\n-            >\n-              All\n-            </a>\n-\n-            <a\n-              href=\"#/active\"\n-              className=\"filter__link\"\n-              data-cy=\"FilterLinkActive\"\n-            >\n-              Active\n-            </a>\n-\n-            <a\n-              href=\"#/completed\"\n-              className=\"filter__link\"\n-              data-cy=\"FilterLinkCompleted\"\n-            >\n-              Completed\n-            </a>\n-          </nav>\n-\n-          {/* this button should be disabled if there are no completed todos */}\n-          <button\n-            type=\"button\"\n-            className=\"todoapp__clear-completed\"\n-            data-cy=\"ClearCompletedButton\"\n-          >\n-            Clear completed\n-          </button>\n-        </footer>\n+      \n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n"
+                },
+                {
+                    "date": 1714379570547,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n import { UserWarning } from './UserWarning';\n import { USER_ID } from './api/todos';\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n+import { Footer } from './Components/Footer';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n@@ -37,9 +38,9 @@\n \n        <TodoList/>\n \n         {/* Hide the footer if there are no todos */}\n-      \n+      <Footer/>\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n"
+                },
+                {
+                    "date": 1714382074738,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,10 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n+  \n+\n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n \n"
+                },
+                {
+                    "date": 1714382082669,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  \n+  co\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382089920,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  co\n+  const [todos, setTodos]\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382097912,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n /* eslint-disable jsx-a11y/label-has-associated-control */\n /* eslint-disable jsx-a11y/control-has-associated-label */\n-import React from 'react';\n+import React, { useState } from 'react';\n import { UserWarning } from './UserWarning';\n import { USER_ID } from './api/todos';\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n@@ -11,9 +11,9 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  const [todos, setTodos]\n+  const [todos, setTodos] = useState<>\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382103484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  const [todos, setTodos] = useState<>\n+  const [todos, setTodos] = useState<Todo[]>([])\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382113067,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,10 +11,12 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  const [todos, setTodos] = useState<Todo[]>([])\n+  const [todos, setTodos] = useState<Todo[]>([]);\n \n+  \n+\n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n \n"
+                },
+                {
+                    "date": 1714382120932,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n import { USER_ID } from './api/todos';\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n import { Footer } from './Components/Footer';\n+import { Todo } from './types/Todo';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n"
+                },
+                {
+                    "date": 1714382125999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n-  \n+  use\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382133654,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n /* eslint-disable jsx-a11y/label-has-associated-control */\n /* eslint-disable jsx-a11y/control-has-associated-label */\n-import React, { useState } from 'react';\n+import React, { useEffect, useState } from 'react';\n import { UserWarning } from './UserWarning';\n import { USER_ID } from './api/todos';\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n@@ -14,9 +14,9 @@\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n-  use\n+  useEffect(() =. )\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382148701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,10 +14,12 @@\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n-  useEffect(() =. )\n+  useEffect(() = {\n \n+  })\n+\n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n \n"
+                },
+                {
+                    "date": 1714382172827,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,10 +14,10 @@\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n-  useEffect(() = {\n-\n+  useEffect(() => {\n+get\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382192169,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-get\n+getTodos\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382197522,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos\n+getTodos().then\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382202711,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then\n+getTodos().then(todod)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382219495,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(todod)\n+getTodos().then(lo)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382230687,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(lo)\n+getTodos().then(loaded)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382237598,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loaded)\n+getTodos().then(loadedTodos => setTodos)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382248509,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos)\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382254681,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).ca\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382260182,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).ca\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(errir)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382279862,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(errir)\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error)\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382285724,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error)\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error(`Error loadi`))\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382293257,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error(`Error loadi`))\n+getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error(`Error loading todos:`))\n   })\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382301937,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,10 +15,12 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-getTodos().then(loadedTodos => setTodos(loadedTodos)).catch(error => console.error(`Error loading todos:`))\n-  })\n+    getTodos()\n+      .then(loadedTodos => setTodos(loadedTodos))\n+      .catch(error => console.error(`Error loading todos:`, error));\n+  });\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n@@ -42,16 +44,16 @@\n             />\n           </form>\n         </header>\n \n-       <TodoList/>\n+        <TodoList />\n \n         {/* Hide the footer if there are no todos */}\n-      <Footer/>\n+        <Footer />\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-     <ErrorNotification/>\n+      <ErrorNotification />\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714382307355,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n /* eslint-disable jsx-a11y/label-has-associated-control */\n /* eslint-disable jsx-a11y/control-has-associated-label */\n import React, { useEffect, useState } from 'react';\n import { UserWarning } from './UserWarning';\n-import { USER_ID } from './api/todos';\n+import { USER_ID, getTodos } from './api/todos';\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n import { Footer } from './Components/Footer';\n import { Todo } from './types/Todo';\n"
+                },
+                {
+                    "date": 1714382327494,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n   useEffect(() => {\n     getTodos()\n       .then(loadedTodos => setTodos(loadedTodos))\n       .catch(error => console.error(`Error loading todos:`, error));\n-  });\n+  }, []);\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714382441961,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    getTodos()\n+    const getTodos()\n       .then(loadedTodos => setTodos(loadedTodos))\n       .catch(error => console.error(`Error loading todos:`, error));\n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382447052,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const getTodos()\n+    const getTodos = ()\n       .then(loadedTodos => setTodos(loadedTodos))\n       .catch(error => console.error(`Error loading todos:`, error));\n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382455679,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const getTodos = ()\n+    const getTodos = async () => \n       .then(loadedTodos => setTodos(loadedTodos))\n       .catch(error => console.error(`Error loading todos:`, error));\n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382466062,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,11 +15,10 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const getTodos = async () => \n-      .then(loadedTodos => setTodos(loadedTodos))\n-      .catch(error => console.error(`Error loading todos:`, error));\n+    const getTodos = async () => {}\n+     \n   }, []);\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382473042,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,10 +15,12 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const getTodos = async () => {}\n-     \n+    const getTodos = async () => {\n+      try\n+    }\n+\n   }, []);\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382479018,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,11 @@\n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n     const getTodos = async () => {\n-      try\n+      try {\n+        const loaded\n+      }\n     }\n \n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382484301,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n \n   useEffect(() => {\n     const getTodos = async () => {\n       try {\n-        const loaded\n+        const loadedTodos = await\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382490046,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n \n   useEffect(() => {\n     const getTodos = async () => {\n       try {\n-        const loadedTodos = await\n+        const loadedTodos = await fetchTodos()\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382496306,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,10 @@\n \n   useEffect(() => {\n     const getTodos = async () => {\n       try {\n-        const loadedTodos = await fetchTodos()\n+        const loadedTodos = await fetchTodos();\n+        setTodos\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382502265,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n   useEffect(() => {\n     const getTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n-        setTodos\n+        setTodos(loadedTodos);\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382509790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n     const getTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n-      }\n+      } catch ()\n     }\n \n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382514822,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,11 @@\n     const getTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n-      } catch ()\n+      } catch (error) {\n+        \n+      }\n     }\n \n   }, []);\n \n"
+                },
+                {
+                    "date": 1714382520198,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n-        \n+        console.error()\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382527429,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n-        console.error()\n+        console.error('Error loadin')\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382532691,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n-        console.error('Error loadin')\n+        console.error('Error loading todos:' )\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382539521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n-        console.error('Error loading todos:' )\n+        console.error('Error loading todos:', error);\n       }\n     }\n \n   }, []);\n"
+                },
+                {
+                    "date": 1714382545144,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,10 @@\n         setTodos(loadedTodos);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n-    }\n+    };\n+    \n \n   }, []);\n \n   return (\n"
+                },
+                {
+                    "date": 1714382552014,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n     };\n-    \n+    loadTodos\n \n   }, []);\n \n   return (\n"
+                },
+                {
+                    "date": 1714382558625,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,10 +23,10 @@\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n     };\n-    loadTodos\n \n+    loadTodos();\n   }, []);\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714382564854,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const getTodos = async () => {\n+    const Todos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714382598076,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n   useEffect(() => {\n-    const Todos = async () => {\n+    const loadTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n         setTodos(loadedTodos);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714382866224,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,17 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n-\n+  async function fetchTodos() {\n+    try {\n+      const todos = await client.get<Todo[]>('/todos'); // Wywołujemy metodę `get` z obiektu `client`\n+      return todos;\n+    } catch (error) {\n+      console.error('Error fetching todos:', error);\n+      throw new Error('Failed to fetch todos');\n+    }\n+  }\n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n"
+                },
+                {
+                    "date": 1714382871830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,8 +13,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n+\n   async function fetchTodos() {\n     try {\n       const todos = await client.get<Todo[]>('/todos'); // Wywołujemy metodę `get` z obiektu `client`\n       return todos;\n@@ -22,8 +23,9 @@\n       console.error('Error fetching todos:', error);\n       throw new Error('Failed to fetch todos');\n     }\n   }\n+  \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n"
+                },
+                {
+                    "date": 1714382877768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,8 +6,9 @@\n import { TodoList } from './Components/TodoList';\n import { ErrorNotification } from './Components/ErrorNotification';\n import { Footer } from './Components/Footer';\n import { Todo } from './types/Todo';\n+import { client } from './utils/fetchClient';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n"
+                },
+                {
+                    "date": 1714382954933,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,18 +15,8 @@\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n \n-  async function fetchTodos() {\n-    try {\n-      const todos = await client.get<Todo[]>('/todos'); // Wywołujemy metodę `get` z obiektu `client`\n-      return todos;\n-    } catch (error) {\n-      console.error('Error fetching todos:', error);\n-      throw new Error('Failed to fetch todos');\n-    }\n-  }\n-  \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await fetchTodos();\n"
+                },
+                {
+                    "date": 1714382965172,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n-        const loadedTodos = await fetchTodos();\n+        const loadedTodos = await client();\n         setTodos(loadedTodos);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n"
+                },
+                {
+                    "date": 1714382970842,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n-        const loadedTodos = await client();\n+        const loadedTodos = await client.get<>();\n         setTodos(loadedTodos);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n"
+                },
+                {
+                    "date": 1714382979772,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n-        const loadedTodos = await client.get<>();\n+        const loadedTodos = await client.get<Todos[]>('');\n         setTodos(loadedTodos);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n"
+                },
+                {
+                    "date": 1714382991598,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n-        const loadedTodos = await client.get<Todos[]>('');\n+        const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n"
+                },
+                {
+                    "date": 1714383002394,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,67 @@\n+/* eslint-disable jsx-a11y/label-has-associated-control */\n+/* eslint-disable jsx-a11y/control-has-associated-label */\n+import React, { useEffect, useState } from 'react';\n+import { UserWarning } from './UserWarning';\n+import { USER_ID } from './api/todos';\n+import { TodoList } from './Components/TodoList';\n+import { ErrorNotification } from './Components/ErrorNotification';\n+import { Footer } from './Components/Footer';\n+import { Todo } from './types/Todo';\n+import { client } from './utils/fetchClient';\n+\n+export const App: React.FC = () => {\n+  if (!USER_ID) {\n+    return <UserWarning />;\n+  }\n+\n+  const [todos, setTodos] = useState<Todo[]>([]);\n+\n+  useEffect(() => {\n+    const loadTodos = async () => {\n+      try {\n+        const loadedTodos = await client.get<Todo[]>('/todos');\n+        setTodos(loadedTodos);\n+      } catch (error) {\n+        console.error('Error loading todos:', error);\n+      }\n+    };\n+\n+    loadTodos();\n+  }, []);\n+\n+  return (\n+    <div className=\"todoapp\">\n+      <h1 className=\"todoapp__title\">todos</h1>\n+\n+      <div className=\"todoapp__content\">\n+        <header className=\"todoapp__header\">\n+          {/* this button should have `active` class only if all todos are completed */}\n+          <button\n+            type=\"button\"\n+            className=\"todoapp__toggle-all active\"\n+            data-cy=\"ToggleAllButton\"\n+          />\n+\n+          {/* Add a todo on form submit */}\n+          <form>\n+            <input\n+              data-cy=\"NewTodoField\"\n+              type=\"text\"\n+              className=\"todoapp__new-todo\"\n+              placeholder=\"What needs to be done?\"\n+            />\n+          </form>\n+        </header>\n+\n+        <TodoList />\n+\n+        {/* Hide the footer if there are no todos */}\n+        <Footer />\n+      </div>\n+\n+      {/* DON'T use conditional rendering to hide the notification */}\n+      {/* Add the 'hidden' class to hide the message smoothly */}\n+      <ErrorNotification />\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714383124172,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,9 @@\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n+        set\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n     };\n@@ -64,71 +65,4 @@\n       <ErrorNotification />\n     </div>\n   );\n };\n-/* eslint-disable jsx-a11y/label-has-associated-control */\n-/* eslint-disable jsx-a11y/control-has-associated-label */\n-import React, { useEffect, useState } from 'react';\n-import { UserWarning } from './UserWarning';\n-import { USER_ID, getTodos } from './api/todos';\n-import { TodoList } from './Components/TodoList';\n-import { ErrorNotification } from './Components/ErrorNotification';\n-import { Footer } from './Components/Footer';\n-import { Todo } from './types/Todo';\n-import { client } from './utils/fetchClient';\n-\n-export const App: React.FC = () => {\n-  if (!USER_ID) {\n-    return <UserWarning />;\n-  }\n-\n-  const [todos, setTodos] = useState<Todo[]>([]);\n-\n-  useEffect(() => {\n-    const loadTodos = async () => {\n-      try {\n-        const loadedTodos = await client.get<Todo[]>('/todos');\n-        setTodos(loadedTodos);\n-      } catch (error) {\n-        console.error('Error loading todos:', error);\n-      }\n-    };\n-\n-    loadTodos();\n-  }, []);\n-\n-  return (\n-    <div className=\"todoapp\">\n-      <h1 className=\"todoapp__title\">todos</h1>\n-\n-      <div className=\"todoapp__content\">\n-        <header className=\"todoapp__header\">\n-          {/* this button should have `active` class only if all todos are completed */}\n-          <button\n-            type=\"button\"\n-            className=\"todoapp__toggle-all active\"\n-            data-cy=\"ToggleAllButton\"\n-          />\n-\n-          {/* Add a todo on form submit */}\n-          <form>\n-            <input\n-              data-cy=\"NewTodoField\"\n-              type=\"text\"\n-              className=\"todoapp__new-todo\"\n-              placeholder=\"What needs to be done?\"\n-            />\n-          </form>\n-        </header>\n-\n-        <TodoList />\n-\n-        {/* Hide the footer if there are no todos */}\n-        <Footer />\n-      </div>\n-\n-      {/* DON'T use conditional rendering to hide the notification */}\n-      {/* Add the 'hidden' class to hide the message smoothly */}\n-      <ErrorNotification />\n-    </div>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714383130276,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n-        set\n+        setDefaultResultOrder(null);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n     };\n"
+                },
+                {
+                    "date": 1714383138279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n-        setDefaultResultOrder(null);\n+        setError(null);\n       } catch (error) {\n         console.error('Error loading todos:', error);\n       }\n     };\n"
+                },
+                {
+                    "date": 1714383143991,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n+  \n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383149736,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n-  \n+  const [error, setError]\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383156524,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n-  const [error, setError]\n+  const [error, setError] = useState<\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383162021,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n-  const [error, setError] = useState<\n+  const [error, setError] = useState<string | >\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383168059,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [todos, setTodos] = useState<Todo[]>([]);\n-  const [error, setError] = useState<string | >\n+  const [error, setError] = useState<string | null>()\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383175107,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,10 +13,10 @@\n   if (!USER_ID) {\n     return <UserWarning />;\n   }\n \n-  const [todos, setTodos] = useState<Todo[]>([]);\n-  const [error, setError] = useState<string | null>()\n+  const [, setTodos] = useState<Todo[]>([]);\n+  const [error, setError] = useState<string | null>(null);\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383188194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,18 +14,18 @@\n     return <UserWarning />;\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n-  const [error, setError] = useState<string | null>(null);\n+  const [, setError] = useState<string | null>(null);\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n-        console.error('Error loading todos:', error);\n+        set('Error loading todos:', error);\n       }\n     };\n \n     loadTodos();\n"
+                },
+                {
+                    "date": 1714383195936,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,18 +14,18 @@\n     return <UserWarning />;\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n-  const [, setError] = useState<string | null>(null);\n+  const [error, setError] = useState<string | null>(null);\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n-        set('Error loading todos:', error);\n+        setError('Error loading todos:', error);\n       }\n     };\n \n     loadTodos();\n"
+                },
+                {
+                    "date": 1714383205082,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n-        setError('Error loading todos:', error);\n+        setError('Error loading todos:');\n       }\n     };\n \n     loadTodos();\n"
+                },
+                {
+                    "date": 1714383318594,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n     return <UserWarning />;\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n-  const [error, setError] = useState<string | null>(null);\n+  const [, setError] = useState<string | null>(null);\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n@@ -62,8 +62,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-      <ErrorNotification />\n+      <ErrorNotification error />\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714383429832,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,8 +7,9 @@\n import { ErrorNotification } from './Components/ErrorNotification';\n import { Footer } from './Components/Footer';\n import { Todo } from './types/Todo';\n import { client } from './utils/fetchClient';\n+import { error } from 'cypress/types/jquery';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n@@ -62,8 +63,8 @@\n       </div>\n \n       {/* DON'T use conditional rendering to hide the notification */}\n       {/* Add the 'hidden' class to hide the message smoothly */}\n-      <ErrorNotification error />\n+      <ErrorNotification error={error} />\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714383454299,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n     return <UserWarning />;\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n-  const [, setError] = useState<string | null>(null);\n+  const [error, setError] = useState<string | null>(null);\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383459481,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,8 @@\n import { ErrorNotification } from './Components/ErrorNotification';\n import { Footer } from './Components/Footer';\n import { Todo } from './types/Todo';\n import { client } from './utils/fetchClient';\n-import { error } from 'cypress/types/jquery';\n \n export const App: React.FC = () => {\n   if (!USER_ID) {\n     return <UserWarning />;\n"
+                },
+                {
+                    "date": 1714383643409,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,8 +15,9 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n+  \n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383651198,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n-  \n+  const [filter, setFilter]\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383657266,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n-  const [filter, setFilter]\n+  const [filter, setFilter] = i\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383667133,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n-  const [filter, setFilter] = i\n+  const [filter, setFilter] = useState()\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383674670,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n-  const [filter, setFilter] = useState()\n+  const [filter, setFilter] = useState<>('all');\n \n   useEffect(() => {\n     const loadTodos = async () => {\n       try {\n"
+                },
+                {
+                    "date": 1714383692620,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,12 +15,12 @@\n   }\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n-  const [filter, setFilter] = useState<>('all');\n+  const [filter, setFilter] = useState<string>('all');\n \n   useEffect(() => {\n-    const loadTodos = async () => {\n+    const fet = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         setTodos(loadedTodos);\n         setError(null);\n"
+                },
+                {
+                    "date": 1714383724687,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,11 +18,12 @@\n   const [error, setError] = useState<string | null>(null);\n   const [filter, setFilter] = useState<string>('all');\n \n   useEffect(() => {\n-    const fet = async () => {\n+    const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n+        let \n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383730358,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n   useEffect(() => {\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n-        let \n+        let filteredTodos\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383736900,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n   useEffect(() => {\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n-        let filteredTodos\n+        let filteredTodos = loade\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383748654,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,10 @@\n   useEffect(() => {\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n-        let filteredTodos = loade\n+        let filteredTodos = loadedTodos;\n+        if \n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383754044,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n-        if \n+        if (filter === 'comp')\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383759782,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n-        if (filter === 'comp')\n+        if (filter === 'completed') \n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383764907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,11 @@\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n-        if (filter === 'completed') \n+        if (filter === 'completed') {\n+          filtered\n+        }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383770249,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n-          filtered\n+          filteredTodos = loadedTodos.\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383775792,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n-          filteredTodos = loadedTodos.\n+          filteredTodos = loadedTodos.filter(todo => todo)\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383788326,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,10 +23,10 @@\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n-          filteredTodos = loadedTodos.filter(todo => todo)\n-        }\n+          filteredTodos = loadedTodos.filter(todo => todo.completed)\n+        } else \n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383797319,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n-        } else \n+        } else if (filter === 'active')\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383803183,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,11 @@\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n-        } else if (filter === 'active')\n+        } else if (filter === 'active') {\n+          \n+        }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n"
+                },
+                {
+                    "date": 1714383808264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n         } else if (filter === 'active') {\n-          \n+          filteredTodos\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383814168,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n         } else if (filter === 'active') {\n-          filteredTodos\n+          filteredTodos = loadedTodos.filter\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383820590,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n         } else if (filter === 'active') {\n-          filteredTodos = loadedTodos.filter\n+          filteredTodos = loadedTodos.filter(todo => !todo)\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383832845,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,18 +25,18 @@\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n           filteredTodos = loadedTodos.filter(todo => todo.completed)\n         } else if (filter === 'active') {\n-          filteredTodos = loadedTodos.filter(todo => !todo)\n+          filteredTodos = loadedTodos.filter(todo => !todo.completed)\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n         setError('Error loading todos:');\n       }\n     };\n \n-    loadTodos();\n+    fetch();\n   }, []);\n \n   return (\n     <div className=\"todoapp\">\n"
+                },
+                {
+                    "date": 1714383840047,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -34,10 +34,10 @@\n         setError('Error loading todos:');\n       }\n     };\n \n-    fetch();\n-  }, []);\n+    fetchFilteredTodos();\n+  }, [filter]);\n \n   return (\n     <div className=\"todoapp\">\n       <h1 className=\"todoapp__title\">todos</h1>\n"
+                },
+                {
+                    "date": 1714383959873,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,18 +16,19 @@\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n   const [filter, setFilter] = useState<string>('all');\n+  \n \n   useEffect(() => {\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n         let filteredTodos = loadedTodos;\n         if (filter === 'completed') {\n-          filteredTodos = loadedTodos.filter(todo => todo.completed)\n+          filteredTodos = loadedTodos.filter(todo => todo.completed);\n         } else if (filter === 'active') {\n-          filteredTodos = loadedTodos.filter(todo => !todo.completed)\n+          filteredTodos = loadedTodos.filter(todo => !todo.completed);\n         }\n         setTodos(loadedTodos);\n         setError(null);\n       } catch (error) {\n"
+                },
+                {
+                    "date": 1714383979953,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,10 +16,10 @@\n \n   const [, setTodos] = useState<Todo[]>([]);\n   const [error, setError] = useState<string | null>(null);\n   const [filter, setFilter] = useState<string>('all');\n-  \n \n+\n   useEffect(() => {\n     const fetchFilteredTodos = async () => {\n       try {\n         const loadedTodos = await client.get<Todo[]>('/todos');\n@@ -52,9 +52,9 @@\n             data-cy=\"ToggleAllButton\"\n           />\n \n           {/* Add a todo on form submit */}\n-          <form>\n+          <form >\n             <input\n               data-cy=\"NewTodoField\"\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n"
+                },
+                {
+                    "date": 1714383987343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -52,9 +52,9 @@\n             data-cy=\"ToggleAllButton\"\n           />\n \n           {/* Add a todo on form submit */}\n-          <form >\n+          <form onSubmit={handle}>\n             <input\n               data-cy=\"NewTodoField\"\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n"
+                },
+                {
+                    "date": 1714383995552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -52,14 +52,15 @@\n             data-cy=\"ToggleAllButton\"\n           />\n \n           {/* Add a todo on form submit */}\n-          <form onSubmit={handle}>\n+          <form onSubmit={handleSubmit}>\n             <input\n               data-cy=\"NewTodoField\"\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n+              val\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384001819,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -58,9 +58,9 @@\n               data-cy=\"NewTodoField\"\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n-              val\n+              value={newTodo}\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384006944,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -59,8 +59,9 @@\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n               value={newTodo}\n+              onChange={}\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384012473,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -59,9 +59,9 @@\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n               value={newTodo}\n-              onChange={}\n+              onChange={(e )}\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384019527,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -59,9 +59,9 @@\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n               value={newTodo}\n-              onChange={(e )}\n+              onChange={(event) => setNewto}\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384025098,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -59,9 +59,9 @@\n               type=\"text\"\n               className=\"todoapp__new-todo\"\n               placeholder=\"What needs to be done?\"\n               value={newTodo}\n-              onChange={(event) => setNewTodo(event)}\n+              onChange={(event) => setNewTodo(event.)}\n             />\n           </form>\n         </header>\n \n"
+                },
+                {
+                    "date": 1714384108260,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,82 @@\n+/* eslint-disable jsx-a11y/label-has-associated-control */\n+/* eslint-disable jsx-a11y/control-has-associated-label */\n+import React, { useEffect, useState } from 'react';\n+import { UserWarning } from './UserWarning';\n+import { USER_ID } from './api/todos';\n+import { TodoList } from './Components/TodoList';\n+import { ErrorNotification } from './Components/ErrorNotification';\n+import { Footer } from './Components/Footer';\n+import { Todo } from './types/Todo';\n+import { client } from './utils/fetchClient';\n+\n+export const App: React.FC = () => {\n+  if (!USER_ID) {\n+    return <UserWarning />;\n+  }\n+\n+  const [, setTodos] = useState<Todo[]>([]);\n+  const [error, setError] = useState<string | null>(null);\n+  const [filter, setFilter] = useState<string>('all');\n+  const [newTodo, setNewTodo] = useState<string>('');\n+\n+\n+  useEffect(() => {\n+    const fetchFilteredTodos = async () => {\n+      try {\n+        const loadedTodos = await client.get<Todo[]>('/todos');\n+        let filteredTodos = loadedTodos;\n+        if (filter === 'completed') {\n+          filteredTodos = loadedTodos.filter(todo => todo.completed);\n+        } else if (filter === 'active') {\n+          filteredTodos = loadedTodos.filter(todo => !todo.completed);\n+        }\n+        setTodos(loadedTodos);\n+        setError(null);\n+      } catch (error) {\n+        setError('Error loading todos:');\n+      }\n+    };\n+\n+    fetchFilteredTodos();\n+  }, [filter]);\n+\n+  const handleSubmit = async(eve)\n+\n+  return (\n+    <div className=\"todoapp\">\n+      <h1 className=\"todoapp__title\">todos</h1>\n+\n+      <div className=\"todoapp__content\">\n+        <header className=\"todoapp__header\">\n+          {/* this button should have `active` class only if all todos are completed */}\n+          <button\n+            type=\"button\"\n+            className=\"todoapp__toggle-all active\"\n+            data-cy=\"ToggleAllButton\"\n+          />\n+\n+          {/* Add a todo on form submit */}\n+          <form onSubmit={handleSubmit}>\n+            <input\n+              data-cy=\"NewTodoField\"\n+              type=\"text\"\n+              className=\"todoapp__new-todo\"\n+              placeholder=\"What needs to be done?\"\n+              value={newTodo}\n+              onChange={(event) => setNewTodo(event.target.value)}\n+            />\n+          </form>\n+        </header>\n+\n+        <TodoList />\n+\n+        {/* Hide the footer if there are no todos */}\n+        <Footer />\n+      </div>\n+\n+      {/* DON'T use conditional rendering to hide the notification */}\n+      {/* Add the 'hidden' class to hide the message smoothly */}\n+      <ErrorNotification error={error} />\n+    </div>\n+  );\n+};\n"
+                }
+            ],
+            "date": 1714379206408,
+            "name": "Commit-0",
+            "content": "/* eslint-disable jsx-a11y/label-has-associated-control */\n/* eslint-disable jsx-a11y/control-has-associated-label */\nimport React from 'react';\nimport { UserWarning } from './UserWarning';\nimport { USER_ID } from './api/todos';\n\nexport const App: React.FC = () => {\n  if (!USER_ID) {\n    return <UserWarning />;\n  }\n\n  return (\n    <div className=\"todoapp\">\n      <h1 className=\"todoapp__title\">todos</h1>\n\n      <div className=\"todoapp__content\">\n        <header className=\"todoapp__header\">\n          {/* this button should have `active` class only if all todos are completed */}\n          <button\n            type=\"button\"\n            className=\"todoapp__toggle-all active\"\n            data-cy=\"ToggleAllButton\"\n          />\n\n          {/* Add a todo on form submit */}\n          <form>\n            <input\n              data-cy=\"NewTodoField\"\n              type=\"text\"\n              className=\"todoapp__new-todo\"\n              placeholder=\"What needs to be done?\"\n            />\n          </form>\n        </header>\n\n       \n\n        {/* Hide the footer if there are no todos */}\n        <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n          <span className=\"todo-count\" data-cy=\"TodosCounter\">\n            3 items left\n          </span>\n\n          {/* Active link should have the 'selected' class */}\n          <nav className=\"filter\" data-cy=\"Filter\">\n            <a\n              href=\"#/\"\n              className=\"filter__link selected\"\n              data-cy=\"FilterLinkAll\"\n            >\n              All\n            </a>\n\n            <a\n              href=\"#/active\"\n              className=\"filter__link\"\n              data-cy=\"FilterLinkActive\"\n            >\n              Active\n            </a>\n\n            <a\n              href=\"#/completed\"\n              className=\"filter__link\"\n              data-cy=\"FilterLinkCompleted\"\n            >\n              Completed\n            </a>\n          </nav>\n\n          {/* this button should be disabled if there are no completed todos */}\n          <button\n            type=\"button\"\n            className=\"todoapp__clear-completed\"\n            data-cy=\"ClearCompletedButton\"\n          >\n            Clear completed\n          </button>\n        </footer>\n      </div>\n\n      {/* DON'T use conditional rendering to hide the notification */}\n      {/* Add the 'hidden' class to hide the message smoothly */}\n      <div\n        data-cy=\"ErrorNotification\"\n        className=\"notification is-danger is-light has-text-weight-normal\"\n      >\n        <button data-cy=\"HideErrorButton\" type=\"button\" className=\"delete\" />\n        {/* show only one message at a time */}\n        Unable to load todos\n        <br />\n        Title should not be empty\n        <br />\n        Unable to add a todo\n        <br />\n        Unable to delete a todo\n        <br />\n        Unable to update a todo\n      </div>\n    </div>\n  );\n};\n"
+        }
+    ]
+}

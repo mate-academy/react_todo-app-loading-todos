@@ -1,0 +1,710 @@
+{
+    "sourceFile": "src/Components/Footer.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 173,
+            "patches": [
+                {
+                    "date": 1714379538200,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714379545391,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,41 +1,1 @@\n-<footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-<span className=\"todo-count\" data-cy=\"TodosCounter\">\n-  3 items left\n-</span>\n \n-{/* Active link should have the 'selected' class */}\n-<nav className=\"filter\" data-cy=\"Filter\">\n-  <a\n-    href=\"#/\"\n-    className=\"filter__link selected\"\n-    data-cy=\"FilterLinkAll\"\n-  >\n-    All\n-  </a>\n-\n-  <a\n-    href=\"#/active\"\n-    className=\"filter__link\"\n-    data-cy=\"FilterLinkActive\"\n-  >\n-    Active\n-  </a>\n-\n-  <a\n-    href=\"#/completed\"\n-    className=\"filter__link\"\n-    data-cy=\"FilterLinkCompleted\"\n-  >\n-    Completed\n-  </a>\n-</nav>\n-\n-{/* this button should be disabled if there are no completed todos */}\n-<button\n-  type=\"button\"\n-  className=\"todoapp__clear-completed\"\n-  data-cy=\"ClearCompletedButton\"\n->\n-  Clear completed\n-</button>\n-</footer>\n"
+                },
+                {
+                    "date": 1714379551387,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-\n+export const Footer \n"
+                },
+                {
+                    "date": 1714379556596,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export const Footer \n+export const Footer = () => {}\n"
+                },
+                {
+                    "date": 1714379562693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,5 @@\n-export const Footer = () => {}\n+export const Footer = () => {\n+  return (\n+    \n+  )\n+}\n"
+                },
+                {
+                    "date": 1714379620930,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,47 @@\n+\n+\n export const Footer = () => {\n   return (\n-    \n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      3 items left\n+    </span>\n+\n+    {/* Active link should have the 'selected' class */}\n+    <nav className=\"filter\" data-cy=\"Filter\">\n+      <a\n+        href=\"#/\"\n+        className=\"filter__link selected\"\n+        data-cy=\"FilterLinkAll\"\n+      >\n+        All\n+      </a>\n+\n+      <a\n+        href=\"#/active\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkActive\"\n+      >\n+        Active\n+      </a>\n+\n+      <a\n+        href=\"#/completed\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkCompleted\"\n+      >\n+        Completed\n+      </a>\n+    </nav>\n+\n+    {/* this button should be disabled if there are no completed todos */}\n+    <button\n+      type=\"button\"\n+      className=\"todoapp__clear-completed\"\n+      data-cy=\"ClearCompletedButton\"\n+    >\n+      Clear completed\n+    </button>\n+  </footer>\n   )\n }\n"
+                },
+                {
+                    "date": 1714379626052,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n+import React from \"react\"\n \n-\n export const Footer = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714379633786,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React from \"react\"\n+import React from \"react\";\n \n export const Footer = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n"
+                },
+                {
+                    "date": 1714385277078,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from \"react\";\n \n-export const Footer = () => {\n+export const Footer: React = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714386282239,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,9 @@\n import React from \"react\";\n \n-export const Footer: React = () => {\n+\n+\n+export const Footer: React.FC = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714386287826,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from \"react\";\n \n+type\n \n-\n export const Footer: React.FC = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714386293648,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from \"react\";\n \n-type\n+interface \n \n export const Footer: React.FC = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n"
+                },
+                {
+                    "date": 1714386299473,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,9 @@\n import React from \"react\";\n \n-interface \n+interface Props {\n+  comple\n+}\n \n export const Footer: React.FC = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n"
+                },
+                {
+                    "date": 1714386304505,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from \"react\";\n \n interface Props {\n-  comple\n+  completedTodos: \n }\n \n export const Footer: React.FC = () => {\n   return (\n"
+                },
+                {
+                    "date": 1714386314104,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import React from \"react\";\n \n interface Props {\n-  completedTodos: \n+  completedTodos: boolean;\n }\n \n-export const Footer: React.FC = () => {\n+export const Footer: React.FC<> = () => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714386320550,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   completedTodos: boolean;\n }\n \n-export const Footer: React.FC<> = () => {\n+export const Footer: React.FC<Props> = ({completedTodos}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714386336320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,10 @@\n     {/* this button should be disabled if there are no completed todos */}\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n-      data-cy=\"ClearCompletedButton\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386343553,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,9 +42,9 @@\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={}\n+        onClick={clearCo}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386382876,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,9 +42,9 @@\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={clearCo}\n+        onClick={compl}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386389363,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,9 +42,10 @@\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={compl}\n+        onClick={completedTodos}\n+        disabled\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386394669,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={completedTodos}\n-        disabled\n+        disabled={!compl}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386435845,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import React from \"react\";\n \n interface Props {\n   completedTodos: boolean;\n+  \n }\n \n export const Footer: React.FC<Props> = ({completedTodos}) => {\n   return (\n@@ -43,9 +44,9 @@\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={completedTodos}\n-        disabled={!compl}\n+        disabled={!completedTodos}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714386442215,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n \n interface Props {\n   completedTodos: boolean;\n-  \n+  clearCompletedTodos\n }\n \n export const Footer: React.FC<Props> = ({completedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714386447481,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n \n interface Props {\n   completedTodos: boolean;\n-  clearCompletedTodos\n+  clearCompletedTodos: () => void\n }\n \n export const Footer: React.FC<Props> = ({completedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714386455202,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,12 @@\n import React from \"react\";\n \n interface Props {\n   completedTodos: boolean;\n-  clearCompletedTodos: () => void\n+  clearCompletedTodos: () => void;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, clear}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714386460300,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n   completedTodos: boolean;\n   clearCompletedTodos: () => void;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, clear}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n@@ -43,9 +43,9 @@\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={completedTodos}\n+        onClick={clear}\n         disabled={!completedTodos}\n     >\n       Clear completed\n     </button>\n"
+                },
+                {
+                    "date": 1714387356585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n import React from \"react\";\n+import \n \n interface Props {\n   completedTodos: boolean;\n   clearCompletedTodos: () => void;\n@@ -43,9 +44,9 @@\n     <button\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={clear}\n+        onClick={clearCompletedTodos}\n         disabled={!completedTodos}\n     >\n       Clear completed\n     </button>\n"
+                },
+                {
+                    "date": 1714387362360,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,5 @@\n import React from \"react\";\n-import \n \n interface Props {\n   completedTodos: boolean;\n   clearCompletedTodos: () => void;\n"
+                },
+                {
+                    "date": 1714387637322,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      3 items left\n+      {3} items left\n     </span>\n \n     {/* Active link should have the 'selected' class */}\n     <nav className=\"filter\" data-cy=\"Filter\">\n"
+                },
+                {
+                    "date": 1714387672371,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      {3} items left\n+      {completedTodos} items left\n     </span>\n \n     {/* Active link should have the 'selected' class */}\n     <nav className=\"filter\" data-cy=\"Filter\">\n@@ -44,9 +44,9 @@\n       type=\"button\"\n       className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={!completedTodos}\n+        disabled={!completedTodos =\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714387680739,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,13 +40,13 @@\n     </nav>\n \n     {/* this button should be disabled if there are no completed todos */}\n     <button\n-      type=\"button\"\n-      className=\"todoapp__clear-completed\"\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={!completedTodos =\n+        disabled={completedTodos === 0}\n     >\n       Clear completed\n     </button>\n   </footer>\n"
+                },
+                {
+                    "date": 1714387720418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from \"react\";\n \n interface Props {\n-  completedTodos: boolean;\n+  completedTodos: number;\n   clearCompletedTodos: () => void;\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n"
+                },
+                {
+                    "date": 1714387758255,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n     {/* Active link should have the 'selected' class */}\n     <nav className=\"filter\" data-cy=\"Filter\">\n       <a\n         href=\"#/\"\n-        className=\"filter__link selected\"\n+        className=\"filter__link\"\n         data-cy=\"FilterLinkAll\"\n       >\n         All\n       </a>\n"
+                },
+                {
+                    "date": 1714387897698,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,54 @@\n+import React from \"react\";\n+\n+interface Props {\n+  completedTodos: number;\n+  clearCompletedTodos: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      {completedTodos} items left\n+    </span>\n+\n+    {/* Active link should have the 'selected' class */}\n+    <nav className=\"filter\" data-cy=\"Filter\">\n+      <a\n+        href=\"#/\"\n+        className=\"filter__link selected\"\n+        data-cy=\"FilterLinkAll\"\n+      >\n+        All\n+      </a>\n+\n+      <a\n+        href=\"#/active\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkActive\"\n+      >\n+        Active\n+      </a>\n+\n+      <a\n+        href=\"#/completed\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkCompleted\"\n+      >\n+        Completed\n+      </a>\n+    </nav>\n+\n+    {/* this button should be disabled if there are no completed todos */}\n+    <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={clearCompletedTodos}\n+        disabled={completedTodos === 0}\n+    >\n+      Clear completed\n+    </button>\n+  </footer>\n+  )\n+}\n"
+                },
+                {
+                    "date": 1714388285530,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,9 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n+  \n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n@@ -51,58 +52,4 @@\n     </button>\n   </footer>\n   )\n }\n-import React from \"react\";\n-\n-interface Props {\n-  completedTodos: number;\n-  clearCompletedTodos: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      {completedTodos} items left\n-    </span>\n-\n-    {/* Active link should have the 'selected' class */}\n-    <nav className=\"filter\" data-cy=\"Filter\">\n-      <a\n-        href=\"#/\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkAll\"\n-      >\n-        All\n-      </a>\n-\n-      <a\n-        href=\"#/active\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkActive\"\n-      >\n-        Active\n-      </a>\n-\n-      <a\n-        href=\"#/completed\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkCompleted\"\n-      >\n-        Completed\n-      </a>\n-    </nav>\n-\n-    {/* this button should be disabled if there are no completed todos */}\n-    <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n-    >\n-      Clear completed\n-    </button>\n-  </footer>\n-  )\n-}\n"
+                },
+                {
+                    "date": 1714388291348,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,55 @@\n+import React from \"react\";\n+\n+interface Props {\n+  completedTodos: number;\n+  clearCompletedTodos: () => void;\n+  showClear\n+}\n+\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      {completedTodos} items left\n+    </span>\n+\n+    {/* Active link should have the 'selected' class */}\n+    <nav className=\"filter\" data-cy=\"Filter\">\n+      <a\n+        href=\"#/\"\n+        className=\"filter__link selected\"\n+        data-cy=\"FilterLinkAll\"\n+      >\n+        All\n+      </a>\n+\n+      <a\n+        href=\"#/active\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkActive\"\n+      >\n+        Active\n+      </a>\n+\n+      <a\n+        href=\"#/completed\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkCompleted\"\n+      >\n+        Completed\n+      </a>\n+    </nav>\n+\n+    {/* this button should be disabled if there are no completed todos */}\n+    <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={clearCompletedTodos}\n+        disabled={completedTodos === 0}\n+    >\n+      Clear completed\n+    </button>\n+  </footer>\n+  )\n+}\n"
+                },
+                {
+                    "date": 1714388299018,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n-  showClear\n+  showClearCompletedButton: boolea\\\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n@@ -52,59 +52,4 @@\n     </button>\n   </footer>\n   )\n }\n-import React from \"react\";\n-\n-interface Props {\n-  completedTodos: number;\n-  clearCompletedTodos: () => void;\n-  \n-}\n-\n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      {completedTodos} items left\n-    </span>\n-\n-    {/* Active link should have the 'selected' class */}\n-    <nav className=\"filter\" data-cy=\"Filter\">\n-      <a\n-        href=\"#/\"\n-        className=\"filter__link selected\"\n-        data-cy=\"FilterLinkAll\"\n-      >\n-        All\n-      </a>\n-\n-      <a\n-        href=\"#/active\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkActive\"\n-      >\n-        Active\n-      </a>\n-\n-      <a\n-        href=\"#/completed\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkCompleted\"\n-      >\n-        Completed\n-      </a>\n-    </nav>\n-\n-    {/* this button should be disabled if there are no completed todos */}\n-    <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n-    >\n-      Clear completed\n-    </button>\n-  </footer>\n-  )\n-}\n"
+                },
+                {
+                    "date": 1714388306980,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,12 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n-  showClearCompletedButton: boolea\\\n+  showClearCompletedButton: boolean;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos, }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       {completedTodos} items left\n"
+                },
+                {
+                    "date": 1714388313890,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,55 +1,51 @@\n-import React from \"react\";\n+import React from 'react';\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n   showClearCompletedButton: boolean;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos, }) => {\n+export const Footer: React.FC<Props> = ({\n+  completedTodos,\n+  clearCompletedTodos,\n+  showClearCompletedButton,\n+}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      {completedTodos} items left\n-    </span>\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {completedTodos} items left\n+      </span>\n \n-    {/* Active link should have the 'selected' class */}\n-    <nav className=\"filter\" data-cy=\"Filter\">\n-      <a\n-        href=\"#/\"\n-        className=\"filter__link selected\"\n-        data-cy=\"FilterLinkAll\"\n-      >\n-        All\n-      </a>\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n \n-      <a\n-        href=\"#/active\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkActive\"\n-      >\n-        Active\n-      </a>\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n \n-      <a\n-        href=\"#/completed\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkCompleted\"\n-      >\n-        Completed\n-      </a>\n-    </nav>\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n \n-    {/* this button should be disabled if there are no completed todos */}\n-    <button\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n         disabled={completedTodos === 0}\n-    >\n-      Clear completed\n-    </button>\n-  </footer>\n-  )\n-}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714388394976,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n+        style={completedTodos === 0}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388403250,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={completedTodos === 0}\n+        style={{displaycompletedTodos === 0}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388408361,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{displaycompletedTodos === 0}\n+        style={{display: completedTodos === 0}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388415055,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{display: completedTodos === 0}\n+        style={{display: completedTodos === 0 ? 'none'}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388420917,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{display: completedTodos === 0 ? 'none'}\n+        style={{display: completedTodos === 0 ? 'none' : }\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388426110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{display: completedTodos === 0 ? 'none' : }\n+        style={{display: completedTodos === 0 ? 'none' : 'inline-blo'}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388459775,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{display: completedTodos === 0 ? 'none' : 'inline-blo'}\n+        style={{ display: completedTodos === 0 ? 'none' :  }}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388465388,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{ display: completedTodos === 0 ? 'none' :  }}\n+        style={{ display: completedTodos === 0 ? 'inline-block' : 'none' }}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388486948,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{ display: completedTodos === 0 ? 'inline-block' : 'none' }}\n+        style={{ display: completedTodos === 0 ? 'inline-block' : 'none' :  }}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388504704,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{ display: completedTodos === 0 ? 'inline-block' : 'none' :  }}\n+        style={{display: complcompletedTodos === 0}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714388650060,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,10 +41,10 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{display: complcompletedTodos === 0}\n-      >\n+        style={{ display: showClearCompletedButton ? 'inline-block' : 'none' }}\n+        >\n         Clear completed\n       </button>\n     </footer>\n   );\n"
+                },
+                {
+                    "date": 1714389142218,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        style={{ display: showClearCompletedButton ? 'inline-block' : 'none' }}\n+        disa={{ display: showClearCompletedButton ? 'inline-block' : 'none' }}\n         >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714389148169,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disa={{ display: showClearCompletedButton ? 'inline-block' : 'none' }}\n+        disabled={showClearCompletedButton ? 'inline-block' : 'none' }}\n         >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714389153397,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={showClearCompletedButton ? 'inline-block' : 'none' }}\n+        disabled={showClearCompletedButton === 0}\n         >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714389158677,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={showClearCompletedButton === 0}\n+        disabled={compl === 0}\n         >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714389168022,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,14 +36,14 @@\n         </a>\n       </nav>\n \n       {/* this button should be disabled if there are no completed todos */}\n-      <button\n+      {<button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n-        disabled={compl === 0}\n+        disabled={completedTodos === 0}\n         >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714389175150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n         </a>\n       </nav>\n \n       {/* this button should be disabled if there are no completed todos */}\n-      {<button\n+      {completedTodos > 0<button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n"
+                },
+                {
+                    "date": 1714389180608,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,10 @@\n         </a>\n       </nav>\n \n       {/* this button should be disabled if there are no completed todos */}\n-      {completedTodos > 0<button\n+      {completedTodos > 0 && (\n+        <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n"
+                },
+                {
+                    "date": 1714389185867,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,15 +38,16 @@\n \n       {/* this button should be disabled if there are no completed todos */}\n       {completedTodos > 0 && (\n         <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n+          type=\"button\"\n+          className=\"todoapp__clear-completed\"\n+          data-cy=\"ClearCompletedButton\"\n+          onClick={clearCompletedTodos}\n+          disabled={completedTodos === 0}\n         >\n-        Clear completed\n-      </button>\n+          Clear completed\n+        </button>\n+      )}\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389204725,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   clearCompletedTodos,\n-  showClearCompletedButton,\n+  ,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714389412866,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,15 +2,13 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n-  showClearCompletedButton: boolean;\n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   clearCompletedTodos,\n-  ,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n@@ -47,7 +45,8 @@\n         >\n           Clear completed\n         </button>\n       )}\n+      \n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389418769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,8 @@\n         >\n           Clear completed\n         </button>\n       )}\n-      \n+      {completedTodos === 0}\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389427814,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,8 @@\n         >\n           Clear completed\n         </button>\n       )}\n-      {completedTodos === 0}\n+      {completedTodos === 0 && <div style={{ display: 'none' }}>Clear completed</div>}\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389454046,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,8 +45,7 @@\n         >\n           Clear completed\n         </button>\n       )}\n-      {completedTodos === 0 && <div style={{ display: 'none' }}>Clear completed</div>}\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389532185,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,7 +45,11 @@\n         >\n           Clear completed\n         </button>\n       )}\n+      {completedTodos === 0 && (\n+        <div>\n+          {/* This empty div will take the place of the button when there are no completed todos */}\n+        </div>\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389604393,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,16 +40,12 @@\n           type=\"button\"\n           className=\"todoapp__clear-completed\"\n           data-cy=\"ClearCompletedButton\"\n           onClick={clearCompletedTodos}\n-          disabled={completedTodos === 0}\n+          disabled={completedTodos}\n         >\n           Clear completed\n         </button>\n       )}\n-      {completedTodos === 0 && (\n-        <div>\n-          {/* This empty div will take the place of the button when there are no completed todos */}\n-        </div>\n     </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714389613523,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n           type=\"button\"\n           className=\"todoapp__clear-completed\"\n           data-cy=\"ClearCompletedButton\"\n           onClick={clearCompletedTodos}\n-          disabled={completedTodos}\n+          disabled={completedTodos === 0}\n         >\n           Clear completed\n         </button>\n       )}\n"
+                },
+                {
+                    "date": 1714389749368,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,8 @@\n           type=\"button\"\n           className=\"todoapp__clear-completed\"\n           data-cy=\"ClearCompletedButton\"\n           onClick={clearCompletedTodos}\n-          disabled={completedTodos === 0}\n         >\n           Clear completed\n         </button>\n       )}\n"
+                },
+                {
+                    "date": 1714389866849,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,8 +40,9 @@\n           type=\"button\"\n           className=\"todoapp__clear-completed\"\n           data-cy=\"ClearCompletedButton\"\n           onClick={clearCompletedTodos}\n+          disabled={completedTodos === 0}\n         >\n           Clear completed\n         </button>\n       )}\n"
+                },
+                {
+                    "date": 1714389872191,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,13 +2,15 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n+  showClearCompletedButton: boolean;\n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   clearCompletedTodos,\n+  showClearCompletedButton,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714389877288,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,53 +1,55 @@\n-import React from 'react';\n+import React from \"react\";\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n   showClearCompletedButton: boolean;\n }\n \n-export const Footer: React.FC<Props> = ({\n-  completedTodos,\n-  clearCompletedTodos,\n-  showClearCompletedButton,\n-}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos, show}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {completedTodos} items left\n-      </span>\n+    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      {completedTodos} items left\n+    </span>\n \n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n+    {/* Active link should have the 'selected' class */}\n+    <nav className=\"filter\" data-cy=\"Filter\">\n+      <a\n+        href=\"#/\"\n+        className=\"filter__link selected\"\n+        data-cy=\"FilterLinkAll\"\n+      >\n+        All\n+      </a>\n \n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n+      <a\n+        href=\"#/active\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkActive\"\n+      >\n+        Active\n+      </a>\n \n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n+      <a\n+        href=\"#/completed\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkCompleted\"\n+      >\n+        Completed\n+      </a>\n+    </nav>\n \n-      {/* this button should be disabled if there are no completed todos */}\n-      {completedTodos > 0 && (\n-        <button\n-          type=\"button\"\n-          className=\"todoapp__clear-completed\"\n-          data-cy=\"ClearCompletedButton\"\n-          onClick={clearCompletedTodos}\n-          disabled={completedTodos === 0}\n-        >\n-          Clear completed\n-        </button>\n-      )}\n-    </footer>\n-  );\n-};\n+    {/* this button should be disabled if there are no completed todos */}\n+    <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={clearCompletedTodos}\n+        disabled={completedTodos === 0}\n+    >\n+      Clear completed\n+    </button>\n+  </footer>\n+  )\n+}\n"
+                },
+                {
+                    "date": 1714389955388,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,11 @@\n \n interface Props {\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n-  showClearCompletedButton: boolean;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos, show}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       {completedTodos} items left\n"
+                },
+                {
+                    "date": 1714391551517,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,8 @@\n import React from \"react\";\n \n interface Props {\n-  completedTodos: number;\n-  clearCompletedTodos: () => void;\n+ filter\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391558529,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n import React from \"react\";\n \n interface Props {\n- filter\n+  filter: Status;\n+  set\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391564416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n \n interface Props {\n   filter: Status;\n-  set\n+  setFilter: (status)\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391570031,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n \n interface Props {\n   filter: Status;\n-  setFilter: (status)\n+  setFilter: (status: Status) \n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391575749,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,10 @@\n import React from \"react\";\n \n interface Props {\n   filter: Status;\n-  setFilter: (status: Status) \n+  setFilter: (status: Status) => void;\n+  compl\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391581929,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n \n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n-  compl\n+  completeTodos: number\n }\n \n export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n   return (\n"
+                },
+                {
+                    "date": 1714391588466,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,12 @@\n \n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n-  completeTodos: number\n+  completeTodos: number;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, clearCompletedTodos}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, filter}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       {completedTodos} items left\n"
+                },
+                {
+                    "date": 1714391594362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   setFilter: (status: Status) => void;\n   completeTodos: number;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, filter}) => {\n+export const Footer: React.FC<Props> = ({completedTodos, filter, setFilter}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       {completedTodos} items left\n"
+                },
+                {
+                    "date": 1714391628502,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,55 +1,51 @@\n-import React from \"react\";\n+import React from 'react';\n \n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n   completeTodos: number;\n }\n \n-export const Footer: React.FC<Props> = ({completedTodos, filter, setFilter}) => {\n+export const Footer: React.FC<Props> = ({\n+  completedTodos,\n+  filter,\n+  setFilter,\n+}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      {completedTodos} items left\n-    </span>\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {completedTodos} items left\n+      </span>\n \n-    {/* Active link should have the 'selected' class */}\n-    <nav className=\"filter\" data-cy=\"Filter\">\n-      <a\n-        href=\"#/\"\n-        className=\"filter__link selected\"\n-        data-cy=\"FilterLinkAll\"\n-      >\n-        All\n-      </a>\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLin\n+          All\n+        </a>\n \n-      <a\n-        href=\"#/active\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkActive\"\n-      >\n-        Active\n-      </a>\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n \n-      <a\n-        href=\"#/completed\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkCompleted\"\n-      >\n-        Completed\n-      </a>\n-    </nav>\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n \n-    {/* this button should be disabled if there are no completed todos */}\n-    <button\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n         onClick={clearCompletedTodos}\n         disabled={completedTodos === 0}\n-    >\n-      Clear completed\n-    </button>\n-  </footer>\n-  )\n-}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714391635147,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLin\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714391659649,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,13 +18,13 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll'>\n           All\n         </a>\n \n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n           Active\n         </a>\n \n         <a\n"
+                },
+                {
+                    "date": 1714391670090,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll'>\n+      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714391700689,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n         </a>\n \n         <a\n           href=\"#/completed\"\n-          className=\"filter__link\"\n+          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n           data-cy=\"FilterLinkCompleted\"\n         >\n           Completed\n         </a>\n"
+                },
+                {
+                    "date": 1714391718848,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n+        onClick={completedTodos}\n         disabled={completedTodos === 0}\n       >\n         Clear completed\n       </button>\n"
+                },
+                {
+                    "date": 1714391732312,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={completedTodos}\n+        onClick={clearcompletedTodos}\n         disabled={completedTodos === 0}\n       >\n         Clear completed\n       </button>\n"
+                },
+                {
+                    "date": 1714391738639,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n-        onClick={clearcompletedTodos}\n+        onClick={clearCompletedTodos}\n         disabled={completedTodos === 0}\n       >\n         Clear completed\n       </button>\n"
+                },
+                {
+                    "date": 1714392165082,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,9 @@\n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   filter,\n   setFilter,\n+  clear\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714392170558,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   filter,\n   setFilter,\n-  clear\n+  clearCompletedTodos: \n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714392175609,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,15 +3,16 @@\n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n   completeTodos: number;\n+  \n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n   filter,\n   setFilter,\n-  clearCompletedTodos: \n+  clearCompletedTodos,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714392182268,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,53 @@\n+import React from 'react';\n+\n+interface Props {\n+  filter: Status;\n+  setFilter: (status: Status) => void;\n+  completeTodos: number;\n+  clearCompletedTodo\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  completedTodos,\n+  filter,\n+  setFilter,\n+  clearCompletedTodos,\n+}) => {\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {completedTodos} items left\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={clearCompletedTodos}\n+        disabled={completedTodos === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714392211425,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n   completeTodos: number;\n-  clearCompletedTodo\n+  clearCompletedTodos: ()\n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n@@ -50,57 +50,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-\n-interface Props {\n-  filter: Status;\n-  setFilter: (status: Status) => void;\n-  completeTodos: number;\n-  \n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  completedTodos,\n-  filter,\n-  setFilter,\n-  clearCompletedTodos,\n-}) => {\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {completedTodos} items left\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714392221190,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,12 @@\n import React from 'react';\n+import { Status } from '../types/Todo';\n \n interface Props {\n   filter: Status;\n   setFilter: (status: Status) => void;\n   completeTodos: number;\n-  clearCompletedTodos: ()\n+  clearCompletedTodos: () => void;\n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n"
+                },
+                {
+                    "date": 1714392237177,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,54 @@\n+import React from 'react';\n+import { Status } from '../types/Todo';\n+\n+interface Props {\n+  filter: Status;\n+  setFilter: (status: Status) => void;\n+  completedTodos: number;\n+  clearCompletedTodos: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  completedTodos,\n+  filter,\n+  setFilter,\n+  clearCompletedTodos,\n+}) => {\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {completedTodos} items left\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={clearCompletedTodos}\n+        disabled={completedTodos === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714392268720,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -51,58 +51,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-import { Status } from '../types/Todo';\n-\n-interface Props {\n-  filter: Status;\n-  setFilter: (status: Status) => void;\n-  completeTodos: number;\n-  clearCompletedTodos: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  completedTodos,\n-  filter,\n-  setFilter,\n-  clearCompletedTodos,\n-}) => {\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {completedTodos} items left\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714393073337,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,11 +21,15 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-      <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`} onClick={() => setFilter('all')} data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n+      <a\n+              href=\"#/\"\n+              className=\"filter__link selected\"\n+              data-cy=\"FilterLinkAll\"\n+            >\n+              All\n+            </a>\n \n         <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n           Active\n         </a>\n"
+                },
+                {
+                    "date": 1714393097565,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,11 +29,15 @@\n             >\n               All\n             </a>\n \n-        <a href=\"#/active\" className={`filter__link ${filter === 'active' ? 'selected' : ''}`} onClick={() => setFilter('active')} data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n+            <a\n+              href=\"#/active\"\n+              className=\"filter__link\"\n+              data-cy=\"FilterLinkActive\"\n+            >\n+              Active\n+            </a>\n \n         <a\n           href=\"#/completed\"\n           className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n"
+                },
+                {
+                    "date": 1714393103381,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,15 +37,15 @@\n             >\n               Active\n             </a>\n \n-        <a\n-          href=\"#/completed\"\n-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`} onClick={() => setFilter('completed')}\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n+            <a\n+              href=\"#/completed\"\n+              className=\"filter__link\"\n+              data-cy=\"FilterLinkCompleted\"\n+            >\n+              Completed\n+            </a>\n       </nav>\n \n       {/* this button should be disabled if there are no completed todos */}\n       <button\n"
+                },
+                {
+                    "date": 1714393215132,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,10 +9,8 @@\n }\n \n export const Footer: React.FC<Props> = ({\n   completedTodos,\n-  filter,\n-  setFilter,\n   clearCompletedTodos,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n"
+                },
+                {
+                    "date": 1714393222571,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,9 @@\n import React from 'react';\n import { Status } from '../types/Todo';\n \n interface Props {\n-  filter: Status;\n-  setFilter: (status: Status) => void;\n+\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n }\n \n"
+                },
+                {
+                    "date": 1714393227607,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,7 @@\n import React from 'react';\n-import { Status } from '../types/Todo';\n \n interface Props {\n-\n   completedTodos: number;\n   clearCompletedTodos: () => void;\n }\n \n"
+                },
+                {
+                    "date": 1714393540410,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,48 +10,46 @@\n   clearCompletedTodos,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {completedTodos} items left\n-      </span>\n+    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      3 items left\n+    </span>\n \n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n+    {/* Active link should have the 'selected' class */}\n+    <nav className=\"filter\" data-cy=\"Filter\">\n       <a\n-              href=\"#/\"\n-              className=\"filter__link selected\"\n-              data-cy=\"FilterLinkAll\"\n-            >\n-              All\n-            </a>\n+        href=\"#/\"\n+        className=\"filter__link selected\"\n+        data-cy=\"FilterLinkAll\"\n+      >\n+        All\n+      </a>\n \n-            <a\n-              href=\"#/active\"\n-              className=\"filter__link\"\n-              data-cy=\"FilterLinkActive\"\n-            >\n-              Active\n-            </a>\n+      <a\n+        href=\"#/active\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkActive\"\n+      >\n+        Active\n+      </a>\n \n-            <a\n-              href=\"#/completed\"\n-              className=\"filter__link\"\n-              data-cy=\"FilterLinkCompleted\"\n-            >\n-              Completed\n-            </a>\n-      </nav>\n+      <a\n+        href=\"#/completed\"\n+        className=\"filter__link\"\n+        data-cy=\"FilterLinkCompleted\"\n+      >\n+        Completed\n+      </a>\n+    </nav>\n \n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={clearCompletedTodos}\n-        disabled={completedTodos === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n+    {/* this button should be disabled if there are no completed todos */}\n+    <button\n+      type=\"button\"\n+      className=\"todoapp__clear-completed\"\n+      data-cy=\"ClearCompletedButton\"\n+    >\n+      Clear completed\n+    </button>\n+  </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714393557927,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,10 +5,9 @@\n   clearCompletedTodos: () => void;\n }\n \n export const Footer: React.FC<Props> = ({\n-  completedTodos,\n-  clearCompletedTodos,\n+\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714393572578,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,13 +1,9 @@\n import React from 'react';\n \n-interface Props {\n-  completedTodos: number;\n-  clearCompletedTodos: () => void;\n-}\n \n+\n export const Footer: React.FC<Props> = ({\n-\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714396756033,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,11 @@\n import React from 'react';\n \n+interface FooterProps {\n+  todosCount: number;\n+}\n \n-\n-export const Footer: React.FC<Props> = ({\n+export const Footer: React.FC = ({\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714396761548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import React from 'react';\n \n-interface FooterProps {\n+interface Props {\n   todosCount: number;\n }\n \n-export const Footer: React.FC = ({\n+export const Footer: React.FC<> = ({\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n"
+                },
+                {
+                    "date": 1714396772906,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,9 @@\n interface Props {\n   todosCount: number;\n }\n \n-export const Footer: React.FC<> = ({\n-}) => {\n+export const Footer: React.FC<Props> = ({}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n     <span className=\"todo-count\" data-cy=\"TodosCounter\">\n       3 items left\n"
+                },
+                {
+                    "date": 1714396818558,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,51 +1,45 @@\n import React from 'react';\n \n interface Props {\n   todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n }\n \n-export const Footer: React.FC<Props> = ({}) => {\n+export const Footer: React.FC<Props> = ({ todosCount }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-    <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-      3 items left\n-    </span>\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        3 items left\n+      </span>\n \n-    {/* Active link should have the 'selected' class */}\n-    <nav className=\"filter\" data-cy=\"Filter\">\n-      <a\n-        href=\"#/\"\n-        className=\"filter__link selected\"\n-        data-cy=\"FilterLinkAll\"\n-      >\n-        All\n-      </a>\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n \n-      <a\n-        href=\"#/active\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkActive\"\n-      >\n-        Active\n-      </a>\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n \n-      <a\n-        href=\"#/completed\"\n-        className=\"filter__link\"\n-        data-cy=\"FilterLinkCompleted\"\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n       >\n-        Completed\n-      </a>\n-    </nav>\n-\n-    {/* this button should be disabled if there are no completed todos */}\n-    <button\n-      type=\"button\"\n-      className=\"todoapp__clear-completed\"\n-      data-cy=\"ClearCompletedButton\"\n-    >\n-      Clear completed\n-    </button>\n-  </footer>\n+        Clear completed\n+      </button>\n+    </footer>\n   );\n };\n"
+                },
+                {
+                    "date": 1714396828103,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n }\n \n-export const Footer: React.FC<Props> = ({ todosCount }) => {\n+export const Footer: React.FC<Props> = ({ todosCount,completedTodosCount, onClearCompleted }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         3 items left\n"
+                },
+                {
+                    "date": 1714396846217,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,13 +5,17 @@\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n }\n \n-export const Footer: React.FC<Props> = ({ todosCount,completedTodosCount, onClearCompleted }) => {\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+}) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        3 items left\n+        <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n"
+                },
+                {
+                    "date": 1714396857017,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,15 +12,15 @@\n   onClearCompleted,\n }) => {\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-        <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+      <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714396879743,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,8 +40,10 @@\n       <button\n         type=\"button\"\n         className=\"todoapp__clear-completed\"\n         data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n       >\n         Clear completed\n       </button>\n     </footer>\n"
+                },
+                {
+                    "date": 1714406998641,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,8 +10,10 @@\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n+\n+  \n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n"
+                },
+                {
+                    "date": 1714407005418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n \n-  \n+  const active\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n"
+                },
+                {
+                    "date": 1714407011062,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n \n-  const active\n+  const activeTodosCounter\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n"
+                },
+                {
+                    "date": 1714407016431,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n \n-  const activeTodosCounter\n+  const activeTodosCounter = todosCou\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n"
+                },
+                {
+                    "date": 1714407023129,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n \n-  const activeTodosCounter = todosCou\n+  const activeTodosCounter = todosCount - completedTodosCount;\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n"
+                },
+                {
+                    "date": 1714407031110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,12 +12,13 @@\n   onClearCompleted,\n }) => {\n \n   const activeTodosCounter = todosCount - completedTodosCount;\n+\n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {todosCount === 1 ? '1 item left' : `${todosCount} items left`}\n+        {activeTodosCounter === 1 ? '1 item left' : `${todosCount} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n"
+                },
+                {
+                    "date": 1714407036827,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n \n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1 ? '1 item left' : `${todosCount} items left`}\n+        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n"
+                },
+                {
+                    "date": 1714407420582,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n+      <nav className={\"filter\" data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407426162,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={\"filter\" data-cy=\"Filter\">\n+      <nav className={\"filter\"`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407431892,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={\"filter\"`} data-cy=\"Filter\">\n+      <nav className={`fil\"filter\"`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407450165,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`fil\"filter\"`} data-cy=\"Filter\">\n+      <nav className={`\"filter__\"`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407456027,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`\"filter__\"`} data-cy=\"Filter\">\n+      <nav className={`\"filter__link\" $`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407462494,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`\"filter__link\" $`} data-cy=\"Filter\">\n+      <nav className={`\"filter__link\" ${filter === 'all'}`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407469588,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`\"filter__link\" ${filter === 'all'}`} data-cy=\"Filter\">\n+      <nav className={`\"filter__link\" ${filter === 'all' ? 'selected'}`} data-cy=\"Filter\">\n       <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407483150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,20 +10,24 @@\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n-\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n+        {activeTodosCounter === 1\n+          ? '1 item left'\n+          : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`\"filter__link\" ${filter === 'all' ? 'selected'}`} data-cy=\"Filter\">\n-      <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+      <nav\n+        className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n+        data-cy=\"Filter\"\n+      >\n+        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407497443,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,59 @@\n+import React from 'react';\n+\n+interface Props {\n+  todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+}) => {\n+  const activeTodosCounter = todosCount - completedTodosCount;\n+\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {activeTodosCounter === 1\n+          ? '1 item left'\n+          : `${activeTodosCounter} items left`}\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav\n+        className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n+        data-cy=\"Filter\"\n+        onCli\n+      >\n+        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714407504425,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onCli\n+        onClick={()}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n@@ -56,62 +56,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-\n-interface Props {\n-  todosCount: number;\n-  completedTodosCount: number;\n-  onClearCompleted: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  todosCount,\n-  completedTodosCount,\n-  onClearCompleted,\n-}) => {\n-  const activeTodosCounter = todosCount - completedTodosCount;\n-\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1\n-          ? '1 item left'\n-          : `${activeTodosCounter} items left`}\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav\n-        className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n-        data-cy=\"Filter\"\n-      >\n-        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={onClearCompleted}\n-        disabled={completedTodosCount === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714407509652,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onClick={()}\n+        onClick={() => hand}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n"
+                },
+                {
+                    "date": 1714407515555,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onClick={() => hand}\n+        onClick={() => handleFilterChange}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n"
+                },
+                {
+                    "date": 1714407528650,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n+  filter\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n@@ -24,9 +25,9 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onClick={() => handleFilterChange}\n+        onClick={() => handleFilterChange('all')}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n"
+                },
+                {
+                    "date": 1714407550720,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  filter\n+  handleFilterChange\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n"
+                },
+                {
+                    "date": 1714407556812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  handleFilterChange\n+  handleFilterChange: () => void;\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n"
+                },
+                {
+                    "date": 1714407562632,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,8 +10,9 @@\n export const Footer: React.FC<Props> = ({\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n+  handleFilterChange\n }) => {\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n"
+                },
+                {
+                    "date": 1714407577415,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onClick={() => handleFilterChange('all')}\n+        onClick={() => handleFilterChange('')}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n"
+                },
+                {
+                    "date": 1714407600631,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,8 @@\n       {/* Active link should have the 'selected' class */}\n       <nav\n         className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"Filter\"\n-        onClick={() => handleFilterChange('')}\n       >\n         <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n"
+                },
+                {
+                    "date": 1714407618889,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,33 +3,27 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  handleFilterChange: () => void;\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n-  handleFilterChange\n }) => {\n+\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1\n-          ? '1 item left'\n-          : `${activeTodosCounter} items left`}\n+        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav\n-        className={`\"filter__link\" ${filter === 'all' ? 'selected' : ''}`}\n-        data-cy=\"Filter\"\n-      >\n-        <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+      <nav className={`\"filter__link\"`} data-cy=\"Filter\">\n+      <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407629594,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,10 +20,10 @@\n         {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n-      <nav className={`\"filter__link\"`} data-cy=\"Filter\">\n-      <a href=\"#/\" className=\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+      <a href=\"#/\" className={\"filter__link selected\" data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407641529,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-      <a href=\"#/\" className={\"filter__link selected\" data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={\"filter__link $selected\"} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407648884,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,54 @@\n+import React from 'react';\n+\n+interface Props {\n+  todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+}) => {\n+\n+  const activeTodosCounter = todosCount - completedTodosCount;\n+\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a href=\"#/\" className={`\"filter__link ${selected\"`} data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714407657562,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`\"filter__link ${selected\"`} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`\"filter__link ${filterselected\"`} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n@@ -51,58 +51,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-\n-interface Props {\n-  todosCount: number;\n-  completedTodosCount: number;\n-  onClearCompleted: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  todosCount,\n-  completedTodosCount,\n-  onClearCompleted,\n-}) => {\n-\n-  const activeTodosCounter = todosCount - completedTodosCount;\n-\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={\"filter__link $selected\"} data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={onClearCompleted}\n-        disabled={completedTodosCount === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714407664384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`\"filter__link ${filterselected\"`} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`\"filter__link ${filter === 'allselected\"`} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407670715,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`\"filter__link ${filter === 'allselected\"`} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`\"filter__link ${filter === 'alls ? selected\"`} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407676913,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`\"filter__link ${filter === 'alls ? selected\"`} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`\"filter__link ${filter === 'alls ? 'selected\" : `} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407686491,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`\"filter__link ${filter === 'alls ? 'selected\" : `} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`filter__link ${filter === 'alls ? 'selected\" : ''`} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407692339,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'alls ? 'selected\" : ''`} data-cy=\"FilterLinkAll\">\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''`} data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407701700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,55 @@\n+import React from 'react';\n+\n+interface Props {\n+  todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+}) => {\n+\n+  const activeTodosCounter = todosCount - completedTodosCount;\n+\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''`}\n+        data-cy=\"FilterLinkAll\">\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714407709941,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''`}\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''}`}\n         data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n@@ -52,58 +52,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-\n-interface Props {\n-  todosCount: number;\n-  completedTodosCount: number;\n-  onClearCompleted: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  todosCount,\n-  completedTodosCount,\n-  onClearCompleted,\n-}) => {\n-\n-  const activeTodosCounter = todosCount - completedTodosCount;\n-\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''`} data-cy=\"FilterLinkAll\">\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={onClearCompleted}\n-        disabled={completedTodosCount === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714407722478,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected\" : ''}`}\n+        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n         data-cy=\"FilterLinkAll\">\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407731532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,21 +10,25 @@\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n }) => {\n-\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n     <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1 ? '1 item left' : `${activeTodosCounter} items left`}\n+        {activeTodosCounter === 1\n+          ? '1 item left'\n+          : `${activeTodosCounter} items left`}\n       </span>\n \n       {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n-        <a href=\"#/\" className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n-        data-cy=\"FilterLinkAll\">\n+        <a\n+          href=\"#/\"\n+          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n+          data-cy=\"FilterLinkAll\"\n+        >\n           All\n         </a>\n \n         <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n"
+                },
+                {
+                    "date": 1714407737141,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n+          onClic\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407742707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClic\n+          onClick={()}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407748304,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={()}\n+          onClick={() => handle}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407758144,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={() => handle}\n+          onClick={() => handleFilterChange}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407768412,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n+  handleFilterChange\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n@@ -26,9 +27,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange}\n+          onClick={() => handleFilterChange('all')}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407774102,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  handleFilterChange\n+  handleFilterChange: () => void;\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n"
+                },
+                {
+                    "date": 1714407779118,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,62 @@\n+import React from 'react';\n+\n+interface Props {\n+  todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n+  handleFilterChange: () => void;\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+  handleFilterChange\n+}) => {\n+  const activeTodosCounter = todosCount - completedTodosCount;\n+\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {activeTodosCounter === 1\n+          ? '1 item left'\n+          : `${activeTodosCounter} items left`}\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a\n+          href=\"#/\"\n+          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n+          data-cy=\"FilterLinkAll\"\n+          onClick={() => handleFilterChange('all')}\n+        >\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714407806692,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,63 @@\n+import React from 'react';\n+\n+interface Props {\n+  todosCount: number;\n+  completedTodosCount: number;\n+  onClearCompleted: () => void;\n+  handleFilterChange: () => void;\n+  filter\n+}\n+\n+export const Footer: React.FC<Props> = ({\n+  todosCount,\n+  completedTodosCount,\n+  onClearCompleted,\n+  handleFilterChange\n+}) => {\n+  const activeTodosCounter = todosCount - completedTodosCount;\n+\n+  return (\n+    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n+      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n+        {activeTodosCounter === 1\n+          ? '1 item left'\n+          : `${activeTodosCounter} items left`}\n+      </span>\n+\n+      {/* Active link should have the 'selected' class */}\n+      <nav className=\"filter\" data-cy=\"Filter\">\n+        <a\n+          href=\"#/\"\n+          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n+          data-cy=\"FilterLinkAll\"\n+          onClick={() => handleFilterChange('all')}\n+        >\n+          All\n+        </a>\n+\n+        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          Active\n+        </a>\n+\n+        <a\n+          href=\"#/completed\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkCompleted\"\n+        >\n+          Completed\n+        </a>\n+      </nav>\n+\n+      {/* this button should be disabled if there are no completed todos */}\n+      <button\n+        type=\"button\"\n+        className=\"todoapp__clear-completed\"\n+        data-cy=\"ClearCompletedButton\"\n+        onClick={onClearCompleted}\n+        disabled={completedTodosCount === 0}\n+      >\n+        Clear completed\n+      </button>\n+    </footer>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714407813193,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n   handleFilterChange: () => void;\n-  filter\n+  filter: Sta\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n@@ -60,127 +60,4 @@\n       </button>\n     </footer>\n   );\n };\n-import React from 'react';\n-\n-interface Props {\n-  todosCount: number;\n-  completedTodosCount: number;\n-  onClearCompleted: () => void;\n-  handleFilterChange: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  todosCount,\n-  completedTodosCount,\n-  onClearCompleted,\n-  handleFilterChange\n-}) => {\n-  const activeTodosCounter = todosCount - completedTodosCount;\n-\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1\n-          ? '1 item left'\n-          : `${activeTodosCounter} items left`}\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-        <a\n-          href=\"#/\"\n-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n-          data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange('all')}\n-        >\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={onClearCompleted}\n-        disabled={completedTodosCount === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n-import React from 'react';\n-\n-interface Props {\n-  todosCount: number;\n-  completedTodosCount: number;\n-  onClearCompleted: () => void;\n-  handleFilterChange: () => void;\n-}\n-\n-export const Footer: React.FC<Props> = ({\n-  todosCount,\n-  completedTodosCount,\n-  onClearCompleted,\n-}) => {\n-  const activeTodosCounter = todosCount - completedTodosCount;\n-\n-  return (\n-    <footer className=\"todoapp__footer\" data-cy=\"Footer\">\n-      <span className=\"todo-count\" data-cy=\"TodosCounter\">\n-        {activeTodosCounter === 1\n-          ? '1 item left'\n-          : `${activeTodosCounter} items left`}\n-      </span>\n-\n-      {/* Active link should have the 'selected' class */}\n-      <nav className=\"filter\" data-cy=\"Filter\">\n-        <a\n-          href=\"#/\"\n-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n-          data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange('all')}\n-        >\n-          All\n-        </a>\n-\n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n-          Active\n-        </a>\n-\n-        <a\n-          href=\"#/completed\"\n-          className=\"filter__link\"\n-          data-cy=\"FilterLinkCompleted\"\n-        >\n-          Completed\n-        </a>\n-      </nav>\n-\n-      {/* this button should be disabled if there are no completed todos */}\n-      <button\n-        type=\"button\"\n-        className=\"todoapp__clear-completed\"\n-        data-cy=\"ClearCompletedButton\"\n-        onClick={onClearCompleted}\n-        disabled={completedTodosCount === 0}\n-      >\n-        Clear completed\n-      </button>\n-    </footer>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714407820161,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,16 +4,17 @@\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n   handleFilterChange: () => void;\n-  filter: Sta\n+  filter: Status;\n }\n \n export const Footer: React.FC<Props> = ({\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n-  handleFilterChange\n+  handleFilterChange,\n+  filter\n }) => {\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n"
+                },
+                {
+                    "date": 1714407825860,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   todosCount,\n   completedTodosCount,\n   onClearCompleted,\n   handleFilterChange,\n-  filter\n+  filter,\n }) => {\n   const activeTodosCounter = todosCount - completedTodosCount;\n \n   return (\n@@ -30,9 +30,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange('all')}\n+          onClick={() => handleFilterChange('')}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407834582,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n import React from 'react';\n+import { Status } from '../types/Todo';\n \n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n@@ -30,9 +31,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange('')}\n+          onClick={() => handleFilterChange()}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407882125,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkAll\"\n-          onClick={() => handleFilterChange()}\n+          onClick={() => handleFilterChange('all')}\n         >\n           All\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407895693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,10 @@\n         >\n           All\n         </a>\n \n-        <a href=\"#/active\" className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+        <a href=\"#/active\"\n+          className=\"filter__link\" data-cy=\"FilterLinkActive\">\n           Active\n         </a>\n \n         <a\n"
+                },
+                {
+                    "date": 1714407910964,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,11 @@\n           All\n         </a>\n \n         <a href=\"#/active\"\n-          className=\"filter__link\" data-cy=\"FilterLinkActive\">\n+          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}\n+          onClick={() => handleFilterChange('active')}\n+    >\n           Active\n         </a>\n \n         <a\n"
+                },
+                {
+                    "date": 1714407917120,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,11 +37,10 @@\n           All\n         </a>\n \n         <a href=\"#/active\"\n-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}\n-          onClick={() => handleFilterChange('active')}\n-    >\n+          className=\"filter__link\" data-cy=\"FilterLinkActive\"\n+          >\n           Active\n         </a>\n \n         <a\n"
+                },
+                {
+                    "date": 1714407924886,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,10 @@\n           All\n         </a>\n \n         <a href=\"#/active\"\n-          className=\"filter__link\" data-cy=\"FilterLinkActive\"\n+          className=\"filter__link\"\n+          data-cy=\"FilterLinkActive\"\n           >\n           Active\n         </a>\n \n"
+                },
+                {
+                    "date": 1714407929986,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,12 +36,13 @@\n         >\n           All\n         </a>\n \n-        <a href=\"#/active\"\n-          className=\"filter__link\"\n+        <a\n+          href=\"#/active\"\n+          onClick={() => handleFilterChange('active')}\n           data-cy=\"FilterLinkActive\"\n-          >\n+        >\n           Active\n         </a>\n \n         <a\n"
+                },
+                {
+                    "date": 1714407940293,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,8 +38,10 @@\n         </a>\n \n         <a\n           href=\"#/active\"\n+          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}\n+\n           onClick={() => handleFilterChange('active')}\n           data-cy=\"FilterLinkActive\"\n         >\n           Active\n"
+                },
+                {
+                    "date": 1714407960392,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,18 +39,17 @@\n \n         <a\n           href=\"#/active\"\n           className={`filter__link ${filter === 'active' ? 'selected' : ''}`}\n-\n           onClick={() => handleFilterChange('active')}\n           data-cy=\"FilterLinkActive\"\n         >\n           Active\n         </a>\n \n         <a\n           href=\"#/completed\"\n-          className=\"filter__link\"\n+          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkCompleted\"\n         >\n           Completed\n         </a>\n"
+                },
+                {
+                    "date": 1714407966267,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -49,8 +49,10 @@\n         <a\n           href=\"#/completed\"\n           className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkCompleted\"\n+          onClick={() => handleFilterChange('completed')}\n+\n         >\n           Completed\n         </a>\n       </nav>\n"
+                },
+                {
+                    "date": 1714408029162,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  handleFilterChange: () => void;\n+  handleFilterChange: (newFilter: Status) => void\n   filter: Status;\n }\n \n export const Footer: React.FC<Props> = ({\n"
+                },
+                {
+                    "date": 1714471343476,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n interface Props {\n   todosCount: number;\n   completedTodosCount: number;\n   onClearCompleted: () => void;\n-  handleFilterChange: (newFilter: Status) => void\n+  handleFilterChange: (newFilter: Status) => void;\n   filter: Status;\n }\n \n export const Footer: React.FC<Props> = ({\n@@ -50,9 +50,8 @@\n           href=\"#/completed\"\n           className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}\n           data-cy=\"FilterLinkCompleted\"\n           onClick={() => handleFilterChange('completed')}\n-\n         >\n           Completed\n         </a>\n       </nav>\n"
+                }
+            ],
+            "date": 1714379538200,
+            "name": "Commit-0",
+            "content": "<footer className=\"todoapp__footer\" data-cy=\"Footer\">\n<span className=\"todo-count\" data-cy=\"TodosCounter\">\n  3 items left\n</span>\n\n{/* Active link should have the 'selected' class */}\n<nav className=\"filter\" data-cy=\"Filter\">\n  <a\n    href=\"#/\"\n    className=\"filter__link selected\"\n    data-cy=\"FilterLinkAll\"\n  >\n    All\n  </a>\n\n  <a\n    href=\"#/active\"\n    className=\"filter__link\"\n    data-cy=\"FilterLinkActive\"\n  >\n    Active\n  </a>\n\n  <a\n    href=\"#/completed\"\n    className=\"filter__link\"\n    data-cy=\"FilterLinkCompleted\"\n  >\n    Completed\n  </a>\n</nav>\n\n{/* this button should be disabled if there are no completed todos */}\n<button\n  type=\"button\"\n  className=\"todoapp__clear-completed\"\n  data-cy=\"ClearCompletedButton\"\n>\n  Clear completed\n</button>\n</footer>\n"
+        }
+    ]
+}

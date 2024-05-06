@@ -1,204 +1,161 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { USER_ID, getTodos } from './api/todos';
+import { TodoList } from './Components/TodoList';
+import { ErrorNotification } from './Components/ErrorNotification';
+import { Footer } from './Components/Footer';
+import { Status, Todoo } from './types/Todo';
+import { Error } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todoo[]>([]);
+  const [error, setError] = useState<boolean>(false);
+  const [errorType, setErrorType] = useState<Error | null>(null);
+  const [filter, setFilter] = useState<Status>('all');
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const todosData = await getTodos();
+
+        setTodos(todosData);
+      } catch (err) {
+        setError(true);
+        setErrorType('load');
+      }
+    };
+
+    fetchTodos();
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
+  const handleDeleteTodo = (id: number) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+
+    setError(true);
+
+    setErrorType('delete');
+  };
+
+  const handleToggleTodo = (id: number) => {
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
+    );
+  };
+
+  const handleToggleAllTodos = () => {
+    const allCompleted = todos.every(todo => todo.completed);
+
+    setTodos(prev =>
+      prev.map(todo => ({
+        ...todo,
+        completed: !allCompleted,
+      })),
+    );
+  };
+
+  const hideError = () => {
+    setError(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const trimmedTodo = newTodoTitle.trim();
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      if (trimmedTodo) {
+        const newTodo: Todoo = {
+          id: todos.length + 1,
+          userId: USER_ID,
+          title: trimmedTodo,
+          completed: false,
+        };
+
+        setTodos(prevTodos => [...prevTodos, newTodo]);
+        setNewTodoTitle('');
+      } else {
+        setError(true);
+        setErrorType('empty');
+      }
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodoTitle(event.target.value);
+  };
+
+  const onClearCompleted = () => {
+    setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
+  };
+
+  const handleFilterChange = (newFilter: Status) => {
+    setFilter(newFilter);
+  };
+
   return (
     <div className="todoapp">
+      {!USER_ID && <UserWarning />}
       <h1 className="todoapp__title">todos</h1>
-
-      <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
+      {USER_ID && (
+        <div className="todoapp__content">
+          <header className="todoapp__header">
+            {/* this button should have `active` class only if all todos are completed */}
+            <button
+              type="button"
+              className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
+              data-cy="ToggleAllButton"
+              onClick={handleToggleAllTodos}
             />
-          </form>
-        </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
-
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
+            {/* Add a todo on form submit */}
             <form>
               <input
-                data-cy="TodoTitleField"
+                data-cy="NewTodoField"
                 type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                onKeyDown={handleKeyDown}
+                value={newTodoTitle}
+                onChange={handleChange}
               />
             </form>
+          </header>
 
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+          <TodoList
+            todos={todos}
+            onDeleteTodo={handleDeleteTodo}
+            onToggleTodo={handleToggleTodo}
+            filter={filter}
+          />
 
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
-
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
-      </div>
-
+          {/* Hide the footer if there are no todos */}
+          {todos.length > 0 && (
+            <Footer
+              filter={filter}
+              todosCount={todos.length}
+              completedTodosCount={todos.filter(todo => todo.completed).length}
+              onClearCompleted={onClearCompleted}
+              handleFilterChange={handleFilterChange}
+            />
+          )}
+        </div>
+      )}
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorNotification
+        error={error}
+        errorType={errorType}
+        hideError={hideError}
+      />
     </div>
   );
 };

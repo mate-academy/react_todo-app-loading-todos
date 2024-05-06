@@ -1,0 +1,250 @@
+{
+    "sourceFile": "src/Components/Todo.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 58,
+            "patches": [
+                {
+                    "date": 1714384924565,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714384933360,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export \n+export const Todo\n"
+                },
+                {
+                    "date": 1714384938703,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export const Todo\n+export const Todo: React.FC\n"
+                },
+                {
+                    "date": 1714384943754,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export const Todo: React.FC\n+export const Todo: React.FC \n"
+                },
+                {
+                    "date": 1714384949531,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,3 @@\n-export const Todo: React.FC \n+export const Todo: React.FC = () => {\n+  return \n+}\n"
+                },
+                {
+                    "date": 1714384957931,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,30 @@\n+\n export const Todo: React.FC = () => {\n-  return \n+  return (\n+    <div data-cy=\"Todo\" className=\"todo completed\">\n+    <label className=\"todo__status-label\">\n+      <input\n+        data-cy=\"TodoStatus\"\n+        type=\"checkbox\"\n+        className=\"todo__status\"\n+        checked\n+      />\n+    </label>\n+\n+    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+      Completed Todo\n+    </span>\n+\n+    {/* Remove button appears only on hover */}\n+    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+      ×\n+    </button>\n+\n+    {/* overlay will cover the todo while it is being deleted or updated */}\n+    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+      <div className=\"modal-background has-background-white-ter\" />\n+      <div className=\"loader\" />\n+    </div>\n+  </div>\n+  )\n }\n"
+                },
+                {
+                    "date": 1714385112357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,5 @@\n+import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n"
+                },
+                {
+                    "date": 1714385791592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from \"react\";\n \n-export const Todo: React.FC = () => {\n+export const Todo: React.FC = (todo: ) => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n     <label className=\"todo__status-label\">\n       <input\n"
+                },
+                {
+                    "date": 1714385799953,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from \"react\";\n-\n-export const Todo: React.FC = (todo: ) => {\n+type \n+export const Todo: React.FC = (todo: Todoo) => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n     <label className=\"todo__status-label\">\n       <input\n"
+                },
+                {
+                    "date": 1714385810607,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,8 @@\n import React from \"react\";\n-type \n+type Props = {\n+  todo: Todoo\n+}\n export const Todo: React.FC = (todo: Todoo) => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n     <label className=\"todo__status-label\">\n"
+                },
+                {
+                    "date": 1714385817197,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n-  todo: Todoo\n+  todo: Todoo;\n }\n-export const Todo: React.FC = (todo: Todoo) => {\n+export const Todo: React.FC<Props> = (todo: Todoo) => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n     <label className=\"todo__status-label\">\n       <input\n"
+                },
+                {
+                    "date": 1714385822395,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React from \"react\";\n type Props = {\n   todo: Todoo;\n }\n-export const Todo: React.FC<Props> = (todo: Todoo) => {\n+export const Todo: React.FC<Props> = ({}) => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo completed\">\n     <label className=\"todo__status-label\">\n       <input\n"
+                },
+                {
+                    "date": 1714385837521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,33 +1,33 @@\n-import React from \"react\";\n+import React from 'react';\n type Props = {\n   todo: Todoo;\n-}\n-export const Todo: React.FC<Props> = ({}) => {\n+};\n+export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className=\"todo completed\">\n-    <label className=\"todo__status-label\">\n-      <input\n-        data-cy=\"TodoStatus\"\n-        type=\"checkbox\"\n-        className=\"todo__status\"\n-        checked\n-      />\n-    </label>\n+    <div data-cy=\"Todo\" className={\"todo completed\">\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+          checked\n+        />\n+      </label>\n \n-    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-      Completed Todo\n-    </span>\n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        Completed Todo\n+      </span>\n \n-    {/* Remove button appears only on hover */}\n-    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-      ×\n-    </button>\n+      {/* Remove button appears only on hover */}\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n \n-    {/* overlay will cover the todo while it is being deleted or updated */}\n-    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-      <div className=\"modal-background has-background-white-ter\" />\n-      <div className=\"loader\" />\n+      {/* overlay will cover the todo while it is being deleted or updated */}\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n     </div>\n-  </div>\n-  )\n-}\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714385844087,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={\"todo completed\">\n+    <div data-cy=\"Todo\" className={`todo \"todo completed\">\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385850707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo \"todo completed\">\n+    <div data-cy=\"Todo\" className={`todo ${\"todo completed\">\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385859725,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${\"todo completed\">\n+    <div data-cy=\"Todo\" className={`todo ${\"todo completed\"}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385870701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${\"todo completed\"}>\n+    <div data-cy=\"Todo\" className={`todo ${todo completed\"`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385877588,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${todo completed\"`}>\n+    <div data-cy=\"Todo\" className={`todo ${todo completed ? 'complete'`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385883775,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${todo completed ? 'complete'`}>\n+    <div data-cy=\"Todo\" className={`todo ${todo completed ? 'completed' : '}'`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385896256,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,10 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${todo completed ? 'completed' : '}'`}>\n+    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''\n+}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385903317,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,9 @@\n   todo: Todoo;\n };\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''\n-}`}>\n+    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714385909233,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,34 @@\n+import React from 'react';\n+import { Todoo } from '../types/Todo';\n+type Props = {\n+  todo: Todoo;\n+};\n+export const Todo: React.FC<Props> = ({ todo }) => {\n+  return (\n+    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+          checked\n+        />\n+      </label>\n+\n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        Completed Todo\n+      </span>\n+\n+      {/* Remove button appears only on hover */}\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n+\n+      {/* overlay will cover the todo while it is being deleted or updated */}\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714385937091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,51 +1,20 @@\n import React from 'react';\n import { Todoo } from '../types/Todo';\n+\n type Props = {\n   todo: Todoo;\n };\n-export const Todo: React.FC<Props> = ({ todo }) => {\n-  return (\n-    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n-      <label className=\"todo__status-label\">\n-        <input\n-          data-cy=\"TodoStatus\"\n-          type=\"checkbox\"\n-          className=\"todo__status\"\n-          checked\n-        />\n-      </label>\n \n-      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        Completed Todo\n-      </span>\n-\n-      {/* Remove button appears only on hover */}\n-      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-        ×\n-      </button>\n-\n-      {/* overlay will cover the todo while it is being deleted or updated */}\n-      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-        <div className=\"modal-background has-background-white-ter\" />\n-        <div className=\"loader\" />\n-      </div>\n-    </div>\n-  );\n-};\n-import React from 'react';\n-type Props = {\n-  todo: Todoo;\n-};\n export const Todo: React.FC<Props> = ({ todo }) => {\n   return (\n     <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n           className=\"todo__status\"\n-          checked\n+          checked={}\n         />\n       </label>\n \n       <span data-cy=\"TodoTitle\" className=\"todo__title\">\n"
+                },
+                {
+                    "date": 1714385952250,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,14 +12,14 @@\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n           className=\"todo__status\"\n-          checked={}\n+          checked={todo.completed}\n         />\n       </label>\n \n       <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        Completed Todo\n+        {Completed Todo}\n       </span>\n \n       {/* Remove button appears only on hover */}\n       <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n"
+                },
+                {
+                    "date": 1714394552289,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,36 +1,1 @@\n-import React from 'react';\n-import { Todoo } from '../types/Todo';\n-\n-type Props = {\n-  todo: Todoo;\n-};\n-\n-export const Todo: React.FC<Props> = ({ todo }) => {\n-  return (\n-    <div data-cy=\"Todo\" className={`todo ${todo.completed ? 'completed' : ''}`}>\n-      <label className=\"todo__status-label\">\n-        <input\n-          data-cy=\"TodoStatus\"\n-          type=\"checkbox\"\n-          className=\"todo__status\"\n-          checked={todo.completed}\n-        />\n-      </label>\n-\n-      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        {Completed Todo}\n-      </span>\n-\n-      {/* Remove button appears only on hover */}\n-      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-        ×\n-      </button>\n-\n-      {/* overlay will cover the todo while it is being deleted or updated */}\n-      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-        <div className=\"modal-background has-background-white-ter\" />\n-        <div className=\"loader\" />\n-      </div>\n-    </div>\n-  );\n-};\n+export \n"
+                },
+                {
+                    "date": 1714394558149,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export \n+export const\n"
+                },
+                {
+                    "date": 1714394563684,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-export const\n+export const Todo = ()\n"
+                },
+                {
+                    "date": 1714394569786,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,5 @@\n-export const Todo = ()\n+export const Todo = () => {\n+  return (\n+    V\n+  )\n+}\n"
+                },
+                {
+                    "date": 1714394577083,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,25 @@\n-export const Todo = () => {\n+export const Todo: React = () => {\n   return (\n-    V\n+    <div data-cy=\"Todo\" className=\"todo\">\n+    <label className=\"todo__status-label\">\n+      <input\n+        data-cy=\"TodoStatus\"\n+        type=\"checkbox\"\n+        className=\"todo__status\"\n+      />\n+    </label>\n+\n+    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+      Not Completed Todo\n+    </span>\n+    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+      ×\n+    </button>\n+\n+    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+      <div className=\"modal-background has-background-white-ter\" />\n+      <div className=\"loader\" />\n+    </div>\n+  </div>\n   )\n }\n"
+                },
+                {
+                    "date": 1714394587913,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,7 @@\n-export const Todo: React = () => {\n+\n+\n+export const Todo: React.FC = () => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo\">\n     <label className=\"todo__status-label\">\n       <input\n"
+                },
+                {
+                    "date": 1714394593713,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n+import React; from \"react\"\n \n-\n export const Todo: React.FC = () => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo\">\n     <label className=\"todo__status-label\">\n"
+                },
+                {
+                    "date": 1714394598994,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,27 @@\n+import React from \"react';\n+\n+export const Todo: React.FC = () => {\n+  return (\n+    <div data-cy=\"Todo\" className=\"todo\">\n+    <label className=\"todo__status-label\">\n+      <input\n+        data-cy=\"TodoStatus\"\n+        type=\"checkbox\"\n+        className=\"todo__status\"\n+      />\n+    </label>\n+\n+    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+      Not Completed Todo\n+    </span>\n+    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+      ×\n+    </button>\n+\n+    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+      <div className=\"modal-background has-background-white-ter\" />\n+      <div className=\"loader\" />\n+    </div>\n+  </div>\n+  )\n+}\n"
+                },
+                {
+                    "date": 1714394604486,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React from \"react';\n+import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n     <div data-cy=\"Todo\" className=\"todo\">\n@@ -24,31 +24,4 @@\n     </div>\n   </div>\n   )\n }\n-import React; from \"react\"\n-\n-export const Todo: React.FC = () => {\n-  return (\n-    <div data-cy=\"Todo\" className=\"todo\">\n-    <label className=\"todo__status-label\">\n-      <input\n-        data-cy=\"TodoStatus\"\n-        type=\"checkbox\"\n-        className=\"todo__status\"\n-      />\n-    </label>\n-\n-    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-      Not Completed Todo\n-    </span>\n-    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-      ×\n-    </button>\n-\n-    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-      <div className=\"modal-background has-background-white-ter\" />\n-      <div className=\"loader\" />\n-    </div>\n-  </div>\n-  )\n-}\n"
+                },
+                {
+                    "date": 1714394813094,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,33 @@\n import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n+    <div data-cy=\"Todo\" className=\"todo completed\">\n+    <label className=\"todo__status-label\">\n+      <input\n+        data-cy=\"TodoStatus\"\n+        type=\"checkbox\"\n+        className=\"todo__status\"\n+        checked\n+      />\n+    </label>\n+\n+    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+      Completed Todo\n+    </span>\n+\n+    {/* Remove button appears only on hover */}\n+    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+      ×\n+    </button>\n+\n+    {/* overlay will cover the todo while it is being deleted or updated */}\n+    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+      <div className=\"modal-background has-background-white-ter\" />\n+      <div className=\"loader\" />\n+    </div>\n+  </div>\n     <div data-cy=\"Todo\" className=\"todo\">\n     <label className=\"todo__status-label\">\n       <input\n         data-cy=\"TodoStatus\"\n"
+                },
+                {
+                    "date": 1714394852172,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,33 +1,9 @@\n import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n-    <div data-cy=\"Todo\" className=\"todo completed\">\n-    <label className=\"todo__status-label\">\n-      <input\n-        data-cy=\"TodoStatus\"\n-        type=\"checkbox\"\n-        className=\"todo__status\"\n-        checked\n-      />\n-    </label>\n-\n-    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-      Completed Todo\n-    </span>\n-\n-    {/* Remove button appears only on hover */}\n-    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-      ×\n-    </button>\n-\n-    {/* overlay will cover the todo while it is being deleted or updated */}\n-    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-      <div className=\"modal-background has-background-white-ter\" />\n-      <div className=\"loader\" />\n-    </div>\n-  </div>\n+    \n     <div data-cy=\"Todo\" className=\"todo\">\n     <label className=\"todo__status-label\">\n       <input\n         data-cy=\"TodoStatus\"\n"
+                },
+                {
+                    "date": 1714395021256,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,9 @@\n import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n-    \n-    <div data-cy=\"Todo\" className=\"todo\">\n+<    <div data-cy=\"Todo\" className=\"todo\">\n     <label className=\"todo__status-label\">\n       <input\n         data-cy=\"TodoStatus\"\n         type=\"checkbox\"\n@@ -22,7 +21,7 @@\n     <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n       <div className=\"modal-background has-background-white-ter\" />\n       <div className=\"loader\" />\n     </div>\n-  </div>\n+  </div>>\n   )\n }\n"
+                },
+                {
+                    "date": 1714395026464,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,27 +1,6 @@\n import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n-<    <div data-cy=\"Todo\" className=\"todo\">\n-    <label className=\"todo__status-label\">\n-      <input\n-        data-cy=\"TodoStatus\"\n-        type=\"checkbox\"\n-        className=\"todo__status\"\n-      />\n-    </label>\n-\n-    <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-      Not Completed Todo\n-    </span>\n-    <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-      ×\n-    </button>\n-\n-    <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-      <div className=\"modal-background has-background-white-ter\" />\n-      <div className=\"loader\" />\n-    </div>\n-  </div>>\n   )\n }\n"
+                },
+                {
+                    "date": 1714395032362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,9 @@\n import React from \"react\";\n \n export const Todo: React.FC = () => {\n   return (\n+    <>\n+\n+    </>\n   )\n }\n"
+                },
+                {
+                    "date": 1714396531174,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,114 @@\n import React from \"react\";\n-\n+interface TodoProps {\n+  id: number;\n+  title: string;\n+  completed: boolean;\n+  onDelete: () => void;\n+  onToggle: () => void;\n+}\n export const Todo: React.FC = () => {\n   return (\n     <>\n+   <div data-cy=\"Todo\" className=\"todo completed\">\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+          checked\n+        />\n+      </label>\n \n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        Completed Todo\n+      </span>\n+\n+      {/* Remove button appears only on hover */}\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n+\n+      {/* overlay will cover the todo while it is being deleted or updated */}\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n+\n+    {/* This todo is an active todo */}\n+    <div data-cy=\"Todo\" className=\"todo\">\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+        />\n+      </label>\n+\n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        Not Completed Todo\n+      </span>\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n+\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n+\n+    {/* This todo is being edited */}\n+    <div data-cy=\"Todo\" className=\"todo\">\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+        />\n+      </label>\n+\n+      {/* This form is shown instead of the title and remove button */}\n+      <form>\n+        <input\n+          data-cy=\"TodoTitleField\"\n+          type=\"text\"\n+          className=\"todo__title-field\"\n+          placeholder=\"Empty todo will be deleted\"\n+          value=\"Todo is being edited now\"\n+        />\n+      </form>\n+\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n+\n+    {/* This todo is in loadind state */}\n+    <div data-cy=\"Todo\" className=\"todo\">\n+      <label className=\"todo__status-label\">\n+        <input\n+          data-cy=\"TodoStatus\"\n+          type=\"checkbox\"\n+          className=\"todo__status\"\n+        />\n+      </label>\n+\n+      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n+        Todo is being saved now\n+      </span>\n+\n+      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+        ×\n+      </button>\n+\n+      {/* 'is-active' class puts this modal on top of the todo */}\n+      <div data-cy=\"TodoLoader\" className=\"modal overlay is-active\">\n+        <div className=\"modal-background has-background-white-ter\" />\n+        <div className=\"loader\" />\n+      </div>\n+    </div>\n     </>\n   )\n }\n"
+                },
+                {
+                    "date": 1714396539376,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,14 @@\n import React from \"react\";\n-interface TodoProps {\n+\n+interface rops {\n   id: number;\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n }\n+\n export const Todo: React.FC = () => {\n   return (\n     <>\n    <div data-cy=\"Todo\" className=\"todo completed\">\n"
+                },
+                {
+                    "date": 1714396546196,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,15 @@\n import React from \"react\";\n \n-interface rops {\n+interface Props {\n   id: number;\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n }\n \n-export const Todo: React.FC = () => {\n+export const Todo: React.FC<Props> = () => {\n   return (\n     <>\n    <div data-cy=\"Todo\" className=\"todo completed\">\n       <label className=\"todo__status-label\">\n"
+                },
+                {
+                    "date": 1714396554265,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   onDelete: () => void;\n   onToggle: () => void;\n }\n \n-export const Todo: React.FC<Props> = () => {\n+export const Todo: React.FC<Props> = ({id, title, completed, onDelete, onToggle}) => {\n   return (\n     <>\n    <div data-cy=\"Todo\" className=\"todo completed\">\n       <label className=\"todo__status-label\">\n"
+                },
+                {
+                    "date": 1714396617414,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React from \"react\";\n+import React from 'react';\n \n interface Props {\n   id: number;\n   title: string;\n@@ -7,110 +7,38 @@\n   onDelete: () => void;\n   onToggle: () => void;\n }\n \n-export const Todo: React.FC<Props> = ({id, title, completed, onDelete, onToggle}) => {\n+export const Todo: React.FC<Props> = ({\n+  id,\n+  title,\n+  completed,\n+  onDelete,\n+  onToggle,\n+}) => {\n   return (\n-    <>\n-   <div data-cy=\"Todo\" className=\"todo completed\">\n+    <div data-cy=\"Todo\" className={`todo ${completed ? 'completed' : ''}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n           className=\"todo__status\"\n-          checked\n+          checked={completed}\n+          onChange={onToggle}\n         />\n       </label>\n \n       <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        Completed Todo\n+        {title}\n       </span>\n \n-      {/* Remove button appears only on hover */}\n-      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n+      <button type=\"button\" className=\"todo__remove\" onClick={onDelete} data-cy=\"TodoDelete\">\n         ×\n       </button>\n \n-      {/* overlay will cover the todo while it is being deleted or updated */}\n       <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n         <div className=\"modal-background has-background-white-ter\" />\n         <div className=\"loader\" />\n       </div>\n     </div>\n-\n-    {/* This todo is an active todo */}\n-    <div data-cy=\"Todo\" className=\"todo\">\n-      <label className=\"todo__status-label\">\n-        <input\n-          data-cy=\"TodoStatus\"\n-          type=\"checkbox\"\n-          className=\"todo__status\"\n-        />\n-      </label>\n-\n-      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        Not Completed Todo\n-      </span>\n-      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-        ×\n-      </button>\n-\n-      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-        <div className=\"modal-background has-background-white-ter\" />\n-        <div className=\"loader\" />\n-      </div>\n-    </div>\n-\n-    {/* This todo is being edited */}\n-    <div data-cy=\"Todo\" className=\"todo\">\n-      <label className=\"todo__status-label\">\n-        <input\n-          data-cy=\"TodoStatus\"\n-          type=\"checkbox\"\n-          className=\"todo__status\"\n-        />\n-      </label>\n-\n-      {/* This form is shown instead of the title and remove button */}\n-      <form>\n-        <input\n-          data-cy=\"TodoTitleField\"\n-          type=\"text\"\n-          className=\"todo__title-field\"\n-          placeholder=\"Empty todo will be deleted\"\n-          value=\"Todo is being edited now\"\n-        />\n-      </form>\n-\n-      <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n-        <div className=\"modal-background has-background-white-ter\" />\n-        <div className=\"loader\" />\n-      </div>\n-    </div>\n-\n-    {/* This todo is in loadind state */}\n-    <div data-cy=\"Todo\" className=\"todo\">\n-      <label className=\"todo__status-label\">\n-        <input\n-          data-cy=\"TodoStatus\"\n-          type=\"checkbox\"\n-          className=\"todo__status\"\n-        />\n-      </label>\n-\n-      <span data-cy=\"TodoTitle\" className=\"todo__title\">\n-        Todo is being saved now\n-      </span>\n-\n-      <button type=\"button\" className=\"todo__remove\" data-cy=\"TodoDelete\">\n-        ×\n-      </button>\n-\n-      {/* 'is-active' class puts this modal on top of the todo */}\n-      <div data-cy=\"TodoLoader\" className=\"modal overlay is-active\">\n-        <div className=\"modal-background has-background-white-ter\" />\n-        <div className=\"loader\" />\n-      </div>\n-    </div>\n-    </>\n-  )\n-}\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714396629687,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   onToggle: () => void;\n }\n \n export const Todo: React.FC<Props> = ({\n-  id,\n+  \n   title,\n   completed,\n   onDelete,\n   onToggle,\n"
+                },
+                {
+                    "date": 1714396637425,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   onToggle: () => void;\n }\n \n export const Todo: React.FC<Props> = ({\n-  \n+  id,\n   title,\n   completed,\n   onDelete,\n   onToggle,\n"
+                },
+                {
+                    "date": 1714397975859,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n import React from 'react';\n \n interface Props {\n-  id: number;\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n"
+                },
+                {
+                    "date": 1714397981443,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,11 +6,9 @@\n   onDelete: () => void;\n   onToggle: () => void;\n }\n \n-export const Todo: React.FC<Props> = ({\n-  id,\n-  title,\n+export const Todo: React.FC<Props> = ({  title,\n   completed,\n   onDelete,\n   onToggle,\n }) => {\n"
+                },
+                {
+                    "date": 1714398225796,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,16 @@\n import React from 'react';\n \n+\n interface Props {\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n }\n \n-export const Todo: React.FC<Props> = ({  title,\n+export const Todo: React.FC<Props> = ({\n+  title,\n   completed,\n   onDelete,\n   onToggle,\n }) => {\n@@ -27,9 +29,14 @@\n       <span data-cy=\"TodoTitle\" className=\"todo__title\">\n         {title}\n       </span>\n \n-      <button type=\"button\" className=\"todo__remove\" onClick={onDelete} data-cy=\"TodoDelete\">\n+      <button\n+        type=\"button\"\n+        className=\"todo__remove\"\n+        onClick={onDelete}\n+        data-cy=\"TodoDelete\"\n+      >\n         ×\n       </button>\n \n       <div data-cy=\"TodoLoader\" className=\"modal overlay\">\n"
+                },
+                {
+                    "date": 1714398231696,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n+impport T\n \n-\n interface Props {\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n"
+                },
+                {
+                    "date": 1714398239458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import React from 'react';\n-impport T\n+import { TodoList } from './TodoList';\n+impport TodoList from\n \n interface Props {\n   title: string;\n   completed: boolean;\n"
+                },
+                {
+                    "date": 1714398247065,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n import { TodoList } from './TodoList';\n-impport TodoList from\n+impport {TodoList from './'\n \n interface Props {\n   title: string;\n   completed: boolean;\n"
+                },
+                {
+                    "date": 1714398255083,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n import { TodoList } from './TodoList';\n-impport {TodoList from './'\n+import { TodoList } from './'\n \n interface Props {\n   title: string;\n   completed: boolean;\n"
+                },
+                {
+                    "date": 1714398286344,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,10 @@\n import React from 'react';\n import { TodoList } from './TodoList';\n-import { TodoList } from './'\n \n+\n interface Props {\n+  id\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n"
+                },
+                {
+                    "date": 1714398292056,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { TodoList } from './TodoList';\n \n \n interface Props {\n-  id\n+  id: number;\n   title: string;\n   completed: boolean;\n   onDelete: () => void;\n   onToggle: () => void;\n"
+                },
+                {
+                    "date": 1714398297350,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,8 +10,9 @@\n   onToggle: () => void;\n }\n \n export const Todo: React.FC<Props> = ({\n+  id,\n   title,\n   completed,\n   onDelete,\n   onToggle,\n"
+                },
+                {
+                    "date": 1714398352247,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,5 @@\n import React from 'react';\n-import { TodoList } from './TodoList';\n \n \n interface Props {\n   id: number;\n"
+                },
+                {
+                    "date": 1714398463524,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,6 @@\n import React from 'react';\n \n-\n interface Props {\n   id: number;\n   title: string;\n   completed: boolean;\n@@ -16,9 +15,9 @@\n   onDelete,\n   onToggle,\n }) => {\n   return (\n-    <div data-cy=\"Todo\" className={`todo ${completed ? 'completed' : ''}`}>\n+    <div data-cy=\"Todo\"  className={`todo ${completed ? 'completed' : ''}`}>\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714485675675,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,13 @@\n   onDelete,\n   onToggle,\n }) => {\n   return (\n-    <div data-cy=\"Todo\"  className={`todo ${completed ? 'completed' : ''}`}>\n+    <div\n+      data-cy=\"Todo\"\n+      data-id={id}\n+      className={`todo ${completed ? 'completed' : ''}`}\n+    >\n       <label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n"
+                },
+                {
+                    "date": 1714486389007,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       data-cy=\"Todo\"\n       data-id={id}\n       className={`todo ${completed ? 'completed' : ''}`}\n     >\n-      <label className=\"todo__status-label\">\n+      {/* eslint-disable jsx-a11y/label-has-associated-control */}<label className=\"todo__status-label\">\n         <input\n           data-cy=\"TodoStatus\"\n           type=\"checkbox\"\n           className=\"todo__status\"\n"
+                }
+            ],
+            "date": 1714384924565,
+            "name": "Commit-0",
+            "content": "export \n"
+        }
+    ]
+}
