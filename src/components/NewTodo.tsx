@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 interface NewTodoProps {
   onAddTodo: (title: string) => void;
+  handleEmpty: () => void;
 }
 
-const NewTodo: React.FC<NewTodoProps> = ({ onAddTodo }) => {
+const NewTodo: React.FC<NewTodoProps> = ({ onAddTodo, handleEmpty }) => {
   const [title, setTitle] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -12,6 +13,8 @@ const NewTodo: React.FC<NewTodoProps> = ({ onAddTodo }) => {
     if (title.trim()) {
       onAddTodo(title);
       setTitle('');
+    } else {
+      handleEmpty();
     }
   };
 

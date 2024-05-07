@@ -3,12 +3,14 @@ import { getTodos } from './api/todos';
 import Filter from './components/Filter';
 import TodoList from './components/TodoList';
 import NewTodo from './components/NewTodo';
-import { Todo } from './types/Todo';
+import { Todo, Error } from './types/Todo';
+import { ErrorFile } from './components/ErrorFile';
 
 export const App: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<boolean>(false);
+  const [errorType, setErrorType] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -17,7 +19,8 @@ export const App: React.FC = () => {
 
         setTodos(fetchedTodos);
       } catch (err) {
-        setError('Error loading todos');
+        setError(true);
+        setErrorType('load');
       }
     };
 
@@ -41,6 +44,9 @@ export const App: React.FC = () => {
     const updatedTodos = todos.filter(todo => todo.id !== id);
 
     setTodos(updatedTodos);
+    setError(true);
+
+    setErrorType('delete');
   };
 
   const handleSetFilter = (selected: 'all' | 'active' | 'completed') => {
@@ -55,16 +61,21 @@ export const App: React.FC = () => {
 
   const remainingTodoCount = todos.filter(todo => !todo.completed).length;
 
+  const hideError = () => {
+    setError(false);
+  };
+
+  const handleEmpty = () => {
+    setError(true);
+    setErrorType('empty');
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <NewTodo onAddTodo={handleAddTodo} />
-
-        {todos.length > 0 && (
-          <Filter selectedFilter={filter} onSelectFilter={handleSetFilter} />
-        )}
+        <NewTodo onAddTodo={handleAddTodo} handleEmpty={handleEmpty} />
 
         {todos.length > 0 && (
           <TodoList
@@ -79,11 +90,6 @@ export const App: React.FC = () => {
             data-cy="ErrorNotification"
             className="notification is-danger is-light has-text-weight-normal"
           >
-            <button
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-            />
             {error}
           </div>
         )}
@@ -92,8 +98,14 @@ export const App: React.FC = () => {
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {remainingTodoCount}
-              {remainingTodoCount === 1 ? 'item' : 'items'} left
+              {remainingTodoCount === 1 ? ' item' : ' items'} left
             </span>
+            {todos.length > 0 && (
+              <Filter
+                selectedFilter={filter}
+                onSelectFilter={handleSetFilter}
+              />
+            )}
             <button
               type="button"
               className="todoapp__clear-completed"
@@ -105,6 +117,8 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
+
+      <ErrorFile error={error} errorType={errorType} errorHide={hideError} />
     </div>
   );
 };

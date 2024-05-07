@@ -1,6 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
-import TodoItem from './Todo';
+import TodoItem from './TodoItem';
 
 interface TodoListProps {
   todos: Todo[];
@@ -9,16 +9,22 @@ interface TodoListProps {
 }
 
 const TodoList: React.FC<TodoListProps> = ({ todos, filter, onDeleteTodo }) => {
-  const filteredTodos =
-    filter === 'all'
-      ? todos
-      : filter === 'active'
-        ? todos.filter(todo => !todo.completed)
-        : todos.filter(todo => todo.completed);
+  const filteredTodos = () => {
+    switch (filter) {
+      case 'all':
+        return todos;
+      case 'active':
+        return todos.filter(todo => !todo.completed);
+      case 'completed':
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => (
+      {filteredTodos().map((todo: Todo) => (
         <TodoItem key={todo.id} todo={todo} onDeleteTodo={onDeleteTodo} />
       ))}
     </section>
