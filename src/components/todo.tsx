@@ -115,83 +115,79 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const activeTodos = todos.every((todoItem) => todoItem.completed);
 
   return (
-    <>
+    <div
+      data-cy="Todo"
+      className={cn("todo", {
+        completed: todo.completed,
+      })}
+    >
+      <label className="todo__status-label">
+        <p style={{ display: "none" }}>hidden text</p>
+
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          onChange={() => {
+            onSelected(todo.id);
+            if (allTodosButton || activeTodos) {
+              setAllTodosButton(true);
+            }
+          }}
+        />
+      </label>
+
+      {isEditing ? (
+        <form>
+          <input
+            ref={inputField}
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value={todoTitle}
+            onChange={(event) => setTodoTitle(event.target.value)}
+            onKeyDown={handleEnterKey}
+            onDoubleClick={() => setIsEditing(!isEditing)}
+            onBlur={handleBlur}
+            onKeyUp={handleEscapeKey}
+          />
+        </form>
+      ) : (
+        <>
+          <span
+            data-cy="TodoTitle"
+            className="todo__title"
+            onDoubleClick={() => setIsEditing(!isEditing)}
+            onClick={() => onSelected(todo.id)}
+          >
+            {todoTitle}
+          </span>
+
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => {
+              onDelete(todo.id);
+              setSelectedtodoId(todo.id);
+            }}
+          >
+            ×
+          </button>
+        </>
+      )}
+
       <div
-        data-cy="Todo"
-        className={cn("todo", {
-          completed: todo.completed,
+        data-cy="TodoLoader"
+        className={cn("modal", "overlay", {
+          "is-active": selectedtodoId === todo.id,
         })}
       >
-        <label className="todo__status-label">
-          <p style={{display: 'none'}}>hidden text</p>
-
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            checked={todo.completed}
-            onChange={() => {
-              onSelected(todo.id);
-              if (allTodosButton || activeTodos) {
-                setAllTodosButton(true);
-              }
-            }}
-          />
-        </label>
-
-        {isEditing ? (
-          <>
-            <form>
-              <input
-                ref={inputField}
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value={todoTitle}
-                onChange={(event) => setTodoTitle(event.target.value)}
-                onKeyDown={handleEnterKey}
-                onDoubleClick={() => setIsEditing(!isEditing)}
-                onBlur={handleBlur}
-                onKeyUp={handleEscapeKey}
-              />
-            </form>
-          </>
-        ) : (
-          <>
-            <span
-              data-cy="TodoTitle"
-              className="todo__title"
-              onDoubleClick={() => setIsEditing(!isEditing)}
-              onClick={() => onSelected(todo.id)}
-            >
-              {todoTitle}
-            </span>
-
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDelete"
-              onClick={() => {
-                onDelete(todo.id);
-                setSelectedtodoId(todo.id);
-              }}
-            >
-              ×
-            </button>
-          </>
-        )}
-
-        <div
-          data-cy="TodoLoader"
-          className={cn("modal", "overlay", {
-            "is-active": selectedtodoId === todo.id,
-          })}
-        >
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
+        <div className="modal-background has-background-white-ter" />
+        <div className="loader" />
       </div>
-    </>
+    </div>
   );
 };
