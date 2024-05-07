@@ -29,9 +29,11 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         {todo.title}
       </span>
 
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
-        x
-      </button>
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+      ></button>
 
       <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
