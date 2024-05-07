@@ -49,8 +49,8 @@ export const App: React.FC = () => {
       .then(Post => {
         setTodos(prevTodos =>
           prevTodos
-            ? prevTodos.map(todo =>
-              todo.id === newTempId ? { ...Post } : todo, // eslint-disable-line prettier/prettier
+            ? prevTodos.map(
+              todo => (todo.id === newTempId ? { ...Post } : todo), // eslint-disable-line prettier/prettier
             ) // eslint-disable-line prettier/prettier
             : [],
         );
@@ -88,7 +88,7 @@ export const App: React.FC = () => {
         <Main todos={filteredTodos} loader={loader} tempId={tempId} />
         {todos.length > 0 && (
           <Footer
-            todos={filteredTodos}
+            todos={todos}
             setTodos={setTodos}
             filtered={filtered}
             setFiltered={setFiltered}
