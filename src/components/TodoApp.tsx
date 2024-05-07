@@ -10,16 +10,15 @@ import { UserWarning } from '../UserWarning';
 import { USER_ID, getTodos } from '../api/todos';
 import { Filter } from '../types/Filter';
 import { TodoList } from './TodoList';
-import { Header } from './Header';
-import { SetTodosContext, Context } from './Context';
+import { TodosContext } from './Context';
 import { Footer } from './Footer';
+import { Header } from './Header';
 
 export const TodoApp: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState('All');
 
-  const todos = useContext(Context);
-  const setTodos = useContext(SetTodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const todosToShow = useMemo(() => {
     return todos.filter(todo => {
@@ -82,8 +81,6 @@ export const TodoApp: React.FC = () => {
           </>
         )}
       </div>
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={cn(
@@ -101,7 +98,6 @@ export const TodoApp: React.FC = () => {
           aria-label="hide error"
           onClick={handleHideErrorMessage}
         />
-        {/* show only one message at a time */}
         {errorMessage}
       </div>
     </div>

@@ -1,10 +1,15 @@
 import { createContext, useState } from 'react';
 import { Todo } from '../types/Todo';
 
-type SetTodosContextType = React.Dispatch<React.SetStateAction<Todo[]>>;
+export type TodosContextType = {
+  todos: Todo[];
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+};
 
-export const Context = createContext<Todo[]>([]);
-export const SetTodosContext = createContext<SetTodosContextType>(() => []);
+export const TodosContext = createContext<TodosContextType>({
+  todos: [],
+  setTodos: () => {},
+});
 
 type Props = {
   children: React.ReactNode;
@@ -14,10 +19,8 @@ export const TodosContextProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   return (
-    <Context.Provider value={todos}>
-      <SetTodosContext.Provider value={setTodos}>
-        {children}
-      </SetTodosContext.Provider>
-    </Context.Provider>
+    <TodosContext.Provider value={{ todos, setTodos }}>
+      {children}
+    </TodosContext.Provider>
   );
 };

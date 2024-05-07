@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { Context, SetTodosContext } from './Context';
+import { TodosContext } from './Context';
 import { Todo } from '../types/Todo';
 import { USER_ID, addTodo, patchTodo } from '../api/todos';
 
@@ -10,8 +10,7 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ setErrorMessage }) => {
   const [title, setTitle] = useState('');
-  const todos = useContext(Context);
-  const setTodos = useContext(SetTodosContext);
+  const { todos, setTodos } = useContext(TodosContext);
 
   const toggledAllCompleted = useMemo(() => {
     return !todos.some(todo => todo.completed === false);
@@ -63,7 +62,6 @@ export const Header: React.FC<Props> = ({ setErrorMessage }) => {
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {todos.length !== 0 && (
         <button
           type="button"
@@ -76,7 +74,6 @@ export const Header: React.FC<Props> = ({ setErrorMessage }) => {
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form onSubmit={submitTodo}>
         <input
           data-cy="NewTodoField"

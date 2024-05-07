@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useContext, useMemo } from 'react';
-import { Context } from './Context';
+import { TodosContext } from './Context';
 import { Filter } from '../types/Filter';
 
 type Props = {
@@ -12,7 +12,7 @@ export const Footer: React.FC<Props> = ({
   filter: filter,
   handleFilterClick,
 }) => {
-  const todos = useContext(Context);
+  const { todos } = useContext(TodosContext);
 
   const itemsLeftAmount = useMemo(() => {
     return todos.reduce((res, todo) => {
@@ -25,7 +25,6 @@ export const Footer: React.FC<Props> = ({
       <span className="todo-count" data-cy="TodosCounter">
         {`${itemsLeftAmount} item${itemsLeftAmount === 1 ? '' : 's'} left`}
       </span>
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -59,7 +58,6 @@ export const Footer: React.FC<Props> = ({
           Completed
         </a>
       </nav>
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
