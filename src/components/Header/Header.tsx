@@ -50,6 +50,11 @@ export const Header: React.FC<Props> = ({ isEmpty }) => {
     }
   };
 
+  const handleToggleAll = () => {
+    setActiveToggle(!activeToggle);
+    toggleAll();
+  };
+
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
@@ -60,10 +65,7 @@ export const Header: React.FC<Props> = ({ isEmpty }) => {
             active: isAllTodoCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={() => {
-            setActiveToggle(!activeToggle);
-            toggleAll();
-          }}
+          onClick={() => handleToggleAll}
         />
       )}
 

@@ -20,13 +20,13 @@ export const Footer: React.FC<Props> = () => {
     setStateClearBtn,
   } = useContext(TodosContext);
 
-  if (todos.find(todo => todo.completed === true)) {
+  if (todos.find(todo => !todo.completed)) {
     setStateClearBtn(false);
   } else {
     setStateClearBtn(true);
   }
 
-  const count = todos.filter(t => t.completed === false).length;
+  const count = todos.filter(todo => todo.completed === false).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">

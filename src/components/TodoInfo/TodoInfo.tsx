@@ -9,10 +9,12 @@ type Props = {
 };
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
+  const { completed, title } = todo;
+
   const { updateTodo, deleteTodo, setIsSubmitting } = useContext(TodosContext);
 
   const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState(todo.title);
+  const [value, setValue] = useState(title);
 
   const inputElement = document.getElementById('NewTodoField');
 
@@ -46,7 +48,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
     <div
       data-cy="Todo"
       className={classNames('todo', {
-        completed: todo.completed,
+        completed: completed,
       })}
     >
       <label className="todo__status-label">
@@ -55,7 +57,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           type="checkbox"
           className="todo__status"
           onClick={togelStatement}
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
@@ -65,7 +67,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           className="todo__title"
           onDoubleClick={() => setEditing(true)}
         >
-          {todo.title}
+          {title}
         </span>
       ) : (
         <form onSubmit={editingTodo}>
@@ -75,7 +77,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
-            defaultValue={todo.title}
+            defaultValue={title}
             onChange={event => setValue(event.target.value)}
             onBlur={editingTodo}
             onKeyDown={event => {
