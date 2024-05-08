@@ -5,7 +5,8 @@ import { TodoType } from '../types/Todo';
 
 type Props = {
   todos: TodoType[];
-  addTodo: (newTodoTitle: string) => void;
+  addTodo: (newTodoTitle: string) => Promise<boolean>;
+  isInputDisabled: boolean;
 };
 
 export const Header: FC<Props> = ({ todos, addTodo }) => {

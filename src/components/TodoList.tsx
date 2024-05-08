@@ -6,6 +6,8 @@ import { TodoItem } from '../components/TodoItem';
 
 type Props = {
   todos: Todo[];
+  deleteTodo: (todoId: number) => Promise<boolean>;
+  newTodo: Todo | null;
 };
 export const TodoList: FC<Props> = ({ todos }) => {
   return (

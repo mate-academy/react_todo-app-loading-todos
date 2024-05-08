@@ -1,56 +1,55 @@
-import { FC, useEffect } from 'react';
+import { FC, useMemo } from 'react';
 
-import { useTimeout } from './useTimeout';
 import React from 'react';
+import { ErrorTypes } from '../types/Error';
 
-export const errors = {
-  load: {
-    message: 'Unable to load todos',
-  },
-  add: {
-    message: 'Unable to add todo',
-  },
-  delete: {
-    message: 'Unable to delete todo',
-  },
-  update: {
-    message: 'Unable to update todo',
-  },
-  empty: {
-    message: 'Title cannot be empty',
-  },
+const errorMessages = {
+  todoLoad: 'Unable to load todos',
+  titleLength: 'Title should not be empty',
+  addTodo: 'Unable to add todo',
+  deleteTodo: 'Unable to delete todo',
+  updateTodo: 'Unable to update todo',
 };
 
-export type ErrorType = keyof typeof errors;
-
 type Props = {
-  errorType: ErrorType | null;
-  handleClosingError: () => void;
+  errorCases: {};
+  updateErrorCases: (value: boolean, error?: keyof ErrorTypes | 'all') => void;
 };
 
 export const ErrorNotification: FC<Props> = ({
-  errorType,
-  handleClosingError,
+  errorCases,
+  updateErrorCases,
 }) => {
-  const [startTimeout] = useTimeout(handleClosingError, 3000);
+  const detectFailCase = useMemo(() => {
+    const fail = Object.entries(errorCases).filter(fCase => fCase[1]);
 
-  useEffect(() => {
-    startTimeout();
-  }, [errorType, startTimeout]);
-  const message = errorType ? errors[errorType].message : '';
+    if (fail.length === 0) {
+      return null;
+    } else {
+      setTimeout(() => {
+        updateErrorCases(false, fail[0][0] as keyof typeof errorMessages);
+      }, 3000);
+
+      return errorMessages[fail[0][0] as keyof typeof errorMessages];
+    }
+  }, [errorCases, updateErrorCases]);
+
+  const handleHideError = () => {
+    updateErrorCases(false);
+  };
 
   return (
     <div
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${!message ? 'hidden' : ''}`}
+      className={`notification is-danger is-light has-text-weight-normal ${!detectFailCase ? 'hidden' : ''}`}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={handleClosingError}
+        onClick={handleHideError}
       />
-      {message}
+      {detectFailCase}
     </div>
   );
 };

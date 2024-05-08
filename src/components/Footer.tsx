@@ -8,6 +8,7 @@ type Props = {
   todos: Todo[];
   filter: Filter;
   setFilter: (filter: Filter) => void;
+  deleteFinishedTodos: () => void;
 };
 export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {
   const counter = useMemo(

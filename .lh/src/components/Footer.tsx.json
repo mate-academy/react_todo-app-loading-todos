@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 4,
+            "activePatchIndex": 5,
             "patches": [
                 {
                     "date": 1714483400862,
@@ -24,6 +24,10 @@
                 {
                     "date": 1714987982488,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,8 @@\n       <span className=\"todo-count\" data-cy=\"TodosCounter\">\n         {counter} items left\n       </span>\n \n-      {/* Active link should have the 'selected' class */}\n       <nav className=\"filter\" data-cy=\"Filter\">\n         <a\n           href=\"#/\"\n           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}\n"
+                },
+                {
+                    "date": 1715161540259,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,8 +7,9 @@\n type Props = {\n   todos: Todo[];\n   filter: Filter;\n   setFilter: (filter: Filter) => void;\n+  deleteFinishedTodos: () => void;\n };\n export const Footer: FC<Props> = ({ todos, filter, setFilter }) => {\n   const counter = useMemo(\n     () => todos.filter(todo => !todo.completed).length,\n"
                 }
             ],
             "date": 1714483400862,

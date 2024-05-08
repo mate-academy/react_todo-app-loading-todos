@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/types/Error.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1715161359668,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1715161359668,
+            "name": "Commit-0",
+            "content": "export type ErrorTypes = {\n  todoLoad: boolean;\n  titleLength: boolean;\n  addTodo: boolean;\n  deleteTodo: boolean;\n  updateTodo: boolean;\n};\n"
+        }
+    ]
+}

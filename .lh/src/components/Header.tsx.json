@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1714483392186,
@@ -28,6 +28,10 @@
                 {
                     "date": 1714998627242,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n       <form onSubmit={handleNewTodoForm}>\n         <input\n           data-cy=\"NewTodoField\"\n           type=\"text\"\n-          className=\"todoapp__new-todos\"\n+          className=\"todoapp__new-todo\"\n           placeholder=\"What needs to be done?\"\n           value={newTodoTitle}\n           onChange={e => {\n             setNewTodoTitle(e.target.value);\n"
+                },
+                {
+                    "date": 1715161558613,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,10 @@\n import { TodoType } from '../types/Todo';\n \n type Props = {\n   todos: TodoType[];\n-  addTodo: (newTodoTitle: string) => void;\n+  addTodo: (newTodoTitle: string) => Promise<boolean>;\n+  isInputDisabled: boolean;\n };\n \n export const Header: FC<Props> = ({ todos, addTodo }) => {\n   const [newTodoTitle, setNewTodoTitle] = useState<string>('');\n"
                 }
             ],
             "date": 1714483392186,
