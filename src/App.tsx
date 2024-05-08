@@ -12,6 +12,10 @@ export const App: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [errorType, setErrorType] = useState<Error | null>(null);
 
+  const hideError = () => {
+    setError(false);
+  };
+
   useEffect(() => {
     const fetchTodos = async () => {
       try {
@@ -45,8 +49,10 @@ export const App: React.FC = () => {
 
     setTodos(updatedTodos);
     setError(true);
-
     setErrorType('delete');
+    setTimeout(() => {
+      hideError();
+    }, 3000);
   };
 
   const handleSetFilter = (selected: 'all' | 'active' | 'completed') => {
@@ -61,13 +67,12 @@ export const App: React.FC = () => {
 
   const remainingTodoCount = todos.filter(todo => !todo.completed).length;
 
-  const hideError = () => {
-    setError(false);
-  };
-
   const handleEmpty = () => {
     setError(true);
     setErrorType('empty');
+    setTimeout(() => {
+      hideError();
+    }, 3000);
   };
 
   return (
@@ -83,15 +88,6 @@ export const App: React.FC = () => {
             filter={filter}
             onDeleteTodo={handleDeleteTodo}
           />
-        )}
-
-        {error && (
-          <div
-            data-cy="ErrorNotification"
-            className="notification is-danger is-light has-text-weight-normal"
-          >
-            {error}
-          </div>
         )}
 
         {todos.length > 0 && (
@@ -118,7 +114,9 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorFile error={error} errorType={errorType} errorHide={hideError} />
+      {error && (
+        <ErrorFile error={error} errorType={errorType} errorHide={hideError} />
+      )}
     </div>
   );
 };
