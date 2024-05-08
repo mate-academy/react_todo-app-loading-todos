@@ -1,0 +1,42 @@
+{
+    "sourceFile": "src/components/Header.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 6,
+            "patches": [
+                {
+                    "date": 1714483392186,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714483603679,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, useEffect, useRef, useState } from 'react';\n-import React = require('react');\n+const React = require('react');\n \n import { TodoType } from '../types/Todo';\n \n type Props = {\n"
+                },
+                {
+                    "date": 1714484239862,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { FC, useEffect, useRef, useState } from 'react';\n-const React = require('react');\n+import React = require('react');\n \n import { TodoType } from '../types/Todo';\n \n type Props = {\n"
+                },
+                {
+                    "date": 1714485957486,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,54 @@\n+import { FC, useEffect, useRef, useState } from 'react';\n+import React from 'react';\n+\n+import { TodoType } from '../types/Todo';\n+\n+type Props = {\n+  todos: TodoType[];\n+  addTodo: (newTodoTitle: string) => void;\n+};\n+\n+export const Header: FC<Props> = ({ todos, addTodo }) => {\n+  const [newTodoTitle, setNewTodoTitle] = useState<string>('');\n+  const newTodoInputRef = useRef<HTMLInputElement>(null);\n+\n+  useEffect(() => {\n+    if (newTodoInputRef.current) {\n+      newTodoInputRef.current.focus();\n+    }\n+  }, []);\n+  const handleNewTodoForm = (e: React.FormEvent) => {\n+    e.preventDefault();\n+    addTodo(newTodoTitle);\n+    setNewTodoTitle('');\n+  };\n+\n+  return (\n+    <header className=\"todoapp__header\">\n+      {/* this button should have `active` class only if all todos are completed */}\n+      <button\n+        type=\"button\"\n+        className={\n+          'todoapp__toggle-all ' +\n+          (todos.every(({ completed }) => completed) ? 'active' : '')\n+        }\n+        data-cy=\"ToggleAllButton\"\n+      />\n+\n+      {/* Add a todos on form submit */}\n+      <form onSubmit={handleNewTodoForm}>\n+        <input\n+          data-cy=\"NewTodoField\"\n+          type=\"text\"\n+          className=\"todoapp__new-todos\"\n+          placeholder=\"What needs to be done?\"\n+          value={newTodoTitle}\n+          onChange={e => {\n+            setNewTodoTitle(e.target.value);\n+          }}\n+          autoFocus\n+        />\n+      </form>\n+    </header>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714987675795,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,8 @@\n   };\n \n   return (\n     <header className=\"todoapp__header\">\n-      {/* this button should have `active` class only if all todos are completed */}\n       <button\n         type=\"button\"\n         className={\n           'todoapp__toggle-all ' +\n"
+                },
+                {
+                    "date": 1714998627242,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n       <form onSubmit={handleNewTodoForm}>\n         <input\n           data-cy=\"NewTodoField\"\n           type=\"text\"\n-          className=\"todoapp__new-todos\"\n+          className=\"todoapp__new-todo\"\n           placeholder=\"What needs to be done?\"\n           value={newTodoTitle}\n           onChange={e => {\n             setNewTodoTitle(e.target.value);\n"
+                },
+                {
+                    "date": 1715161558613,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,10 @@\n import { TodoType } from '../types/Todo';\n \n type Props = {\n   todos: TodoType[];\n-  addTodo: (newTodoTitle: string) => void;\n+  addTodo: (newTodoTitle: string) => Promise<boolean>;\n+  isInputDisabled: boolean;\n };\n \n export const Header: FC<Props> = ({ todos, addTodo }) => {\n   const [newTodoTitle, setNewTodoTitle] = useState<string>('');\n"
+                }
+            ],
+            "date": 1714483392186,
+            "name": "Commit-0",
+            "content": "import { FC, useEffect, useRef, useState } from 'react';\nimport React = require('react');\n\nimport { TodoType } from '../types/Todo';\n\ntype Props = {\n  todos: TodoType[];\n  addTodo: (newTodoTitle: string) => void;\n};\n\nexport const Header: FC<Props> = ({ todos, addTodo }) => {\n  const [newTodoTitle, setNewTodoTitle] = useState<string>('');\n  const newTodoInputRef = useRef<HTMLInputElement>(null);\n\n  useEffect(() => {\n    if (newTodoInputRef.current) {\n      newTodoInputRef.current.focus();\n    }\n  }, []);\n  const handleNewTodoForm = (e: React.FormEvent) => {\n    e.preventDefault();\n    addTodo(newTodoTitle);\n    setNewTodoTitle('');\n  };\n\n  return (\n    <header className=\"todoapp__header\">\n      {/* this button should have `active` class only if all todos are completed */}\n      <button\n        type=\"button\"\n        className={\n          'todoapp__toggle-all ' +\n          (todos.every(({ completed }) => completed) ? 'active' : '')\n        }\n        data-cy=\"ToggleAllButton\"\n      />\n\n      {/* Add a todos on form submit */}\n      <form onSubmit={handleNewTodoForm}>\n        <input\n          data-cy=\"NewTodoField\"\n          type=\"text\"\n          className=\"todoapp__new-todos\"\n          placeholder=\"What needs to be done?\"\n          value={newTodoTitle}\n          onChange={e => {\n            setNewTodoTitle(e.target.value);\n          }}\n          autoFocus\n        />\n      </form>\n    </header>\n  );\n};\n"
+        }
+    ]
+}
