@@ -26,6 +26,14 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const handleStatusChange = (newStatus: Status) => {
+    setStatus(newStatus);
+  };
+
+  const handleSetError = (errorMessage: string) => {
+    setError(errorMessage);
+  };
+
   const visibleTodos = getVisibleTodos(todos, status);
 
   if (!todosApi.USER_ID) {
@@ -42,12 +50,16 @@ export const App: React.FC = () => {
         {!error && !!todos.length && (
           <>
             <TodoList visibleTodos={visibleTodos} />
-            <Footer todos={todos} status={status} setStatus={setStatus} />
+            <Footer
+              todos={todos}
+              status={status}
+              setStatus={handleStatusChange}
+            />
           </>
         )}
       </div>
 
-      <ErrorNotification error={error} setError={setError} />
+      <ErrorNotification error={error} setError={handleSetError} />
     </div>
   );
 };
