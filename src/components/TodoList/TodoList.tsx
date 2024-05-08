@@ -1,9 +1,10 @@
 import { useContext, FC } from 'react';
 import { StateContext } from '../../store/todoReducer';
 import { TodoItem } from '../Todo/TodoItem';
-import { Filter } from '../../types/state';
+// import { Filter } from '../../types/state';
 import { Todo } from '../../types/Todo';
 import { TempTodo } from '../TempTodo';
+import { filterTodos } from '../../helpers/filterTodos';
 
 type Props = {
   onError: (message: string) => void;
@@ -20,23 +21,7 @@ export const TodoList: FC<Props> = ({
 }) => {
   const { todos, filter } = useContext(StateContext);
 
-  let filteredTodos;
-
-  switch (filter) {
-    case Filter.active: {
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
-    }
-
-    case Filter.completed: {
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
-    }
-
-    default:
-      filteredTodos = todos;
-      break;
-  }
+  const filteredTodos = filterTodos(todos, filter);
 
   return (
     <>

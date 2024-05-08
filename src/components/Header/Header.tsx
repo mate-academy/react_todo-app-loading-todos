@@ -45,13 +45,14 @@ export const Header: FC<Props> = ({ onError, setTempTodo }) => {
     createTodo(newTodo)
       .then(response => {
         dispatch({ type: Action.addTodo, payload: response });
-        setTempTodo(null);
       })
       .catch(() => {
         onError('Unable to add a todo');
-        setTempTodo(null);
       })
-      .finally(() => setTodoTitle(''));
+      .finally(() => {
+        setTodoTitle('');
+        setTempTodo(null);
+      });
   };
 
   const handleStatusChange = () => {
@@ -81,7 +82,7 @@ export const Header: FC<Props> = ({ onError, setTempTodo }) => {
         />
       )}
 
-      <form onSubmit={event => handleSubmit(event)}>
+      <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"

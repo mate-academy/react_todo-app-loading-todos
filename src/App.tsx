@@ -21,9 +21,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(response => {
-        response.forEach(todo => {
-          dispatch({ type: Action.addTodo, payload: todo });
-        });
+        dispatch({ type: Action.initialTodo, payload: response });
       })
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);

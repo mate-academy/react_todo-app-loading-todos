@@ -5,6 +5,13 @@ import { Filter, State } from '../types/state';
 
 const reducer = (state: State, action: Actions) => {
   switch (action.type) {
+    case Action.initialTodo: {
+      return {
+        ...state,
+        todos: action.payload,
+      };
+    }
+
     case Action.addTodo: {
       return {
         ...state,

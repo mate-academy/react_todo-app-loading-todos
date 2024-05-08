@@ -23,10 +23,8 @@ export const TodoItem: FC<Props> = ({
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
-    if (updateMode) {
-      if (newTitleRef.current) {
-        newTitleRef.current.focus();
-      }
+    if (updateMode && newTitleRef.current) {
+      newTitleRef.current.focus();
     }
   }, [updateMode]);
 
@@ -54,6 +52,8 @@ export const TodoItem: FC<Props> = ({
         type: Action.deleteTodo,
         payload: todo.id,
       });
+
+      return;
     }
 
     const copyTodo = { ...todo };
@@ -100,6 +100,13 @@ export const TodoItem: FC<Props> = ({
       });
   };
 
+  const handleEscape = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setUpdateMode(false);
+      setNewTitle(todo.title);
+    }
+  };
+
   return (
     <li key={todo.id}>
       <div data-cy="Todo" className={`todo ${todo.completed && 'completed'}`}>
@@ -123,12 +130,7 @@ export const TodoItem: FC<Props> = ({
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
                 value={newTitle}
-                onKeyDown={event => {
-                  if (event.key === 'Escape') {
-                    setUpdateMode(false);
-                    setNewTitle(todo.title);
-                  }
-                }}
+                onKeyDown={handleEscape}
                 onChange={event => setNewTitle(event.target.value)}
                 onBlur={() => saveNewTitle()}
               />
