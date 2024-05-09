@@ -1,35 +1,55 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 import * as todosService from './api/todos';
 
-const todosFromServer = todosService.getTodos();
-const ERROR_CLASSNAMES =
-  'notification is-danger is-light has-text-weight-normal';
+// const ERROR_CLASSNAMES =
+//   'notification is-danger is-light has-text-weight-normal';
+
+const filterFunction = (todos: Todo[], chosenFilter: TodoStatus) => {
+
+  switch (chosenFilter) {
+    case TodoStatus.active:
+      return todos.filter(todo => !todo.completed);
+    case TodoStatus.completed:
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
+  }
+
+}
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterType, setFilterType] = useState('all');
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [filterType, setFilterType] = useState(TodoStatus.all);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [filtredTodos, setFiltredTodos] = useState<Todo[]>([])
 
-  const itemsLeft = todos.filter(todo => !todo.completed);
+  const itemsLeft = todosFromServer.filter(todo => !todo.completed);
 
   useEffect(() => {
-    todosFromServer
-      .then(setTodos)
+    todosService.getTodos()
+      .then(todos => setTodosFromServer(todos))
       .catch(() => setErrorMessage('Unable to load todos'));
-  }, [todos]);
+  }, []);
+
+  useEffect(
+    () => setFiltredTodos(() => filterFunction(todosFromServer, filterType)),
+    [todosFromServer, filterType]
+  );
 
   if (errorMessage) {
     setTimeout(() => setErrorMessage(null), 3000);
-  }
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
-  }
+  };
 
   return (
     <div className="todoapp">
@@ -57,17 +77,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
-          {todos
-            .filter(todo => {
-              switch (filterType) {
-                case 'active':
-                  return !todo.completed;
-                case 'completed':
-                  return todo.completed;
-                default:
-                  return todo;
-              }
-            })
+          {filtredTodos
             .map(todo => (
               <div
                 data-cy="Todo"
@@ -106,7 +116,7 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos "filter__link selected"*/}
-        {todos.length > 0 && (
+        {todosFromServer.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {itemsLeft.length} items left
@@ -116,39 +126,33 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={
-                  filterType === 'all'
-                    ? 'filter__link selected'
-                    : 'filter__link'
-                }
+                className={classNames('filter__link', {
+                  'selected': TodoStatus.all === filterType
+                })}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilterType('all')}
+                onClick={() => setFilterType(TodoStatus.all)}
               >
                 All
               </a>
 
               <a
                 href="#/active"
-                className={
-                  filterType === 'active'
-                    ? 'filter__link selected'
-                    : 'filter__link'
-                }
+                className={classNames('filter__link', {
+                  'selected': TodoStatus.active === filterType
+                })}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilterType('active')}
+                onClick={() => setFilterType(TodoStatus.active)}
               >
                 Active
               </a>
 
               <a
                 href="#/completed"
-                className={
-                  filterType === 'completed'
-                    ? 'filter__link selected'
-                    : 'filter__link'
-                }
+                className={classNames('filter__link', {
+                  'selected': TodoStatus.completed === filterType
+                })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilterType('completed')}
+                onClick={() => setFilterType(TodoStatus.completed)}
               >
                 Completed
               </a>
@@ -170,9 +174,9 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={
-          errorMessage ? ERROR_CLASSNAMES : `${ERROR_CLASSNAMES} hidden`
-        }
+        className={classNames('notification is-danger is-light has-text-weight-normal', {
+          'hidden': !errorMessage
+        })}
       >
         <button
           data-cy="HideErrorButton"
