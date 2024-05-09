@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { USER_ID } from '../api/todos';
 import classNames from 'classnames';
@@ -13,6 +13,14 @@ export const Header: React.FC<Props> = ({ todos, onAdd }) => {
   const [isAllCompleted, setIsAllCompleted] = useState(() =>
     todos.every(todo => todo.completed),
   );
+
+  useEffect(() => {
+    if (todos.every(todo => todo.completed)) {
+      setIsAllCompleted(false);
+    } else {
+      setIsAllCompleted(true);
+    }
+  }, [todos]);
 
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
