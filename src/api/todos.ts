@@ -8,9 +8,9 @@ export const filterByStatus = async (status: string | boolean) => {
     let response = null;
 
     if (status === 'all') {
-      response = await client.get<typeTodo[]>(`/todos`);
+      response = await client.get<typeTodo[]>(`/todos?userId=${USER_ID}`);
     } else {
-      response = await client.get<typeTodo[]>(`/todos?completed=${status}`);
+      response = await client.get<typeTodo[]>(`/todos?userId=${USER_ID}&completed=${status}`);
     }
 
     return response;
