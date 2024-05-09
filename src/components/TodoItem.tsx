@@ -86,7 +86,10 @@ export const TodoItem: React.FC<Props> = ({
             placeholder="Empty todo will be deleted"
             value={editValue}
             onChange={event => setEditValue(event.target.value)}
-            onBlur={() => onSave(todo.id)}
+            onBlur={() => {
+              onSave(todo.id);
+              setIsEditing(false);
+            }}
             onKeyUp={handleEdit}
             ref={editRef}
           />

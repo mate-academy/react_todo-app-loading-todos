@@ -35,16 +35,15 @@ export const Footer: React.FC<Props> = ({
 
       <TodoFilter status={status} setStatus={setStatus} />
 
-      {todos.some(todo => todo.completed) && (
-        <button
-          type="button"
-          className="todoapp__clear-completed"
-          data-cy="ClearCompletedButton"
-          onClick={clearCompleted}
-        >
-          Clear completed
-        </button>
-      )}
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+        onClick={clearCompleted}
+        disabled={!todos.some(todo => todo.completed)}
+      >
+        Clear completed
+      </button>
     </footer>
   );
 };
