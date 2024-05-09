@@ -1,16 +1,19 @@
-import { typeTodo } from '../types/Todo';
+import { FilterType } from '../types/FilterType';
+import { TypeTodo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
 export const USER_ID = 584;
 
-export const filterByStatus = async (status: string | boolean) => {
+export const filterByStatus = async (status: FilterType | boolean) => {
   try {
     let response = null;
 
-    if (status === 'all') {
-      response = await client.get<typeTodo[]>(`/todos?userId=${USER_ID}`);
+    if (status === FilterType.All) {
+      response = await client.get<TypeTodo []>(`/todos?userId=${USER_ID}`);
     } else {
-      response = await client.get<typeTodo[]>(`/todos?userId=${USER_ID}&completed=${status}`);
+      response = await client.get<TypeTodo[]>(
+        `/todos?userId=${USER_ID}&completed=${status === FilterType.Active ? false : true}`
+      );
     }
 
     return response;

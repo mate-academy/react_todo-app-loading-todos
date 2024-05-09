@@ -1,9 +1,9 @@
 import React from 'react';
-import { typeTodo } from '../../types/Todo';
+import { TypeTodo } from '../../types/Todo';
 import classNames from 'classnames';
 
 interface Props {
-  todo: typeTodo,
+  todo: TypeTodo,
 }
 
 export const Todo: React.FC<Props> = ({ todo }) => {
@@ -16,12 +16,13 @@ export const Todo: React.FC<Props> = ({ todo }) => {
         "todo",
         { "completed": completed, }
       )}>
-      <label className="todo__status-label" htmlFor="todoCheckbox">
+      <label className="todo__status-label" htmlFor={`todo${todo.id}`}>
         <input
-          id="todoCheckbox" // Add an id to the input element
+          id={`todo${todo.id}`}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          checked={todo.completed}
         />
       </label>
 

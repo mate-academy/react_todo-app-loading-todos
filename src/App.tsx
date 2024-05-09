@@ -1,42 +1,57 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
+// App.tsx
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, filterByStatus } from './api/todos';
-import { typeTodo } from './types/Todo';
-import { Todo } from './components/Todo/Todo';
-import { Loader } from './components/Loader/Loader';
+import { TypeTodo } from './types/Todo';
 import classNames from 'classnames';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterType, setFilterType] = useState('all');
-  const [todos, setTodos] = useState<typeTodo[]>([]);
+  const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
+  const [todos, setTodos] = useState<TypeTodo[]>([]);
 
-  const filterStatus = (filter: string) => {
-    let status: string | boolean = '';
-
-    setFilterType(filter);
-
-    if (filter === 'all') {
-      status = 'all';
-    } else if (filter === 'active') {
-      status = false;
-    } else {
-      status = true;
-    }
-
+  const filterStatus = (type: FilterType) => {
+    setFilterType(type);
     setIsLoading(true);
-    filterByStatus(status)
-      .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => setIsLoading(false));
+
+    filterByStatus(type)
+      .then(response => {
+        setTodos(response);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
-    filterStatus('all');
-  }, []);
+    let timeoutId: NodeJS.Timeout;
+
+    const clearErrorMessage = () => {
+      timeoutId = setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    };
+
+    setIsLoading(true);
+    filterByStatus(filterType)
+      .then(response => {
+        setTodos(response);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+        clearErrorMessage();
+      });
+
+    return () => clearTimeout(timeoutId);
+  }, [filterType]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -47,88 +62,17 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+        <Header />
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
-        <section className="todoapp__main" data-cy="TodoList">
-          {isLoading
-            ? <Loader />
-            : (
-              todos.map(todo => (
-                <Todo key={todo.id} todo={todo} />
-              ))
-            )
-          }
-        </section>
+        <TodoList isLoading={isLoading} todos={todos} />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              3 items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={`filter__link ${
-                  'all' === filterType ? 'selected' : ''
-                }`}
-                data-cy="FilterLinkAll"
-                onClick={() => filterStatus('all')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={`filter__link ${
-                  'active' === filterType ? 'selected' : ''
-                }`}
-                data-cy="FilterLinkActive"
-                onClick={() => filterStatus('active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={`filter__link ${
-                  'completed' === filterType ? 'selected' : ''
-                }`}
-                data-cy="FilterLinkCompleted"
-                onClick={() => filterStatus('completed')}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            filterStatus={filterStatus}
+            filterType={filterType}
+            todos={todos}
+          />
         )}
       </div>
 
@@ -146,14 +90,6 @@ export const App: React.FC = () => {
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {/* show only one message at a time */}
         {errorMessage}
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );

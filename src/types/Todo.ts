@@ -1,4 +1,4 @@
-export interface typeTodo {
+export interface TypeTodo {
   id: number;
   userId: number;
   title: string;
