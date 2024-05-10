@@ -4,13 +4,13 @@ import { TypeTodo } from '../../types/Todo';
 import { FilterType } from '../../types/FilterType';
 
 interface Props {
-  filterStatus: (type: FilterType) => void,
+  setFilterType: (type: FilterType) => void,
   filterType: FilterType,
   todos: TypeTodo[],
 };
 
 export const Footer: React.FC<Props> = ({
-  filterStatus, filterType, todos
+  setFilterType, filterType, todos
 }) => {
   const notCompletedCount = todos.filter(todo => !todo.completed).length;
 
@@ -29,7 +29,7 @@ export const Footer: React.FC<Props> = ({
             { 'selected': filterType === FilterType.All }
           )}
           data-cy="FilterLinkAll"
-          onClick={() => filterStatus(FilterType.All)}
+          onClick={() => setFilterType(FilterType.All)}
         >
           All
         </a>
@@ -41,7 +41,7 @@ export const Footer: React.FC<Props> = ({
             { 'selected': filterType === FilterType.Active }
           )}
           data-cy="FilterLinkActive"
-          onClick={() => filterStatus(FilterType.Active)}
+          onClick={() => setFilterType(FilterType.Active)}
         >
           Active
         </a>
@@ -53,7 +53,7 @@ export const Footer: React.FC<Props> = ({
             { 'selected': filterType === FilterType.Completed }
           )}
           data-cy="FilterLinkCompleted"
-          onClick={() => filterStatus(FilterType.Completed)}
+          onClick={() => setFilterType(FilterType.Completed)}
         >
           Completed
         </a>

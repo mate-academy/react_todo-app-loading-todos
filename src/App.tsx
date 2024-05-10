@@ -1,7 +1,7 @@
 // App.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID, filterByStatus } from './api/todos';
+import { USER_ID, getData } from './api/todos';
 import { TypeTodo } from './types/Todo';
 import classNames from 'classnames';
 import { Footer } from './components/Footer/Footer';
@@ -14,44 +14,42 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterType, setFilterType] = useState<FilterType>(FilterType.All);
   const [todos, setTodos] = useState<TypeTodo[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const filterStatus = (type: FilterType) => {
-    setFilterType(type);
-    setIsLoading(true);
+  const allTodosCompleted = todos.every(todo => todo.completed);
+  const hasAnyTodos = todos.length !== 0;
 
-    filterByStatus(type)
-      .then(response => {
-        setTodos(response);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setIsLoading(false);
-      });
-  };
+  const filteredTodo = todos.filter(todo => {
+    if (filterType === FilterType.Active) {
+      return !todo.completed;
+    }
+
+    if (filterType === FilterType.Completed) {
+      return todo.completed;
+    }
+
+    return true;
+  });
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const clearErrorMessage = () => {
-      timeoutId = setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
-    };
-
     setIsLoading(true);
-    filterByStatus(filterType)
+    getData()
       .then(response => {
         setTodos(response);
         setIsLoading(false);
       })
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        clearErrorMessage();
+
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       });
 
-    return () => clearTimeout(timeoutId);
-  }, [filterType]);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -62,14 +60,18 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header inputRef={inputRef} allTodosCompleted={allTodosCompleted} />
 
-        <TodoList isLoading={isLoading} todos={todos} />
+        <TodoList
+          isLoading={isLoading}
+          todos={todos}
+          filteredTodo={filteredTodo}
+        />
 
         {/* Hide the footer if there are no todos */}
-        {todos.length > 0 && (
+        {hasAnyTodos && (
           <Footer
-            filterStatus={filterStatus}
+            setFilterType={setFilterType}
             filterType={filterType}
             todos={todos}
           />
