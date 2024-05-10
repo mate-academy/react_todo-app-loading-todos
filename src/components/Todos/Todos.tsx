@@ -32,7 +32,7 @@ export const Todos: React.FC<Props> = ({ todos }) => {
             ×
           </button>
 
-          <div data-cy="TodoLoader" className="modal overlay is-active">
+          <div data-cy="TodoLoader" className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
           </div>

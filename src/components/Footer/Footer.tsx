@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import { SortType } from '../../types/SortType';
 import { Todo } from '../../types/Todo';
 

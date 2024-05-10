@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
+
 import { Todo } from './types/Todo';
 import { SortType } from './types/SortType';
+
 import { Todos } from './components/Todos/Todos';
 import { Footer } from './components/Footer/Footer';
 
@@ -19,7 +21,6 @@ function getFilter(todos: Todo[], sortField: SortType) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodos, setNewTodos] = useState<Todo[]>([]);
   const [sortField, setSortField] = useState(SortType.All);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -41,12 +42,7 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  useEffect(
-    () => setNewTodos(() => getFilter(todos, sortField)),
-    [todos, sortField],
-  );
-
-  // const sortedTodos = getFilter(todos, sortField);
+  const sortedTodos = getFilter(todos, sortField);
 
   const everyTodosCompleted = todos.every(todo => todo.completed);
 
@@ -78,7 +74,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <Todos todos={newTodos} />
+        <Todos todos={sortedTodos} />
 
         {todos.length !== 0 && (
           <Footer
