@@ -1,36 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID, getTodos } from './api/todos';
 
-// TYPES
-import { Todo } from './types/Todo';
-import { FilterField } from './types/FilterField';
+import { USER_ID, getTodos } from './api/todos';
+import { ActionType } from './types/ReducerTypes';
+
+import { DispatchContext, StateContext } from './store/reducer';
 
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 
-function getFilteredTodos(todos: Todo[], filterField: FilterField) {
-  switch (filterField) {
-    case FilterField.Active:
-      return todos.filter(todo => !todo.completed);
-    case FilterField.Completed:
-      return todos.filter(todo => todo.completed);
-    default:
-      return todos;
-  }
-}
-
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const { todos } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterField, setFilterField] = useState(FilterField.All);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
     getTodos()
-      .then(value => setTodosFromServer(value as Todo[]))
+      .then(result => dispatch({ type: ActionType.SetTodos, payload: result }))
       .catch(() => {
         setErrorMessage('Unable to load todos');
 
@@ -38,20 +32,7 @@ export const App: React.FC = () => {
           setErrorMessage('');
         }, 3000);
       });
-
-    // focus on text field when page is loaded
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
-  useEffect(
-    () => setVisibleTodos(() => getFilteredTodos(todosFromServer, filterField)),
-    [todosFromServer, filterField],
-  );
-
-  const allTodosCompleted = todosFromServer.every(todo => todo.completed);
-  const hasAnyTodos = todosFromServer.length !== 0;
+  }, [dispatch]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -63,33 +44,28 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
+          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={`todoapp__toggle-all ${allTodosCompleted && 'active'}`}
+            className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
           {/* Add a todo on form submit */}
           <form>
             <input
-              ref={inputRef}
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              ref={inputRef}
             />
           </form>
         </header>
 
-        <TodoList todos={visibleTodos} />
+        <TodoList />
 
-        {hasAnyTodos && (
-          <Footer
-            todos={todosFromServer}
-            filterField={filterField}
-            setFilterField={setFilterField}
-          />
-        )}
+        {todos.length !== 0 && <Footer />}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
@@ -99,7 +75,6 @@ export const App: React.FC = () => {
         className={`notification is-danger is-light has-text-weight-normal ${!errorMessage && 'hidden'}`}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
         {errorMessage}
       </div>
     </div>

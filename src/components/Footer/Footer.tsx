@@ -1,28 +1,28 @@
+import { useContext } from 'react';
+import { DispatchContext, StateContext } from '../../store/reducer';
+import { ActionType } from '../../types/ReducerTypes';
+import { FilterField } from '../../types/FilterField';
 import cn from 'classnames';
 
-import { FilterField } from '../../types/FilterField';
-import { Todo } from '../../types/Todo';
+export const Footer = () => {
+  const { todos, filterField } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
 
-interface Props {
-  todos: Todo[];
-  filterField: FilterField;
-  setFilterField: (field: FilterField) => void;
-}
-
-export const Footer: React.FC<Props> = ({
-  todos,
-  filterField,
-  setFilterField,
-}) => {
-  const activeTodos = todos.reduce(
+  const activeTodosAmount = todos.reduce(
     (acc, todo) => (todo.completed ? acc : acc + 1),
     0,
   );
 
+  const setFilter = (newFilterField: FilterField) => {
+    if (filterField !== newFilterField) {
+      dispatch({ type: ActionType.SetFilterField, payload: newFilterField });
+    }
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodos} items left
+        {activeTodosAmount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -33,7 +33,7 @@ export const Footer: React.FC<Props> = ({
             selected: filterField === FilterField.All,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilterField(FilterField.All)}
+          onClick={() => setFilter(FilterField.All)}
         >
           All
         </a>
@@ -44,7 +44,7 @@ export const Footer: React.FC<Props> = ({
             selected: filterField === FilterField.Active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilterField(FilterField.Active)}
+          onClick={() => setFilter(FilterField.Active)}
         >
           Active
         </a>
@@ -55,7 +55,7 @@ export const Footer: React.FC<Props> = ({
             selected: filterField === FilterField.Completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilterField(FilterField.Completed)}
+          onClick={() => setFilter(FilterField.Completed)}
         >
           Completed
         </a>

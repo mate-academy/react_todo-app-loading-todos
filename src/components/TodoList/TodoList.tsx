@@ -1,16 +1,29 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 
+import React, { useContext } from 'react';
+import { StateContext } from '../../store/reducer';
+import { FilterField } from '../../types/FilterField';
 import { Todo } from '../../types/Todo';
 
-interface Props {
-  todos: Todo[];
-}
+export const TodoList: React.FC = () => {
+  const { todos, filterField } = useContext(StateContext);
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+  let visibleTodos: Todo[] = [];
+
+  switch (filterField) {
+    case FilterField.Active:
+      visibleTodos = todos.filter(todo => !todo.completed);
+      break;
+    case FilterField.Completed:
+      visibleTodos = todos.filter(todo => todo.completed);
+      break;
+    case FilterField.All:
+      visibleTodos = [...todos];
+  }
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
+      {visibleTodos.map(todo => (
         <div
           data-cy="Todo"
           className={`todo ${todo.completed && 'completed'}`}
