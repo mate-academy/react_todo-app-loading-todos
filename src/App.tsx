@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { UserWarning } from './UserWarning';
 
@@ -28,9 +27,13 @@ export const App: React.FC = () => {
       .catch(() => {
         setErrorMessage('Unable to load todos');
 
-        setTimeout(() => {
+        const timeoutRef = setTimeout(() => {
           setErrorMessage('');
         }, 3000);
+
+        return () => {
+          clearTimeout(timeoutRef);
+        };
       });
   }, [dispatch]);
 
