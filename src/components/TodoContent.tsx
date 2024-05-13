@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
-import { TodoContext } from '../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../Context/TodoContext';
 import { HeaderTodo } from './HeaderTodo/HeaderTodo';
 import { MainTodo } from './MainTodo/MainTodo';
 import { FooterTodo } from './FooterTodo/FooterTodo';
@@ -7,7 +7,8 @@ import { ErrorsTodo } from './Erorrs/ErrorsTodo';
 import { getTodos } from '../api/todos';
 
 export const TodoContent: FC = () => {
-  const { todos, dispatch } = useContext(TodoContext);
+  const { todos } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
   const [errorMessage, setErrorMessage] = useState('');
   const [creating, setCreating] = useState(false);
   const timerId = useRef(0);
@@ -28,12 +29,13 @@ export const TodoContent: FC = () => {
 
   useEffect(() => {
     setCreating(true);
+    showError('');
     getTodos()
       .then(todosData => {
         dispatch({ type: 'ADD_TODOS', payload: todosData });
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
+        showError('Unable to load todos');
       })
       .finally(() => {
         setCreating(false);
@@ -51,9 +53,7 @@ export const TodoContent: FC = () => {
         </>
       )}
 
-      {errorMessage && (
-        <ErrorsTodo errorMessage={errorMessage} showError={showError} />
-      )}
+      <ErrorsTodo errorMessage={errorMessage} showError={showError} />
     </div>
   );
 };

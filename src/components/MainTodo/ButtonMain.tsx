@@ -1,12 +1,13 @@
 import { FC, useContext } from 'react';
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 
 interface IProps {
   id: string;
 }
 
 export const ButtonMain: FC<IProps> = ({ id }) => {
-  const { handleFocusInput, dispatch } = useContext(TodoContext);
+  const { handleFocusInput } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
 
   const handleDeleteClick = () => {
     dispatch({ type: 'DELETE_TODO', payload: id });

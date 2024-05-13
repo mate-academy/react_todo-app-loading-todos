@@ -12,54 +12,54 @@ import {
 import { Todo } from '../types/Todo';
 import { TodoReducer } from './TodoReducer';
 
+export type Action = { type: string; payload?: string | Todo | Todo[] };
+
 export interface TodoContextType {
   todos: Todo[];
-  inputRef: typeof createRef<HTMLInputElement> | null;
-  dispatch: React.Dispatch<Action>;
-  handleFocusInput: () => void;
+  inputRef: React.MutableRefObject<HTMLInputElement | null>;
   editFlag: boolean;
   editID: string;
   textToEdit: string;
   allCompleted: boolean;
   numberNotComplete: number;
   numberComplete: number;
+  handleFocusInput: () => void;
 }
-
-export type Action = { type: string; payload?: string | Todo | Todo[] };
 
 type TProps = {
   children: ReactNode;
 };
 
-const defaultDispatch: Dispatch<Action> = () => {
-  throw new Error('Dispatch function not provided');
-};
-
 const initialState: TodoContextType = {
   todos: [],
-  inputRef: null,
+  inputRef: createRef<HTMLInputElement>(),
   editFlag: false,
   editID: '',
   textToEdit: '',
   allCompleted: false,
   numberNotComplete: 0,
   numberComplete: 0,
-  dispatch: defaultDispatch,
   handleFocusInput: () => {},
 };
 
 export const TodoDispatch = createContext<Dispatch<Action>>(() => {});
-export const TodoContext = createContext<TodoContextType>(initialState);
+export const TodoContext = createContext<TodoContextType>(
+  initialState as TodoContextType,
+);
 
 export const TodoProvider: FC<TProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(TodoReducer, initialState, () => {
-    const localValue = localStorage.getItem('todos');
+  const [state, dispatch] = useReducer(
+    TodoReducer as React.Reducer<TodoContextType, Action>,
+    initialState as TodoContextType,
+    () => {
+      const localValue = localStorage.getItem('todos');
 
-    return {
-      ...initialState,
-      todos: localValue ? JSON.parse(localValue) : initialState.todos,
-    };
-  });
+      return {
+        ...initialState,
+        todos: localValue ? JSON.parse(localValue) : initialState.todos,
+      } as TodoContextType;
+    },
+  );
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(state.todos));

@@ -1,11 +1,12 @@
 import { FC, useContext } from 'react';
 import classNames from 'classnames';
 
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 import { FormHeader } from '../HeaderTodo/FormHeader';
 
 export const HeaderTodo: FC = () => {
-  const { todos, dispatch, allCompleted } = useContext(TodoContext);
+  const { todos, allCompleted } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
 
   const handleToggleAll = () => {
     dispatch({ type: 'CHECK_ALL_TODO' });

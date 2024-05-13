@@ -4,7 +4,7 @@ import { FC, useContext, useState } from 'react';
 import classNames from 'classnames';
 
 import { LoaderTodo } from '../Loader/LoaderTodo';
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoDispatch } from '../../Context/TodoContext';
 import { FilterContext } from '../../Context/FilterContext';
 import { ButtonMain } from './ButtonMain';
 import { FormMain } from './FormMain';
@@ -16,7 +16,7 @@ type Props = {
 export const MainTodo: FC<Props> = ({ creating }) => {
   const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
   const { filteredTodos } = useContext(FilterContext);
-  const { dispatch } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
 
   const handleDoubleClick = (id: string, title: string) => {
     setEditableTodoId(id);

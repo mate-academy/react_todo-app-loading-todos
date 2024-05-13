@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 
 interface IProps {
   id: string;
@@ -17,7 +17,8 @@ interface IProps {
 }
 
 export const FormMain: FC<IProps> = ({ id, title, setEditableTodoId }) => {
-  const { dispatch, handleFocusInput } = useContext(TodoContext);
+  const { handleFocusInput } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
   const [editText, setEditText] = useState(title);
 
   const editFormRef = useRef<HTMLFormElement>(null);

@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
 import React, { FC, useContext, useState } from 'react';
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 
 export const FormHeader: FC = () => {
   const [text, setNewTodo] = useState('');
-  const { inputRef, dispatch } = useContext(TodoContext);
+  const { inputRef } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

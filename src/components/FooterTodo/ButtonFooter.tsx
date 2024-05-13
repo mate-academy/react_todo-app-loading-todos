@@ -1,9 +1,9 @@
 import { FC, useContext } from 'react';
-import { TodoContext } from '../../Context/TodoContext';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 
 export const ButtonFooter: FC = () => {
-  const { numberComplete, handleFocusInput, dispatch } =
-    useContext(TodoContext);
+  const { numberComplete, handleFocusInput } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
 
   const clearCompleted = () => {
     dispatch({ type: 'DELETE_COMPLETED_TODO' });
