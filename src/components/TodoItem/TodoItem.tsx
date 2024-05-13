@@ -19,6 +19,7 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           className="todo__status"
           checked={todo.completed}
         />
+        Checkbox Label
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
