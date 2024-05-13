@@ -13,13 +13,13 @@ export const TodoItem: FC<Props> = ({ todo }) => {
       className={`todo ${todo.completed ? 'completed' : ''}`}
     >
       <label className="todo__status-label">
+        {' '}
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
         />
-        Checkbox Label
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">

@@ -30,7 +30,6 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Errors>(Errors.default);
   const [filter, setFilter] = useState<Filters>(Filters.all);
-  // const [todosLeft, setTodosLeft] = useState(0);
 
   useEffect(() => {
     setIsLoading(true);
@@ -45,9 +44,11 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      handleErrorHide();
-    }, 3000);
+    if (error !== Errors.default) {
+      setTimeout(() => {
+        handleErrorHide();
+      }, 3000);
+    }
   }, [error]);
 
   const filteredTodos = useMemo(

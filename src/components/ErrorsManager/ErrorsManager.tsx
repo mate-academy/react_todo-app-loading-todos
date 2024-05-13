@@ -25,7 +25,7 @@ export const ErrorsManager: FC<Props> = ({ error, errorHide }) => {
         title="Hide Error"
         onClick={errorHide}
       ></button>
-      {error}
+      {error !== Errors.default && error}
     </div>
   );
 };
