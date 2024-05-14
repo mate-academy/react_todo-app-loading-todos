@@ -2,7 +2,7 @@
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
 import React, { FC, useContext, useState } from 'react';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
-import { addTodo } from '../../api/todos';
+import { USER_ID, addTodo } from '../../api/todos';
 
 interface IProps {
   showError: (err: string) => void;
@@ -21,6 +21,7 @@ export const FormHeader: FC<IProps> = ({ showError }) => {
     if (trimmedTodo !== '') {
       const newTodo = {
         id: crypto.randomUUID(),
+        userId: USER_ID,
         title: text.trim(),
         completed: false,
       };
