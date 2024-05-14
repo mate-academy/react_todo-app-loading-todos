@@ -6,9 +6,10 @@ import { USER_ID, addTodo } from '../../api/todos';
 
 interface IProps {
   showError: (err: string) => void;
+  setLoading: (chek: boolean) => void;
 }
 
-export const FormHeader: FC<IProps> = ({ showError }) => {
+export const FormHeader: FC<IProps> = ({ showError, setLoading }) => {
   const [text, setNewTodo] = useState('');
   const { inputRef } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
@@ -27,12 +28,15 @@ export const FormHeader: FC<IProps> = ({ showError }) => {
       };
 
       try {
+        setLoading(true);
         await addTodo(newTodo).then(todo => {
           dispatch({ type: 'ADD_TODO', payload: todo });
           setNewTodo('');
         });
       } catch (error) {
         showError('Unable to add a todo');
+      } finally {
+        setLoading(false);
       }
     }
   };

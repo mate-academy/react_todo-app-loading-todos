@@ -10,19 +10,17 @@ import { ButtonMain } from './ButtonMain';
 import { FormMain } from './FormMain';
 
 type TProps = {
-  creating: boolean;
+  loading: boolean;
   showError: (err: string) => void;
 };
 
-export const MainTodo: FC<TProps> = ({ creating, showError }) => {
+export const MainTodo: FC<TProps> = ({ loading, showError }) => {
   const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
   const { filteredTodos } = useContext(FilterContext);
   const dispatch = useContext(TodoDispatch);
 
-  const handleDoubleClick = (id: string, title: string) => {
+  const handleDoubleClick = (id: string) => {
     setEditableTodoId(id);
-
-    dispatch({ type: 'EDIT_CONFIG_TODO', payload: { id, title } });
   };
 
   const checkTodo = (id: string) => {
@@ -42,7 +40,7 @@ export const MainTodo: FC<TProps> = ({ creating, showError }) => {
             title="Change"
             key={id}
           >
-            {creating && <LoaderTodo />}
+            <LoaderTodo loading={loading} />
 
             <label className="todo__status-label">
               <input
@@ -53,8 +51,6 @@ export const MainTodo: FC<TProps> = ({ creating, showError }) => {
                 onChange={() => checkTodo(id)}
               />
             </label>
-
-            {creating && <LoaderTodo />}
 
             {isEditable ? (
               <>
@@ -67,11 +63,10 @@ export const MainTodo: FC<TProps> = ({ creating, showError }) => {
               </>
             ) : (
               <>
-                {creating && <LoaderTodo />}
                 <span
                   data-cy="TodoTitle"
                   className="todo__title"
-                  onDoubleClick={() => handleDoubleClick(id, title)}
+                  onDoubleClick={() => handleDoubleClick(id)}
                 >
                   {title}
                 </span>

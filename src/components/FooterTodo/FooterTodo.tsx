@@ -5,7 +5,11 @@ import { ButtonFooter } from './ButtonFooter';
 import { FILTER_LINKS } from '../../utils/constants';
 import { FilterFooter } from './FilterTodo';
 
-export const FooterTodo: FC = () => {
+interface IProps {
+  showError: (err: string) => void;
+}
+
+export const FooterTodo: FC<IProps> = ({ showError }) => {
   const { numberNotComplete } = useContext(TodoContext);
   const numberQuantity = numberNotComplete > 1 ? ' items' : ' item';
 
@@ -18,7 +22,7 @@ export const FooterTodo: FC = () => {
 
       <FilterFooter items={FILTER_LINKS} />
 
-      <ButtonFooter />
+      <ButtonFooter showError={showError} />
     </footer>
   );
 };

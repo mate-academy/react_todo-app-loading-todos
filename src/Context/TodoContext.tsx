@@ -12,7 +12,15 @@ import {
 import { Todo } from '../types/Todo';
 import { TodoReducer } from './TodoReducer';
 
-export type Action = { type: string; payload?: string | Todo | Todo[] };
+export type Action =
+  | { type: 'ADD_TODO'; payload: Todo }
+  | { type: 'LOAD_TODOS'; payload: Todo[] }
+  | { type: 'CHECK_TODO'; payload: string }
+  | { type: 'DELETE_TODO'; payload: string }
+  | { type: 'EDIT_TODO'; payload: Todo }
+  | { type: 'CANCEL_TODO' }
+  | { type: 'DELETE_COMPLETED_TODO' }
+  | { type: 'CHECK_ALL_TODO' };
 
 export interface TodoContextType {
   todos: Todo[];

@@ -8,7 +8,7 @@ export const TodoReducer = (state: TodoContextType, action: Action) => {
         ...state,
         todos: [...state.todos, action.payload],
       };
-    case 'LOAD_TODO':
+    case 'LOAD_TODOS':
       return {
         ...state,
         todos: action.payload,

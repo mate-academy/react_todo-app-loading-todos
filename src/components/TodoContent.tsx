@@ -8,7 +8,7 @@ import { getTodos } from '../api/todos';
 
 export const TodoContent: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  const [creating, setCreating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { todos } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
@@ -29,7 +29,7 @@ export const TodoContent: FC = () => {
   };
 
   useEffect(() => {
-    setCreating(true);
+    setLoading(true);
     showError('');
     getTodos()
       .then(todosData => {
@@ -38,18 +38,18 @@ export const TodoContent: FC = () => {
       .catch(() => {
         showError('Unable to load todos');
       })
-      .finally(() => setCreating(false));
+      .finally(() => setLoading(false));
   }, [dispatch]);
 
   return (
     <>
       <div className="todoapp__content">
-        <HeaderTodo showError={showError} />
+        <HeaderTodo showError={showError} setLoading={() => setLoading(true)} />
         {hasTodos && (
           <>
-            <MainTodo creating={creating} showError={showError} />
+            <MainTodo loading={loading} showError={showError} />
 
-            <FooterTodo />
+            <FooterTodo showError={showError} />
           </>
         )}
       </div>

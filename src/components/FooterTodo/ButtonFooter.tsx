@@ -1,13 +1,27 @@
 import { FC, useContext } from 'react';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
+import { deleteTodo } from '../../api/todos';
 
-export const ButtonFooter: FC = () => {
-  const { numberComplete, handleFocusInput } = useContext(TodoContext);
+interface IProps {
+  showError: (err: string) => void;
+}
+
+export const ButtonFooter: FC<IProps> = ({ showError }) => {
+  const { todos, numberComplete, handleFocusInput } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
 
-  const clearCompleted = () => {
-    dispatch({ type: 'DELETE_COMPLETED_TODO' });
-    handleFocusInput();
+  const clearCompleted = async () => {
+    try {
+      const completedTodoIds = todos
+        .filter(todo => todo.completed)
+        .map(todo => todo.id);
+
+      await Promise.all(completedTodoIds.map(deleteTodo));
+      dispatch({ type: 'DELETE_COMPLETED_TODO' });
+      handleFocusInput();
+    } catch (error) {
+      showError('Unable to delete todos');
+    }
   };
 
   return (

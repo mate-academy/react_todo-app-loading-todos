@@ -6,9 +6,10 @@ import { FormHeader } from '../HeaderTodo/FormHeader';
 
 interface IProps {
   showError: (err: string) => void;
+  setLoading: () => void;
 }
 
-export const HeaderTodo: FC<IProps> = ({ showError }) => {
+export const HeaderTodo: FC<IProps> = ({ showError, setLoading }) => {
   const { todos, allCompleted } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
 
@@ -29,7 +30,7 @@ export const HeaderTodo: FC<IProps> = ({ showError }) => {
         />
       )}
 
-      <FormHeader showError={showError} />
+      <FormHeader showError={showError} setLoading={setLoading} />
     </header>
   );
 };
