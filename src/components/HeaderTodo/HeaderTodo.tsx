@@ -4,7 +4,11 @@ import classNames from 'classnames';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 import { FormHeader } from '../HeaderTodo/FormHeader';
 
-export const HeaderTodo: FC = () => {
+interface IProps {
+  showError: (err: string) => void;
+}
+
+export const HeaderTodo: FC<IProps> = ({ showError }) => {
   const { todos, allCompleted } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
 
@@ -25,7 +29,7 @@ export const HeaderTodo: FC = () => {
         />
       )}
 
-      <FormHeader />
+      <FormHeader showError={showError} />
     </header>
   );
 };

@@ -2,13 +2,18 @@
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
 import React, { FC, useContext, useState } from 'react';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
+import { addTodo } from '../../api/todos';
 
-export const FormHeader: FC = () => {
+interface IProps {
+  showError: (err: string) => void;
+}
+
+export const FormHeader: FC<IProps> = ({ showError }) => {
   const [text, setNewTodo] = useState('');
   const { inputRef } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const trimmedTodo = text.trim();
@@ -20,10 +25,15 @@ export const FormHeader: FC = () => {
         completed: false,
       };
 
-      dispatch({ type: 'ADD_TODO', payload: newTodo });
+      try {
+        await addTodo(newTodo).then(todo => {
+          dispatch({ type: 'ADD_TODO', payload: todo });
+          setNewTodo('');
+        });
+      } catch (error) {
+        showError('Unable to add a todo');
+      }
     }
-
-    setNewTodo('');
   };
 
   return (

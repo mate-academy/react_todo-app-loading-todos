@@ -7,12 +7,13 @@ import { ErrorsTodo } from './Erorrs/ErrorsTodo';
 import { getTodos } from '../api/todos';
 
 export const TodoContent: FC = () => {
-  const { todos } = useContext(TodoContext);
-  const dispatch = useContext(TodoDispatch);
   const [errorMessage, setErrorMessage] = useState('');
   const [creating, setCreating] = useState(false);
-  const timerId = useRef(0);
 
+  const { todos } = useContext(TodoContext);
+  const dispatch = useContext(TodoDispatch);
+
+  const timerId = useRef(0);
   const hasTodos = todos.length > 0;
 
   const showError = (message: string) => {
@@ -32,28 +33,28 @@ export const TodoContent: FC = () => {
     showError('');
     getTodos()
       .then(todosData => {
-        dispatch({ type: 'ADD_TODOS', payload: todosData });
+        dispatch({ type: 'LOAD_TODOS', payload: todosData });
       })
       .catch(() => {
         showError('Unable to load todos');
       })
-      .finally(() => {
-        setCreating(false);
-      });
+      .finally(() => setCreating(false));
   }, [dispatch]);
 
   return (
-    <div className="todoapp__content">
-      <HeaderTodo />
-      {hasTodos && (
-        <>
-          <MainTodo creating={creating} />
+    <>
+      <div className="todoapp__content">
+        <HeaderTodo showError={showError} />
+        {hasTodos && (
+          <>
+            <MainTodo creating={creating} showError={showError} />
 
-          <FooterTodo />
-        </>
-      )}
+            <FooterTodo />
+          </>
+        )}
+      </div>
 
       <ErrorsTodo errorMessage={errorMessage} showError={showError} />
-    </div>
+    </>
   );
 };

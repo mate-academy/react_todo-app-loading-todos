@@ -9,14 +9,21 @@ import React, {
   useState,
 } from 'react';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
+import { deleteTodo, updateTodo } from '../../api/todos';
 
 interface IProps {
   id: string;
   title: string;
   setEditableTodoId: () => void;
+  showError: (err: string) => void;
 }
 
-export const FormMain: FC<IProps> = ({ id, title, setEditableTodoId }) => {
+export const FormMain: FC<IProps> = ({
+  id,
+  title,
+  setEditableTodoId,
+  showError,
+}) => {
   const { handleFocusInput } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
   const [editText, setEditText] = useState(title);
@@ -28,23 +35,49 @@ export const FormMain: FC<IProps> = ({ id, title, setEditableTodoId }) => {
   }, [dispatch]);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent | MouseEvent) => {
+    async (e: React.FormEvent | MouseEvent) => {
       e.preventDefault();
 
       if (!editText.trim()) {
         if (id) {
-          dispatch({ type: 'DELETE_TODO', payload: id });
-          handleFocusInput();
+          try {
+            await deleteTodo(id);
+            dispatch({ type: 'DELETE_TODO', payload: id });
+            handleFocusInput();
+          } catch (error) {
+            showError('Title should not be empty');
+          }
         }
       } else {
-        dispatch({ type: 'EDIT_TODO', payload: editText });
+        const newTodo = {
+          id: id,
+          title: editText.trim(),
+          completed: false,
+        };
+
+        try {
+          const updatedTodo = await updateTodo(newTodo);
+
+          dispatch({ type: 'EDIT_TODO', payload: updatedTodo });
+        } catch (error) {
+          showError('Unable to update a todo');
+        }
+
         cancelEdit();
         handleFocusInput();
       }
 
       setEditableTodoId();
     },
-    [id, editText, dispatch, setEditableTodoId, cancelEdit, handleFocusInput],
+    [
+      editText,
+      setEditableTodoId,
+      id,
+      dispatch,
+      handleFocusInput,
+      showError,
+      cancelEdit,
+    ],
   );
 
   const handleClickOutside = useCallback(

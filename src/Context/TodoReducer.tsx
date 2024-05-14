@@ -8,6 +8,11 @@ export const TodoReducer = (state: TodoContextType, action: Action) => {
         ...state,
         todos: [...state.todos, action.payload],
       };
+    case 'LOAD_TODO':
+      return {
+        ...state,
+        todos: action.payload,
+      };
     case 'CHECK_TODO':
       return {
         ...state,
@@ -24,18 +29,12 @@ export const TodoReducer = (state: TodoContextType, action: Action) => {
         ...state,
         todos: state.todos.filter((todo: Todo) => todo.id !== action.payload),
       };
-    case 'EDIT_CONFIG_TODO':
-      return {
-        ...state,
-        textToEdit: action.payload,
-        editID: action.payload,
-      };
     case 'EDIT_TODO':
       return {
         ...state,
         todos: state.todos.map((todo: Todo) => {
-          if (todo.id === state.editID) {
-            return { ...todo, title: action.payload };
+          if (todo.id === action.payload.id) {
+            return action.payload;
           }
 
           return todo;

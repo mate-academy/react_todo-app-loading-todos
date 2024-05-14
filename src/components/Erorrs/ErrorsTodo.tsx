@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import classNames from 'classnames';
 
-type Props = {
+type TProps = {
   errorMessage: string;
   showError: (err: string) => void;
 };
 
-export const ErrorsTodo: FC<Props> = ({ errorMessage, showError }) => {
+export const ErrorsTodo: FC<TProps> = ({ errorMessage, showError }) => {
   return (
     <div
       data-cy="ErrorNotification"

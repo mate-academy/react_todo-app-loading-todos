@@ -9,11 +9,12 @@ import { FilterContext } from '../../Context/FilterContext';
 import { ButtonMain } from './ButtonMain';
 import { FormMain } from './FormMain';
 
-type Props = {
+type TProps = {
   creating: boolean;
+  showError: (err: string) => void;
 };
 
-export const MainTodo: FC<Props> = ({ creating }) => {
+export const MainTodo: FC<TProps> = ({ creating, showError }) => {
   const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
   const { filteredTodos } = useContext(FilterContext);
   const dispatch = useContext(TodoDispatch);
@@ -52,13 +53,16 @@ export const MainTodo: FC<Props> = ({ creating }) => {
                 onChange={() => checkTodo(id)}
               />
             </label>
+
+            {creating && <LoaderTodo />}
+
             {isEditable ? (
               <>
-                {creating && <LoaderTodo />}
                 <FormMain
                   id={id}
                   title={title}
                   setEditableTodoId={() => setEditableTodoId(null)}
+                  showError={showError}
                 />
               </>
             ) : (
@@ -71,7 +75,7 @@ export const MainTodo: FC<Props> = ({ creating }) => {
                 >
                   {title}
                 </span>
-                <ButtonMain id={id} />
+                <ButtonMain id={id} showError={showError} />
               </>
             )}
           </div>
