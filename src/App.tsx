@@ -7,42 +7,33 @@ import { SortType } from './types/SortType';
 
 import { Todos } from './components/Todos/Todos';
 import { Footer } from './components/Footer/Footer';
-
-function getFilter(todos: Todo[], sortField: SortType) {
-  switch (sortField) {
-    case SortType.Active:
-      return todos.filter(todo => !todo.completed);
-    case SortType.Completed:
-      return todos.filter(todo => todo.completed);
-    default:
-      return todos;
-  }
-}
+import { getFiltredTodos } from './components/Func/getFiltredTodos';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortField, setSortField] = useState(SortType.All);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<ErrorType | null>(null);
 
   const activeInput = useRef<HTMLInputElement>(null);
+
+  const setErrorWithSetTimeout = (error: ErrorType) => {
+    setErrorMessage(error);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+  };
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
+        setErrorWithSetTimeout(ErrorType.UnableLoad);
       });
-
-    if (activeInput.current) {
-      activeInput.current.focus();
-    }
+    activeInput.current?.focus();
   }, []);
 
-  const sortedTodos = getFilter(todos, sortField);
+  const sortedTodos = getFiltredTodos(todos, sortField);
 
   const everyTodosCompleted = todos.every(todo => todo.completed);
 
@@ -62,7 +53,6 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               ref={activeInput}
@@ -76,7 +66,7 @@ export const App: React.FC = () => {
 
         <Todos todos={sortedTodos} />
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             sortField={sortField}
