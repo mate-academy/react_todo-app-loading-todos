@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-// import { UserWarning } from './UserWarning';
-// import { USER_ID } from './api/todos';
 
 import { getTodos } from './api/todos';
 
@@ -18,9 +16,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<Error | ''>('');
   const [status, setStatus] = useState('all');
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
 
   useEffect(() => {
     getTodos()
@@ -50,7 +45,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList visibleTodos={visibleTodos} />
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer todos={todos} setStatus={setStatus} status={status} />
         )}
       </div>

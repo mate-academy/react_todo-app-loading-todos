@@ -10,25 +10,23 @@ export const Footer: React.FC<FooterProps> = ({ todos, status, setStatus }) => {
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
   const completedTodoCount = todos.filter(todo => todo.completed).length;
 
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: string) => () => {
     setStatus(newStatus);
   };
 
   return (
     <>
-      {/* Hide the footer if there are no todos */}
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="TodosCounter">
           {`${activeTodoCount} items left`}
         </span>
 
-        {/* Active link should have the 'selected' class */}
         <nav className="filter" data-cy="Filter">
           <a
             href="#/"
             className={cn('filter__link', { selected: status === 'all' })}
             data-cy="FilterLinkAll"
-            onClick={() => handleStatusChange('all')}
+            onClick={handleStatusChange('all')}
           >
             All
           </a>
@@ -37,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({ todos, status, setStatus }) => {
             href="#/active"
             className={cn('filter__link', { selected: status === 'active' })}
             data-cy="FilterLinkActive"
-            onClick={() => handleStatusChange('active')}
+            onClick={handleStatusChange('active')}
           >
             Active
           </a>
@@ -46,18 +44,17 @@ export const Footer: React.FC<FooterProps> = ({ todos, status, setStatus }) => {
             href="#/completed"
             className={cn('filter__link', { selected: status === 'completed' })}
             data-cy="FilterLinkCompleted"
-            onClick={() => handleStatusChange('completed')}
+            onClick={handleStatusChange('completed')}
           >
             Completed
           </a>
         </nav>
 
-        {/* this button should be disabled if there are no completed todos */}
         <button
           type="button"
           className="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
-          disabled={completedTodoCount === 0}
+          disabled={!completedTodoCount}
         >
           Clear completed
         </button>
