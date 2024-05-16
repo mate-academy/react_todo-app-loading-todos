@@ -1,9 +1,9 @@
-import React, { useState } from "react"
-import { Todo } from "../../types/Todo";
+import React, { useState } from 'react';
+import { Todo } from '../../types/Todo';
 
 interface Props {
-    todos: Todo[];
-    addTodo: (newTodoTitle: string) => void;
+  todos: Todo[];
+  addTodo: (newTodoTitle: string) => void;
 }
 
 export const Header: React.FC<Props> = ({ todos, addTodo }) => {
@@ -14,6 +14,7 @@ export const Header: React.FC<Props> = ({ todos, addTodo }) => {
     if (query.length > 0) {
       addTodo(query);
     }
+
     setQuery('');
   };
 
@@ -43,4 +44,4 @@ export const Header: React.FC<Props> = ({ todos, addTodo }) => {
       </form>
     </header>
   );
-}
+};

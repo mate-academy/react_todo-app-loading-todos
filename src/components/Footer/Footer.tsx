@@ -1,12 +1,12 @@
-import React, { useMemo } from "react"
-import { Todo } from "../../types/Todo"
-import { Filter } from "../../types/Filter";
-import classNames from "classnames";
+import React, { useMemo } from 'react';
+import { Todo } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
+import classNames from 'classnames';
 
 interface Props {
-    todos: Todo[];
-    filter: Filter;
-    addFilter: React.Dispatch<React.SetStateAction<Filter>>;
+  todos: Todo[];
+  filter: Filter;
+  addFilter: React.Dispatch<React.SetStateAction<Filter>>;
 }
 
 export const Footer: React.FC<Props> = ({ todos, filter, addFilter }) => {

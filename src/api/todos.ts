@@ -9,4 +9,4 @@ export const getTodos = () => {
 
 export const postTodo = (newTodo: any) => {
   return client.post<Todo>('/todos', newTodo);
-}
+};

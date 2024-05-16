@@ -1,9 +1,9 @@
-import React from "react";
-import { Todo } from "../../types/Todo";
-import classNames from "classnames";
+import React from 'react';
+import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 interface Props {
-    todo: Todo;
+  todo: Todo;
 }
 
 export const TodoInfo:React.FC<Props> = ({ todo }) => {
@@ -12,14 +12,13 @@ export const TodoInfo:React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      <label className="todo__status-label">
-        <input
-          data-cy="TodoStatus"
-          type="checkbox"
-          className="todo__status"
-          defaultChecked={todo.completed}
-        />
-      </label>
+      <input
+        id="label"
+        data-cy="TodoStatus"
+        type="checkbox"
+        className="todo__status"
+        defaultChecked={todo.completed}
+      />
 
       <span data-cy="TodoTitle" className="todo__title">
         {todo.title}
@@ -37,4 +36,4 @@ export const TodoInfo:React.FC<Props> = ({ todo }) => {
       </div>
     </div>
   );
-}
+};

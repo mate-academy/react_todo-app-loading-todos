@@ -1,9 +1,9 @@
-import classNames from "classnames";
-import React, { useEffect } from "react";
+import classNames from 'classnames';
+import React, { useEffect } from 'react';
 
 interface Props {
-    errorType: ErrorType | null;
-    onClose: () => void;
+  errorType: ErrorType | null;
+  onClose: () => void;
 }
 
 export const errors = {
