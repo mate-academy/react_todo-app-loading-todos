@@ -1,81 +1,77 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useContext, useState } from 'react';
-import classNames from 'classnames';
-
-import { LoaderTodo } from '../Loader/LoaderTodo';
-import { TodoDispatch } from '../../Context/TodoContext';
+import { FC, useContext } from 'react';
+import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 import { FilterContext } from '../../Context/FilterContext';
-import { ButtonMain } from './ButtonMain';
-import { FormMain } from './FormMain';
+import { Todo } from '../../types/Todo';
+import { updateTodo } from '../../api/todos';
+import { TodoItem } from './TodoItem';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 type TProps = {
   loading: boolean;
+  loadingAdd: boolean;
+  tempTodo: Todo | null;
   showError: (err: string) => void;
+  setLoading: (bool: boolean) => void;
 };
 
-export const MainTodo: FC<TProps> = ({ loading, showError }) => {
-  const [editableTodoId, setEditableTodoId] = useState<string | null>(null);
+export const MainTodo: FC<TProps> = ({
+  loading,
+  loadingAdd,
+  showError,
+  setLoading,
+  tempTodo,
+}) => {
   const { filteredTodos } = useContext(FilterContext);
+  const { todos } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
 
-  const handleDoubleClick = (id: string) => {
-    setEditableTodoId(id);
-  };
+  const checkTodo = async (id: string) => {
+    setLoading(true);
+    try {
+      const index = todos.findIndex(todo => todo.id === id);
 
-  const checkTodo = (id: string) => {
-    dispatch({ type: 'CHECK_TODO', payload: id });
+      const updatedTodo = {
+        ...todos[index],
+        completed: !todos[index].completed,
+      };
+
+      await updateTodo(updatedTodo);
+
+      dispatch({ type: 'CHECK_TODO', payload: id });
+    } catch {
+      showError('Unable to update a todo');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => {
-        const { title, completed, id } = todo;
-        const isEditable = editableTodoId === id;
-
-        return (
-          <div
-            data-cy="Todo"
-            className={classNames('todo', { completed: completed })}
-            title="Change"
-            key={id}
-          >
-            <LoaderTodo loading={loading} />
-
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked={completed}
-                onChange={() => checkTodo(id)}
-              />
-            </label>
-
-            {isEditable ? (
-              <>
-                <FormMain
-                  id={id}
-                  title={title}
-                  setEditableTodoId={() => setEditableTodoId(null)}
-                  showError={showError}
-                />
-              </>
-            ) : (
-              <>
-                <span
-                  data-cy="TodoTitle"
-                  className="todo__title"
-                  onDoubleClick={() => handleDoubleClick(id)}
-                >
-                  {title}
-                </span>
-                <ButtonMain id={id} showError={showError} />
-              </>
-            )}
-          </div>
-        );
-      })}
+      <TransitionGroup>
+        {filteredTodos.map(todo => (
+          <CSSTransition key={todo.id} timeout={300} classNames="item">
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              loading={loading}
+              checkTodo={checkTodo}
+              showError={showError}
+              setLoading={setLoading}
+            />
+          </CSSTransition>
+        ))}
+        {tempTodo && (
+          <CSSTransition key={tempTodo.id} timeout={300} classNames="temp-item">
+            <TodoItem
+              todo={tempTodo}
+              loading={loadingAdd}
+              setLoading={setLoading}
+            />
+          </CSSTransition>
+        )}
+      </TransitionGroup>
     </section>
   );
 };

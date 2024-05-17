@@ -1,43 +1,71 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // eslint-disable-next-line jsx-a11y/label-has-associated-control
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { TodoContext, TodoDispatch } from '../../Context/TodoContext';
 import { USER_ID, addTodo } from '../../api/todos';
+import { Todo } from '../../types/Todo';
 
 interface IProps {
   showError: (err: string) => void;
-  setLoading: (chek: boolean) => void;
+  setLoadingAdd: (err: boolean) => void;
+  setTempTodo: (todo: Todo | null) => void;
 }
 
-export const FormHeader: FC<IProps> = ({ showError, setLoading }) => {
+export const FormHeader: FC<IProps> = ({
+  showError,
+  setTempTodo,
+  setLoadingAdd,
+}) => {
   const [text, setNewTodo] = useState('');
-  const { inputRef } = useContext(TodoContext);
+  const [load, setLoad] = useState(false);
+  const { inputRef, handleFocusInput } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
+
+  useEffect(() => {
+    if (!load) {
+      handleFocusInput();
+    }
+  }, [handleFocusInput, load]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoad(true);
+    setLoadingAdd(true);
 
-    const trimmedTodo = text.trim();
+    if (!text.trim()) {
+      showError('Title should not be empty');
+      setLoad(false);
+      setLoadingAdd(false);
 
-    if (trimmedTodo !== '') {
-      const newTodo = {
-        id: crypto.randomUUID(),
-        userId: USER_ID,
-        title: text.trim(),
-        completed: false,
-      };
+      return;
+    }
 
-      try {
-        setLoading(true);
-        await addTodo(newTodo).then(todo => {
-          dispatch({ type: 'ADD_TODO', payload: todo });
-          setNewTodo('');
-        });
-      } catch (error) {
-        showError('Unable to add a todo');
-      } finally {
-        setLoading(false);
-      }
+    setTempTodo({
+      id: crypto.randomUUID(),
+      title: text.trim(),
+      completed: false,
+    });
+
+    const newTodo = {
+      id: crypto.randomUUID(),
+      userId: USER_ID,
+      title: text.trim(),
+      completed: false,
+    };
+
+    try {
+      const todo = await addTodo(newTodo);
+
+      dispatch({ type: 'ADD_TODO', payload: todo });
+      showError('');
+      setNewTodo('');
+      handleFocusInput();
+    } catch (error) {
+      showError('Unable to add a todo');
+    } finally {
+      setTempTodo(null);
+      setLoad(false);
+      setLoadingAdd(false);
     }
   };
 
@@ -53,6 +81,7 @@ export const FormHeader: FC<IProps> = ({ showError, setLoading }) => {
           placeholder="What needs to be done?"
           ref={inputRef}
           value={text}
+          disabled={load}
           onChange={e => setNewTodo(e.target.value)}
         />
       </label>

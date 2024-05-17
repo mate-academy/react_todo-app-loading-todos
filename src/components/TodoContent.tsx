@@ -5,10 +5,13 @@ import { MainTodo } from './MainTodo/MainTodo';
 import { FooterTodo } from './FooterTodo/FooterTodo';
 import { ErrorsTodo } from './Erorrs/ErrorsTodo';
 import { getTodos } from '../api/todos';
+import { Todo } from '../types/Todo';
 
 export const TodoContent: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
   const { todos } = useContext(TodoContext);
   const dispatch = useContext(TodoDispatch);
@@ -44,12 +47,23 @@ export const TodoContent: FC = () => {
   return (
     <>
       <div className="todoapp__content">
-        <HeaderTodo showError={showError} setLoading={() => setLoading(true)} />
+        <HeaderTodo
+          showError={showError}
+          setTempTodo={setTempTodo}
+          setLoading={setLoading}
+          setLoadingAdd={setLoadingAdd}
+        />
         {hasTodos && (
           <>
-            <MainTodo loading={loading} showError={showError} />
+            <MainTodo
+              loading={loading}
+              loadingAdd={loadingAdd}
+              tempTodo={tempTodo}
+              showError={showError}
+              setLoading={setLoading}
+            />
 
-            <FooterTodo showError={showError} />
+            <FooterTodo showError={showError} setLoading={setLoading} />
           </>
         )}
       </div>
