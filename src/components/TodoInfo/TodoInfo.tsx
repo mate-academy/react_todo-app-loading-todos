@@ -12,9 +12,9 @@ export const TodoInfo:React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      <label className="todo__status-label">
+      <label htmlFor='todoStatus' className="todo__status-label">
         <input
-          id="label"
+          id="todoStatus"
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
