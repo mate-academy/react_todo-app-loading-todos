@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Button } from './Button';
 import { Todo } from '../types/Todo';
@@ -7,8 +8,6 @@ type Props = {
 };
 
 export const TodoElement: React.FC<Props> = ({ todo }) => {
-  console.log(todo);
-
   return (
     <>
       {/* This is a completed todo */}
