@@ -15,6 +15,7 @@ export const TodoInfo:React.FC<Props> = ({ todo }) => {
       <label htmlFor='todoStatus' className="todo__status-label">
         <input
           id="todoStatus"
+          aria-label="Some label"
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
