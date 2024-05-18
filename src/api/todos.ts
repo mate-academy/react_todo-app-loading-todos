@@ -7,6 +7,6 @@ export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-export const postTodo = (newTodo: any) => {
-  return client.post<Todo>('/todos', newTodo);
+export const postTodo = ({ title, userId, completed }: Omit<Todo, 'id'>) => {
+  return client.post<Todo>('/todos', { title, userId, completed });
 };

@@ -12,13 +12,15 @@ export const TodoInfo:React.FC<Props> = ({ todo }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      <input
-        id="label"
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        defaultChecked={todo.completed}
-      />
+      <label className="todo__status-label">
+        <input
+          id="label"
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          defaultChecked={todo.completed}
+        />
+      </label>
 
       <span data-cy="TodoTitle" className="todo__title">
         {todo.title}
