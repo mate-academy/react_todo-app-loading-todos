@@ -37,9 +37,13 @@ const reducer = (state: State, action: Action): State => {
         todos: action.payload,
       };
     case 'remove':
+      const filteredTodos = state.todos.filter(
+        todo => todo.id !== action.payload,
+      );
+
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.payload),
+        todos: filteredTodos,
       };
     case 'set-error':
       return {
