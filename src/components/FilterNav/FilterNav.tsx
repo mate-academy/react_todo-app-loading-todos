@@ -13,7 +13,7 @@ export const FilterNav = () => {
         return (
           <a
             key={status}
-            href={`#/${status === Filter.ALL ? '' : status}`}
+            href={`#/${status === Filter.ALL ? '' : status.toLowerCase}`}
             className={cn('filter__link', { selected: filter === status })}
             data-cy={`FilterLink${status}`}
             onClick={() => dispatch({ type: 'set-filter', payload: status })}
