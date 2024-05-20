@@ -41,7 +41,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header title={title}/>
+        <Header title={title} />
         <TodoList todos={filtredTodos} />
 
         {todos.length !== 0 && (
@@ -49,12 +49,10 @@ export const App: React.FC = () => {
             todos={todos}
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
-          />)}
-
+          />
+        )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={cn(
