@@ -9,7 +9,6 @@ export const getFilteredTodos = (todos: Todo[], status: Status) => {
       return todos.filter(todo => !todo.completed);
     case Status.Completed:
       return todos.filter(todo => todo.completed);
-
     default:
       return todos;
   }
