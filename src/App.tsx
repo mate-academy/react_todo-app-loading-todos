@@ -111,26 +111,26 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodos.map(todo => (
+          {filteredTodos.map(({ id, title, completed }) => (
             <div
               data-cy="Todo"
               className={classNames('todo', {
-                completed: todo.completed,
+                completed: completed,
               })}
-              key={todo.id}
+              key={id}
             >
               <label className="todo__status-label">
                 <input
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  checked={todo.completed}
-                  onChange={() => handleToggleTodo(todo.id)}
+                  checked={completed}
+                  onChange={() => handleToggleTodo(id)}
                 />
               </label>
 
               <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
+                {title}
               </span>
 
               <button
