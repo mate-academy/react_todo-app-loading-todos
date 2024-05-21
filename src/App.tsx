@@ -12,7 +12,6 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<Status>(Status.All);
-  // const [newTodoTitle, setNewTodoTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const showError = (message: string) => {
