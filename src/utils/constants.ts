@@ -1,3 +1,5 @@
-export const FILTER_FIELD_ALL = 'all';
-export const FILTER_FIELD_ACTIVE = 'active';
-export const FILTER_FIELD_COMPLETED = 'completed';
+export enum FilterField {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}

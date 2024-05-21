@@ -25,8 +25,6 @@ export const TodoAppContent: React.FC = () => {
         <Footer />
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${errorMessage === '' && 'hidden'}`}

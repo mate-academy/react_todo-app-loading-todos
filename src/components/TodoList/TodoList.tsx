@@ -13,15 +13,13 @@ export const TodoList: React.FC = () => {
           key={todo.id}
           data-cy="Todo"
           className={classNames('todo', { completed: todo.completed })}
-          // onMouseEnter={() => setIsHover(true)}
-          // onMouseLeave={() => setIsHover(false)}
         >
           <label className="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed}
               onChange={() => handleCompletedStatus(todo)}
             />
           </label>
@@ -53,20 +51,11 @@ export const TodoList: React.FC = () => {
             </form>
           )}
           <>
-            <span
-              data-cy="TodoTitle"
-              className="todo__title"
-              // onDoubleClick={() => setSelectedTodo(todo)}
-            >
+            <span data-cy="TodoTitle" className="todo__title">
               {todo.title}
             </span>
 
-            <button
-              type="button"
-              className="todo__remove"
-              data-cy="TodoDelete"
-              // onClick={() => handleDelete(todo)}
-            >
+            <button type="button" className="todo__remove" data-cy="TodoDelete">
               ×
             </button>
             <div data-cy="TodoLoader" className="modal overlay">

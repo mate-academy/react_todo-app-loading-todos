@@ -1,11 +1,7 @@
 import { useContext } from 'react';
 import { TodoContext } from '../../TodoContext';
-import {
-  FILTER_FIELD_ACTIVE,
-  FILTER_FIELD_ALL,
-  FILTER_FIELD_COMPLETED,
-} from '../../utils/constants';
 import classNames from 'classnames';
+import { FilterField } from '../../utils/constants';
 
 export const Footer: React.FC = () => {
   const { todos, filterField, setFilterField } = useContext(TodoContext);
@@ -18,15 +14,14 @@ export const Footer: React.FC = () => {
             {`${todos.filter(todo => !todo.completed).length} items left`}
           </span>
 
-          {/* Active link should have the 'selected' class */}
           <nav className="filter" data-cy="Filter">
             <a
               href="#/"
               className={classNames('filter__link', {
-                selected: filterField === FILTER_FIELD_ALL,
+                selected: filterField === FilterField.ALL,
               })}
               data-cy="FilterLinkAll"
-              onClick={() => setFilterField(FILTER_FIELD_ALL)}
+              onClick={() => setFilterField(FilterField.ALL)}
             >
               All
             </a>
@@ -34,10 +29,10 @@ export const Footer: React.FC = () => {
             <a
               href="#/active"
               className={classNames('filter__link', {
-                selected: filterField === FILTER_FIELD_ACTIVE,
+                selected: filterField === FilterField.ACTIVE,
               })}
               data-cy="FilterLinkActive"
-              onClick={() => setFilterField(FILTER_FIELD_ACTIVE)}
+              onClick={() => setFilterField(FilterField.ACTIVE)}
             >
               Active
             </a>
@@ -45,16 +40,15 @@ export const Footer: React.FC = () => {
             <a
               href="#/completed"
               className={classNames('filter__link', {
-                selected: filterField === FILTER_FIELD_COMPLETED,
+                selected: filterField === FilterField.COMPLETED,
               })}
               data-cy="FilterLinkCompleted"
-              onClick={() => setFilterField(FILTER_FIELD_COMPLETED)}
+              onClick={() => setFilterField(FilterField.COMPLETED)}
             >
               Completed
             </a>
           </nav>
 
-          {/* this button should be disabled if there are no completed todos */}
           <button
             type="button"
             className="todoapp__clear-completed"

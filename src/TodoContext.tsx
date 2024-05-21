@@ -2,11 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Todo } from './types/Todo';
 import { USER_ID } from './api/todos';
 import * as todoServises from './api/todos';
-import {
-  FILTER_FIELD_ACTIVE,
-  FILTER_FIELD_ALL,
-  FILTER_FIELD_COMPLETED,
-} from './utils/constants';
+import { FilterField } from './utils/constants';
 
 type ContextProps = {
   readyTodos: Todo[];
@@ -50,13 +46,13 @@ export const TodoProvider: React.FC<Props> = ({ children }) => {
 
     if (filterField) {
       switch (filterField) {
-        case FILTER_FIELD_ALL:
+        case FilterField.ALL:
           return readyTodos;
 
-        case FILTER_FIELD_ACTIVE:
+        case FilterField.ACTIVE:
           return readyTodos.filter(todo => !todo.completed);
 
-        case FILTER_FIELD_COMPLETED:
+        case FilterField.COMPLETED:
           return readyTodos.filter(todo => todo.completed);
 
         default:
