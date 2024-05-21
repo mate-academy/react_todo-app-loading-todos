@@ -5,14 +5,12 @@ import { TodoLoader } from './TodoLoader';
 
 type TodoProps = {
   todo: Todo;
-  isLoadingTodoId: number | null;
   deleteTodo: (num: number) => void;
   updateTodo: (todo: Todo) => void;
 };
 
 export const SingleTodo: React.FunctionComponent<TodoProps> = ({
   todo,
-  isLoadingTodoId,
   deleteTodo,
   updateTodo,
 }) => {
@@ -100,7 +98,7 @@ export const SingleTodo: React.FunctionComponent<TodoProps> = ({
         </>
       )}
 
-      <TodoLoader isLoadingTodoId={isLoadingTodoId} todo={todo} />
+      <TodoLoader todo={todo} />
     </div>
   );
 };

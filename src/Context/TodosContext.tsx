@@ -13,6 +13,11 @@ const initialTodosContextValue: TodosContextValue = {
   errors: {},
   triggerError: () => {},
   setErrors: () => {},
+  loadingIds: [],
+  addTodoAndSubmit: () => {},
+  deletingTodo: () => {},
+  updatingTodo: () => {},
+  toggleAllTodos: () => {},
 };
 
 const TodosContext = createContext<TodosContextValue>(initialTodosContextValue);

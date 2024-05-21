@@ -5,7 +5,7 @@ import cn from 'classnames';
 
 import { UserWarning } from './UserWarning';
 
-import { USER_ID, addTodo, deleteTodo, updateTodo } from './api/todos';
+import { USER_ID } from './api/todos';
 import { getFilteredTodos } from './utils/getFilteredTodos';
 
 import { Header } from './components/Header';
@@ -25,10 +25,10 @@ const tempTodo: Todo = {
 };
 
 export const App: React.FC = () => {
-  const { todos, setTodos, errors, triggerError } = useTodosContext();
+  const { todos, errors, addTodoAndSubmit, deletingTodo, updatingTodo } =
+    useTodosContext();
   const [todo, setTodo] = useState<Todo>(tempTodo);
   const [filter, setFilter] = useState<FilterType>(FilterType.All);
-  const [todoLoadingId, setTodoLoadingId] = useState<number | null>(null);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -38,71 +38,21 @@ export const App: React.FC = () => {
 
   const errorsCondition = errors.titleError || errors.loadingError;
 
-  const handleDeleteTodo = (todoId: number) => {
-    setTodoLoadingId(todoId);
-    setTimeout(() => {
-      deleteTodo(todoId)
-        .catch(() => {
-          triggerError('deleteTodoError');
-        })
-        .finally(() => setTodoLoadingId(null));
-      setTodos(currentTodos =>
-        currentTodos.filter(todoDeleted => todoDeleted.id !== todoId),
-      );
-    }, 300);
-  };
-
   const handleChangeTodo = (e: ChangeEvent<HTMLInputElement>) => {
     setTodo({ ...todo, title: e.target.value });
   };
 
+  const handleDeleteTodo = (todoId: number) => {
+    deletingTodo(todoId);
+  };
+
   const handleUpdateTodo = (updatedTodo: Todo) => {
-    setTodoLoadingId(updatedTodo.id);
-    updateTodo(updatedTodo)
-      .then(todoUpdated => {
-        setTodos(currentTodos => {
-          const newTodos = [...currentTodos];
-          const index = newTodos.findIndex(
-            todoIndex => todoIndex.id === updatedTodo.id,
-          );
-
-          newTodos.splice(index, 1, todoUpdated);
-
-          return newTodos;
-        });
-      })
-      .catch(() => {
-        triggerError('updateTodoError');
-      })
-      .finally(() => setTodoLoadingId(null));
+    updatingTodo(updatedTodo);
   };
 
-  const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!todo.title.trim()) {
-      triggerError('titleError');
-
-      return;
-    }
-
-    // setTodoLoadingId(todo.id);
-    addTodo(todo)
-      .then(newTodo => {
-        setTodoLoadingId(newTodo.id);
-        setTodos(prev => [...prev, newTodo]);
-        setTodo(tempTodo);
-      })
-      .catch(() => {
-        triggerError('addTodoError');
-      })
-      .finally(() =>
-        setTimeout(() => {
-          setTodoLoadingId(null);
-        }, 300),
-      );
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    addTodoAndSubmit(e, todo, setTodo, tempTodo);
   };
-
-  window.console.log(todos, 'Rendered');
 
   return (
     <div className={cn('todoapp', { 'has-error': errorsCondition })}>
@@ -111,25 +61,18 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header
           newTodo={todo}
-          submit={handleSubmitForm}
+          submit={handleSubmit}
           changeTodo={handleChangeTodo}
         />
-
         <Main
           filteredTodos={filteredTodos}
-          isLoadingTodoId={todoLoadingId}
           deleteTodo={handleDeleteTodo}
           updateTodo={handleUpdateTodo}
         />
-
-        {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (
           <Footer todos={todos} filterType={filter} setFilter={setFilter} />
         )}
       </div>
-
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorsContainer errorsCondition={errorsCondition} />
     </div>
   );
