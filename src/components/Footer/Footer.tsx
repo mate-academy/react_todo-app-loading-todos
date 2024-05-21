@@ -1,30 +1,29 @@
 import React, { FC, SetStateAction } from 'react';
-import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 
 export interface IFooter {
   setStatus: React.Dispatch<SetStateAction<Status>>;
   status: Status;
-  todos: Todo[];
+  activeTodoCount: number;
+  hasCompletedTodos: boolean;
 }
 
-export const Footer: FC<IFooter> = ({ setStatus, status, todos }) => {
-  const activeTodo = todos.reduce(
-    (acc, current) => (current.completed ? acc : acc + 1),
-    0,
-  );
-
-  if (!todos.length) {
+export const Footer: FC<IFooter> = ({
+  setStatus,
+  status,
+  activeTodoCount,
+  hasCompletedTodos,
+}) => {
+  if (activeTodoCount === 0 && !hasCompletedTodos) {
     return null;
   }
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodo} items left
+        {activeTodoCount} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -37,9 +36,7 @@ export const Footer: FC<IFooter> = ({ setStatus, status, todos }) => {
 
         <a
           href="#/active"
-          className={`filter__link ${
-            status === Status.Active ? 'selected' : ''
-          }`}
+          className={`filter__link ${status === Status.Active ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
           onClick={() => setStatus(Status.Active)}
         >
@@ -48,9 +45,7 @@ export const Footer: FC<IFooter> = ({ setStatus, status, todos }) => {
 
         <a
           href="#/completed"
-          className={`filter__link ${
-            status === Status.Completed ? 'selected' : ''
-          }`}
+          className={`filter__link ${status === Status.Completed ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
           onClick={() => setStatus(Status.Completed)}
         >
@@ -58,11 +53,11 @@ export const Footer: FC<IFooter> = ({ setStatus, status, todos }) => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!hasCompletedTodos}
       >
         Clear completed
       </button>

@@ -20,6 +20,12 @@ export const App: React.FC = () => {
 
   const filteredTodo = todoFilter(todos, status);
 
+  const activeTodoCount = todos.reduce(
+    (acc, todo) => (todo.completed ? acc : acc + 1),
+    0,
+  );
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+
   useEffect(() => {
     const fetchTodo = async () => {
       try {
@@ -38,10 +44,6 @@ export const App: React.FC = () => {
     fetchTodo();
   }, [error, status]);
 
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -49,7 +51,12 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList todos={filteredTodo} />
-        <Footer todos={todos} setStatus={setStatus} status={status} />
+        <Footer
+          setStatus={setStatus}
+          status={status}
+          activeTodoCount={activeTodoCount}
+          hasCompletedTodos={hasCompletedTodos}
+        />
       </div>
 
       <ErrorNotification error={error} setError={setError} />
