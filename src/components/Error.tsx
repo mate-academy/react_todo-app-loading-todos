@@ -1,30 +1,39 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ErrorTypes } from '../types/ErrorTypes';
 
-interface Props {
-  emptyTitle: boolean;
-  setEmptyTitle: React.Dispatch<React.SetStateAction<boolean>>;
-}
+type Props = {
+  errorMessage: ErrorTypes | null;
+  setErrorMessage: (errorMessage: ErrorTypes | null) => void;
+};
 
 export const ErrorMessage: React.FC<Props> = ({
-  emptyTitle,
-  setEmptyTitle,
+  errorMessage,
+  setErrorMessage,
 }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage(null);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [errorMessage, setErrorMessage]);
+
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !emptyTitle },
+        { hidden: !errorMessage },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setEmptyTitle(false)}
+        onClick={() => setErrorMessage(null)}
       />
-      Title should not be empty
+      {errorMessage}
     </div>
   );
 };

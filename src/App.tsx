@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID, getTodos } from './api/todos';
+import { USER_ID, addTodo, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import { TodoList } from './components/TodoList';
@@ -10,19 +10,23 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { FilterBy } from './utils/FilterBy';
 import { ErrorMessage } from './components/Error';
+import { ErrorTypes } from './types/ErrorTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.All);
-  const [emptyTitle, setEmptyTitle] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
 
   useEffect(() => {
-    getTodos().then(data => {
-      setTodos(data);
-      setFilteredTodos(data);
-    });
+    getTodos()
+      .then(data => {
+        setTodos(data);
+        setFilteredTodos(data);
+      })
+      .catch(() => {
+        setErrorMessage(ErrorTypes.UnableToLoad);
+      });
   }, []);
 
   if (!USER_ID) {
@@ -38,10 +42,6 @@ export const App: React.FC = () => {
     applyFilter(newFilter, todos);
   };
 
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
   const handleToggleTodo = (id: number) => {
     const updatedTodos = todos.map(todo =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo,
@@ -51,33 +51,30 @@ export const App: React.FC = () => {
     applyFilter(filter, updatedTodos);
   };
 
-  const handleShowError = () => {
-    setEmptyTitle(true);
+  const handleAddTodo = ({
+    title,
+    userId,
+    completed,
+  }: Omit<Todo, 'id'>): Promise<void> => {
+    setErrorMessage(null);
 
-    setTimeout(() => {
-      setEmptyTitle(false);
-    }, 4000);
-  };
+    if (!title) {
+      setErrorMessage(ErrorTypes.invalidTitle);
 
-  const handleAddTodo = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (query.trim()) {
-      const newTodo: Todo = {
-        id: todos.length + 1,
-        title: query,
-        completed: false,
-        userId: USER_ID,
-      };
-
-      const updatedTodos = [...todos, newTodo];
-
-      setTodos(updatedTodos);
-      setQuery('');
-      applyFilter(filter, updatedTodos);
-    } else {
-      handleShowError();
+      return Promise.resolve();
     }
+
+    return addTodo({ title, userId, completed })
+      .then(newTodo => {
+        const updatedTodos = [...todos, newTodo];
+
+        setTodos(updatedTodos);
+        applyFilter(filter, updatedTodos);
+      })
+      .catch(error => {
+        setErrorMessage(ErrorTypes.UnableToAdd);
+        throw error;
+      });
   };
 
   return (
@@ -85,12 +82,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header
-          handleAddTodo={handleAddTodo}
-          handleQueryChange={handleQueryChange}
-          query={query}
-          todos={todos}
-        />
+        <Header handleAddTodo={handleAddTodo} todos={todos} />
 
         <TodoList todos={filteredTodos} handleToggleTodo={handleToggleTodo} />
 
@@ -102,7 +94,10 @@ export const App: React.FC = () => {
           />
         )}
       </div>
-      <ErrorMessage emptyTitle={emptyTitle} setEmptyTitle={setEmptyTitle} />
+      <ErrorMessage
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
