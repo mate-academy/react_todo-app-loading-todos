@@ -11,6 +11,7 @@ import { AppContextType } from '../types/AppContextType';
 import { getTodos } from '../api/todos';
 import { Error } from '../types/Error';
 import { updateErrorState } from '../utils/errorHandler';
+import { Filter } from '../types/Filter';
 
 const initialErrorState: Error[] = [
   { type: 'TodoLoadError', textError: 'Unable to load todos', value: false },
@@ -35,7 +36,7 @@ const initialErrorState: Error[] = [
 const initialState: State = {
   todos: [],
   filteredTodos: [],
-  filter: 'All',
+  filter: Filter.All,
   errors: initialErrorState,
   targetTodo: 0, //object with inProgress boolean?
 };
@@ -76,11 +77,9 @@ const reducer = (state: State, action: Action): State => {
     case 'SET_FILTER':
       const filteredTodos = state.todos.filter(todo => {
         switch (action.payload) {
-          case 'All':
-            return true;
-          case 'Active':
+          case Filter.Active:
             return !todo.completed;
-          case 'Completed':
+          case Filter.Completed:
             return todo.completed;
           default:
             return true;

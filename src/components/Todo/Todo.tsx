@@ -76,12 +76,3 @@ export const Todo: React.FC<TodoProps> = memo(({ todo }) => {
 });
 
 Todo.displayName = 'Todo';
-/*
-// TODO overlay will cover the todo while it is being deleted or updated
-//TODO 'is-active' class puts this modal on top of the todo
-
-<div data-cy="TodoLoader" className="modal overlay">
-  <div className="modal-background has-background-white-ter" />
-  <div className="loader" />
-</div>
-*/
