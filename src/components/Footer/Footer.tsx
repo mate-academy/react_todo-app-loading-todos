@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { deleteTodo } from '../../api/todos';
 
 import { useTodosContext } from '../../context/TodosContext';
@@ -14,9 +12,10 @@ type FooterProps = {
 
 export const Footer: React.FunctionComponent<FooterProps> = ({
   isClearAllCompletedActive,
+  status,
+  setStatus,
 }) => {
   const { todos, setTodos, setLoadingIds, setErrorMessage } = useTodosContext();
-  const [status, setStatus] = useState<Status>(Status.All);
 
   const statuses = Object.values(Status);
 
