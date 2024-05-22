@@ -1,8 +1,8 @@
-import { Status } from '../App';
+import { Statuses } from '../types/Statuses';
 import { Todo } from '../types/Todo';
 
 interface Filter {
-  status: Status;
+  status: Statuses;
 }
 
 export const getFilteredTodos = (todos: Todo[], { status }: Filter) => {
