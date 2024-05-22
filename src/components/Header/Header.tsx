@@ -1,16 +1,19 @@
 import { RefObject } from 'react';
+import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
-interface Props {
-  title: RefObject<HTMLInputElement>;
+interface HeaderProps {
+  inputRef: RefObject<HTMLInputElement>;
+  todos: Todo[];
 }
 
-export const Header: React.FC<Props> = ({ title }) => {
+export const Header: React.FC<HeaderProps> = ({ inputRef, todos }) => {
+  const everyTodoCompleted = todos.every(todo => todo.completed);
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
-        className="todoapp__toggle-all active"
+        className={cn('todoapp__toggle-all', {active: everyTodoCompleted})}
         data-cy="ToggleAllButton"
       />
 
@@ -21,7 +24,7 @@ export const Header: React.FC<Props> = ({ title }) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          ref={title}
+          ref={inputRef}
         />
       </form>
     </header>

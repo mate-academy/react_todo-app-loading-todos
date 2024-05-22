@@ -6,7 +6,7 @@ import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
-import { getFiltredTodos } from './utils/getFiltredTodos';
+import { getFilteredTodos } from './utils/getFiltredTodos';
 import { FilterStatus } from './types/FilterStatus';
 import { getTodos } from './api/todos';
 import { Footer } from './components/Footer/Footer';
@@ -18,19 +18,24 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedFilter, setSelectedFilter] = useState(FilterStatus.All);
 
-  const filtredTodos = getFiltredTodos(todos, selectedFilter);
-  const title = useRef<HTMLInputElement>(null);
+  const filteredTodos = getFilteredTodos(todos, selectedFilter);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     getTodos()
       .then(res => setTodos(res))
       .catch(() => setError(Error.UnableLoad))
-      .finally(() => {
-        setTimeout(() => {
-          setError('');
-        }, 3000);
-      });
   }, []);
+
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setError(''), 3000)
+
+    return () => clearTimeout(timeout);
+  }, [error])
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -41,8 +46,8 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header title={title} />
-        <TodoList todos={filtredTodos} />
+        <Header inputRef={inputRef} todos={todos} />
+        <TodoList todos={filteredTodos} />
 
         {todos.length !== 0 && (
           <Footer
@@ -60,7 +65,11 @@ export const App: React.FC = () => {
           { hidden: !error },
         )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError('')}
+        />
         {error}
       </div>
     </div>

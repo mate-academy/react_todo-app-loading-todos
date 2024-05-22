@@ -2,24 +2,24 @@ import { Todo } from '../../types/Todo';
 import { FilterStatus } from '../../types/FilterStatus';
 import cn from 'classnames';
 
-interface Props {
+interface FooterProps {
   todos: Todo[];
   selectedFilter: FilterStatus;
   setSelectedFilter: (selectedFilter: FilterStatus) => void;
 }
 
-export const Footer: React.FC<Props> = ({
+export const Footer: React.FC<FooterProps> = ({
   todos,
   selectedFilter,
   setSelectedFilter,
 }) => {
-  const activeTodos = todos.filter(todo => !todo.completed).length;
-  const completedTodos = todos.some(todo => todo.completed);
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${activeTodos} items left`}
+        {`${activeTodosCount} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -61,7 +61,7 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!completedTodos}
+        disabled={!hasCompletedTodos}
       >
         Clear completed
       </button>

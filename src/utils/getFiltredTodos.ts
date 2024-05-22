@@ -1,7 +1,7 @@
 import { Todo } from '../types/Todo';
 import { FilterStatus } from '../types/FilterStatus';
 
-export const getFiltredTodos = (
+export const getFilteredTodos = (
   todos: Todo[],
   selectedFilter: FilterStatus,
 ) => {

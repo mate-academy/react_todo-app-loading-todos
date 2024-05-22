@@ -22,9 +22,21 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
-      </span>
+      {true ? (
+        <span data-cy="TodoTitle" className="todo__title">
+          {todo.title}
+        </span>
+      ) : (
+        <form>
+          <input
+            data-cy="TodoTitleField"
+            type="text"
+            className="todo__title-field"
+            placeholder="Empty todo will be deleted"
+            value="Todo is being edited now"
+          />
+        </form>
+      )}
 
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
