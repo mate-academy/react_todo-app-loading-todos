@@ -80,6 +80,13 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
           />
         </form>
       )}
+
+      {!todo && (
+        <div data-cy="TodoLoader" className="modal overlay">
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
+      )}
     </div>
   );
 };

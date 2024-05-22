@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { client } from './utils/fetchClient';
@@ -8,48 +8,49 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { Filter } from './types/Filter';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
-import classNames from 'classnames';
+import { ErrorMessage } from './components/EroorMessage/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState(Filter.All);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const getFilteredTodos = () => {
+    switch (filter) {
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+      case Filter.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  };
+
+  const todosToRender = getFilteredTodos();
 
   useEffect(() => {
     client
       .get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage('Unable to load todos');
-        throw error;
       });
   }, []);
 
-  const [todosToRender, setTodosToRender] = useState(todos);
-
-  useEffect(() => {
-    switch (filter) {
-      case Filter.Active:
-        setTodosToRender(todos.filter(todo => !todo.completed));
-
-        break;
-      case Filter.Completed:
-        setTodosToRender(todos.filter(todo => todo.completed));
-
-        break;
-      default:
-        setTodosToRender(todos);
-
-        break;
-    }
-  }, [filter, todos]);
-
   useEffect(() => {
     if (errorMessage) {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setErrorMessage('');
       }, 3000);
     }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
   }, [errorMessage]);
 
   if (!USER_ID) {
@@ -80,7 +81,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <TodoList todos={todosToRender} />
 
@@ -90,24 +91,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: errorMessage.length === 0 },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {/* show only one message at a time */}
-        {errorMessage}
-      </div>
+      <ErrorMessage
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
