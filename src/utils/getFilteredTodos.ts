@@ -1,17 +1,14 @@
-import { FilterType } from '../types/FilterType';
+import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export const getFilteredTodos = (
-  todosFromServer: Todo[],
-  filterBy: FilterType,
-) => {
+export const getFilteredTodos = (todosFromServer: Todo[], filterBy: Status) => {
   const filteredTodos = [...todosFromServer];
 
   switch (filterBy) {
-    case FilterType.Active:
+    case Status.Active:
       return filteredTodos.filter(todo => !todo.completed);
 
-    case FilterType.Completed:
+    case Status.Completed:
       return filteredTodos.filter(todo => todo.completed);
 
     default:

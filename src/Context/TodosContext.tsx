@@ -1,32 +1,31 @@
 import React, { createContext, useContext } from 'react';
-import { TodosContextValue, useTodos } from '../hooks/useTodos';
+import { UseTodos, useTodos } from '../hooks/useTodos';
+import { temporaryTodo } from '../utils/tempTodo';
 
 interface TodosProviderProps {
   children: React.ReactNode;
 }
 
-const initialTodosContextValue: TodosContextValue = {
+const initialContextValue: UseTodos = {
   todos: [],
   setTodos: () => {},
-  isLoading: false,
-  setIsLoading: () => {},
-  errors: {},
-  triggerError: () => {},
-  setErrors: () => {},
+  errorMessage: '',
+  setErrorMessage: () => {},
+  tempTodo: temporaryTodo,
+  setTempTodo: () => {},
   loadingIds: [],
-  addTodoAndSubmit: () => {},
-  deletingTodo: () => {},
-  updatingTodo: () => {},
-  toggleAllTodos: () => {},
+  setLoadingIds: () => {},
 };
 
-const TodosContext = createContext<TodosContextValue>(initialTodosContextValue);
+const TodosContext = createContext<UseTodos>(initialContextValue);
 
-export const TodosProvider: React.FC<TodosProviderProps> = ({ children }) => {
-  const todosValue = useTodos();
+export const TodosProvider: React.FunctionComponent<TodosProviderProps> = ({
+  children,
+}) => {
+  const todosData = useTodos();
 
   return (
-    <TodosContext.Provider value={todosValue}>{children}</TodosContext.Provider>
+    <TodosContext.Provider value={todosData}>{children}</TodosContext.Provider>
   );
 };
 
@@ -34,7 +33,7 @@ export const useTodosContext = () => {
   const context = useContext(TodosContext);
 
   if (!context) {
-    throw new Error('Here is Context Error');
+    throw new Error('');
   }
 
   return context;
