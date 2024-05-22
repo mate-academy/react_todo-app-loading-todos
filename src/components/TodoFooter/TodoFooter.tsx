@@ -7,15 +7,15 @@ export const TodoFooter: React.FC = memo(() => {
   const { state, dispatch } = useContext(AppContext);
   const { todos, filter } = state;
 
-  const filterOptions: Filter[] = ['All', 'Active', 'Completed'];
+  const filterOptions: Filter[] = [Filter.All, Filter.Active, Filter.Completed];
   const buttonDisabled = todos.filter(todo => todo.completed).length === 0;
   // TODO check after UPD implementation
   const activeTodosAmount = todos.filter(todo => !todo.completed).length;
 
-  const handleSetFiltration = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleSetFiltration = (filterOption: number) => {
     dispatch({
       type: 'SET_FILTER',
-      payload: event.currentTarget.innerText as Filter,
+      payload: filterOption as Filter,
     });
   };
 
@@ -32,14 +32,14 @@ export const TodoFooter: React.FC = memo(() => {
             {filterOptions.map(value => (
               <a
                 key={value}
-                href={`#/${value === 'All' ? '' : value.toLowerCase()}`}
+                href={`#/${value === Filter.All ? '' : Filter[value].toLowerCase()}`}
                 className={classNames('filter__link', {
                   selected: value === filter,
                 })}
-                data-cy={`FilterLink${value}`}
-                onClick={handleSetFiltration}
+                data-cy={`FilterLink${Filter[value]}`}
+                onClick={() => handleSetFiltration(value)}
               >
-                {value}
+                {Filter[value]}
               </a>
             ))}
           </nav>
