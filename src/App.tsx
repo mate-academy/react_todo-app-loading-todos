@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos, postTodo } from './api/todos';
 import { Todo } from './types/Todo';
@@ -24,9 +24,9 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleCloseError = () => {
+  const handleCloseError = useCallback(() => {
     setError(null);
-  };
+  }, []);
 
   const addTodo = (newTodoTitle: string) => {
     setLoader(true);
