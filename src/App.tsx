@@ -8,27 +8,7 @@ import { Footer } from './Footer';
 import { Errors } from './types/Errors';
 import { FilterBy } from './types/FiilterBy';
 import { ErrorNotification } from './ErrorNotification';
-
-type FilterTheTodos = (todos: Todo[], filterBy: FilterBy) => Todo[];
-
-const getFilteredTodos: FilterTheTodos = (todos, filterBy) => {
-  let filteredTodos = todos;
-
-  if (filterBy !== FilterBy.All) {
-    filteredTodos = filteredTodos.filter(todo => {
-      switch (filterBy) {
-        case FilterBy.Active:
-          return !todo.completed;
-        case FilterBy.Completed:
-          return todo.completed;
-        default:
-          throw new Error('Unknown filter type');
-      }
-    });
-  }
-
-  return filteredTodos;
-};
+import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -86,7 +66,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <>
             <TodoList todos={visibleTodos} />
 
