@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+export const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
-function wait(delay: number) {
+export function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });
