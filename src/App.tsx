@@ -16,7 +16,7 @@ import { Footer } from './components/Footer';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
-  const [status, setStatus] = useState<Statuses>('all');
+  const [status, setStatus] = useState<Statuses>(Statuses.All);
 
   const filteredTodos = getFilteredTodos(todos, { status });
 
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   const fetchTodos = () => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(Errors.LoadTodoError));
   };
 
   useEffect(() => {
