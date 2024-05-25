@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
 
       return null;
     },
-    [title, dispatch],
+    [title, dispatch, resetErrorMessage],
   );
 
   const handleToggleAll = () => {

@@ -25,7 +25,7 @@ export const App: React.FC = () => {
 
         resetErrorMessage();
       });
-  }, [dispatch]);
+  }, [dispatch, resetErrorMessage]);
 
   const { todos, tab } = useContext(TodoContext);
 
