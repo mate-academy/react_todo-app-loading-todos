@@ -1,16 +1,14 @@
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export const FilteredTodos = (todos: Todo[], filterBy: Status): Todo[] => {
-  let filteredTodos = [...todos];
-
+export const handleFilterTodos = (todos: Todo[], filterBy: Status): Todo[] => {
   if (filterBy) {
     switch (filterBy) {
       case Status.Active:
-        return (filteredTodos = filteredTodos.filter(todo => !todo.completed));
+        return todos.filter(todo => !todo.completed);
 
       case Status.Completed:
-        return (filteredTodos = filteredTodos.filter(todo => todo.completed));
+        return todos.filter(todo => todo.completed);
 
       case Status.All:
       default:
@@ -18,5 +16,5 @@ export const FilteredTodos = (todos: Todo[], filterBy: Status): Todo[] => {
     }
   }
 
-  return filteredTodos;
+  return todos;
 };

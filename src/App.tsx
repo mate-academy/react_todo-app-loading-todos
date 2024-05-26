@@ -20,7 +20,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(res => setTodos(res))
+      .then(setTodos)
       .catch(() => setError(Error.UnableLoad))
       .finally(() => {
         setTimeout(() => {
@@ -43,7 +43,7 @@ export const App: React.FC = () => {
 
         <TodoList todos={todos} filterBy={filterBy} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer todos={todos} filterBy={filterBy} setFilterBy={setFilterBy} />
         )}
       </div>
