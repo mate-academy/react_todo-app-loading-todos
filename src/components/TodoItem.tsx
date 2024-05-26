@@ -5,25 +5,12 @@ import cn from 'classnames';
 
 type Props = {
   todo: Todo;
-  handleCompltete(id: number): void;
-  loadingIds: number[];
 };
 
-export const TodoItem: React.FC<Props> = ({
-  todo,
-  handleCompltete,
-  loadingIds,
-}) => (
+export const TodoItem: React.FC<Props> = ({ todo }) => (
   <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
     <label className="todo__status-label">
-      <input
-        data-cy="TodoStatus"
-        type="checkbox"
-        className="todo__status"
-        onChange={() => {
-          handleCompltete(todo.id);
-        }}
-      />
+      <input data-cy="TodoStatus" type="checkbox" className="todo__status" />
     </label>
 
     <span data-cy="TodoTitle" className="todo__title">
@@ -33,12 +20,7 @@ export const TodoItem: React.FC<Props> = ({
       ×
     </button>
 
-    <div
-      data-cy="TodoLoader"
-      className={cn('modal overlay', {
-        'is-active': loadingIds.includes(todo.id),
-      })}
-    >
+    <div data-cy="TodoLoader" className="modal overlay">
       <div className="modal-background has-background-white-ter" />
       <div className="loader" />
     </div>
