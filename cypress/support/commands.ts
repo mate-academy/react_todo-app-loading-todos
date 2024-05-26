@@ -36,7 +36,7 @@
 //   }
 // }
 
-export {};
+export { };
 
 declare global {
   namespace Cypress {
