@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -42,17 +42,17 @@ export const App: React.FC = () => {
     setFilteredTodoList(filteredTodos);
   }, [selectedFilter, todoList]);
 
+  const handleSelectFilter = useCallback((filter: FiltersEnum) => {
+    setSelecetedFilter(filter);
+  }, []);
+
+  const handleCloseError = useCallback(() => {
+    setError(null);
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
-
-  const handleSelectFilter = (filter: FiltersEnum) => {
-    setSelecetedFilter(filter);
-  };
-
-  const handleCloseError = () => {
-    setError(null);
-  };
 
   return (
     <div className="todoapp">
@@ -207,9 +207,7 @@ export const App: React.FC = () => {
                 href="#/"
                 className={`filter__link ${selectedFilter === FiltersEnum.All ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
-                onClick={() => {
-                  handleSelectFilter(FiltersEnum.All);
-                }}
+                onClick={() => handleSelectFilter(FiltersEnum.All)}
               >
                 {FiltersEnum.All}
               </a>
@@ -218,9 +216,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={`filter__link ${selectedFilter === FiltersEnum.Active ? 'selected' : ''}`}
                 data-cy="FilterLinkActive"
-                onClick={() => {
-                  handleSelectFilter(FiltersEnum.Active);
-                }}
+                onClick={() => handleSelectFilter(FiltersEnum.Active)}
               >
                 {FiltersEnum.Active}
               </a>
@@ -229,9 +225,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={`filter__link ${selectedFilter === FiltersEnum.Completed ? 'selected' : ''}`}
                 data-cy="FilterLinkCompleted"
-                onClick={() => {
-                  handleSelectFilter(FiltersEnum.Completed);
-                }}
+                onClick={() => handleSelectFilter(FiltersEnum.Completed)}
               >
                 {FiltersEnum.Completed}
               </a>
