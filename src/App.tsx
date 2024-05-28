@@ -7,7 +7,7 @@ import { Todo } from './types/Todo';
 import { client } from './utils/fetchClient';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>('');
   const [filter, setFilter] = useState<string>('');
 
@@ -98,7 +98,7 @@ export const App: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
-                  checked={todo.completed}
+                  checked
                 />
               </label>
 
