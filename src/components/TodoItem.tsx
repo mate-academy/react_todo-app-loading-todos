@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -26,15 +27,12 @@ export const TodoItem: React.FC<PropsItem> = ({ todo }) => {
           onClick={() => handleCompleted(id)}
         />
       </label>
-
       <span data-cy="TodoTitle" className="todo__title">
         {title}
       </span>
-
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
-
       <div data-cy="TodoLoader" className="modal overlay">
         <div
           className={classNames('modal-background has-background-white-ter', {
