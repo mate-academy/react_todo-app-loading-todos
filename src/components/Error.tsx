@@ -1,36 +1,48 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { CreatedContext } from './TodoContext';
 
-type Props = {
-  error: string;
-  setError: (error: string) => void;
-};
+export const Error = () => {
+  const { state, dispatch } = useContext(CreatedContext);
+  const { errors } = state;
 
-export const Error = ({ error, setError }: Props) => {
+  const hiddenError = useCallback(
+    () =>
+      dispatch({
+        type: 'CLEAR_ERRORS',
+      }),
+    [dispatch],
+  );
+
+  const activeError = errors.find(curError => curError.value);
+
+  useEffect(() => {
+    if (activeError) {
+      const timer = setTimeout(() => {
+        hiddenError();
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+
+    return;
+  }, [activeError, hiddenError]);
+
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !error },
+        { hidden: !activeError },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError('')}
+        onClick={hiddenError}
       />
-      {error}
-      {/* Unable to load todos
-      <br />
-      Title should not be empty
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
+      {activeError && <div>{activeError.errorTitle}</div>}
     </div>
   );
 };

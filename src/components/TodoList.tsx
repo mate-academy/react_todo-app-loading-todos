@@ -1,85 +1,30 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useContext, useMemo, useState } from 'react';
-import { Todo } from '../types/Todo';
+import React, { useContext } from 'react';
 import { CreatedContext } from './TodoContext';
 import classNames from 'classnames';
+import { FilterButtons } from '../types/FilterType';
 
 export const TodoList = () => {
-  const { todos, setTodos, toDoTitle, filterButton } =
-    useContext(CreatedContext);
-  const [edittedTitle, setEdittedTitle] = useState<string>('');
-  const [edittedId, setEdittedId] = useState<number | null>(null);
-  const handleChangeStatus = (todo: Todo) => {
-    const newTodo: Todo = {
-      ...todo,
-      completed: !todo.completed,
-    };
-
-    const changedTodo = todos.map(curTodo =>
-      curTodo.id === todo.id ? newTodo : curTodo,
-    );
-
-    setTodos(changedTodo);
-  };
+  const { state, dispatch } = useContext(CreatedContext);
+  const { todos, filterButton } = state;
 
   const deleteTodo = (idNumber: number) => {
-    const updateTodo = todos.filter(todo => todo.id !== idNumber);
-
-    setTodos(updateTodo);
-  };
-
-  const filteredTodos = useMemo(() => {
-    switch (filterButton) {
-      case 'all':
-        return todos;
-      case 'completed':
-        return todos.filter(todo => todo.completed);
-      case 'active':
-        return todos.filter(todo => !todo.completed);
-      default:
-        return;
-    }
-  }, [todos, filterButton]);
-
-  const editTodo = (idNumber: number, newTitle: string) => {
-    const updateTodo = todos.map(todo => {
-      if (todo.id === idNumber) {
-        return { ...todo, title: newTitle };
-      }
-
-      return todo;
+    dispatch({
+      type: 'DELETE_TODO',
+      id: idNumber,
     });
-
-    setTodos(updateTodo);
   };
 
-  const handleSavingTitle = (idNumber: number) => {
-    const trimmedTitle = edittedTitle.trim();
-
-    if (!trimmedTitle) {
-      deleteTodo(idNumber);
-    } else {
-      editTodo(idNumber, trimmedTitle);
+  const filteredTodos = todos.filter(todo => {
+    switch (filterButton) {
+      case FilterButtons.Active:
+        return !todo.completed;
+      case FilterButtons.Completed:
+        return todo.completed;
+      default:
+        return todo;
     }
-
-    setEdittedId(null);
-  };
-
-  const handleDoubleClick = (newId: number, newTitle: string) => {
-    setEdittedTitle(newTitle);
-    setEdittedId(newId);
-  };
-
-  const handleKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    idNumber: number,
-  ) => {
-    if (event.key === 'Enter') {
-      handleSavingTitle(idNumber);
-    } else if (event.key === 'Escape') {
-      setEdittedId(null);
-    }
-  };
+  });
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -97,61 +42,74 @@ export const TodoList = () => {
                 type="checkbox"
                 className="todo__status"
                 checked={todo.completed}
-                value={toDoTitle}
-                onClick={() => handleChangeStatus(todo)}
+                onClick={() => {
+                  dispatch({
+                    type: 'CHANGE_TODO_STATUS',
+                    payload: todo.id,
+                  });
+                }}
               />
             </label>
-
-            {edittedId !== null && edittedId === todo.id ? (
+            {!todo.editted && (
+              <span
+                data-cy="TodoTitle"
+                className="todo__title"
+                onDoubleClick={() => {
+                  dispatch({
+                    type: 'SET_EDITTED_TITLE',
+                    id: todo.id,
+                  });
+                }}
+              >
+                {todo.title}
+              </span>
+            )}
+            {todo.editted && (
               <input
                 data-cy="TodoTitleField"
                 type="text"
                 className="todo__title-field"
                 placeholder="Empty todo will be deleted"
-                onBlur={() => handleSavingTitle(todo.id)}
-                value={edittedTitle}
-                onChange={e => setEdittedTitle(e.target.value)}
-                onKeyUp={event => handleKeyPress(event, todo.id)}
+                value={todo.title}
+                onKeyUp={e => {
+                  if (e.key === 'Escape') {
+                    dispatch({
+                      type: 'ESCAPE_CHANGED_TITLE',
+                      id: todo.id,
+                    });
+                  } else if (e.key === 'Enter') {
+                    dispatch({
+                      type: 'SET_EDITTED_TITLE',
+                      id: todo.id,
+                    });
+                  }
+                }}
                 autoFocus
+                onChange={e => {
+                  dispatch({
+                    type: 'TARGET_EDITTED_TITLE',
+                    id: todo.id,
+                    changedTitle: e.target.value,
+                  });
+                }}
+                onBlur={() => {
+                  dispatch({
+                    type: 'SET_EDITTED_TITLE',
+                    id: todo.id,
+                  });
+                }}
               />
-            ) : (
-              <>
-                {' '}
-                <span
-                  data-cy="TodoTitle"
-                  className="todo__title"
-                  onDoubleClick={() => handleDoubleClick(todo.id, todo.title)}
-                >
-                  {todo.title}
-                </span>
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                  onClick={() => deleteTodo(todo.id)}
-                >
-                  ×
-                </button>{' '}
-              </>
             )}
-
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={() => deleteTodo(todo.id)}
+            >
+              ×{' '}
+            </button>
           </div>
         ))}
-
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
-
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
     </section>
   );
 };

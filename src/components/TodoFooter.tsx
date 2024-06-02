@@ -2,19 +2,15 @@ import { useContext } from 'react';
 import { CreatedContext } from './TodoContext';
 import { FilterButtons } from '../types/FilterType';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TodoFooter = () => {
-  const { todos, setTodos, setFilterButton } = useContext(CreatedContext);
+  const { state, dispatch } = useContext(CreatedContext);
+  const { todos } = state;
   const onlyActiveTodos = todos.filter(todo => !todo.completed);
 
   const handleCounter =
     todos.length === 1 ? '1 item left' : `${onlyActiveTodos.length} items left`;
-
-  const handleClearButton = () => {
-    const updateTodo = todos.filter(todo => !todo.completed);
-
-    setTodos(updateTodo);
-  };
 
   return (
     <>
@@ -27,27 +23,48 @@ export const TodoFooter = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={classNames('filter__link selected', {
+                  selected: FilterButtons.All,
+                })}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilterButton(FilterButtons.All)}
+                onClick={() => {
+                  dispatch({
+                    type: 'SET_FILTER',
+                    filterName: FilterButtons.All,
+                  });
+                }}
               >
                 All
               </a>
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: FilterButtons.Active,
+                })}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilterButton(FilterButtons.Active)}
+                onClick={() => {
+                  dispatch({
+                    type: 'SET_FILTER',
+                    filterName: FilterButtons.Active,
+                  });
+                }}
               >
                 Active
               </a>
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: FilterButtons.Completed,
+                })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilterButton(FilterButtons.Completed)}
+                onClick={() => {
+                  dispatch({
+                    type: 'SET_FILTER',
+                    filterName: FilterButtons.Completed,
+                  });
+                }}
               >
                 Completed
               </a>
@@ -56,7 +73,12 @@ export const TodoFooter = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              onClick={handleClearButton}
+              onClick={() => {
+                dispatch({
+                  type: 'CLEAR_ALL_COMPLETED',
+                });
+              }}
+              disabled={todos.length === onlyActiveTodos.length}
             >
               Clear completed
             </button>
