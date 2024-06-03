@@ -6,10 +6,16 @@ import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  enum TodoStatus {
+    all = 'all',
+    active = 'active',
+    completed = 'completed',
+  }
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [edit, setEdit] = useState(false);
-  const [status, setStaus] = useState('all');
+  const [editingTodo, setEditingTodo] = useState(0);
+  const [status, setStaus] = useState<TodoStatus>(TodoStatus.all);
   const [showNotification, setShowNotification] = useState(false);
 
   if (!USER_ID) {
@@ -86,7 +92,7 @@ export const App: React.FC = () => {
                 />
               </label>
 
-              {edit ? (
+              {editingTodo === todo.id ? (
                 <form>
                   <input
                     data-cy="TodoTitleField"
@@ -94,7 +100,7 @@ export const App: React.FC = () => {
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
                     value={todo.title}
-                    onBlur={() => setEdit(false)}
+                    onBlur={() => setEditingTodo(0)}
                   />
                 </form>
               ) : (
@@ -102,7 +108,7 @@ export const App: React.FC = () => {
                   <span
                     data-cy="TodoTitle"
                     className="todo__title"
-                    onDoubleClick={() => setEdit(true)}
+                    onDoubleClick={() => setEditingTodo(todo.id)}
                   >
                     {todo.title}
                   </span>
@@ -138,7 +144,7 @@ export const App: React.FC = () => {
                 href="#/"
                 className={`filter__link ${status === 'all' && 'selected'}`}
                 data-cy="FilterLinkAll"
-                onClick={() => setStaus('all')}
+                onClick={() => setStaus(TodoStatus.all)}
               >
                 All
               </a>
@@ -147,7 +153,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={`filter__link ${status === 'active' && 'selected'}`}
                 data-cy="FilterLinkActive"
-                onClick={() => setStaus('active')}
+                onClick={() => setStaus(TodoStatus.active)}
               >
                 Active
               </a>
@@ -156,7 +162,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={`filter__link ${status === 'completed' && 'selected'}`}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setStaus('completed')}
+                onClick={() => setStaus(TodoStatus.completed)}
               >
                 Completed
               </a>
