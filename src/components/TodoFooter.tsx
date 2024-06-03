@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 export const TodoFooter = () => {
   const { state, dispatch } = useContext(CreatedContext);
-  const { todos } = state;
+  const { todos, filterButton } = state;
   const onlyActiveTodos = todos.filter(todo => !todo.completed);
 
   const handleCounter =
@@ -24,7 +24,7 @@ export const TodoFooter = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: FilterButtons.All,
+                  selected: filterButton === FilterButtons.All,
                 })}
                 data-cy="FilterLinkAll"
                 onClick={() => {
@@ -40,15 +40,15 @@ export const TodoFooter = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: FilterButtons.Active,
+                  selected: filterButton === FilterButtons.Active,
                 })}
                 data-cy="FilterLinkActive"
-                // onClick={() => {
-                //   dispatch({
-                //     type: 'SET_FILTER',
-                //     filterName: FilterButtons.Active,
-                //   });
-                // }}
+                onClick={() => {
+                  dispatch({
+                    type: 'SET_FILTER',
+                    filterName: FilterButtons.Active,
+                  });
+                }}
               >
                 Active
               </a>
@@ -56,15 +56,15 @@ export const TodoFooter = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: FilterButtons.Completed,
+                  selected: filterButton === FilterButtons.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                // onClick={() => {
-                //   dispatch({
-                //     type: 'SET_FILTER',
-                //     filterName: FilterButtons.Completed,
-                //   });
-                // }}
+                onClick={() => {
+                  dispatch({
+                    type: 'SET_FILTER',
+                    filterName: FilterButtons.Completed,
+                  });
+                }}
               >
                 Completed
               </a>
