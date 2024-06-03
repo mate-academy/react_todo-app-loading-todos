@@ -23,7 +23,7 @@ export const TodoFooter = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={classNames('filter__link selected', {
+                className={classNames('filter__link', {
                   selected: FilterButtons.All,
                 })}
                 data-cy="FilterLinkAll"
