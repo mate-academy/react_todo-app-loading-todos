@@ -11,7 +11,7 @@ import { getTodos } from '../api/todos';
 const allErrors: Error[] = [
   {
     type: 'UnloadedTodoError',
-    errorTitle: 'Unable to load todo',
+    errorTitle: 'Unable to load todos',
     value: false,
   },
   {
