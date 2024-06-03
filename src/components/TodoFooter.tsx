@@ -43,12 +43,12 @@ export const TodoFooter = () => {
                   selected: FilterButtons.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => {
-                  dispatch({
-                    type: 'SET_FILTER',
-                    filterName: FilterButtons.Active,
-                  });
-                }}
+                // onClick={() => {
+                //   dispatch({
+                //     type: 'SET_FILTER',
+                //     filterName: FilterButtons.Active,
+                //   });
+                // }}
               >
                 Active
               </a>
@@ -59,12 +59,12 @@ export const TodoFooter = () => {
                   selected: FilterButtons.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => {
-                  dispatch({
-                    type: 'SET_FILTER',
-                    filterName: FilterButtons.Completed,
-                  });
-                }}
+                // onClick={() => {
+                //   dispatch({
+                //     type: 'SET_FILTER',
+                //     filterName: FilterButtons.Completed,
+                //   });
+                // }}
               >
                 Completed
               </a>
