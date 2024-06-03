@@ -39,9 +39,10 @@ export const TodoFooter = () => {
 
               <a
                 href="#/active"
-                className={classNames('filter__link', {
-                  selected: FilterButtons.Active,
-                })}
+                // className={classNames('filter__link', {
+                //   selected: FilterButtons.Active,
+                // })}
+                className="filter__link"
                 data-cy="FilterLinkActive"
                 onClick={() => {
                   dispatch({
@@ -55,9 +56,10 @@ export const TodoFooter = () => {
 
               <a
                 href="#/completed"
-                className={classNames('filter__link', {
-                  selected: FilterButtons.Completed,
-                })}
+                // className={classNames('filter__link', {
+                //   selected: FilterButtons.Completed,
+                // })}
+                className="filter__link"
                 data-cy="FilterLinkCompleted"
                 onClick={() => {
                   dispatch({
