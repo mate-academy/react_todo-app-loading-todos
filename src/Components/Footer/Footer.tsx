@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
+import { Status } from '../../types/Status';
 
 type Props = {
-  status: string;
-  onClick: (status: string) => void;
+  status: Status;
+  onClick: (status: Status) => void;
   itemsLeft: number;
 };
 
@@ -22,7 +23,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
             'filter__link selected': status === 'all',
           })}
           data-cy="FilterLinkAll"
-          onClick={() => onClick('all')}
+          onClick={() => onClick(Status.All)}
         >
           All
         </a>
@@ -33,7 +34,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
             'filter__link selected': status === 'active',
           })}
           data-cy="FilterLinkActive"
-          onClick={() => onClick('active')}
+          onClick={() => onClick(Status.Active)}
         >
           Active
         </a>
@@ -44,7 +45,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
             'filter__link selected': status === 'completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => onClick('completed')}
+          onClick={() => onClick(Status.Completed)}
         >
           Completed
         </a>

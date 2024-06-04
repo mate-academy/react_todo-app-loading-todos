@@ -4,9 +4,10 @@ import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
+  onDelete?: (todoId: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos }) => {
+export const TodoList: React.FC<Props> = ({ todos, onDelete = () => {} }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
@@ -35,7 +36,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             </span>
 
             {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
+            <button
+              type="button"
+              className="todo__remove"
+              data-cy="TodoDelete"
+              onClick={() => onDelete(todo.id)}
+            >
               ×
             </button>
 

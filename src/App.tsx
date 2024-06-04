@@ -1,56 +1,54 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID, getTodos } from './api/todos';
+import { USER_ID, addTodos, deleteTodos, getTodos } from './api/todos';
 import { Header } from './Components/Header/Header';
 import { Todo } from './types/Todo';
 import { Footer } from './Components/Footer/Footer';
 import { TodoList } from './Components/TodoList/TodoList';
 import { Errors } from './Components/Errors/Errors';
-
-function idTodo(todos: Todo[]) {
-  const maxId = Math.max(...todos.map(todo => todo.id));
-
-  return maxId + 1;
-}
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Status.All);
   const [error, setError] = useState('');
 
-  const onAdd = (todo: Todo) => {
-    const newTodo = { ...todo, id: idTodo(todos) };
+  function onAdd({ userId, title, completed }: Todo) {
+    addTodos({ userId, title, completed }).then(newTodo => {
+      setTodos(currentTodos => [...currentTodos, newTodo]);
+    });
+  }
 
-    setTodos(currentTodos => [...currentTodos, newTodo]);
-  };
+  function onDelete(todoId: number) {
+    deleteTodos(todoId);
+    setTodos(currentTodos => currentTodos.filter(todo => todo.id !== todoId));
+  }
 
   const itemsLeft = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     getTodos()
-      .then(initialTodos => {
-        switch (status) {
-          case 'all':
-            setTodos(initialTodos);
-            break;
-
-          case 'active':
-            setTodos(initialTodos.filter(todo => todo.completed === false));
-            break;
-
-          case 'completed':
-            setTodos(initialTodos.filter(todo => todo.completed === true));
-            break;
-
-          default:
-            setTodos(initialTodos);
-        }
-      })
+      .then(setTodos)
       .catch(() => setError('Unable to load todos'))
       .finally(() => setTimeout(() => setError(''), 3000));
-  }, [status]);
+  }, []);
+
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (status) {
+        case Status.Completed:
+          return todo.completed;
+
+        case Status.Active:
+          return !todo.completed;
+
+        default:
+          return true;
+      }
+    });
+  }, [todos, status]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -61,9 +59,9 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} onSubmit={onAdd} />
+        <Header todos={filteredTodos} onSubmit={onAdd} />
 
-        <TodoList todos={todos} />
+        <TodoList todos={filteredTodos} onDelete={onDelete} />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (

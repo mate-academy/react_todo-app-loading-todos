@@ -18,7 +18,7 @@ export const Errors: React.FC<Props> = ({ error, onClose }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => onClose}
+        onClick={onClose}
       />
       {error}
     </div>
