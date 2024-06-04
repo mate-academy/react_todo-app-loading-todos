@@ -69,8 +69,8 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <Footer status={status} onClick={setStatus} itemsLeft={itemsLeft} />
         )}
-        {error && <Errors error={error} onClose={() => setError('')} />}
       </div>
+      <Errors error={error} onClose={() => setError('')} />
     </div>
   );
 };
