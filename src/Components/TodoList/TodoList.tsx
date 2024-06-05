@@ -16,7 +16,7 @@ export const TodoList: React.FC<Props> = ({ todos, onDelete = () => {} }) => {
           <div
             data-cy="Todo"
             className={cn('todo', {
-              'todo completed': todo.completed === true,
+              'todo completed': todo.completed,
             })}
             key={todo.id}
           >

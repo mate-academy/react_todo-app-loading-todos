@@ -41,7 +41,7 @@ export const Header: React.FC<Props> = ({ todos, onSubmit }) => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      {todos.length > 0 && (
+      {!!todos.length && (
         <button
           type="button"
           className="todoapp__toggle-all active"

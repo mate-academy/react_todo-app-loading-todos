@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
         <a
           href="#/"
           className={cn('filter__link', {
-            'filter__link selected': status === 'all',
+            'filter__link selected': status === Status.All,
           })}
           data-cy="FilterLinkAll"
           onClick={() => onClick(Status.All)}
@@ -31,7 +31,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
         <a
           href="#/active"
           className={cn('filter__link', {
-            'filter__link selected': status === 'active',
+            'filter__link selected': status === Status.Active,
           })}
           data-cy="FilterLinkActive"
           onClick={() => onClick(Status.Active)}
@@ -42,7 +42,7 @@ export const Footer: React.FC<Props> = ({ status, onClick, itemsLeft }) => {
         <a
           href="#/completed"
           className={cn('filter__link', {
-            'filter__link selected': status === 'completed',
+            'filter__link selected': status === Status.Completed,
           })}
           data-cy="FilterLinkCompleted"
           onClick={() => onClick(Status.Completed)}
