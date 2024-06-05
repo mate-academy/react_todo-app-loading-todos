@@ -106,9 +106,13 @@
 }
 
 .item-enter-active {
-  overflow: hidden;
   max-height: 58px;
+}
+
+.item-enter,
+.item-enter-active {
   transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 .item-exit {
