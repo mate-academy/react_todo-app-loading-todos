@@ -7,6 +7,12 @@ import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
 
+export enum FilterType {
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState('');
@@ -14,9 +20,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(response => {
-        setTodos(response);
-      })
+      .then(setTodos)
       .catch(() => {
         setError('Unable to load todos');
 
@@ -26,24 +30,24 @@ export const App: React.FC = () => {
 
   const establishFilter = useCallback(
     (
-      filterName: string,
+      filterName: FilterType,
       e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) => {
       e.preventDefault();
       e.stopPropagation();
 
       switch (filterName) {
-        case 'All': {
+        case FilterType.ALL: {
           setFilter(null);
           break;
         }
 
-        case 'Active': {
+        case FilterType.ACTIVE: {
           setFilter(false);
           break;
         }
 
-        case 'Completed': {
+        case FilterType.COMPLETED: {
           setFilter(true);
           break;
         }
@@ -94,43 +98,41 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           <div>
             {todos &&
-              getFormedTodos(todos).map((item, index) => {
-                return (
-                  <div
-                    data-cy="Todo"
-                    key={'id: ' + index}
-                    className={classNames('todo', {
-                      completed: item.completed,
-                    })}
+              getFormedTodos(todos).map((item, index) => (
+                <div
+                  data-cy="Todo"
+                  key={'id: ' + index}
+                  className={classNames('todo', {
+                    completed: item.completed,
+                  })}
+                >
+                  <label className="todo__status-label">
+                    <input
+                      data-cy="TodoStatus"
+                      type="checkbox"
+                      checked={item.completed}
+                      className="todo__status"
+                    />
+                  </label>
+
+                  <span data-cy="TodoTitle" className="todo__title">
+                    {item.title}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="todo__remove"
+                    data-cy="TodoDelete"
                   >
-                    <label className="todo__status-label">
-                      <input
-                        data-cy="TodoStatus"
-                        type="checkbox"
-                        checked={item.completed}
-                        className="todo__status"
-                      />
-                    </label>
+                    ×
+                  </button>
 
-                    <span data-cy="TodoTitle" className="todo__title">
-                      {item.title}
-                    </span>
-
-                    <button
-                      type="button"
-                      className="todo__remove"
-                      data-cy="TodoDelete"
-                    >
-                      ×
-                    </button>
-
-                    <div data-cy="TodoLoader" className="modal overlay">
-                      <div className="modal-background has-background-white-ter" />
-                      <div className="loader" />
-                    </div>
+                  <div data-cy="TodoLoader" className="modal overlay">
+                    <div className="modal-background has-background-white-ter" />
+                    <div className="loader" />
                   </div>
-                );
-              })}
+                </div>
+              ))}
           </div>
         </section>
 
@@ -148,7 +150,7 @@ export const App: React.FC = () => {
                   selected: filter === null,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={e => establishFilter('All', e)}
+                onClick={e => establishFilter(FilterType.ALL, e)}
               >
                 All
               </a>
@@ -159,7 +161,7 @@ export const App: React.FC = () => {
                   selected: filter === false,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={e => establishFilter('Active', e)}
+                onClick={e => establishFilter(FilterType.ACTIVE, e)}
               >
                 Active
               </a>
@@ -170,7 +172,7 @@ export const App: React.FC = () => {
                   selected: filter === true,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={e => establishFilter('Completed', e)}
+                onClick={e => establishFilter(FilterType.COMPLETED, e)}
               >
                 Completed
               </a>
