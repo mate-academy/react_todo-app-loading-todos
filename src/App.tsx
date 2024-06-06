@@ -6,6 +6,8 @@ import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
+import { Errors } from './components/Errors/Errors';
+import { TodoContent } from './components/TodoContent/TodoContent';
 
 export type FilterType = 'all' | 'active' | 'completed';
 
@@ -47,64 +49,16 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
-
-      <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              autoFocus
-            />
-          </form>
-        </header>
-
+      <TodoContent todos={todos} filter={filter} setFilter={setFilter}>
         <TodoList todos={filteredTodos} />
-
-        {/* Hide the footer if there are no todos */}
         {todos.length !== 0 && (
           <Footer todos={todos} filter={filter} setFilter={setFilter} />
         )}
-      </div>
+      </TodoContent>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={`notification
-        is-danger is-light
-        has-text-weight-normal ${!error ? 'hidden' : ''}`}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setError(null)}
-        />
-        {/* show only one message at a time */}
-        {error}
-
-        {/*
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-      </div>
+      <Errors error={error} setError={setError} />
     </div>
   );
 };
