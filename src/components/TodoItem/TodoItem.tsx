@@ -6,7 +6,11 @@ type TodoItemProps = {
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   return (
-    <div key={todo.id} className={todo.completed ? 'completed' : ''}>
+    <div
+      data-cy="Todo"
+      key={todo.id}
+      className={todo.completed ? 'completed' : ''}
+    >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label" htmlFor={`${todo.id}`}>
         <input
