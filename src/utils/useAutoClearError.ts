@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { TodoErrors } from '../types/TodoErrors';
-import { Action } from './TodoContext';
+import { Action } from '../components/TodoContext';
 
 export const useAutoClearError = (
   dispatch: React.Dispatch<Action>,

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 
-import { useAutoClearError } from './ClearError';
+import { useAutoClearError } from '../utils/useAutoClearError';
 import { Todo } from '../types/Todo';
 import { TodoStatus } from '../types/TodoStatus';
 import { TodoErrors } from '../types/TodoErrors';

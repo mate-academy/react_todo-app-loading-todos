@@ -19,8 +19,9 @@ export const TodoApp: React.FC = () => {
         <TodoHeader />
         <TodoMain />
         <TodoFooter />
-        <TodoError />
       </div>
+
+      <TodoError />
     </div>
   );
 };

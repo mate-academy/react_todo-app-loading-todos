@@ -6,7 +6,7 @@ import { TodoContext } from './TodoContext';
 export const TodoError = () => {
   const { state, dispatch } = useContext(TodoContext);
 
-  const hiddenError = useCallback(() => {
+  const hideError = useCallback(() => {
     dispatch({ type: 'SET_ERROR', error: null });
   }, [dispatch]);
 
@@ -22,9 +22,9 @@ export const TodoError = () => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={hiddenError}
+        onClick={hideError}
       />
-      <span>{state.error}</span>
+      {state.error}
     </div>
   );
 };

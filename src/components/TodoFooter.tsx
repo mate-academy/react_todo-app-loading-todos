@@ -31,7 +31,7 @@ export const TodoFooter: React.FC = () => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {(Object.values(TodoStatus) as TodoStatus[]).map(status => (
+        {Object.values(TodoStatus).map(status => (
           <a
             key={status}
             href={
