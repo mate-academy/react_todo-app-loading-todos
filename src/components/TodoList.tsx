@@ -9,9 +9,9 @@ type Props = {
 export const TodoList: React.FC<Props> = ({ todos, loading }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
-        return <TodoItem key={todo.id} todo={todo} todoLoading={loading} />;
-      })}
+      {todos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} todoLoading={loading} />
+      ))}
     </section>
   );
 };

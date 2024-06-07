@@ -28,12 +28,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(data => {
-        setTodos(data);
-      })
-      .catch(() => {
-        setErrorMessage(ErrorsTypes.UnabeToLoadTodos);
-      })
+      .then(setTodos)
+      .catch(() => setErrorMessage(ErrorsTypes.UnableToLoadTodos))
       .finally(() => setLoading(false));
   }, []);
 
