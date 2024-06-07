@@ -40,15 +40,11 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let timerId = 0;
+    const timeoutId = setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
 
-    if (errorMessage) {
-      timerId = window.setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
-    }
-
-    return () => clearTimeout(timerId);
+    return () => clearTimeout(timeoutId);
   }, [errorMessage]);
 
   if (!USER_ID) {
