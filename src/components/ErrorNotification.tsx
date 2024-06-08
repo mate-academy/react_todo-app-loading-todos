@@ -14,35 +14,6 @@ export const ErrorNotification: React.FC<{
       className="delete"
       onClick={() => onSetError(null)}
     />
-    {isError === 'Unable to load todos' && (
-      <>
-        Unable to load todos
-        <br />
-      </>
-    )}
-    {isError === 'Title should not be empty' && (
-      <>
-        Title should not be empty
-        <br />
-      </>
-    )}
-    {isError === 'Unable to add a todo' && (
-      <>
-        Unable to add a todo
-        <br />
-      </>
-    )}
-    {isError === 'Unable to delete a todo' && (
-      <>
-        Unable to delete a todo
-        <br />
-      </>
-    )}
-    {isError === 'Unable to update a todo' && (
-      <>
-        Unable to update a todo
-        <br />
-      </>
-    )}
+    {isError}
   </div>
 );

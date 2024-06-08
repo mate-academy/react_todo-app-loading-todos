@@ -8,6 +8,7 @@ import React, {
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { ErrorType } from './types/ErrorTypes';
 import { Filter } from './types/Filter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -27,7 +28,7 @@ export const App: React.FC = () => {
 
         setTodos(todosFromServer);
       } catch (error) {
-        setIsError('Unable to load todos');
+        setIsError(ErrorType.LOAD_TODOS);
       }
     };
 
