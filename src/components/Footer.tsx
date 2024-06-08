@@ -5,8 +5,8 @@ import { FilterLink } from './FilterLink';
 export const Footer: React.FC<{
   activeTodosCount: number;
   filter: Filter;
-  handleSetFilter: (filter: Filter) => void;
-}> = ({ activeTodosCount, filter, handleSetFilter }) => (
+  onFilterChange: (filter: Filter) => void;
+}> = ({ activeTodosCount, filter, onFilterChange }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="TodosCounter">
       {activeTodosCount} items left
@@ -15,21 +15,21 @@ export const Footer: React.FC<{
       <FilterLink
         filter="all"
         currentFilter={filter}
-        setFilter={handleSetFilter}
+        setFilter={onFilterChange}
         label="All"
         dataCy="FilterLinkAll"
       />
       <FilterLink
         filter="active"
         currentFilter={filter}
-        setFilter={handleSetFilter}
+        setFilter={onFilterChange}
         label="Active"
         dataCy="FilterLinkActive"
       />
       <FilterLink
         filter="completed"
         currentFilter={filter}
-        setFilter={handleSetFilter}
+        setFilter={onFilterChange}
         label="Completed"
         dataCy="FilterLinkCompleted"
       />

@@ -39,15 +39,13 @@ export const App: React.FC = () => {
       timerRef.current = setTimeout(() => {
         setIsError(null);
       }, 3000);
-
-      return () => {
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-        }
-      };
     }
 
-    return () => {};
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [isError]);
 
   if (!USER_ID) {
@@ -77,6 +75,11 @@ export const App: React.FC = () => {
     setFilter(newFilter);
   }, []);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const handleSetIsError = useCallback((error: string | null) => {
+    setIsError(error);
+  }, []);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -87,11 +90,11 @@ export const App: React.FC = () => {
           <Footer
             activeTodosCount={activeTodosCount}
             filter={filter}
-            handleSetFilter={handleSetFilter}
+            onFilterChange={handleSetFilter}
           />
         )}
       </div>
-      <ErrorNotification isError={isError} setIsError={setIsError} />
+      <ErrorNotification isError={isError} onSetError={handleSetIsError} />
     </div>
   );
 };
