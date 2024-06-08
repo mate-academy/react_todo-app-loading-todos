@@ -10,21 +10,22 @@ import { Header } from './Components/Header';
 import { Loader } from './Components/Loader';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type filterButton = 'all' | 'active' | 'completed';
+export type Filter = 'all' | 'active' | 'completed';
 
-function chooseActіveArray(filteredButton: filterButton, todos: Todo[]) {
-  if (filteredButton === 'all') {
-    return todos;
-  } else if (filteredButton === 'active') {
-    return todos.filter(todo => todo.completed === false);
-  } else {
-    return todos.filter(todo => todo.completed === true);
+function chooseActіveArray(filter: Filter, todos: Todo[]) {
+  switch (filter) {
+    case 'active':
+      return todos.filter(todo => !todo.completed);
+    case 'completed':
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
   }
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [filteredButton, setFilteredButton] = useState<filterButton>('all');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredButton, setFilteredButton] = useState<Filter>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -41,32 +42,10 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getTodos()
-  //     .then(data => {
-  //       if (filteredButton === 'all') {
-  //         setTodos(data);
-  //       } else if (filteredButton === 'active') {
-  //         setTodos(data.filter(todo => todo.completed === false));
-  //       } else {
-  //         setTodos(data.filter(todo => todo.completed === true));
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setErrorMessage('Unable to load todos');
-  //       setTimeout(() => {
-  //         setErrorMessage('');
-  //       }, 3000);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, [filteredButton]);
-
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  // const activeTodos = todos.filter(todo => todo.completed === false);
   const completedTodos = todos.filter(todo => todo.completed === true);
   const todosLeft = todos.length - completedTodos.length;
 

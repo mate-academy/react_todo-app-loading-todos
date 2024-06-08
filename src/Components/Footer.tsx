@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import { filterButton } from '../App';
+import { Filter } from '../App';
 
 type Props = {
   filteredButton: string;
   todosLeft: number;
-  filterBy: (value: filterButton) => void;
+  filterBy: (value: Filter) => void;
 };
 
 export const Footer: React.FC<Props> = ({
