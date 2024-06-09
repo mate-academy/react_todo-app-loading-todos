@@ -14,7 +14,7 @@ import { ErrorType } from './types/ErrorType';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<ErrorType | null>(null);
-  const [filter, setFilter] = useState<FilterType>('all');
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
 
   const hideError = () => {
     setTimeout(() => {
@@ -26,17 +26,17 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setError('Unable to load todos');
+        setError(ErrorType.UnableToLoadTodos);
         hideError();
       });
   }, []);
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') {
+    if (filter === FilterType.Active) {
       return !todo.completed;
     }
 
-    if (filter === 'completed') {
+    if (filter === FilterType.Completed) {
       return todo.completed;
     }
 
@@ -47,22 +47,30 @@ export const App: React.FC = () => {
     setFilter(actualFilter);
   };
 
+  const handleError = (thrownError: ErrorType | null) => {
+    setError(thrownError);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
   return (
     <div className="todoapp">
-      <TodoContent todos={filteredTodos}>
+      <TodoContent>
         <TodoList todos={filteredTodos} />
         {todos.length !== 0 && (
-          <Footer todos={todos} filter={filter} handleFilter={handleFilter} />
+          <Footer
+            todos={filteredTodos}
+            filter={filter}
+            onFilterChange={handleFilter}
+          />
         )}
       </TodoContent>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Errors error={error} setError={setError} />
+      <Errors error={error} onErrorChange={handleError} />
     </div>
   );
 };

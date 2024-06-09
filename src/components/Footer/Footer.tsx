@@ -5,13 +5,13 @@ import { FilterType } from '../../types/FilterType';
 type FooterProps = {
   todos: Todo[];
   filter: FilterType;
-  handleFilter: (filter: FilterType) => void;
+  onFilterChange: (filter: FilterType) => void;
 };
 
 export const Footer: React.FC<FooterProps> = ({
   todos,
   filter,
-  handleFilter,
+  onFilterChange,
 }) => {
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.length - activeTodosCount;
@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/"
           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
           data-cy="FilterLinkAll"
-          onClick={() => handleFilter('all')}
+          onClick={() => onFilterChange(FilterType.All)}
         >
           All
         </a>
@@ -37,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/active"
           className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
-          onClick={() => handleFilter('active')}
+          onClick={() => onFilterChange(FilterType.Active)}
         >
           Active
         </a>
@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({
           href="#/completed"
           className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
-          onClick={() => handleFilter('completed')}
+          onClick={() => onFilterChange(FilterType.Completed)}
         >
           Completed
         </a>

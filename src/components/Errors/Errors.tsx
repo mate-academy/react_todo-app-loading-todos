@@ -1,11 +1,11 @@
 import { ErrorType } from '../../types/ErrorType';
 
 type ErrorsProps = {
-  error: string | null;
-  setError: (error: ErrorType | null) => void;
+  error: ErrorType | null;
+  onErrorChange: (error: ErrorType | null) => void;
 };
 
-export const Errors: React.FC<ErrorsProps> = ({ error, setError }) => {
+export const Errors: React.FC<ErrorsProps> = ({ error, onErrorChange }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -17,7 +17,7 @@ export const Errors: React.FC<ErrorsProps> = ({ error, setError }) => {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError(null)}
+        onClick={() => onErrorChange(null)}
       />
       {/* show only one message at a time */}
       {error}

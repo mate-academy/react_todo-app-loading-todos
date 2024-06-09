@@ -1,7 +1,4 @@
-import { Todo } from '../../types/Todo';
-
 type TodoContentProps = {
-  todos: Todo[];
   children: React.ReactNode;
 };
 
