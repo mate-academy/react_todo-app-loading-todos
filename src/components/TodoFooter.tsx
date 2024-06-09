@@ -33,7 +33,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, filter, setFilter }) => {
 
         <a
           href="#/active"
-          className={classNames('filter_link', {
+          className={classNames('filter__link', {
             selected: filter === Filter.Active,
           })}
           data-cy="FilterLinkActive"

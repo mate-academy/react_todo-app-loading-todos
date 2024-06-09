@@ -60,8 +60,8 @@ export const App: React.FC = () => {
         {!!todos.length && (
           <TodoFooter todos={todos} filter={filter} setFilter={setFilter} />
         )}
-        <TodoError error={errorMessage} setError={handleError} />
       </div>
+      <TodoError error={errorMessage} setError={handleError} />
     </div>
   );
 };
