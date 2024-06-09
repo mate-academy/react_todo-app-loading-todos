@@ -56,11 +56,12 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
         <TodoList visibleTodos={visibleTodos} />
+
+        {!!todos.length && (
+          <TodoFooter todos={todos} filter={filter} setFilter={setFilter} />
+        )}
+        <TodoError error={errorMessage} setError={handleError} />
       </div>
-      {!!todos.length && (
-        <TodoFooter todos={todos} filter={filter} setFilter={setFilter} />
-      )}
-      <TodoError error={errorMessage} setError={handleError} />
     </div>
   );
 };
