@@ -1,17 +1,25 @@
-import { FilterType } from '../../App';
+import React from 'react';
 import { Todo } from '../../types/Todo';
+import { FilterType } from '../../types/FilterType';
 
 type FooterProps = {
   todos: Todo[];
   filter: FilterType;
-  setFilter: (filter: FilterType) => void;
+  handleFilter: (filter: FilterType) => void;
 };
 
-export const Footer: React.FC<FooterProps> = ({ todos, filter, setFilter }) => {
+export const Footer: React.FC<FooterProps> = ({
+  todos,
+  filter,
+  handleFilter,
+}) => {
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.length - activeTodosCount;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.filter(todo => !todo.completed).length} items left
+        {activeTodosCount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -20,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({ todos, filter, setFilter }) => {
           href="#/"
           className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
           data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
+          onClick={() => handleFilter('all')}
         >
           All
         </a>
@@ -29,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({ todos, filter, setFilter }) => {
           href="#/active"
           className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
+          onClick={() => handleFilter('active')}
         >
           Active
         </a>
@@ -38,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({ todos, filter, setFilter }) => {
           href="#/completed"
           className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
+          onClick={() => handleFilter('completed')}
         >
           Completed
         </a>
@@ -49,6 +57,7 @@ export const Footer: React.FC<FooterProps> = ({ todos, filter, setFilter }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={completedTodosCount === 0}
       >
         Clear completed
       </button>

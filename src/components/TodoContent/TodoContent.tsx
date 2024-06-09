@@ -1,10 +1,7 @@
-import { FilterType } from '../../App';
 import { Todo } from '../../types/Todo';
 
 type TodoContentProps = {
   todos: Todo[];
-  filter: FilterType;
-  setFilter: (filter: FilterType) => void;
   children: React.ReactNode;
 };
 

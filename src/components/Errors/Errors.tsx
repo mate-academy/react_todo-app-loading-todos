@@ -1,6 +1,8 @@
+import { ErrorType } from '../../types/ErrorType';
+
 type ErrorsProps = {
   error: string | null;
-  setError: (error: string | null) => void;
+  setError: (error: ErrorType | null) => void;
 };
 
 export const Errors: React.FC<ErrorsProps> = ({ error, setError }) => {
@@ -19,16 +21,6 @@ export const Errors: React.FC<ErrorsProps> = ({ error, setError }) => {
       />
       {/* show only one message at a time */}
       {error}
-
-      {/*
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
     </div>
   );
 };

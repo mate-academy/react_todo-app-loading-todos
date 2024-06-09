@@ -9,7 +9,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
     <div
       data-cy="Todo"
       key={todo.id}
-      className={todo.completed ? 'completed' : ''}
+      className={`todo ${todo.completed ? 'completed' : ''}`}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label" htmlFor={`${todo.id}`}>

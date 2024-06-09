@@ -8,12 +8,12 @@ import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { Errors } from './components/Errors/Errors';
 import { TodoContent } from './components/TodoContent/TodoContent';
-
-export type FilterType = 'all' | 'active' | 'completed';
+import { FilterType } from './types/FilterType';
+import { ErrorType } from './types/ErrorType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorType | null>(null);
   const [filter, setFilter] = useState<FilterType>('all');
 
   const hideError = () => {
@@ -43,16 +43,20 @@ export const App: React.FC = () => {
     return true;
   });
 
+  const handleFilter = (actualFilter: FilterType) => {
+    setFilter(actualFilter);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
   return (
     <div className="todoapp">
-      <TodoContent todos={todos} filter={filter} setFilter={setFilter}>
+      <TodoContent todos={filteredTodos}>
         <TodoList todos={filteredTodos} />
         {todos.length !== 0 && (
-          <Footer todos={todos} filter={filter} setFilter={setFilter} />
+          <Footer todos={todos} filter={filter} handleFilter={handleFilter} />
         )}
       </TodoContent>
 
