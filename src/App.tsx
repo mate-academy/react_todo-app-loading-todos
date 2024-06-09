@@ -60,11 +60,7 @@ export const App: React.FC = () => {
       <TodoContent>
         <TodoList todos={filteredTodos} />
         {todos.length !== 0 && (
-          <Footer
-            todos={filteredTodos}
-            filter={filter}
-            onFilterChange={handleFilter}
-          />
+          <Footer todos={todos} filter={filter} onFilterChange={handleFilter} />
         )}
       </TodoContent>
 
