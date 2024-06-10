@@ -9,19 +9,26 @@ import { Footer } from './Components/Footer';
 import { Header } from './Components/Header';
 import cn from 'classnames';
 import { ErrorTypes } from './types/ErrorTypes';
+import { Loader } from './Components/Loader/Loader';
 
 export const App: React.FC = () => {
   const [listOfTodos, setListOfTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedValue, setSelectedValue] = useState('All');
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     todoService
       .getTodos()
       .then(setListOfTodos)
       .catch(() => {
         setErrorMessage(ErrorTypes.UnableToLoad);
-      });
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (!todoService.USER_ID) {
@@ -49,6 +56,9 @@ export const App: React.FC = () => {
     setListOfTodos(updatedTodos);
   };
 
+  const completedTodos = listOfTodos.filter(todo => todo.completed === true);
+  const todosLeft = listOfTodos.length - completedTodos.length;
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -56,16 +66,21 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList
-          mainTodoList={getFilteringTodos}
-          handleCompleted={handleCompleted}
-        />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <TodoList
+            mainTodoList={getFilteringTodos}
+            handleCompleted={handleCompleted}
+          />
+        )}
 
-        {listOfTodos && (
+        {listOfTodos.length > 0 && (
           <Footer
-            todos={getFilteringTodos}
+            todosLeft={todosLeft}
             setSelectedFilter={setSelectedValue}
             selectedValue={selectedValue}
+            completedTodos={completedTodos}
           />
         )}
       </div>

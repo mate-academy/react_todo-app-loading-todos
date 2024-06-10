@@ -3,21 +3,21 @@ import cn from 'classnames';
 
 type Props = {
   setSelectedFilter: (value: string) => void;
-  todos: Todo[];
+  todosLeft: number;
   selectedValue: string;
+  completedTodos: Todo[];
 };
 
 export const Footer: React.FC<Props> = ({
   setSelectedFilter,
-  todos,
+  todosLeft,
   selectedValue,
+  completedTodos,
 }) => {
-  const hasCompleted = todos.some(todo => todo.completed);
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {todosLeft} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -60,7 +60,7 @@ export const Footer: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={!hasCompleted}
+        disabled={completedTodos.length === 0}
       >
         Clear completed
       </button>
