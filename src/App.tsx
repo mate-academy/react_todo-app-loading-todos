@@ -10,11 +10,12 @@ import { Header } from './Components/Header';
 import cn from 'classnames';
 import { ErrorTypes } from './types/ErrorTypes';
 import { Loader } from './Components/Loader/Loader';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [listOfTodos, setListOfTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('All');
+  const [selectedValue, setSelectedValue] = useState(Status.all);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
 
   useEffect(() => {
@@ -37,12 +38,10 @@ export const App: React.FC = () => {
 
   const getFilteringTodos = listOfTodos.filter(todo => {
     switch (selectedValue) {
-      case 'All':
-        return true;
-      case 'Active':
-        return todo.completed === false;
-      case 'Completed':
-        return todo.completed === true;
+      case Status.active:
+        return !todo.completed;
+      case Status.completed:
+        return todo.completed;
       default:
         return true;
     }
@@ -75,7 +74,7 @@ export const App: React.FC = () => {
           />
         )}
 
-        {listOfTodos.length > 0 && (
+        {!!listOfTodos.length && (
           <Footer
             todosLeft={todosLeft}
             setSelectedFilter={setSelectedValue}

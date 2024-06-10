@@ -13,15 +13,13 @@ export const TodoList: React.FC<Props> = ({
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {mainTodoList &&
-        mainTodoList.map(todo => {
-          return (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              handleCompleted={handleCompleted}
-            />
-          );
-        })}
+        mainTodoList.map(todo => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            handleCompleted={handleCompleted}
+          />
+        ))}
     </section>
   );
 };

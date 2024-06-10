@@ -22,7 +22,7 @@ export const TodoItem: React.FC<Props> = ({ todo, handleCompleted }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={completed === true}
+          checked={completed}
           onChange={() => handleCompleted(id)}
         />
       </label>

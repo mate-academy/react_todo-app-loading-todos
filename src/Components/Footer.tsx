@@ -1,8 +1,9 @@
+import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 import cn from 'classnames';
 
 type Props = {
-  setSelectedFilter: (value: string) => void;
+  setSelectedFilter: (value: Status) => void;
   todosLeft: number;
   selectedValue: string;
   completedTodos: Todo[];
@@ -25,10 +26,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/"
           className={cn('filter__link', {
-            selected: selectedValue === 'All',
+            selected: selectedValue === Status.all,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setSelectedFilter('All')}
+          onClick={() => setSelectedFilter(Status.all)}
         >
           All
         </a>
@@ -36,10 +37,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/active"
           className={cn('filter__link', {
-            selected: selectedValue === 'Active',
+            selected: selectedValue === Status.active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setSelectedFilter('Active')}
+          onClick={() => setSelectedFilter(Status.active)}
         >
           Active
         </a>
@@ -47,10 +48,10 @@ export const Footer: React.FC<Props> = ({
         <a
           href="#/completed"
           className={cn('filter__link', {
-            selected: selectedValue === 'Completed',
+            selected: selectedValue === Status.completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setSelectedFilter('Completed')}
+          onClick={() => setSelectedFilter(Status.completed)}
         >
           Completed
         </a>
