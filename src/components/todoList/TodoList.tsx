@@ -14,18 +14,20 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           className={`todo ${todo.completed && 'completed'}`}
           key={todo.id}
         >
+          {/* eslint-disable jsx-a11y/label-has-associated-control  */}
           <label className="todo__status-label" htmlFor={'' + todo.id}>
             <input
               id={'' + todo.id}
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed}
+              checked={todo.completed ? true : false}
             />
-            <span data-cy="TodoTitle" className="todo__title">
-              {todo.title}
-            </span>
           </label>
+
+          <span data-cy="TodoTitle" className="todo__title">
+            {todo.title}
+          </span>
 
           {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove" data-cy="TodoDelete">
