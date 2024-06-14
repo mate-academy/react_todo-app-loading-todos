@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -14,8 +11,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [status, setStatus] = useState('all');
-
-  // Check USER_ID condition first
 
   useEffect(() => {
     getTodos()
@@ -38,9 +33,8 @@ export const App: React.FC = () => {
       .finally(() => {
         setTimeout(() => setErrorMessage(''), 3000);
       });
-  }, [status]); // Dependency array with status
+  }, [status]);
 
-  // Calculate leftItems based on todo state
   const leftItems = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
