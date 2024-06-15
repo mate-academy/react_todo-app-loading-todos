@@ -47,10 +47,8 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        <TodoList todos={todos} />
-        {todos.length > 0 && (
-          <Footer onClick={setStatus} status={status} items={leftItems} />
-        )}
+        {todos.length > 0 && <TodoList todos={todos} />}
+        <Footer onClick={setStatus} status={status} items={leftItems} />
       </div>
 
       <Errors errorMessage={errorMessage} onClose={setErrorMessage} />
