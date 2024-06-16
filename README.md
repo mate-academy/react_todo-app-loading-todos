@@ -45,7 +45,7 @@ Tests help you to check if your implementation is correct.
 
 1. Register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
 1. Save the received `userId` in the `api/todos.ts` and use it to load todos
-1. reate some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
+1. Create some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
 1. Load your todos when the `App` is loaded
 1. hide the list and the footer if there are no todos yet;
 
@@ -70,4 +70,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://yuliiacat.github.io/react_todo-app-loading-todos/) and add it to the PR description.
