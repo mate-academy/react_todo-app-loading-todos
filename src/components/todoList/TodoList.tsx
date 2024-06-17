@@ -29,7 +29,6 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button type="button" className="todo__remove" data-cy="TodoDelete">
             ×
           </button>
