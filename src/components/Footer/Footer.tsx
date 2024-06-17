@@ -1,8 +1,7 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
-
-export type TodoStatus = 'All' | 'Active' | 'Completed';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   todos: Todo[];
@@ -25,10 +24,10 @@ export const Footer: React.FC<Props> = ({ todos, status, setStatus }) => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: status === 'All',
+            selected: status === TodoStatus.all,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setStatus('All')}
+          onClick={() => setStatus(TodoStatus.all)}
         >
           All
         </a>
@@ -36,10 +35,10 @@ export const Footer: React.FC<Props> = ({ todos, status, setStatus }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: status === 'Active',
+            selected: status === TodoStatus.active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setStatus('Active')}
+          onClick={() => setStatus(TodoStatus.active)}
         >
           Active
         </a>
@@ -47,10 +46,10 @@ export const Footer: React.FC<Props> = ({ todos, status, setStatus }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: status === 'Completed',
+            selected: status === TodoStatus.completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setStatus('Completed')}
+          onClick={() => setStatus(TodoStatus.completed)}
         >
           Completed
         </a>

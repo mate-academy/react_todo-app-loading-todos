@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { Footer, TodoStatus } from './components/Footer/Footer';
+import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { Errors } from './components/Errors/Errors';
+import { TodoStatus } from './types/TodoStatus';
 
 const getVisibleTodos = (todos: Todo[], status: TodoStatus) => {
   let visibleTodos = [...todos];
@@ -23,7 +24,7 @@ const getVisibleTodos = (todos: Todo[], status: TodoStatus) => {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<TodoStatus>('All');
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.all);
   const [error, setError] = useState('');
 
   useEffect(() => {
