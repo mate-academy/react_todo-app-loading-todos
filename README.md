@@ -34,7 +34,6 @@ Improve user experience:
 ## Tests
 
 Tests help you to check if your implementation is correct.
-
 - tests are grouped by functionality
 - `.skip` after `it` or `describe` disables a test or a group of tests
 - if you don't understand the test by its name, read its code in `cypress/integration/page.js`
@@ -70,4 +69,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://VladimirKolesnikov.github.io/react_todo-app-loading-todos/) and add it to the PR description.
