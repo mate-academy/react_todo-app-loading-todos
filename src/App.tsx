@@ -54,10 +54,10 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        {todos.length > 0 && (
+        {!!todos.length && (
           <TodoList todos={filterTodos(todos, filtrationParam)} />
         )}
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             activeTodosCount={filterTodos(todos, TodoStatus.active).length}
             selectedParam={filtrationParam}
