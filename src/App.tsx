@@ -270,7 +270,7 @@ export const App: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
             >
-              {isOneActive().length > 0 && 'Clear completed'}ƒ
+              {isOneActive().length > 0 && 'Clear completed'}
             </button>
           </footer>
         )}
