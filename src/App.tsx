@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
 import { getTodos } from './api/todos';
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filteredTodos = () => {
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case SelectedFilter.ACTIVE:
         return todos.filter(todo => !todo.completed);
@@ -41,15 +41,15 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-  };
+  }, [filter, todos]);
 
   const isOneActive = () => {
     return todos.filter(todo => todo.completed);
   };
 
   const isAllActive = () => {
-    for (const elem of todos) {
-      if (!elem.completed) {
+    for (const todo of todos) {
+      if (!todo.completed) {
         return false;
       }
     }
@@ -88,6 +88,14 @@ export const App: React.FC = () => {
     );
   };
 
+  const itemsLeft = () => {
+    const leftItems = todos.length - isOneActive().length;
+
+    // console.log(leftItems);
+
+    return `${leftItems} ${leftItems === 1 ? 'item' : 'items'} left`;
+  };
+
   // if (!USER_ID) {
   //   return <UserWarning />;
   // }
@@ -113,13 +121,14 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              autoFocus
               value={query}
               onChange={event => setQuery(event.target.value)}
             />
           </form>
         </header>
         <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodos().map(todo => (
+          {filteredTodos.map((todo: Todo) => (
             <div
               data-cy="Todo"
               className={cn('todo', {
@@ -216,7 +225,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.length - isOneActive().length} items left
+              {itemsLeft()}
             </span>
 
             {/* Active link should have the 'selected' class */}
@@ -261,7 +270,7 @@ export const App: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
             >
-              {isOneActive().length > 0 && 'Clear completed'}
+              {isOneActive().length > 0 && 'Clear completed'}ƒ
             </button>
           </footer>
         )}
