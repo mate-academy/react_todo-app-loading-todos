@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Filter, Todo } from './types/Todo';
 import cn from 'classnames';
-import { TodoList } from './components/todosList';
+import TodoList from './components/TodosList';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -13,9 +13,8 @@ export const App: React.FC = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
 
-  const [selectedFilter, setSelectedFilter] = useState<Filter>('All');
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.ALL);
 
   useEffect(() => {
     getTodos()
@@ -39,17 +38,18 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
-  const filteredTodos = todos.filter(todo => {
-    if (selectedFilter === 'Active') {
-      return !todo.completed;
-    } else if (selectedFilter === 'Completed') {
-      setIsCompleted(true);
+  const filteredTodos = useMemo(() => {
+    switch (selectedFilter) {
+      case Filter.ACTIVE:
+        return todos.filter(todo => !todo.completed);
 
-      return todo.completed;
-    } else {
-      return todo;
+      case Filter.COMPLETED:
+        return todos.filter(todo => todo.completed);
+
+      default:
+        return todos;
     }
-  });
+  }, [selectedFilter, todos]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
@@ -70,6 +70,10 @@ export const App: React.FC = () => {
     setTodos(activeTodos);
   };
 
+  const handleCleanButton = () => {
+    setErrorMessage('');
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -80,7 +84,7 @@ export const App: React.FC = () => {
           {todos && (
             <button
               type="button"
-              className={cn('todoapp__toggle-all', { active: isCompleted })}
+              className={cn('todoapp__toggle-all', { active: todos })}
               data-cy="ToggleAllButton"
             />
           )}
@@ -100,45 +104,9 @@ export const App: React.FC = () => {
 
         <TodoList todos={filteredTodos} handleTodoClick={handleTodoClick} />
 
-        {/* <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodos.map(todo => (
-            <div
-              key={todo.id}
-              data-cy="Todo"
-              className={cn('todo', { completed: todo.completed })}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                  onClick={() => handleTodoClick(todo.id)}
-                />
-              </label>
-
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
-
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section> */}
-
         {/* Hide the footer if there are no todos */}
 
-        {filteredTodos.length > 0 && (
+        {!!todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {todos.filter(todo => !todo.completed).length} items left
@@ -152,9 +120,9 @@ export const App: React.FC = () => {
                   selected: selectedFilter === 'All',
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setSelectedFilter('All')}
+                onClick={() => setSelectedFilter(Filter.ALL)}
               >
-                All
+                {Filter.ALL}
               </a>
 
               <a
@@ -163,9 +131,9 @@ export const App: React.FC = () => {
                   selected: selectedFilter === 'Active',
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setSelectedFilter('Active')}
+                onClick={() => setSelectedFilter(Filter.ACTIVE)}
               >
-                Active
+                {Filter.ACTIVE}
               </a>
 
               <a
@@ -174,9 +142,9 @@ export const App: React.FC = () => {
                   selected: selectedFilter === 'Completed',
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setSelectedFilter('Completed')}
+                onClick={() => setSelectedFilter(Filter.COMPLETED)}
               >
-                Completed
+                {Filter.COMPLETED}
               </a>
             </nav>
 
@@ -209,7 +177,7 @@ export const App: React.FC = () => {
             data-cy="HideErrorButton"
             type="button"
             className="delete hidden"
-            onClick={() => setErrorMessage('')}
+            onClick={handleCleanButton}
           />
           {/* show only one message at a time */}
           {errorMessage}

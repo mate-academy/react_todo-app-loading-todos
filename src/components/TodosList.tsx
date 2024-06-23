@@ -22,11 +22,13 @@ const TodoList: React.FC<TodoListProps> = React.memo(
             data-cy="Todo"
             className={cn('todo', { completed: todo.completed })}
           >
-            <label className="todo__status-label">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
+                id={`todo-${todo.id}`}
                 checked={todo.completed}
                 onChange={() => handleTodoClick(todo.id)}
               />
