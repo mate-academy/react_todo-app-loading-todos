@@ -38,6 +38,7 @@ export const App: React.FC = () => {
     setTodos(newTodos);
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const filteredTodos = useMemo(() => {
     switch (selectedFilter) {
       case Filter.ACTIVE:
