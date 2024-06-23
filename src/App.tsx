@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
@@ -30,15 +31,6 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleTodoClick = (id: number) => {
-    const newTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-    );
-
-    setTodos(newTodos);
-  };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const filteredTodos = useMemo(() => {
     switch (selectedFilter) {
       case Filter.ACTIVE:
@@ -51,6 +43,14 @@ export const App: React.FC = () => {
         return todos;
     }
   }, [selectedFilter, todos]);
+
+  const handleTodoClick = (id: number) => {
+    const newTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+    );
+
+    setTodos(newTodos);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
