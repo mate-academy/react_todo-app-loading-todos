@@ -73,7 +73,7 @@ export const App: React.FC = () => {
 
         <TodosList todos={filteredTodos} loading={loading} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             numberActiveTodos={numberActiveTodos}
             filter={filter}
