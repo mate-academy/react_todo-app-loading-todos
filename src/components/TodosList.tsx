@@ -16,26 +16,26 @@ const TodoList: React.FC<TodoListProps> = React.memo(
   ({ todos, handleTodoClick }) => {
     return (
       <section className="todoapp__main" data-cy="TodoList">
-        {todos.map(todo => (
+        {todos.map(({ id, title, completed }) => (
           <div
-            key={todo.id}
+            key={id}
             data-cy="Todo"
-            className={cn('todo', { completed: todo.completed })}
+            className={cn('todo', { completed: completed })}
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+            <label className="todo__status-label" htmlFor={`todo-${id}`}>
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                id={`todo-${todo.id}`}
-                checked={todo.completed}
-                onChange={() => handleTodoClick(todo.id)}
+                id={`todo-${id}`}
+                checked={completed}
+                onChange={() => handleTodoClick(id)}
               />
             </label>
 
             <span data-cy="TodoTitle" className="todo__title">
-              {todo.title}
+              {title}
             </span>
             <button type="button" className="todo__remove" data-cy="TodoDelete">
               ×
