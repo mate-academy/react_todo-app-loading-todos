@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -12,28 +12,40 @@ import { Filter } from './types/Filter';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState(Filter.All);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const timeoutRef = useRef<number | null>(null);
 
-  const handleError = (message: string) => {
+  const handleError = useCallback((message: string) => {
     setErrorMessage(message);
 
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-  };
+    // Clear any existing timeout before setting a new one
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
 
-  function loadPosts() {
+    timeoutRef.current = window.setTimeout(() => {
+      setErrorMessage('');
+      timeoutRef.current = null;
+    }, 3000);
+  }, []);
+
+  const loadPosts = useCallback(() => {
     getTodos()
       .then(setTodos)
       .catch(() => handleError(Error.LOAD_TODOS));
-  }
+  }, [handleError]);
 
-  useEffect(loadPosts, []);
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  useEffect(() => {
+    loadPosts();
 
-  function getVisibleTodos(newTodos: Todo[], newFilter: Filter) {
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [loadPosts]);
+
+  const getVisibleTodos = useCallback((newTodos: Todo[], newFilter: Filter) => {
     switch (newFilter) {
       case Filter.Active:
         return newTodos.filter(todo => !todo.completed);
@@ -44,9 +56,13 @@ export const App: React.FC = () => {
       default:
         return newTodos;
     }
-  }
+  }, []);
 
   const visibleTodos = getVisibleTodos(todos, filter);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
