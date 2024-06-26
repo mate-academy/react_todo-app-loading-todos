@@ -19,7 +19,7 @@ export const createTodos = ({ userId, title, completed }: Omit<Todo, 'id'>) => {
 };
 
 export const updateTodos = ({ id, userId, title, completed }: Todo) => {
-  return client.patch<Todo>(`/todos?userId=${USER_ID}`, {
+  return client.patch<Todo>(`/todos/${id}`, {
     id,
     userId,
     title,
