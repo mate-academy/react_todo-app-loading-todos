@@ -8,12 +8,8 @@ type Props = {
 };
 
 export const TodoFooter: React.FC<Props> = ({ todos, setStatus, status }) => {
-  const handleActiveTodos = () => {
-    setStatus('active');
-  };
-
-  const handleCompletedTodos = () => {
-    setStatus('completed');
+  const handleTodosStatus = (currentStatus: string) => {
+    setStatus(currentStatus);
   };
 
   return (
@@ -27,10 +23,10 @@ export const TodoFooter: React.FC<Props> = ({ todos, setStatus, status }) => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: status === '',
+            selected: status === 'all',
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setStatus('')}
+          onClick={() => handleTodosStatus('all')}
         >
           All
         </a>
@@ -41,7 +37,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, setStatus, status }) => {
             selected: status === 'active',
           })}
           data-cy="FilterLinkActive"
-          onClick={handleActiveTodos}
+          onClick={() => handleTodosStatus('active')}
         >
           Active
         </a>
@@ -52,7 +48,7 @@ export const TodoFooter: React.FC<Props> = ({ todos, setStatus, status }) => {
             selected: status === 'completed',
           })}
           data-cy="FilterLinkCompleted"
-          onClick={handleCompletedTodos}
+          onClick={() => handleTodosStatus('completed')}
         >
           Completed
         </a>

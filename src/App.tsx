@@ -32,8 +32,7 @@ export const App: React.FC = () => {
   const [titleError, setTitleError] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadError, setLoadError] = useState(false);
-  const [status, setStatus] = useState('');
-  // const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [status, setStatus] = useState('all');
 
   const filteredTodos = getTodosByStatus(status, todos);
 
