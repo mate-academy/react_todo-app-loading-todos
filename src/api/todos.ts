@@ -26,3 +26,7 @@ export const updateTodos = ({ id, userId, title, completed }: Todo) => {
     completed,
   });
 };
+
+export const deleteTodos = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
+};

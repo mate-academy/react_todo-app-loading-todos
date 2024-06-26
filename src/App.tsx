@@ -3,6 +3,7 @@
 import React, {
   ChangeEvent,
   FormEvent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -38,31 +39,42 @@ export const App: React.FC = () => {
   const [loadError, setLoadError] = useState(false);
   const [status, setStatus] = useState('');
   const titleField = useRef<HTMLInputElement>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const filteredTodos = getTodosByStatus(status, todos);
+
+  const addTodo = (newTodoTitle: string) => {
+    const editedTitle = newTodoTitle.trim();
+
+    todosFromServer
+      .createTodos({
+        userId: 839,
+        title: editedTitle,
+        completed: false,
+      })
+      .then(newTodo => setTodos(prevTodos => [...prevTodos, newTodo]));
+    // } else {
+    //   setTitleError(true);
+    //   wait(3000).then(() => setTitleError(false));
+    // }
+  };
+
+  useEffect(() => {
+    todosFromServer
+      .getTodos()
+      .then(setTodos)
+      .catch(() => setLoadError(true));
+    wait(3000).then(() => setLoadError(false));
+  }, []);
 
   useEffect(() => {
     titleField.current?.focus();
   }, []);
 
-  const filteredTodos = getTodosByStatus(status, todos);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
-
-  function addTodo(newTodoTitle: string) {
-    const editedTitle = newTodoTitle.trim();
-
-    if (title) {
-      todosFromServer.createTodos({
-        userId: 839,
-        title: editedTitle,
-        completed: false,
-      });
-    } else {
-      setTitleError(true);
-      wait(3000).then(() => setTitleError(false));
-    }
-  }
 
   function updateTodo(updatedTodo: Todo) {
     todosFromServer.updateTodos(updatedTodo).then(todo =>
@@ -78,6 +90,10 @@ export const App: React.FC = () => {
       }),
     );
   }
+
+  const handleDeleteTodo = (todo: Todo) => {
+    todosFromServer.deleteTodos(todo.id);
+  };
 
   const handleIsCompleted = (todo: Todo) => {
     const newTodo = { ...todo, completed: !todo.completed };
@@ -96,15 +112,8 @@ export const App: React.FC = () => {
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
     addTodo(title);
+    setTitle('');
   };
-
-  useEffect(() => {
-    todosFromServer
-      .getTodos()
-      .then(setTodos)
-      .catch(() => setLoadError(true));
-    wait(3000).then(() => setLoadError(false));
-  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -126,6 +135,7 @@ export const App: React.FC = () => {
           {/* Add a todo on form submit */}
           <form onSubmit={handleFormSubmit}>
             <input
+              value={title}
               ref={titleField}
               autoFocus={true}
               data-cy="NewTodoField"
@@ -166,6 +176,7 @@ export const App: React.FC = () => {
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
+                onClick={() => handleDeleteTodo(todo)}
               >
                 ×
               </button>
