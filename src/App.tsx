@@ -3,7 +3,6 @@
 import React, {
   ChangeEvent,
   FormEvent,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -39,24 +38,25 @@ export const App: React.FC = () => {
   const [loadError, setLoadError] = useState(false);
   const [status, setStatus] = useState('');
   const titleField = useRef<HTMLInputElement>(null);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  // const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const filteredTodos = getTodosByStatus(status, todos);
 
   const addTodo = (newTodoTitle: string) => {
     const editedTitle = newTodoTitle.trim();
 
-    todosFromServer
-      .createTodos({
-        userId: 839,
-        title: editedTitle,
-        completed: false,
-      })
-      .then(newTodo => setTodos(prevTodos => [...prevTodos, newTodo]));
-    // } else {
-    //   setTitleError(true);
-    //   wait(3000).then(() => setTitleError(false));
-    // }
+    if (title) {
+      todosFromServer
+        .createTodos({
+          userId: 839,
+          title: editedTitle,
+          completed: false,
+        })
+        .then(newTodo => setTodos(prevTodos => [...prevTodos, newTodo]));
+    } else {
+      setTitleError(true);
+      wait(3000).then(() => setTitleError(false));
+    }
   };
 
   useEffect(() => {
@@ -70,7 +70,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     titleField.current?.focus();
   }, []);
-
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
