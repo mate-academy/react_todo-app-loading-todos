@@ -31,9 +31,7 @@ export const TodoList: React.FC<Props> = ({ todos, updateTodo, deletTodo }) => {
                 type="checkbox"
                 className="todo__status"
                 checked={todo.completed}
-                onChange={() => {
-                  handleIsCompleted(todo);
-                }}
+                onChange={() => handleIsCompleted(todo)}
               />
             </label>
 

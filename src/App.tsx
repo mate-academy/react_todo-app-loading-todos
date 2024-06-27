@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
@@ -10,16 +11,17 @@ import { wait } from './utils/fetchClient';
 import { TodoForm } from './components/TodoForm/TodoForm';
 import { TodoList } from './components/TodoList/TodoList';
 import { TodoFooter } from './components/TodoFooter/TodoFooter';
+import { Status } from './types/Status';
 
 const getTodosByStatus = (status: string, todos: Todo[]) => {
   const preperedTodos = [...todos];
 
   if (status) {
     switch (status) {
-      case 'active':
-        return preperedTodos.filter(todo => todo.completed === false);
-      case 'completed':
-        return preperedTodos.filter(todo => todo.completed === true);
+      case Object.keys(Status)[Object.values(Status).indexOf(Status.active)]:
+        return preperedTodos.filter(todo => !todo.completed);
+      case Object.keys(Status)[Object.values(Status).indexOf(Status.completed)]:
+        return preperedTodos.filter(todo => todo.completed);
       default:
         return preperedTodos;
     }
@@ -92,13 +94,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            // className={classNames("todoapp__toggle-all", { "active": todo.completed})}
-            data-cy="ToggleAllButton"
-          />
-
           {/* Add a todo on form submit */}
           <TodoForm onSubmit={addTodo} />
         </header>
@@ -109,7 +104,7 @@ export const App: React.FC = () => {
           deletTodo={handleDeleteTodo}
         />
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           // {/* Hide the footer if there are no todos */}
           <TodoFooter todos={todos} setStatus={setStatus} status={status} />
         )}

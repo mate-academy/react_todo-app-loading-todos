@@ -24,11 +24,17 @@ export const TodoForm: React.FC<Props> = ({ onSubmit }) => {
 
   return (
     <>
+      {/* this button should have `active` class only if all todos are completed */}
+      <button
+        type="button"
+        // className={classNames("todoapp__toggle-all", { "active": todo.completed})}
+        data-cy="ToggleAllButton"
+      />
       <form onSubmit={handleFormSubmit}>
         <input
           value={title}
           ref={titleField}
-          autoFocus={true}
+          autoFocus
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
