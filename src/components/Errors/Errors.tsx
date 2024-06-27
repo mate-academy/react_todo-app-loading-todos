@@ -8,29 +8,9 @@ interface ErrorsProps {
 }
 
 export const Errors: React.FC<ErrorsProps> = ({ isError, setIsError }) => {
-  const errorMessage = () => {
-    let message = '';
-
-    switch (isError) {
-      case IsActiveError.Add:
-        message = 'Unable to add a todo';
-        break;
-      case IsActiveError.Delete:
-        message = 'Unable to delete a todo';
-        break;
-      case IsActiveError.Empty:
-        message = 'Title should not be empty';
-        break;
-      case IsActiveError.Load:
-        message = 'Unable to load todos';
-        break;
-      case IsActiveError.Update:
-        message = 'Unable to update a todo';
-        break;
-    }
-
-    return message;
-  };
+  const errorMessage = React.useMemo(() => {
+    return Object.values(IsActiveError).find(item => item === isError);
+  }, [isError]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,7 +36,7 @@ export const Errors: React.FC<ErrorsProps> = ({ isError, setIsError }) => {
         className="delete"
         onClick={() => setIsError(IsActiveError.NoError)}
       />
-      {errorMessage()}
+      {errorMessage}
     </div>
   );
 };

@@ -5,10 +5,10 @@ export enum IsActiveLink {
 }
 
 export enum IsActiveError {
-  NoError = 'no',
-  Load = 'load',
-  Empty = 'empty',
-  Add = 'add',
-  Delete = 'delete',
-  Update = 'update',
+  NoError = '',
+  Load = 'Unable to load todos',
+  Empty = 'Title should not be empty',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
 }
