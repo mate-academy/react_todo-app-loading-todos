@@ -14,12 +14,18 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.All);
 
   useEffect(() => {
+    let timeoutId: number;
+
     getTodos()
       .then(setTodos)
       .catch(() => {
         setError('Unable to load todos');
-        setTimeout(() => setError(''), 3000);
+        timeoutId = window.setTimeout(() => setError(''), 3000);
       });
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, []);
 
   function getVisiebleTodos(newTodos: Todo[], newStatus: Status) {
