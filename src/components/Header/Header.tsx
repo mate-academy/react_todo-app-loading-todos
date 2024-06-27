@@ -1,7 +1,14 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { addTodo } from '../../api/todos';
-import { IsActiveError, HeaderProps } from '../../types/types';
+import { IsActiveError } from '../../types/types';
+import { Todo } from '../../types/Todo';
+
+interface HeaderProps {
+  todos: Todo[];
+  setTodos: (arg: Todo[]) => void;
+  setIsError: (arg: IsActiveError) => void;
+}
 
 export const Header: React.FC<HeaderProps> = ({
   todos,
@@ -25,10 +32,11 @@ export const Header: React.FC<HeaderProps> = ({
         .then(response => {
           setTodos([...todos, response]);
           setQuery('');
-          setIsDisabled(false);
         })
         .catch(() => {
           setIsError(IsActiveError.Add);
+        })
+        .finally(() => {
           setIsDisabled(false);
         });
     } else {

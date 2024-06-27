@@ -55,6 +55,7 @@ export const App: React.FC = () => {
               filteredTodos={visibleTodos}
               todos={todos}
               setTodos={setTodos}
+              setIsError={setIsError}
             />
             <Footer todos={todos} link={link} setLink={setLink} />
           </>

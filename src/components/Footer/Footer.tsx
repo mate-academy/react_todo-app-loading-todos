@@ -1,6 +1,13 @@
 import * as React from 'react';
-import { IsActiveLink, FooterProps } from '../../types/types';
+import { IsActiveLink } from '../../types/types';
 import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
+
+interface FooterProps {
+  todos: Todo[];
+  link: IsActiveLink;
+  setLink: (arg: IsActiveLink) => void;
+}
 
 export const Footer: React.FC<FooterProps> = ({ todos, link, setLink }) => {
   const activeTodos = React.useMemo(() => {
@@ -18,38 +25,19 @@ export const Footer: React.FC<FooterProps> = ({ todos, link, setLink }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: link === IsActiveLink.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setLink(IsActiveLink.All)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: link === IsActiveLink.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setLink(IsActiveLink.Active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: link === IsActiveLink.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setLink(IsActiveLink.Completed)}
-        >
-          Completed
-        </a>
+        {Object.values(IsActiveLink).map(item => (
+          <a
+            key={item}
+            href={link === 'All' ? '#/' : `#/${item}`}
+            className={classNames('filter__link', {
+              selected: link === item,
+            })}
+            data-cy={`FilterLink${item}`}
+            onClick={() => setLink(item)}
+          >
+            {item}
+          </a>
+        ))}
       </nav>
 
       <button

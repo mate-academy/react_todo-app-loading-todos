@@ -3,7 +3,14 @@ import * as React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 import { updateTodo, deleteTodo } from '../../api/todos';
-import { TodoItemProps } from '../../types/types';
+import { IsActiveError } from '../../types/types';
+
+interface TodoItemProps {
+  todo: Todo;
+  todos: Todo[];
+  setTodos: (arg: Todo[]) => void;
+  setIsError: (arg: IsActiveError) => void;
+}
 
 type UpdateEvent =
   | React.MouseEvent<HTMLInputElement, MouseEvent>
@@ -13,6 +20,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   todo,
   todos,
   setTodos,
+  setIsError,
 }) => {
   const [loader, setLoader] = React.useState(false);
   const [isFocused, setIsFocused] = React.useState(false);
@@ -38,22 +46,32 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         updateTodo(todo.id, {
           ...todo,
           completed: !todo.completed ? true : false,
-        }).then(res => {
-          setTodos(preparedTodos(res));
-
-          setLoader(false);
-        });
+        })
+          .then(res => {
+            setTodos(preparedTodos(res));
+          })
+          .catch(() => {
+            setIsError(IsActiveError.Update);
+          })
+          .finally(() => {
+            setLoader(false);
+          });
         break;
       case todo.title:
         updateTodo(todo.id, {
           ...todo,
           title: title,
-        }).then(res => {
-          setTodos(preparedTodos(res));
-
-          setLoader(false);
-          setIsFocused(false);
-        });
+        })
+          .then(res => {
+            setTodos(preparedTodos(res));
+            setIsFocused(false);
+          })
+          .catch(() => {
+            setIsError(IsActiveError.Update);
+          })
+          .finally(() => {
+            setLoader(false);
+          });
         break;
     }
   }
@@ -68,9 +86,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     deleteTodo(todo.id)
       .then(() => {
         setTodos(newList);
-        setLoader(false);
       })
       .catch(() => {
+        setIsError(IsActiveError.Delete);
+      })
+      .finally(() => {
         setLoader(false);
       });
   }

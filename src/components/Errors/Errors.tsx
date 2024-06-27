@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { IsActiveError, ErrorsProps } from '../../types/types';
+import { IsActiveError } from '../../types/types';
 import classNames from 'classnames';
+
+interface ErrorsProps {
+  isError: IsActiveError;
+  setIsError: (arg: IsActiveError) => void;
+}
 
 export const Errors: React.FC<ErrorsProps> = ({ isError, setIsError }) => {
   const errorMessage = () => {
