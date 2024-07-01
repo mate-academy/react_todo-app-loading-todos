@@ -24,6 +24,8 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
+
+    return undefined;
   }, [errorMessage]);
 
   const filteredTodo = todos.filter(todo => {
