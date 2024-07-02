@@ -5,6 +5,8 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { FilterTypes } from './types/filterTypes';
+import classNames from 'classnames';
+import { getFilteredTodos } from './components/filteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -29,25 +31,11 @@ export const App: React.FC = () => {
     return undefined;
   }, [errorMessage]);
 
-  const filteredTodo = todos.filter(todo => {
-    if (filter === FilterTypes.All) {
-      return true;
-    }
-
-    if (filter === FilterTypes.Active) {
-      return !todo.completed;
-    }
-
-    if (filter === FilterTypes.Completed) {
-      return todo.completed;
-    }
-
-    return true;
-  });
-
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const filteredTodos = getFilteredTodos(todos, filter);
 
   return (
     <div className="todoapp">
@@ -58,7 +46,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={`todoapp__toggle-all active ${todos.every(todo => todo.completed) ? `is-active` : ''} `}
+            className={classNames('todoapp__toggle-all', {
+              active: todos.every(todo => todo.completed) ? 'is-active' : '',
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -74,11 +64,11 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodo.map(todo => (
+          {filteredTodos.map(todo => (
             <div
               key={todo.id}
               data-cy="Todo"
-              className={`todo ${todo.completed ? 'completed' : ''}`}
+              className={classNames('todo', { completed: todo.completed })}
             >
               <label className="todo__status-label">
                 <input
