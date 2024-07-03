@@ -7,6 +7,8 @@ import Header from './components/Header';
 import { Footer } from './components/Footer';
 import { Todo } from './types/Todo';
 import { ErrorType } from './types/Errors';
+import { Status } from './types/Status';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,15 +18,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(response => setTodos(response))
+      .then(setTodos)
       .catch(() => setErrorType(ErrorType.LOAD_TODOS))
       .finally(() => setLoading(false));
   }, []);
-
-  // eslint-disable-next-line no-console
-  console.log(todos);
-  // eslint-disable-next-line no-console
-  console.log(errorType);
 
   useEffect(() => {
     if (errorType) {
@@ -39,11 +36,11 @@ export const App: React.FC = () => {
   const handleCloseError = () => setErrorType(null);
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') {
+    if (filter === Status.ACTIVE) {
       return !todo.completed;
     }
 
-    if (filter === 'completed') {
+    if (filter === Status.COMPLETED) {
       return todo.completed;
     }
 
@@ -69,22 +66,22 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && (
           <section className="todoapp__main" data-cy="TodoList">
-            {filteredTodos.map(todo => (
+            {filteredTodos.map(({ id, title, completed }) => (
               <div
-                key={todo.id}
+                key={id}
                 data-cy="Todo"
-                className={`todo ${todo.completed ? 'completed' : ''}`}
+                className={classNames('todo', { completed: completed })}
               >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked={todo.completed}
+                    checked={completed}
                   />
                 </label>
                 <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
+                  {title}
                 </span>
                 <button
                   type="button"
