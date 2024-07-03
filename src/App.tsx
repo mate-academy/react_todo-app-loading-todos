@@ -5,45 +5,35 @@ import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-
-enum Status {
-  all = 'all',
-  completed = 'completed',
-  active = 'active',
-}
-
-enum Emessage {
-  load = 'Unable to load todos',
-  title = 'Title should not be empty',
-  add = 'Unable to add a todo',
-  delete = 'Unable to delete a todo',
-  update = 'Unable to update a todo',
-  null = '',
-}
+import { Status } from './types/status';
+import { Emessage } from './types/Emessage';
+import { TodoList } from './TodoList';
+import { Footer } from './Footer';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [queryStatus, setQueryStatus] = useState(Status.all);
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(Emessage.null);
-  const [foundError, setFoundError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const storeTimeouts = useRef<NodeJS.Timeout[]>([]);
 
   const closingErrMessage = () => {
-    setFoundError(false);
-
-    setTimeout(() => {
+    const storeTimeout = setTimeout(() => {
       setErrMessage(Emessage.null);
     }, 500);
+
+    storeTimeouts.current.push(storeTimeout);
   };
 
-  const handleErrMessage = (message: Emessage, error = true) => {
-    setFoundError(error);
+  const handleErrMessage = (message: Emessage) => {
     setErrMessage(message);
 
-    setTimeout(() => {
+    const storeTimeout = setTimeout(() => {
       closingErrMessage();
     }, 2000);
+
+    storeTimeouts.current.push(storeTimeout);
   };
 
   useEffect(() => {
@@ -57,6 +47,12 @@ export const App: React.FC = () => {
         .catch(() => handleErrMessage(Emessage.load))
         .finally(() => setIsLoading(false));
     }
+
+    const timeouts = storeTimeouts.current;
+
+    return () => {
+      timeouts.forEach(storeTimeout => clearTimeout(storeTimeout));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -117,105 +113,20 @@ export const App: React.FC = () => {
         </header>
 
         {!isLoading && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {todosByStatus()?.map(todo => {
-              const { id, title, completed } = todo;
-
-              return (
-                <div
-                  data-cy="Todo"
-                  className={classNames('todo', { completed: completed })}
-                  key={id}
-                >
-                  <label className="todo__status-label">
-                    <input
-                      data-cy="TodoStatus"
-                      type="checkbox"
-                      className="todo__status"
-                      checked={completed}
-                      onChange={() => checkedUnchecked(id)}
-                    />
-                  </label>
-
-                  <span data-cy="TodoTitle" className="todo__title">
-                    {title}
-                  </span>
-
-                  {/* Remove button appears only on hover */}
-                  <button
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                  >
-                    ×
-                  </button>
-
-                  {/* 'is-active' class puts this modal on top of the todo */}
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    <div
-                      className="modal-background
-                    has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              );
-            })}
-          </section>
+          <TodoList
+            todosByStatus={todosByStatus}
+            checkedUnchecked={checkedUnchecked}
+            queryStatus={queryStatus}
+          />
         )}
 
         {!!todos.length && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {todosByStatus(Status.active).length} items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={classNames('filter__link', {
-                  selected: queryStatus === Status.all,
-                })}
-                onClick={() => setQueryStatus(Status.all)}
-                data-cy="FilterLinkAll"
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={classNames('filter__link', {
-                  selected: queryStatus === Status.active,
-                })}
-                onClick={() => setQueryStatus(Status.active)}
-                data-cy="FilterLinkActive"
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={classNames('filter__link', {
-                  selected: queryStatus === Status.completed,
-                })}
-                onClick={() => setQueryStatus(Status.completed)}
-                data-cy="FilterLinkCompleted"
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              disabled={!hasCompletedTodos()}
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            todosByStatus={todosByStatus}
+            queryStatus={queryStatus}
+            setQueryStatus={setQueryStatus}
+            hasCompletedTodos={hasCompletedTodos}
+          />
         )}
       </div>
 
@@ -226,7 +137,7 @@ export const App: React.FC = () => {
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
           {
-            hidden: !foundError,
+            hidden: errMessage === Emessage.null,
           },
         )}
       >
