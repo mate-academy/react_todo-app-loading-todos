@@ -32,6 +32,8 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
+
+    return undefined;
   }, [errorType]);
 
   const handleCloseError = () => setErrorType(null);
