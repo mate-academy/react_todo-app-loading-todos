@@ -15,6 +15,10 @@ export const Footer: React.FC<FooterProps> = ({
 }) => {
   const itemCountText = `${activeCount} ${activeCount === 1 ? 'item' : 'items'} left`;
 
+  const handleFilterClick = (status: Status) => {
+    setFilter(status);
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -22,36 +26,19 @@ export const Footer: React.FC<FooterProps> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filter === Status.ALL,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter(Status.ALL)}
-        >
-          All
-        </a>
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === Status.ACTIVE,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter(Status.ACTIVE)}
-        >
-          Active
-        </a>
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === Status.COMPLETED,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(Status.COMPLETED)}
-        >
-          Completed
-        </a>
+        {Object.values(Status).map(status => (
+          <a
+            key={status}
+            href={`#/${status.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: filter === status,
+            })}
+            data-cy={`FilterLink${status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}`}
+            onClick={() => handleFilterClick(status)}
+          >
+            {status.charAt(0) + status.slice(1).toLowerCase()}
+          </a>
+        ))}
       </nav>
 
       <button
