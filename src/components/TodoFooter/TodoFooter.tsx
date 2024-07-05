@@ -8,7 +8,7 @@ interface Props {
   onChangeFilter: (fil: Filters) => void;
 }
 
-export const TodoFilters: React.FC<Props> = ({
+export const TodoFooter: React.FC<Props> = ({
   selectedFilter,
   todosLeft,
   onChangeFilter,

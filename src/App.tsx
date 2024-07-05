@@ -5,8 +5,9 @@ import cn from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { TodoFilters } from './components/TodoFilters';
 import { Filters } from './types';
+import { TodoHeader } from './components/TodoHeader';
+import { TodoFooter } from './components/TodoFooter/TodoFooter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -47,29 +48,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <TodoHeader />
 
         <TodoList todos={filTodos} />
 
         {todos.length !== 0 && (
-          <TodoFilters
+          <TodoFooter
             selectedFilter={filter}
             todosLeft={completedTodos}
             onChangeFilter={setFilter}
