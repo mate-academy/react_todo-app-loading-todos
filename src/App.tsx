@@ -7,6 +7,7 @@ import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { Status } from './types/status';
 import { Emessage } from './types/Emessage';
+import { Header } from './Header';
 import { TodoList } from './TodoList';
 import { Footer } from './Footer';
 
@@ -16,24 +17,22 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(Emessage.null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const storeTimeouts = useRef<NodeJS.Timeout[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const closingErrMessage = () => {
-    const storeTimeout = setTimeout(() => {
-      setErrMessage(Emessage.null);
-    }, 500);
-
-    storeTimeouts.current.push(storeTimeout);
+    setErrMessage(Emessage.null);
   };
 
   const handleErrMessage = (message: Emessage) => {
     setErrMessage(message);
 
-    const storeTimeout = setTimeout(() => {
-      closingErrMessage();
-    }, 2000);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-    storeTimeouts.current.push(storeTimeout);
+    timeoutRef.current = setTimeout(() => {
+      closingErrMessage();
+    }, 3000);
   };
 
   useEffect(() => {
@@ -48,10 +47,10 @@ export const App: React.FC = () => {
         .finally(() => setIsLoading(false));
     }
 
-    const timeouts = storeTimeouts.current;
-
     return () => {
-      timeouts.forEach(storeTimeout => clearTimeout(storeTimeout));
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,25 +91,7 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              ref={inputRef}
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+        <Header inputRef={inputRef} />
 
         {!isLoading && (
           <TodoList
