@@ -9,6 +9,7 @@ import { Todo } from './types/Todo';
 import { ErrorType } from './types/Errors';
 import { Status } from './types/Status';
 import TodoList from './components/ToDoList';
+import ErrorNotification from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -77,18 +78,10 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${errorType ? '' : 'hidden'}`}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={handleCloseError}
-        />
-        {errorType}
-      </div>
+      <ErrorNotification
+        errorType={errorType}
+        handleCloseError={handleCloseError}
+      />
     </div>
   );
 };
