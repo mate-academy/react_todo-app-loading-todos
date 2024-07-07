@@ -1,17 +1,15 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
-import cn from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { Filters } from './types';
 import { TodoHeader } from './components/TodoHeader';
-import { TodoFooter } from './components/TodoFooter/TodoFooter';
+import { TodoFooter } from './components/TodoFooter';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadError, setLoadError] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<Filters>(Filters.All);
   const completedTodos = todos.reduce(
     (acc, curr) => (!curr.completed ? acc + 1 : acc),
@@ -22,8 +20,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setLoadError(false);
-        setTimeout(() => setLoadError(true), 3000);
+        setErrorMessage('Unable to load todos');
       });
   }, []);
 
@@ -61,26 +58,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        // eslint-disable-next-line max-len
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: loadError },
-        )}
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

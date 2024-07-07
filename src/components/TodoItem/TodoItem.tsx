@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -11,7 +13,6 @@ export const TodoItem: React.FC<Props> = ({ todo }) => (
     data-cy="Todo"
     className={cn('todo', 'item-enter-done', { completed: todo.completed })}
   >
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control*/}
     <label className="todo__status-label">
       <input
         data-cy="TodoStatus"
