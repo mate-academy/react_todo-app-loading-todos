@@ -14,4 +14,9 @@ export const createTodo = ({ userId, title, completed }: Omit<Todo, 'id'>) => {
 export function deleteTodo(todoId: number | undefined) {
   return client.delete(`/todos/${todoId}`);
 }
+
+export const upDataTodo = ({ id, title, completed }: Partial<Todo>) => {
+  return client.patch(`/todos/${id}`, { title, completed });
+};
+
 // Add more methods here
