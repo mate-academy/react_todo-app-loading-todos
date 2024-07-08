@@ -45,9 +45,9 @@ Tests help you to check if your implementation is correct.
 
 1. Register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
 1. Save the received `userId` in the `api/todos.ts` and use it to load todos
-1. reate some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
+1. Create some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
 1. Load your todos when the `App` is loaded
-1. hide the list and the footer if there are no todos yet;
+1. Hide the list and the footer if there are no todos yet;
 
 ## Show Error Messages
 
