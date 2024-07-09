@@ -136,9 +136,10 @@ export const TodoApp = () => {
             </span>
 
             {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter" onClick={onFilter}>
+            <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
+                onClick={onFilter}
                 className={cn('filter__link', {
                   selected: !filter,
                 })}
@@ -149,7 +150,7 @@ export const TodoApp = () => {
 
               <a
                 href="#/active"
-                data-href="active"
+                onClick={onFilter}
                 className={cn('filter__link', {
                   selected: filter === Filter.active,
                 })}
@@ -160,7 +161,7 @@ export const TodoApp = () => {
 
               <a
                 href="#/completed"
-                data-href="completed"
+                onClick={onFilter}
                 className={cn('filter__link', {
                   selected: filter === Filter.completed,
                 })}

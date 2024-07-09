@@ -4,11 +4,15 @@ import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { useError } from '../../hooks/useError';
 import { Filter } from '../../types/common';
+import { extractFilter } from '../../utils/helpers';
 
 export const useTodoApp = () => {
+  const { hash } = window.location;
+  const initialFilter = extractFilter(hash);
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const { error, onError, clearError } = useError();
-  const [filter, setFilter] = useState<Filter | null>(null);
+  const [filter, setFilter] = useState<Filter | null>(initialFilter);
 
   const activeTodosQty = useMemo(() => {
     if (!todos) {
@@ -44,12 +48,11 @@ export const useTodoApp = () => {
       });
   }, []);
 
-  const onFilter = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const value = (event.target as HTMLAnchorElement).getAttribute(
-      'data-href',
-    ) as Filter | null;
+  const onFilter = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const { href } = event.currentTarget;
+    const selected = extractFilter(href);
 
-    setFilter(value);
+    setFilter(selected);
   };
 
   return {
