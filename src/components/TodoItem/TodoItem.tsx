@@ -9,12 +9,14 @@ interface Props {
   todo: Todo;
 }
 export const TodoItem: FC<Props> = ({ todo }) => {
+  const { id, completed, title } = todo;
+
   return (
     <div
-      key={todo.id}
+      key={id}
       data-cy="Todo"
       className={classNames('todo', {
-        completed: todo.completed,
+        completed: completed,
       })}
     >
       <label className="todo__status-label">
@@ -22,12 +24,12 @@ export const TodoItem: FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         x

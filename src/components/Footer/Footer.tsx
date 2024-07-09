@@ -1,7 +1,7 @@
-import { FC } from 'react';
-
 import { Status } from '../../types/statusTypes';
 import { Todo } from '../../types/Todo';
+import pluralize from 'pluralize';
+import cn from 'classnames';
 
 interface Props {
   todos: Todo[];
@@ -9,7 +9,7 @@ interface Props {
   setSelectedStatus: (status: Status) => void;
 }
 
-export const Footer: FC<Props> = ({
+export const Footer: React.FC<Props> = ({
   todos,
   selectedStatus,
   setSelectedStatus,
@@ -19,13 +19,15 @@ export const Footer: FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${activeTodosCount} ${activeTodosCount === 1 ? 'item' : 'items'} left`}
+        {`${activeTodosCount} ${pluralize('item', activeTodosCount)} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${selectedStatus === Status.All ? 'selected' : ''}`}
+          className={cn('filter__link', {
+            selected: selectedStatus === Status.All,
+          })}
           data-cy="FilterLinkAll"
           onClick={() => setSelectedStatus(Status.All)}
         >
@@ -34,7 +36,9 @@ export const Footer: FC<Props> = ({
 
         <a
           href="#/active"
-          className={`filter__link ${selectedStatus === Status.Active ? 'selected' : ''}`}
+          className={cn('filter__link', {
+            selected: selectedStatus === Status.Active,
+          })}
           data-cy="FilterLinkActive"
           onClick={() => setSelectedStatus(Status.Active)}
         >
@@ -43,7 +47,9 @@ export const Footer: FC<Props> = ({
 
         <a
           href="#/completed"
-          className={`filter__link ${selectedStatus === Status.Completed ? 'selected' : ''}`}
+          className={cn('filter__link', {
+            selected: selectedStatus === Status.Completed,
+          })}
           data-cy="FilterLinkCompleted"
           onClick={() => setSelectedStatus(Status.Completed)}
         >

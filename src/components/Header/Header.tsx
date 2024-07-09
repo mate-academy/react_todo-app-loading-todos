@@ -1,4 +1,4 @@
-export const Header = () => {
+export const Header: React.FC = () => {
   return (
     <header className="todoapp__header">
       <button

@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 import { Status } from '../../types/statusTypes';
@@ -16,7 +17,7 @@ export const TodoList: FC<Props> = ({ todos, selectedStatus }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} />
+        <TodoItem key={uuidv4()} todo={todo} />
       ))}
     </section>
   );
