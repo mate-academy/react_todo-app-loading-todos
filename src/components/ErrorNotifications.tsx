@@ -28,17 +28,7 @@ export const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={onClose}
       />
-      {/* show only one message at a time */}
       {valueError}
-      {/* Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
     </div>
   );
 };

@@ -10,11 +10,12 @@ import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotifications';
+import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [valueError, setValueError] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [isNotificationHidden, setIsNotificationHidden] = useState(true);
 
   const autoHideNotification = () => {
@@ -39,20 +40,19 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') {
-      return !todo.completed;
+  const filteredTodos = todos.filter((todo: Todo) => {
+    switch (filterBy) {
+      case FilterBy.Active:
+        return !todo.completed;
+      case FilterBy.Completed:
+        return todo.completed;
+      default:
+        return true;
     }
-
-    if (filter === 'completed') {
-      return todo.completed;
-    }
-
-    return true;
   });
 
-  const handleFilter = (selectedFilter: 'all' | 'active' | 'completed') => {
-    setFilter(selectedFilter);
+  const handleFilter = (selectedFilter: FilterBy) => {
+    setFilterBy(selectedFilter);
   };
 
   const handleCloseNotifications = () => {
@@ -73,12 +73,10 @@ export const App: React.FC = () => {
         {filteredTodos.length > 0 && <TodoList filteredTodos={filteredTodos} />}
 
         {todos.length > 0 && (
-          <Footer todos={todos} filter={filter} handleFilter={handleFilter} />
+          <Footer todos={todos} filter={filterBy} onFilter={handleFilter} />
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification
         valueError={valueError}
         isNotificationHidden={isNotificationHidden}
