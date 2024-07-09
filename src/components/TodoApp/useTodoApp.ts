@@ -60,6 +60,7 @@ export const useTodoApp = () => {
     filter,
     error,
     activeTodosQty,
+    isFooterShown: !!todos.length,
     clearError,
     onFilter,
   };
