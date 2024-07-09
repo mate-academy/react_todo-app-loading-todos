@@ -11,10 +11,6 @@ import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(Filter.All);
@@ -37,14 +33,14 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   useEffect(() => {
-    if (!USER_ID) {
-      return;
-    }
-
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Failed to fetch todos'));
   }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
