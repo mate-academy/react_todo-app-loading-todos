@@ -52,3 +52,4 @@ export const Footer: React.FC<Props> = ({ onClick, status, leftItems }) => {
     </footer>
   );
 };
+/*das*/
