@@ -11,10 +11,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<Filters>(Filters.All);
-  const completedTodos = todos.reduce(
-    (acc, curr) => (!curr.completed ? acc + 1 : acc),
-    0,
-  );
+  const completedTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     getTodos()
@@ -24,12 +21,12 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     const filtrTodos = [...todos];
 
     switch (filter) {
       case Filters.Active:
-        return filtrTodos.filter(todo => todo.completed === false);
+        return filtrTodos.filter(todo => !todo.completed);
 
       case Filters.Completed:
         return filtrTodos.filter(todo => todo.completed);
@@ -47,9 +44,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <TodoHeader />
 
-        <TodoList todos={filTodos} />
+        <TodoList todos={filteredTodos} />
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <TodoFooter
             selectedFilter={filter}
             todosLeft={completedTodos}
@@ -60,7 +57,7 @@ export const App: React.FC = () => {
 
       <ErrorNotification
         errorMessage={errorMessage}
-        onErrorMessage={setErrorMessage}
+        onCloseErrorMessage={() => setErrorMessage('')}
       />
     </div>
   );
