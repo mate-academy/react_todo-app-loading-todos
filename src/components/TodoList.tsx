@@ -1,6 +1,9 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { v4 as uuidv4 } from 'uuid';
+
 type Props = {
   todos: Todo[];
 };
@@ -9,10 +12,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => {
-        const { id, title, completed } = todo;
+        const { title, completed } = todo;
+        const id = uuidv4();
 
         return (
           <div
+            id={id}
             data-cy="Todo"
             className={classNames('todo', { completed: completed })}
             key={id}

@@ -6,10 +6,10 @@ import { Todo } from '../types/Todo';
 type Props = {
   todos: Todo[];
   filterBy: Filter;
-  setFilterBy: (filterBy: Filter) => void;
+  handleSelect: (filterBy: Filter) => void;
 };
 
-export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
+export const Footer: React.FC<Props> = ({ todos, filterBy, handleSelect }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -24,7 +24,7 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
             selected: filterBy === Filter.All,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilterBy(Filter.All)}
+          onClick={() => handleSelect(Filter.All)}
         >
           All
         </a>
@@ -35,7 +35,7 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
             selected: filterBy === Filter.Active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilterBy(Filter.Active)}
+          onClick={() => handleSelect(Filter.Active)}
         >
           Active
         </a>
@@ -46,7 +46,7 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
             selected: filterBy === Filter.Completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilterBy(Filter.Completed)}
+          onClick={() => handleSelect(Filter.Completed)}
         >
           Completed
         </a>
@@ -57,7 +57,7 @@ export const Footer: React.FC<Props> = ({ todos, filterBy, setFilterBy }) => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={getCompletedTodos(todos).length === 0}
+        disabled={!getCompletedTodos(todos).length}
       >
         Clear completed
       </button>

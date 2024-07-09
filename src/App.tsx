@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import classNames from 'classnames';
+import { getPreparedTodos } from './utils/preparedTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,17 +25,10 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const preparedTodos = useMemo(() => {
-    if (filterBy === Filter.Active) {
-      return todos.filter(todo => !todo.completed);
-    }
-
-    if (filterBy === Filter.Completed) {
-      return todos.filter(todo => todo.completed);
-    }
-
-    return todos;
-  }, [filterBy, todos]);
+  const filteredTodos = useMemo(
+    () => getPreparedTodos(todos, filterBy),
+    [todos, filterBy],
+  );
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -47,10 +41,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList todos={preparedTodos} />
+        <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && (
-          <Footer todos={todos} filterBy={filterBy} setFilterBy={setFilterBy} />
+        {todos.length && (
+          <Footer
+            todos={todos}
+            filterBy={filterBy}
+            handleSelect={setFilterBy}
+          />
         )}
       </div>
 
