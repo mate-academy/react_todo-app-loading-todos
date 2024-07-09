@@ -5,7 +5,8 @@ import { useTodoApp } from './useTodoApp';
 import { Filter } from '../../types/common';
 
 export const TodoApp = () => {
-  const { todos, error, filter, activeTodosQty, clearError } = useTodoApp();
+  const { todos, error, filter, activeTodosQty, clearError, onFilter } =
+    useTodoApp();
 
   return (
     <div className="todoapp">
@@ -135,7 +136,7 @@ export const TodoApp = () => {
             </span>
 
             {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
+            <nav className="filter" data-cy="Filter" onClick={onFilter}>
               <a
                 href="#/"
                 className={cn('filter__link', {
@@ -148,6 +149,7 @@ export const TodoApp = () => {
 
               <a
                 href="#/active"
+                data-href="active"
                 className={cn('filter__link', {
                   selected: filter === Filter.active,
                 })}
@@ -158,6 +160,7 @@ export const TodoApp = () => {
 
               <a
                 href="#/completed"
+                data-href="completed"
                 className={cn('filter__link', {
                   selected: filter === Filter.completed,
                 })}

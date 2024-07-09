@@ -3,15 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { getTodos } from '../../api/todos';
 import { useError } from '../../hooks/useError';
-import { useLocation } from 'react-router-dom';
 import { Filter } from '../../types/common';
 
 export const useTodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const { error, onError, clearError } = useError();
-  const { pathname } = useLocation();
-
-  const filter = useMemo(() => pathname.replace('/', '') as Filter, [pathname]);
+  const [filter, setFilter] = useState<Filter | null>(null);
 
   const activeTodosQty = useMemo(() => {
     if (!todos) {
@@ -47,5 +44,20 @@ export const useTodoApp = () => {
       });
   }, []);
 
-  return { todos: filteredTodos, filter, error, activeTodosQty, clearError };
+  const onFilter = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const value = (event.target as HTMLAnchorElement).getAttribute(
+      'data-href',
+    ) as Filter | null;
+
+    setFilter(value);
+  };
+
+  return {
+    todos: filteredTodos,
+    filter,
+    error,
+    activeTodosQty,
+    clearError,
+    onFilter,
+  };
 };
