@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import cn from 'classnames';
 import { Todo as TodoType } from '../types/Todo';
@@ -16,8 +14,10 @@ export const Todo: React.FC<Props> = ({ todo }) => {
         className={cn('todo', { completed: todo.completed })}
         key={todo.id}
       >
-        <label className="todo__status-label">
+        <label htmlFor="{`todo-${todo.id}`}" className="todo__status-label">
+          {' '}
           <input
+            id={`todo-${todo.id}`}
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
@@ -44,6 +44,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
       {false && (
         <div data-cy="Todo" className="todo">
           <label className="todo__status-label">
+            {' '}
             <input
               data-cy="TodoStatus"
               type="checkbox"
@@ -73,6 +74,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
       {false && (
         <div data-cy="Todo" className="todo">
           <label className="todo__status-label">
+            {' '}
             <input
               data-cy="TodoStatus"
               type="checkbox"

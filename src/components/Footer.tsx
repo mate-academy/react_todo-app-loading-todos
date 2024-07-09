@@ -24,9 +24,9 @@ export const Footer: React.FC<Props> = ({ onGetFilterBy, filterBy, todos }) => {
       <nav className="filter" data-cy="Filter">
         {links.map(([key, value]) => (
           <a
-            href={`#/${value === 'all' ? '' : `${value}`}`}
+            href={`#/${value === FilterBy.All ? '' : `${value}`}`}
             className={cn('filter__link', { selected: filterBy === value })}
-            data-cy={'FilterLink' + `${key}`}
+            data-cy={`FilterLink${key}`}
             key={key}
             onClick={() => onGetFilterBy(value)}
           >

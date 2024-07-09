@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 export const Header: React.FC = () => {
-  const field = useRef<HTMLInputElement>(null);
+  const fieldTitle = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    field.current?.focus();
+    fieldTitle.current?.focus();
   }, []);
 
   return (
@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
       {/* Add a todo on form submit */}
       <form>
         <input
-          ref={field}
+          ref={fieldTitle}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
