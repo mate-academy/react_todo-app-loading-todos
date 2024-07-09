@@ -46,6 +46,7 @@ export const useTodoApp = () => {
       .catch(() => {
         onError('Unable to load todos');
       });
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
   const onFilter = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
