@@ -10,7 +10,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setfilterBy] = useState<FilterBy>(FilterBy.All);
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
         <TodoList todos={filteredTodos} />
         {!!todos.length && (
           <Footer
-            onGetFilterBy={setfilterBy}
+            onGetFilterBy={setFilterBy}
             filterBy={filterBy}
             todos={todos}
           />
