@@ -12,8 +12,8 @@ import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [status, setStatus] = useState<Status>(Status.all);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState(Status.all);
   const [isEditingTodo, setIsEditingTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -26,22 +26,21 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    switch (status) {
-      case Status.active:
-        return todos.filter(todo => !todo.completed);
-      case Status.completed:
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
+    if (status === Status.all) {
+      return todos;
     }
+
+    return todos.filter(todo => {
+      return status === Status.completed ? todo.completed : !todo.completed;
+    });
   }, [todos, status]);
 
   const handleCompletedStatus = (id: number) => {
-    setTodos(prevTodos =>
-      prevTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
     );
+
+    setTodos(updatedTodos);
   };
 
   if (!USER_ID) {
@@ -62,11 +61,12 @@ export const App: React.FC = () => {
           handleCompletedStatus={handleCompletedStatus}
         />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <TodoFilter setStatus={setStatus} status={status} todos={todos} />
         )}
       </div>
 
+      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={classNames(
@@ -81,6 +81,8 @@ export const App: React.FC = () => {
           onClick={() => setErrorMessage('')}
         />
         {errorMessage}
+
+        {}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Status } from '../types/Status';
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
@@ -10,13 +10,19 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
-  const isAnyCompletedTodo = todos.some(todo => todo.completed);
-  const activeTodos = todos.filter(todo => !todo.completed);
+  const isAnyCompletedTodo = useMemo(
+    () => todos.some(todo => todo.completed),
+    [todos],
+  );
+  const activeTodosCount = useMemo(
+    () => todos.filter(todo => !todo.completed).length,
+    [todos],
+  );
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodos.length} items left
+        {activeTodosCount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -55,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
+      {/* This button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
