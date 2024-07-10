@@ -1,23 +1,23 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-interface ErrorNotificationProps {
-  errorMessage: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-}
+type Props = {
+  errorMessage: string | null;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>;
+};
 
-const ErrorNotification: React.FC<ErrorNotificationProps> = ({
+export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   setErrorMessage,
 }) => {
   useEffect(() => {
     if (errorMessage) {
-      const timer = setTimeout(() => setErrorMessage(''), 3000);
+      const timer = setTimeout(() => setErrorMessage(null), 3000);
 
       return () => clearTimeout(timer);
     }
 
-    return undefined;
+    return;
   }, [errorMessage, setErrorMessage]);
 
   return (
@@ -32,11 +32,9 @@ const ErrorNotification: React.FC<ErrorNotificationProps> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage('')}
+        onClick={() => setErrorMessage(null)}
       />
       {errorMessage}
     </div>
   );
 };
-
-export default ErrorNotification;

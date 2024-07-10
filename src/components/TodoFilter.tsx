@@ -10,8 +10,8 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
-  const isAnyCompletedTodo = todos.some(todo => todo.completed);
   const activeTodos = todos.filter(todo => !todo.completed);
+  const isAnyCompletedTodo = activeTodos.length !== todos.length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -24,10 +24,10 @@ export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
         <a
           href="#/"
           className={classNames('filter__link', {
-            selected: status === Status.all,
+            selected: status === Status.All,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setStatus(Status.all)}
+          onClick={() => setStatus(Status.All)}
         >
           All
         </a>
@@ -35,10 +35,10 @@ export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
         <a
           href="#/active"
           className={classNames('filter__link', {
-            selected: status === Status.active,
+            selected: status === Status.Active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setStatus(Status.active)}
+          onClick={() => setStatus(Status.Active)}
         >
           Active
         </a>
@@ -46,10 +46,10 @@ export const TodoFilter: React.FC<Props> = ({ setStatus, status, todos }) => {
         <a
           href="#/completed"
           className={classNames('filter__link', {
-            selected: status === Status.completed,
+            selected: status === Status.Completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setStatus(Status.completed)}
+          onClick={() => setStatus(Status.Completed)}
         >
           Completed
         </a>

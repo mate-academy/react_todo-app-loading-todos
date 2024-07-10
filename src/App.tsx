@@ -8,12 +8,12 @@ import { Todo } from './types/Todo';
 import { Status } from './types/Status';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import ErrorNotification from './components/ErrorNotification';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [status, setStatus] = useState(Status.all);
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [status, setStatus] = useState(Status.All);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -26,13 +26,13 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    if (status === Status.all) {
+    if (status === Status.All) {
       return todos;
     }
 
-    return todos.filter(todo => {
-      return status === Status.completed ? todo.completed : !todo.completed;
-    });
+    return todos.filter(todo =>
+      status === Status.Completed ? todo.completed : !todo.completed,
+    );
   }, [todos, status]);
 
   if (!USER_ID) {
