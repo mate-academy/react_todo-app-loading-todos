@@ -25,6 +25,7 @@ export const Footer: FC<Props> = ({
       <nav className="filter" data-cy="Filter">
         {filters.map(filter => (
           <a
+            key={filter}
             href={`#${filter}`}
             className={cn('filter__link', {
               selected: filter === selectedFilter,
