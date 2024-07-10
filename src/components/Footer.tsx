@@ -1,0 +1,46 @@
+import React from 'react';
+import { FilterBy } from '../types/FilterBy';
+import cn from 'classnames';
+import { Todo } from '../types/Todo';
+
+type Props = {
+  onGetFilterBy: React.Dispatch<React.SetStateAction<FilterBy>>;
+  filterBy: FilterBy;
+  todos: Todo[];
+};
+
+export const Footer: React.FC<Props> = ({ onGetFilterBy, filterBy, todos }) => {
+  const links = Object.entries(FilterBy);
+
+  const totalActiveTodos = todos.filter(todo => !todo.completed).length;
+
+  return (
+    <footer className="todoapp__footer" data-cy="Footer">
+      <span className="todo-count" data-cy="TodosCounter">
+        {totalActiveTodos} items left
+      </span>
+
+      <nav className="filter" data-cy="Filter">
+        {links.map(([key, value]) => (
+          <a
+            href={`#/${value === FilterBy.All ? '' : `${value}`}`}
+            className={cn('filter__link', { selected: filterBy === value })}
+            data-cy={`FilterLink${key}`}
+            key={key}
+            onClick={() => onGetFilterBy(value)}
+          >
+            {key}
+          </a>
+        ))}
+      </nav>
+
+      <button
+        type="button"
+        className="todoapp__clear-completed"
+        data-cy="ClearCompletedButton"
+      >
+        Clear completed
+      </button>
+    </footer>
+  );
+};
