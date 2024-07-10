@@ -4,12 +4,14 @@ import { Filter } from '../types/Filter';
 
 interface Props {
   onFilter: (filter: Filter) => void;
+  onClear: () => void;
   selectedFilter: Filter;
   activeTodosCount: number;
 }
 
 export const Footer: FC<Props> = ({
   onFilter,
+  onClear,
   activeTodosCount,
   selectedFilter,
 }) => {
@@ -43,6 +45,7 @@ export const Footer: FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        onClick={onClear}
       >
         Clear completed
       </button>
