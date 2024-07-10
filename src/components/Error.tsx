@@ -17,7 +17,7 @@ export const Error: FC<Props> = ({ message, onClose }) => {
     <div
       data-cy="ErrorNotification"
       className={cn('notification is-danger is-light has-text-weight-normal', {
-        'is-hidden': !message,
+        hidden: !message,
       })}
     >
       <button data-cy="HideErrorButton" type="button" className="delete" />

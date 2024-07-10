@@ -32,10 +32,14 @@ export const App: React.FC = () => {
     return filteredTodos;
   }, [todos, filter]);
 
+  const activeTodosCount = useMemo(() => {
+    return todos.filter(({ completed }) => !completed).length;
+  }, [todos]);
+
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Failed to fetch todos'));
+      .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
@@ -52,7 +56,13 @@ export const App: React.FC = () => {
         <List todos={filterTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer onFilter={setFilter} />
+        {todos.length > 0 && (
+          <Footer
+            onFilter={setFilter}
+            activeTodosCount={activeTodosCount}
+            selectedFilter={filter}
+          />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
