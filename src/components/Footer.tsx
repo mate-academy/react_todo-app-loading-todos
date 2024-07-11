@@ -6,13 +6,16 @@ interface Props {
   onFilter: (filter: Filter) => void;
   onClear: () => void;
   selectedFilter: Filter;
-  activeTodosCount: number;
+  todosCount: {
+    active: number;
+    completed: number;
+  };
 }
 
 export const Footer: FC<Props> = ({
   onFilter,
   onClear,
-  activeTodosCount,
+  todosCount,
   selectedFilter,
 }) => {
   const filters = [Filter.All, Filter.Active, Filter.Completed];
@@ -20,7 +23,7 @@ export const Footer: FC<Props> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodosCount} items left
+        {todosCount.active} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
@@ -45,6 +48,7 @@ export const Footer: FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={todosCount.completed === 0}
         onClick={onClear}
       >
         Clear completed

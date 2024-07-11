@@ -125,9 +125,9 @@ Cypress.on('fail', e => {
 });
 
 describe('', () => {
-  beforeEach(() => {
-    if (failed) Cypress.runner.stop();
-  });
+  // beforeEach(() => {
+  //   if (failed) Cypress.runner.stop();
+  // });
 
   describe.skip('Page with no todos', () => {
     it('should send 1 todos request', () => {
@@ -283,7 +283,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Filtering', () => {
+  describe('Filtering', () => {
     describe('with mixed todos', () => {
       beforeEach(() => {
         page.mockLoad().as('loadRequest');
@@ -1013,7 +1013,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Todo Toggling', () => {
+  describe('Todo Toggling', () => {
     beforeEach(() => {
       page.mockLoad().as('loadRequest');
       page.visit();
@@ -1167,7 +1167,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Toggle All Button', () => {
+  describe('Toggle All Button', () => {
     describe('if there are no todos', () => {
       it('should not be visible while loading todos', () => {
         page.mockLoad({ body: [] }).as('loadRequest');
@@ -1421,7 +1421,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Renaming', () => {
+  describe('Renaming', () => {
     beforeEach(() => {
       page.mockLoad().as('loadRequest');
       page.visit();

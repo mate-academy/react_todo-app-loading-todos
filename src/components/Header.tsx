@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 interface Props {
   onAdd: (title: string) => Promise<void>;
@@ -13,17 +13,24 @@ export const Header: FC<Props> = ({ onAdd, inputRef }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
 
     try {
+      setLoading(true);
       await onAdd(title);
       setTitle('');
     } catch {
+      // eslint-disable-next-line no-console
       console.log('Error adding todo');
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputRef, loading]);
 
   return (
     <header className="todoapp__header">

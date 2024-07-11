@@ -24,13 +24,16 @@ export const App: React.FC = () => {
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleAddTodo = async (title: string) => {
-    if (!title.trim()) {
-      setErrorMessage('Todo title cannot be empty');
+    const formattedTitle = title.trim();
+
+    if (!formattedTitle) {
+      setErrorMessage('Title should not be empty');
+
       return;
     }
 
     const newTodo = {
-      title,
+      title: formattedTitle,
       completed: false,
       userId: USER_ID,
     };
@@ -42,8 +45,8 @@ export const App: React.FC = () => {
 
       setTodos(currentTodos => [...currentTodos, createdTodo]);
     } catch {
-      setErrorMessage('Unable to add todo');
-      throw new Error('Unable to add todo');
+      setErrorMessage('Unable to add a todo');
+      throw new Error('Unable to add a todo');
     } finally {
       setTempTodoTitle(null);
     }
@@ -55,7 +58,7 @@ export const App: React.FC = () => {
 
       setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
     } catch {
-      setErrorMessage('Unable to delete todo');
+      setErrorMessage('Unable to delete a todo');
     }
   };
 
@@ -87,17 +90,32 @@ export const App: React.FC = () => {
 
           return { id: todo.id, status: 'resolved' };
         } catch {
-          setErrorMessage(`Unable to clear completed todo with id ${todo.id}`);
+          setErrorMessage('Unable to delete a todo');
+
           return { id: todo.id, status: 'rejected' };
         }
       };
 
       // filters by resolved & filter currentTodos
-      const responses = await Promise.allSettled(
-        filteredTodos.map(deleteCallback),
-      );
+      const res = await Promise.allSettled(filteredTodos.map(deleteCallback));
 
-      setTodos(currentTodos => currentTodos.filter(todo => !todo.completed));
+      const resolvedIds = res.reduce((acc, { value }) => {
+        if (value.status === 'resolved') {
+          acc[value.id] = value.id;
+        }
+
+        return acc;
+      }, {});
+
+      setTodos(currentTodos =>
+        currentTodos.filter(todo => {
+          if (resolvedIds[todo.id] && todo.completed) {
+            return false;
+          }
+
+          return true;
+        }),
+      );
     } catch {
       setErrorMessage('Unable to clear completed todos');
     }
@@ -120,8 +138,14 @@ export const App: React.FC = () => {
     return filteredTodos;
   }, [todos, filter]);
 
-  const activeTodosCount = useMemo(() => {
-    return todos.filter(({ completed }) => !completed).length;
+  const todosCount = useMemo(() => {
+    const active = todos.filter(({ completed }) => !completed).length;
+    const completed = todos.length - active;
+
+    return {
+      active,
+      completed,
+    };
   }, [todos]);
 
   useEffect(() => {
@@ -157,7 +181,7 @@ export const App: React.FC = () => {
           <Footer
             onFilter={setFilter}
             onClear={clearCompletedTodos}
-            activeTodosCount={activeTodosCount}
+            todosCount={todosCount}
             selectedFilter={filter}
           />
         )}

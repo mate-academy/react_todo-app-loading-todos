@@ -1,6 +1,9 @@
-import { FC } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import { FC, useState } from 'react';
 import cn from 'classnames';
 import { Todo as TodoType } from '../types/Todo';
+import { TodoForm } from './TodoForm';
 
 interface Props {
   todo: TodoType;
@@ -9,6 +12,48 @@ interface Props {
 }
 
 export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
+  const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      await onDelete(todo.id);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.log('Error deleting todo');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = async (data: Partial<TodoType>) => {
+    try {
+      setLoading(true);
+      await onEdit(todo.id, data);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.log('Error editing todo');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = (title: string) => {
+    if (!title.trim()) {
+      return handleDelete();
+    }
+
+    if (title === todo.title) {
+      setIsEditing(false);
+
+      return;
+    }
+
+    handleEdit({ title });
+    setIsEditing(false);
+  };
+
   return (
     <div
       data-cy="Todo"
@@ -22,27 +67,40 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          onChange={() => onEdit(todo.id, { completed: !todo.completed })}
+          onChange={() => handleEdit({ completed: !todo.completed })}
           checked={todo.completed}
         />
       </label>
 
-      <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
-      </span>
+      {isEditing ? (
+        <TodoForm title={todo.title} onSubmit={handleSubmit} />
+      ) : (
+        <span
+          data-cy="TodoTitleґ"
+          className="todo__title"
+          onDoubleClick={() => setIsEditing(true)}
+        >
+          {todo.title}
+        </span>
+      )}
 
       {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"
         data-cy="TodoDelete"
-        onClick={() => onDelete(todo.id)}
+        onClick={handleDelete}
       >
         ×
       </button>
 
       {/* overlay will cover the todo while it is being deleted or updated */}
-      <div data-cy="TodoLoader" className="modal overlay">
+      <div
+        data-cy="TodoLoader"
+        className={cn('modal overlay', {
+          'is-active': loading,
+        })}
+      >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>

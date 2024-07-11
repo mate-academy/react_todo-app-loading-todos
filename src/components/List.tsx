@@ -58,15 +58,6 @@ export const List: FC<Props> = ({ todos, tempTodoTitle, onDelete, onEdit }) => {
             </label>
 
             {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
 
             <div data-cy="TodoLoader" className="modal overlay">
               <div className="modal-background has-background-white-ter" />
