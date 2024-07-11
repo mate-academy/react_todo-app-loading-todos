@@ -55,7 +55,7 @@ export const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const checkedUnchecked = (id: number) => {
+  const handleCheck = (id: number) => {
     setTodos(existingTodos =>
       existingTodos?.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
@@ -96,7 +96,7 @@ export const App: React.FC = () => {
         {!isLoading && (
           <TodoList
             todosByStatus={todosByStatus}
-            checkedUnchecked={checkedUnchecked}
+            handleCheck={handleCheck}
             queryStatus={queryStatus}
           />
         )}

@@ -5,17 +5,16 @@ import { Todo } from './types/Todo';
 
 interface Props {
   todo: Todo;
-  checkedUnchecked: (id: number) => void;
+  handleCheck: (id: number) => void;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo, checkedUnchecked }) => {
+export const TodoItem: React.FC<Props> = ({ todo, handleCheck }) => {
   const { id, title, completed } = todo;
 
   return (
     <div
       data-cy="Todo"
       className={classNames('todo', { completed: completed })}
-      key={id}
     >
       <label className="todo__status-label">
         <input
@@ -23,7 +22,7 @@ export const TodoItem: React.FC<Props> = ({ todo, checkedUnchecked }) => {
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() => checkedUnchecked(id)}
+          onChange={() => handleCheck(id)}
         />
       </label>
 
