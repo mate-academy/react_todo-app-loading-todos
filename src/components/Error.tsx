@@ -7,7 +7,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const Error: FC<Props> = ({ message, onClose }) => {
+export const TodoError: FC<Props> = ({ message, onClose }) => {
   useEffect(() => {
     const timeout = setTimeout(onClose, 3000);
 

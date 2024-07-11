@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { List } from './components/List';
-import { Error } from './components/Error';
-import { Footer } from './components/Footer';
-import { Header } from './components/Header';
+import { TodoList } from './components/List';
+import { TodoError } from './components/Error';
+import { TodoFooter } from './components/Footer';
+import { TodoHeader } from './components/Header';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
@@ -65,12 +65,12 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header onAdd={addTodo} />
+        <TodoHeader onAdd={addTodo} />
 
-        {todos.length > 0 && <List todos={filterTodos} />}
+        {!!todos.length && <TodoList todos={filterTodos} />}
 
         {todos.length > 0 && (
-          <Footer
+          <TodoFooter
             onFilter={setFilter}
             activeTodosCount={activeTodosCount}
             currentFilter={filter}
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+      <TodoError message={errorMessage} onClose={() => setErrorMessage('')} />
     </div>
   );
 };

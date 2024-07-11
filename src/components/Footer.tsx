@@ -10,7 +10,7 @@ interface Props {
   currentFilter: Filter;
 }
 
-export const Footer: FC<Props> = ({
+export const TodoFooter: FC<Props> = ({
   onFilter,
   activeTodosCount,
   currentFilter,

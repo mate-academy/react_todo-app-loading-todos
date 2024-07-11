@@ -5,7 +5,7 @@ interface Props {
   onAdd: (title: string) => void;
 }
 
-export const Header: FC<Props> = ({ onAdd }) => {
+export const TodoHeader: FC<Props> = ({ onAdd }) => {
   const [title, setTitle] = useState('');
 
   const handleSubmit = (event: FormEvent) => {

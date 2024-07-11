@@ -9,7 +9,7 @@ interface Props {
   todos: Todo[];
 }
 
-export const List: FC<Props> = ({ todos }) => {
+export const TodoList: FC<Props> = ({ todos }) => {
   if (todos.length === 0) {
     return null;
   }
