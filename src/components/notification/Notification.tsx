@@ -1,17 +1,17 @@
 import React from 'react';
+import cn from 'classnames';
 
 type Props = {
   messageError: string;
-  onSetError: (val: string) => void;
 };
 
-export const Notification: React.FC<Props> = ({ messageError, onSetError }) => {
-  setTimeout(() => onSetError(''), 3000);
-
+export const Notification: React.FC<Props> = ({ messageError }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${!messageError && 'hidden'}`}
+      className={cn('notification is-danger is-light has-text-weight-normal', {
+        hidden: !messageError,
+      })}
     >
       <button data-cy="HideErrorButton" type="button" className="delete" />
       {/* show only one message at a time */}

@@ -2,25 +2,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { completed, title } = todo;
+
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed && 'completed'}`}>
+    <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={true && todo.completed}
+          checked={completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
       {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove" data-cy="TodoDelete">
