@@ -5,9 +5,10 @@ import { FC, useEffect, useState } from 'react';
 interface Props {
   onAdd: (title: string) => Promise<void>;
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
+  onToggleAll: () => Promise<void>;
 }
 
-export const Header: FC<Props> = ({ onAdd, inputRef }) => {
+export const Header: FC<Props> = ({ onAdd, inputRef, onToggleAll }) => {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +40,7 @@ export const Header: FC<Props> = ({ onAdd, inputRef }) => {
         type="button"
         className="todoapp__toggle-all active"
         data-cy="ToggleAllButton"
+        onClick={onToggleAll}
       />
 
       {/* Add a todo on form submit */}

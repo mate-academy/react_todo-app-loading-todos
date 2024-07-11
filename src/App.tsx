@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(Filter.All);
   const [tempTodoTitle, setTempTodoTitle] = useState<string | null>('');
+  const [idsProccesing, setIdsProccesing] = useState<number[]>([]);
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleAddTodo = async (title: string) => {
@@ -76,12 +77,15 @@ export const App: React.FC = () => {
         }),
       );
     } catch {
-      setErrorMessage('Unable to edit todo');
+      setErrorMessage('Unable to update a todo');
     }
   };
 
   const clearCompletedTodos = async () => {
     const filteredTodos = todos.filter(todo => todo.completed);
+    const completedIds = filteredTodos.map(todo => todo.id);
+
+    setIdsProccesing(completedIds);
 
     try {
       const deleteCallback = async (todo: Todo) => {
@@ -93,19 +97,27 @@ export const App: React.FC = () => {
           setErrorMessage('Unable to delete a todo');
 
           return { id: todo.id, status: 'rejected' };
+        } finally {
+          setIdsProccesing([]);
         }
       };
 
-      // filters by resolved & filter currentTodos
       const res = await Promise.allSettled(filteredTodos.map(deleteCallback));
 
-      const resolvedIds = res.reduce((acc, { value }) => {
-        if (value.status === 'resolved') {
-          acc[value.id] = value.id;
-        }
+      const resolvedIds = res.reduce(
+        (acc, item) => {
+          if (item.status === 'rejected') {
+            return acc;
+          }
 
-        return acc;
-      }, {});
+          if (item.value.status === 'resolved') {
+            return { ...acc, [item.value.id]: item.value.id };
+          }
+
+          return acc;
+        },
+        {} as Record<number, number>,
+      );
 
       setTodos(currentTodos =>
         currentTodos.filter(todo => {
@@ -148,6 +160,51 @@ export const App: React.FC = () => {
     };
   }, [todos]);
 
+  const handleToggleAll = async () => {
+    if (todosCount.completed === todos.length) {
+      try {
+        setIdsProccesing(todos.map(todo => todo.id));
+
+        const updatedTodos = await Promise.all(
+          todos.map(todo => patchTodo(todo.id, { completed: false })),
+        );
+
+        setTodos(updatedTodos);
+      } catch {
+        setErrorMessage('Unable to update todos');
+      } finally {
+        setIdsProccesing([]);
+      }
+
+      return;
+    }
+
+    const filteredTodos = todos.filter(todo => !todo.completed);
+    const activeIds = filteredTodos.map(todo => todo.id);
+
+    setIdsProccesing(activeIds);
+
+    try {
+      await Promise.all(
+        filteredTodos.map(todo => patchTodo(todo.id, { completed: true })),
+      );
+
+      setTodos(currentTodos =>
+        currentTodos.map(todo => {
+          if (!todo.completed) {
+            return { ...todo, completed: true };
+          }
+
+          return todo;
+        }),
+      );
+    } catch {
+      setErrorMessage('Unable to update todos');
+    } finally {
+      setIdsProccesing([]);
+    }
+  };
+
   useEffect(() => {
     getTodos()
       .then(setTodos)
@@ -167,13 +224,18 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header onAdd={handleAddTodo} inputRef={ref} />
+        <Header
+          onAdd={handleAddTodo}
+          onToggleAll={handleToggleAll}
+          inputRef={ref}
+        />
 
         <List
           todos={filterTodos}
           tempTodoTitle={tempTodoTitle}
           onDelete={handleDeleteTodo}
           onEdit={handleEditTodo}
+          idsProccesing={idsProccesing}
         />
 
         {/* Hide the footer if there are no todos */}

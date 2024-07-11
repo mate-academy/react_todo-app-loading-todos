@@ -7,11 +7,12 @@ import { TodoForm } from './TodoForm';
 
 interface Props {
   todo: TodoType;
-  onDelete: (id: number) => void;
-  onEdit: (id: number, data: Partial<TodoType>) => void;
+  idsProccesing: number[];
+  onDelete: (id: number) => Promise<void>;
+  onEdit: (id: number, data: Partial<TodoType>) => Promise<void>;
 }
 
-export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
+export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -39,7 +40,7 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
     }
   };
 
-  const handleSubmit = (title: string) => {
+  const handleEditSubmit = async (title: string) => {
     if (!title.trim()) {
       return handleDelete();
     }
@@ -73,10 +74,15 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
       </label>
 
       {isEditing ? (
-        <TodoForm title={todo.title} onSubmit={handleSubmit} />
+        <div
+          onBlur={() => setIsEditing(false)}
+          onKeyUp={({ key }) => key === 'Escape' && setIsEditing(false)}
+        >
+          <TodoForm title={todo.title} onSubmit={handleEditSubmit} />
+        </div>
       ) : (
         <span
-          data-cy="TodoTitleґ"
+          data-cy="TodoTitle"
           className="todo__title"
           onDoubleClick={() => setIsEditing(true)}
         >
@@ -98,7 +104,7 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit }) => {
       <div
         data-cy="TodoLoader"
         className={cn('modal overlay', {
-          'is-active': loading,
+          'is-active': loading || idsProccesing.includes(todo.id),
         })}
       >
         <div className="modal-background has-background-white-ter" />

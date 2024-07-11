@@ -7,17 +7,30 @@ import { TempTodo } from './TempTodo';
 
 interface Props {
   onDelete: (id: number) => Promise<void>;
-  onEdit: (id: number, data: Partial<TodoType>) => void;
+  onEdit: (id: number, data: Partial<TodoType>) => Promise<void>;
   todos: TodoType[];
   tempTodoTitle: string | null;
+  idsProccesing: number[];
 }
 
-export const List: FC<Props> = ({ todos, tempTodoTitle, onDelete, onEdit }) => {
+export const List: FC<Props> = ({
+  todos,
+  tempTodoTitle,
+  onDelete,
+  onEdit,
+  idsProccesing,
+}) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}
       {todos.map(todo => (
-        <Todo key={todo.id} todo={todo} onDelete={onDelete} onEdit={onEdit} />
+        <Todo
+          key={todo.id}
+          todo={todo}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          idsProccesing={idsProccesing}
+        />
       ))}
 
       {tempTodoTitle && <TempTodo title={tempTodoTitle} />}
