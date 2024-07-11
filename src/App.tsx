@@ -67,11 +67,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header onAdd={addTodo} />
 
-        {todos.length > 0 ? (
-          <List todos={filterTodos} />
-        ) : (
-          <p data-cy="NoTodosMessage">No todos</p>
-        )}
+        {todos.length > 0 && <List todos={filterTodos} />}
 
         {todos.length > 0 && (
           <Footer
