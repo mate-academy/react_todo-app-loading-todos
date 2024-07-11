@@ -26,15 +26,14 @@ export const App: FC = () => {
   }, []);
 
   const preparedTodos = useMemo(() => {
-    if (filter === Filters.Active) {
-      return todos.filter(todo => !todo.completed);
+    switch (filter) {
+      case Filters.Active:
+        return todos.filter(todo => !todo.completed);
+      case Filters.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
     }
-
-    if (filter === Filters.Completed) {
-      return todos.filter(todo => todo.completed);
-    }
-
-    return todos;
   }, [filter, todos]);
 
   if (!USER_ID) {
@@ -47,7 +46,9 @@ export const App: FC = () => {
 
       <div className="todoapp__content">
         <Header />
+
         <TodoList todos={preparedTodos} />
+
         {todos.length > 0 && (
           <TodoFiler filter={filter} setFilter={setFilter} todos={todos} />
         )}

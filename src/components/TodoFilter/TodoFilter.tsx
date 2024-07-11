@@ -2,6 +2,7 @@ import React from 'react';
 import { Filters } from '../../types/Filters';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
+import { getActiveTodos } from '../../servisec/getActiveTodos';
 
 interface Props {
   filter: Filters;
@@ -9,15 +10,11 @@ interface Props {
   todos: Todo[];
 }
 
-const getActiveTodo = (todos: Todo[]) => {
-  return todos.filter(todo => !todo.completed);
-};
-
 export const TodoFiler: React.FC<Props> = ({ filter, setFilter, todos }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {getActiveTodo(todos).length} items left
+        {getActiveTodos(todos).length} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
