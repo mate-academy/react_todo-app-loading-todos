@@ -56,16 +56,20 @@ export const App: React.FC = () => {
 
   const handleDeleteTodo = async (id: number) => {
     try {
+      setIdsProccesing([id]);
       await deleteTodo(id);
 
       setTodos(currentTodos => currentTodos.filter(todo => todo.id !== id));
     } catch {
       setErrorMessage('Unable to delete a todo');
+    } finally {
+      setIdsProccesing([]);
     }
   };
 
   const handleEditTodo = async (id: number, data: Partial<Todo>) => {
     try {
+      setIdsProccesing([id]);
       const editedTodo = await patchTodo(id, data);
 
       setTodos(currentTodos =>
@@ -80,6 +84,8 @@ export const App: React.FC = () => {
     } catch {
       setErrorMessage('Unable to update a todo');
       throw new Error('Unable to update a todo');
+    } finally {
+      setIdsProccesing([]);
     }
   };
 
