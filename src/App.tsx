@@ -22,6 +22,7 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(Filter.All);
   const [tempTodoTitle, setTempTodoTitle] = useState<string | null>('');
   const [idsProccesing, setIdsProccesing] = useState<number[]>([]);
+
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handleAddTodo = async (title: string) => {
@@ -78,6 +79,7 @@ export const App: React.FC = () => {
       );
     } catch {
       setErrorMessage('Unable to update a todo');
+      throw new Error('Unable to update a todo');
     }
   };
 
@@ -228,17 +230,17 @@ export const App: React.FC = () => {
           onAdd={handleAddTodo}
           onToggleAll={handleToggleAll}
           inputRef={ref}
+          todosCount={todosCount}
         />
 
         <List
-          todos={filterTodos}
-          tempTodoTitle={tempTodoTitle}
           onDelete={handleDeleteTodo}
           onEdit={handleEditTodo}
+          todos={filterTodos}
+          tempTodoTitle={tempTodoTitle}
           idsProccesing={idsProccesing}
         />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
             onFilter={setFilter}
@@ -249,8 +251,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorMessage
         message={errorMessage}
         onClose={() => setErrorMessage('')}

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo as TodoType } from '../types/Todo';
 import { TodoForm } from './TodoForm';
@@ -15,6 +15,8 @@ interface Props {
 export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleDelete = async () => {
     try {
@@ -35,13 +37,16 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
     } catch {
       // eslint-disable-next-line no-console
       console.log('Error editing todo');
+      throw new Error('Error editing todo');
     } finally {
       setLoading(false);
     }
   };
 
   const handleEditSubmit = async (title: string) => {
-    if (!title.trim()) {
+    const formattedTitle = title.trim();
+
+    if (!formattedTitle) {
       return handleDelete();
     }
 
@@ -51,8 +56,14 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
       return;
     }
 
-    handleEdit({ title });
-    setIsEditing(false);
+    try {
+      await handleEdit({ title: formattedTitle });
+
+      setIsEditing(false);
+    } catch {
+      // eslint-disable-next-line no-console
+      inputRef.current?.focus();
+    }
   };
 
   return (
@@ -74,11 +85,12 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
       </label>
 
       {isEditing ? (
-        <div
-          onBlur={() => setIsEditing(false)}
-          onKeyUp={({ key }) => key === 'Escape' && setIsEditing(false)}
-        >
-          <TodoForm title={todo.title} onSubmit={handleEditSubmit} />
+        <div onKeyUp={({ key }) => key === 'Escape' && setIsEditing(false)}>
+          <TodoForm
+            title={todo.title}
+            onSubmit={handleEditSubmit}
+            inputRef={inputRef}
+          />
         </div>
       ) : (
         <span
@@ -91,14 +103,16 @@ export const Todo: FC<Props> = ({ todo, onDelete, onEdit, idsProccesing }) => {
       )}
 
       {/* Remove button appears only on hover */}
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        onClick={handleDelete}
-      >
-        ×
-      </button>
+      {!isEditing && (
+        <button
+          type="button"
+          className="todo__remove"
+          data-cy="TodoDelete"
+          onClick={handleDelete}
+        >
+          ×
+        </button>
+      )}
 
       {/* overlay will cover the todo while it is being deleted or updated */}
       <div

@@ -1,14 +1,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { FC, useEffect, useState } from 'react';
+import cn from 'classnames';
 
 interface Props {
   onAdd: (title: string) => Promise<void>;
-  inputRef: React.MutableRefObject<HTMLInputElement | null>;
   onToggleAll: () => Promise<void>;
+  inputRef: React.MutableRefObject<HTMLInputElement | null>;
+  todosCount: { active: number; completed: number };
 }
 
-export const Header: FC<Props> = ({ onAdd, inputRef, onToggleAll }) => {
+export const Header: FC<Props> = ({
+  onAdd,
+  onToggleAll,
+  inputRef,
+  todosCount,
+}) => {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -36,12 +43,16 @@ export const Header: FC<Props> = ({ onAdd, inputRef, onToggleAll }) => {
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-        onClick={onToggleAll}
-      />
+      {(todosCount.active > 0 || todosCount.completed > 0) && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: todosCount.active === 0,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={onToggleAll}
+        />
+      )}
 
       {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
