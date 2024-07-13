@@ -9,19 +9,11 @@ export const Footer = () => {
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className="filter__link selected"
-          data-cy="FilterLinkAll"
-        >
+        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
           All
         </a>
 
-        <a
-          href="#/active"
-          className="filter__link"
-          data-cy="FilterLinkActive"
-        >
+        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
           Active
         </a>
 

@@ -16,25 +16,21 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
         })}
         key={todo.id}
       >
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          // checked
-          />
-        </label>
+        {/* <label className="todo__status-label"> */}
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked
+        />
+        {/* </label> */}
 
         <span data-cy="TodoTitle" className="todo__title">
           {todo.title}
         </span>
 
         {/* Remove button appears only on hover */}
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-        >
+        <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
         </button>
 
@@ -47,13 +43,14 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
 
       {/* This todo is an active todo */}
       <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
+        {/* <label className="todo__status-label"> */}
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked
+        />
+        {/* </label> */}
 
         <span data-cy="TodoTitle" className="todo__title">
           Not Completed Todo
@@ -70,13 +67,14 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
 
       {/* This todo is being edited */}
       <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
+        {/* <label className="todo__status-label"> */}
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked
+        />
+        {/* </label> */}
 
         {/* This form is shown instead of the title and remove button */}
         <form>
@@ -97,13 +95,14 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
 
       {/* This todo is in loadind state */}
       <div data-cy="Todo" className="todo">
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-          />
-        </label>
+        {/* <label className="todo__status-label"> */}
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked
+        />
+        {/* </label> */}
 
         <span data-cy="TodoTitle" className="todo__title">
           Todo is being saved now
@@ -121,4 +120,4 @@ export const TodoList: React.FC<Props> = ({ todo }) => {
       </div>
     </section>
   );
-}
+};

@@ -11,15 +11,15 @@ import { getTodos, USER_ID } from './api/todos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
 
   function loadTodos() {
-    setLoading(true);
+    //setLoading(true);
 
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => setLoading(false));
+      .finally(() => {});
   }
 
   if (errorMessage) {
