@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Filter } from '../../types/Filter';
 
 interface Props {
@@ -23,27 +24,29 @@ export const Footer: React.FC<Props> = ({
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
-        className={`filter__link ${filter === 'all' && 'selected'}`}
+        className={cn('filter__link', { selected: filter === Filter.all })}
         data-cy="FilterLinkAll"
-        onClick={() => setFilter('all')}
+        onClick={() => setFilter(Filter.all)}
       >
         All
       </a>
 
       <a
-        href="#/active"
-        className={`filter__link ${filter === 'active' && 'selected'}`}
+        href="#/"
+        className={cn('filter__link', { selected: filter === Filter.active })}
         data-cy="FilterLinkActive"
-        onClick={() => setFilter('active')}
+        onClick={() => setFilter(Filter.active)}
       >
         Active
       </a>
 
       <a
-        href="#/completed"
-        className={`filter__link ${filter === 'completed' && 'selected'}`}
+        href="#/"
+        className={cn('filter__link', {
+          selected: filter === Filter.completed,
+        })}
         data-cy="FilterLinkCompleted"
-        onClick={() => setFilter('completed')}
+        onClick={() => setFilter(Filter.completed)}
       >
         Completed
       </a>

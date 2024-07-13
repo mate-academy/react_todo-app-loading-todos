@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import cn from 'classnames';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { getTodos } from './api/todos';
@@ -8,7 +9,7 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isLoadingError, setIsLoadingError] = useState<boolean>(false);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
 
   const isError = useMemo(() => isLoadingError, [isLoadingError]);
 
@@ -28,13 +29,13 @@ export const App: React.FC = () => {
 
   const displayedTodos = useMemo(() => {
     switch (filter) {
-      case 'all':
+      case Filter.all:
         return todosFromServer;
 
-      case 'active':
+      case Filter.active:
         return todosFromServer.filter(todo => !todo.completed);
 
-      case 'completed':
+      case Filter.completed:
         return todosFromServer.filter(todo => todo.completed);
     }
   }, [todosFromServer, filter]);
@@ -64,7 +65,11 @@ export const App: React.FC = () => {
           {!!displayedTodos.length && (
             <button
               type="button"
-              className={`todoapp__toggle-all ${todosFromServer.every(todo => todo.completed) && !!todosFromServer.length && 'active'}`}
+              className={cn('todoapp__toggle-all', {
+                active:
+                  todosFromServer.every(todo => todo.completed) &&
+                  !!todosFromServer.length,
+              })}
               data-cy="ToggleAllButton"
             />
           )}
@@ -95,13 +100,13 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={`
-          notification
-          is-danger
-          is-light
-          has-text-weight-normal
-          ${isError || 'hidden'}
-        `}
+        className={cn(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: !isError },
+        )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {/* show only one message at a time */}
