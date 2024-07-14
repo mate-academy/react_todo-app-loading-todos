@@ -7,11 +7,14 @@ import { Todo } from './types/Todo';
 import { TodoHeader } from './components/TodoHeader/TodoHeader';
 import { TodoList } from './components/TodoList/TodoList';
 import { getTodos, USER_ID } from './api/todos';
+import { Footer } from './components/Footer/Footer';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   //const [loading, setLoading] = useState(false);
+  const [statusOfTodos, setStatusOfTodos] = useState(Status.all);
 
   function loadTodos() {
     //setLoading(true);
@@ -40,6 +43,16 @@ export const App: React.FC = () => {
     setErrorMessage('');
   };
 
+  let filteredTodos = todos;
+
+  if (statusOfTodos === Status.active) {
+    filteredTodos = filteredTodos.filter(todo => !todo.completed);
+  }
+
+  if (statusOfTodos === Status.completed) {
+    filteredTodos = filteredTodos.filter(todo => todo.completed);
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -48,9 +61,14 @@ export const App: React.FC = () => {
         <TodoHeader />
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.map(todo => (
-            <TodoList todo={todo} key={todo.id} />
-          ))}
+          <TodoList todos={filteredTodos} />
+          {!!todos.length && (
+            <Footer
+              todos={todos}
+              setStatusOfTodos={setStatusOfTodos}
+              statusOfTodos={statusOfTodos}
+            />
+          )}
         </section>
       </div>
 
