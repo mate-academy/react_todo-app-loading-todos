@@ -30,7 +30,8 @@ export const App: React.FC = () => {
   const [selectedTodoStatus, setSelectedTodoStatus] = useState<TodoStatus>(
     TodoStatus.All,
   );
-  const [errorMessage, setErrorMessage] = useState<ErrorType | ''>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorType | null>(null);
+  const isDisabled = todos.filter(t => t.completed).length === 0;
 
   useEffect(() => {
     getTodos()
@@ -39,9 +40,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!errorMessage.length) {
+    if (!errorMessage?.length) {
       setTimeout(() => {
-        setErrorMessage('');
+        setErrorMessage(null);
       }, 3000);
     }
   }, [errorMessage]);
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
   }, [selectedTodoStatus, todos]);
 
   const closeErrorHandler = () => {
-    setErrorMessage('');
+    setErrorMessage(null);
   };
 
   const handleStatusChange = (status: TodoStatus) => {
@@ -71,7 +72,7 @@ export const App: React.FC = () => {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setIsLoading(true);
-      setErrorMessage('');
+      setErrorMessage(null);
 
       addNewTodo(newTodo)
         .then(todo => {
@@ -90,7 +91,7 @@ export const App: React.FC = () => {
 
   const changeTodoHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setErrorMessage('');
+      setErrorMessage(null);
       setNewTodo(current => ({
         ...current,
         title: e.target.value,
@@ -127,6 +128,7 @@ export const App: React.FC = () => {
           onStatusChange={handleStatusChange}
           filteringTodosByActiveStatus={filteringTodosByActiveStatus}
           TodoStatusRoutes={TodoStatusRoutes}
+          isDisabled={isDisabled}
         />
       </div>
 
@@ -134,7 +136,7 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
-          { hidden: errorMessage.length === 0 },
+          { hidden: errorMessage?.length === 0 },
         )}
       >
         <button
