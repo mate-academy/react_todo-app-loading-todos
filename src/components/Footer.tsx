@@ -6,19 +6,19 @@ import React from 'react';
 
 interface Props {
   onFilter: (filter: Filter) => void;
-  activeTodosCount: number;
+  todosCount: number;
   currentFilter: Filter;
 }
 
 export const TodoFooter: FC<Props> = ({
   onFilter,
-  activeTodosCount,
+  todosCount,
   currentFilter,
 }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'} left
+        {todosCount} items left
       </span>
 
       {/* Active link should have the 'selected' class */}
