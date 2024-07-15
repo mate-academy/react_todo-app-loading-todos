@@ -1,202 +1,147 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID, addData, deleteData, updateTodoStatus } from './api/todos';
-import { getTodos, deleteData as deleteTodo } from './api/todos';
+import { USER_ID, getTodos, addNewTodo } from './api/todos';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/SortTypes';
+import { ErrorType } from './types/Errors';
+import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { SortField } from './types/SortTypes';
 import { SortButtons } from './components/SortButtons';
+import classNames from 'classnames';
+
+const emptyTodo: Omit<Todo, 'id'> = {
+  completed: false,
+  userId: USER_ID,
+  title: '',
+};
+
+const TodoStatusRoutes: Record<TodoStatus, string> = {
+  [TodoStatus.All]: '/',
+  [TodoStatus.Active]: '/active',
+  [TodoStatus.Completed]: '/completed',
+};
 
 export const App: React.FC = () => {
-  const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [sortField, setSortField] = useState<SortField>(SortField.All);
-  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [updatedTodoId, setUpdatedTodoId] = useState<number | null>(null);
-  const [isAddingTodo, setIsAddingTodo] = useState<boolean>(false); // New state for adding todo
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState<Omit<Todo, 'id'>>(emptyTodo);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedTodoStatus, setSelectedTodoStatus] = useState<TodoStatus>(
+    TodoStatus.All,
+  );
+  const [errorMessage, setErrorMessage] = useState<ErrorType | ''>('');
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      setErrorMessage(null);
-      setIsNotificationVisible(false);
-
-      try {
-        setIsTimerActive(true);
-        const todos = await getTodos();
-
-        setVisibleTodos(todos);
-      } catch (error) {
-        setErrorMessage('Unable to load todos');
-        setIsNotificationVisible(true);
-
-        setTimeout(() => {
-          setIsNotificationVisible(false);
-        }, 3000);
-      } finally {
-        setIsTimerActive(false);
-      }
-    };
-
-    fetchTodos();
-    inputRef.current?.focus();
+    getTodos()
+      .then(setTodos)
+      .catch(() => setErrorMessage(ErrorType.LOAD_TODOS));
   }, []);
+
+  useEffect(() => {
+    if (!errorMessage.length) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    }
+  }, [errorMessage]);
+
+  const filteredTodos = useMemo(() => {
+    switch (selectedTodoStatus) {
+      case TodoStatus.Active:
+        return todos.filter(todo => todo.completed === false);
+
+      case TodoStatus.Completed:
+        return todos.filter(todo => todo.completed === true);
+
+      default:
+        return todos;
+    }
+  }, [selectedTodoStatus, todos]);
+
+  const closeErrorHandler = () => {
+    setErrorMessage('');
+  };
+
+  const handleStatusChange = (status: TodoStatus) => {
+    setSelectedTodoStatus(status);
+  };
+
+  const addTodo = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setIsLoading(true);
+      setErrorMessage('');
+
+      addNewTodo(newTodo)
+        .then(todo => {
+          setTodos(currentTodos => [...currentTodos, todo]);
+          setNewTodo(emptyTodo);
+        })
+        .catch(() => {
+          setErrorMessage(ErrorType.ADD_TODO);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [newTodo],
+  );
+
+  const changeTodoHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setErrorMessage('');
+      setNewTodo(current => ({
+        ...current,
+        title: e.target.value,
+      }));
+    },
+    [],
+  );
+
+  const filteringTodosByActiveStatus = useMemo(
+    () => [...todos].filter(todo => todo.completed === false).length,
+    [todos],
+  );
 
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const changeStatus = async (id: number, completed: boolean) => {
-    setUpdatedTodoId(id);
-    try {
-      await updateTodoStatus(id, completed);
-      setVisibleTodos(prev =>
-        prev.map(todo => (todo.id === id ? { ...todo, completed } : todo)),
-      );
-    } catch (error) {
-      setErrorMessage('Unable to update a todo.');
-      setIsNotificationVisible(true);
-      setTimeout(() => setIsNotificationVisible(false), 3000);
-    } finally {
-      setUpdatedTodoId(null);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    setUpdatedTodoId(id);
-    try {
-      await deleteTodo(id);
-      setVisibleTodos(todos => todos.filter(todo => todo.id !== id));
-    } catch (error) {
-      setErrorMessage('Unable to delete a todo.');
-      setIsNotificationVisible(true);
-      setTimeout(() => setIsNotificationVisible(false), 3000);
-    } finally {
-      setUpdatedTodoId(null);
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (newTodoTitle.trim()) {
-      setIsAddingTodo(true);
-      try {
-        const newTodo = await addData(newTodoTitle);
-
-        setVisibleTodos(todos => [...todos, newTodo]);
-        setNewTodoTitle('');
-      } catch (error) {
-        setErrorMessage('Unable to add a todo.');
-        setIsNotificationVisible(true);
-        setTimeout(() => {
-          setIsNotificationVisible(false);
-        }, 3000);
-      } finally {
-        setIsAddingTodo(false);
-      }
-    }
-  };
-
-  const sortTodos = (field: SortField) => {
-    setSortField(field);
-  };
-
-  const getSortedTodos = () => {
-    switch (sortField) {
-      case SortField.All:
-        return visibleTodos;
-      case SortField.Active:
-        return visibleTodos.filter(todo => !todo.completed);
-      case SortField.Completed:
-        return visibleTodos.filter(todo => todo.completed);
-      default:
-        return visibleTodos;
-    }
-  };
-
-  const clearCompleted = async () => {
-    try {
-      const completedTodos = visibleTodos.filter(todo => todo.completed);
-
-      await Promise.all(completedTodos.map(todo => deleteData(todo.id)));
-      setVisibleTodos(todos => todos.filter(todo => !todo.completed));
-    } catch (error) {
-      setErrorMessage('Unable to clear completed todos.');
-      setIsNotificationVisible(true);
-      setTimeout(() => {
-        setIsNotificationVisible(false);
-      }, 3000);
-    }
-  };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
+
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-          <form onSubmit={handleSubmit}>
-            <input
-              ref={inputRef}
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={newTodoTitle}
-              onChange={event => setNewTodoTitle(event.target.value)}
-            />
-          </form>
-        </header>
+        <Header
+          todos={todos}
+          addTodo={addTodo}
+          newTodo={newTodo}
+          onChange={changeTodoHandler}
+        />
+        <TodoList preparedTodos={filteredTodos} isLoading={isLoading} />
 
-        <section className="todoapp__main" data-cy="TodoList">
-          <TodoList
-            todos={getSortedTodos()}
-            deleteTodo={handleDelete}
-            isLoaderVisible={isAddingTodo || isTimerActive}
-            onStatusChange={changeStatus}
-            isCompleted={visibleTodos.some(todo => todo.completed)}
-            updatedTodoId={updatedTodoId}
-          />
-        </section>
-
-        {visibleTodos.length !== 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {getSortedTodos().length} items left
-            </span>
-            <nav className="filter" data-cy="Filter">
-              <SortButtons sortBy={sortTodos} currentSortField={sortField} />
-            </nav>
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-              onClick={clearCompleted}
-            >
-              Clear completed
-            </button>
-          </footer>
-        )}
+        <SortButtons
+          todos={todos}
+          selectedStatus={selectedTodoStatus}
+          onStatusChange={handleStatusChange}
+          filteringTodosByActiveStatus={filteringTodosByActiveStatus}
+          TodoStatusRoutes={TodoStatusRoutes}
+        />
       </div>
 
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${isNotificationVisible ? '' : 'hidden'}`}
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: errorMessage.length === 0 },
+        )}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setIsNotificationVisible(false)}
+          onClick={closeErrorHandler}
         />
         {errorMessage}
       </div>

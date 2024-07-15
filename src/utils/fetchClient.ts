@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
-const DEFAULT_HEADER = {
-  'Content-Type': 'application/json; charset=UTF-8',
-};
-
 function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
@@ -22,10 +18,11 @@ function request<T>(
 
   if (data) {
     options.body = JSON.stringify(data);
-    options.headers = DEFAULT_HEADER;
+    options.headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
   }
 
-  // DON'T change the delay it is required for tests
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {

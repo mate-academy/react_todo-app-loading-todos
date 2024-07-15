@@ -1,47 +1,57 @@
 import React from 'react';
-import { SortField } from '../types/SortTypes';
+import { TodoStatus } from '../types/SortTypes';
+import { Todo } from '../types/Todo';
 import classNames from 'classnames';
 
-type Props = {
-  sortBy: (sortField: SortField) => void;
-  currentSortField: SortField;
-};
+interface Props {
+  todos: Todo[];
+  selectedStatus: TodoStatus;
+  onStatusChange: (status: TodoStatus) => void;
+  filteringTodosByActiveStatus: number;
+  TodoStatusRoutes: Record<TodoStatus, string>;
+}
 
-export const SortButtons: React.FC<Props> = ({ sortBy, currentSortField }) => {
-  return (
-    <div>
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: currentSortField === SortField.All,
-        })}
-        data-cy="FilterLinkAll"
-        onClick={() => sortBy(SortField.All)}
-      >
-        All
-      </a>
+export const SortButtons: React.FC<Props> = ({
+  todos,
+  selectedStatus,
+  onStatusChange,
+  filteringTodosByActiveStatus,
+  TodoStatusRoutes,
+}) => {
+  if (todos.length > 0) {
+    return (
+      <footer className="todoapp__footer" data-cy="Footer">
+        <span className="todo-count" data-cy="TodosCounter">
+          {filteringTodosByActiveStatus} items left
+        </span>
 
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: currentSortField === SortField.Active,
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => sortBy(SortField.Active)}
-      >
-        Active
-      </a>
+        <nav className="filter" data-cy="Filter">
+          {Object.keys(TodoStatusRoutes).map(status => (
+            <a
+              key={status}
+              href={`#${TodoStatusRoutes[status as TodoStatus]}`}
+              className={classNames('filter__link', {
+                selected: selectedStatus === status,
+              })}
+              data-cy={`FilterLink${status}`}
+              onClick={() => onStatusChange(status as TodoStatus)}
+            >
+              {status}
+            </a>
+          ))}
+        </nav>
 
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: currentSortField === SortField.Completed,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => sortBy(SortField.Completed)}
-      >
-        Completed
-      </a>
-    </div>
-  );
+        <button
+          type="button"
+          className="todoapp__clear-completed"
+          data-cy="ClearCompletedButton"
+          disabled={todos.map(t => t.completed).length === 0}
+        >
+          Clear completed
+        </button>
+      </footer>
+    );
+  } else {
+    return null;
+  }
 };

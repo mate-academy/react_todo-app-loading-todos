@@ -1,5 +1,5 @@
-export enum SortField {
-  All = 'All',
+export enum TodoStatus {
   Active = 'Active',
   Completed = 'Completed',
+  All = 'All',
 }

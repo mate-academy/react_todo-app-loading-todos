@@ -1,63 +1,55 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
 
-type Props = {
-  todos: Todo[];
-  deleteTodo: (id: number) => void;
-  onStatusChange: (id: number, isCompleted: boolean) => void;
-  isCompleted: boolean;
-  isLoaderVisible: boolean;
-  updatedTodoId?: number | null;
-};
+interface TodoListProps {
+  preparedTodos: Todo[];
+  isLoading: boolean;
+}
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  deleteTodo,
-  onStatusChange,
-  updatedTodoId,
-}) => (
-  <div>
-    {todos.map(todo => (
-      <div
-        key={todo.id}
-        data-cy="Todo"
-        className={classNames('todo', { completed: todo.completed })}
-      >
-        <label className="todo__status-label">
-          <input
-            data-cy="TodoStatus"
-            type="checkbox"
-            className="todo__status"
-            checked={todo.completed}
-            onChange={() => onStatusChange(todo.id, !todo.completed)}
-          />
-        </label>
-
-        <span data-cy="TodoTitle" className="todo__title">
-          {todo.title}
-        </span>
-
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={() => {
-            deleteTodo(todo.id);
-          }}
+export const TodoList: React.FC<TodoListProps> = ({
+  preparedTodos,
+  isLoading,
+}) => {
+  return (
+    <section className="todoapp__main" data-cy="TodoList">
+      {preparedTodos.map(todo => (
+        <div
+          key={todo.id}
+          data-cy="Todo"
+          className={classNames('todo', { completed: todo.completed })}
         >
-          ×
-        </button>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control*/}
+          <label className="todo__status-label">
+            <input
+              data-cy="TodoStatus"
+              type="checkbox"
+              className="todo__status"
+              checked={todo.completed}
+            />
+          </label>
 
-        {updatedTodoId === todo.id && (
-          <div data-cy="TodoLoader" className="modal overlay is-active">
+          <span data-cy="TodoTitle" className="todo__title">
+            {todo.title}
+          </span>
+
+          {/* Remove button appears only on hover */}
+          <button type="button" className="todo__remove" data-cy="TodoDelete">
+            ×
+          </button>
+
+          {/* overlay will cover the todo while it is being deleted or updated */}
+          <div
+            data-cy="TodoLoader"
+            className={classNames('modal overlay', {
+              'is-loading': isLoading,
+            })}
+          >
             <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
+            {isLoading && <div className="loader" />}
           </div>
-        )}
-      </div>
-    ))}
-  </div>
-);
+        </div>
+      ))}
+    </section>
+  );
+};
