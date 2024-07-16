@@ -21,6 +21,7 @@ export const TodoFooter: React.FC<Props> = ({
         {todosLeft} items left
       </span>
 
+      <p> joiekolcfpe;f</p>
       <nav className="filter" data-cy="Filter">
         {allFilters.map(filter => (
           <a
