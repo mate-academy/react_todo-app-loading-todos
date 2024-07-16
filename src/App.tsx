@@ -41,10 +41,10 @@ export const App: React.FC = () => {
     if (todos) {
       switch (query) {
         case FilterType.Active:
-          setFilteredTodos(todos.filter(todo => todo.completed === false));
+          setFilteredTodos(todos.filter(todo => !todo.completed));
           break;
         case FilterType.Complited:
-          setFilteredTodos(todos.filter(todo => todo.completed === true));
+          setFilteredTodos(todos.filter(todo => todo.completed));
           break;
         default:
           setFilteredTodos(todos);
@@ -69,13 +69,21 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setError(null);
     }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [error]);
 
   const returnLeftNumber = () => {
     return todos.filter(todo => todo.completed != true).length;
+  };
+
+  const handleSetQuery = (passedQuery: FilterType) => {
+    setQuery(passedQuery);
   };
 
   const handleEnter = (event: React.KeyboardEvent) => {
@@ -122,7 +130,11 @@ export const App: React.FC = () => {
 
         {/* Hide the footer if there are no todos */}
         {todos && todos.length > 0 && (
-          <Footer setQuery={setQuery} query={query} left={returnLeftNumber} />
+          <Footer
+            handleSetQuery={handleSetQuery}
+            query={query}
+            left={returnLeftNumber}
+          />
         )}
       </div>
 
