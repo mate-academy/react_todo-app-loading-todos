@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodosList } from './components/TodosList';
@@ -16,7 +16,6 @@ enum ErrorType {
 }
 
 export const App: React.FC = () => {
-  const inputValue = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<ErrorType | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
@@ -69,13 +68,15 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setError(null);
-    }, 3000);
+    setTimeout(() => {
+      const timeout = setTimeout(() => {
+        setError(null);
+      }, 3000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
+      return () => {
+        clearTimeout(timeout);
+      };
+    });
   }, [error]);
 
   const returnLeftNumber = () => {
@@ -84,18 +85,6 @@ export const App: React.FC = () => {
 
   const handleSetQuery = (passedQuery: FilterType) => {
     setQuery(passedQuery);
-  };
-
-  const handleEnter = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      if (inputValue.current && inputValue.current.value.length > 0) {
-        inputValue.current.value = '';
-      } else {
-        setError(ErrorType.EmptyTitle);
-      }
-
-      event.preventDefault();
-    }
   };
 
   return (
@@ -118,8 +107,6 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              ref={inputValue}
-              onKeyDown={handleEnter}
             />
           </form>
         </header>
@@ -131,7 +118,7 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {todos && todos.length > 0 && (
           <Footer
-            handleSetQuery={handleSetQuery}
+            onSetQuery={handleSetQuery}
             query={query}
             left={returnLeftNumber}
           />

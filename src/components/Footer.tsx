@@ -3,12 +3,12 @@ import { FilterType } from '../types/FilterType';
 import classNames from 'classnames';
 
 type FooterProps = {
-  handleSetQuery: (FilterType: FilterType) => void;
+  onSetQuery: (FilterType: FilterType) => void;
   query: FilterType;
   left: () => number;
 };
 
-export const Footer = ({ handleSetQuery, query, left }: FooterProps) => {
+export const Footer = ({ onSetQuery, query, left }: FooterProps) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -23,7 +23,7 @@ export const Footer = ({ handleSetQuery, query, left }: FooterProps) => {
             selected: query === FilterType.All,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => handleSetQuery(FilterType.All)}
+          onClick={() => onSetQuery(FilterType.All)}
         >
           All
         </a>
@@ -34,7 +34,7 @@ export const Footer = ({ handleSetQuery, query, left }: FooterProps) => {
             selected: query === FilterType.Active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => handleSetQuery(FilterType.Active)}
+          onClick={() => onSetQuery(FilterType.Active)}
         >
           Active
         </a>
@@ -45,7 +45,7 @@ export const Footer = ({ handleSetQuery, query, left }: FooterProps) => {
             selected: query === FilterType.Complited,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => handleSetQuery(FilterType.Complited)}
+          onClick={() => onSetQuery(FilterType.Complited)}
         >
           Completed
         </a>
