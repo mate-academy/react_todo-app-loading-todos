@@ -1,7 +1,7 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 import { States } from '../types/States';
-import { getTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
+import { Filter } from '../types/Filter';
 
 type DispatchContextType = {
   (action: Action): void;
@@ -11,19 +11,24 @@ type Action =
   | { type: 'startLoading' }
   | { type: 'stopLoading' }
   | { type: 'loadTodos'; payload: Todo[] }
-  | { type: 'showError'; payload: string }
+  | { type: 'showError'; payload: string | null }
   | { type: 'startUpdate' }
-  | { type: 'stopUpdate' };
+  | { type: 'stopUpdate' }
+  | { type: 'selectTodo'; payload: number }
+  | { type: 'updateTodos'; payload: Todo }
+  | { type: 'setFilter'; payload: Filter };
 
 const initialStates: States = {
   todos: [],
   isLoading: false,
   errorMessage: null,
   isUpdating: false,
+  selectedTodo: null,
+  filter: Filter.all,
 };
 
 function reducer(states: States, action: Action) {
-  let newStates: States = { ...initialStates };
+  let newStates: States = { ...states };
 
   switch (action.type) {
     case 'startLoading':
@@ -44,6 +49,20 @@ function reducer(states: States, action: Action) {
     case 'stopUpdate':
       newStates = { ...newStates, isUpdating: false };
       break;
+    case 'selectTodo':
+      newStates = { ...newStates, selectedTodo: action.payload };
+      break;
+    case 'updateTodos':
+      newStates = {
+        ...newStates,
+        todos: states.todos.map(t =>
+          action.payload.id === t.id ? action.payload : t,
+        ),
+      };
+      break;
+    case 'setFilter':
+      newStates = { ...newStates, filter: action.payload };
+      break;
     default:
       return states;
   }
@@ -60,24 +79,6 @@ type Props = {
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [states, dispatch] = useReducer(reducer, initialStates);
-
-  useEffect(() => {
-    dispatch({ type: 'startLoading' });
-    getTodos()
-      .then(todosFromServer => {
-        dispatch({ type: 'loadTodos', payload: todosFromServer });
-        // eslint-disable-next-line no-console
-        console.log('todosFromServer', todosFromServer);
-        // eslint-disable-next-line no-console
-        console.log('states.todos', states.todos);
-      })
-      .catch(() =>
-        dispatch({ type: 'showError', payload: `Unable to load todos` }),
-      )
-      .finally(() => {
-        dispatch({ type: 'stopLoading' });
-      });
-  }, [states.todos]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

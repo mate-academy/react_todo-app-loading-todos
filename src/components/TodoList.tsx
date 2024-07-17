@@ -1,17 +1,41 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import { useContext, useState } from 'react';
-import { StatesContext } from '../context/Store';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { DispatchContext, StatesContext } from '../context/Store';
 import classNames from 'classnames';
+import { TodoLoader } from './TodoLoader';
 
 export const TodoList: React.FC = () => {
-  const { todos, isUpdating } = useContext(StatesContext);
+  const { todos, selectedTodo, filter } = useContext(StatesContext);
+  const dispatch = useContext(DispatchContext);
   const [isEditing, setIsEditing] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const filteredTodos = todos.filter(t => {
+    switch (filter) {
+      case 'all':
+        return t;
+      case 'active':
+        return !t.completed;
+      case 'completed':
+        return t.completed;
+      default:
+        return t;
+    }
+  });
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    } else if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  }, [isEditing]);
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
+      {filteredTodos.map(todo => {
         return (
           <div
             data-cy="Todo"
@@ -23,45 +47,50 @@ export const TodoList: React.FC = () => {
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                checked
+                checked={todo.completed}
+                onChange={e =>
+                  dispatch({
+                    type: 'updateTodos',
+                    payload: { ...todo, completed: e.target.checked },
+                  })
+                }
               />
             </label>
-            <span
-              data-cy="TodoTitle"
-              className="todo__title"
-              onDoubleClick={() => setIsEditing(true)}
-            >
-              {todo.title}
-            </span>
-            {isEditing ? (
+
+            {isEditing && selectedTodo === todo.id ? (
               <form>
                 <input
                   data-cy="TodoTitleField"
                   type="text"
                   className="todo__title-field"
                   placeholder="Empty todo will be deleted"
-                  value="Todo is being edited now"
+                  value={todo.title}
+                  ref={inputRef}
+                  onBlur={() => setIsEditing(false)}
                 />
               </form>
             ) : (
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
+              <>
+                <span
+                  data-cy="TodoTitle"
+                  className="todo__title"
+                  onDoubleClick={() => {
+                    setIsEditing(true);
+                    dispatch({ type: 'selectTodo', payload: todo.id });
+                  }}
+                >
+                  {todo.title}
+                </span>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
+                  ×
+                </button>
+              </>
             )}
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div
-              data-cy="TodoLoader"
-              className={classNames('modal', 'overlay', {
-                ['is-active']: isUpdating,
-              })}
-            >
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>{' '}
+            <TodoLoader />
           </div>
         );
       })}

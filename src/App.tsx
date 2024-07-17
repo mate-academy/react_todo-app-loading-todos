@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { getTodos, USER_ID } from './api/todos';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorNotification } from './components/ErrorNotification';
+import { DispatchContext, StatesContext } from './context/Store';
 
 export const App: React.FC = () => {
+  const { todos } = useContext(StatesContext);
+  const dispatch = useContext(DispatchContext);
+
+  useEffect(() => {
+    dispatch({ type: 'startLoading' });
+    getTodos()
+      .then(todosFromServer => {
+        dispatch({ type: 'loadTodos', payload: todosFromServer });
+      })
+      .catch(() => {
+        dispatch({ type: 'showError', payload: `Unable to load todos` });
+      })
+      .finally(() => {
+        dispatch({ type: 'stopLoading' });
+      });
+  }, [dispatch]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -18,12 +36,9 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList />
-        {/* Hide the footer if there are no todos */}
-        <Footer />
+        {todos.length !== 0 && <Footer />}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification />
     </div>
   );
