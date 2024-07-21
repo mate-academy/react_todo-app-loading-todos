@@ -10,13 +10,14 @@ import { Header } from './components/Header/Header';
 import { Main } from './components/Main/Main';
 import { Footer } from './components/Footer/Footer';
 import { Errors } from './components/Errors/Errors';
-import { Todo } from './types/Todo';
 import { IsActiveError, IsActiveLink } from './types/types';
+import { TodosContext, ErrorContext } from './utils/Store';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todos, setTodos } = React.useContext(TodosContext);
+  const { setIsError } = React.useContext(ErrorContext);
+
   const [link, setLink] = useState(IsActiveLink.All);
-  const [isError, setIsError] = useState(IsActiveError.NoError);
 
   useEffect(() => {
     getTodos()
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
       .catch(() => {
         setIsError(IsActiveError.Load);
       });
-  }, []);
+  }, [setTodos, setIsError]);
 
   const visibleTodos = React.useMemo(() => {
     return todos.filter(todo => {
@@ -47,22 +48,14 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} setTodos={setTodos} setIsError={setIsError} />
+        <Header />
 
-        {todos.length > 0 && (
-          <>
-            <Main
-              filteredTodos={visibleTodos}
-              todos={todos}
-              setTodos={setTodos}
-              setIsError={setIsError}
-            />
-            <Footer todos={todos} link={link} setLink={setLink} />
-          </>
-        )}
+        <Main filteredTodos={visibleTodos} />
+
+        <Footer link={link} setLink={setLink} />
       </div>
 
-      <Errors isError={isError} setIsError={setIsError} />
+      <Errors />
     </div>
   );
 };

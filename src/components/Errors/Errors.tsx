@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { IsActiveError } from '../../types/types';
 import classNames from 'classnames';
+import { ErrorContext } from '../../utils/Store';
 
-interface ErrorsProps {
-  isError: IsActiveError;
-  setIsError: (arg: IsActiveError) => void;
-}
+export const Errors: React.FC = () => {
+  const { isError, setIsError } = React.useContext(ErrorContext);
 
-export const Errors: React.FC<ErrorsProps> = ({ isError, setIsError }) => {
   const errorMessage = React.useMemo(() => {
     return Object.values(IsActiveError).find(item => item === isError);
   }, [isError]);

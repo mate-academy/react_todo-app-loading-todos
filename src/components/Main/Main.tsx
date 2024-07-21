@@ -1,33 +1,35 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import * as React from 'react';
-import { TodoItem } from '../Todo/TodoItem';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
+import { TodoItem } from '../TodoItem/TodoItem';
 import { Todo } from '../../types/Todo';
-import { IsActiveError } from '../../types/types';
+import { TodosContext, TempTodoContext } from '../../utils/Store';
 
 interface MainProps {
   filteredTodos: Todo[];
-  todos: Todo[];
-  setTodos: (arg: Todo[]) => void;
-  setIsError: (arg: IsActiveError) => void;
 }
 
-export const Main: React.FC<MainProps> = ({
-  filteredTodos,
-  todos,
-  setTodos,
-  setIsError,
-}) => {
+export const Main: React.FC<MainProps> = ({ filteredTodos }) => {
+  const { tempTodo } = React.useContext(TempTodoContext);
+  const { todos } = React.useContext(TodosContext);
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map((todo: Todo) => (
-        <TodoItem
-          key={todo?.id}
-          todo={todo}
-          setTodos={setTodos}
-          setIsError={setIsError}
-          todos={todos}
-        />
-      ))}
+      <TransitionGroup>
+        {todos.length > 0 &&
+          filteredTodos.map((todo: Todo) => (
+            <CSSTransition key={todo?.id} timeout={300} classNames="item">
+              <TodoItem todo={todo} />
+            </CSSTransition>
+          ))}
+
+        {tempTodo && (
+          <CSSTransition key={0} timeout={300} classNames="temp-item">
+            <TodoItem todo={tempTodo} isTemp={tempTodo} />
+          </CSSTransition>
+        )}
+      </TransitionGroup>
     </section>
   );
 };
