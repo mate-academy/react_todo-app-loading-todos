@@ -48,6 +48,21 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
+  let filteredTodos = todos;
+
+  if (filter !== Filter.all) {
+    filteredTodos = todos.filter(todo => {
+      switch (filter) {
+        case Filter.active:
+          return !todo.completed;
+        case Filter.completed:
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
+  }
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -55,7 +70,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <TodoList loading={loading} filter={filter} todos={todos} />
+        <TodoList loading={loading} filteredTodos={filteredTodos} />
 
         {todos.length > 0 && (
           <Footer todos={todos} setFilter={setFilter} filter={filter} />
