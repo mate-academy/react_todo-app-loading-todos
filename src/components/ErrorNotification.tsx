@@ -21,7 +21,6 @@ export const ErrorNotification: React.FC = () => {
       )}
     >
       <button data-cy="HideErrorButton" type="button" className="delete" />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );

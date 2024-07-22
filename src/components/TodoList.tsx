@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { DispatchContext, StatesContext } from '../context/Store';
 import classNames from 'classnames';
 import { TodoLoader } from './TodoLoader';
@@ -12,18 +12,22 @@ export const TodoList: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const filteredTodos = todos.filter(t => {
-    switch (filter) {
-      case 'all':
-        return t;
-      case 'active':
-        return !t.completed;
-      case 'completed':
-        return t.completed;
-      default:
-        return t;
-    }
-  });
+  const filteredTodos = useMemo(
+    () =>
+      todos.filter(t => {
+        switch (filter) {
+          case 'all':
+            return t;
+          case 'active':
+            return !t.completed;
+          case 'completed':
+            return t.completed;
+          default:
+            return t;
+        }
+      }),
+    [todos, filter],
+  );
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
