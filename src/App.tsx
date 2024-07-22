@@ -68,7 +68,11 @@ export const App: React.FC = () => {
         className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
-        {error && <div>{errorMessages[error]}</div>}
+        {Object.values(errorMessages)
+          .filter(msg => errorMessages[error as ErrorType] === msg)
+          .map((msg, index) => (
+            <div key={index}>{msg}</div>
+          ))}
       </div>
     </div>
   );
