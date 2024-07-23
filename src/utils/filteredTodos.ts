@@ -1,18 +1,18 @@
 import { Actions } from '../types/Actions';
 import { Todo } from '../types/Todo';
 
-export const filteredTodos = (arr: Todo[], action: Actions): Todo[] => {
+export const filteredTodos = (todos: Todo[], action: Actions): Todo[] => {
   switch (action) {
     case Actions.ALL:
-      return arr;
+      return todos;
 
     case Actions.ACTIVE:
-      return arr.filter(todo => todo.completed === false);
+      return todos.filter(todo => !todo.completed);
 
     case Actions.COMPLETED:
-      return arr.filter(todo => todo.completed === true);
+      return todos.filter(todo => todo.completed);
 
     default:
-      return arr;
+      return todos;
   }
 };

@@ -15,25 +15,25 @@ export const ListOfTodos: React.FC<Props> = ({ todos, actions }) => {
       {todos.length > 0 && (
         <section className="todoapp__main" data-cy="TodoList">
           {todos.length > 0 &&
-            filteredTodos(todos, actions).map(todo => (
+            filteredTodos(todos, actions).map(({ id, title, completed }) => (
               <div
                 data-cy="Todo"
                 className={classNames('todo', {
-                  completed: todo.completed,
+                  completed: completed,
                 })}
-                key={todo.id}
+                key={id}
               >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    defaultChecked={todo.completed}
+                    defaultChecked={completed}
                   />
                 </label>
 
                 <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
+                  {title}
                 </span>
 
                 <button
@@ -44,7 +44,6 @@ export const ListOfTodos: React.FC<Props> = ({ todos, actions }) => {
                   ×
                 </button>
 
-                {/* overlay will cover the todo while it is being deleted or updated */}
                 <div data-cy="TodoLoader" className="modal overlay">
                   <div
                     className="modal-background
