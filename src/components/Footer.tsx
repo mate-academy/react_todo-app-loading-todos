@@ -9,6 +9,8 @@ interface Props {
   setFilter: (value: Filter) => void;
 }
 
+const filters = Object.values(Filter);
+
 export const Footer: React.FC<Props> = ({
   activeTodosCount,
   areThereCompletedTodos,
@@ -21,34 +23,17 @@ export const Footer: React.FC<Props> = ({
     </span>
 
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        className={cn('filter__link', { selected: filter === Filter.all })}
-        data-cy="FilterLinkAll"
-        onClick={() => setFilter(Filter.all)}
-      >
-        All
-      </a>
-
-      <a
-        href="#/"
-        className={cn('filter__link', { selected: filter === Filter.active })}
-        data-cy="FilterLinkActive"
-        onClick={() => setFilter(Filter.active)}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/"
-        className={cn('filter__link', {
-          selected: filter === Filter.completed,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => setFilter(Filter.completed)}
-      >
-        Completed
-      </a>
+      {filters.map(filterOption => (
+        <a
+          key={filterOption}
+          href="#/"
+          className={cn('filter__link', { selected: filter === filterOption })}
+          data-cy={`FilterLink${filterOption.charAt(0).toUpperCase() + filterOption.slice(1)}`}
+          onClick={() => setFilter(filterOption)}
+        >
+          {filterOption.charAt(0).toUpperCase() + filterOption.slice(1)}
+        </a>
+      ))}
     </nav>
 
     <button
