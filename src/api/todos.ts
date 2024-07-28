@@ -22,6 +22,7 @@ export const createTodo = (title: string) => {
     title,
     completed: false,
   };
+
   return client.post<Todo>('/todos', newTodo);
 };
 
