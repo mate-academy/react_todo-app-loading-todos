@@ -2,27 +2,25 @@ import React, { useEffect, useState } from 'react';
 
 interface ErrorNotificationProps {
   error: string | null;
-  onClearError: () => void;
 }
 
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
   error,
-  onClearError,
 }) => {
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(true);
 
   useEffect(() => {
     if (error) {
       setHidden(false);
       const timer = setTimeout(() => {
         setHidden(true);
-        setTimeout(onClearError, 1000);
       }, 4000);
 
       return () => clearTimeout(timer);
     }
+
     return undefined;
-  }, [error, onClearError]);
+  }, [error]);
 
   return (
     <div
@@ -33,10 +31,7 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => {
-          setHidden(true);
-          setTimeout(onClearError, 1000);
-        }}
+        onClick={() => setHidden(true)}
       />
       {error}
     </div>

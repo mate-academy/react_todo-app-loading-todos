@@ -83,12 +83,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             ×
           </button>
 
-          {loading && (
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          )}
+          <div data-cy="TodoLoader" className="modal overlay">
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
+          </div>
         </>
       )}
     </div>

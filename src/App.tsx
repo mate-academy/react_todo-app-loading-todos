@@ -207,12 +207,7 @@ export const App: React.FC = () => {
             )}
           </div>
 
-          {error && (
-            <ErrorNotification
-              error={error}
-              onClearError={() => setError(null)}
-            />
-          )}
+          <ErrorNotification data-cy="ErrorNotification" error={error} />
         </>
       )}
     </div>
