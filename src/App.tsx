@@ -6,6 +6,7 @@ import {
   getTodos,
   updateTodo,
 } from './api/todos';
+import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
@@ -30,16 +31,6 @@ export const App: React.FC = () => {
         .finally(() => setLoading(false));
     }
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => setError(null), 3000);
-
-      return () => clearTimeout(timer);
-    }
-
-    return undefined;
-  }, [error]);
 
   const handleAddTodo = (event: React.FormEvent) => {
     event.preventDefault();
@@ -217,18 +208,10 @@ export const App: React.FC = () => {
           </div>
 
           {error && (
-            <div
-              data-cy="ErrorNotification"
-              className="notification is-danger is-light has-text-weight-normal"
-            >
-              <button
-                data-cy="HideErrorButton"
-                type="button"
-                className="delete"
-                onClick={() => setError(null)}
-              />
-              {error}
-            </div>
+            <ErrorNotification
+              error={error}
+              onClearError={() => setError(null)}
+            />
           )}
         </>
       )}

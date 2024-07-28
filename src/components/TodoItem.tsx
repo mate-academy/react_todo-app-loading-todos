@@ -53,6 +53,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             className="todo__status-label"
             htmlFor={`todo-status-${todo.id}`}
           >
+            11
             <input
               id={`todo-status-${todo.id}`}
               data-cy="TodoStatus"
