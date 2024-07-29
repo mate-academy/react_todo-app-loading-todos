@@ -35,6 +35,8 @@ export const App: React.FC = () => {
 
   async function addTodo(todo: Omit<Todo, 'id'>) {
     try {
+      setSubmitting(true);
+
       setTempTodo({ ...todo, id: 0 });
 
       const newTodo = await apiTodos.addTodo(todo);
@@ -43,17 +45,15 @@ export const App: React.FC = () => {
     } catch (error) {
       setErrorMessage('Unable to add a todo');
       setTimeout(resetError, 3000);
-      formField.current?.focus();
       throw error;
     } finally {
       setTempTodo(null);
+      setSubmitting(false);
     }
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    setSubmitting(true);
 
     if (!title) {
       setErrorMessage('Title should not be empty');
@@ -66,9 +66,7 @@ export const App: React.FC = () => {
       userId: USER_ID,
       title,
       completed,
-    })
-      .then(resetTitle)
-      .finally(() => setSubmitting(false));
+    }).then(resetTitle);
   }
 
   const filteredTodos: Todo[] = useMemo(() => {
@@ -106,8 +104,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     formField.current?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todos, error]);
+  }, [todos, errorMessage]);
+
+  const activeTodosCount = useMemo(() => {
+    return todos.reduce((sum, todo) => sum + Number(!todo.completed), 0);
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -265,7 +266,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {activeTodosCount} items left
             </span>
 
             <nav className="filter" data-cy="Filter">
@@ -276,7 +277,7 @@ export const App: React.FC = () => {
                   className={classNames('filter__link', {
                     selected: status === todoStatus,
                   })}
-                  data-cy="FilterLinkAll"
+                  data-cy={`FilterLink${status}`}
                   onClick={() => setTodoStatus(status as Status)}
                 >
                   {status}
