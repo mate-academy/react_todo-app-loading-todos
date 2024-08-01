@@ -48,7 +48,7 @@ export const App: React.FC = () => {
         <Header todos={todos} />
 
         <TodoList todos={filteredTodos} />
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <Footer todos={todos} onFilter={setFilter} filter={filter} />
         )}
       </div>
