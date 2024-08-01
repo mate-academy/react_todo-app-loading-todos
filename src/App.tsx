@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
@@ -7,10 +7,11 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import cn from 'classnames';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -22,17 +23,19 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') {
-      return !todo.completed;
-    }
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      if (filter === Filter.active) {
+        return !todo.completed;
+      }
 
-    if (filter === 'completed') {
-      return todo.completed;
-    }
+      if (filter === Filter.completed) {
+        return todo.completed;
+      }
 
-    return true;
-  });
+      return true;
+    });
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
