@@ -6,9 +6,9 @@ import {
   getTodos,
   updateTodo,
 } from './api/todos';
-import { ErrorNotification } from './components/ErrorNotification';
-import { Footer } from './components/Footer';
-import { Header } from './components/Header';
+import { ErrorNotification } from './components/errorNotification';
+import { Footer } from './components/footer';
+import { Header } from './components/header';
 import { TodoList } from './components/todoList';
 import { Todo } from './types/Todo';
 import { UserWarning } from './UserWarning';
