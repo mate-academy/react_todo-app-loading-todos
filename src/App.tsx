@@ -5,12 +5,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import { FilterEnum } from './types/FilterEnum';
+import { Filter } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<FilterEnum>(FilterEnum.All);
+  const [filterStatus, setFilterStatus] = useState<Filter>(Filter.All);
 
   const inputField = useRef<HTMLInputElement>(null);
 
@@ -68,20 +68,20 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     switch (filterStatus) {
-      case FilterEnum.Active:
+      case Filter.Active:
         return !todo.completed;
-      case FilterEnum.Completed:
+      case Filter.Completed:
         return todo.completed;
-      case FilterEnum.All:
+      case Filter.All:
       default:
         return true;
     }
   });
 
-  const updateTodoStatus = (todoId: number, completed: boolean) => {
+  const updateTodoStatus = (todoId: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
-        todo.id === todoId ? { ...todo, completed } : todo,
+        todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
   };
@@ -129,9 +129,7 @@ export const App: React.FC = () => {
                   type="checkbox"
                   className="todo__status"
                   checked={todo.completed}
-                  onChange={event =>
-                    updateTodoStatus(todo.id, event.target.checked)
-                  }
+                  onChange={() => updateTodoStatus(todo.id)}
                 />
               </label>
               <span data-cy="TodoTitle" className="todo__title">
@@ -162,7 +160,7 @@ export const App: React.FC = () => {
 
             {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
-              {Object.values(FilterEnum).map(status => (
+              {Object.values(Filter).map(status => (
                 <a
                   key={status}
                   href={`#/${status}`}
@@ -170,7 +168,7 @@ export const App: React.FC = () => {
                     selected: status === filterStatus,
                   })}
                   data-cy={`FilterLink${status}`}
-                  onClick={() => setFilterStatus(status as FilterEnum)}
+                  onClick={() => setFilterStatus(status)}
                 >
                   {status}
                 </a>
