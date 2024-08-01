@@ -189,8 +189,6 @@ export const App: React.FC = () => {
             </button>
           </footer>
         )}
-        {/* DON'T use conditional rendering to hide the notification */}
-        {/* Add the 'hidden' class to hide the message smoothly */}
       </div>
       <div
         data-cy="ErrorNotification"
