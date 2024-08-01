@@ -7,10 +7,6 @@ import { Todo } from './types/Todo';
 import classNames from 'classnames';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
@@ -37,6 +33,10 @@ export const App: React.FC = () => {
         return todos;
     }
   }, [status, todos]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
