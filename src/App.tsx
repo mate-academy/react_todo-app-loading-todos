@@ -89,7 +89,6 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
@@ -170,7 +169,7 @@ export const App: React.FC = () => {
                   className={cn('filter__link', {
                     selected: status === filterStatus,
                   })}
-                  data-cy={`FilterLinkAll${status}`}
+                  data-cy={`FilterLink${status}`}
                   onClick={() => setFilterStatus(status as FilterEnum)}
                 >
                   {status}
@@ -190,24 +189,23 @@ export const App: React.FC = () => {
             </button>
           </footer>
         )}
-
         {/* DON'T use conditional rendering to hide the notification */}
         {/* Add the 'hidden' class to hide the message smoothly */}
-        <div
-          data-cy="ErrorNotification"
-          className={cn(
-            'notification is-danger is-light has-text-weight-normal',
-            { hidden: !error },
-          )}
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setError(null)}
-          />
-          {error}
-        </div>
+      </div>
+      <div
+        data-cy="ErrorNotification"
+        className={cn(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !error },
+        )}
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError(null)}
+        />
+        {error}
       </div>
     </div>
   );
