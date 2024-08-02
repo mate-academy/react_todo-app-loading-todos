@@ -1,6 +1,6 @@
+import React from 'react';
 import classNames from 'classnames';
 import { Errors } from '../enums/Errors';
-import React from 'react';
 
 interface ErrorNotificationProps {
   errorMessage: Errors | null;

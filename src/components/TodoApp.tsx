@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { getTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
@@ -7,7 +8,6 @@ import { TodoFooter } from './TodoFooter';
 import { Errors } from '../enums/Errors';
 import { ErrorNotification } from './ErrorNotification';
 import { FilteredTodos } from '../enums/FilteredTodos';
-import React from 'react';
 
 const handleFilteredTodos = (todos: Todo[], filterSelected: FilteredTodos) => {
   switch (filterSelected) {
@@ -62,7 +62,7 @@ export const TodoApp: React.FC = () => {
 
         <TodoList preparedTodos={preparedTodos} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <TodoFooter
             filterSelected={filterSelected}
             setFilterSelected={setFilterSelected}
