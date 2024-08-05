@@ -1,1 +1,5 @@
-export type Status = 'All' | 'Active' | 'Completed';
+export enum Status {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}

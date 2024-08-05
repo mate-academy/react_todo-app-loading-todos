@@ -12,7 +12,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [todoStatus, setTodoStatus] = useState<Status>('All');
+  const [todoStatus, setTodoStatus] = useState<Status>(Status.All);
   const [submitting, setSubmitting] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
@@ -45,10 +45,10 @@ export const App: React.FC = () => {
   const filteredTodos: Todo[] = useMemo(() => {
     return todos.filter(todo => {
       switch (todoStatus) {
-        case 'Active':
+        case Status.Active:
           return !todo.completed;
 
-        case 'Completed':
+        case Status.Completed:
           return todo.completed;
 
         default:
@@ -94,7 +94,7 @@ export const App: React.FC = () => {
           tempTodo={tempTodo}
         />
 
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             todoStatus={todoStatus}

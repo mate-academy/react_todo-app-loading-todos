@@ -28,12 +28,12 @@ export const Header: React.FC<Props> = ({
 }) => {
   const formField = useRef<HTMLInputElement>(null);
 
-  function handleTitleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     setErrorMessage('');
-  }
+  };
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -48,7 +48,7 @@ export const Header: React.FC<Props> = ({
       title,
       completed,
     });
-  }
+  };
 
   const allCompleted = useMemo(() => {
     return todos.every(todo => todo.completed);

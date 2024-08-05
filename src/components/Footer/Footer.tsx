@@ -29,7 +29,7 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {['All', 'Active', 'Completed'].map(status => (
+        {Object.values(Status).map(status => (
           <a
             key={status}
             href={`#/${status}`}
@@ -37,7 +37,7 @@ export const Footer: React.FC<Props> = ({
               selected: status === todoStatus,
             })}
             data-cy={`FilterLink${status}`}
-            onClick={() => setTodoStatus(status as Status)}
+            onClick={() => setTodoStatus(status)}
           >
             {status}
           </a>
