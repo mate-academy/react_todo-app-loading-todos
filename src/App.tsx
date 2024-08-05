@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useRef, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { addTodo, getTodos } from './api/todos';
@@ -12,42 +10,32 @@ export const App: React.FC = () => {
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-
     getTodos()
       .then(todo => {
         setTodos(todo);
         setLoadingError('');
       })
-      .catch(() => {
-        // Clear any existing timeout before setting a new one
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-        }
-
-        timeoutRef.current = setTimeout(() => {
-          setLoadingError('Unable to load todos');
-        }, 3000);
-      });
-
-    return () => {
-      // Cleanup timeout on component unmount
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
+      .catch((error) => {
+        setLoadingError('Unable to load todos');
+        throw error;
+      })
   }, []);
 
   const toggleTodo = (id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  const toggleTodoAll = () => {
+    const allCompleted = todos.every(todo => todo.completed);
+
+    setTodos(prevTodos =>
+      prevTodos.map(todo => ({ ...todo, completed: !allCompleted }))
     );
   };
 
@@ -57,6 +45,9 @@ export const App: React.FC = () => {
     if (!inputText.trim()) {
       setValidationError('Title should not be empty');
 
+      setTimeout(() => {
+        setValidationError('');
+      }, 3000);
       return;
     }
 
@@ -66,17 +57,28 @@ export const App: React.FC = () => {
         setInputText('');
         setValidationError('');
       })
-      .catch(() => {
-        // Clear any existing timeout before setting a new one
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-        }
+      .catch((error) => {
+        setLoadingError('Unable to add a todo');
 
-        timeoutRef.current = setTimeout(() => {
-          setLoadingError('Unable to add a todo');
+        setTimeout(() => {
+          setLoadingError('');
         }, 3000);
+        throw error;
       });
   };
+
+  const clearErrors = () => {
+    setLoadingError('');
+    setValidationError('');
+  }
+
+  const clearCompleted = () => {
+    setTodos(prevTodos =>
+      prevTodos.filter(todo =>
+        !todo.completed
+      )
+    );
+  }
 
   return (
     <div className="todoapp">
@@ -88,6 +90,7 @@ export const App: React.FC = () => {
             type="button"
             className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
             data-cy="ToggleAllButton"
+            onClick={toggleTodoAll}
           />
 
           <form onSubmit={handleAddTodo}>
@@ -112,27 +115,15 @@ export const App: React.FC = () => {
             </span>
 
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className="filter__link selected"
-                data-cy="FilterLinkAll"
-              >
+              <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
                 All
               </a>
 
-              <a
-                href="#/active"
-                className="filter__link"
-                data-cy="FilterLinkActive"
-              >
+              <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
                 Active
               </a>
 
-              <a
-                href="#/completed"
-                className="filter__link"
-                data-cy="FilterLinkCompleted"
-              >
+              <a href="#/completed" className="filter__link" data-cy="FilterLinkCompleted">
                 Completed
               </a>
             </nav>
@@ -142,6 +133,7 @@ export const App: React.FC = () => {
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
               disabled={todos.every(todo => !todo.completed)}
+              onClick={clearCompleted}
             >
               Clear completed
             </button>
@@ -157,13 +149,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => {
-            setLoadingError('');
-            setValidationError('');
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-            }
-          }}
+          onClick={clearErrors}
         />
         {loadingError && <div>{loadingError}</div>}
         {validationError && <div>{validationError}</div>}
