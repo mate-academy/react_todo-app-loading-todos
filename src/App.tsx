@@ -1,15 +1,37 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { addTodo, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import cn from 'classnames';
+
+
+enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+
   const [loadingError, setLoadingError] = useState('');
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [filterSelected, setFilterSelected] = useState(Filter.All);
+
+  const filterTodos = useMemo(() => {
+    switch (filterSelected) {
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+      case Filter.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filterSelected]);
 
   useEffect(() => {
     getTodos()
@@ -17,12 +39,20 @@ export const App: React.FC = () => {
         setTodos(todo);
         setLoadingError('');
       })
-      .catch((error) => {
+      .catch(() => {
         setLoadingError('Unable to load todos');
-        throw error;
-      })
-  }, []);
+        setTimeout(() => {
+          setLoadingError('');
+        }, 3000);
+      });
 
+    // Установить фокус на input поле после загрузки
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
+
+  //#region function
   const toggleTodo = (id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
@@ -57,13 +87,12 @@ export const App: React.FC = () => {
         setInputText('');
         setValidationError('');
       })
-      .catch((error) => {
+      .catch(() => {
         setLoadingError('Unable to add a todo');
 
         setTimeout(() => {
           setLoadingError('');
         }, 3000);
-        throw error;
       });
   };
 
@@ -79,6 +108,7 @@ export const App: React.FC = () => {
       )
     );
   }
+  //#endregion
 
   return (
     <div className="todoapp">
@@ -106,24 +136,45 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={todos} toggleTodo={toggleTodo} />
+        <TodoList todos={filterTodos} toggleTodo={toggleTodo} />
 
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.length} items left
+              {todos.filter(todo => !todo.completed).length} items left
             </span>
 
             <nav className="filter" data-cy="Filter">
-              <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+              <a
+                href="#/"
+                className={cn('filter__link', {
+                  'selected': filterSelected === Filter.All,
+                })}
+                data-cy="FilterLinkAll"
+                onClick={() => setFilterSelected(Filter.All)}
+              >
                 All
               </a>
 
-              <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+              <a
+                href="#/active"
+                className={cn('filter__link', {
+                  'selected': filterSelected === Filter.Active,
+                })}
+                data-cy="FilterLinkActive"
+                onClick={() => setFilterSelected(Filter.Active)}
+              >
                 Active
               </a>
 
-              <a href="#/completed" className="filter__link" data-cy="FilterLinkCompleted">
+              <a
+                href="#/completed"
+                className={cn('filter__link', {
+                  'selected': filterSelected === Filter.Completed,
+                })}
+                data-cy="FilterLinkCompleted"
+                onClick={() => setFilterSelected(Filter.Completed)}
+              >
                 Completed
               </a>
             </nav>
