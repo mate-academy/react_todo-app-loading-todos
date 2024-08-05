@@ -5,7 +5,7 @@ import cn from 'classnames';
 type Props = {
   todos: Todo[];
   toggleTodo: (id: number) => void;
-  deletePost: (is: number) => void;
+  deletePost: (id: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -23,12 +23,12 @@ export const TodoList: React.FC<Props> = ({
             completed: todo.completed,
           })}
         >
-          <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
+          <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              id={`todo-status-${todo.id}`}
+              id={`todo-status-${todo.id}`}  // Убедитесь, что id совпадает с htmlFor
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
             />
