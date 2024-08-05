@@ -3,23 +3,17 @@ import { TodoList } from './components/TodoList';
 import { addTodo, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
-
-enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Filter } from './types/types';
 
 export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-
   const [loadingError, setLoadingError] = useState('');
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [filterSelected, setFilterSelected] = useState(Filter.All);
+  const [filterSelected, setFilterSelected] = useState<Filter>(Filter.All);
 
   const filterTodos = useMemo(() => {
     switch (filterSelected) {
@@ -34,9 +28,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todo => {
-        setTodos(todo);
-        setLoadingError('');
+      .then(todoList => {
+        setTodos(todoList);
       })
       .catch(() => {
         setLoadingError('Unable to load todos');
@@ -44,14 +37,14 @@ export const App: React.FC = () => {
           setLoadingError('');
         }, 3000);
       });
+  }, []);
 
-    // Установить фокус на input поле после загрузки
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inputRef]);
+  }, []);
 
-  //#region function
   const toggleTodo = (id: number) => {
     setTodos(prevTodos =>
       prevTodos.map(todo =>
@@ -73,10 +66,12 @@ export const App: React.FC = () => {
 
     if (!inputText.trim()) {
       setValidationError('Title should not be empty');
-
       setTimeout(() => {
         setValidationError('');
       }, 3000);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
 
       return;
     }
@@ -86,14 +81,20 @@ export const App: React.FC = () => {
         setTodos(prevTodos => [...prevTodos, newTodo]);
         setInputText('');
         setValidationError('');
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       })
       .catch(() => {
         setLoadingError('Unable to add a todo');
-
         setTimeout(() => {
           setLoadingError('');
         }, 3000);
       });
+  };
+
+  const deletePost = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
   const clearErrors = () => {
@@ -104,12 +105,19 @@ export const App: React.FC = () => {
   const clearCompleted = () => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
-  //#endregion
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  };
+
+  const leftItem = todos.filter(todo => !todo.completed).length;
+  const disabledButton = todos.every(todo => !todo.completed);
+
+  const filterValues = Object.values(Filter);
 
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
       <div className="todoapp__content">
         <header className="todoapp__header">
           <button
@@ -118,7 +126,6 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
             onClick={toggleTodoAll}
           />
-
           <form onSubmit={handleAddTodo}>
             <input
               data-cy="NewTodoField"
@@ -127,59 +134,45 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               ref={inputRef}
               value={inputText}
-              onChange={e => setInputText(e.target.value)}
+              onChange={handleInputChange}
             />
           </form>
         </header>
-
-        <TodoList todos={filterTodos} toggleTodo={toggleTodo} />
-
+        <TodoList
+          todos={filterTodos}
+          toggleTodo={toggleTodo}
+          deletePost={deletePost}
+        />
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.filter(todo => !todo.completed).length} items left
+              {leftItem} items left
             </span>
-
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilterSelected(Filter.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.Active,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilterSelected(Filter.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.Completed,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilterSelected(Filter.Completed)}
-              >
-                Completed
-              </a>
+              return (
+              <div>
+                {filterValues.map(filter => (
+                  <a
+                    key={filter}
+                    href={`#/${filter.toLowerCase()}`}
+                    className={cn('filter__link', {
+                      selected: filterSelected === filter,
+                    })}
+                    data-cy={`FilterLink${filter}`}
+                    onClick={() => setFilterSelected(filter)}
+                  >
+                    {filter}
+                  </a>
+                ))}
+              </div>
+              );
             </nav>
 
             <button
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={todos.every(todo => !todo.completed)}
+              disabled={disabledButton}
               onClick={clearCompleted}
             >
               Clear completed
@@ -187,7 +180,6 @@ export const App: React.FC = () => {
           </footer>
         )}
       </div>
-
       <div
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${loadingError || validationError ? '' : 'hidden'}`}

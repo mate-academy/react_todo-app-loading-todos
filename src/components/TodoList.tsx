@@ -1,13 +1,17 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
-import cn from 'classnames';
+import { TodoComponent } from './Todo';
 
 type Props = {
   todos: Todo[];
   toggleTodo: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, toggleTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  toggleTodo,
+  deletePost,
+}) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
@@ -18,14 +22,19 @@ export const TodoList: React.FC<Props> = ({ todos, toggleTodo }) => {
             completed: todo.completed,
           })}
         >
-          <label className="todo__status-label">
+          <label
+            className="todo__status-label"
+            htmlFor={`todo-status-${todo.id}`}
+          >
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
+              id={`todo-status-${todo.id}`}
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
             />
+            <span className="visually-hidden">Mark as completed</span>
           </label>
 
           <span data-cy="TodoTitle" className="todo__title">
@@ -33,7 +42,12 @@ export const TodoList: React.FC<Props> = ({ todos, toggleTodo }) => {
           </span>
 
           {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => deletePost(todo.id)}
+          >
             ×
           </button>
 
