@@ -28,7 +28,7 @@ export const TodoList: React.FC<Props> = ({
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              id={`todo-status-${todo.id}`}  // Убедитесь, что id совпадает с htmlFor
+              id={`todo-status-${todo.id}`}
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
             />
