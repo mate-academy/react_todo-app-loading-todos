@@ -23,11 +23,12 @@ export const TodoList: React.FC<Props> = ({
             completed: todo.completed,
           })}
         >
-          <label className="todo__status-label">
+          <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
+              id={`todo-status-${todo.id}`}
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
             />
