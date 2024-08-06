@@ -3,12 +3,7 @@ import { TodoList } from './components/TodoList';
 import { addTodo, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
-
-enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Filter } from './types/types';
 
 export const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
@@ -18,7 +13,7 @@ export const App: React.FC = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [filterSelected, setFilterSelected] = useState(Filter.All);
+  const [filterSelected, setFilterSelected] = useState<Filter>(Filter.All);
 
   const filterTodos = useMemo(() => {
     switch (filterSelected) {
@@ -111,6 +106,15 @@ export const App: React.FC = () => {
     setTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  }
+
+  const leftItem = todos.filter(todo => !todo.completed).length;
+  const disabledButton = todos.every(todo => !todo.completed);
+
+  const filterValues = Object.values(Filter);
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -130,8 +134,7 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               ref={inputRef}
               value={inputText}
-              onChange={e => setInputText(e.target.value)}
-              autoFocus
+              onChange={handleInputChange}
             />
           </form>
         </header>
@@ -143,45 +146,33 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.filter(todo => !todo.completed).length} items left
+              {leftItem} items left
             </span>
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilterSelected(Filter.All)}
-              >
-                All
-              </a>
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.Active,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilterSelected(Filter.Active)}
-              >
-                Active
-              </a>
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filterSelected === Filter.Completed,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilterSelected(Filter.Completed)}
-              >
-                Completed
-              </a>
+              return (
+              <div>
+                {filterValues.map((filter) => (
+                  <a
+                    key={filter}
+                    href={`#/${filter.toLowerCase()}`}
+                    className={cn('filter__link', {
+                      selected: filterSelected === filter,
+                    })}
+                    data-cy={`FilterLink${filter}`}
+                    onClick={() => setFilterSelected(filter)}
+                  >
+                    {filter}
+                  </a>
+                ))}
+              </div>
+              );
             </nav>
+
             <button
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={todos.every(todo => !todo.completed)}
+              disabled={disabledButton}
               onClick={clearCompleted}
             >
               Clear completed
