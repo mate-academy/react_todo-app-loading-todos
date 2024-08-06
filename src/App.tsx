@@ -108,7 +108,7 @@ export const App: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
-  }
+  };
 
   const leftItem = todos.filter(todo => !todo.completed).length;
   const disabledButton = todos.every(todo => !todo.completed);
@@ -151,7 +151,7 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               return (
               <div>
-                {filterValues.map((filter) => (
+                {filterValues.map(filter => (
                   <a
                     key={filter}
                     href={`#/${filter.toLowerCase()}`}
