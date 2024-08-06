@@ -12,7 +12,6 @@ export const App: React.FC = () => {
   const [validationError, setValidationError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [filterSelected, setFilterSelected] = useState<Filter>(Filter.All);
 
   const filterTodos = useMemo(() => {
@@ -149,23 +148,19 @@ export const App: React.FC = () => {
               {leftItem} items left
             </span>
             <nav className="filter" data-cy="Filter">
-              return (
-              <div>
-                {filterValues.map(filter => (
-                  <a
-                    key={filter}
-                    href={`#/${filter.toLowerCase()}`}
-                    className={cn('filter__link', {
-                      selected: filterSelected === filter,
-                    })}
-                    data-cy={`FilterLink${filter}`}
-                    onClick={() => setFilterSelected(filter)}
-                  >
-                    {filter}
-                  </a>
-                ))}
-              </div>
-              );
+              {filterValues.map(filter => (
+                <a
+                  key={filter}
+                  href={`#/${filter !== 'all' ? filter : ''}`}
+                  className={cn('filter__link', {
+                    selected: filterSelected === filter,
+                  })}
+                  data-cy={`FilterLink${filter.charAt(0).toUpperCase() + filter.slice(1)}`}
+                  onClick={() => setFilterSelected(filter)}
+                >
+                  {filter}
+                </a>
+              ))}
             </nav>
 
             <button

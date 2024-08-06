@@ -5,17 +5,17 @@ type Props = {
   todo: Todo;
   toggleTodo: (id: number) => void;
   deletePost: (id: number) => void;
-}
+};
 
-export const TodoComponent: React.FC<Props> = ({ todo, toggleTodo, deletePost }) => {
+export const TodoComponent: React.FC<Props> = ({
+  todo,
+  toggleTodo,
+  deletePost,
+}) => {
   const { id, title, completed } = todo;
 
   return (
-    <div
-      key={id}
-      data-cy="Todo"
-      className={cn('todo', { completed })}
-    >
+    <div key={id} data-cy="Todo" className={cn('todo', { completed })}>
       <label className="todo__status-label" htmlFor={`todo-status-${id}`}>
         <input
           data-cy="TodoStatus"
