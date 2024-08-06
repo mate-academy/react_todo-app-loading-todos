@@ -8,7 +8,11 @@ type Props = {
   deletePost: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, toggleTodo, deletePost }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  toggleTodo,
+  deletePost,
+}) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos.map(todo => (
       <TodoComponent
