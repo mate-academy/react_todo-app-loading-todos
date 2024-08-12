@@ -15,10 +15,17 @@ enum ERROR_MESSAGE {
   updateError = 'Unable to update a todo',
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+enum FILTER_STATUS {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todoData, setTodoData] = useState<Todo[]>([]);
   const [filteredData, setFilteredData] = useState<Todo[]>([]);
-  const [fillterStatus, setFilterStatus] = useState('all');
+  const [fillterStatus, setFilterStatus] = useState(FILTER_STATUS.all);
   const [todoCounter, setTododCounter] = useState<number>(0);
 
   // const [loading, setLoading] = useState(false);
@@ -30,9 +37,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(data => {
-        setTodoData(data);
-      })
+      .then(setTodoData)
       .catch(() => {
         setShowErrorBox(true);
         setTextOfError(ERROR_MESSAGE.serverError);
@@ -48,9 +53,9 @@ export const App: React.FC = () => {
     };
 
     addTodo(ownData)
-      .then((data: any) => {
+      .then((data: Todo) => {
         setTodoInput('');
-        setTodoData((prevData: Todo[]): any => {
+        setTodoData((prevData: Todo[]): Todo[] => {
           return [data, ...prevData];
         });
       })
@@ -65,10 +70,10 @@ export const App: React.FC = () => {
     setTodoData(prevData => prevData.filter(el => el.id !== todoId));
   }
 
-  function updatePost(todoId: number, info: any) {
+  function updatePost(todoId: number, info: Todo) {
     updateTodo(todoId, info)
-      .then((data: any) => {
-        setTodoData((prevData: Todo[]) => {
+      .then((data: Todo[]) => {
+        setTodoData((prevData: Todo[]): Todo[] => {
           const updatedData = prevData.map(el => {
             if (el.id === todoId) {
               return data;
@@ -77,7 +82,7 @@ export const App: React.FC = () => {
             return el;
           });
 
-          return updatedData;
+          return updatedData as Todo[];
         });
       })
       .catch(() => {
@@ -118,19 +123,19 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     switch (fillterStatus) {
-      case 'all':
+      case FILTER_STATUS.all:
         setFilteredData(todoData);
         break;
       case 'active':
-        setFilteredData(todoData.filter(el => el.completed === false));
+        setFilteredData(todoData.filter(el => !el.completed));
         break;
       case 'completed':
-        setFilteredData(todoData.filter(el => el.completed === true));
+        setFilteredData(todoData.filter(el => el.completed));
         break;
     }
   }, [fillterStatus, todoData]);
 
-  const hasIncompleteTasks = todoData.some(el => el.completed === false);
+  const hasIncompleteTasks = todoData.some(el => !el.completed);
 
   return (
     <div className="todoapp">
@@ -183,17 +188,17 @@ export const App: React.FC = () => {
             {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
-                onClick={() => setFilterStatus('all')}
+                onClick={() => setFilterStatus(FILTER_STATUS.all)}
                 href="#/"
-                className={`filter__link ${fillterStatus === 'all' && 'selected'}`}
+                className={`filter__link ${fillterStatus === FILTER_STATUS.all && 'selected'}`}
                 data-cy="FilterLinkAll"
               >
                 All
               </a>
 
               <a
-                onClick={() => setFilterStatus('active')}
-                className={`filter__link ${fillterStatus === 'active' && 'selected'}`}
+                onClick={() => setFilterStatus(FILTER_STATUS.active)}
+                className={`filter__link ${fillterStatus === FILTER_STATUS.active && 'selected'}`}
                 href="#/active"
                 data-cy="FilterLinkActive"
               >
@@ -201,8 +206,8 @@ export const App: React.FC = () => {
               </a>
 
               <a
-                onClick={() => setFilterStatus('completed')}
-                className={`filter__link ${fillterStatus === 'completed' && 'selected'}`}
+                onClick={() => setFilterStatus(FILTER_STATUS.completed)}
+                className={`filter__link ${fillterStatus === FILTER_STATUS.completed && 'selected'}`}
                 href="#/completed"
                 data-cy="FilterLinkCompleted"
               >
