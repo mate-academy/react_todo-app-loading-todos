@@ -4,7 +4,7 @@ import { Todo as TodoInterface } from '../types/Todo';
 type Props = {
   todo: TodoInterface;
   deletePost: (v: number) => void;
-  updatePost: (v: number, b: any) => any;
+  updatePost: (v: number, b: TodoInterface) => any;
 };
 
 export const Todo: React.FC<Props> = ({ todo, deletePost, updatePost }) => {
@@ -13,6 +13,7 @@ export const Todo: React.FC<Props> = ({ todo, deletePost, updatePost }) => {
   const { id, title, completed } = todo;
 
   const handleComplied = () => {
+
     updatePost(id, {
       ...todo,
       completed: !completed,
