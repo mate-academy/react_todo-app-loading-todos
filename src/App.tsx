@@ -28,8 +28,6 @@ export const App: React.FC = () => {
   const [fillterStatus, setFilterStatus] = useState(FILTER_STATUS.all);
   const [todoCounter, setTododCounter] = useState<number>(0);
 
-  // const [loading, setLoading] = useState(false);
-
   const [showErrorBox, setShowErrorBox] = useState(false);
 
   const [textOfError, setTextOfError] = useState<ERROR_MESSAGE | null>(null);
@@ -41,8 +39,7 @@ export const App: React.FC = () => {
       .catch(() => {
         setShowErrorBox(true);
         setTextOfError(ERROR_MESSAGE.serverError);
-      })
-      .finally(() => {});
+      });
   }, []);
 
   function addPost(title: string) {
