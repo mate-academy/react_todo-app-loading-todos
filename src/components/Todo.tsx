@@ -13,7 +13,6 @@ export const Todo: React.FC<Props> = ({ todo, deletePost, updatePost }) => {
   const { id, title, completed } = todo;
 
   const handleComplied = () => {
-
     updatePost(id, {
       ...todo,
       completed: !completed,
@@ -43,15 +42,23 @@ export const Todo: React.FC<Props> = ({ todo, deletePost, updatePost }) => {
   };
 
   return (
-    <div data-cy="Todo" className={`todo ${completed && 'completed'}`}>
-      <label onClick={handleComplied} className="todo__status-label">
+    <div data-cy="Todo" className={`todo ${completed ? 'completed' : ''}`}>
+      <label
+        onClick={handleComplied}
+        className="todo__status-label"
+        htmlFor={`todo-checkbox-${id}`}
+      >
+        {/* Add the input element */}
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          id={`todo-checkbox-${id}`}
           checked={completed}
           onChange={handleComplied}
         />
+        {/* Add the custom checkbox */}
+        <span className="custom-checkbox" />
       </label>
 
       {isEditing ? (
@@ -84,7 +91,7 @@ export const Todo: React.FC<Props> = ({ todo, deletePost, updatePost }) => {
         ×
       </button>
 
-      <div data-cy="TodoLoader" className={`modal overlay `}>
+      <div data-cy="TodoLoader" className={`modal overlay`}>
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
