@@ -6,14 +6,31 @@ import { Footer } from './Components/Footer/Footer';
 import { ErrorMessage } from './Components/ErrorMessage/ErrorMessage';
 
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
+
 import { getTodos, createTodo, deleteTodo } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [filter, setFilter] = useState<string>('all');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const areAllTodosCompleted = todos.every(todo => todo.completed === true);
+
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+
+  const handleFilter = (filteringCriteria: string) => {
+    switch (filteringCriteria) {
+      case 'completed':
+        setFilter(Filter.Completed);
+        break;
+      case 'active':
+        setFilter(Filter.Active);
+        break;
+      default:
+        setFilter(Filter.All);
+        break;
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,14 +60,16 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header areAllTodosCompleted={areAllTodosCompleted} onAdd={onAdd} />
-        <TodoList
-          isLoading={isLoading}
-          todos={todos}
-          filter={filter}
-          onDelete={onDelete}
-        />
         {todos.length !== 0 && (
-          <Footer todos={todos} setFilter={setFilter} filter={filter} />
+          <>
+            <TodoList
+              isLoading={isLoading}
+              todos={todos}
+              filter={filter}
+              onDelete={onDelete}
+            />
+            <Footer todos={todos} handleFilter={handleFilter} filter={filter} />
+          </>
         )}
       </div>
 

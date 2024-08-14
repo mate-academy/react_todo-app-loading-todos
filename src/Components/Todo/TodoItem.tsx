@@ -15,6 +15,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
+  const { id, completed, title } = todo;
+
+  const handleTriggerEdit = () => {
+    setIsEditing(prevState => !prevState);
+  };
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditTitle(e.target.value);
@@ -30,20 +35,20 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   });
 
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={`todo ${completed ? 'completed' : ''}`}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label className="todo__status-label" htmlFor={`todoStatus-${todo.id}`}>
+      <label className="todo__status-label" htmlFor={`todoStatus-${id}`}>
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          id={`todoStatus-${todo.id}`}
-          checked={todo.completed}
+          id={`todoStatus-${id}`}
+          checked={completed}
         />
       </label>
 
       {isEditing ? (
-        <form onSubmit={handleSave} id={`todoStatus-${todo.id}`}>
+        <form onSubmit={handleSave} id={`todoStatus-${id}`}>
           <input
             data-cy="TodoTitleField"
             type="text"
@@ -58,15 +63,15 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => setIsEditing(true)}
+            onDoubleClick={() => handleTriggerEdit()}
           >
-            {todo.title}
+            {title}
           </span>
           <button
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
-            onClick={() => onDelete(todo.id)}
+            onClick={() => onDelete(id)}
           >
             ×
           </button>

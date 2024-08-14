@@ -25,12 +25,12 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
         className={`todoapp__toggle-all ${areAllTodosCompleted ? 'active' : ''}`}
         data-cy="ToggleAllButton"
       />
+
       <form onSubmit={addToDo}>
         <input
           data-cy="NewTodoField"

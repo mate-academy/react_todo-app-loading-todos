@@ -1,12 +1,17 @@
 import { Todo } from '../../types/Todo';
+import { Filter } from '../../types/Filter';
 
 type FooterProps = {
-  setFilter: (filter: string) => void;
+  handleFilter: (filteringCriteria: string) => void;
   todos: Todo[];
   filter: string;
 };
 
-export const Footer: React.FC<FooterProps> = ({ setFilter, todos, filter }) => {
+export const Footer: React.FC<FooterProps> = ({
+  handleFilter,
+  todos,
+  filter,
+}) => {
   const noCompletedTodos = todos.filter(todo => !todo.completed).length === 0;
 
   const getNumber = () => {
@@ -20,32 +25,17 @@ export const Footer: React.FC<FooterProps> = ({ setFilter, todos, filter }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </a>
+        {Object.values(Filter).map(filterValue => (
+          <a
+            key={filterValue}
+            href={`#/${filterValue}`}
+            className={`filter__link ${filter === filterValue ? 'selected' : ''}`}
+            data-cy={`FilterLink${filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}`}
+            onClick={() => handleFilter(filterValue)}
+          >
+            {filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
+          </a>
+        ))}
       </nav>
 
       <button
