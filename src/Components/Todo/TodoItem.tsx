@@ -35,7 +35,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   });
 
   return (
-    <div data-cy="Todo" className={`todo ${completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label" htmlFor={`todoStatus-${id}`}>
         <input
@@ -63,7 +63,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => handleTriggerEdit()}
+            onDoubleClick={handleTriggerEdit}
           >
             {title}
           </span>

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useState } from 'react';
 
 type HeaderProps = {
@@ -27,7 +28,9 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="todoapp__header">
       <button
         type="button"
-        className={`todoapp__toggle-all ${areAllTodosCompleted ? 'active' : ''}`}
+        className={classNames('todoapp__toggle-all', {
+          active: areAllTodosCompleted,
+        })}
         data-cy="ToggleAllButton"
       />
 

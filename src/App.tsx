@@ -14,22 +14,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const areAllTodosCompleted = todos.every(todo => todo.completed === true);
+  const areAllTodosCompleted = todos.every(todo => todo.completed);
 
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
-  const handleFilter = (filteringCriteria: string) => {
-    switch (filteringCriteria) {
-      case 'completed':
-        setFilter(Filter.Completed);
-        break;
-      case 'active':
-        setFilter(Filter.Active);
-        break;
-      default:
-        setFilter(Filter.All);
-        break;
-    }
+  const handleFilter = (filteringCriteria: Filter) => {
+    setFilter(filteringCriteria);
   };
 
   useEffect(() => {
@@ -60,7 +50,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header areAllTodosCompleted={areAllTodosCompleted} onAdd={onAdd} />
-        {todos.length !== 0 && (
+        {!!todos.length && (
           <>
             <TodoList
               isLoading={isLoading}

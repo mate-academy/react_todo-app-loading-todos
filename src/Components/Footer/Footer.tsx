@@ -1,8 +1,9 @@
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
+import classNames from 'classnames';
 
 type FooterProps = {
-  handleFilter: (filteringCriteria: string) => void;
+  handleFilter: (filteringCriteria: Filter) => void;
   todos: Todo[];
   filter: string;
 };
@@ -29,7 +30,9 @@ export const Footer: React.FC<FooterProps> = ({
           <a
             key={filterValue}
             href={`#/${filterValue}`}
-            className={`filter__link ${filter === filterValue ? 'selected' : ''}`}
+            className={classNames('filter__link ', {
+              selected: filter === filterValue,
+            })}
             data-cy={`FilterLink${filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}`}
             onClick={() => handleFilter(filterValue)}
           >

@@ -7,13 +7,15 @@ type ErrorMessageProps = {
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   errorMessageText,
 }) => {
-  const messageClass = classNames({
-    notification: true,
-    'is-danger': true,
-    'is-light': true,
-    'has-text-weight-normal': true,
-    hidden: errorMessageText === '',
-  });
+  const messageClass = classNames(
+    'notification',
+    'is-danger',
+    'is-light',
+    'has-text-weight-normal',
+    {
+      hidden: errorMessageText === '',
+    },
+  );
 
   return (
     <div data-cy="ErrorNotification" className={messageClass}>
