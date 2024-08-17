@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   deleteTodo,
   getTodos,
@@ -35,11 +35,11 @@ export const TodoList: React.FC<Props> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const cancelEditing = () => {
+  const cancelEditing = useCallback(() => {
     setQuery('');
     setLoadingTodosId([]);
     setEditingTodo(null);
-  };
+  }, [setLoadingTodosId]);
 
   useEffect(() => {
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -54,7 +54,7 @@ export const TodoList: React.FC<Props> = ({
     return () => {
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [cancelEditing]);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -69,7 +69,7 @@ export const TodoList: React.FC<Props> = ({
     };
 
     fetchTodos();
-  }, []);
+  }, [setErrorMessage, setTodos]);
 
   const handleOnClickDelete = async (todoForDelate: Todo) => {
     addIdToLoad(todoForDelate.id);
@@ -144,10 +144,6 @@ export const TodoList: React.FC<Props> = ({
     try {
       addIdToLoad(todoForChange.id);
       await updateTodoStatus(todoForChange.id, !todoForChange.completed);
-    } catch (error) {
-      setErrorMessage('Unable to update a todo');
-      throw error;
-    } finally {
       setTodos(prevTodos =>
         prevTodos.map(todo =>
           todo.id === todoForChange.id
@@ -155,6 +151,10 @@ export const TodoList: React.FC<Props> = ({
             : todo,
         ),
       );
+    } catch (error) {
+      setErrorMessage('Unable to update a todo');
+      throw error;
+    } finally {
       setLoadingTodosId([]);
     }
   };
@@ -187,11 +187,12 @@ export const TodoList: React.FC<Props> = ({
         >
           <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
             <input
+              id={`todo-${todo.id}`}
               aria-labelledby={`todo-${todo.id}`}
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed}
               onChange={() => handleOnChangeStatus(todo)}
             />
           </label>

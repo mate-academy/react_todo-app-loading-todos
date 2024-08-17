@@ -88,10 +88,7 @@ export const Header: React.FC<Props> = ({
         setLoadingTodosId(prev => [...prev, ...activeTodosId]);
         await Promise.all(activeTodosId.map(id => updateTodoStatus(id, false)));
       }
-    } catch (error) {
-      setErrorMessage('Unable to update a todo');
-      throw error;
-    } finally {
+
       setTodos(prevTodos =>
         prevTodos.map(todo =>
           activeTodosId.includes(todo.id)
@@ -99,6 +96,10 @@ export const Header: React.FC<Props> = ({
             : todo,
         ),
       );
+    } catch (error) {
+      setErrorMessage('Unable to update a todo');
+      throw error;
+    } finally {
       setLoadingTodosId([]);
     }
   };
@@ -110,14 +111,16 @@ export const Header: React.FC<Props> = ({
   return (
     <header className="todoapp__header">
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className={cn('todoapp__toggle-all', {
-          active: todos.every(todo => todo.completed),
-        })}
-        data-cy="ToggleAllButton"
-        onClick={handleOnClick}
-      />
+      {todos.length !== 0 && (
+        <button
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: todos.every(todo => todo.completed),
+          })}
+          data-cy="ToggleAllButton"
+          onClick={handleOnClick}
+        />
+      )}
 
       <form onSubmit={handleOnSubmit}>
         <input
