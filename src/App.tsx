@@ -115,7 +115,7 @@ export const App: React.FC = () => {
                     className={cn('filter__link', {
                       selected: activeFilter === method,
                     })}
-                    data-cy="FilterLinkAll"
+                    data-cy={`FilterLink${method}`}
                     onClick={() => handleOnClickFilter(method)}
                     key={method}
                   >
