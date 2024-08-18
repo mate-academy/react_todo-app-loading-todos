@@ -27,6 +27,7 @@ export const Header: React.FC<Props> = ({
   const [query, setQuery] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const hasLoadingTodos = loadingTodosId.length > 0;
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -36,7 +37,7 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
     setErrorMessage('');
 
-    if (!query) {
+    if (!query.trim()) {
       return setErrorMessage('Title should not be empty');
     }
 
@@ -131,7 +132,7 @@ export const Header: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={query}
           onChange={handleOnChange}
-          disabled={loadingTodosId.length > 0}
+          disabled={hasLoadingTodos}
         />
       </form>
     </header>

@@ -179,68 +179,78 @@ export const TodoList: React.FC<Props> = ({
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => (
-        <div
-          data-cy="Todo"
-          className={cn('todo', { completed: todo.completed })}
-          key={todo.id}
-        >
-          <label className="todo__status-label" htmlFor={`todo-${todo.id}`}>
-            <input
-              id={`todo-${todo.id}`}
-              aria-labelledby={`todo-${todo.id}`}
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              checked={todo.completed}
-              onChange={() => handleOnChangeStatus(todo)}
-            />
-          </label>
+      {filteredTodos.map(({ id, userId, title, completed }) => {
+        const isTodoLoading = loadingTodosId.includes(id);
 
-          {editingTodo?.id !== todo.id ? (
-            <>
-              <span
-                data-cy="TodoTitle"
-                className="todo__title"
-                onDoubleClick={() => handleOnDoubleClick(todo)}
-              >
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-                onClick={() => handleOnClickDelete(todo)}
-              >
-                ×
-              </button>
-            </>
-          ) : (
-            <form onSubmit={handleOnSubmit}>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                ref={inputRef}
-                value={query}
-                onChange={handleOnChange}
-                onBlur={handleOnBlur}
-              />
-            </form>
-          )}
-
+        return (
           <div
-            data-cy="TodoLoader"
-            className={cn('modal', 'overlay', {
-              'is-active': loadingTodosId.includes(todo.id),
-            })}
+            data-cy="Todo"
+            className={cn('todo', { completed: completed })}
+            key={id}
           >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
+            <label className="todo__status-label" htmlFor={`todo-${id}`}>
+              <input
+                id={`todo-${id}`}
+                aria-labelledby={`todo-${id}`}
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                checked={completed}
+                onChange={() =>
+                  handleOnChangeStatus({ id, userId, title, completed })
+                }
+              />
+            </label>
+
+            {editingTodo?.id !== id ? (
+              <>
+                <span
+                  data-cy="TodoTitle"
+                  className="todo__title"
+                  onDoubleClick={() =>
+                    handleOnDoubleClick({ id, userId, title, completed })
+                  }
+                >
+                  {title}
+                </span>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                  onClick={() =>
+                    handleOnClickDelete({ id, userId, title, completed })
+                  }
+                >
+                  ×
+                </button>
+              </>
+            ) : (
+              <form onSubmit={handleOnSubmit}>
+                <input
+                  data-cy="TodoTitleField"
+                  type="text"
+                  className="todo__title-field"
+                  placeholder="Empty todo will be deleted"
+                  ref={inputRef}
+                  value={query}
+                  onChange={handleOnChange}
+                  onBlur={handleOnBlur}
+                />
+              </form>
+            )}
+
+            <div
+              data-cy="TodoLoader"
+              className={cn('modal', 'overlay', {
+                'is-active': isTodoLoading,
+              })}
+            >
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       {tempTodo !== null && <TodoItem tempTodo={tempTodo} />}
     </section>
   );

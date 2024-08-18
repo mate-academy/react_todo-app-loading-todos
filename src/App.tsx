@@ -13,13 +13,15 @@ import { TodoList } from './components/TodoList/TodoList';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState(FilterMethods.All);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingTodosId, setLoadingTodosId] = useState<number[]>([]);
 
   const addIdToLoad = (newId: number) => {
     setLoadingTodosId(prev => [...prev, newId]);
   };
+
+  const hasCompletedTodos = todos.find(todo => todo.completed) !== undefined;
 
   useEffect(() => {
     if (errorMessage) {
@@ -63,6 +65,8 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleOnClickHideError = () => setErrorMessage('');
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -104,45 +108,28 @@ export const App: React.FC = () => {
 
             {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: activeFilter === FilterMethods.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => handleOnClickFilter(FilterMethods.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: activeFilter === FilterMethods.ACTIVE,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => handleOnClickFilter(FilterMethods.ACTIVE)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: activeFilter === FilterMethods.COMPLETED,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => handleOnClickFilter(FilterMethods.COMPLETED)}
-              >
-                Completed
-              </a>
+              {Object.values(FilterMethods).map(method => {
+                return (
+                  <a
+                    href="#/"
+                    className={cn('filter__link', {
+                      selected: activeFilter === method,
+                    })}
+                    data-cy="FilterLinkAll"
+                    onClick={() => handleOnClickFilter(method)}
+                    key={method}
+                  >
+                    {method}
+                  </a>
+                );
+              })}
             </nav>
             <button
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
               onClick={handleOnClickCLearAll}
-              disabled={todos.find(todo => todo.completed) === undefined}
+              disabled={!hasCompletedTodos}
             >
               Clear completed
             </button>
@@ -165,7 +152,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setErrorMessage('')}
+          onClick={handleOnClickHideError}
         />
         {errorMessage}
       </div>
