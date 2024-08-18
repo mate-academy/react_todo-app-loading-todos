@@ -131,6 +131,7 @@ export const App: React.FC = () => {
                 className={`todo ${todo.completed ? 'completed' : ''}`}
               >
                 <label className="todo__status-label">
+                  <span className="todo__status-text">2 items left</span>
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
