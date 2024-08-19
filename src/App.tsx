@@ -9,22 +9,22 @@ import { Todo } from './types/Todo';
 
 const USER_ID = 11926;
 
-enum FilterType {
+enum Filter {
   All = 'all',
   Active = 'active',
   Completed = 'completed',
 }
 
-const filterTodos = (todos: Todo[], filter: FilterType) => {
+const filterTodos = (todos: Todo[], filter: Filter) => {
   return todos.filter(todo => {
     switch (filter) {
-      case FilterType.All:
+      case Filter.All:
         return true;
 
-      case FilterType.Active:
+      case Filter.Active:
         return !todo.completed;
 
-      case FilterType.Completed:
+      case Filter.Completed:
         return todo.completed;
 
       default:
@@ -49,9 +49,7 @@ const handleErrorMessage = (
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [currentFilter, setCurrentFilter] = useState<FilterType>(
-    FilterType.All,
-  );
+  const [currentFilter, setCurrentFilter] = useState<Filter>(Filter.All);
   const [isEditing, setIsEditing] = useState<Record<number, boolean>>({});
 
   const toggleEditing = (id: number) => {
@@ -174,7 +172,7 @@ export const App: React.FC = () => {
 
         {shouldShowFooter && (
           <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="todosCounter">
+            <span className="todo-count" data-cy="TodosCounter">
               {`${uncompletedCount} ${
                 uncompletedCount === 1 ? 'item' : 'items'
               } left`}
@@ -183,30 +181,30 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: currentFilter === FilterType.All,
+                  selected: currentFilter === Filter.All,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setCurrentFilter(FilterType.All)}
+                onClick={() => setCurrentFilter(Filter.All)}
               >
                 All
               </a>
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: currentFilter === FilterType.Active,
+                  selected: currentFilter === Filter.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setCurrentFilter(FilterType.Active)}
+                onClick={() => setCurrentFilter(Filter.Active)}
               >
                 Active
               </a>
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: currentFilter === FilterType.Completed,
+                  selected: currentFilter === Filter.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setCurrentFilter(FilterType.Completed)}
+                onClick={() => setCurrentFilter(Filter.Completed)}
               >
                 Completed
               </a>
