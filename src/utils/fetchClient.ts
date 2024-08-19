@@ -17,7 +17,7 @@ function request<T, D = undefined>(
 ): Promise<T> {
   const options: RequestInit = { method };
 
-  if (data !== undefined) {
+  if (data) {
     // We add body and Content-Type only for the requests with data
     options.body = JSON.stringify(data);
     options.headers = {

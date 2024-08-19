@@ -1,4 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -44,13 +48,10 @@ const handleErrorMessage = (
 
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const [currentFilter, setCurrentFilter] = useState<FilterType>(
     FilterType.All,
   );
-
   const [isEditing, setIsEditing] = useState<Record<number, boolean>>({});
 
   const toggleEditing = (id: number) => {
@@ -87,17 +88,11 @@ export const App: React.FC = () => {
 
   const filteredTodos = filterTodos(todos, currentFilter);
 
-  const uncompletedCount = todos.filter((todo: Todo) => !todo.completed).length;
+  const uncompletedCount = todos.filter(todo => !todo.completed).length;
 
-  const allTodosAreActive = todos.every((todo: Todo) => !todo.completed);
+  const allTodosAreActive = todos.every(todo => !todo.completed);
 
-  const shouldShowFooter =
-    todos.length > 0 &&
-    (currentFilter === FilterType.All ||
-      (currentFilter === FilterType.Active && uncompletedCount > 0) ||
-      (currentFilter === FilterType.Completed &&
-        uncompletedCount < todos.length) ||
-      allTodosAreActive);
+  const shouldShowFooter = todos.length > 0;
 
   return (
     <div className="todoapp">
@@ -124,42 +119,41 @@ export const App: React.FC = () => {
 
         {filteredTodos.length > 0 && (
           <section className="todoapp__main" data-cy="TodoList">
-            {filteredTodos.map(todo => (
+            {filteredTodos.map(({ id, completed, title }) => (
               <div
-                key={todo.id}
+                key={id}
                 data-cy="Todo"
-                className={`todo ${todo.completed ? 'completed' : ''}`}
+                className={classNames('todo', { completed })}
               >
                 <label className="todo__status-label">
-                  <span className="todo__status-text">2 items left</span>
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked={todo.completed}
+                    checked={completed}
                   />
                 </label>
-                {isEditing[todo.id] ? (
+                {isEditing[id] ? (
                   <input
                     data-cy="TodoTitleField"
                     type="text"
                     className="todo__title-field"
                     placeholder="Empty todo will be deleted"
-                    value={todo.title}
+                    value={title}
                   />
                 ) : (
                   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                   <span
                     data-cy="TodoTitle"
                     className="todo__title"
-                    onClick={() => toggleEditing(todo.id)}
+                    onClick={() => toggleEditing(id)}
                     onKeyDown={event => {
                       if (event.key === 'Enter') {
-                        toggleEditing(todo.id);
+                        toggleEditing(id);
                       }
                     }}
                   >
-                    {todo.title}
+                    {title}
                   </span>
                 )}
                 <button
@@ -180,16 +174,17 @@ export const App: React.FC = () => {
 
         {shouldShowFooter && (
           <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {uncompletedCount}
-              {uncompletedCount === 1 ? 'item' : 'items'} left
+            <span className="todo-count" data-cy="todosCounter">
+              {`${uncompletedCount} ${
+                uncompletedCount === 1 ? 'item' : 'items'
+              } left`}
             </span>
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link ${
-                  currentFilter === FilterType.All ? 'selected' : ''
-                }`}
+                className={classNames('filter__link', {
+                  selected: currentFilter === FilterType.All,
+                })}
                 data-cy="FilterLinkAll"
                 onClick={() => setCurrentFilter(FilterType.All)}
               >
@@ -197,9 +192,9 @@ export const App: React.FC = () => {
               </a>
               <a
                 href="#/active"
-                className={`filter__link ${
-                  currentFilter === FilterType.Active ? 'selected' : ''
-                }`}
+                className={classNames('filter__link', {
+                  selected: currentFilter === FilterType.Active,
+                })}
                 data-cy="FilterLinkActive"
                 onClick={() => setCurrentFilter(FilterType.Active)}
               >
@@ -207,9 +202,9 @@ export const App: React.FC = () => {
               </a>
               <a
                 href="#/completed"
-                className={`filter__link ${
-                  currentFilter === FilterType.Completed ? 'selected' : ''
-                }`}
+                className={classNames('filter__link', {
+                  selected: currentFilter === FilterType.Completed,
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setCurrentFilter(FilterType.Completed)}
               >
@@ -231,9 +226,10 @@ export const App: React.FC = () => {
 
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${
-          errorMessage ? '' : 'hidden'
-        }`}
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
         <button
           data-cy="HideErrorButton"
