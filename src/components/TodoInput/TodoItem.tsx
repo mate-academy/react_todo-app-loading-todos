@@ -6,7 +6,7 @@ type Props = {
   todo: Todo;
 };
 
-export const TodoInput: React.FC<Props> = ({ todo }) => (
+export const TodoItem: React.FC<Props> = ({ todo }) => (
   <div
     data-cy="Todo"
     className={classNames('todo', { completed: todo.completed })}
