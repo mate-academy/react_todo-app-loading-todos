@@ -4,15 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
-
-type Filter = 'All' | 'Active' | 'Completed';
-type ErrorMessages = {
-  load: string;
-  title: string;
-  add: string;
-  delete: string;
-  update: string;
-};
+import { Footer } from './components/Footer';
+import { ErrorMessages } from './types/ErrorMessages';
+import { Filter } from './types/Filter';
+import { getFilteredList } from './utils/getFilteredList';
 
 const errorMessages: ErrorMessages = {
   load: 'Unable to load todos',
@@ -25,6 +20,7 @@ const errorMessages: ErrorMessages = {
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[] | null>(null);
   const [filter, setFilter] = useState<Filter>('All');
+
   const [error, setError] = useState<keyof ErrorMessages | null>(null);
 
   useEffect(() => {
@@ -49,31 +45,8 @@ export const App: React.FC = () => {
     setError(null);
   }
 
-  function handleFilter(event: React.MouseEvent<HTMLAnchorElement>) {
-    event.preventDefault();
-    const newFilter = event.currentTarget.textContent as Filter;
-
-    setFilter(newFilter);
-  }
-
-  const getFilteredList = (currentFilter: Filter): Todo[] | null => {
-    if (currentFilter === 'All') {
-      return todosList;
-    }
-
-    return (
-      todosList?.filter(({ completed }) => {
-        if (currentFilter === 'Active') {
-          return !completed;
-        }
-
-        return completed;
-      }) || null
-    );
-  };
-
-  const filteredList = getFilteredList(filter);
-  const activeFilteredList = getFilteredList('Active');
+  const filteredList = getFilteredList(filter, todosList);
+  const activeListLength = getFilteredList('Active', todosList)?.length;
 
   function handleAddingTodo(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
@@ -145,59 +118,14 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {/* Hide the footer if there are no todos */}
         {todosList && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {activeFilteredList?.length} items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', { selected: filter === 'All' })}
-                data-cy="FilterLinkAll"
-                onClick={handleFilter}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filter === 'Active',
-                })}
-                data-cy="FilterLinkActive"
-                onClick={handleFilter}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filter === 'Completed',
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={handleFilter}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            onSetFilter={setFilter}
+            activeListLength={activeListLength}
+            filter={filter}
+          />
         )}
       </div>
-
       <div
         data-cy="ErrorNotification"
         className={cn(
