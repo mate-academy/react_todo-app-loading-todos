@@ -15,18 +15,21 @@ export const App: React.FC = () => {
   );
   const [isErrorHidden, setIsErrorHidden] = useState(true);
 
-  const areTodosExist = todos.length !== 0;
-  const notCompletedTodos = todos.filter(todo => !todo.completed).length;
+  const areTodosExist = !!todos?.length;
+  const notCompletedTodosCount = todos?.filter(todo => !todo.completed).length;
 
-  let filteredTodos = [...todos];
-
-  if (selectedTodos === FilterTypes.Active) {
-    filteredTodos = filteredTodos.filter(todo => !todo.completed);
+  function filterTodos(initTodos: Todo[], filterType: FilterTypes) {
+    switch (filterType) {
+      case FilterTypes.Active:
+        return initTodos.filter(todo => !todo.completed);
+      case FilterTypes.Completed:
+        return initTodos.filter(todo => todo.completed);
+      default:
+        return initTodos;
+    }
   }
 
-  if (selectedTodos === FilterTypes.Completed) {
-    filteredTodos = filteredTodos.filter(todo => todo.completed);
-  }
+  const filteredTodos = filterTodos(todos, selectedTodos);
 
   useEffect(() => {
     getTodos()
@@ -75,7 +78,7 @@ export const App: React.FC = () => {
         {areTodosExist && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {notCompletedTodos} items left
+              {notCompletedTodosCount} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
