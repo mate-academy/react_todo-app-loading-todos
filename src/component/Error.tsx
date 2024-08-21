@@ -4,16 +4,9 @@ import React from 'react';
 type Props = {
   errorMessage: boolean;
   setErrorMessage: (err: boolean) => void;
-  // isHidden: boolean;
 };
 
-export const Error: React.FC<Props> = ({
-  errorMessage,
-  setErrorMessage,
-  // isHidden,
-}) => {
-  // console.log(errorMessage);
-
+export const Error: React.FC<Props> = ({ errorMessage, setErrorMessage }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -31,7 +24,6 @@ export const Error: React.FC<Props> = ({
         className="delete"
         onClick={() => setErrorMessage(true)}
       />
-      {/* show only one message at a time */}
       Unable to load todos
     </div>
   );

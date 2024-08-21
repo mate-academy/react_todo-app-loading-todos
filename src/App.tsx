@@ -1,24 +1,22 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
-import { FilterType, Todo } from './types/Todo';
-// import { UserWarning } from './UserWarning';
-// import { USER_ID } from './api/todos';
+import { FilterStatusType, Todo } from './types/Todo';
 import * as tadoService from './api/todos';
 import classNames from 'classnames';
 import { Footer } from './component/Footer';
 import { Error } from './component/Error';
 import { UserWarning } from './UserWarning';
 
-function todoInUse(todo: Todo[], filter: FilterType) {
+function todoInUse(todo: Todo[], filter: FilterStatusType) {
   const todoUsed = [...todo];
 
   switch (filter) {
-    case 'all':
+    case FilterStatusType.All:
       return todoUsed;
-    case 'active':
+    case FilterStatusType.Active:
       return todoUsed.filter(todoItem => todoItem.completed === false);
-    case 'completed':
+    case FilterStatusType.Completed:
       return todoUsed.filter(todoItem => todoItem.completed === true);
     default:
       return todoUsed;
@@ -27,12 +25,11 @@ function todoInUse(todo: Todo[], filter: FilterType) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterBy, setFilterBy] = useState<FilterType>('all');
-  // const [taskText, setTaskText] = useState('');
+  const [filterBy, setFilterBy] = useState<FilterStatusType>(
+    FilterStatusType.All,
+  );
 
   const [errorMessage, setErrorMessage] = useState(true);
-
-  // const userId = tadoService.USER_ID;
 
   useEffect(() => {
     tadoService
@@ -55,32 +52,24 @@ export const App: React.FC = () => {
 
   const tasks = todoInUse(todos, filterBy);
 
-  // const handleTaskText = (task: string) => {
-  //   setTaskText(task);
-  // };
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
             className="todoapp__toggle-all active"
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              // value={taskText}
-              // onChange={event => handleTaskText(event.target.value)}
             />
           </form>
         </header>
@@ -125,14 +114,7 @@ export const App: React.FC = () => {
           <Footer setFilterBy={setFilterBy} todos={todos} filterBy={filterBy} />
         )}
       </div>
-
-      {/* DON'T use conditional rendering to hide the no  tification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <Error
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-        // isHidden={errorMessage !== null}
-      />
+      <Error errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
     </div>
   );
 };
