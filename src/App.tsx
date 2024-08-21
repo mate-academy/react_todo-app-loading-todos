@@ -5,29 +5,21 @@ import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
 import { Footer } from './components/Footer';
-import { ErrorMessages } from './types/ErrorMessages';
 import { Filter } from './types/Filter';
 import { getFilteredList } from './utils/getFilteredList';
-
-const errorMessages: ErrorMessages = {
-  load: 'Unable to load todos',
-  title: 'Title should not be empty',
-  add: 'Unable to delete a todo',
-  delete: 'Unable to delete a todo',
-  update: 'Unable to update a todo',
-};
+import { errorMessages, ErrorMessages } from './types/ErrorMessages';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[] | null>(null);
-  const [filter, setFilter] = useState<Filter>('All');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
 
-  const [error, setError] = useState<keyof ErrorMessages | null>(null);
+  const [error, setError] = useState<ErrorMessages | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(data => setTodosList(data))
       .catch(() => {
-        setError('load');
+        setError(errorMessages.load);
       });
   }, []);
 
@@ -46,13 +38,13 @@ export const App: React.FC = () => {
   }
 
   const filteredList = getFilteredList(filter, todosList);
-  const activeListLength = getFilteredList('Active', todosList)?.length;
+  const activeListLength = getFilteredList(Filter.active, todosList)?.length;
 
   function handleAddingTodo(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (!event.currentTarget.value) {
-        setError('title');
+        setError(errorMessages.title);
       }
     }
   }
@@ -118,7 +110,7 @@ export const App: React.FC = () => {
           ))}
         </section>
 
-        {todosList && (
+        {Array.isArray(todosList) && todosList.length > 0 && (
           <Footer
             onSetFilter={setFilter}
             activeListLength={activeListLength}
@@ -142,7 +134,7 @@ export const App: React.FC = () => {
           className="delete"
           onClick={handleHideError}
         />
-        {error && errorMessages[error]}
+        {error}
       </div>
     </div>
   );

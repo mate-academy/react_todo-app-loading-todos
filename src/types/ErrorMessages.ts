@@ -1,7 +1,9 @@
-export type ErrorMessages = {
-  load: string;
-  title: string;
-  add: string;
-  delete: string;
-  update: string;
-};
+export const errorMessages = {
+  load: 'Unable to load todos',
+  title: 'Title should not be empty',
+  add: 'Unable to delete a todo',
+  delete: 'Unable to delete a todo',
+  update: 'Unable to update a todo',
+} as const;
+
+export type ErrorMessages = (typeof errorMessages)[keyof typeof errorMessages];
