@@ -1,7 +1,7 @@
 import React from 'react';
 import { Options } from '../../types/Options';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { FooterFilter } from '../FooterFilter';
 
 type Props = {
   filteredTodo: Todo[];
@@ -21,40 +21,7 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       {/* Active link should have the 'selected' class */}
-      <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: selected === Options.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setSelected(Options.All)}
-        >
-          {Options.All}
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: selected === Options.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setSelected(Options.Active)}
-        >
-          {Options.Active}
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: selected === Options.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setSelected(Options.Completed)}
-        >
-          {Options.Completed}
-        </a>
-      </nav>
+      <FooterFilter selected={selected} setSelected={setSelected} />
 
       {/* this button should be disabled if there are no completed todos */}
       <button
