@@ -9,13 +9,13 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({ setFilterBy, todos, filterBy }) => {
-  const leftTodosCount = todos.filter(todo => !todo.completed).length;
+  const uncompletedTaskCount = todos.filter(todo => !todo.completed).length;
   const completedTaskCount = todos.filter(todo => todo.completed).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {leftTodosCount} items left
+        {uncompletedTaskCount} items left
       </span>
       <nav className="filter" data-cy="Filter">
         <a

@@ -1,23 +1,19 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { FilterStatusType, Todo } from './types/Todo';
 import * as tadoService from './api/todos';
 import { Footer } from './component/Footer';
 import { Error } from './component/Error';
 import { UserWarning } from './UserWarning';
-import { TodoItem } from './component/Todo';
+import { ListComponent } from './component/ListComponent';
 
-function filterTodos(todoArr: Todo[], filter: FilterStatusType) {
-  const todos = [...todoArr];
-
+function filterTodos(todos: Todo[], filter: FilterStatusType) {
   switch (filter) {
     case FilterStatusType.All:
       return todos;
     case FilterStatusType.Active:
-      return todos.filter(todo => todo.completed === false);
+      return todos.filter(todo => !todo.completed);
     case FilterStatusType.Completed:
-      return todos.filter(todo => todo.completed === true);
+      return todos.filter(todo => todo.completed);
     default:
       return todos;
   }
@@ -28,21 +24,22 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterStatusType>(
     FilterStatusType.All,
   );
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [hiddenError, setHiddenError] = useState(true);
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
 
   useEffect(() => {
     tadoService
       .getTodos()
       .then(setTodos)
-      .catch(error => {
-        setHiddenError(false);
-        alert(error);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setHiddenError(true);
-        }, 3000);
+      .catch(() => {
+        handleError('Failed to load todos');
       });
   }, []);
 
@@ -74,16 +71,13 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {tasks.map(todo => (
-            <TodoItem todo={todo} key={todo.id} />
-          ))}
-        </section>
+        <ListComponent todos={tasks} />
         {todos.length > 0 && (
           <Footer setFilterBy={setFilterBy} todos={todos} filterBy={filterBy} />
         )}
       </div>
-      <Error hiddenError={hiddenError} setHiddenError={setHiddenError} />
+
+      <Error message={errorMessage} onClose={() => setErrorMessage('')} />
     </div>
   );
 };

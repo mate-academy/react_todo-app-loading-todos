@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import React from 'react';
 
 type Props = {
-  hiddenError: boolean;
-  setHiddenError: (err: boolean) => void;
+  message: string;
+  onClose: () => void;
 };
 
-export const Error: React.FC<Props> = ({ hiddenError, setHiddenError }) => {
+export const Error: React.FC<Props> = ({ message, onClose }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,16 +15,16 @@ export const Error: React.FC<Props> = ({ hiddenError, setHiddenError }) => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: hiddenError },
+        { hidden: !message },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setHiddenError(true)}
+        onClick={onClose}
       />
-      Unable to load todos
+      {message}
     </div>
   );
 };
