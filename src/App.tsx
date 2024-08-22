@@ -36,12 +36,12 @@ export const App: React.FC = () => {
       .getTodos()
       .then(setTodos)
       .catch(error => {
-        setErrorMessage(false);
+        setHiddenError(false);
         alert(error);
       })
       .finally(() => {
         setTimeout(() => {
-          setErrorMessage(true);
+          setHiddenError(true);
         }, 3000);
       });
   }, []);
