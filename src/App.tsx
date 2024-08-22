@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
@@ -8,37 +6,40 @@ import { Footer } from './components/footer/footer';
 import { ToDoList } from './components/todoList/todoList';
 import { Header } from './components/header/header';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './enums/TodoStatus';
+import { filterTodos } from './utils/todoHelpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.All);
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => {
-        switch (status) {
-          case 'all':
-            setTodos(todosFromServer);
-            break;
-          case 'active':
-            setTodos(todosFromServer.filter(todo => !todo.completed));
-            break;
+      .then(todosFromServer => setTodos(todosFromServer))
+      .catch(() => handleError('Unable to load todos'));
+  }, []);
 
-          case 'completed':
-            setTodos(todosFromServer.filter(todo => todo.completed));
-            break;
+  const handleToggle = (id: number) => {
+    setTodos(prevTodos =>
+      prevTodos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
+    );
+  };
 
-          default:
-            setTodos(todosFromServer);
-        }
-      })
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => {
-        setTimeout(() => setErrorMessage(''), 3000);
-      });
-  }, [status]);
+  const handleRemove = (id: number) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
 
+  const filteredTodos = filterTodos(todos, status);
   const leftItems = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
@@ -52,7 +53,11 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <ToDoList list={todos} />
+        <ToDoList
+          list={filteredTodos}
+          onToggle={handleToggle}
+          onRemove={handleRemove}
+        />
 
         {todos.length > 0 && (
           <Footer onClick={setStatus} status={status} leftItems={leftItems} />

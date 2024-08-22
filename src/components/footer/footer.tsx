@@ -1,6 +1,10 @@
+import React from 'react';
+import classNames from 'classnames';
+import { TodoStatus } from '../../enums/TodoStatus';
+
 type Props = {
-  onClick: (status: string) => void;
-  status: string;
+  onClick: (status: TodoStatus) => void;
+  status: TodoStatus;
   leftItems: number;
 };
 
@@ -15,27 +19,33 @@ export const Footer: React.FC<Props> = ({ onClick, status, leftItems }) => {
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${status === 'all' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === TodoStatus.All,
+          })}
           data-cy="FilterLinkAll"
-          onClick={() => onClick('all')}
+          onClick={() => onClick(TodoStatus.All)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link ${status === 'active' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === TodoStatus.Active,
+          })}
           data-cy="FilterLinkActive"
-          onClick={() => onClick('active')}
+          onClick={() => onClick(TodoStatus.Active)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${status === 'completed' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === TodoStatus.Completed,
+          })}
           data-cy="FilterLinkCompleted"
-          onClick={() => onClick('completed')}
+          onClick={() => onClick(TodoStatus.Completed)}
         >
           Completed
         </a>
