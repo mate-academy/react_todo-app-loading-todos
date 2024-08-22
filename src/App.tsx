@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import './styles/index.scss';
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
@@ -70,16 +71,16 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <Header />
+        <TodoList todos={filteredStatus} />
+        {hasTodos && (
+          <Footer
+            todos={todos}
+            hasCompletedTodos={hasCompletedTodos}
+            selectedStatus={selectedStatus}
+            handleSelectedStatus={handleSelectedStatus}
+          />
+        )}
       </div>
-      <TodoList todos={filteredStatus} />
-      {hasTodos && (
-        <Footer
-          todos={todos}
-          hasCompletedTodos={hasCompletedTodos}
-          selectedStatus={selectedStatus}
-          handleSelectedStatus={handleSelectedStatus}
-        />
-      )}
       <TodoError message={error} onCLose={handleErrorClose} />
     </div>
   );
