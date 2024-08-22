@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { FilterStatusType, Todo } from './types/Todo';
 import * as tadoService from './api/todos';
@@ -24,6 +26,8 @@ export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<FilterStatusType>(
     FilterStatusType.All,
   );
+
+  // const [hiddenError, setHiddenError] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleError = (message: string) => {
@@ -76,8 +80,7 @@ export const App: React.FC = () => {
           <Footer setFilterBy={setFilterBy} todos={todos} filterBy={filterBy} />
         )}
       </div>
-
-      <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+      <Error errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
     </div>
   );
 };

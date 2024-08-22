@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import React from 'react';
 
 type Props = {
-  message: string;
-  onClose: () => void;
+  errorMessage: string;
+  setErrorMessage: (err: string) => void;
 };
 
-export const Error: React.FC<Props> = ({ message, onClose }) => {
+export const Error: React.FC<Props> = ({ errorMessage, setErrorMessage }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,16 +15,16 @@ export const Error: React.FC<Props> = ({ message, onClose }) => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !message },
+        { hidden: !errorMessage },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={onClose}
+        onClick={() => setErrorMessage('')}
       />
-      {message}
+      {errorMessage}
     </div>
   );
 };
