@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import React from 'react';
 
 type Props = {
-  errorMessage: boolean;
-  setErrorMessage: (err: boolean) => void;
+  hiddenError: boolean;
+  setHiddenError: (err: boolean) => void;
 };
 
-export const Error: React.FC<Props> = ({ errorMessage, setErrorMessage }) => {
+export const Error: React.FC<Props> = ({ hiddenError, setHiddenError }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,14 +15,14 @@ export const Error: React.FC<Props> = ({ errorMessage, setErrorMessage }) => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: errorMessage },
+        { hidden: hiddenError },
       )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrorMessage(true)}
+        onClick={() => setHiddenError(true)}
       />
       Unable to load todos
     </div>

@@ -3,23 +3,23 @@
 import React, { useEffect, useState } from 'react';
 import { FilterStatusType, Todo } from './types/Todo';
 import * as tadoService from './api/todos';
-import classNames from 'classnames';
 import { Footer } from './component/Footer';
 import { Error } from './component/Error';
 import { UserWarning } from './UserWarning';
+import { TodoItem } from './component/Todo';
 
-function todoInUse(todo: Todo[], filter: FilterStatusType) {
-  const todoUsed = [...todo];
+function filterTodos(todoArr: Todo[], filter: FilterStatusType) {
+  const todos = [...todoArr];
 
   switch (filter) {
     case FilterStatusType.All:
-      return todoUsed;
+      return todos;
     case FilterStatusType.Active:
-      return todoUsed.filter(todoItem => todoItem.completed === false);
+      return todos.filter(todo => todo.completed === false);
     case FilterStatusType.Completed:
-      return todoUsed.filter(todoItem => todoItem.completed === true);
+      return todos.filter(todo => todo.completed === true);
     default:
-      return todoUsed;
+      return todos;
   }
 }
 
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
     FilterStatusType.All,
   );
 
-  const [errorMessage, setErrorMessage] = useState(true);
+  const [hiddenError, setHiddenError] = useState(true);
 
   useEffect(() => {
     tadoService
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const tasks = todoInUse(todos, filterBy);
+  const tasks = filterTodos(todos, filterBy);
 
   return (
     <div className="todoapp">
@@ -76,45 +76,14 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {tasks.map(todo => (
-            <div
-              data-cy="Todo"
-              className={classNames('todo', {
-                completed: todo.completed,
-              })}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                />
-              </label>
-
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
-
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
+            <TodoItem todo={todo} key={todo.id} />
           ))}
         </section>
         {todos.length > 0 && (
           <Footer setFilterBy={setFilterBy} todos={todos} filterBy={filterBy} />
         )}
       </div>
-      <Error errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+      <Error hiddenError={hiddenError} setHiddenError={setHiddenError} />
     </div>
   );
 };
