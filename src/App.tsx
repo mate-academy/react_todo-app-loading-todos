@@ -27,7 +27,6 @@ export const App: React.FC = () => {
     FilterStatusType.All,
   );
 
-  // const [hiddenError, setHiddenError] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleError = (message: string) => {
@@ -43,7 +42,7 @@ export const App: React.FC = () => {
       .getTodos()
       .then(setTodos)
       .catch(() => {
-        handleError('Failed to load todos');
+        handleError('Unable to load todos');
       });
   }, []);
 
