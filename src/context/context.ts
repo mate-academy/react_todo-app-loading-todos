@@ -1,8 +1,11 @@
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { Todo } from '../types/Todo';
 
 interface ContextProps {
-  onSelectInputChange: (id: number, completed: boolean) => void;
   todoLoadingStates: { [key: number]: boolean };
+  setTodoLoading: (id: number, status: boolean) => void;
+  setErrorMessage: (message: string) => void;
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
 }
 
 export const TodoContext = createContext<ContextProps | undefined>(undefined);
