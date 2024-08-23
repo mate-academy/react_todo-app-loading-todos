@@ -20,15 +20,18 @@ export const App: React.FC = () => {
   const filterTodos = (posts: Todo[], option: Options) => {
     switch (option) {
       case Options.Active:
-        return posts.filter(todo => !todo.completed);
+        return posts.filter(post => !post.completed);
 
       case Options.Completed:
-        return posts.filter(todo => todo.completed);
+        return posts.filter(post => post.completed);
 
       default:
         return posts;
     }
   };
+
+  const todoFilterSelectedOptions = filterTodos(todos, selectedOption);
+  const todoFilterOptionActive = filterTodos(todos, Options.Active);
 
   const clearError = useCallback(() => {
     setErrorMessage(null);
@@ -105,13 +108,13 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header filteredTodo={filterTodos(todos, selectedOption)} />
+        <Header filteredTodo={todoFilterSelectedOptions} />
 
-        <TodoList filteredTodo={filterTodos(todos, selectedOption)} />
+        <TodoList filteredTodo={todoFilterSelectedOptions} />
 
         {!!todos.length && (
           <Footer
-            filteredTodo={filterTodos(todos, Options.Active)}
+            filteredTodo={todoFilterOptionActive}
             selected={selectedOption}
             setSelected={setSelectedOption}
           />
