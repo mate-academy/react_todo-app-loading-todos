@@ -45,5 +45,5 @@ export const TodoItem: FC<Props> = ({ todo }) => {
         <div className="loader" />
       </div>
     </div>
-  )
+  );
 };
