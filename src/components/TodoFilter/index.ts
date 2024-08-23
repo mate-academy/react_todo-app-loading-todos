@@ -1,1 +1,1 @@
-export * from '../TodoFilter';
+export * from './TodoFilter';

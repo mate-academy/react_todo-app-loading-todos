@@ -2,24 +2,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { getTodos } from './api/todos';
-import { TodoList } from './components/Todo';
+import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import { getFilteredTodos } from './utils/TodosFilter';
-import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { Error } from './types/Error';
+import { Footer } from './components/Footer';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [sortedStatus, setSortedStatus] = useState<Filter>(Filter.ALL);
+  const [filterStatus, setFilterStatus] = useState<Filter>(Filter.ALL);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(Error.GET);
-        throw error;
       });
   }, []);
 
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
     }
   }, [errorMessage]);
 
-  const preparedTodos = getFilteredTodos(todos, sortedStatus);
+  const preparedTodos = getFilteredTodos(todos, filterStatus);
 
   const activeTodosCount = useMemo(() => {
     return todos?.filter(todo => !todo.completed).length;
@@ -61,36 +61,21 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          <TodoList todos={preparedTodos} />
-        </section>
+        <TodoList todos={preparedTodos} />
 
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {activeTodosCount} items left
-            </span>
-
-            <TodoFilter status={sortedStatus} onSorted={setSortedStatus} />
-          </footer>
+          <Footer
+            filterStatus={filterStatus}
+            onFilterChange={setFilterStatus}
+            activeTodosCount={activeTodosCount}
+          />
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { ' hidden': !errorMessage },
-        )}
-      >
-        {errorMessage}
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-      </div>
+      <ErrorNotification
+        setErrorMessage={setErrorMessage}
+        message={errorMessage}
+      />
     </div>
   );
 };
