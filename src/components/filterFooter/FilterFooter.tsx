@@ -1,14 +1,15 @@
 import classNames from 'classnames';
 import { FilterTypes } from '../../enum/FilterTypes';
-import { Todo } from '../../types/Todo';
 import { FC, useState } from 'react';
+import { useTodosContext } from '../../context/context';
 
 interface Props {
-  todos: Todo[];
   handleFilterChange: (filter: FilterTypes) => void;
 }
 
-export const FilterFooter: FC<Props> = ({ todos, handleFilterChange }) => {
+export const FilterFooter: FC<Props> = ({ handleFilterChange }) => {
+  const { todos } = useTodosContext();
+
   const [filter, setFilter] = useState(FilterTypes.All);
 
   const NotCompletedTodos = todos.filter(todo => !todo.completed).length;
@@ -21,6 +22,10 @@ export const FilterFooter: FC<Props> = ({ todos, handleFilterChange }) => {
   const isSelectedFilter = (filterType: FilterTypes) =>
     filter === FilterTypes[filterType];
 
+  const filterKeys = Object.keys(FilterTypes).filter(
+    key => isNaN(Number(key))
+  );
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -28,38 +33,27 @@ export const FilterFooter: FC<Props> = ({ todos, handleFilterChange }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: isSelectedFilter(FilterTypes.All),
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilterType(FilterTypes.All)}
-        >
-          {FilterTypes.All}
-        </a>
+        {filterKeys.map(key => {
+          const filterType = FilterTypes[key as keyof typeof FilterTypes];
+          const href =
+            filterType === FilterTypes.All
+              ? '#/'
+              : `#/${filterType.toLowerCase()}`;
 
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: isSelectedFilter(FilterTypes.Active),
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilterType(FilterTypes.Active)}
-        >
-          {FilterTypes.Active}
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: isSelectedFilter(FilterTypes.Completed),
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilterType(FilterTypes.Completed)}
-        >
-          {FilterTypes.Completed}
-        </a>
+          return (
+            <a
+              key={filterType}
+              href={href}
+              className={classNames('filter__link', {
+                selected: isSelectedFilter(filterType),
+              })}
+              data-cy={`FilterLink${key}`}
+              onClick={() => setFilterType(filterType as FilterTypes)}
+            >
+              {filterType}
+            </a>
+          );
+        })}
       </nav>
 
       <button

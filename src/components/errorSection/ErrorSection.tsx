@@ -1,12 +1,24 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import classNames from 'classnames';
+import { useTodosContext } from '../../context/context';
 
-interface Props {
-  errorMessage: string;
-  setErrorMessage: (message: string) => void;
-}
+export const ErrorSection: FC = () => {
+  const { errorMessage, setErrorMessage } = useTodosContext();
 
-export const ErrorSection: FC<Props> = ({ errorMessage, setErrorMessage }) => {
+  useEffect(() => {
+    let mistakeTimer = 0;
+
+    if (errorMessage) {
+      mistakeTimer = window.setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+    }
+
+    return () => {
+      window.clearTimeout(mistakeTimer);
+    };
+  }, [errorMessage]);
+
   return (
     <div
       data-cy="ErrorNotification"
