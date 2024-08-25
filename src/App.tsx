@@ -31,19 +31,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
+
   useEffect(() => {
-    if (isLoadError) {
-      const timer = setTimeout(() => {
-        setIsLoadError(false);
-      }, 3000);
+    if (!isLoadError) {
+      return;
+    };
 
-      return () => clearTimeout(timer);
-    }
+    const timer = setTimeout(() => {
+      setIsLoadError(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [isLoadError]);
-
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
 
   const filteredTodos = useMemo(() => {
     return filter(todos, selectedFilter);
