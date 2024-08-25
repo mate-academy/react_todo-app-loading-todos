@@ -3,27 +3,17 @@
 import { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { Footer, TodoStatus } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
 import { Errors } from './components/Errors/Errors';
-
-const getVisibleTodos = (todos: Todo[], status: TodoStatus) => {
-  let visibleTodos = [...todos];
-
-  if (status !== 'All') {
-    visibleTodos = visibleTodos.filter(todo => {
-      return status === 'Active' ? !todo.completed : todo.completed;
-    });
-  }
-
-  return visibleTodos;
-};
+import { getVisibleTodos } from './utils/todoUtils';
+import { TodoStatus } from './components/enum/enum';
+import { Footer } from './components/Footer/Footer';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState<TodoStatus>('All');
+  const [status, setStatus] = useState<TodoStatus>(TodoStatus.All);
   const [error, setError] = useState('');
 
   useEffect(() => {
