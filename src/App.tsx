@@ -6,11 +6,11 @@ import cn from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { TodoHeader } from './components/TodoForm';
-import { TodoList } from './components/TodoList';
+import { TodoHeader } from './components/TodoForm/TodoForm';
+import { TodoList } from './components/TodoList/TodoList';
 import { Todo } from './types/Todo';
-import { TodoFilter } from './components/TodoFilter';
-import { Filters } from './components/Filters';
+import { TodoFilter } from './components/TodoFilter/TodoFilter';
+import { Filters } from './components/Filters/Filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
