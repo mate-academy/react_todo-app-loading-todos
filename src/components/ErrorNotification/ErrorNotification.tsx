@@ -1,14 +1,32 @@
-type Props = {};
+import classNames from 'classnames';
 
-export const ErrorNotification: React.FC<Props> = () => {
+type Props = {
+  errorMessage: string;
+  onClose: (message: string) => void;
+};
+
+export const ErrorNotification: React.FC<Props> = ({
+  errorMessage,
+  onClose,
+}) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className="notification is-danger is-light has-text-weight-normal"
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !errorMessage },
+      )}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
-      {/* show only one message at a time */}
-      Unable to load todos
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className={classNames('delete', { hidden: !errorMessage })}
+        onClick={() => {
+          onClose('');
+        }}
+      />
+      {errorMessage}
+      {/* Unable to load todos
       <br />
       Title should not be empty
       <br />
@@ -16,7 +34,7 @@ export const ErrorNotification: React.FC<Props> = () => {
       <br />
       Unable to delete a todo
       <br />
-      Unable to update a todo
+      Unable to update a todo */}
     </div>
   );
 };
