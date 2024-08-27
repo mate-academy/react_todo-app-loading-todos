@@ -9,16 +9,15 @@ type Props = {
 
 export const ErrorNotification: React.FC<Props> = ({ message, setMessage }) => {
   useEffect(() => {
-    if (message) {
-      const timeoutId = setTimeout(
-        () => setMessage(ErrorMessage.Default),
-        3000,
-      );
+    let timeoutId: NodeJS.Timeout;
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
+    if (message) {
+      timeoutId = setTimeout(() => setMessage(ErrorMessage.Default), 3000);
     }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [message, setMessage]);
 
   return (
