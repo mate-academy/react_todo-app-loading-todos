@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState<Filters>(Filters.All);
+  const [newTodoTitle, setNewTodoTitle] = useState<string>('');
 
   useEffect(() => {
     getTodos()
@@ -48,24 +49,48 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div>
-      <section className="todoapp__main" data-cy="TodoList">
-        {/* This is a completed todo */}
-        {filteredTodos.map((todo: Todo) => (
-          <TodoItem key={todo.id} todo={todo} />
-        ))}
-      </section>
+    <div className="todoapp">
+      <h1 className="todoapp__title">todos</h1>
 
-      {/* Hide the footer if there are no todos */}
-      {todos.length > 0 && (
-        <TodoFilter
-          currentFilter={filter}
-          onFilterChange={setFilter}
-          todos={todos}
-          activeTodosCount={activeTodosCount}
-        />
-      )}
+      <div className="todoapp__content">
+        <header className="todoapp__header">
+          {/* this button should have `active` class only if all todos are completed */}
+          <button
+            type="button"
+            className="todoapp__toggle-all active"
+            data-cy="ToggleAllButton"
+          />
 
+          {/* Add a todo on form submit */}
+          <form>
+            <input
+              data-cy="NewTodoField"
+              type="text"
+              className="todoapp__new-todo"
+              placeholder="What needs to be done?"
+              value={newTodoTitle}
+              onChange={e => setNewTodoTitle(e.target.value)}
+            />
+          </form>
+        </header>
+
+        <section className="todoapp__main" data-cy="TodoList">
+          {/* This is a completed todo */}
+          {filteredTodos.map((todo: Todo) => (
+            <TodoItem key={todo.id} todo={todo} />
+          ))}
+        </section>
+
+        {/* Hide the footer if there are no todos */}
+        {todos.length > 0 && (
+          <TodoFilter
+            currentFilter={filter}
+            onFilterChange={setFilter}
+            todos={todos}
+            activeTodosCount={activeTodosCount}
+          />
+        )}
+      </div>
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorMessage error={errorMessage} setError={setErrorMessage} />
