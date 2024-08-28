@@ -6,20 +6,36 @@ import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import { TodoCard } from './components/TodoCard';
+import { TodoItem } from './components/TodoItem/TodoItem';
+
+enum Filter {
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterTodos, setFilterTodos] = useState<Filter>(Filter.ALL);
+
   const [title, setTitle] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const [allTodos, setAllTodos] = useState<boolean>(true);
-  const [activeTodos, setActiveTodos] = useState<boolean>(false);
-  const [completedeTodos, setCompletedTodos] = useState<boolean>(false);
 
   useEffect(() => {
     getTodos().then(setTodos);
   }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    if (filterTodos === 'ACTIVE') {
+      return !todo.completed;
+    } else if (filterTodos === 'COMPLETED') {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
+  const todosAmount = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -38,31 +54,6 @@ export const App: React.FC = () => {
 
   const handleButtonClose = () => {
     setErrorMessage('');
-  };
-
-  const filterTodoAll = () => {
-    getTodos().then(setTodos);
-    setAllTodos(true);
-    setActiveTodos(false);
-    setCompletedTodos(false);
-  };
-
-  const filterTodoActive = () => {
-    getTodos().then(todosActive => {
-      setTodos(todosActive.filter(todoActive => !todoActive.completed));
-    });
-    setActiveTodos(true);
-    setAllTodos(false);
-    setCompletedTodos(false);
-  };
-
-  const filterTodoCompleted = () => {
-    getTodos().then(todosComplete => {
-      setTodos(todosComplete.filter(todoComplete => todoComplete.completed));
-    });
-    setCompletedTodos(true);
-    setActiveTodos(false);
-    setAllTodos(false);
   };
 
   return (
@@ -95,8 +86,8 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todos.map(todo => (
-            <TodoCard key={todo.id} todo={todo} />
+          {filteredTodos.map(todo => (
+            <TodoItem key={todo.id} todo={todo} />
           ))}
         </section>
 
@@ -104,7 +95,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              0 items left
+              {todosAmount} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
@@ -112,10 +103,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: allTodos,
+                  selected: filterTodos === 'ALL',
                 })}
                 data-cy="FilterLinkAll"
-                onClick={filterTodoAll}
+                onClick={() => setFilterTodos(Filter.ALL)}
               >
                 All
               </a>
@@ -123,10 +114,10 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: activeTodos,
+                  selected: filterTodos === 'ACTIVE',
                 })}
                 data-cy="FilterLinkActive"
-                onClick={filterTodoActive}
+                onClick={() => setFilterTodos(Filter.ACTIVE)}
               >
                 Active
               </a>
@@ -134,10 +125,10 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: completedeTodos,
+                  selected: filterTodos === 'COMPLETED',
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={filterTodoCompleted}
+                onClick={() => setFilterTodos(Filter.COMPLETED)}
               >
                 Completed
               </a>

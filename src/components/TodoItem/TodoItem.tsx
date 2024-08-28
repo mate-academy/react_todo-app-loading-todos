@@ -6,7 +6,7 @@ interface Props {
   todo: Todo;
 }
 
-export const TodoCard: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo }) => {
   const [isChecked, setIsChecked] = useState(todo.completed);
 
   const handleCheckboxChange = () => {
