@@ -26,6 +26,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          checked={isChecked}
           onChange={handleCheckboxChange}
         />
       </label>
