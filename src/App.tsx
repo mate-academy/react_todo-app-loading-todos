@@ -10,28 +10,31 @@ import { TodoFooter } from './components/TodoFooter';
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Todo } from './types/Todo';
 import { FilterOptions } from './types/FilterOptions';
+import { ErrorMessage } from './types/ErrorMessage';
 
 function filterTodos(todos: Todo[], option: FilterOptions) {
-  // eslint-disable-next-line no-console
-  console.log('called');
-  if (option === -1) {
-    return todos;
-  }
+  switch (option) {
+    case FilterOptions.FilterByAllButton:
+      return todos;
 
-  return todos.filter(todo => todo.completed === option);
+    case FilterOptions.FilterByActiveTodos:
+      return todos.filter(
+        todo => Number(todo.completed) === FilterOptions.FilterByActiveTodos,
+      );
+
+    case FilterOptions.FilterByCompletedTodos:
+      return todos.filter(
+        todo => Number(todo.completed) === FilterOptions.FilterByCompletedTodos,
+      );
+  }
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
+    ErrorMessage.NoErrors,
+  );
   const [selectedOption, setSelectedOption] = useState<FilterOptions>(-1);
-  // const handleCreatingNewTodo = ({
-  //   userId,
-  //   title,
-  //   completed,
-  // }: Omit<Todo, 'id'>) => {
-  //   createNewTodo({ userId, title, completed });
-  // };
 
   const handleFiltrationOption = (option: FilterOptions) => {
     setSelectedOption(option);
@@ -51,10 +54,10 @@ export const App: React.FC = () => {
     );
   };
 
-  const handleError = (message: string) => {
+  const handleError = (message: ErrorMessage) => {
     setErrorMessage(message);
     setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(ErrorMessage.NoErrors);
     }, 3000);
   };
 
@@ -62,7 +65,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        handleError('Unable to load todos');
+        handleError(ErrorMessage.OnLoadingTodos);
       });
   }, []);
 
