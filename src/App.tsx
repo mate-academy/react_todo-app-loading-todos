@@ -34,7 +34,9 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
     ErrorMessage.NoErrors,
   );
-  const [selectedOption, setSelectedOption] = useState<FilterOptions>(-1);
+  const [selectedOption, setSelectedOption] = useState<FilterOptions>(
+    FilterOptions.FilterByAllButton,
+  );
 
   const handleFiltrationOption = (option: FilterOptions) => {
     setSelectedOption(option);
