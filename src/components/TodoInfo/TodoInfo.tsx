@@ -10,8 +10,6 @@ type Props = {
 
 export const TodoInfo: React.FC<Props> = ({ todo }) => {
   const { title, completed } = todo;
-  const edit = false;
-  const uptading = false;
 
   return (
     <div
@@ -29,34 +27,17 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
         />
       </label>
 
-      {edit ? (
-        <form>
-          <input
-            data-cy="TodoTitleField"
-            type="text"
-            className="todo__title-field"
-            placeholder="Empty todo will be deleted"
-            value="Todo is being edited now"
-          />
-        </form>
-      ) : (
-        <>
-          <span data-cy="TodoTitle" className="todo__title">
-            {title}
-          </span>
-          {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-        </>
-      )}
+      <>
+        <span data-cy="TodoTitle" className="todo__title">
+          {title}
+        </span>
+        {/* Remove button appears only on hover */}
+        <button type="button" className="todo__remove" data-cy="TodoDelete">
+          ×
+        </button>
+      </>
 
-      <div
-        data-cy="TodoLoader"
-        className={cn('modal overlay', {
-          'is-active': uptading,
-        })}
-      >
+      <div data-cy="TodoLoader" className="modal overlay">
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
       </div>
