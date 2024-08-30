@@ -10,7 +10,7 @@ export const handleFilter = (todos: Todo[], filters: TodoFilter) => {
       case TodoFilter.Completed:
         return todo.completed;
 
-      case TodoFilter.All:
+      case TodoFilter.filter:
         return true;
 
       default:

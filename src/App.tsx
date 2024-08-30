@@ -9,10 +9,11 @@ import { TodoFilter } from './types/filter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
 import { handleFilter } from './utils/FilterFunction';
+import { Error } from './types/error';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [sortFilter, setSortFilter] = useState<TodoFilter>(TodoFilter.All);
+  const [sortFilter, setSortFilter] = useState<TodoFilter>(TodoFilter.filter);
   const [errorMessage, setErrorMessage] = useState('');
 
   const areTodosActive =
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(Error.GET));
 
     setTimeout(() => {
       setErrorMessage('');
@@ -39,7 +40,7 @@ export const App: React.FC = () => {
         <Header areTodosActive={areTodosActive} />
         <Main todos={prepared} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             sortFilter={sortFilter}
             setSortFilter={setSortFilter}

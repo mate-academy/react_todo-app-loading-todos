@@ -21,46 +21,22 @@ export const Footer: React.FC<Props> = ({
         {activeCounter} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: sortFilter === TodoFilter.All,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => {
-            setSortFilter(TodoFilter.All);
-          }}
-        >
-          {TodoFilter.All}
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: sortFilter === TodoFilter.Active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => {
-            setSortFilter(TodoFilter.Active);
-          }}
-        >
-          {TodoFilter.Active}
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: sortFilter === TodoFilter.Completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => {
-            setSortFilter(TodoFilter.Completed);
-          }}
-        >
-          {TodoFilter.Completed}
-        </a>
+        {Object.values(TodoFilter).map(filter => (
+          <a
+            key={filter}
+            href="#/"
+            className={classNames('filter__link', {
+              selected: sortFilter === filter,
+            })}
+            data-cy={`FilterLink${filter}`}
+            onClick={() => {
+              setSortFilter(filter);
+            }}
+          >
+            {filter}
+          </a>
+        ))}
       </nav>
 
       <button
