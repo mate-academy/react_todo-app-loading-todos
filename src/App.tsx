@@ -8,12 +8,15 @@ import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 import Error from './components/Error';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   // Стейт для хранения данных полученных из сервера
   const [todos, setTodos] = useState<Todo[]>([]);
   // Стейт для хранения сообщений об ошибке
   const [errorMessage, setErrorMessage] = useState<string>('');
+  // Стейт для значения фильтрации
+  const [filterValue, setFilterValue] = useState<Filter>(Filter.All);
 
   // Получение данных из сервера
   useEffect(() => {
@@ -21,6 +24,8 @@ export const App: React.FC = () => {
       .then(todosFromServer => setTodos(todosFromServer))
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
+
+  // Фильтрация данных по нажатию
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -35,7 +40,11 @@ export const App: React.FC = () => {
         <TodoList />
 
         {/* Hide the footer if there are no todos */}
-        <Footer />
+        <Footer
+          todos={todos}
+          filterValue={filterValue}
+          onClickFilter={setFilterValue}
+        />
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}

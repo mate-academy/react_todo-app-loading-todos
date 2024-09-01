@@ -1,24 +1,53 @@
-const Footer = () => {
+import React from 'react';
+import cn from 'classnames';
+import { Filter } from '../types/Filter';
+import { Todo } from '../types/Todo';
+
+type Props = {
+  todos: Todo[];
+  filterValue: Filter;
+  onClickFilter: (filterValue: Filter) => void;
+};
+
+const Footer: React.FC<Props> = ({ todos, filterValue, onClickFilter }) => {
+  // Проверка на наличие хотя бы одного completed todo
+  const isCompleted = todos.some(todo => todo.completed);
+  // Все, которые не complited
+  const allNotCompleted = todos.filter(todo => !todo.completed).length;
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${allNotCompleted} items left`}
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={cn('filter__link', { selected: filterValue === 'all' })}
+          data-cy="FilterLinkAll"
+          onClick={() => onClickFilter(Filter.All)}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={cn('filter__link', { selected: filterValue === 'active' })}
+          data-cy="FilterLinkActive"
+          onClick={() => onClickFilter(Filter.Active)}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={cn('filter__link', {
+            selected: filterValue === 'completed',
+          })}
           data-cy="FilterLinkCompleted"
+          onClick={() => onClickFilter(Filter.Completed)}
         >
           Completed
         </a>
@@ -29,6 +58,7 @@ const Footer = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!isCompleted}
       >
         Clear completed
       </button>
