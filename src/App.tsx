@@ -11,21 +11,16 @@ import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  // Стейт для хранения данных полученных из сервера
   const [todos, setTodos] = useState<Todo[]>([]);
-  // Стейт для хранения сообщений об ошибке
   const [errorMessage, setErrorMessage] = useState<string>('');
-  // Стейт для значения фильтрации
   const [filterValue, setFilterValue] = useState<Filter>(Filter.All);
 
-  // Получение данных из сервера
   useEffect(() => {
     getTodos()
       .then(todosFromServer => setTodos(todosFromServer))
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
-  // Фильтрация данных в зависимости от способа
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       switch (filterValue) {
@@ -51,7 +46,6 @@ export const App: React.FC = () => {
         <Header todos={todos} />
         <TodoList todos={filteredTodos} />
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
             todos={todos}
@@ -62,8 +56,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}

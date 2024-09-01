@@ -10,12 +10,13 @@ const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  // Проверка наличия ошибки, и её удаления
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => setErrorMessage(''), 3000);
 
       return () => clearTimeout(timer);
+    } else {
+      return;
     }
   }, [errorMessage, setErrorMessage]);
 
@@ -32,7 +33,6 @@ const ErrorNotification: React.FC<Props> = ({
         className="delete"
         onClick={() => setErrorMessage('')}
       />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );

@@ -16,11 +16,10 @@ const Footer: React.FC<Props> = ({
   filterValue,
   onClickFilter,
 }) => {
-  // Проверка на наличие хотя бы одного completed todo
   const isCompleted = todos.some(todo => todo.completed);
-  // Все, которые не complited
+
   const allNotCompleted = todos.filter(todo => !todo.completed).length;
-  // Убрать все завершенные todos
+
   const allActive = todos.filter(todo => !todo.completed);
 
   return (
@@ -29,7 +28,6 @@ const Footer: React.FC<Props> = ({
         {`${allNotCompleted} items left`}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
@@ -61,7 +59,6 @@ const Footer: React.FC<Props> = ({
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
