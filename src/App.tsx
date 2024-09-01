@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import Header from './components/Header';
@@ -25,7 +25,19 @@ export const App: React.FC = () => {
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
-  // Фильтрация данных по нажатию
+  // Фильтрация данных в зависимости от способа
+  const filteredTodos = useMemo(() => {
+    return todos.filter(todo => {
+      switch (filterValue) {
+        case Filter.Active:
+          return !todo.completed;
+        case Filter.Completed:
+          return todo.completed;
+        default:
+          return true;
+      }
+    });
+  }, [todos, filterValue]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -37,14 +49,16 @@ export const App: React.FC = () => {
       {errorMessage}
       <div className="todoapp__content">
         <Header todos={todos} />
-        <TodoList />
+        <TodoList todos={filteredTodos} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer
-          todos={todos}
-          filterValue={filterValue}
-          onClickFilter={setFilterValue}
-        />
+        {todos.length > 0 && (
+          <Footer
+            todos={todos}
+            filterValue={filterValue}
+            onClickFilter={setFilterValue}
+          />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
