@@ -6,7 +6,7 @@ import { getTodos, USER_ID } from './api/todos';
 import Header from './components/Header';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
-import Error from './components/Error';
+import ErrorNotification from './components/ErrorNotification';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
@@ -55,6 +55,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <Footer
             todos={todos}
+            setTodos={setTodos}
             filterValue={filterValue}
             onClickFilter={setFilterValue}
           />
@@ -63,7 +64,10 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <Error />
+      <ErrorNotification
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

@@ -5,15 +5,23 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   todos: Todo[];
+  setTodos: (todos: Todo[]) => void;
   filterValue: Filter;
   onClickFilter: (filterValue: Filter) => void;
 };
 
-const Footer: React.FC<Props> = ({ todos, filterValue, onClickFilter }) => {
+const Footer: React.FC<Props> = ({
+  todos,
+  setTodos,
+  filterValue,
+  onClickFilter,
+}) => {
   // Проверка на наличие хотя бы одного completed todo
   const isCompleted = todos.some(todo => todo.completed);
   // Все, которые не complited
   const allNotCompleted = todos.filter(todo => !todo.completed).length;
+  // Убрать все завершенные todos
+  const allActive = todos.filter(todo => !todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -59,6 +67,7 @@ const Footer: React.FC<Props> = ({ todos, filterValue, onClickFilter }) => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!isCompleted}
+        onClick={() => setTodos(allActive)}
       >
         Clear completed
       </button>

@@ -16,7 +16,7 @@ const TodoComponent: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          defaultChecked={todo.completed}
         />
       </label>
 
