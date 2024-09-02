@@ -11,9 +11,9 @@ import { Footer } from './components/Footer';
 import { UserWarning } from './UserWarning';
 
 export const App: React.FC = () => {
-  const  [ todos ,  setTodos ]  =  useState < Todo [ ] > ( [ ] ) ;
-  const  [ errorMessage ,  setErrorMessage ]  =  useState ( '' ) ;
-  const  [ status ,  setStatus ]  =  useState ( Status . All ) ;
+  const  [todos, setTodos] = useState<Todo[]>([]);
+  const  [errorMessage, setErrorMessage] = useState('') ;
+  const  [status,  setStatus] = useState(Status.All) ;
   useEffect(() => {
     getTodos()
       .then(setTodos)
