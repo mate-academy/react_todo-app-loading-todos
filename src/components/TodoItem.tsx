@@ -7,20 +7,22 @@ type Props = {
   todo: Todo;
 };
 
-const TodoComponent: React.FC<Props> = ({ todo }) => {
+const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, completed } = todo;
+
   return (
-    <div data-cy="Todo" className={cn('todo', { completed: todo.completed })}>
+    <div data-cy="Todo" className={cn('todo', { completed: completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          defaultChecked={todo.completed}
+          defaultChecked={completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
 
       <button type="button" className="todo__remove" data-cy="TodoDelete">
@@ -35,4 +37,4 @@ const TodoComponent: React.FC<Props> = ({ todo }) => {
   );
 };
 
-export default TodoComponent;
+export default TodoItem;

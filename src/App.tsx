@@ -26,8 +26,10 @@ export const App: React.FC = () => {
       switch (filterValue) {
         case Filter.Active:
           return !todo.completed;
+
         case Filter.Completed:
           return todo.completed;
+
         default:
           return true;
       }
@@ -41,12 +43,11 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-      {errorMessage}
       <div className="todoapp__content">
         <Header todos={todos} />
         <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             todos={todos}
             setTodos={setTodos}
