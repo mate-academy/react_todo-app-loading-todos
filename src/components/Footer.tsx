@@ -20,7 +20,7 @@ export const Footer: React.FC<Props> = ({ todos, status, setStatus }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
+      <a
           href="#/"
           className={cn('filter-link', {
             selected: status === Status.All,

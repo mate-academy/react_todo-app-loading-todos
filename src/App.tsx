@@ -11,10 +11,9 @@ import { Footer } from './components/Footer';
 import { UserWarning } from './UserWarning';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState(Status.All);
-
+  const  [ todos ,  setTodos ]  =  useState < Todo [ ] > ( [ ] ) ;
+  const  [ errorMessage ,  setErrorMessage ]  =  useState ( '' ) ;
+  const  [ status ,  setStatus ]  =  useState ( Status . All ) ;
   useEffect(() => {
     getTodos()
       .then(setTodos)
@@ -45,9 +44,8 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
-        <TodoList visibleTodos={visibleTodos} />
-
+      <Header />
+      <TodoList visibleTodos={visibleTodos} />
         {!!todos.length && (
           <Footer todos={todos} status={status} setStatus={setStatus} />
         )}
