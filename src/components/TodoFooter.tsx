@@ -25,47 +25,28 @@ export const TodoFooter: React.FC<Props> = ({
         {activeListLength} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', {
-            selected: filter === TodoFilter.all,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={handleFilter}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={cn('filter__link', {
-            selected: filter === TodoFilter.active,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={handleFilter}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', {
-            selected: filter === TodoFilter.completed,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={handleFilter}
-        >
-          Completed
-        </a>
+        {/* Рендеринг фільтрів з використанням Object.values(TodoFilter) */}
+        {Object.values(TodoFilter).map((filterType) => (
+          <a
+            key={filterType}
+            href={`#/${filterType.toLowerCase()}`}
+            className={cn('filter__link', {
+              selected: filter === filterType,
+            })}
+            data-cy={`FilterLink${filterType}`}
+            onClick={handleFilter}
+          >
+            {filterType}
+          </a>
+        ))}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={activeListLength === 0}
       >
         Clear completed
       </button>

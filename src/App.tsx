@@ -5,19 +5,19 @@ import cn from 'classnames';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoFilter } from './types/TodoFilter';
 import { getFilteredList } from './utils/getFilteredList';
-import { BoxErrorMessages, ErrorMessages } from './types/BoxErrorMessages';
+import { ErrorMessages, ErrorMessage } from './types//BoxErrorMessages';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[] | null>(null);
-  const [filter, setFilter] = useState<TodoFilter>(TodoFilter.all);
+  const [filter, setFilter] = useState<TodoFilter>(TodoFilter.All);
 
-  const [error, setError] = useState<ErrorMessages | null>(null);
+  const [error, setError] = useState<ErrorMessage | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(data => setTodosList(data))
       .catch(() => {
-        setError(BoxErrorMessages.load);
+        setError(ErrorMessages.load);
       });
   }, []);
 
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
 
   const filteredList = getFilteredList(filter, todosList);
   const activeListLength = getFilteredList(
-    TodoFilter.active,
+    TodoFilter.Active,
     todosList,
   )?.length;
 
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (!event.currentTarget.value) {
-        setError(BoxErrorMessages.title);
+        setError(ErrorMessages.title);
       }
     }
   }
@@ -85,7 +85,6 @@ export const App: React.FC = () => {
                 className="todo__status-label"
               >
                 {' '}
-                
                 <input
                   id={`todo-status-${todo.id}`}
                   data-cy="TodoStatus"

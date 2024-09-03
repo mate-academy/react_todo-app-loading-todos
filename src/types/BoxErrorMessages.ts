@@ -1,4 +1,4 @@
-export const BoxErrorMessages = {
+export const ErrorMessages = {
   load: 'Unable to load todos',
   title: 'Title should not be empty',
   add: 'Unable to delete a todo',
@@ -6,5 +6,5 @@ export const BoxErrorMessages = {
   update: 'Unable to update a todo',
 } as const;
 
-export type ErrorMessages =
-  (typeof BoxErrorMessages)[keyof typeof BoxErrorMessages];
+export type ErrorMessage =
+  (typeof ErrorMessages)[keyof typeof ErrorMessages];
