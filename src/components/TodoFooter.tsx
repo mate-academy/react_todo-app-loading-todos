@@ -26,8 +26,7 @@ export const TodoFooter: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        {/* Рендеринг фільтрів з використанням Object.values(TodoFilter) */}
-        {Object.values(TodoFilter).map((filterType) => (
+        {Object.values(TodoFilter).map(filterType => (
           <a
             key={filterType}
             href={`#/${filterType.toLowerCase()}`}
@@ -46,7 +45,7 @@ export const TodoFooter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        disabled={activeListLength === 0}
+        disabled={!activeListLength}
       >
         Clear completed
       </button>

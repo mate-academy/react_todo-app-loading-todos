@@ -5,7 +5,7 @@ export const getFilteredList = (
   currentFilter: TodoFilter,
   todosList: Todo[] | null,
 ): Todo[] | null => {
-  if (currentFilter === TodoFilter .All) {
+  if (currentFilter === TodoFilter.All) {
     return todosList || null;
   }
 

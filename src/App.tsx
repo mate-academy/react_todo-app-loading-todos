@@ -98,7 +98,6 @@ export const App: React.FC = () => {
                 {todo.title}
               </span>
 
-              {/* Remove button appears only on hover */}
               <button
                 type="button"
                 className="todo__remove"
