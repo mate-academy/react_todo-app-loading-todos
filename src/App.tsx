@@ -17,7 +17,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(data => setTodosList(data))
       .catch(() => {
-        setError(ErrorMessages.load);
+        setError(ErrorMessages.Load);
       });
   }, []);
 
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (!event.currentTarget.value) {
-        setError(ErrorMessages.title);
+        setError(ErrorMessages.Title);
       }
     }
   }
