@@ -1,47 +1,58 @@
+import { GroupStatusTypes } from '../../types/status';
+import classNames from 'classnames';
+
 type Props = {
-  onClick: (status: string) => void;
-  status: string;
-  leftItems: number;
+  onClick: (status: GroupStatusTypes) => void;
+  status: GroupStatusTypes; // Змінено тип зі string на GroupStatusTypes
+  filteredTodods: number;
 };
 
-export const Footer: React.FC<Props> = ({ onClick, status, leftItems }) => {
+export const Footer: React.FC<Props> = ({
+  onClick,
+  status,
+  filteredTodods,
+}) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {leftItems + ' items left'}
+        {filteredTodods + ' items left'}
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={`filter__link ${status === 'all' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === GroupStatusTypes.ALL,
+          })}
           data-cy="FilterLinkAll"
-          onClick={() => onClick('all')}
+          onClick={() => onClick(GroupStatusTypes.ALL)}
         >
           All
         </a>
 
         <a
           href="#/active"
-          className={`filter__link ${status === 'active' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === GroupStatusTypes.ACTIVE,
+          })}
           data-cy="FilterLinkActive"
-          onClick={() => onClick('active')}
+          onClick={() => onClick(GroupStatusTypes.ACTIVE)}
         >
           Active
         </a>
 
         <a
           href="#/completed"
-          className={`filter__link ${status === 'completed' && 'selected'}`}
+          className={classNames('filter__link', {
+            selected: status === GroupStatusTypes.COMPLETED,
+          })}
           data-cy="FilterLinkCompleted"
-          onClick={() => onClick('completed')}
+          onClick={() => onClick(GroupStatusTypes.COMPLETED)}
         >
           Completed
         </a>
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

@@ -1,16 +1,19 @@
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
-  list: Todo[];
+  todos: Todo[];
 };
 
-export const ToDoList: React.FC<Props> = ({ list }) => {
+export const ToDoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {list.map(todo => (
+      {todos.map(todo => (
         <div
           data-cy="Todo"
-          className={`todo ${todo.completed && 'completed'}`}
+          className={classNames('todo', {
+            completed: todo.completed,
+          })}
           key={todo.id}
         >
           {/* eslint-disable jsx-a11y/label-has-associated-control  */}
@@ -20,7 +23,7 @@ export const ToDoList: React.FC<Props> = ({ list }) => {
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked={todo.completed ? true : false}
+              checked={todo.completed}
             />
           </label>
 

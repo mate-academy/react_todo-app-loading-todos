@@ -8,24 +8,31 @@ import { Header } from './component/Header/Header';
 import { ToDoList } from './component/TodoList/TodoList';
 import { Footer } from './component/Footer/Footer';
 import { Errors } from './component/Errors/Errors';
+import { GroupStatusTypes } from './types/status';
+import { ErrorMessage } from './types/errorMessage';
 
-export const App: React.FC = () => {
+interface TodoFilterProps {
+  filteredStatus: GroupStatusTypes;
+  error: ErrorMessage;
+}
+
+export const App: React.FC<TodoFilterProps> = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(GroupStatusTypes.ALL);
 
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
         switch (status) {
-          case 'all':
+          case GroupStatusTypes.ALL:
             setTodos(todosFromServer);
             break;
-          case 'active':
+          case GroupStatusTypes.ACTIVE:
             setTodos(todosFromServer.filter(todo => !todo.completed));
             break;
 
-          case 'completed':
+          case GroupStatusTypes.COMPLETED:
             setTodos(todosFromServer.filter(todo => todo.completed));
             break;
 
@@ -33,13 +40,13 @@ export const App: React.FC = () => {
             setTodos(todosFromServer);
         }
       })
-      .catch(() => setErrorMessage('Unable to load todos'))
+      .catch(() => setErrorMessage(ErrorMessage.ERROR))
       .finally(() => {
         setTimeout(() => setErrorMessage(''), 3000);
       });
   }, [status]);
 
-  const leftItems = todos.filter(todo => !todo.completed).length;
+  const filteredTodods = todos.filter(todo => !todo.completed).length;
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -52,10 +59,14 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
 
-        <ToDoList list={todos} />
+        <ToDoList todos={todos} />
 
-        {todos.length > 0 && (
-          <Footer onClick={setStatus} status={status} leftItems={leftItems} />
+        {!!todos.length && (
+          <Footer
+            onClick={setStatus}
+            status={status}
+            filteredTodods={filteredTodods}
+          />
         )}
       </div>
 
