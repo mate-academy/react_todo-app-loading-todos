@@ -2,24 +2,24 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { ErrorNotification, Footer, Header, TodoList } from './components';
-import { State, Todo } from './types/Todo';
+import { FilterType, Todo } from './types/Todo';
 
-const filterTasks = (tasks: Todo[], filter: State): Todo[] => {
+const filterTasks = (tasks: Todo[], filter: FilterType): Todo[] => {
   return tasks.filter(task => {
     const matchesState =
-      filter === State.ALL ||
-      (filter === State.ACTIVE && !task.completed) ||
-      (filter === State.COMPLETED && task.completed);
+      filter === FilterType.ALL ||
+      (filter === FilterType.ACTIVE && !task.completed) ||
+      (filter === FilterType.COMPLETED && task.completed);
 
     return matchesState;
   });
 };
 
 export const App: React.FC = () => {
-  const [tasks, setTasks] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [state, setState] = useState(State.ALL);
+  const [state, setState] = useState(FilterType.ALL);
 
   const handleError = useCallback((ErrorMessage: string) => {
     setErrorMessage(ErrorMessage);
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleStageChange = useCallback(
-    (newState: State) => {
+    (newState: FilterType) => {
       setState(newState);
     },
     [setState],
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
     setIsLoading(true);
 
     getTodos()
-      .then(setTasks)
+      .then(setTodos)
       .catch(() => handleError('Unable to load todos'))
       .finally(() => setIsLoading(false));
   };
@@ -47,16 +47,16 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTasks = useMemo(
-    () => filterTasks(tasks, state),
-    [tasks, state],
+    () => filterTasks(todos, state),
+    [todos, state],
   );
   const activeTasks = useMemo(
-    () => tasks.filter(task => !task.completed).length,
-    [tasks],
+    () => todos.filter(task => !task.completed).length,
+    [todos],
   );
   const completedTasks = useMemo(
-    () => tasks.length - activeTasks,
-    [tasks, activeTasks],
+    () => todos.length - activeTasks,
+    [todos, activeTasks],
   );
 
   if (!USER_ID) {
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
 
         <TodoList tasks={filteredTasks} />
 
-        {!isLoading && tasks.length !== 0 && (
+        {!isLoading && !!todos.length && (
           <Footer
             activeTasks={activeTasks}
             completedTasks={completedTasks}

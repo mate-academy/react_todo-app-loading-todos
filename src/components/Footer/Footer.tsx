@@ -1,11 +1,11 @@
 import cn from 'classnames';
-import { State } from '../../types/Todo';
+import { FilterType } from '../../types/Todo';
 
 export interface FooterProps {
   activeTasks: number;
   completedTasks: number;
-  state: State;
-  onStageChange: (stage: State) => void;
+  state: FilterType;
+  onStageChange: (stage: FilterType) => void;
 }
 
 export const Footer = ({
@@ -21,38 +21,23 @@ export const Footer = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', {
-            selected: state === State.ALL,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => onStageChange(State.ALL)}
-        >
-          All
-        </a>
+        {Object.values(FilterType).map(filterValue => {
+          const isSelected = state === filterValue;
+          const hrefValue =
+            filterValue === FilterType.ALL ? '' : `#/${filterValue}`;
 
-        <a
-          href="#/active"
-          className={cn('filter__link', {
-            selected: state === State.ACTIVE,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => onStageChange(State.ACTIVE)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', {
-            selected: state === State.COMPLETED,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => onStageChange(State.COMPLETED)}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={filterValue}
+              href={hrefValue}
+              className={cn('filter__link', { selected: isSelected })}
+              data-cy={`FilterLink${filterValue}`}
+              onClick={() => onStageChange(filterValue)}
+            >
+              {filterValue}
+            </a>
+          );
+        })}
       </nav>
 
       <button

@@ -1,4 +1,4 @@
-export function Header() {
+export const Header = () => {
   return (
     <header className="todoapp__header">
       <button
@@ -16,4 +16,4 @@ export function Header() {
       </form>
     </header>
   );
-}
+};
