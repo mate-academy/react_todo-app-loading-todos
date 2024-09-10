@@ -20,13 +20,13 @@ export const TodoItem: React.FC<Props> = ({
   todoLoadingStates,
 }) => {
   const { id, completed, title } = todo;
-  const [editing, setEditing] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
 
   const trimmedTitle = newTitle.trim();
 
   const handleDoubleClick = () => {
-    setEditing(true);
+    setIsEditing(true);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,14 +40,14 @@ export const TodoItem: React.FC<Props> = ({
       onDelete(id);
     }
 
-    setEditing(false);
+    setIsEditing(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSubmit();
     } else if (event.key === 'Escape') {
-      setEditing(false);
+      setIsEditing(false);
       setNewTitle(title);
     }
   };
@@ -65,7 +65,7 @@ export const TodoItem: React.FC<Props> = ({
           }
         />
       </label>
-      {editing ? (
+      {isEditing ? (
         <form>
           <input
             data-cy="TodoTitleField"

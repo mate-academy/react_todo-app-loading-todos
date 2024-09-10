@@ -1,18 +1,19 @@
 import classNames from 'classnames';
 import React from 'react';
+import { ErrorMessages } from '../enum/ErrorMessages';
 
 type Props = {
-  errorMassage: string;
+  errorMessage: ErrorMessages;
   onClearError: () => void;
 };
 
-export const ErrorBox: React.FC<Props> = ({ errorMassage, onClearError }) => {
+export const ErrorBox: React.FC<Props> = ({ errorMessage, onClearError }) => {
   return (
     <div
       data-cy="ErrorNotification"
       className={classNames(
         'notification is-danger is-light has-text-weight-normal',
-        { hidden: !errorMassage },
+        { hidden: !errorMessage },
       )}
     >
       <button
@@ -21,7 +22,7 @@ export const ErrorBox: React.FC<Props> = ({ errorMassage, onClearError }) => {
         className="delete"
         onClick={onClearError}
       />
-      {errorMassage}
+      {errorMessage}
     </div>
   );
 };

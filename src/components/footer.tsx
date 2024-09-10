@@ -1,9 +1,10 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
+import { FilterType } from '../enum/filterTypes';
 
 interface Props {
-  setFilter: Dispatch<SetStateAction<string>>;
+  setFilter: Dispatch<SetStateAction<FilterType>>;
   filter: string;
   todos: Todo[];
   onDelete: (userId: number) => void;
@@ -33,38 +34,23 @@ export const Footer: FC<Props> = ({ setFilter, filter, todos, onDelete }) => {
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: 'all' === filter,
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setFilter('all')}
-        >
-          All
-        </a>
+        {Object.entries(FilterType).map(([key, value]) => {
+          const href = value === FilterType.All ? '#/' : `#/${value}`;
 
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: 'active' === filter,
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: 'completed' === filter,
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={key}
+              href={href}
+              className={classNames('filter__link', {
+                selected: value === filter,
+              })}
+              data-cy={`FilterLink${key}`}
+              onClick={() => setFilter(value)}
+            >
+              {key}
+            </a>
+          );
+        })}
       </nav>
 
       <button

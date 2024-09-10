@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { Todo } from '../types/Todo';
+import { ErrorMessages } from '../enum/ErrorMessages';
 
 interface Props {
   onAdd: (newTodo: Todo) => void;
-  showError: (message: string) => void;
+  showError: (message: ErrorMessages) => void;
   isLoading: boolean;
   todos: Todo[];
 }
@@ -26,7 +27,7 @@ export const Header: React.FC<Props> = ({
     event.preventDefault();
 
     if (!trimmedTitle) {
-      showError('Title shoud not be empty');
+      showError(ErrorMessages.Title);
 
       return;
     }

@@ -8,26 +8,33 @@ import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { ErrorBox } from './components/ErrorBox';
 import { UpdateTodo } from './types/Updates';
+import { getFilteredTodos } from './helpers/helpers';
+import { FilterType } from './enum/filterTypes';
+import { ErrorMessages } from './enum/ErrorMessages';
 
 export const App: React.FC = () => {
+  const { Load, Add, Delete, Update, None } = ErrorMessages;
+
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMassage, setErrorMassage] = useState('');
+  const [errorMessage, setErrorMassage] = useState(ErrorMessages.None);
   const [isLoading, setIsLoading] = useState(false);
   const [todoLoadingStates, setTodoLoadingStates] = useState<{
     [key: number]: boolean;
   }>({});
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(FilterType.All);
+
+  const displayedTodos = getFilteredTodos(todos, filter);
 
   const setTodoLoading = (id: number, loading: boolean) => {
     setTodoLoadingStates(prevState => ({ ...prevState, [id]: loading }));
   };
 
   const errorTimerId = useRef(0);
-  const showError = (message: string) => {
+  const showError = (message: ErrorMessages) => {
     setErrorMassage(message);
     window.clearTimeout(errorTimerId.current);
     errorTimerId.current = window.setTimeout(() => {
-      setErrorMassage('');
+      setErrorMassage(None);
     }, 3000);
   };
 
@@ -37,7 +44,7 @@ export const App: React.FC = () => {
     todoService
       .getTodos()
       .then(setTodos)
-      .catch(() => showError('Unable to load todos'))
+      .catch(() => showError(Load))
       .finally(() => {
         setIsLoading(false);
       });
@@ -55,7 +62,7 @@ export const App: React.FC = () => {
 
       setTodos(prev => [...prev, newTodo]);
     } catch (error) {
-      showError('Unable to add todo');
+      showError(Add);
       throw error;
     } finally {
       setIsLoading(false);
@@ -68,9 +75,9 @@ export const App: React.FC = () => {
       setTodoLoading(todoId, true);
       await todoService.deleteTodo(todoId);
 
-      setTodos(prewTodos => prewTodos.filter(todo => todo.id !== todoId));
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
     } catch (error) {
-      showError('Unable to delete todo');
+      showError(Delete);
     } finally {
       setTodoLoading(todoId, false);
     }
@@ -91,26 +98,10 @@ export const App: React.FC = () => {
         ),
       );
     } catch (error) {
-      showError('Unable to update todo');
+      showError(Update);
     } finally {
       setTodoLoading(id, false);
     }
-  };
-
-  let todoToShow = todos;
-  const getFilterTodo = () => {
-    switch (filter) {
-      case 'active':
-        todoToShow = todoToShow.filter((todo: Todo) => !todo.completed);
-        break;
-      case 'completed':
-        todoToShow = todoToShow.filter((todo: Todo) => todo.completed);
-        break;
-      case 'all':
-      default:
-    }
-
-    return todoToShow;
   };
 
   return (
@@ -126,7 +117,7 @@ export const App: React.FC = () => {
         />
 
         <TodoList
-          todos={getFilterTodo()}
+          todos={displayedTodos}
           onDelete={onDelete}
           updateTodo={updateTodo}
           todoLoadingStates={todoLoadingStates}
@@ -142,9 +133,9 @@ export const App: React.FC = () => {
       </div>
 
       <ErrorBox
-        errorMassage={errorMassage}
+        errorMessage={errorMessage}
         onClearError={() => {
-          setErrorMassage('');
+          setErrorMassage(None);
         }}
       />
     </div>
