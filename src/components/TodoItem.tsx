@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
 import { UpdateTodo } from '../types/Updates';
+import { FilterType } from '../enum/filterTypes';
 
 interface Props {
   todo: Todo;
@@ -20,6 +21,8 @@ export const TodoItem: React.FC<Props> = ({
   todoLoadingStates,
 }) => {
   const { id, completed, title } = todo;
+  const { Completed } = FilterType;
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>(title);
 
@@ -61,7 +64,7 @@ export const TodoItem: React.FC<Props> = ({
           className="todo__status"
           checked={completed}
           onChange={() =>
-            updateTodo({ id, newData: !completed, keyValue: 'completed' })
+            updateTodo({ id, newData: !completed, keyValue: Completed })
           }
         />
       </label>
