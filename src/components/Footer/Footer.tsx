@@ -17,45 +17,33 @@ export const Footer: React.FC<Props> = ({
   completedTodosCount,
   clearCompletedTodos,
 }) => {
+  const itemLabel = uncompletedTodosCount === 1 ? 'item' : 'items';
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${uncompletedTodosCount} ${uncompletedTodosCount === 1 ? 'item' : 'items'} left`}
+        {`${uncompletedTodosCount} ${itemLabel} left`}
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={cn('filter__link', {
-            selected: activeTodoFilter === TodoFilterOptions.All,
-          })}
-          onClick={() => setTodoFilterValue(TodoFilterOptions.All)}
-          data-cy="FilterLinkAll"
-        >
-          All
-        </a>
+        {Object.values(TodoFilterOptions).map(filterOption => {
+          const formattedFilterOption =
+            filterOption.charAt(0).toUpperCase() + filterOption.slice(1);
 
-        <a
-          href="#/active"
-          className={cn('filter__link', {
-            selected: activeTodoFilter === TodoFilterOptions.Active,
-          })}
-          onClick={() => setTodoFilterValue(TodoFilterOptions.Active)}
-          data-cy="FilterLinkActive"
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={cn('filter__link', {
-            selected: activeTodoFilter === TodoFilterOptions.Completed,
-          })}
-          onClick={() => setTodoFilterValue(TodoFilterOptions.Completed)}
-          data-cy="FilterLinkCompleted"
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={filterOption}
+              href={`#/${filterOption.toLowerCase()}`}
+              className={cn('filter__link', {
+                selected: activeTodoFilter === filterOption,
+              })}
+              onClick={() => setTodoFilterValue(filterOption)}
+              data-cy={`FilterLink${formattedFilterOption}`}
+            >
+              {formattedFilterOption}
+            </a>
+          );
+        })}
       </nav>
 
       <button

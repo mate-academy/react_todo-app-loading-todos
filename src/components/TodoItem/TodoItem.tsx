@@ -28,7 +28,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   };
 
   const handleEditTodoFormSubmit = (
-    event: React.UIEvent<HTMLFormElement> | React.UIEvent<HTMLInputElement>,
+    event: // eslint-disable-next-line prettier/prettier
+    | React.FormEvent<HTMLFormElement>
+    | React.FocusEvent<HTMLInputElement>,
   ) => {
     if ('preventDefault' in event) {
       event.preventDefault();
