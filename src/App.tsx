@@ -3,15 +3,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Todo } from './types/Todo';
+import { FilterCriteria } from './types/FilterCriteria';
 import * as todoServise from './api/todos';
 import { Header, Footer, TodoList, ErrorNotification } from './components';
 
-const filterTodos = (tasks: Todo[], filterCriteria: string) => {
+const filterTodos = (tasks: Todo[], filterCriteria: FilterCriteria) => {
   return tasks.filter(task => {
     const matchesStatus =
-      filterCriteria === 'all' ||
-      (filterCriteria === 'active' && !task.completed) ||
-      (filterCriteria === 'completed' && task.completed);
+      filterCriteria === FilterCriteria.All ||
+      (filterCriteria === FilterCriteria.Active && !task.completed) ||
+      (filterCriteria === FilterCriteria.Completed && task.completed);
 
     return matchesStatus;
   });
@@ -21,8 +22,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<FilterCriteria>(FilterCriteria.All);
 
   useEffect(() => {
     setLoading(true);
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
       });
   }
 
-  const handleFilter = (filterType: string) => {
+  const handleFilter = (filterType: FilterCriteria) => {
     setFilter(filterType);
   };
 
@@ -128,7 +128,7 @@ export const App: React.FC = () => {
         />
 
         {/* Hide the footer if there are no todos */}
-        {!!todos.length && (
+        {!!todos.length && !loading && (
           <Footer
             handleFilter={handleFilter}
             filter={filter}

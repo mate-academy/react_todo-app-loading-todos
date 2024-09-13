@@ -2,13 +2,18 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { Todo } from '../../types/Todo';
+import { FilterCriteria } from '../../types/FilterCriteria';
 
 type Props = {
-  handleFilter: (filterType: string) => void;
-  filter: string;
+  handleFilter: (filterType: FilterCriteria) => void;
+  filter: FilterCriteria;
   todos: Todo[] | null;
   deleteTodo: (todoId: number) => void;
   activeTodos: number;
+};
+
+const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 export const Footer: React.FC<Props> = ({
@@ -26,52 +31,31 @@ export const Footer: React.FC<Props> = ({
     });
   };
 
+  const correctItemTerm = activeTodos === 1 ? 'item' : 'items';
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {activeTodos} {activeTodos === 1 ? 'item' : 'items'} left
+        {activeTodos} {correctItemTerm} left
       </span>
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: filter === 'all',
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => {
-            handleFilter('all');
-          }}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === 'active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => {
-            handleFilter('active');
-          }}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === 'completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => {
-            handleFilter('completed');
-          }}
-        >
-          Completed
-        </a>
+        {Object.values(FilterCriteria).map(filterType => (
+          <a
+            key={filterType}
+            href={`#/${filterType}`}
+            className={classNames('filter__link', {
+              selected: filter === filterType,
+            })}
+            data-cy={`FilterLink${capitalizeFirstLetter(filterType)}`}
+            onClick={() => {
+              handleFilter(filterType);
+            }}
+          >
+            {capitalizeFirstLetter(filterType)}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
