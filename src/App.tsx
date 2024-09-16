@@ -7,6 +7,8 @@ import { Todo } from './types/Todo';
 import classNames from 'classnames';
 import { Filter } from './types/Filter';
 import { TodoItem } from './components/TodoItem';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 export const USER_ID = 1414;
 
@@ -17,26 +19,23 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [userId] = useState(USER_ID);
-  const [completed] = useState(false);
-  //const [hasShownError, setHasShownError] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    getTodos(userId)
+    getTodos(USER_ID)
       .then(setTodos)
       .catch(() => {
         setError('Unable to load todos');
         const timeoutId = setTimeout(() => {
           setError('');
-          //setHasShownError(true);
         }, 3000);
 
         return () => clearTimeout(timeoutId);
       })
       .finally(() => setIsLoading(false));
-  }, [userId]);
+  }, []);
 
-  //userId, filter, error, hasShownError
   const reset = () => {
     setTitle('');
     setError('');
@@ -47,7 +46,7 @@ export const App: React.FC = () => {
 
     setTitle(title);
 
-    if (!title) {
+    if (!title.trim()) {
       setError('Title should not be empty');
 
       return;
@@ -66,6 +65,7 @@ export const App: React.FC = () => {
   };
 
   const handleToggle = (todoId: number) => {
+    setCompleted(true);
     setTodos(prevTodos =>
       prevTodos.map(todo =>
         todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
@@ -84,10 +84,11 @@ export const App: React.FC = () => {
   const hasCompleted = todos.some(todo => todo.completed);
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === Filter.Active) {
-      return !todo.completed;
-    } else if (filter === Filter.Completed) {
-      return todo.completed;
+    switch (filter) {
+      case Filter.Active:
+        return !todo.completed;
+      case Filter.Completed:
+        return todo.completed;
     }
 
     return true;
@@ -107,33 +108,14 @@ export const App: React.FC = () => {
       {!isloading && (
         <>
           <div className="todoapp__content">
-            <header className="todoapp__header">
-              {todos.length > 0 && (
-                <button
-                  type="button"
-                  data-cy="ToggleAllButton"
-                  className={classNames('todoapp__toggle-all', {
-                    active: isAllCompleted,
-                  })}
-                />
-              )}
-
-              <form
-                action="api/todos"
-                method="POST"
-                onSubmit={handleSubmit}
-                onReset={reset}
-              >
-                <input
-                  data-cy="NewTodoField"
-                  type="text"
-                  className="todoapp__new-todo"
-                  placeholder="What needs to be done?"
-                  value={title}
-                  onChange={handleTitleChange}
-                />
-              </form>
-            </header>
+            <Header
+              todosLen={todos.length}
+              onSubmit={handleSubmit}
+              onReset={reset}
+              isAllCompleted={isAllCompleted}
+              title={title}
+              onTitleChange={handleTitleChange}
+            />
 
             <section className="todoapp__main" data-cy="TodoList">
               {filteredTodos.map(todo => (
@@ -142,37 +124,12 @@ export const App: React.FC = () => {
             </section>
 
             {todos.length > 0 && (
-              <footer className="todoapp__footer" data-cy="Footer">
-                <span className="todo-count" data-cy="TodosCounter">
-                  {todos.filter(todo => !todo.completed).length} items left
-                </span>
-
-                <nav className="filter" data-cy="Filter">
-                  {Object.values(Filter).map(filterValue => (
-                    <a
-                      key={filterValue}
-                      href={`#/${filterValue}`}
-                      className={classNames('filter__link', {
-                        selected: filter === filterValue,
-                      })}
-                      data-cy={`FilterLink${filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}`}
-                      onClick={() => handleFilterChange(filterValue)}
-                    >
-                      {filterValue.charAt(0).toUpperCase() +
-                        filterValue.slice(1)}
-                    </a>
-                  ))}
-                </nav>
-
-                <button
-                  type="button"
-                  className="todoapp__clear-completed"
-                  data-cy="ClearCompletedButton"
-                  disabled={!hasCompleted}
-                >
-                  Clear completed
-                </button>
-              </footer>
+              <Footer
+                todos={todos}
+                filter={filter}
+                onFilterChange={handleFilterChange}
+                hasCompleted={hasCompleted}
+              />
             )}
           </div>
         </>
