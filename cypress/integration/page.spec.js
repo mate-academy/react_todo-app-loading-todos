@@ -128,7 +128,7 @@ describe('', () => {
       page.visit();
 
       cy.wait('@loadRequest');
-      cy.wait(1000);
+      cy.wait(500);
 
       cy.get('@loadCallback').should('have.callCount', 1);
     });
@@ -167,11 +167,6 @@ describe('', () => {
         page.mockLoad({ statusCode: 404, body: 'Not found' }).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
-
-        // just in case
-        cy.wait(50);
-
-        cy.clock();
       });
 
       it('should show error', () => {
@@ -183,6 +178,10 @@ describe('', () => {
       });
 
       it('should hide error after 3 seconds', () => {
+        // just in case
+        cy.wait(50);
+
+        cy.clock();
         cy.tick(2500);
         errorMessage.assertVisible();
 
@@ -375,6 +374,22 @@ describe('', () => {
         page.mockLoad({ fixture: 'completed-todos' }).as('loadRequest');
         page.visit();
         cy.wait('@loadRequest');
+      });
+
+      it('should hide todos on active selection', () => {
+        filter.link('active').click();
+
+        todos.assertCount(0);
+      });
+
+      it('should keep footer on active selection', () => {
+        filter.link('active').click();
+        filter.assertVisible();
+      });
+
+      it('should keep todos counter on active selection', () => {
+        filter.link('active').click();
+        page.todosCounter().should('have.text', '0 items left');
       });
     });
   });
@@ -595,6 +610,9 @@ describe('', () => {
       });
 
       it('should hide an error message in 3 seconds', () => {
+        // just in case
+        cy.wait(50);
+
         cy.clock();
         cy.tick(2500);
 
