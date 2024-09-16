@@ -1,67 +1,31 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
-
+import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
-import { ErrorMessages } from './types/Errors';
-import { TodoStatusFilter } from './types/TodoStatusFilter';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
+import { TodoStatusFilter } from './types/TodoStatusFilter';
+import { getPreparedTodos } from './utils/getPreparedTodos';
 
 export const App: React.FC = () => {
-  // #region todos and errors
   const [todos, setTodos] = useState<Todo[]>([]);
-  const sortedTodos = useMemo(
-    () => ({
-      active: todos.filter(todo => !todo.completed),
-      completed: todos.filter(todo => todo.completed),
-    }),
-    [todos],
-  );
-
-  const [errorMessage, setErrorMessage] = useState<ErrorMessages>(
-    ErrorMessages.None,
-  );
-  // #endregion
-
-  // #region filterStatus and  filter handling
-  const [filterStatus, setFilterStatus] = useState<TodoStatusFilter>(
+  const [errorMessage, setErrorMessage] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState<TodoStatusFilter>(
     TodoStatusFilter.All,
   );
 
-  const getFilteredTodos = useCallback(
-    (allTodos: Todo[], status: TodoStatusFilter) => {
-      let filteredTodos = [...allTodos];
-
-      if (status) {
-        filteredTodos =
-          status === TodoStatusFilter.Completed
-            ? sortedTodos.completed
-            : sortedTodos.active;
-      }
-
-      return filteredTodos;
-    },
-    [sortedTodos],
-  );
-
-  const filteredTodos = useMemo(
-    () => getFilteredTodos(todos, filterStatus),
-    [getFilteredTodos, todos, filterStatus],
-  );
-  // #endregion
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
+  const preparedTodos = getPreparedTodos(todos, selectedFilter);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => {
-        setErrorMessage(ErrorMessages.Loading);
-      });
+      .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
@@ -73,21 +37,24 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} onToggle={setTodos} />
+        <Header />
 
-        <TodoList todos={filteredTodos} onTodosChange={setTodos} />
+        <TodoList todos={preparedTodos} />
 
-        {!!todos.length && (
+        {todos.length > 0 && (
           <Footer
-            sortedTodos={sortedTodos}
-            filterStatus={filterStatus}
-            onStatusChange={setFilterStatus}
-            onTodosChange={setTodos}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
           />
         )}
       </div>
 
-      <ErrorMessage errorMessage={errorMessage} />
+      <ErrorMessage
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

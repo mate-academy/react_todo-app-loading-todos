@@ -1,44 +1,31 @@
-import { memo, useEffect, useRef } from 'react';
-import { ErrorMessages } from '../../types/Errors';
+import classNames from 'classnames';
+import { useEffect } from 'react';
 
 type Props = {
-  errorMessage: ErrorMessages;
+  errorMessage: string;
+  setErrorMessage: (error: string) => void;
 };
 
-export const ErrorMessage: React.FC<Props> = memo(function ErrorNotification({
-  errorMessage,
-}) {
-  const errorNotification = useRef<HTMLDivElement>(null);
-
-  const deleteNotification = () => {
-    errorNotification.current?.classList.add('hidden');
-  };
-
+export const ErrorMessage = ({ errorMessage, setErrorMessage }: Props) => {
   useEffect(() => {
-    if (errorMessage) {
-      errorNotification.current?.classList.remove('hidden');
-
-      setTimeout(deleteNotification, 3000);
-    }
-  }, [errorMessage]);
+    setTimeout(() => setErrorMessage(''), 3000);
+  });
 
   return (
     <div
-      ref={errorNotification}
       data-cy="ErrorNotification"
-      className="
-        notification is-danger is-light
-        has-text-weight-normal hidden
-      "
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !errorMessage },
+      )}
     >
       <button
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={deleteNotification}
+        onClick={() => setErrorMessage('')}
       />
-
       {errorMessage}
     </div>
   );
-});
+};
