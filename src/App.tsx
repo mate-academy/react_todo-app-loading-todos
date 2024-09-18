@@ -13,26 +13,23 @@ import { Errors } from './types/Errors';
 import { Filters } from './types/Filters';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<Errors | null>(null);
   const [filter, setFilter] = useState<Filters>(Filters.all);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-
-  const todos: Todo[] = [];
 
   useEffect(() => {
     todosClient
       .get()
       .then(res => {
+        setTodos(res);
         setFilteredTodos(res);
-
-        return res;
       })
       .catch(() => {
         window.setTimeout(() => {
           setErrorMessage(Errors.load);
         }, 300);
-
-        return [];
+        setTodos([]);
       });
   }, []);
 
