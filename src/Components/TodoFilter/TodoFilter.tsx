@@ -10,47 +10,35 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ todos, filter, onClick }) => {
+  const uncmpltTodosCount = todos.filter(todo => !todo.completed).length;
+
   return (
     <>
       {todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {`${todos.filter(todo => !todo.completed).length} items left`}
+            {`${uncmpltTodosCount} items left`}
           </span>
 
           <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={classNames('filter__link', {
-                selected: filter === Filters.all,
-              })}
-              data-cy="FilterLinkAll"
-              onClick={() => onClick(Filters.all)}
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={classNames('filter__link', {
-                selected: filter === Filters.active,
-              })}
-              data-cy="FilterLinkActive"
-              onClick={() => onClick(Filters.active)}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={classNames('filter__link', {
-                selected: filter === Filters.completed,
-              })}
-              data-cy="FilterLinkCompleted"
-              onClick={() => onClick(Filters.completed)}
-            >
-              Completed
-            </a>
+            {Object.keys(Filters).map(filterButton => {
+              return (
+                <a
+                  key={filterButton}
+                  href="#/"
+                  className={classNames('filter__link', {
+                    selected:
+                      filter === Filters[filterButton as keyof typeof Filters],
+                  })}
+                  data-cy="FilterLinkAll"
+                  onClick={() =>
+                    onClick(Filters[filterButton as keyof typeof Filters])
+                  }
+                >
+                  {Filters[filterButton as keyof typeof Filters]}
+                </a>
+              );
+            })}
           </nav>
 
           <button
