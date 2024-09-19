@@ -9,7 +9,7 @@ type Props = {
 export const Header: React.FC<Props> = ({ todos }) => {
   return (
     <header className="todoapp__header">
-      {todos.length > 0 && (
+      {!!todos.length && (
         <button
           type="button"
           className={cn('todoapp__toggle-all')}

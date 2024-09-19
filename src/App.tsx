@@ -41,10 +41,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     todoService
       .getTodos()
-      .then(el => {
-        setTodos(el);
-        setErrorMessage('');
-      })
+      .then(setTodos)
       .catch(er => {
         setErrorMessage('Unable to load todos');
         setTimeout(() => setErrorMessage(''), 3000);
@@ -70,7 +67,7 @@ export const App: React.FC = () => {
 
         <TodoList sortedTodos={sortedTodos} />
 
-        {todos.length > 0 && (
+        {!!todos.length && (
           <Footer
             sortFunction={setSelectedSort}
             todos={todos}
