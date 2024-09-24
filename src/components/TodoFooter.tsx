@@ -2,45 +2,33 @@ import { useContext } from 'react';
 import { FilterContext, InitialTodosContext, TodosContext } from '../store';
 import cn from 'classnames';
 import { Filter, filteredOptions, Options } from '../types/type';
-import { deleteTodos } from '../api/todos';
 
 export const TodoFooter: React.FC = () => {
-  const { initialTodos, setInitialTodos } = useContext(InitialTodosContext);
+  const { initialTodos } = useContext(InitialTodosContext);
   const { dispatch } = useContext(TodosContext);
   const { filter, setFilter } = useContext(FilterContext);
 
   const hasCompletedTodos = initialTodos.some(todo => todo.completed);
   const numberOfItems = initialTodos.filter(todo => !todo.completed).length;
 
-  const showAllTodos = () => {
+  const AllTodos = () => {
     setFilter(Filter.All);
-    dispatch({ type: Filter.All.toUpperCase(), payload: initialTodos })
+    dispatch({ type: Filter.All.toUpperCase(), payload: initialTodos });
   };
 
   const activeTodos = () => {
     setFilter(Filter.Active);
 
-    dispatch({ type: Filter.Active.toUpperCase(), payload: initialTodos })
+    dispatch({ type: Filter.Active.toUpperCase(), payload: initialTodos });
   };
 
   const competedTodos = () => {
     setFilter(Filter.Completed);
 
-    dispatch({ type: Filter.Completed.toUpperCase(), payload: initialTodos })
+    dispatch({ type: Filter.Completed.toUpperCase(), payload: initialTodos });
   };
 
-  const clearCompetedTodos = () => {
-    const deletePromises = initialTodos
-      .filter(todo => todo.completed)
-      .map(({ id }) => deleteTodos(id));
-
-    Promise.all(deletePromises);
-
-    dispatch({ type: 'CLEAR_COMPLETED', payload: initialTodos })
-    setInitialTodos(prevTodos => prevTodos.filter(todo => !todo.completed));
-  };
-
-  const arrOfFilteredFunc = [showAllTodos, activeTodos, competedTodos];
+  const arrOfFilteredFunc = [AllTodos, activeTodos, competedTodos];
 
   if (!initialTodos.length) {
     return null;
@@ -71,7 +59,6 @@ export const TodoFooter: React.FC = () => {
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={clearCompetedTodos}
         disabled={!hasCompletedTodos}
       >
         Clear completed

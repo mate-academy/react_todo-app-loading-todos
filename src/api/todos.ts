@@ -18,7 +18,4 @@ export const postTodo = ({ userId, title, completed }: Omit<Todo, 'id'>) => {
 export const updeteTodo = (data: Todo) => {
   return client.patch<Todo>(`/todos/${data.id}`, data);
 };
-
-
-
 // Add more methods here

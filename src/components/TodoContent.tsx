@@ -1,3 +1,4 @@
+import { ErrorField } from './ErrorField';
 import { TodoFooter } from './TodoFooter';
 import { TodoHeader } from './TodoHeader';
 import { TodoList } from './TodoList';
@@ -8,6 +9,7 @@ export const TodoContent: React.FC = () => {
       <TodoHeader />
       <TodoList />
       <TodoFooter />
+      <ErrorField />
     </div>
   );
 };

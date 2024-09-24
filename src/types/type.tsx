@@ -11,10 +11,10 @@ export enum Filter {
 }
 
 export type Options = {
-  href: string,
-  title: string,
-  'data-cy': string,
-}
+  href: string;
+  title: string;
+  'data-cy': string;
+};
 
 export const filteredOptions = [
   {
