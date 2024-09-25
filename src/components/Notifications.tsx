@@ -6,7 +6,6 @@ interface Props {
 }
 
 export const Notifications: React.FC<Props> = ({ errorMessage, onClose }) => {
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimeout(onClose, 500);
@@ -14,7 +13,6 @@ export const Notifications: React.FC<Props> = ({ errorMessage, onClose }) => {
 
     return () => clearTimeout(timer);
   }, [onClose]);
-
 
   return (
     <div
@@ -26,5 +24,3 @@ export const Notifications: React.FC<Props> = ({ errorMessage, onClose }) => {
     </div>
   );
 };
-
-

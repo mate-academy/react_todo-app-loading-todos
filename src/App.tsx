@@ -477,8 +477,7 @@ export const App: React.FC = () => {
       </div>
       {/* Add the 'hidden' class to hide the message smoothly */}
 
-        <Notifications errorMessage={error} onClose={() => setError(null)} />
-
+      <Notifications errorMessage={error} onClose={() => setError(null)} />
     </div>
   );
 };
