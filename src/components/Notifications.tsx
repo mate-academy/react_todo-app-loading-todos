@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
-  message: string | null;
+  errorMessage: string | null;
   onClose: () => void;
 }
 
-export const Notifications: React.FC<Props> = ({ message, onClose }) => {
-  const [isVisible, setIsVisible] = useState(true);
+export const Notifications: React.FC<Props> = ({ errorMessage, onClose }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
       setTimeout(onClose, 500);
     }, 3000);
 
     return () => clearTimeout(timer);
   }, [onClose]);
 
+
   return (
     <div
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${!isVisible ? 'hidden' : ''}`}
+      className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
     >
-      {message}
-      <button onClick={onClose}>{message}</button>
+      <button data-cy="HideErrorButton" type="button" className="delete" />
+      {errorMessage}
     </div>
   );
 };
+
+

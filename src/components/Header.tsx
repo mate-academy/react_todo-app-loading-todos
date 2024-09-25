@@ -1,36 +1,3 @@
-// import React, { useState } from 'react';
-
-// interface Props {
-//   onAddTodo: (title: string) => void;
-// }
-
-// export const Header: React.FC<Props> = ({ onAddTodo }) => {
-//   const [newTodo, setNewTodo] = useState('');
-
-//   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     if (newTodo.trim()) {
-//       onAddTodo(newTodo);
-//       setNewTodo('');
-//     }
-//   };
-
-//   return (
-//     <header className="todoapp__header">
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="text"
-//           className="todoapp__new-todo"
-//           placeholder="What needs to be done?"
-//           value={newTodo}
-//           onChange={(e) => setNewTodo(e.target.value)}
-//           autoFocus
-//         />
-//       </form>
-//     </header>
-//   );
-// };
-
 import { Todo } from '../types/Todo';
 
 interface HeaderProps {

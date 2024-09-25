@@ -1,34 +1,3 @@
-// import React from 'react';
-// import { Todo } from '../types/Todo';
-
-// interface Props {
-//   filter: 'all' | 'active' | 'completed';
-//   setFilter: (filter: 'all' | 'active' | 'completed') => void;
-// }
-
-// export const Footer: React.FC<Props> = ({ filter, setFilter }) => (
-//   <div className="filter">
-//     <button
-//       className={filter === 'all' ? 'selected' : ''}
-//       onClick={() => setFilter('all')}
-//     >
-//       All
-//     </button>
-//     <button
-//       className={filter === 'active' ? 'selected' : ''}
-//       onClick={() => setFilter('active')}
-//     >
-//       Active
-//     </button>
-//     <button
-//       className={filter === 'completed' ? 'selected' : ''}
-//       onClick={() => setFilter('completed')}
-//     >
-//       Completed
-//     </button>
-//   </div>
-// );
-
 import { Todo } from '../types/Todo';
 
 interface FooterProps {
