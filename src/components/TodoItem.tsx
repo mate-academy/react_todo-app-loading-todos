@@ -82,7 +82,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
-
 import { Todo } from '../types/Todo';
 import React, { useState } from 'react';
 
@@ -132,7 +131,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         />
       </label>
 
-      <form>
+
         {isEditing ? (
           <input
             data-cy="TodoTitleField"
@@ -153,7 +152,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             {todo.title}
           </span>
         )}
-      </form>
+
 
       <button
         type="button"
