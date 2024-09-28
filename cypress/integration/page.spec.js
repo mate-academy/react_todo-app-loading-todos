@@ -467,7 +467,7 @@ describe('', () => {
       beforeEach(() => {
         page.mockCreate();
         page.pauseTimers();
-        page.newTodoField().type('Test Todo.tsx{enter}');
+        page.newTodoField().type('Test Todo{enter}');
       });
 
       it('should send a create request', () => {
@@ -480,7 +480,7 @@ describe('', () => {
       });
 
       it('should keep entered text', () => {
-        page.newTodoField().should('have.value', 'Test Todo.tsx');
+        page.newTodoField().should('have.value', 'Test Todo');
       });
 
       it('should create and show a temp TodoItem with Loader', () => {
@@ -489,7 +489,7 @@ describe('', () => {
       });
 
       it('should show a temp TodoItem with correct title', () => {
-        todos.assertTitle(5, 'Test Todo.tsx');
+        todos.assertTitle(5, 'Test Todo');
       });
 
       it('should show a not completed temp TodoItem', () => {
@@ -513,7 +513,7 @@ describe('', () => {
       describe('', () => {
         beforeEach(() => {
           page.mockCreate().as('createRequest');
-          page.newTodoField().type('Test Todo.tsx{enter}');
+          page.newTodoField().type('Test Todo{enter}');
 
           cy.wait('@createRequest');
         });
@@ -526,7 +526,7 @@ describe('', () => {
         });
 
         it('should add a todo with a correct title', () => {
-          todos.assertTitle(5, 'Test Todo.tsx');
+          todos.assertTitle(5, 'Test Todo');
         });
 
         it('should add a not completed todo', () => {
@@ -584,7 +584,7 @@ describe('', () => {
         page.mockCreate().as('createRequest');
 
         filter.link('active').click();
-        page.newTodoField().type('Test Todo.tsx{enter}');
+        page.newTodoField().type('Test Todo{enter}');
         cy.wait('@createRequest');
 
         filter.assertSelected('active');
@@ -599,7 +599,7 @@ describe('', () => {
         page.mockCreate({ statusCode: 503, body: 'Service Unavailable' })
           .as('createRequest');
 
-        page.newTodoField().type('Test Todo.tsx{enter}');
+        page.newTodoField().type('Test Todo{enter}');
 
         cy.wait('@createRequest');
       });
@@ -632,7 +632,7 @@ describe('', () => {
       });
 
       it('should keep the entered text on request fail', () => {
-        page.newTodoField().should('have.value', 'Test Todo.tsx');
+        page.newTodoField().should('have.value', 'Test Todo');
       });
 
       it('should focus text field', () => {
@@ -689,7 +689,7 @@ describe('', () => {
         todos.assertCount(6);
         // todos.assertNotLoading(5);
         todos.assertNotCompleted(5);
-        todos.assertTitle(5, 'Test Todo.tsx');
+        todos.assertTitle(5, 'Test Todo');
 
         page.todosCounter().should('have.text', '3 items left');
       });
@@ -723,7 +723,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Individual Todo.tsx Deletion', () => {
+  describe.skip('Individual Todo Deletion', () => {
     describe('Default behavior', () => {
       beforeEach(() => {
         page.mockLoad().as('loadRequest');
@@ -849,7 +849,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Group Todo.tsx Deletion', () => {
+  describe.skip('Group Todo Deletion', () => {
     describe('with no completed todos', () => {
       beforeEach(() => {
         page.mockLoad({ fixture: 'active-todos' }).as('loadRequest');
@@ -979,7 +979,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Todo.tsx Toggling', () => {
+  describe.skip('Todo Toggling', () => {
     beforeEach(() => {
       page.mockLoad().as('loadRequest');
       page.visit();
