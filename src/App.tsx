@@ -18,13 +18,11 @@ export const App: React.FC = () => {
 
   const hasCompleted = fetchedTodos.find(todo => todo.completed)?.completed;
 
-  const todoCounter: number | string = fetchedTodos.filter(todo =>
-    filterBy === 'active' ? todo.completed : !todo.completed,
-  ).length;
-
+  const numOfActiveTodos = todos.filter(todo => !todo.completed).length;
   const todoCounterTitle =
-    (todoCounter > 1 ? `${todoCounter} items` : `${todoCounter} item`) +
-    ' left';
+    (numOfActiveTodos !== 1
+      ? `${numOfActiveTodos} items`
+      : `${numOfActiveTodos} item`) + ' left';
 
   const errorMessageHandler = (er: Error) => {
     setIsHidden(false);
@@ -55,15 +53,15 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let filteredTodos = [...todos];
+    let filteredTodos = todos;
 
     if (filterBy !== 'all') {
-      filteredTodos = filteredTodos.filter(todo =>
+      filteredTodos = todos.filter(todo =>
         filterBy === 'active' ? !todo.completed : todo.completed,
       );
     }
 
-    setFetchedTodos(filteredTodos);
+    setFetchedTodos([...filteredTodos]);
   }, [filterBy, todos]);
 
   if (!USER_ID) {
@@ -160,59 +158,62 @@ export const App: React.FC = () => {
             </section>
 
             {/* Hide the footer if there are no todos */}
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {todoCounterTitle}
-              </span>
+            {!!todos.length && (
+              <footer className="todoapp__footer" data-cy="Footer">
+                <span className="todo-count" data-cy="TodosCounter">
+                  {todoCounterTitle}
+                </span>
 
-              {/* Active link should have the 'selected' class */}
-              <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: filterBy === 'all',
-                  })}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setFilterBy('all')}
-                >
-                  All
-                </a>
+                {/* Active link should have the 'selected' class */}
+                <nav className="filter" data-cy="Filter">
+                  <a
+                    href="#/"
+                    className={classNames('filter__link', {
+                      selected: filterBy === 'all',
+                    })}
+                    data-cy="FilterLinkAll"
+                    onClick={() => setFilterBy('all')}
+                  >
+                    All
+                  </a>
 
-                <a
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: filterBy === 'active',
-                  })}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setFilterBy('active')}
-                >
-                  Active
-                </a>
+                  <a
+                    href="#/active"
+                    className={classNames('filter__link', {
+                      selected: filterBy === 'active',
+                    })}
+                    data-cy="FilterLinkActive"
+                    onClick={() => setFilterBy('active')}
+                  >
+                    Active
+                  </a>
 
-                <a
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: filterBy === 'completed',
-                  })}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setFilterBy('completed')}
-                >
-                  Completed
-                </a>
-              </nav>
+                  <a
+                    href="#/completed"
+                    className={classNames('filter__link', {
+                      selected: filterBy === 'completed',
+                    })}
+                    data-cy="FilterLinkCompleted"
+                    onClick={() => setFilterBy('completed')}
+                  >
+                    Completed
+                  </a>
+                </nav>
 
-              {/*this button should be disabled if there are no completed todos*/}
+                {/*this button should be disabled if there are no completed todos*/}
 
-              {hasCompleted && (
-                <button
-                  type="button"
-                  className="todoapp__clear-completed"
-                  data-cy="ClearCompletedButton"
-                >
-                  Clear completed
-                </button>
-              )}
-            </footer>
+                {numOfActiveTodos && (
+                  <button
+                    type="button"
+                    className="todoapp__clear-completed"
+                    data-cy="ClearCompletedButton"
+                    disabled={!hasCompleted}
+                  >
+                    Clear completed
+                  </button>
+                )}
+              </footer>
+            )}
           </>
         )}
       </div>
