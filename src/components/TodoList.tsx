@@ -18,18 +18,22 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
             completed: todo.completed,
           })}
         >
-          <label
-            className="todo__status-label"
-            htmlFor={`todo-checkbox-${todo.id}`}
-          >
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              id={`todo-checkbox-${todo.id}`}
-              checked
-            />
-          </label>
+          {
+            // eslint-disable-next-line jsx-a11y/label-has-associated-control
+            <label
+              className="todo__status-label"
+              htmlFor={`todo-checkbox-${todo.id}`}
+            >
+              <input
+                id={`todo-checkbox-${todo.id}`}
+                data-cy="TodoStatus"
+                type="checkbox"
+                className="todo__status"
+                checked={todo.completed}
+                readOnly
+              />
+            </label>
+          }
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
           </span>
