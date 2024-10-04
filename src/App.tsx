@@ -7,6 +7,7 @@ import { getTodos, USER_ID } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
+import { Filter } from './Enum';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,20 +17,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todoList => {
-        setTodos(todoList);
-      })
+      .then(setTodos)
       .catch(error => {
         console.error(error);
         setErrorText('Unable to load todos');
       });
   }, []);
-
-  enum Filter {
-    All = 'All',
-    Active = 'Active',
-    Completed = 'Completed',
-  }
 
   useEffect(() => {
     switch (filterBy) {
@@ -98,43 +91,21 @@ export const App: React.FC = () => {
 
             {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                data-cy="FilterLinkAll"
-                onClick={() => setFilterBy('All')}
-                className={classNames(
-                  'filter__link',
-                  // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === Filter.All }
-                )}
-              >
-                All
-              </a>
-              <a
-                href="#/active"
-                className={classNames(
-                  'filter__link',
-                  // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === Filter.Active }
-                )}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilterBy('Active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={classNames(
-                  'filter__link',
-                  // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === Filter.Completed }
-                )}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilterBy('Completed')}
-              >
-                Completed
-              </a>
+              {Object.values(Filter).map(status => (
+                <a
+                  key={status}
+                  href="#/"
+                  data-cy="FilterLinkAll"
+                  onClick={() => setFilterBy(`${status}`)}
+                  className={classNames(
+                    'filter__link',
+                    // eslint-disable-next-line prettier/prettier
+                    { selected: filterBy === status }
+                  )}
+                >
+                  {status}
+                </a>
+              ))}
             </nav>
 
             {/* this button should be disabled if there are no completed todos */}
