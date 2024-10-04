@@ -25,13 +25,19 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  enum Filter {
+    All = 'All',
+    Active = 'Active',
+    Completed = 'Completed',
+  }
+
   useEffect(() => {
     switch (filterBy) {
-      case 'Active':
+      case Filter.Active:
         setFilteredTodos(todos.filter(todo => !todo.completed));
         break;
 
-      case 'Completed':
+      case Filter.Completed:
         setFilteredTodos(todos.filter(todo => todo.completed));
         break;
 
@@ -99,7 +105,7 @@ export const App: React.FC = () => {
                 className={classNames(
                   'filter__link',
                   // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === 'All' }
+                  { selected: filterBy === Filter.All }
                 )}
               >
                 All
@@ -109,7 +115,7 @@ export const App: React.FC = () => {
                 className={classNames(
                   'filter__link',
                   // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === 'Active' }
+                  { selected: filterBy === Filter.Active }
                 )}
                 data-cy="FilterLinkActive"
                 onClick={() => setFilterBy('Active')}
@@ -122,7 +128,7 @@ export const App: React.FC = () => {
                 className={classNames(
                   'filter__link',
                   // eslint-disable-next-line prettier/prettier
-                  { selected: filterBy === 'Completed' }
+                  { selected: filterBy === Filter.Completed }
                 )}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setFilterBy('Completed')}
