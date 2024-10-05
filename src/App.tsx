@@ -100,6 +100,7 @@ export const App: React.FC = () => {
 
                   {/* overlay will cover the todo while it is being deleted or updated */}
                   <div data-cy="TodoLoader" className="modal overlay">
+                    {/* eslint-disable-next-line max-len */}
                     <div className="modal-background has-background-white-ter" />
                     <div className="loader" />
                   </div>
