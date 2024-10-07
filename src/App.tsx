@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filters';
 import { UserWarning } from './UserWarning';
-import { createTodo, USER_ID, getTodos } from './api/todos';
+import { createTodo, USER_ID, getTodos, deleteTodo } from './api/todos';
 import { Header } from './components/header';
 import { TodoList } from './components/todoList';
 import { Footer } from './components/footer';
@@ -54,6 +54,14 @@ export const App: React.FC = () => {
     );
   }
 
+  function deleteOneTodo(todoId: number) {
+    deleteTodo(todoId)
+
+    setTodos(currentTodos => currentTodos.filter(todo => 
+      todo.id !== todoId
+    ))
+  }
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -73,7 +81,10 @@ export const App: React.FC = () => {
 
         {todos && (
           <>
-            <TodoList visibleTodos={getVisibleTodos(filter)} />
+            <TodoList
+              visibleTodos={getVisibleTodos(filter)}
+              deleteOneTodo={deleteOneTodo}
+            />
 
             <Footer
               setFilter={setFilter}

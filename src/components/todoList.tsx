@@ -5,9 +5,10 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   visibleTodos: Todo[];
+  deleteOneTodo: (id: number) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
+export const TodoList: React.FC<Props> = ({ visibleTodos, deleteOneTodo }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {visibleTodos.map(todo => (
@@ -32,7 +33,12 @@ export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
           </span>
 
           {/* Remove button appears only on hover */}
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => deleteOneTodo(todo.id)}
+          >
             ×
           </button>
 
