@@ -35,7 +35,9 @@ function request<T>(
       }
 
       return response.json();
-    });
+    })
+
+    .then(todos => todos);
 }
 
 export const client = {
