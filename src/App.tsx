@@ -32,8 +32,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => setErrorMessage(''));
+      .catch((error) =>{
+        setErrorMessage('Unable to load todos');
+        throw error;
+      })
   }, []);
 
   const allActive = useMemo(() => {
