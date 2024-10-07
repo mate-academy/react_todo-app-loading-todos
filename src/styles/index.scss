@@ -12,6 +12,7 @@ body {
   transition-property: opacity, min-height;
   transition-duration: 1s;
   min-height: 36px;
+  // opacity: 1;
 }
 
 .notification.hidden {
@@ -20,6 +21,6 @@ body {
   pointer-events: none;
 }
 
-@import "./todoapp";
-@import "./todo";
-@import "./filter";
+@import './todoapp';
+@import './todo';
+@import './filter';
