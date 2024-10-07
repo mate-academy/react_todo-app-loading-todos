@@ -12,16 +12,13 @@ import { Footer } from './components/footer';
 import { Error } from './components/error';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
   const [todoTitle, setTodoTitle] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(Filter.all);
 
-  function getVisibleTodos(filter: Filter) {
-    switch (filter) {
+  function getVisibleTodos(filt: Filter) {
+    switch (filt) {
       case Filter.active:
         return todos.filter(todo => !todo.completed);
       case Filter.completed:
@@ -36,25 +33,30 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => setErrorMessage(''))
+      .finally(() => setErrorMessage(''));
   }, []);
- 
+
   const allActive = useMemo(() => {
-    return todos.every(todo => todo.completed)
-  }, [todos])
+    return todos.every(todo => todo.completed);
+  }, [todos]);
 
   const active = useMemo(() => {
-    return todos.filter(todo => !todo.completed)
-  }, [todos])
+    return todos.filter(todo => !todo.completed);
+  }, [todos]);
 
-  const completed = useMemo(() => {
-    return todos.filter(todo => todo.completed)
-  }, [todos])
+  const complete = useMemo(() => {
+    return todos.filter(todo => todo.completed);
+  }, [todos]);
 
-  function addTodo({ userId, title, completed }: Todo) {
-    createTodo({ userId, title, completed })
-      .then(newTodo => setTodos(currentTodos => [...currentTodos, newTodo]))
-  };
+  function addTodo({ userId, title, completed }: Omit<Todo, 'id'>) {
+    createTodo({ userId, title, completed }).then(newTodo =>
+      setTodos(currentTodos => [...currentTodos, newTodo]),
+    );
+  }
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">
@@ -71,22 +73,18 @@ export const App: React.FC = () => {
 
         {todos && (
           <>
-            <TodoList
-              visibleTodos={getVisibleTodos(filter)}
-            />
-        
+            <TodoList visibleTodos={getVisibleTodos(filter)} />
+
             <Footer
               setFilter={setFilter}
               filter={filter}
               active={active}
-              completed={completed}
+              complete={complete}
             />
           </>
         )}
       </div>
-      <Error
-        errorMessage={errorMessage}
-      />
+      <Error errorMessage={errorMessage} />
     </div>
   );
 };

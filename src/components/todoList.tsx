@@ -13,15 +13,17 @@ export const TodoList: React.FC<Props> = ({ visibleTodos }) => {
       {visibleTodos.map(todo => (
         <div
           data-cy="Todo"
-          className={cn("todo", {"completed": todo.completed})} 
+          className={cn('todo', { completed: todo.completed })}
           key={todo.id}
         >
-          <label className="todo__status-label">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label className="todo__status-label" htmlFor={todo.id.toString()}>
             <input
               data-cy="TodoStatus"
               type="checkbox"
               className="todo__status"
-              checked
+              checked={todo.completed}
+              id={todo.id.toString()}
             />
           </label>
 
