@@ -7,11 +7,11 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TodoList } from './components/TodoList';
 import { Notification } from './components/Notification';
-import { Filter } from './types/Filter';
+import { Filter } from './FilterEnum';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const [errorMessage, setErrorMessage] = useState('');
   const [isNotificationHidden, setIsNotificationHidden] = useState(true);
 
@@ -31,10 +31,10 @@ export const App: React.FC = () => {
 
   const filterTodos = useCallback((todos: Todo[], filterBy: Filter): Todo[] => {
     switch (filterBy) {
-      case 'completed':
+      case Filter.Completed:
         return todos.filter(todo => todo.completed);
 
-      case 'active':
+      case Filter.Active:
         return todos.filter(todo => !todo.completed);
 
       default:
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
 
         {!!todosFromServer.length && (
           <Footer
-            filter={filter}
+            currFilter={filter}
             activeTodosCount={activeTodosCount}
             hasCompletedTodos={hasCompletedTodos}
             onFilterClick={setFilter}

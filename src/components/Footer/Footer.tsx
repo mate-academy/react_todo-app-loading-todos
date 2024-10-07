@@ -1,16 +1,17 @@
 import React from 'react';
-import { Filter } from '../../types/Filter';
 import classNames from 'classnames';
 
+import { Filter } from '../../FilterEnum';
+
 type Props = {
-  filter: Filter;
+  currFilter: Filter;
   activeTodosCount: number;
   hasCompletedTodos: boolean;
   onFilterClick: (newFilter: Filter) => void;
 };
 
 export const Footer: React.FC<Props> = ({
-  filter,
+  currFilter,
   activeTodosCount,
   hasCompletedTodos,
   onFilterClick,
@@ -21,36 +22,24 @@ export const Footer: React.FC<Props> = ({
     </span>
 
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', { selected: filter === 'all' })}
-        data-cy="FilterLinkAll"
-        onClick={() => onFilterClick('all')}
-      >
-        All
-      </a>
+      {Object.values(Filter).map(filter => {
+        const capitalizedFilter =
+          filter[0].toUpperCase() + filter.slice(1).toLowerCase();
 
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: filter === 'active',
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => onFilterClick('active')}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: filter === 'completed',
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => onFilterClick('completed')}
-      >
-        Completed
-      </a>
+        return (
+          <a
+            key={filter}
+            href={`#/${filter === Filter.All ? '' : filter}`}
+            className={classNames('filter__link', {
+              selected: currFilter === filter,
+            })}
+            data-cy={`FilterLink${capitalizedFilter}`}
+            onClick={() => onFilterClick(filter)}
+          >
+            {capitalizedFilter}
+          </a>
+        );
+      })}
     </nav>
 
     {hasCompletedTodos && (
