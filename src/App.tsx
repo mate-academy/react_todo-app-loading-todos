@@ -55,11 +55,9 @@ export const App: React.FC = () => {
   }
 
   function deleteOneTodo(todoId: number) {
-    deleteTodo(todoId)
+    deleteTodo(todoId);
 
-    setTodos(currentTodos => currentTodos.filter(todo => 
-      todo.id !== todoId
-    ))
+    setTodos(currentTodos => currentTodos.filter(todo => todo.id !== todoId));
   }
 
   if (!USER_ID) {
@@ -79,20 +77,18 @@ export const App: React.FC = () => {
           setErrorMessage={setErrorMessage}
         />
 
-        {todos && (
-          <>
-            <TodoList
-              visibleTodos={getVisibleTodos(filter)}
-              deleteOneTodo={deleteOneTodo}
-            />
+        <TodoList
+          visibleTodos={getVisibleTodos(filter)}
+          deleteOneTodo={deleteOneTodo}
+        />
 
-            <Footer
-              setFilter={setFilter}
-              filter={filter}
-              active={active}
-              complete={complete}
-            />
-          </>
+        {todos.length > 0 && (
+          <Footer
+            setFilter={setFilter}
+            filter={filter}
+            active={active}
+            complete={complete}
+          />
         )}
       </div>
       <Error errorMessage={errorMessage} />
