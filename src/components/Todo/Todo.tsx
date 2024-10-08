@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Todo as TodoType } from '../../types/Todo';
 import classNames from 'classnames';
 
@@ -7,7 +6,6 @@ type TodoProps = {
 };
 
 export const Todo: React.FC<TodoProps> = ({ todo }) => {
-
   return (
     <div
       data-cy="Todo"

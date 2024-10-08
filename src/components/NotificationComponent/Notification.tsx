@@ -22,7 +22,7 @@ export const Notification: React.FC<NotificationProps> = ({
     return () => {
       clearTimeout(timer);
     };
-  }, [error]);
+  }, [error, setError]);
 
   return (
     <div
@@ -38,7 +38,6 @@ export const Notification: React.FC<NotificationProps> = ({
         className="delete"
         onClick={() => setError('')}
       />
-      {/* show only one message at a time */}
       {error}
     </div>
   );
