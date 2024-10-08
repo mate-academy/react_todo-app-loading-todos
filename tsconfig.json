@@ -3,6 +3,11 @@
   "include": ["src"],
   "compilerOptions": {
     "sourceMap": false,
-    "types": ["node"]
+    "types": ["node"],
+    "target": "esnext", 
+    "module": "esnext",
+    "esModuleInterop": true,
+    "strict": true,
+    "jsx": "react-jsx",
   }
 }
