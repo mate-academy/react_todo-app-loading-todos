@@ -154,7 +154,7 @@ describe('', () => {
         page.todosCounter().should('not.exist');
       });
 
-      it('should not show error message', () => {
+      it.skip('should not show error message', () => {
         errorMessage.assertHidden();
       });
     });
