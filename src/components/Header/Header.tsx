@@ -11,21 +11,25 @@ export const Header: React.FC<Props> = ({ todos, onTodosChange }) => {
   const areAllTodosCompleted = todos.every(todo => todo.completed);
 
   const handleToggleCompleteStatus = () => {
-    onTodosChange(todos.map(todo => ({
-      ...todo,
-      completed: !areAllTodosCompleted,
-    })))
-  }
+    onTodosChange(
+      todos.map(todo => ({
+        ...todo,
+        completed: !areAllTodosCompleted,
+      })),
+    );
+  };
 
   return (
     <header className="todoapp__header">
       {!!todos.length && (
         <button
-        type="button"
-        className={cn('todoapp__toggle-all', { active: areAllTodosCompleted })}
-        data-cy="ToggleAllButton"
-        onClick={handleToggleCompleteStatus}
-      />
+          type="button"
+          className={cn('todoapp__toggle-all', {
+            active: areAllTodosCompleted,
+          })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleCompleteStatus}
+        />
       )}
 
       {/* Add a todo on form submit */}

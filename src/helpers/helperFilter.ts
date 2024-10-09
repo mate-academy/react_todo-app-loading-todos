@@ -1,5 +1,5 @@
-import { FilterStatus } from "../types/FilterStatus";
-import { Todo } from "../types/Todo";
+import { FilterStatus } from '../types/FilterStatus';
+import { Todo } from '../types/Todo';
 
 export function getFilteredTodos(todos: Todo[], filter: FilterStatus) {
   return todos.filter(todo => {

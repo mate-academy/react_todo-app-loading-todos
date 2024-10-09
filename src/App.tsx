@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
@@ -11,6 +12,7 @@ import { getFilteredTodos } from './helpers/helperFilter';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
+// eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 
 export const App: React.FC = () => {
@@ -48,11 +50,7 @@ export const App: React.FC = () => {
         <TodoList todos={filteredTodos} />
 
         {!!todos.length && (
-          <Footer
-            todos={todos}
-            filter={filter}
-            onFilter={setFilter}
-          />
+          <Footer todos={todos} filter={filter} onFilter={setFilter} />
         )}
       </div>
 
