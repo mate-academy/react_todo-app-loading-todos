@@ -6,7 +6,6 @@ type Props = {
   onDelete: (val: number) => void;
   isLoading: number[];
   tempTodo: Todo | null;
-  textField: string;
   onStatusChange: (val: Todo) => Promise<void>;
   onEdit: (val: Todo) => Promise<void>;
   isUpdateError: boolean;
@@ -17,7 +16,6 @@ export const TodoList: React.FC<Props> = ({
   onDelete,
   isLoading,
   tempTodo,
-  textField,
   onStatusChange,
   onEdit,
   isUpdateError,
@@ -51,7 +49,7 @@ export const TodoList: React.FC<Props> = ({
           </label>
 
           <span data-cy="TodoTitle" className="todo__title">
-            {textField}
+            {tempTodo.title}
           </span>
 
           <div data-cy="TodoLoader" className="modal overlay is-active">

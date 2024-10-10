@@ -212,7 +212,6 @@ export const App: React.FC = () => {
           onDelete={handleDelete}
           isLoading={isLoading}
           tempTodo={tempTodo}
-          textField={textField}
           onStatusChange={handleStatusChange}
           onEdit={handleEditTodo}
           isUpdateError={isUpdateError}
