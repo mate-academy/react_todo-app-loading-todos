@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import {
   addTodo,
@@ -37,8 +37,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [statusTodo, setStatusTodo] = useState<Status>(Status.All);
-  const [textField, setTextField] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [loadingTodosId, setLoadingTodosId] = useState<Set<number>>(new Set());
   const [isUpdateError, setIsUpdateError] = useState(false);
@@ -58,7 +56,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     field.current?.focus();
-  }, [isSubmitting]);
+  }, []);
 
   useEffect(() => {
     window.setTimeout(() => setErrorMessage(''), 3000);
@@ -68,14 +66,7 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTextField(e.target.value);
-    setErrorMessage('');
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = (textField: string) => {
     if (!textField.trim()) {
       setErrorMessage('Title should not be empty');
       return;
@@ -87,7 +78,6 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    setIsSubmitting(true);
     setTempTodo({
       id: 0,
       userId: USER_ID,
@@ -98,20 +88,17 @@ export const App: React.FC = () => {
     addTodo(newTodo)
       .then(todo => {
         setTodos(currentTodos => [...currentTodos, todo]);
-        setTextField('');
       })
       .catch(() => {
         setErrorMessage('Unable to add a todo');
       })
       .finally(() => {
-        setIsSubmitting(false);
         setTempTodo(null);
       });
   };
 
   const handleDelete = (todoId: number) => {
     setLoadingTodosId(prev => new Set(prev).add(todoId));
-    setIsSubmitting(true);
     deleteTodo(todoId)
       .then(() =>
         setTodos(currentTodos =>
@@ -123,7 +110,6 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to delete a todo');
       })
       .finally(() => {
-        setIsSubmitting(false);
         setLoadingTodosId(prev => {
           const updatedSet = new Set(prev);
           updatedSet.delete(todoId);
@@ -201,11 +187,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          textField={textField}
-          onTextField={handleTextField}
-          onSubmit={handleSubmit}
-          isSubmiting={isSubmitting}
-          field={field}
+          onSubmit={handleSubmit} // Pass the handleSubmit function
           onToggleAll={handleToggleAll}
           isToggleActive={completedTodosId.length !== 0}
           isToggleVisible={!!todosLength}

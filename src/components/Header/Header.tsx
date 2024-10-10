@@ -1,26 +1,35 @@
+import React, { FormEvent, useState, useRef } from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  textField: string;
-  onTextField: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmiting: boolean;
-  field: React.RefObject<HTMLInputElement>;
+  onSubmit: (textField: string) => void;
   onToggleAll: () => void;
   isToggleActive: boolean;
   isToggleVisible: boolean;
 };
 
 export const Header: React.FC<Props> = ({
-  textField,
-  onTextField,
   onSubmit,
-  isSubmiting,
-  field,
   onToggleAll,
   isToggleActive,
   isToggleVisible,
 }) => {
+  const [textField, setTextField] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const field = useRef<HTMLInputElement>(null);
+
+  const handleTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTextField(e.target.value);
+  };
+
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    onSubmit(textField);
+    setTextField(''); // Clear input field after submitting
+    setIsSubmitting(false);
+  };
+
   return (
     <header className="todoapp__header">
       {isToggleVisible && (
@@ -34,7 +43,7 @@ export const Header: React.FC<Props> = ({
         />
       )}
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <input
           data-cy="NewTodoField"
           type="text"
@@ -42,8 +51,8 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={textField}
-          onChange={onTextField}
-          disabled={isSubmiting}
+          onChange={handleTextField}
+          disabled={isSubmitting}
         />
       </form>
     </header>
