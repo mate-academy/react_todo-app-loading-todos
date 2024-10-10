@@ -1,3 +1,4 @@
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem/TodoItem';
 
@@ -53,7 +54,6 @@ export const TodoList: React.FC<Props> = ({
           </span>
 
           <div data-cy="TodoLoader" className="modal overlay is-active">
-            {/* eslint-disable-next-line max-len */}
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />
           </div>

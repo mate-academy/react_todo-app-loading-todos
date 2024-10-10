@@ -11,7 +11,6 @@ import { Todo } from './types/Todo';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
-// eslint-disable-next-line max-len
 import { ErrorNotification } from './components/ErrorNote/ErrorNote';
 
 export enum Status {
@@ -39,9 +38,9 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [statusTodo, setStatusTodo] = useState<Status>(Status.All);
   const [textField, setTextField] = useState('');
-  const [isSubmiting, setIsSubmiting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [isLoading, setIsLoading] = useState<number[]>([]);
+  const [loadingTodosId, setLoadingTodosId] = useState<Set<number>>(new Set());
   const [isUpdateError, setIsUpdateError] = useState(false);
 
   const field = useRef<HTMLInputElement>(null);
@@ -59,7 +58,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     field.current?.focus();
-  }, [isSubmiting]);
+  }, [isSubmitting]);
 
   useEffect(() => {
     window.setTimeout(() => setErrorMessage(''), 3000);
@@ -79,7 +78,6 @@ export const App: React.FC = () => {
 
     if (!textField.trim()) {
       setErrorMessage('Title should not be empty');
-
       return;
     }
 
@@ -89,7 +87,7 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    setIsSubmiting(true);
+    setIsSubmitting(true);
     setTempTodo({
       id: 0,
       userId: USER_ID,
@@ -106,14 +104,14 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to add a todo');
       })
       .finally(() => {
-        setIsSubmiting(false);
+        setIsSubmitting(false);
         setTempTodo(null);
       });
   };
 
   const handleDelete = (todoId: number) => {
-    setIsLoading(currentLoads => [...currentLoads, todoId]);
-    setIsSubmiting(true);
+    setLoadingTodosId(prev => new Set(prev).add(todoId));
+    setIsSubmitting(true);
     deleteTodo(todoId)
       .then(() =>
         setTodos(currentTodos =>
@@ -125,10 +123,12 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to delete a todo');
       })
       .finally(() => {
-        setIsSubmiting(false);
-        setIsLoading(currentLoads =>
-          currentLoads.filter(loadId => loadId !== todoId),
-        );
+        setIsSubmitting(false);
+        setLoadingTodosId(prev => {
+          const updatedSet = new Set(prev);
+          updatedSet.delete(todoId);
+          return updatedSet;
+        });
       });
   };
 
@@ -137,7 +137,7 @@ export const App: React.FC = () => {
   };
 
   const handleStatusChange = (updatedTodo: Todo) => {
-    setIsLoading(currentLoads => [...currentLoads, updatedTodo.id]);
+    setLoadingTodosId(prev => new Set(prev).add(updatedTodo.id));
 
     return updateTodo({ ...updatedTodo, completed: !updatedTodo.completed })
       .then(() => {
@@ -153,9 +153,11 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to update a todo');
       })
       .finally(() => {
-        setIsLoading(currentLoads =>
-          currentLoads.filter(loadId => loadId !== updatedTodo.id),
-        );
+        setLoadingTodosId(prev => {
+          const updatedSet = new Set(prev);
+          updatedSet.delete(updatedTodo.id);
+          return updatedSet;
+        });
       });
   };
 
@@ -169,7 +171,7 @@ export const App: React.FC = () => {
   };
 
   const handleEditTodo = (updatedTodo: Todo) => {
-    setIsLoading(currentLoads => [...currentLoads, updatedTodo.id]);
+    setLoadingTodosId(prev => new Set(prev).add(updatedTodo.id));
 
     return updateTodo(updatedTodo)
       .then(() => {
@@ -185,9 +187,11 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to update a todo');
       })
       .finally(() => {
-        setIsLoading(currentLoads =>
-          currentLoads.filter(loadId => loadId !== updatedTodo.id),
-        );
+        setLoadingTodosId(prev => {
+          const updatedSet = new Set(prev);
+          updatedSet.delete(updatedTodo.id);
+          return updatedSet;
+        });
       });
   };
 
@@ -200,7 +204,7 @@ export const App: React.FC = () => {
           textField={textField}
           onTextField={handleTextField}
           onSubmit={handleSubmit}
-          isSubmiting={isSubmiting}
+          isSubmiting={isSubmitting}
           field={field}
           onToggleAll={handleToggleAll}
           isToggleActive={completedTodosId.length !== 0}
@@ -210,7 +214,7 @@ export const App: React.FC = () => {
         <TodoList
           visibleTodos={visibleTodos}
           onDelete={handleDelete}
-          isLoading={isLoading}
+          isLoading={Array.from(loadingTodosId)}
           tempTodo={tempTodo}
           onStatusChange={handleStatusChange}
           onEdit={handleEditTodo}
