@@ -58,10 +58,6 @@ export const App: React.FC = () => {
     field.current?.focus();
   }, []);
 
-  useEffect(() => {
-    window.setTimeout(() => setErrorMessage(''), 3000);
-  }, [errorMessage]);
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -187,7 +183,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header
-          onSubmit={handleSubmit} // Pass the handleSubmit function
+          onSubmit={handleSubmit}
           onToggleAll={handleToggleAll}
           isToggleActive={completedTodosId.length !== 0}
           isToggleVisible={!!todosLength}
