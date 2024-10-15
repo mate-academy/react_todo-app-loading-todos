@@ -89,16 +89,16 @@
       color: #e6e6e6;
     }
   }
+}
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 58px;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
 
-    opacity: 0.5;
-  }
+  opacity: 0.5;
 }
 
 .item-enter {
