@@ -4,3 +4,9 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
+
+export interface IAddTodo {
+  userId: number;
+  title: string;
+  completed: boolean;
+}
