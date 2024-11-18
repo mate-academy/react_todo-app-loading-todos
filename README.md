@@ -1,73 +1,38 @@
-# React Todo App Load Todos
+# **Todo App with API ✅**
 
-You goal is to implement a simple Todo App that will save all changes to [the API](https://mate-academy.github.io/fe-students-api/).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/afdcbbfe-da10-4767-b07a-af8590309687" alt="todo-app-picture-for-readme" />
+</p>
 
-> Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
+# 🗒️ Overview
+This project is a simple Todo application that enables users to create, edit, and manage their tasks through an interactive interface. All actions are synced with an API to ensure persistent data storage and real-time updates.
+You can try it [**here**](https://mikezhylka.github.io/react_todo-app-with-api/#/)
 
-The task consists of 3 part:
-- (This repo) [Load todos](https://github.com/mate-academy/react_todo-app-loading-todos)
-- [Add and Delete](https://github.com/mate-academy/react_todo-app-add-and-delete)
-- [Toggle and Rename](https://github.com/mate-academy/react_todo-app-with-api)
+# ✨ Features
+1. **➕ Add a New Todo**  
+   At the top of the interface, there is an input form where users can type in a task description. Submitting the form sends a POST request to the API, adding a new task to the list.
 
-In this 1st part you will:
+2. **🗑️ Delete a Todo**  
+   Each todo item has a delete button, allowing users to remove individual tasks. Clicking this button triggers a DELETE request to the API, permanently removing the task.
 
-- learn the markup in `App.tsx`
-- learn `src/utils/fetchClient.ts` implementations and use it (or delete use any other approaches to interact with API)
-- implement todos loading
-- implement error messages
-- implement filtering by status
-- copy the final code to [the 2nd part](https://github.com/mate-academy/react_todo-app-add-and-delete)
+3. **✅ Mark as Completed/Not Completed**  
+   Each task has a checkbox (or label) to mark it as completed or incomplete. Toggling this checkbox sends a PATCH request to the API, updating the task’s status.
 
-## General principles
+4. **✏️ Edit Todo Title**  
+   Users can double-click a todo item's title to make it editable. After making changes, pressing Enter (or clicking away) saves the edit by sending a PATCH request with the new title to the API.
 
-> Keep your logic as simple as possible!
+5. **🔍 Filter Todos**  
+   A filter panel allows users to sort tasks by their status:
+   - **All**: Shows all tasks.
+   - **Active**: Displays only tasks that are not completed.
+   - **Completed**: Displays only tasks marked as completed.
 
-Improve user experience:
-- hide or disable elements that can't be used at the moment
-- focus text fields, so user could start typing without extra clicks
-- prevents users from doing the same action twice accidentally (disable controls when action is in progress)
-- show spinners on todos immediately to notify the user that action is in progress
-- update todos only after successful save to the API (tests expect such behaviour)
-- in case of any error show a notification (and hide it after delay)
-- clear input values on `success` and preserve and focus on `error`
+6. **🧹 Clear Completed Todos**  
+   The app provides a "Clear Completed" button, which deletes all completed tasks in one action. This sends a DELETE request to the API to remove all tasks marked as completed.
 
-## Tests
+7. **🔄 Toggle All Todos**  
+   Users can toggle all tasks between completed and not completed using a "Toggle All" button, which sends a PATCH request to the API to change the status of all tasks.
 
-Tests help you to check if your implementation is correct.
+This Todo app simplifies task management with essential features and real-time API synchronization for a seamless user experience.
 
-- tests are grouped by functionality
-- `.skip` after `it` or `describe` disables a test or a group of tests
-- if you don't understand the test by its name, read its code in `cypress/integration/page.js`
-- if you can't fix failed test ask mentors for help
-- delays are important for tests, so make sure every request has `100` - `200` ms delay
 
-## Load Todos by userID
-
-1. Register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
-1. Save the received `userId` in the `api/todos.ts` and use it to load todos
-1. reate some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
-1. Load your todos when the `App` is loaded
-1. hide the list and the footer if there are no todos yet;
-
-## Show Error Messages
-
-In case of any error show the notification with an appropriate message at the bottom
-
-- the notification can be closed with the `close` button (add the `hidden` class, **DON'T** use conditional rendering);
-- automatically hide the notification after 3 seconds;
-- hide the notification before any next request;
-
-You can use a wrong todos URL to test the error.
-
-## Filter Todos by Status
-
-Filter todos by status `All` / `Active` / `Completed`:
-
-- all todos should be visible by default
-- use the `selected` class to highlight a selected link;
-
-## Common Instructions
-- Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
-- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
-- Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
