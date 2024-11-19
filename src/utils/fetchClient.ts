@@ -30,6 +30,10 @@ function request<T>(
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
+      if (response.status === 500) {
+        throw new Error('Server error');
+      }
+
       if (!response.ok) {
         throw new Error();
       }
