@@ -134,5 +134,9 @@
     &:disabled {
       visibility: hidden;
     }
+
+    &.visible {
+      visibility: visible;
+    }
   }
 }
