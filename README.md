@@ -5,6 +5,7 @@ You goal is to implement a simple Todo App that will save all changes to [the AP
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
 
 The task consists of 3 part:
+
 - (This repo) [Load todos](https://github.com/mate-academy/react_todo-app-loading-todos)
 - [Add and Delete](https://github.com/mate-academy/react_todo-app-add-and-delete)
 - [Toggle and Rename](https://github.com/mate-academy/react_todo-app-with-api)
@@ -23,6 +24,7 @@ In this 1st part you will:
 > Keep your logic as simple as possible!
 
 Improve user experience:
+
 - hide or disable elements that can't be used at the moment
 - focus text fields, so user could start typing without extra clicks
 - prevents users from doing the same action twice accidentally (disable controls when action is in progress)
@@ -67,7 +69,8 @@ Filter todos by status `All` / `Active` / `Completed`:
 - use the `selected` class to highlight a selected link;
 
 ## Common Instructions
+
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://OkMoroz.github.io/react_todo-app-loading-todos/) and add it to the PR description.
