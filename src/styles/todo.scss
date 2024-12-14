@@ -121,6 +121,10 @@
   transition: max-height 0.3s ease-in-out;
 }
 
+.temp-item {
+  opacity: 0.6;
+}
+
 .temp-item-enter {
   max-height: 0;
 }
