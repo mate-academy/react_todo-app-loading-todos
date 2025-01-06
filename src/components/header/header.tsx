@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ setTodos, setError }) => {
     }
 
     const newTodo: Omit<Todo, 'id'> = {
-      userId: 1551,
+      userId: 2226,
       title: inputValue,
       completed: false,
     };
