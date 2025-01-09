@@ -1,0 +1,7 @@
+.todoapp__clear-completed {
+    visibility: hidden;
+  }
+  
+  .todoapp__clear-completed.visible {
+    visibility: visible;
+  }
