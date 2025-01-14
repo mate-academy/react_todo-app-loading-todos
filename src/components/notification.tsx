@@ -2,11 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  message: string;
+  errorMessage: string;
   onClose: () => void;
 };
 
-export const Notification: React.FC<Props> = ({ message, onClose }) => {
+export const Notification: React.FC<Props> = ({ onClose, errorMessage }) => {
   return (
     <div
       data-cy="ErrorNotification"
@@ -15,7 +15,7 @@ export const Notification: React.FC<Props> = ({ message, onClose }) => {
         'is-danger',
         'is-light',
         'has-text-weight-normal',
-        { hidden: !message },
+        { hidden: !errorMessage },
       )}
     >
       <button
@@ -24,7 +24,7 @@ export const Notification: React.FC<Props> = ({ message, onClose }) => {
         type="button"
         className="delete"
       />
-      {message}
+      {errorMessage}
     </div>
   );
 };

@@ -10,8 +10,7 @@ type Props = {
   todoCount: number;
 };
 
-export const Filter: React.FC<Props> = ({
-  errorMessage,
+export const Footer: React.FC<Props> = ({
   todos,
   filterBy,
   setFilterBy,
@@ -19,7 +18,7 @@ export const Filter: React.FC<Props> = ({
 }) => {
   return (
     <>
-      {!errorMessage && todos.length > 0 && (
+      {todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
             {`${todoCount} items left`}

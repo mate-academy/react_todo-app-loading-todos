@@ -7,10 +7,10 @@ export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-export const getActive = () => {
-  return getTodos().then(todos => todos.filter(item => !item.completed));
-};
+// export const getActive = () => {
+//   return getTodos().then(todos => todos.filter(item => !item.completed));
+// };
 
-export const getCompleted = () => {
-  return getTodos().then(todos => todos.filter(item => item.completed));
-};
+// export const getCompleted = () => {
+//   return getTodos().then(todos => todos.filter(item => item.completed));
+// };

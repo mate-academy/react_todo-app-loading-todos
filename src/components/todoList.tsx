@@ -1,6 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
-import { TodoItem } from './todoItem';
+import { TodoItem } from './TodoItem';
 
 type Props = {
   preparedTodos: Todo[] | null;
@@ -14,12 +14,11 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <>
-      {!errorMessage &&
-        preparedTodos?.map(todo => (
-          <section key={todo.id} className="todoapp__main" data-cy="TodoList">
-            <TodoItem key={todo.id} todo={todo} errorMessage={errorMessage} />
-          </section>
-        ))}
+      {preparedTodos?.map(todo => (
+        <section key={todo.id} className="todoapp__main" data-cy="TodoList">
+          <TodoItem key={todo.id} todo={todo} errorMessage={errorMessage} />
+        </section>
+      ))}
     </>
   );
 };

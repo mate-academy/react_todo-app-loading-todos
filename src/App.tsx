@@ -5,34 +5,20 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import * as todoService from './api/todos';
-import { TodoForm } from './components/todoForm';
-import { TodoList } from './components/todoList';
-import { Filter } from './components/filter';
-import { Notification } from './components/notification';
+import { TodoForm } from './components/TodoForm';
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/Footer';
+import { Notification } from './components/Notification';
+import { getPreparedTodos } from './utils/todoFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filterBy, setFilterBy] = useState('All');
 
-  function getPreparedTodos(todoList: Todo[], filterType: string) {
-    const preparedTodos = [...todoList];
-
-    switch (filterType) {
-      case 'All':
-        return preparedTodos;
-      case 'Completed':
-        return preparedTodos.filter(todo => todo.completed);
-      case 'Active':
-        return preparedTodos.filter(todo => !todo.completed);
-      default:
-        return null;
-    }
-  }
-
   const preparedTodos = getPreparedTodos(todos, filterBy);
 
-  const completedTasks = todos.filter(todo => todo.completed); //filter completed tasks
+  const completedTasks = todos.filter(todo => todo.completed);
 
   const todoCount = todos.length - completedTasks.length;
 
@@ -66,17 +52,19 @@ export const App: React.FC = () => {
 
         <TodoList preparedTodos={preparedTodos} errorMessage={errorMessage} />
 
-        <Filter
-          errorMessage={errorMessage}
-          todos={todos}
-          setFilterBy={setFilterBy}
-          filterBy={filterBy}
-          todoCount={todoCount}
-        />
+        {!errorMessage && (
+          <Footer
+            errorMessage={errorMessage}
+            todos={todos}
+            setFilterBy={setFilterBy}
+            filterBy={filterBy}
+            todoCount={todoCount}
+          />
+        )}
       </div>
 
       <Notification
-        message={errorMessage}
+        errorMessage={errorMessage}
         onClose={() => {
           setErrorMessage('');
         }}
