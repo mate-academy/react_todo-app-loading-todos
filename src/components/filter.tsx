@@ -7,6 +7,7 @@ type Props = {
   todos: Todo[];
   setFilterBy: React.Dispatch<React.SetStateAction<string>>;
   filterBy: string;
+  todoCount: number;
 };
 
 export const Filter: React.FC<Props> = ({
@@ -14,13 +15,14 @@ export const Filter: React.FC<Props> = ({
   todos,
   filterBy,
   setFilterBy,
+  todoCount,
 }) => {
   return (
     <>
       {!errorMessage && todos.length > 0 && (
         <footer className="todoapp__footer" data-cy="Footer">
           <span className="todo-count" data-cy="TodosCounter">
-            {`0 items left`}
+            {`${todoCount} items left`}
           </span>
 
           {/* Active link should have the 'selected' class */}

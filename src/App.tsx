@@ -32,6 +32,10 @@ export const App: React.FC = () => {
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
 
+  const completedTasks = todos.filter(todo => todo.completed); //filter completed tasks
+
+  const todoCount = todos.length - completedTasks.length;
+
   function loadTodos() {
     setErrorMessage('');
     todoService
@@ -67,6 +71,7 @@ export const App: React.FC = () => {
           todos={todos}
           setFilterBy={setFilterBy}
           filterBy={filterBy}
+          todoCount={todoCount}
         />
       </div>
 
