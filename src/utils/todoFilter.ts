@@ -1,14 +1,15 @@
 import { Todo } from '../types/Todo';
+import { Filter } from '../types/Filter';
 
-export function getPreparedTodos(todoList: Todo[], filterType: string) {
+export function getPreparedTodos(todoList: Todo[], filterType: Filter): Todo[] {
   const preparedTodos = [...todoList];
 
   switch (filterType) {
-    case 'All':
+    case Filter.All:
       return preparedTodos;
-    case 'Completed':
+    case Filter.Completed:
       return preparedTodos.filter(todo => todo.completed);
-    case 'Active':
+    case Filter.Active:
       return preparedTodos.filter(todo => !todo.completed);
     default:
       return todoList;

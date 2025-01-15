@@ -7,18 +7,14 @@ type Props = {
   errorMessage: string;
 };
 
-export const TodoList: React.FC<Props> = ({
-  preparedTodos,
-
-  errorMessage,
-}) => {
+export const TodoList: React.FC<Props> = ({ preparedTodos, errorMessage }) => {
   return (
     <>
-      {preparedTodos?.map(todo => (
-        <section key={todo.id} className="todoapp__main" data-cy="TodoList">
+      <section className="todoapp__main" data-cy="TodoList">
+        {preparedTodos?.map(todo => (
           <TodoItem key={todo.id} todo={todo} errorMessage={errorMessage} />
-        </section>
-      ))}
+        ))}
+      </section>
     </>
   );
 };

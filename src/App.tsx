@@ -10,11 +10,12 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { Notification } from './components/Notification';
 import { getPreparedTodos } from './utils/todoFilter';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState(Filter.All);
 
   const preparedTodos = getPreparedTodos(todos, filterBy);
 

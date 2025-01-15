@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
+import { Filter } from '../types/Filter';
 
 type Props = {
   errorMessage: string;
   todos: Todo[];
-  setFilterBy: React.Dispatch<React.SetStateAction<string>>;
+  setFilterBy: Dispatch<SetStateAction<Filter>>;
   filterBy: string;
   todoCount: number;
 };
@@ -26,7 +27,7 @@ export const Footer: React.FC<Props> = ({
 
           {/* Active link should have the 'selected' class */}
           <nav className="filter" data-cy="Filter">
-            {['All', 'Active', 'Completed'].map(item => (
+            {Object.values(Filter).map(item => (
               <a
                 key={item}
                 href={`#/${item}`}
@@ -34,9 +35,7 @@ export const Footer: React.FC<Props> = ({
                   selected: filterBy === item,
                 })}
                 data-cy={`FilterLink${item}`}
-                onClick={() => {
-                  setFilterBy(item);
-                }}
+                onClick={() => setFilterBy(item)}
               >
                 {item}
               </a>

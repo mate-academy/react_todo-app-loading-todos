@@ -8,12 +8,14 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { id, title, completed } = todo;
+
   return (
     <>
       <div
         data-cy="Todo"
         className={classNames('todo', {
-          completed: todo.completed,
+          completed: completed,
         })}
       >
         {/*eslint-disable-next-line jsx-a11y/label-has-associated-control*/}
@@ -22,12 +24,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
             data-cy="TodoStatus"
             type="checkbox"
             className="todo__status"
-            value={todo.id}
-            checked={todo.completed}
+            value={id}
+            checked={completed}
           />
         </label>
         <span data-cy="TodoTitle" className="todo__title">
-          {todo.title}
+          {title}
         </span>
         <button type="button" className="todo__remove" data-cy="TodoDelete">
           ×
