@@ -1,12 +1,24 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
+  const [query, setQuery] = useState('');
+
   if (!USER_ID) {
     return <UserWarning />;
+  }
+
+  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    // const formattedQuery = query.trim().toLowerCase();
+  }
+
+  function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(e.target.value);
   }
 
   return (
@@ -23,12 +35,14 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form onSubmit={handleFormSubmit}>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={query}
+              onChange={handleQueryChange}
             />
           </form>
         </header>
