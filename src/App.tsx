@@ -1,11 +1,35 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { getTodos, USER_ID } from './api/todos';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
+  const [posts, setPosts] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function loadPosts() {
+    setErrorMessage('');
+    setLoading(true);
+
+    getTodos()
+      .then(setPosts)
+      .catch(error => setErrorMessage(error.message))
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    loadPosts();
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -13,8 +37,6 @@ export const App: React.FC = () => {
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    // const formattedQuery = query.trim().toLowerCase();
   }
 
   function handleQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -41,115 +63,146 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              ref={inputRef}
               value={query}
               onChange={handleQueryChange}
             />
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+        {!errorMessage &&
+          !loading &&
+          posts.map(post => (
+            <section className="todoapp__main" data-cy="TodoList" key={post.id}>
+              <div
+                key={post.id}
+                className={`todo ${post.completed ? 'completed' : ''}`}
+              >
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={post.completed}
+                    className="todo__status"
+                  />
+                </label>
+                <span>{post.title}</span>
+              </div>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
+              {/* This is a completed todo */}
+              <div data-cy="Todo" className="todo completed">
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                    checked
+                  />
+                </label>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+                <span data-cy="TodoTitle" className="todo__title">
+                  Completed Todo
+                </span>
 
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+                {/* Remove button appears only on hover */}
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
+                  ×
+                </button>
 
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                {/* overlay will cover the todo while it is being deleted or updated */}
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
+              </div>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+              {/* This todo is an active todo */}
+              <div data-cy="Todo" className="todo">
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                  />
+                </label>
 
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+                <span data-cy="TodoTitle" className="todo__title">
+                  Not Completed Todo
+                </span>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
+                  ×
+                </button>
 
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
+              </div>
 
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
+              {/* This todo is being edited */}
+              <div data-cy="Todo" className="todo">
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                  />
+                </label>
 
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+                {/* This form is shown instead of the title and remove button */}
+                <form>
+                  <input
+                    data-cy="TodoTitleField"
+                    type="text"
+                    className="todo__title-field"
+                    placeholder="Empty todo will be deleted"
+                    value="Todo is being edited now"
+                  />
+                </form>
 
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
+              </div>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
+              {/* This todo is in loadind state */}
+              <div data-cy="Todo" className="todo">
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                  />
+                </label>
 
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+                <span data-cy="TodoTitle" className="todo__title">
+                  Todo is being saved now
+                </span>
 
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
+                  ×
+                </button>
+
+                {/* 'is-active' class puts this modal on top of the todo */}
+                <div data-cy="TodoLoader" className="modal overlay is-active">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
+              </div>
+            </section>
+          ))}
 
         {/* Hide the footer if there are no todos */}
         <footer className="todoapp__footer" data-cy="Footer">
