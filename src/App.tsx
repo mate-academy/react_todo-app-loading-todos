@@ -10,6 +10,7 @@ import cn from 'classnames';
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [posts, setPosts] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -22,6 +23,18 @@ export const App: React.FC = () => {
   // function removeErrorMessage(message: string) {
   //   setErrorMessages(prev => prev.filter(error => error !== message));
   // }
+
+  const filteredPosts = posts.filter(post => {
+    if (filter === 'active') {
+      return !post.completed;
+    }
+
+    if (filter === 'completed') {
+      return post.completed;
+    }
+
+    return true; // filter === 'all'
+  });
 
   function loadPosts() {
     setErrorMessages([]);
@@ -83,7 +96,7 @@ export const App: React.FC = () => {
         </header>
 
         {!loading &&
-          posts.map(post => (
+          filteredPosts.map(post => (
             <section className="todoapp__main" data-cy="TodoList" key={post.id}>
               {/* This is a completed todo */}
               {post.completed && (
@@ -216,23 +229,28 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={cn('filter__link', { selected: filter === 'all' })}
+                onClick={() => setFilter('all')}
                 data-cy="FilterLinkAll"
               >
                 All
               </a>
-
               <a
                 href="#/active"
-                className="filter__link"
+                className={cn('filter__link', {
+                  selected: filter === 'active',
+                })}
+                onClick={() => setFilter('active')}
                 data-cy="FilterLinkActive"
               >
                 Active
               </a>
-
               <a
                 href="#/completed"
-                className="filter__link"
+                className={cn('filter__link', {
+                  selected: filter === 'completed',
+                })}
+                onClick={() => setFilter('completed')}
                 data-cy="FilterLinkCompleted"
               >
                 Completed
@@ -244,6 +262,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
+              disabled={posts.filter(post => post.completed).length === 0}
             >
               Clear completed
             </button>
