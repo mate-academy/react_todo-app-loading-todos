@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+const BASE_URL = 'https://mate.academy/students-api/todos?userId=2301';
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -36,6 +36,10 @@ function request<T>(
 
       return response.json();
     });
+}
+
+export function postTodo<T>(data: any): Promise<T> {
+  return request<T>('', 'POST', data);
 }
 
 export const client = {
