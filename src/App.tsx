@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
@@ -13,28 +13,28 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleFilterTodos = (
-    selectedFilter?: 'All' | 'Active' | 'Completed',
-  ): void => {
-    if (selectedFilter === 'Active') {
-      const activeTodos = todos.filter(t => !t.completed);
+  const handleFilterTodos = useCallback(
+    (selectedFilter?: 'All' | 'Active' | 'Completed'): void => {
+      if (selectedFilter === 'Active') {
+        const activeTodos = todos.filter(t => !t.completed);
 
-      setFilteredTodos(activeTodos);
+        setFilteredTodos(activeTodos);
 
-      return;
-    }
+        return;
+      }
 
-    if (selectedFilter === 'Completed') {
-      const activeTodos = todos.filter(t => t.completed);
+      if (selectedFilter === 'Completed') {
+        const activeTodos = todos.filter(t => t.completed);
 
-      setFilteredTodos(activeTodos);
+        setFilteredTodos(activeTodos);
 
-      return;
-    }
+        return;
+      }
 
-    setFilteredTodos([...todos]);
-  };
-
+      setFilteredTodos([...todos]);
+    },
+    [todos],
+  );
   const completedTodos: Todo[] = [...todos].filter(t => t.completed);
   const activeTodos: Todo[] = [...todos].filter(t => !t.completed);
 
@@ -58,7 +58,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     handleFilterTodos(filter);
-  }, [filter, todos, handleFilterTodos]);
+  }, [filter, handleFilterTodos, todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
