@@ -58,7 +58,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     handleFilterTodos(filter);
-  }, [filter, todos]);
+  }, [filter, todos, handleFilterTodos]);
 
   if (!USER_ID) {
     return <UserWarning />;
