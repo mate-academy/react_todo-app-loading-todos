@@ -36,6 +36,7 @@ const page = {
    * spy = cy.stub().callsFake(req => req.reply(response)).as('alias')
    */
   mockLoad: (response = { fixture: 'todos' }) => {
+      
     return cy.intercept('**/todos?userId=*', response);
   },
   mockCreate: (response) => {
