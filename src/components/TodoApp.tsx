@@ -7,12 +7,12 @@ import { TodoError } from './TodoError/TodoError';
 
 import { createTodo, getTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
-import { Filter } from '../types/Filter';
+import { Filters } from '../types/Filter';
 import { MessageError } from './TodoError/ErrorMessage';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filter>('All');
+  const [filter, setFilter] = useState<Filters>(Filters.All);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<MessageError>(
     MessageError.default,
@@ -50,9 +50,9 @@ export const TodoApp = () => {
 
   const filterTodos = () => {
     switch (filter) {
-      case 'Active':
+      case Filters.Active:
         return todos.filter(todo => !todo.completed);
-      case 'Completed':
+      case Filters.Completed:
         return todos.filter(todo => todo.completed);
       default:
         return todos;

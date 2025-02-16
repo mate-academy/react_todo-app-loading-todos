@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import { Filter } from '../types/Filter';
+import { Filters } from '../types/Filter';
 import { Todo } from '../types/Todo';
 
 interface Props {
   todos: Todo[];
-  filter: Filter;
-  setFilter: (str: Filter) => void;
+  filter: Filters;
+  setFilter: (str: Filters) => void;
 }
 
 export const TodoFooter = ({ todos, filter, setFilter }: Props) => {
@@ -20,18 +20,33 @@ export const TodoFooter = ({ todos, filter, setFilter }: Props) => {
         </span>
         {/* Active link should have the 'selected' class */}
         <nav className="filter" data-cy="Filter">
-          <a
+          {Object.values(Filters).map((item, i) => {
+            return (
+              <a
+                href={item !== 'All' ? `#/${item.toLowerCase()}` : '#/'}
+                className={classNames('filter__link', {
+                  selected: item === filter,
+                })}
+                data-cy={`FilterLink${item}`}
+                onClick={() => setFilter(item)}
+                key={i}
+              >
+                {item}
+              </a>
+            );
+          })}
+          {/* <a
             href="#/"
             className={classNames('filter__link', {
-              selected: filter === 'All',
+              selected: filter === Filters.All,
             })}
             data-cy="FilterLinkAll"
-            onClick={() => setFilter('All')}
+            onClick={() => setFilter(Filters.All)}
           >
             All
-          </a>
+          </a> */}
 
-          <a
+          {/* <a
             href="#/active"
             className={classNames('filter__link', {
               selected: filter === 'Active',
@@ -51,7 +66,7 @@ export const TodoFooter = ({ todos, filter, setFilter }: Props) => {
             onClick={() => setFilter('Completed')}
           >
             Completed
-          </a>
+          </a> */}
         </nav>
         {/* this button should be disabled if there are no completed todos */}
         <button
