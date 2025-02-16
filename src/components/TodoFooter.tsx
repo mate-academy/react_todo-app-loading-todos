@@ -35,38 +35,6 @@ export const TodoFooter = ({ todos, filter, setFilter }: Props) => {
               </a>
             );
           })}
-          {/* <a
-            href="#/"
-            className={classNames('filter__link', {
-              selected: filter === Filters.All,
-            })}
-            data-cy="FilterLinkAll"
-            onClick={() => setFilter(Filters.All)}
-          >
-            All
-          </a> */}
-
-          {/* <a
-            href="#/active"
-            className={classNames('filter__link', {
-              selected: filter === 'Active',
-            })}
-            data-cy="FilterLinkActive"
-            onClick={() => setFilter('Active')}
-          >
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            className={classNames('filter__link', {
-              selected: filter === 'Completed',
-            })}
-            data-cy="FilterLinkCompleted"
-            onClick={() => setFilter('Completed')}
-          >
-            Completed
-          </a> */}
         </nav>
         {/* this button should be disabled if there are no completed todos */}
         <button

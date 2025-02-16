@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { Todo } from '../types/Todo';
+import classNames from 'classnames';
 
 interface Props {
   todos: Todo[];
@@ -12,23 +13,25 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => {
+        const { id, title, completed } = todo;
+
         return (
           <div
             data-cy="Todo"
-            className={todo.completed ? 'todo completed' : 'todo'}
-            key={todo.id}
+            className={classNames('todo', { completed: completed })}
+            key={id}
           >
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                defaultChecked={todo.completed}
+                defaultChecked={completed}
               />
             </label>
 
             <span data-cy="TodoTitle" className="todo__title">
-              {todo.title}
+              {title}
             </span>
 
             {/* Remove button appears only on hover */}
