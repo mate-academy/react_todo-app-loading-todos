@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-
 import classNames from 'classnames';
-import { Todo } from '../types/Todo';
 import React from 'react';
+
+import { Todo } from '../types/Todo';
 
 interface Props {
   todo: Todo;

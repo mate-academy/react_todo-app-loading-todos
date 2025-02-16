@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+
 import { MessageError } from '../types/ErrorMessage';
 
 interface Props {
@@ -35,15 +36,6 @@ export const TodoError: React.FC<Props> = ({
           onClick={closeError}
         />
         {/* show only one message at a time */}
-        {/* Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
         {isError ? errorMessage : ''}
       </div>
     </>
