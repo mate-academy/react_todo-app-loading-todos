@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { MessageError } from './ErrorMessage';
+import { MessageError } from '../types/ErrorMessage';
 
 interface Props {
   isError: boolean;

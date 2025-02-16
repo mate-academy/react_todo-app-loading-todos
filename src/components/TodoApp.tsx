@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { TodoHeader } from './TodoHeader';
 import { TodoList } from './TodoList';
 import { TodoFooter } from './TodoFooter';
-import { TodoError } from './TodoError/TodoError';
+import { TodoError } from './TodoError';
 
 import { createTodo, getTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
 import { Filters } from '../types/Filter';
-import { MessageError } from './TodoError/ErrorMessage';
+import { MessageError } from '../types/ErrorMessage';
 
 export const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

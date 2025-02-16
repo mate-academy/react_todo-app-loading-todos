@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
-import { MessageError } from './TodoError/ErrorMessage';
+import { MessageError } from '../types/ErrorMessage';
 
 interface Props {
   todos: Todo[];
