@@ -19,25 +19,21 @@ export const TodoError: React.FC<Props> = ({
   };
 
   return (
-    <>
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !isError },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={closeError}
-        />
-        {/* show only one message at a time */}
-        {isError ? errorMessage : ''}
-      </div>
-    </>
+    <div
+      data-cy="ErrorNotification"
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        { hidden: !isError },
+      )}
+    >
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={closeError}
+      />
+
+      {isError ? errorMessage : ''}
+    </div>
   );
 };
