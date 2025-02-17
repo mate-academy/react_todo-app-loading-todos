@@ -1,0 +1,7 @@
+export enum Errors {
+  LoadTodoError = 'Unable to load todos',
+  EmptyTodoTitleError = 'Title should not be empty',
+  AddTodoError = 'Unable to add a todo',
+  DeleteTodoError = 'Unable to delete a todo',
+  UpdateTodoError = 'Unable to update a todo',
+}
