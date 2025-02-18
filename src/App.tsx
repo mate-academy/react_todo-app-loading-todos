@@ -8,7 +8,7 @@ import { Notification } from './components/Notification/Notification';
 import { TodoList } from './components/TodoList/TodoList';
 
 export const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [initialTodos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -28,12 +28,15 @@ export const App: FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header todos={todos} />
+        <Header todos={initialTodos} />
 
         <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && (
-          <Footer todos={todos} onFilterSelect={setFilteredTodos} />
+        {initialTodos.length > 0 && (
+          <Footer
+            initialTodos={initialTodos}
+            onFilterSelect={setFilteredTodos}
+          />
         )}
       </div>
 

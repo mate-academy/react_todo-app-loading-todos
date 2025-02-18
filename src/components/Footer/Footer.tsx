@@ -3,18 +3,20 @@ import { Filter } from '../Filter/Filter';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[];
+  initialTodos: Todo[];
   onFilterSelect: Dispatch<SetStateAction<Todo[]>>;
 };
 
-export const Footer: FC<Props> = ({ todos: filteredTodos, onFilterSelect }) => {
+export const Footer: FC<Props> = ({ initialTodos, onFilterSelect }) => {
+  const activeTodos = initialTodos.filter(todo => !todo.completed);
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${activeTodos.length} items left`}
       </span>
 
-      <Filter onFilterSelect={onFilterSelect} todos={filteredTodos} />
+      <Filter onFilterSelect={onFilterSelect} todos={initialTodos} />
 
       <button
         type="button"
