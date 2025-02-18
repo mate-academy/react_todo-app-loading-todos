@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
-
+import './notification.scss';
 type Props = {
   errorMessage: string;
 };
 
-export const ErrorNotification: FC<Props> = ({ errorMessage }) => {
+export const Notification: FC<Props> = ({ errorMessage }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

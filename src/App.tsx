@@ -4,16 +4,20 @@ import { Todo } from './types/Todo';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 // eslint-disable-next-line max-len
-import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
+import { Notification } from './components/Notification/Notification';
 import { TodoList } from './components/TodoList/TodoList';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     getTodos()
-      .then(setTodos)
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
+      })
       .catch(() => {
         setErrorMessage('Unable to load todos');
       });
@@ -26,12 +30,14 @@ export const App: FC = () => {
       <div className="todoapp__content">
         <Header todos={todos} />
 
-        <TodoList todos={todos} />
+        <TodoList todos={filteredTodos} />
 
-        {todos.length > 0 && <Footer />}
+        {todos.length > 0 && (
+          <Footer todos={todos} onFilterSelect={setFilteredTodos} />
+        )}
       </div>
 
-      <ErrorNotification errorMessage={errorMessage} />
+      <Notification errorMessage={errorMessage} />
     </div>
   );
 };
