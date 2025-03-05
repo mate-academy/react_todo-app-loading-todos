@@ -1,9 +1,9 @@
 .todo {
   position: relative;
+  place-items: center stretch;
 
   display: grid;
   grid-template-columns: 45px 1fr;
-  justify-items: stretch;
 
   font-size: 24px;
   line-height: 1.4em;
