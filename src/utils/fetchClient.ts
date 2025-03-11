@@ -16,6 +16,9 @@ function request<T>(
   method: RequestMethod = 'GET',
   data: any = null, // we can send any data to the server
 ): Promise<T> {
+  // eslint-disable-next-line no-console
+  console.log(`Making request to: ${BASE_URL + url}, method: ${method}`);
+
   const options: RequestInit = { method };
 
   if (data) {
