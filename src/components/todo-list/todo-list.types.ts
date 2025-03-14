@@ -3,7 +3,8 @@ import React from 'react';
 
 export type TodoListTypes = {
   todos: Todo[];
-  onSelected: React.Dispatch<React.SetStateAction<Todo | null>>;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  isLoadingId: number | null;
+  setIsLoadingId: React.Dispatch<React.SetStateAction<number | null>>;
   setError: (text: string) => void;
 };

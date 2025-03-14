@@ -1,40 +1,44 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { TodoListTypes } from './todo-list.types';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { updateTodos } from '../../api/todos';
+import { updateTodo } from '../../api/todos';
 import { LoaderComponent } from '../loader/loader.component';
 
 export const TodoListComponent: React.FC<TodoListTypes> = ({
   todos,
-  onSelected,
   setTodos,
   setError,
+  isLoadingId,
+  setIsLoadingId,
 }) => {
-  const [isLoadingId, setIsLoadingIdId] = useState<number | null>(null);
-
   const handleSelectedTodo = useCallback(
     (todo: Todo) => {
-      setIsLoadingIdId(todo.id);
-
-      const updatedTodo = { ...todo, completed: !todo.completed };
-
       setError('');
 
-      updateTodos(todo.id, updatedTodo)
-        .then(() => {
-          setTodos(prevTodos =>
-            prevTodos.map(t => (t.id === todo.id ? updatedTodo : t)),
-          );
-          onSelected(updatedTodo);
+      setIsLoadingId(todo.id);
+      const updatedTodo = { ...todo, completed: !todo.completed };
+
+      updateTodo(todo.id, updatedTodo)
+        .then(updatedTodoFromServer => {
+          setTodos(prevTodos => {
+            const newTodos = [...prevTodos];
+            const index = prevTodos.findIndex(
+              item => item.id === updatedTodoFromServer.id,
+            );
+
+            newTodos.splice(index, 1, updatedTodoFromServer);
+
+            return newTodos;
+          });
         })
         .catch(err => {
           setError('failed to update there');
           throw new Error(err);
         })
-        .finally(() => setIsLoadingIdId(null));
+        .finally(() => setIsLoadingId(null));
     },
-    [setTodos, onSelected],
+    [setError, setIsLoadingId, setTodos],
   );
 
   return (

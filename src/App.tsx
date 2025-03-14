@@ -12,10 +12,9 @@ import { NotificationComponent } from './components/notification/notification.co
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [error, setError] = useState<string>('');
+  const [isLoadingId, setIsLoadingId] = useState<number | null>(null);
   const timeoutId = useRef<number | null>(null);
 
   useEffect(() => {
@@ -35,6 +34,8 @@ export const App: React.FC = () => {
       }
     };
   }, []);
+
+  console.log(todos);
 
   const activeTodos = useMemo(() => {
     return todos.filter(todo => !todo.completed);
@@ -65,12 +66,13 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">{text.todos}</h1>
-      <HeaderComponent />
+      <HeaderComponent setTodos={setTodos} setIsLoadingId={setIsLoadingId} />
 
       <div className="todoapp__content">
         <TodoListComponent
+          isLoadingId={isLoadingId}
+          setIsLoadingId={setIsLoadingId}
           todos={filteredByStatus}
-          onSelected={setSelectedTodo}
           setTodos={setTodos}
           setError={setError}
         />

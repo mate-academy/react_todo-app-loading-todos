@@ -7,16 +7,16 @@ export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-export const postTodos = (data: any) => {
-  return client.post<Todo[]>(`/todos`, data);
+export const createTodo = (todo: Omit<Todo, 'id'>) => {
+  return client.post<Todo>(`/todos`, todo);
 };
 
-export const updateTodos = (postId: number, data: any) => {
-  return client.patch<Todo[]>(`/todos/${postId}`, data);
+export const updateTodo = (todoId: number, todo: Todo) => {
+  return client.patch<Todo>(`/todos/${todoId}`, todo);
 };
 
-export const deleteTodos = (postId: number) => {
-  return client.delete(`/todos/${postId}`);
+export const deleteTodo = (todoId: number) => {
+  return client.delete(`/todos/${todoId}`);
 };
 
 // Add more methods here
