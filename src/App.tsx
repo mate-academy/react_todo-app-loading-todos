@@ -5,18 +5,19 @@ import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
-import { createTodo } from './utils/fetchClient';
 import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('all');
 
   const handleResetError = () => {
-    setError('');
+    const timerId = window.setTimeout(() => {
+      setError('');
+      clearTimeout(timerId);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -26,7 +27,10 @@ export const App: React.FC = () => {
         setTodos(response);
       })
       .catch(() => setError('Unable to load todos'))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        handleResetError();
+      });
   }, []);
 
   const getFilteredTodos = useCallback(() => {
@@ -47,27 +51,6 @@ export const App: React.FC = () => {
     return todos.filter(todo => !todo.completed).length;
   }, [todos]);
 
-  const handleCreateTodo = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      if (newTodo) {
-        const createNewTodo = await createTodo(newTodo);
-
-        setTodos(prevTodos => [...prevTodos, createNewTodo]);
-        setNewTodo('');
-      } else {
-        setError('Title should not be empty');
-      }
-    } catch {
-      setError('Unable to add a todo');
-    } finally {
-      const timer = setTimeout(() => {
-        handleResetError();
-        window.clearInterval(timer);
-      }, 3000);
-    }
-  };
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -86,14 +69,12 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form onSubmit={event => handleCreateTodo(event)}>
+          <form>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              onChange={e => setNewTodo(e.target.value)}
-              value={newTodo}
             />
           </form>
         </header>
