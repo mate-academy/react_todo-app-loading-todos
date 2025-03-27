@@ -1,10 +1,13 @@
 import { Todo } from '../types/Todo';
+import { User } from '../types/User';
 import { client } from '../utils/fetchClient';
 
-export const USER_ID = 0;
+export const USER_ID = 2468;
 
 export const getTodos = () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
-// Add more methods here
+export const getUser = () => {
+  return client.get<User>(`/users/${USER_ID}`);
+};
