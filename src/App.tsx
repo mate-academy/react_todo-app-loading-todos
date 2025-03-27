@@ -1,18 +1,47 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState } from 'react';
-// import { UserWarning } from './UserWarning';
-// import { USER_ID } from './api/todos';
+import React, { useEffect, useState } from 'react';
+import { UserWarning } from './UserWarning';
+import { USER_ID } from './api/todos';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import { Footer } from './components/Footer/Footer';
+import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
+import { Error } from './components/Error/Error';
+import { ErrorEnum } from './types/ErrorEnum';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<ErrorEnum | null>(ErrorEnum.LOAD);
+  const [filter, setFilter] = useState('all');
 
-  // if (!USER_ID) {
-  //   return <UserWarning />;
-  // }
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .catch(() => setError(ErrorEnum.LOAD));
+  }, []);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
+
+  const filteredTodos = todos.filter(todo => {
+    switch (filter) {
+      case 'active':
+        return !todo.completed;
+
+      case 'completed':
+        return todo.completed;
+
+      default:
+      case 'all':
+        return true;
+    }
+  });
+
+  const activeTodos = todos.filter(todo => !todo.completed);
 
   return (
     <div className="todoapp">
@@ -21,30 +50,18 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header query={query} onInput={setQuery} />
 
-        <TodoList />
+        <TodoList todos={filteredTodos} />
 
-        {/* Hide the footer if there are no todos */}
-        <Footer />
+        {todos.length > 0 && (
+          <Footer
+            filter={filter}
+            onFilter={setFilter}
+            left={activeTodos.length}
+          />
+        )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <Error error={error} onClose={() => setError(null)} />
     </div>
   );
 };

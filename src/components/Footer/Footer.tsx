@@ -1,24 +1,42 @@
-export const Footer: React.FC = () => {
+import cn from 'classnames';
+
+type Props = {
+  filter: string;
+  onFilter: (v: string) => void;
+  left: number;
+};
+
+export const Footer: React.FC<Props> = ({ filter, onFilter, left }) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {left} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a href="#/" className="filter__link selected" data-cy="FilterLinkAll">
+        <a
+          href="#/"
+          className={cn('filter__link', { selected: filter === 'all' })}
+          data-cy="FilterLinkAll"
+          onClick={() => onFilter('all')}
+        >
           All
         </a>
 
-        <a href="#/active" className="filter__link" data-cy="FilterLinkActive">
+        <a
+          href="#/active"
+          className={cn('filter__link', { selected: filter === 'active' })}
+          data-cy="FilterLinkActive"
+          onClick={() => onFilter('active')}
+        >
           Active
         </a>
 
         <a
           href="#/completed"
-          className="filter__link"
+          className={cn('filter__link', { selected: filter === 'completed' })}
           data-cy="FilterLinkCompleted"
+          onClick={() => onFilter('completed')}
         >
           Completed
         </a>
