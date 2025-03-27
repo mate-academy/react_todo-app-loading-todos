@@ -40,6 +40,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>(ErrorType.DEFAULT);
 
   useEffect(() => {
+    let timeout: number;
     const fetchTodos = async () => {
       try {
         const result = await getTodos();
@@ -48,13 +49,17 @@ export const App: React.FC = () => {
         setErrorMessage(ErrorType.DEFAULT);
       } catch (error) {
         setErrorMessage(ErrorType.FAIL_LOADING);
-        setTimeout(() => {
+        timeout = window.setTimeout(() => {
           setErrorMessage(ErrorType.DEFAULT);
         }, 3000);
       }
     };
 
     fetchTodos();
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
   }, []);
 
   // #region handlers
