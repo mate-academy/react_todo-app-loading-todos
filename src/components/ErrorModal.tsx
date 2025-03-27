@@ -1,11 +1,22 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
   errorMessage: string;
+  onClearError: () => void;
 };
 
-export const ErrorModal: React.FC<Props> = ({ errorMessage }) => {
+export const ErrorModal: React.FC<Props> = ({ errorMessage, onClearError }) => {
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        onClearError();
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage, onClearError]);
+
   return (
     <div
       data-cy="ErrorNotification"

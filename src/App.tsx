@@ -35,9 +35,6 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setErrorMessage(Errors.LOAD);
-        setTimeout(() => {
-          setErrorMessage(Errors.DEFAULT);
-        }, 3000);
       });
   }, []);
 
@@ -56,7 +53,10 @@ export const App: React.FC = () => {
           <Footer todos={todos} filterBy={filterBy} setFilterBy={setFilterBy} />
         )}
       </div>
-      <ErrorModal errorMessage={errorMessage} />
+      <ErrorModal
+        errorMessage={errorMessage}
+        onClearError={() => setErrorMessage(Errors.DEFAULT)}
+      />
     </div>
   );
 };
