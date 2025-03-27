@@ -1,12 +1,54 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
-import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { UserWarning } from './components/UserWarning';
+import { getTodos, USER_ID } from './api/todos';
+import { Todo, TodoType } from './types/Todo';
+import { errorsData } from './utils';
+import { ErrorNotification } from './components/ErrorNotification';
+import { Footer } from './components/Footer';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Array<Todo>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<TodoType>('all');
+
+  const hasCompleted = useMemo(
+    () => todos.some(item => item.completed),
+    [todos],
+  );
+
+  useEffect(() => {
+    const getTodosList = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getTodos(USER_ID);
+
+        setTodos(result);
+        setErrorMessage('');
+      } catch (error) {
+        setTodos([]);
+        setErrorMessage(errorsData.loadingError);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getTodosList();
+  }, []);
+
+  const handleSelectType = useCallback((newType: TodoType) => {
+    setSelectedType(newType);
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
+  }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
@@ -137,68 +179,16 @@ export const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
-            >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+        {todos.length > 0 && (
+          <Footer
+            hasCompleted={hasCompleted}
+            selectedType={selectedType}
+            handleSelectType={handleSelectType}
+          />
+        )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorNotification message={errorMessage} />
     </div>
   );
 };
