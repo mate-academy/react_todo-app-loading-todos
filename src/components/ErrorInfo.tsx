@@ -10,7 +10,7 @@ export const ErrorInfo: React.FC<Props> = ({ errorMessage, setError }) => {
     if (errorMessage) {
       setTimeout(() => setError(''), 3000);
     }
-  }, [errorMessage]);
+  }, [errorMessage, setError]);
 
   return (
     <div
