@@ -12,12 +12,11 @@ import { FilterBy } from './types/FilterBy';
 
 const filter = (todos: Todo[], filterBy: FilterBy) => {
   switch (filterBy) {
-    case FilterBy.All:
-      return todos;
     case FilterBy.Active:
       return todos.filter(todo => !todo.completed);
     case FilterBy.Completed:
       return todos.filter(todo => todo.completed);
+    case FilterBy.All:
     default:
       return todos;
   }
