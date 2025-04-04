@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
@@ -14,28 +14,19 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [error, setError] = useState<string>('');
-  const [isLoadingId, setIsLoadingId] = useState<number | null>(null);
-  const timeoutId = useRef<number | null>(null);
+  const [isLoadingId, setIsLoadingId] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     setError('');
-
     getTodos()
       .then(setTodos)
       .catch(() => {
         setError(text.unableToLoadTodos);
-        timeoutId.current = window.setTimeout(() => setError(''), 3000);
+        const timer = setTimeout(() => setError(''), 3000);
+
+        return () => clearTimeout(timer);
       });
-
-    return () => {
-      if (timeoutId.current !== null) {
-        window.clearTimeout(timeoutId.current);
-        timeoutId.current = null;
-      }
-    };
   }, []);
-
-  console.log(todos);
 
   const activeTodos = useMemo(() => {
     return todos.filter(todo => !todo.completed);
@@ -59,6 +50,24 @@ export const App: React.FC = () => {
     setError('');
   };
 
+  const handleLoading = (id: number | null) => {
+    setIsLoadingId(prev => {
+      if (id === null) {
+        return {};
+      }
+
+      const newState = { ...prev };
+
+      if (newState[id]) {
+        delete newState[id];
+      } else {
+        newState[id] = true;
+      }
+
+      return newState;
+    });
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -66,17 +75,25 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">{text.todos}</h1>
-      <HeaderComponent setTodos={setTodos} setIsLoadingId={setIsLoadingId} />
+      <HeaderComponent
+        todos={todos}
+        setTodos={setTodos}
+        handleLoading={handleLoading}
+        setError={setError}
+      />
 
       <div className="todoapp__content">
         <TodoListComponent
           isLoadingId={isLoadingId}
-          setIsLoadingId={setIsLoadingId}
+          handleLoading={handleLoading}
           todos={filteredByStatus}
           setTodos={setTodos}
           setError={setError}
         />
         <FooterComponent
+          setError={setError}
+          handleLoading={handleLoading}
+          isLoadingId={isLoadingId}
           todos={todos}
           setTodos={setTodos}
           count={activeTodos.length}

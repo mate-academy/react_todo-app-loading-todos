@@ -7,4 +7,7 @@ export type FooterTypes = {
   setSelectedStatus: (status: 'completed' | 'all' | 'active') => void;
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  isLoadingId: Record<number, boolean>;
+  handleLoading: (id: number | null) => void;
+  setError: (text: string) => void;
 };

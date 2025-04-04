@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { TodoListTypes } from './todo-list.types';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { updateTodo } from '../../api/todos';
+import { deleteTodo, updateTodo } from '../../api/todos';
 import { LoaderComponent } from '../loader/loader.component';
 
 export const TodoListComponent: React.FC<TodoListTypes> = ({
@@ -10,36 +10,45 @@ export const TodoListComponent: React.FC<TodoListTypes> = ({
   setTodos,
   setError,
   isLoadingId,
-  setIsLoadingId,
+  handleLoading,
 }) => {
   const handleSelectedTodo = useCallback(
     (todo: Todo) => {
       setError('');
-
-      setIsLoadingId(todo.id);
+      handleLoading(todo.id);
       const updatedTodo = { ...todo, completed: !todo.completed };
 
       updateTodo(todo.id, updatedTodo)
         .then(updatedTodoFromServer => {
           setTodos(prevTodos => {
-            const newTodos = [...prevTodos];
-            const index = prevTodos.findIndex(
-              item => item.id === updatedTodoFromServer.id,
+            return prevTodos.map(currentTodo =>
+              currentTodo.id === updatedTodoFromServer.id
+                ? updatedTodoFromServer
+                : currentTodo,
             );
-
-            newTodos.splice(index, 1, updatedTodoFromServer);
-
-            return newTodos;
           });
         })
         .catch(err => {
           setError('failed to update there');
           throw new Error(err);
         })
-        .finally(() => setIsLoadingId(null));
+        .finally(() => handleLoading(todo.id));
     },
-    [setError, setIsLoadingId, setTodos],
+    [handleLoading, setError, setTodos],
   );
+
+  const handleDelete = (todo: Todo) => {
+    handleLoading(todo.id);
+
+    deleteTodo(todo.id)
+      .then(() => {
+        setTodos(prevState =>
+          prevState.filter(currentTodo => currentTodo.id !== todo.id),
+        );
+      })
+      .catch(e => console.log(e))
+      .finally(() => handleLoading(todo.id));
+  };
 
   return (
     <section className="todoapp__main" data-cy="TodoList">
@@ -49,7 +58,7 @@ export const TodoListComponent: React.FC<TodoListTypes> = ({
           data-cy="Todo"
           className={classNames('todo', { completed: todo.completed })}
         >
-          <LoaderComponent isLoading={isLoadingId === todo.id} />
+          <LoaderComponent isLoading={isLoadingId[todo.id] || false} />
           <label className="todo__status-label">
             <input
               onChange={() => handleSelectedTodo(todo)}
@@ -62,112 +71,16 @@ export const TodoListComponent: React.FC<TodoListTypes> = ({
           <span data-cy="TodoTitle" className="todo__title">
             {todo.title}
           </span>
-          <button type="button" className="todo__remove" data-cy="TodoDelete">
+          <button
+            onClick={() => handleDelete(todo)}
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+          >
             ×
           </button>
         </div>
       ))}
-
-      {/*<div data-cy="Todo" className="todo completed">*/}
-      {/*  <label className="todo__status-label">*/}
-      {/*    <input*/}
-      {/*      data-cy="TodoStatus"*/}
-      {/*      type="checkbox"*/}
-      {/*      className="todo__status"*/}
-      {/*      checked*/}
-      {/*    />*/}
-      {/*  </label>*/}
-
-      {/*  <span data-cy="TodoTitle" className="todo__title">*/}
-      {/*    Completed Todo*/}
-      {/*  </span>*/}
-
-      {/*  /!* Remove button appears only on hover *!/*/}
-      {/*  <button type="button" className="todo__remove" data-cy="TodoDelete">*/}
-      {/*    ×*/}
-      {/*  </button>*/}
-
-      {/*  /!* overlay will cover the todo while it is being deleted or updated *!/*/}
-      {/*  <div data-cy="TodoLoader" className="modal overlay">*/}
-      {/*    <div className="modal-background has-background-white-ter" />*/}
-      {/*    <div className="loader" />*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/*/!* This todo is an active todo *!/*/}
-      {/*<div data-cy="Todo" className="todo">*/}
-      {/*  <label className="todo__status-label">*/}
-      {/*    <input*/}
-      {/*      data-cy="TodoStatus"*/}
-      {/*      type="checkbox"*/}
-      {/*      className="todo__status"*/}
-      {/*    />*/}
-      {/*  </label>*/}
-
-      {/*  <span data-cy="TodoTitle" className="todo__title">*/}
-      {/*    Not Completed Todo*/}
-      {/*  </span>*/}
-      {/*  <button type="button" className="todo__remove" data-cy="TodoDelete">*/}
-      {/*    ×*/}
-      {/*  </button>*/}
-
-      {/*  <div data-cy="TodoLoader" className="modal overlay">*/}
-      {/*    <div className="modal-background has-background-white-ter" />*/}
-      {/*    <div className="loader" />*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/*/!* This todo is being edited *!/*/}
-      {/*<div data-cy="Todo" className="todo">*/}
-      {/*  <label className="todo__status-label">*/}
-      {/*    <input*/}
-      {/*      data-cy="TodoStatus"*/}
-      {/*      type="checkbox"*/}
-      {/*      className="todo__status"*/}
-      {/*    />*/}
-      {/*  </label>*/}
-
-      {/*  /!* This form is shown instead of the title and remove button *!/*/}
-      {/*  <form>*/}
-      {/*    <input*/}
-      {/*      data-cy="TodoTitleField"*/}
-      {/*      type="text"*/}
-      {/*      className="todo__title-field"*/}
-      {/*      placeholder="Empty todo will be deleted"*/}
-      {/*      value="Todo is being edited now"*/}
-      {/*    />*/}
-      {/*  </form>*/}
-
-      {/*  <div data-cy="TodoLoader" className="modal overlay">*/}
-      {/*    <div className="modal-background has-background-white-ter" />*/}
-      {/*    <div className="loader" />*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/*/!* This todo is in loadind state *!/*/}
-      {/*<div data-cy="Todo" className="todo">*/}
-      {/*  <label className="todo__status-label">*/}
-      {/*    <input*/}
-      {/*      data-cy="TodoStatus"*/}
-      {/*      type="checkbox"*/}
-      {/*      className="todo__status"*/}
-      {/*    />*/}
-      {/*  </label>*/}
-
-      {/*  <span data-cy="TodoTitle" className="todo__title">*/}
-      {/*    Todo is being saved now*/}
-      {/*  </span>*/}
-
-      {/*  <button type="button" className="todo__remove" data-cy="TodoDelete">*/}
-      {/*    ×*/}
-      {/*  </button>*/}
-
-      {/*  /!* 'is-active' class puts this modal on top of the todo *!/*/}
-      {/*  <div data-cy="TodoLoader" className="modal overlay is-active">*/}
-      {/*    <div className="modal-background has-background-white-ter" />*/}
-      {/*    <div className="loader" />*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </section>
   );
 };

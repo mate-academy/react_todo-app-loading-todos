@@ -2,6 +2,7 @@ import React from 'react';
 import { FooterTypes } from './footer.types';
 import { text } from '../../constants/text';
 import classNames from 'classnames';
+import { deleteTodo } from '../../api/todos';
 
 export const FooterComponent: React.FC<FooterTypes> = ({
   todos,
@@ -9,12 +10,28 @@ export const FooterComponent: React.FC<FooterTypes> = ({
   count,
   selectedStatus,
   setSelectedStatus,
+  handleLoading,
 }) => {
   const handleClearCompletedTodos = () => {
     const completedTodos = todos.filter(todo => todo.completed);
-    // this will be a request for delete
-    // setTodos(noCompletedTodos);
+
+    completedTodos.forEach(todo => handleLoading(todo.id));
+
+    const promises = completedTodos.map(todo => {
+      handleLoading(todo.id);
+
+      return deleteTodo(todo.id);
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        setTodos(prevState => prevState.filter(todo => !todo.completed));
+      })
+      .catch(e => console.log(e));
+    completedTodos.forEach(todo => handleLoading(todo.id));
   };
+
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -66,6 +83,7 @@ export const FooterComponent: React.FC<FooterTypes> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
+        disabled={!hasCompletedTodos}
       >
         {text.clearCompleted}
       </button>
