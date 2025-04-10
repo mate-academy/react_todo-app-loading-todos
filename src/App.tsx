@@ -63,6 +63,7 @@ export const App: React.FC = () => {
         <TodoListComponent todos={sortedTodoByStatus} />
         {/* Hide the footer if there are no todos */}
         <FooterComponent
+          todos={todos}
           handleSelectTodo={handleSelectTodo}
           selectedStatus={selectedStatus}
         />

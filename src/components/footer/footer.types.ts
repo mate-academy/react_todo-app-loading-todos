@@ -1,5 +1,5 @@
 import { Status } from '../../types/Status';
-import { Todo } from "../../types/Todo";
+import { Todo } from '../../types/Todo';
 
 export type FooterTypes = {
   todos: Todo[];
