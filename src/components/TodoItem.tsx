@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 type Props = {
@@ -6,25 +7,25 @@ type Props = {
   onCheckboxClick: () => void;
 };
 
-export const TodoComponent: React.FC<Props> = ({
-  todo,
+export const TodoItem: React.FC<Props> = ({
+  todo: { title, completed, loading },
   onClick,
   onCheckboxClick,
 }) => {
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
+          checked={completed}
           onClick={onCheckboxClick}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
 
       {/* Remove button appears only on hover */}
@@ -40,7 +41,7 @@ export const TodoComponent: React.FC<Props> = ({
       {/* overlay will cover the todo while it is being deleted or updated */}
       <div
         data-cy="TodoLoader"
-        className={`modal overlay ${todo.loading ? 'is-active' : ''}`}
+        className={classNames('modal overlay', { 'is-active': loading })}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />
