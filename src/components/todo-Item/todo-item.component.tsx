@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { TodoItemTypes } from './todo-item';
 
 export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
@@ -7,7 +7,7 @@ export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
 
   const handleLoading = () => {
     setIsLoading(false);
-  }
+  };
 
   return (
     <div

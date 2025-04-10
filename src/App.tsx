@@ -4,9 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import {
-  TodoListComponent,
-} from './components/todo-list/todo-list.component';
+import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { NotifyComponent } from './components/notification/notify.component';
 import { text } from './constants/text';
 import { FooterComponent } from './components/footer/footer.component';
@@ -70,10 +68,7 @@ export const App: React.FC = () => {
         />
       </div>
 
-      <NotifyComponent
-        errorMessage={customError}
-        closeModal={closeModal}
-      />
+      <NotifyComponent errorMessage={customError} closeModal={closeModal} />
     </div>
   );
 };
