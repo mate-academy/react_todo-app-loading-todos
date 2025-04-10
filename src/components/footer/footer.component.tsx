@@ -8,11 +8,13 @@ export const FooterComponent: React.FC<FooterTypes> = ({
   selectedStatus,
   handleSelectTodo,
 }) => {
+  const todoCounter = todos.filter(todo => !todo.completed).length;
+
   return (
     todos.length > 0 && (
       <footer className="todoapp__footer" data-cy="Footer">
         <span className="todo-count" data-cy="TodosCounter">
-          3 items left
+          {todoCounter} items left
         </span>
 
         {/* Active link should have the 'selected' class */}
