@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { NotificationTypes } from "./notification.types";
+import { NotificationTypes } from './notification.types';
 
 export const NotifyComponent: React.FC<NotificationTypes> = ({
   closeModal,
