@@ -14,8 +14,8 @@ export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
-        ggg
         <input
           data-cy="TodoStatus"
           type="checkbox"
