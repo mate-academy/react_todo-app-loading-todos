@@ -5,9 +5,8 @@ import { TodoItemComponent } from '../todo-Item/todo-item.component';
 export const TodoListComponent: React.FC<TodoListTypes> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => (
-        <TodoItemComponent key={todo.id} todo={todo} />
-      ))}
+      {todos.length > 0 &&
+        todos.map(todo => <TodoItemComponent key={todo.id} todo={todo} />)}
 
       {/*/!* This todo is an active todo *!/*/}
       {/*<div data-cy="Todo" className="todo">*/}
