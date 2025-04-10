@@ -1,9 +1,9 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { NotificationTypes } from './notification.types';
+import { notifyTypes } from './notifyTypes';
 
-export const NotificationComponent: React.FC<NotificationTypes> = ({
+export const NotifyComponent: React.FC<notifyTypes> = ({
   closeModal,
   errorMessage,
 }) => {

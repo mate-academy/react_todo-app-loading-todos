@@ -1,9 +1,13 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { TodoItemTypes } from './todo-item';
 
 export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleLoading = () => {
+    setIsLoading(false);
+  }
 
   return (
     <div
@@ -11,6 +15,7 @@ export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
       className={classNames('todo', { completed: todo.completed })}
     >
       <label className="todo__status-label">
+        ggg
         <input
           data-cy="TodoStatus"
           type="checkbox"
@@ -30,6 +35,7 @@ export const TodoItemComponent: React.FC<TodoItemTypes> = ({ todo }) => {
 
       {/* overlay will cover the todo while it is being deleted or updated */}
       <div
+        onClick={handleLoading}
         data-cy="TodoLoader"
         className={classNames('modal overlay', { 'is-active': isLoading })}
       >
