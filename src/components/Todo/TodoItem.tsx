@@ -1,36 +1,35 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
-  setPreparedTodos: React.Dispatch<React.SetStateAction<[] | Todo[]>>;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
+  const { title, completed } = todo;
+
   return (
-    <div data-cy="Todo" className={`todo ${todo.completed && 'completed'}`}>
+    <div
+      data-cy="Todo"
+      className={classNames('todo', { completed: completed })}
+    >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className="todo__status-label">
         <input
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          checked={todo.completed}
-          // onChange={() => setPreparedTodos({...todo,})}
+          checked={completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
+        {title}
       </span>
 
       {/* Remove button appears only on hover */}
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        // onClick={() => setPreparedTodos(current => current.filter())}
-      >
+      <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
 

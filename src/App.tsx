@@ -1,35 +1,31 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList/TodoList';
 import { HeaderForm } from './components/HeaderForm/HeaderForm';
 import { Footer } from './components/Footer/Footer';
-import classNames from 'classnames';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [preparedTodos, setPreparedTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState('all');
+  const [filteredBy, setFilteredBy] = useState(Filter.All);
   const [todosCounter, setTodosCounter] = useState(0);
   const shouldRenderFooter =
     !loading && !errorMessage && todos && todos.length > 0;
 
-  const loadTodos = React.useCallback(() => {
+  const loadTodos = useCallback(() => {
     setLoading(true);
     getTodos()
       .then(fetchedTodo => {
         setTodos(fetchedTodo);
-        setPreparedTodos(fetchedTodo);
       })
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        // showingError();
         setShowError(true);
         setTimeout(() => setShowError(false), 3000);
       })
@@ -37,6 +33,17 @@ export const App: React.FC = () => {
         setLoading(false);
       });
   }, []);
+
+  const filteredTodos = useMemo(() => {
+    switch (filteredBy) {
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+      case Filter.Completed:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filteredBy]);
 
   useEffect(() => {
     loadTodos();
@@ -48,7 +55,7 @@ export const App: React.FC = () => {
 
       setTodosCounter(notCompleted);
     }
-  }, [todos, todosCounter, preparedTodos]);
+  }, [todos, todosCounter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -61,31 +68,19 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <HeaderForm />
 
-        {todos && !loading && (
-          <TodoList
-            preparedTodos={preparedTodos}
-            setPreparedTodos={setPreparedTodos}
-          />
-        )}
+        {todos && !loading && <TodoList filteredTodos={filteredTodos} />}
 
         {shouldRenderFooter && (
           <Footer
-            selected={selected}
-            setSelected={setSelected}
+            filteredBy={filteredBy}
+            setFilteredBy={setFilteredBy}
             todosCounter={todosCounter}
-            todos={todos}
-            setTodos={setTodos}
-            preparedTodos={preparedTodos}
-            setPreparedTodos={setPreparedTodos}
           />
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        // eslint-disable-next-line max-len
         className={classNames(
           'notification',
           'is-danger',
@@ -105,8 +100,6 @@ export const App: React.FC = () => {
     </div>
   );
 };
-
-// Unable to load todos
 
 // Title should not be empty
 
