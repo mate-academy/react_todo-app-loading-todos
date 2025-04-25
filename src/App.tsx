@@ -19,8 +19,16 @@ const getFilteredTodo = (todos: Todo[], query: FilterState): Todo[] => {
   return todos.filter(todo => todo.completed === (query === 'Completed'));
 };
 
+function wait(delay: number): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, delay);
+  });
+}
+
 export const App: React.FC = () => {
-  const [loadingTodoId] = React.useState<Todo['id'] | null>(null);
+  const [loadingTodoId, setLoadingTodoId] = React.useState<Todo['id'] | null>(
+    null,
+  );
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [filterState, setFilterState] = React.useState<FilterState>('All');
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -45,18 +53,34 @@ export const App: React.FC = () => {
   ).length;
 
   const onChange = (todo: Todo, fieldsToUpdate: Partial<Todo>) => {
+    setLoadingTodoId(todo.id);
     const updatedTodo = { ...todo, ...fieldsToUpdate };
-    const updatedTodos = [...todos];
-    const index = updatedTodos.findIndex(
-      currentTodo => currentTodo.id === todo.id,
-    );
 
-    updatedTodos.splice(index, 1, updatedTodo);
-    setTodos(updatedTodos);
+    return wait(1)
+      .then(() => {
+        const updatedTodos = [...todos];
+        const index = updatedTodos.findIndex(
+          currentTodo => currentTodo.id === todo.id,
+        );
+
+        updatedTodos.splice(index, 1, updatedTodo);
+        setTodos(updatedTodos);
+      })
+      .catch(error => {
+        setErrorMessage(MESSAGE.UNABLE_UPDARE);
+        throw Error(error);
+      })
+      .finally(() => setLoadingTodoId(null));
   };
 
   const onDelete = (todo: Todo) => {
-    setTodos(todos.filter(currentTodo => todo.id !== currentTodo.id));
+    setLoadingTodoId(todo.id);
+
+    return wait(1)
+      .then(() =>
+        setTodos(todos.filter(currentTodo => todo.id !== currentTodo.id)),
+      )
+      .then(() => setLoadingTodoId(null));
   };
 
   return (
@@ -78,7 +102,10 @@ export const App: React.FC = () => {
         />
       </div>
 
-      <Notification errorMessage={errorMessage} />
+      <Notification
+        errorMessage={errorMessage}
+        onClearMessage={() => setErrorMessage('')}
+      />
     </div>
   );
 };

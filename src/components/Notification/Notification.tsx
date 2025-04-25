@@ -2,9 +2,13 @@ import cn from 'classnames';
 
 interface NotificationProps {
   errorMessage: string;
+  onClearMessage: () => void;
 }
 
-export const Notification: React.FC<NotificationProps> = ({ errorMessage }) => {
+export const Notification: React.FC<NotificationProps> = ({
+  errorMessage,
+  onClearMessage,
+}) => {
   return (
     <>
       {/* DON'T use conditional rendering to hide the notification */}
@@ -19,7 +23,12 @@ export const Notification: React.FC<NotificationProps> = ({ errorMessage }) => {
           { hidden: !errorMessage },
         )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={onClearMessage}
+        />
         {/* show only one message at a time */}
         {errorMessage}
       </div>

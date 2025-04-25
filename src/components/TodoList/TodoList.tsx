@@ -7,7 +7,7 @@ import { useState } from 'react';
 interface TodoListProps {
   lodingId: Todo['id'] | null;
   todos: Todo[];
-  onChange: (todo: Todo, fieldsToUpdate: Partial<Todo>) => void;
+  onChange: (todo: Todo, fieldsToUpdate: Partial<Todo>) => Promise<unknown>;
   onDelete: (todoId: Todo) => void;
 }
 
@@ -31,8 +31,12 @@ export const TodoList: React.FC<TodoListProps> = ({
   };
 
   const handleSubmit = (todo: Todo) => {
-    onChange(todo, { title: editValue });
-    setEditId(null);
+    onChange(todo, { title: editValue })
+      .then(() => setEditId(null))
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
   };
 
   const handleEditSubmit = (
