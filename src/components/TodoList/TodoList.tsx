@@ -1,5 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-export const TodoList: React.FC = () => {
+
+import { Todo } from '../../types/Todo';
+
+interface TodoListProps {
+  todos: Todo[];
+}
+
+export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+  // eslint-disable-next-line no-console
+  console.log(`todos`, todos);
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* This is a completed todo */}

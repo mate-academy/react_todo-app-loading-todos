@@ -1,8 +1,17 @@
+import cn from 'classnames';
+import { FilterState } from '../../types/FilterStates';
+
 interface FooterProps {
   itemsLeft: number;
+  filterState: FilterState;
+  onFilter: (filterState: FilterState) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ itemsLeft }) => {
+export const Footer: React.FC<FooterProps> = ({
+  itemsLeft,
+  filterState,
+  onFilter,
+}) => {
   return (
     <>
       {/* Hide the footer if there are no todos */}
@@ -15,24 +24,33 @@ export const Footer: React.FC<FooterProps> = ({ itemsLeft }) => {
         <nav className="filter" data-cy="Filter">
           <a
             href="#/"
-            className="filter__link selected"
+            className={cn('filter__link', {
+              selected: filterState === 'All',
+            })}
             data-cy="FilterLinkAll"
+            onClick={() => onFilter('All')}
           >
             All
           </a>
 
           <a
             href="#/active"
-            className="filter__link"
+            className={cn('filter__link', {
+              selected: filterState === 'Active',
+            })}
             data-cy="FilterLinkActive"
+            onClick={() => onFilter('Active')}
           >
             Active
           </a>
 
           <a
             href="#/completed"
-            className="filter__link"
+            className={cn('filter__link', {
+              selected: filterState === 'Completed',
+            })}
             data-cy="FilterLinkCompleted"
+            onClick={() => onFilter('Completed')}
           >
             Completed
           </a>
