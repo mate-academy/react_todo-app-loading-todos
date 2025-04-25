@@ -20,18 +20,16 @@ const getFilteredTodo = (todos: Todo[], query: FilterState): Todo[] => {
 };
 
 export const App: React.FC = () => {
-  const [isLoadint, setIsLoadig] = React.useState(true);
+  const [loadingTodoId] = React.useState<Todo['id'] | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [filterState, setFilterState] = React.useState<FilterState>('All');
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = React.useState<Todo[]>([]);
 
   useEffect(() => {
-    setIsLoadig(true);
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage(MESSAGE.UNABLE_LOAD))
-      .finally(() => setIsLoadig(false));
+      .catch(() => setErrorMessage(MESSAGE.UNABLE_LOAD));
   }, []);
 
   useEffect(() => {
@@ -49,22 +47,16 @@ export const App: React.FC = () => {
   const onChange = (todo: Todo, fieldsToUpdate: Partial<Todo>) => {
     const updatedTodo = { ...todo, ...fieldsToUpdate };
     const updatedTodos = [...todos];
-    const index = todos.findIndex(
-      currentTodo => currentTodo.id === updatedTodo.id,
+    const index = updatedTodos.findIndex(
+      currentTodo => currentTodo.id === todo.id,
     );
 
     updatedTodos.splice(index, 1, updatedTodo);
     setTodos(updatedTodos);
-    setFilteredTodos(getFilteredTodo(updatedTodos, filterState));
   };
 
-  const onDelete = (todoId: Todo['id']) => {
-    const updatedTodos = [...todos];
-    const index = todos.findIndex(currentTodo => currentTodo.id === todoId);
-
-    updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
-    setFilteredTodos(getFilteredTodo(updatedTodos, filterState));
+  const onDelete = (todo: Todo) => {
+    setTodos(todos.filter(currentTodo => todo.id !== currentTodo.id));
   };
 
   return (
@@ -74,7 +66,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <Header />
         <TodoList
-          isLoadint={isLoadint}
+          lodingId={loadingTodoId}
           todos={filteredTodos}
           onChange={onChange}
           onDelete={onDelete}

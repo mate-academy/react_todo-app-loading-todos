@@ -5,14 +5,14 @@ import { Todo } from '../../types/Todo';
 import { useState } from 'react';
 
 interface TodoListProps {
-  isLoadint: boolean;
+  lodingId: Todo['id'] | null;
   todos: Todo[];
   onChange: (todo: Todo, fieldsToUpdate: Partial<Todo>) => void;
-  onDelete: (todoId: Todo['id']) => void;
+  onDelete: (todoId: Todo) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
-  isLoadint,
+  lodingId,
   todos,
   onChange,
   onDelete,
@@ -30,8 +30,17 @@ export const TodoList: React.FC<TodoListProps> = ({
     }
   };
 
-  const handleEditSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (todo: Todo) => {
+    onChange(todo, { title: editValue });
+    setEditId(null);
+  };
+
+  const handleEditSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    todo: Todo,
+  ) => {
     event.preventDefault();
+    handleSubmit(todo);
   };
 
   return (
@@ -52,7 +61,11 @@ export const TodoList: React.FC<TodoListProps> = ({
             />
           </label>
           {todo.id === editId ? (
-            <form onSubmit={handleEditSubmit}>
+            <form
+              onSubmit={event => {
+                handleEditSubmit(event, todo);
+              }}
+            >
               <input
                 data-cy="TodoTitleField"
                 type="text"
@@ -61,7 +74,7 @@ export const TodoList: React.FC<TodoListProps> = ({
                 value={editValue}
                 autoFocus
                 onChange={event => setEditValue(event.target.value)}
-                onBlur={() => setEditId(null)}
+                onBlur={() => handleSubmit(todo)}
                 onKeyUp={event => {
                   if (event.key === 'Escape') {
                     setEditId(null);
@@ -83,14 +96,14 @@ export const TodoList: React.FC<TodoListProps> = ({
                 type="button"
                 className="todo__remove"
                 data-cy="TodoDelete"
-                onClick={() => onDelete(todo.id)}
+                onClick={() => onDelete(todo)}
               >
                 ×
               </button>
             </>
           )}
           {/* overlay will cover the todo while it is being deleted or updated */}
-          {isLoadint ? (
+          {lodingId === todo.id ? (
             <div data-cy="TodoLoader" className="modal overlay is-active">
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />
