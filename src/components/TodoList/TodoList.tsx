@@ -107,12 +107,15 @@ export const TodoList: React.FC<TodoListProps> = ({
             </>
           )}
           {/* overlay will cover the todo while it is being deleted or updated */}
-          {lodingId === todo.id ? (
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          ) : null}
+          <div
+            data-cy="TodoLoader"
+            className={cn('modal', 'overlay', {
+              'is-active': lodingId === todo.id,
+            })}
+          >
+            <div className="modal-background has-background-white-ter" />
+            <div className="loader" />
+          </div>
         </div>
       ))}
     </section>

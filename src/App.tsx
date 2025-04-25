@@ -44,13 +44,21 @@ export const App: React.FC = () => {
     setFilteredTodos(getFilteredTodo(todos, filterState));
   }, [filterState, todos]);
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timeOutId = setTimeout(() => setErrorMessage(''), 3000);
+
+      return () => {
+        clearTimeout(timeOutId);
+      };
+    }
+  }, [errorMessage]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
 
-  const itemsLeft = filteredTodos.filter(
-    todo => todo.completed === false,
-  ).length;
+  const itemsLeft = todos.filter(todo => todo.completed === false).length;
 
   const onChange = (todo: Todo, fieldsToUpdate: Partial<Todo>) => {
     setLoadingTodoId(todo.id);
@@ -89,17 +97,22 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        <TodoList
-          lodingId={loadingTodoId}
-          todos={filteredTodos}
-          onChange={onChange}
-          onDelete={onDelete}
-        />
-        <Footer
-          itemsLeft={itemsLeft}
-          filterState={filterState}
-          onFilter={setFilterState}
-        />
+        {todos.length ? (
+          <>
+            <TodoList
+              lodingId={loadingTodoId}
+              todos={filteredTodos}
+              onChange={onChange}
+              onDelete={onDelete}
+            />
+
+            <Footer
+              itemsLeft={itemsLeft}
+              filterState={filterState}
+              onFilter={setFilterState}
+            />
+          </>
+        ) : null}
       </div>
 
       <Notification
