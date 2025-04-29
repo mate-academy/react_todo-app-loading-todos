@@ -9,7 +9,7 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
-  const [todo, setTodo] = useState<Todo | undefined>();
+  // const [todo, setTodo] = useState<Todo | undefined>();
 
   useEffect(() => {
     todosService
@@ -53,12 +53,12 @@ export const App: React.FC = () => {
       return;
     }
 
-    setTodo({
-      id: 0, //refactor?
-      userId: 2816, //refactor?
-      title: query,
-      completed: false,
-    });
+    // setTodo({
+    //   id: 0, //refactor?
+    //   userId: 2816, //refactor?
+    //   title: query,
+    //   completed: false,
+    // });
 
     // if (!todo) {
     //   return;
@@ -70,7 +70,7 @@ export const App: React.FC = () => {
   };
 
   const handleClick = (event: React.MouseEvent) => {
-    setStatus(event.currentTarget.innerHTML);
+    setStatus(event.currentTarget.innerHTML.toLowerCase());
   };
 
   //CHANGE IF
@@ -80,12 +80,10 @@ export const App: React.FC = () => {
     }, 3000);
   }
 
-  const normalizedStatus = status.toLowerCase();
-
   const filteredTodos = useMemo(() => {
     let fltrdTodos: Todo[] | undefined = todos;
 
-    switch (normalizedStatus) {
+    switch (status) {
       case 'all':
         fltrdTodos = todos;
         break;
@@ -98,7 +96,7 @@ export const App: React.FC = () => {
     }
 
     return fltrdTodos;
-  }, [normalizedStatus, todos]);
+  }, [status, todos]);
 
   function deleteTodo(todoId: number) {
     todosService.deleteTodos(todoId);
@@ -185,81 +183,6 @@ export const App: React.FC = () => {
                 </div>
               </div>
             ))}
-
-            {/* This todo is an active todo */}
-            <div data-cy="Todo" className="todo">
-              {/* <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div> */}
-            </div>
-
-            {/* This todo is being edited */}
-            <div data-cy="Todo" className="todo">
-              {/* <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label> */}
-
-              {/* This form is shown instead of the title and remove button */}
-              {/* <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form> */}
-
-              {/* <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div> */}
-            </div>
-
-            {/* This todo is in loadind state */}
-            <div data-cy="Todo" className="todo">
-              {/* <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label> */}
-
-              {/* <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span> */}
-
-              {/* <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button> */}
-
-              {/* 'is-active' class puts this modal on top of the todo */}
-              {/* <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div> */}
-            </div>
           </section>
         )}
 
