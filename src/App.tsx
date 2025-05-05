@@ -11,11 +11,17 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [erroMessage, setErroMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [listComponent, setListComponent] = useState(false);
+  const [toogle, setToggle] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
   useEffect(() => {
+    if (todos && todos.length > 0) {
+      setToggle(true);
+    } else {
+      setToggle(false);
+    }
+
     const fetchTodos = async () => {
       try {
         const todosData = await client.getTodos();
@@ -31,6 +37,10 @@ export const App: React.FC = () => {
     fetchTodos();
   }, []);
 
+  useEffect(() => {
+    setToggle(todos.length > 0);
+  }, [todos]);
+
   const deleteTodo = async (id: number) => {
     try {
       await client.deletePost(id);
@@ -43,8 +53,7 @@ export const App: React.FC = () => {
 
   const handleSubmitForm = async (title: string) => {
     setLoading(true);
-    await wait(3000);
-    setListComponent(true);
+    await wait(2000);
     try {
       const addTodo = await client.postTodos(title);
 
@@ -115,12 +124,14 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            type="button"
-            className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
-            data-cy="ToggleAllButton"
-            onClick={toggleAllTodos}
-          />
+          {toogle && (
+            <button
+              type="button"
+              className={`todoapp__toggle-all ${todos.every(todo => todo.completed) ? 'active' : ''}`}
+              data-cy="ToggleAllButton"
+              onClick={toggleAllTodos}
+            />
+          )}
 
           {/* Add a todo on form submit */}
           <form
@@ -149,15 +160,11 @@ export const App: React.FC = () => {
       {loading ? (
         <div className="loader"></div>
       ) : (
-        listComponent && (
+        todos.length > 0 && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
               {todos
                 .filter(todo => {
-                  if (!todo || !todo.title) {
-                    return false; // remove nulos ou sem título
-                  }
-
                   if (filter === 'active') {
                     return !todo.completed;
                   }
@@ -228,51 +235,50 @@ export const App: React.FC = () => {
                   Unable to update a todo
                 </div>
               )}
+              <footer className="todoapp__footer" data-cy="Footer">
+                <span className="todo-count" data-cy="TodosCounter">
+                  {todos.filter(todo => !todo.completed).length} items left
+                </span>
+
+                <nav className="filter" data-cy="Filter">
+                  <a
+                    href="#/"
+                    className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+                    data-cy="FilterLinkAll"
+                    onClick={() => setFilter('all')}
+                  >
+                    All
+                  </a>
+
+                  <a
+                    href="#/active"
+                    className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+                    data-cy="FilterLinkActive"
+                    onClick={() => setFilter('active')}
+                  >
+                    Active
+                  </a>
+
+                  <a
+                    href="#/completed"
+                    className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+                    data-cy="FilterLinkCompleted"
+                    onClick={() => setFilter('completed')}
+                  >
+                    Completed
+                  </a>
+                </nav>
+
+                <button
+                  type="button"
+                  className="todoapp__clear-completed"
+                  data-cy="ClearCompletedButton"
+                  onClick={clearCompleted}
+                >
+                  Clear completed
+                </button>
+              </footer>
             </section>
-
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {todos.filter(todo => !todo.completed).length} items left
-              </span>
-
-              <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setFilter('all')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setFilter('active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setFilter('completed')}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                onClick={clearCompleted}
-              >
-                Clear completed
-              </button>
-            </footer>
           </>
         )
       )}
