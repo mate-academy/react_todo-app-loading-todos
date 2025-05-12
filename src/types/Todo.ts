@@ -4,3 +4,5 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
+
+export type EditableField = { title: string } | { completed: boolean };
