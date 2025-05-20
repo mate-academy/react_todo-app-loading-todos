@@ -31,7 +31,11 @@ function request<T>(
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
       if (!response.ok) {
-        throw new Error();
+        const errorText = response.text();
+
+        throw new Error(
+          `Request failed: ${response.status} ${response.statusText} — ${errorText}`,
+        );
       }
 
       return response.json();
@@ -42,5 +46,5 @@ export const client = {
   get: <T>(url: string) => request<T>(url),
   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  delete: <T>(url: string) => request<T>(url, 'DELETE'),
 };
