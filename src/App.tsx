@@ -28,7 +28,7 @@ export const App: React.FC = () => {
 
         setTodos(todosData);
       } catch (error) {
-        setErroMessage(error.message);
+        setErroMessage('Unable to load todos');
       } finally {
         setLoading(false);
       }
@@ -46,8 +46,8 @@ export const App: React.FC = () => {
       await client.deletePost(id);
 
       setTodos(prev => prev.filter(todo => todo.id !== id));
-    } catch (error: unknown) {
-      setErroMessage(error.message);
+    } catch (error) {
+      setErroMessage('Unable to delete a todo');
     }
   };
 
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
 
       setTodos(prev => [addTodo, ...prev]);
     } catch (error: unknown) {
-      setErroMessage(error.message);
+      setErroMessage('Unable to add a todo');
     } finally {
       setLoading(false);
     }
@@ -91,9 +91,7 @@ export const App: React.FC = () => {
 
       setTodos(prev => prev.map(todo => (todo.id === id ? updatedTodo : todo)));
     } catch (error: unknown) {
-      setErroMessage(
-        error instanceof Error ? error.message : 'Erro ao atualizar todo',
-      );
+      setErroMessage('Unable to update a todo');
     }
   };
 
@@ -114,6 +112,10 @@ export const App: React.FC = () => {
       }
     }
   };
+
+  const handleCloseError = () => {
+    setErroMessage('');
+  }
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -137,8 +139,11 @@ export const App: React.FC = () => {
           <form
             onSubmit={event => {
               event.preventDefault();
-              if (inputValue.trim()) {
-                handleSubmitForm(inputValue.trim());
+
+              const trimmed = inputValue.trim();
+
+              if (trimmed) {
+                handleSubmitForm(trimmed);
                 setInputValue('');
               } else {
                 setErroMessage('Title should not be empty');
@@ -203,85 +208,73 @@ export const App: React.FC = () => {
                     >
                       ×
                     </button>
-
-                    <div data-cy="TodoLoader" className="modal overlay">
-                      <div
-                        className="modal-background
-                    has-background-white-ter"
-                      />
-                      <div className="loader" />
-                    </div>
                   </div>
                 ))}
+
               {erroMessage && (
-                <div
-                  data-cy="ErrorNotification"
-                  className="notification is-danger
+              <div
+                data-cy="ErrorNotification"
+                className="notification is-danger
                 is-light has-text-weight-normal"
-                >
-                  <button
-                    data-cy="HideErrorButton"
-                    type="button"
-                    className="delete"
-                  />
-                  Unable to load todos
-                  <br />
-                  Title should not be empty
-                  <br />
-                  Unable to add a todo
-                  <br />
-                  Unable to delete a todo
-                  <br />
-                  Unable to update a todo
-                </div>
-              )}
-              <footer className="todoapp__footer" data-cy="Footer">
-                <span className="todo-count" data-cy="TodosCounter">
-                  {todos.filter(todo => !todo.completed).length} items left
-                </span>
-
-                <nav className="filter" data-cy="Filter">
-                  <a
-                    href="#/"
-                    className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-                    data-cy="FilterLinkAll"
-                    onClick={() => setFilter('all')}
-                  >
-                    All
-                  </a>
-
-                  <a
-                    href="#/active"
-                    className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-                    data-cy="FilterLinkActive"
-                    onClick={() => setFilter('active')}
-                  >
-                    Active
-                  </a>
-
-                  <a
-                    href="#/completed"
-                    className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-                    data-cy="FilterLinkCompleted"
-                    onClick={() => setFilter('completed')}
-                  >
-                    Completed
-                  </a>
-                </nav>
-
+              >
                 <button
+                  data-cy="HideErrorButton"
                   type="button"
-                  className="todoapp__clear-completed"
-                  data-cy="ClearCompletedButton"
-                  onClick={clearCompleted}
+                  className="delete"
+                  onClick={handleCloseError}
+                />
+                {erroMessage}
+              </div>
+              )}
+      
+
+            <footer className="todoapp__footer" data-cy="Footer">
+              <span className="todo-count" data-cy="TodosCounter">
+                {todos.filter(todo => !todo.completed).length} items left
+              </span>
+
+              <nav className="filter" data-cy="Filter">
+                <a
+                  href="#/"
+                  className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+                  data-cy="FilterLinkAll"
+                  onClick={() => setFilter('all')}
                 >
-                  Clear completed
-                </button>
-              </footer>
-            </section>
-          </>
-        )
+                  All
+                </a>
+
+                <a
+                  href="#/active"
+                  className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+                  data-cy="FilterLinkActive"
+                  onClick={() => setFilter('active')}
+                >
+                  Active
+                </a>
+
+                <a
+                  href="#/completed"
+                  className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+                  data-cy="FilterLinkCompleted"
+                  onClick={() => setFilter('completed')}
+                >
+                  Completed
+                </a>
+              </nav>
+
+              <button
+                type="button"
+                className="todoapp__clear-completed"
+                data-cy="ClearCompletedButton"
+                onClick={clearCompleted}
+              >
+                Clear completed
+              </button>
+            </footer>
+          </section>
+    </>
+  )
       )}
-    </div>
+    </div >
   );
 };
