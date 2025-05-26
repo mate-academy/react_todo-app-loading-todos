@@ -8,18 +8,15 @@ export const getTodos = () => {
 };
 
 // Add more methods here
+
+export const deletePost = (id: number) => {
+  return client.delete(`/todos/${id}`);
+};
+
 export const postTodos = (title: string) => {
   return client.post<Todo>('/todos', {
     title,
     completed: false,
     userId: USER_ID,
   });
-};
-
-export const deletePost = (id: number) => {
-  return client.delete(`/todos/${id}`);
-};
-
-export const updateTodo = (id: number, updatedData: Partial<Todo>) => {
-  return client.patch<Todo>(`/todos/${id}`, updatedData);
 };
