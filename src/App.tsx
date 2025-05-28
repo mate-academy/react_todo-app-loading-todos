@@ -6,12 +6,16 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
 
-type FilterName = 'ALL' | 'COMPLETED' | 'ACTIVE';
+enum FilterName {
+  ALL = 'ALL',
+  COMPLETED = 'COMPLETED',
+  ACTIVE = 'ACTIVE',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterValue, setFilterValue] = useState<FilterName>('ALL');
+  const [filterValue, setFilterValue] = useState<FilterName>(FilterName.ALL);
 
   const activeTodosQuantity = todos.filter(todo => !todo.completed).length;
 
@@ -26,9 +30,9 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     switch (filterValue) {
-      case 'ACTIVE':
+      case FilterName.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'COMPLETED':
+      case FilterName.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
@@ -37,10 +41,6 @@ export const App: React.FC = () => {
 
   useEffect(loadTodos, []);
 
-  // function addPost
-  // function deletePost
-  // function updatePost
-  // function addPost
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -119,10 +119,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: filterValue === 'ALL',
+                  selected: filterValue === FilterName.ALL,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilterValue('ALL')}
+                onClick={() => setFilterValue(FilterName.ALL)}
               >
                 All
               </a>
@@ -130,10 +130,10 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: filterValue === 'ACTIVE',
+                  selected: filterValue === FilterName.ACTIVE,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilterValue('ACTIVE')}
+                onClick={() => setFilterValue(FilterName.ACTIVE)}
               >
                 Active
               </a>
@@ -141,10 +141,10 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: filterValue === 'COMPLETED',
+                  selected: filterValue === FilterName.COMPLETED,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilterValue('COMPLETED')}
+                onClick={() => setFilterValue(FilterName.COMPLETED)}
               >
                 Completed
               </a>
@@ -162,8 +162,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
         className={classNames(
@@ -175,16 +173,8 @@ export const App: React.FC = () => {
         )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
+
         {errorMessage}
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );
