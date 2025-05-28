@@ -22,12 +22,16 @@ export const App: React.FC = () => {
 
   const activeTodosQuantity = todos.filter(todo => !todo.completed).length;
 
+  const clearErrorMessage = () => {
+    setErrorMessage('');
+  };
+
   function loadTodos() {
     getTodos()
       .then(setTodos)
       .catch(() => {
         setErrorMessage('Unable to load todos');
-        setTimeout(() => setErrorMessage(''), 3000);
+        setTimeout(clearErrorMessage, 3000);
       });
   }
 
@@ -44,6 +48,14 @@ export const App: React.FC = () => {
 
   useEffect(loadTodos, []);
 
+  const handleTodoChange = (id: number, completed: boolean) => {
+    setTodos(currentTodos =>
+      currentTodos.map(todo =>
+        todo.id === id ? { ...todo, completed } : todo,
+      ),
+    );
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -53,8 +65,10 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
-        {todos.length > 0 && <TodoList todos={filteredTodos} />}
+        <Header activeTodosQuantity={activeTodosQuantity} />
+        {todos.length > 0 && (
+          <TodoList todos={filteredTodos} onChange={handleTodoChange} />
+        )}
         {todos.length > 0 && (
           <Footer
             activeTodosQuantity={activeTodosQuantity}
@@ -65,7 +79,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification errorMessage={errorMessage} />
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onClearError={clearErrorMessage}
+      />
     </div>
   );
 };

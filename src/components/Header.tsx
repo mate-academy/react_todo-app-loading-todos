@@ -1,9 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  activeTodosQuantity: number;
+}
+
+export const Header: React.FC<HeaderProps> = ({ activeTodosQuantity }) => {
   // Assuming props will be added later
-  const activeTodosQuantity = 0; // Placeholder
+  // const activeTodosQuantity = 0; // Placeholder
 
   return (
     <header className="todoapp__header">

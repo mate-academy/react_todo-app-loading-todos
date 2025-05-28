@@ -3,10 +3,12 @@ import classNames from 'classnames';
 
 interface ErrorNotificationProps {
   errorMessage: string;
+  onClearError: () => void;
 }
 
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
   errorMessage,
+  onClearError,
 }) => {
   return (
     <div
@@ -19,7 +21,12 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
         { hidden: !errorMessage },
       )}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={onClearError}
+      />
 
       {errorMessage}
     </div>

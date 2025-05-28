@@ -6,9 +6,10 @@ import { Todo } from '../types/Todo';
 
 interface TodoListProps {
   todos: Todo[];
+  onChange: (id: number, completed: boolean) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+export const TodoList: React.FC<TodoListProps> = ({ todos, onChange }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map((todo: Todo) => (
@@ -26,6 +27,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
               className="todo__status"
               checked={todo.completed}
               id={`todo-${todo.id}`}
+              onChange={event => onChange(todo.id, event.target.checked)}
             />
           </label>
 
