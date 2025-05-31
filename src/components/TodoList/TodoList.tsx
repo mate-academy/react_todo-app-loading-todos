@@ -7,16 +7,16 @@ interface Props {
   todos: Todo[];
   setStatus: (status: string) => void;
   status: string;
-  // setErrorStatus: (status: string) => void;
-  errorStatus: string;
+  setErrorMessage: (status: string) => void;
+  errorMessage: string;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setStatus,
   status,
-  // setErrorStatus,
-  errorStatus,
+  setErrorMessage,
+  errorMessage,
 }) => {
   const visibleTodos = todos.filter(todo => {
     if (status === 'active') {
@@ -165,10 +165,14 @@ export const TodoList: React.FC<Props> = ({
 
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${!errorStatus ? 'hidden' : ''}`}
+        className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {errorStatus}
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')} />
+        {errorMessage}
       </div>
 
       {/*
