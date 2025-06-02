@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   function loadTodos() {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'))
+      .catch(() => setErrorMessage('Unable to load todos'));
   }
 
   useEffect(loadTodos, []);
