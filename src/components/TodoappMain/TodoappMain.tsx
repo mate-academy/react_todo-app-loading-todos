@@ -32,22 +32,33 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
     }
   };
 
-  const handleToggleStatus = (idTodo: number) => {
+  const handleToggleStatus = async (idTodo: number) => {
     setTodos(prev =>
       prev.map(todo =>
         todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
       ),
     );
 
-    setTimeout(() => {
+    const todoToUpdate = todos.find(todo => todo.id === idTodo);
+
+    if (!todoToUpdate) {
+      return;
+    }
+
+    try {
+      const updated = await patchTodo(idTodo, {
+        completed: !todoToUpdate.completed,
+      });
+
       setTodos(prev =>
         prev.map(todo =>
-          todo.id === idTodo
-            ? { ...todo, completed: !todo.completed, isLoaded: true }
-            : todo,
+          todo.id === idTodo ? { ...updated, isLoaded: true } : todo,
         ),
       );
-    }, 500);
+    } catch {
+      setErrorNotification('Unable to update todo status');
+      setTimeout(() => setErrorNotification(''), 2000);
+    }
   };
 
   const handleUpdateTodo = async (updatedTodo: Todo) => {

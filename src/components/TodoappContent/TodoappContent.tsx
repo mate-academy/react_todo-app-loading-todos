@@ -17,7 +17,11 @@ export const TodoappContent: React.FC<TodoappContentProps> = ({
 
   useEffect(() => {
     getTodos()
-      .then(data => setTodos(data))
+      .then(data => {
+        const newData = data.map(todo => ({ ...todo, isLoaded: true }));
+
+        setTodos(newData);
+      })
       .catch(() => setErrorNotification('Unable to load todos'));
   }, [setErrorNotification]);
 

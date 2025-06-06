@@ -2,10 +2,12 @@ import React from 'react';
 
 interface ErrorNotificationProps {
   errorNotification: string;
+  setErrorNotification: (arg: string) => void;
 }
 
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
   errorNotification,
+  setErrorNotification,
 }) => {
   return (
     /* DON'T use conditional rendering to hide the notification */
@@ -14,16 +16,13 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
       data-cy="ErrorNotification"
       className={`notification is-danger is-light has-text-weight-normal ${errorNotification === '' ? 'hidden' : ''}`}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={() => setErrorNotification('')}
+      />
       {errorNotification}
-      {/* show only one message at a time */}
-      {/*
-      <br />
-      Unable to add a todo
-      <br />
-      Unable to delete a todo
-      <br />
-      Unable to update a todo */}
     </div>
   );
 };
