@@ -1,3 +1,4 @@
+import { deleteTodo, patchTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
 import { TodoElement } from '../TodoElement/TodoElement';
 
@@ -10,17 +11,25 @@ interface TodoappMainProps {
 export const TodoappMain: React.FC<TodoappMainProps> = ({
   todos,
   setTodos,
+  setErrorNotification,
 }) => {
-  const handleTodoDelete = (idTodo: number) => {
+  const handleTodoDelete = async (idTodo: number) => {
     setTodos(prev =>
       prev.map(todo =>
         todo.id === idTodo ? { ...todo, isLoaded: false } : todo,
       ),
     );
 
-    setTimeout(() => {
-      setTodos(prev => prev.filter(todo => todo.id !== idTodo));
-    }, 500);
+    try {
+      await deleteTodo(idTodo);
+
+      setTimeout(() => {
+        setTodos(prev => prev.filter(todo => todo.id !== idTodo));
+      }, 500);
+    } catch {
+      setErrorNotification('Unable to delete a todo');
+      setTimeout(() => setErrorNotification(''), 2000);
+    }
   };
 
   const handleToggleStatus = (idTodo: number) => {
@@ -41,23 +50,29 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
     }, 500);
   };
 
-  const handleUpdateTodo = (updatedTodo: Todo) => {
+  const handleUpdateTodo = async (updatedTodo: Todo) => {
     setTodos(prev =>
       prev.map(todo =>
         todo.id === updatedTodo.id ? { ...todo, isLoaded: false } : todo,
       ),
     );
 
-    // Через 500 мс обновляем сам todo и ставим isLoaded: true
-    setTimeout(() => {
+    try {
+      const serverTodo = await patchTodo(updatedTodo.id, {
+        title: updatedTodo.title,
+      });
+
       setTodos(prev =>
         prev.map(todo =>
-          todo.id === updatedTodo.id
-            ? { ...updatedTodo, isLoaded: true }
+          todo.id === serverTodo.id
+            ? { ...todo, title: updatedTodo.title, isLoaded: true }
             : todo,
         ),
       );
-    }, 500);
+    } catch {
+      setErrorNotification('Unable to update todo');
+      setTimeout(() => setErrorNotification(''), 2000);
+    }
   };
 
   return (

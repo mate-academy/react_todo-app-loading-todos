@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TodoappFooter } from '../TodoappFooter';
 import { TodoappHeader } from '../TodoappHeader';
 import { TodoappMain } from '../TodoappMain';
 import { Todo } from '../../types/Todo';
 import { FilterType } from '../../types/Filter';
+import { getTodos } from '../../api/todos';
 interface TodoappContentProps {
   setErrorNotification: (msg: string) => void;
 }
@@ -13,6 +14,12 @@ export const TodoappContent: React.FC<TodoappContentProps> = ({
 }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterStyle, setFilterStyle] = useState<FilterType>('all');
+
+  useEffect(() => {
+    getTodos()
+      .then(data => setTodos(data))
+      .catch(() => setErrorNotification('Unable to load todos'));
+  }, [setErrorNotification]);
 
   const filteredTodos = todos.filter(todo => {
     switch (filterStyle) {
