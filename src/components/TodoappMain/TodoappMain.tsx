@@ -1,5 +1,6 @@
 import { deleteTodo, patchTodo } from '../../api/todos';
 import { Todo } from '../../types/Todo';
+import { errorNotification } from '../../utils/errorFunction';
 import { TodoElement } from '../TodoElement/TodoElement';
 
 interface TodoappMainProps {
@@ -27,8 +28,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
         setTodos(prev => prev.filter(todo => todo.id !== idTodo));
       }, 500);
     } catch {
-      setErrorNotification('Unable to delete a todo');
-      setTimeout(() => setErrorNotification(''), 2000);
+      errorNotification('Unable to delete a todo', setErrorNotification);
     }
   };
 
@@ -56,8 +56,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
         ),
       );
     } catch {
-      setErrorNotification('Unable to update todo status');
-      setTimeout(() => setErrorNotification(''), 2000);
+      errorNotification('Unable to update todo status', setErrorNotification);
     }
   };
 
@@ -81,8 +80,7 @@ export const TodoappMain: React.FC<TodoappMainProps> = ({
         ),
       );
     } catch {
-      setErrorNotification('Unable to update todo');
-      setTimeout(() => setErrorNotification(''), 2000);
+      errorNotification('Unable to update todo', setErrorNotification);
     }
   };
 

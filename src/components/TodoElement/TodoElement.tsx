@@ -79,7 +79,7 @@ export const TodoElement: React.FC<TodoElementProps> = ({
 
       {!isEditing && <TodoDelete onDelete={() => handleTodoDelete(todo.id)} />}
 
-      {loading && <TodoLoader />}
+      <TodoLoader loading={loading} />
     </div>
   );
 };

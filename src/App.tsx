@@ -19,12 +19,10 @@ export const App: React.FC = () => {
 
       <TodoappContent setErrorNotification={setErrorNotification} />
 
-      {errorNotification && (
-        <ErrorNotification
-          errorNotification={errorNotification}
-          setErrorNotification={setErrorNotification}
-        />
-      )}
+      <ErrorNotification
+        errorNotification={errorNotification}
+        setErrorNotification={setErrorNotification}
+      />
     </div>
   );
 };

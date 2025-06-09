@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { USER_ID, postTodo } from '../../api/todos';
+import { errorNotification } from '../../utils/errorFunction';
 
 interface TodoappHeaderProps {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
@@ -26,11 +27,7 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({
     e.preventDefault();
 
     if (newTodo.trim() === '') {
-      setErrorNotification('Title should not be empty');
-
-      setTimeout(() => {
-        setErrorNotification('');
-      }, 500);
+      errorNotification('Title should not be empty', setErrorNotification);
 
       return;
     }
@@ -56,8 +53,7 @@ export const TodoappHeader: React.FC<TodoappHeaderProps> = ({
         );
       }, 500);
     } catch (error) {
-      setErrorNotification('Failed to add todo');
-      setTimeout(() => setErrorNotification(''), 2000);
+      errorNotification('Failed to add todo', setErrorNotification);
     }
   };
 
