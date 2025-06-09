@@ -164,14 +164,21 @@ export const App: React.FC = () => {
                 data-cy="Todo"
                 className={`todo ${todo.completed ? 'completed' : ''}`}
               >
-                <input
-                  type="checkbox"
-                  className="todo__status"
-                  data-cy="TodoStatus"
-                  checked={todo.completed}
-                  onChange={() => handleToggleTodo(todo.id)}
-                  disabled={isLoading}
-                />
+                <label
+                  className="todo__status-label"
+                  aria-label={
+                    todo.completed ? 'Mark as active' : 'Mark as completed'
+                  }
+                >
+                  <input
+                    type="checkbox"
+                    className="todo__status"
+                    data-cy="TodoStatus"
+                    checked={todo.completed}
+                    onChange={() => handleToggleTodo(todo.id)}
+                    disabled={isLoading}
+                  />
+                </label>
 
                 <span className="todo__title" data-cy="TodoTitle">
                   {todo.title}
