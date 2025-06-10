@@ -10,21 +10,40 @@ export const App: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
-  const [loadingTodos, setLoadingTodos] = useState<number[]>([]); // IDs que estão carregando
+  const [loadingTodos, setLoadingTodos] = useState<number[]>([]);
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos');
+        setErrorMessage('Unable to load todos');
       });
   }, []);
+
+  // Auto-hide error after 3 seconds
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const showError = (message: string) => {
+    setErrorMessage(message);
+  };
+
+  const hideError = () => {
+    setErrorMessage('');
+  };
 
   const handleAddTodo = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,7 +51,9 @@ export const App: React.FC = () => {
     const title = newTodoTitle.trim();
 
     if (!title) {
-      return; // ou você pode exibir um erro
+      showError('Title should not be empty');
+
+      return;
     }
 
     const newTodoData = {
@@ -48,8 +69,7 @@ export const App: React.FC = () => {
       setTodos(prev => [...prev, newTodo]);
       setNewTodoTitle('');
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to add todo');
+      showError('Unable to add a todo');
     } finally {
       setIsAdding(false);
     }
@@ -67,8 +87,10 @@ export const App: React.FC = () => {
     const updated = { ...todo, completed: !todo.completed };
 
     try {
-      await uppTodos(id, updated); // sua função PATCH
+      await uppTodos(id, updated);
       setTodos(todos.map(t => (t.id === id ? updated : t)));
+    } catch (error) {
+      showError('Unable to update a todo');
     } finally {
       setLoadingTodos(prev => prev.filter(tid => tid !== id));
     }
@@ -77,8 +99,10 @@ export const App: React.FC = () => {
   const handleDelete = async (id: number) => {
     setLoadingTodos(prev => [...prev, id]);
     try {
-      await deleteTodo(id); // sua função de DELETE
+      await deleteTodo(id);
       setTodos(todos.filter(t => t.id !== id));
+    } catch (error) {
+      showError('Unable to delete a todo');
     } finally {
       setLoadingTodos(prev => prev.filter(tid => tid !== id));
     }
@@ -104,10 +128,25 @@ export const App: React.FC = () => {
     setLoadingTodos(prev => [...prev, id]);
     try {
       await uppTodos(id, todo);
-    } finally {
       setEditingTodoId(null);
+    } catch (error) {
+      showError('Unable to update a todo');
+    } finally {
       setLoadingTodos(prev => prev.filter(tid => tid !== id));
     }
+  };
+
+  const handleEditCancel = (id: number) => {
+    // Restaura o título original
+    const originalTodo = todos.find(t => t.id === id);
+
+    if (originalTodo) {
+      setTodos(prevTodos =>
+        prevTodos.map(t => (t.id === id ? originalTodo : t)),
+      );
+    }
+
+    setEditingTodoId(null);
   };
 
   const filteredTodos = todos.filter(todo => {
@@ -123,17 +162,27 @@ export const App: React.FC = () => {
   });
 
   const handleClearCompleted = async () => {
-    const completedIds = todos.filter(t => t.completed).map(t => t.id);
+    const completedTodos = todos.filter(t => t.completed);
+    const completedIds = completedTodos.map(t => t.id);
+
+    if (completedIds.length === 0) {
+      return;
+    }
 
     setLoadingTodos(prev => [...prev, ...completedIds]);
 
     try {
       await Promise.all(completedIds.map(id => deleteTodo(id)));
       setTodos(todos.filter(t => !t.completed));
+    } catch (error) {
+      showError('Unable to delete a todo');
     } finally {
       setLoadingTodos(prev => prev.filter(id => !completedIds.includes(id)));
     }
   };
+
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const completedTodosCount = todos.filter(todo => todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -169,7 +218,7 @@ export const App: React.FC = () => {
             return (
               <div
                 data-cy="Todo"
-                className={`${todoClass}${isLoading ? '' : ''}`}
+                className={`${todoClass}${isLoading ? ' loading' : ''}`}
                 key={todo.id}
               >
                 <label className="todo__status-label">
@@ -179,6 +228,7 @@ export const App: React.FC = () => {
                     className="todo__status"
                     checked={todo.completed}
                     onChange={() => handleToggle(todo.id)}
+                    disabled={isLoading}
                   />
                 </label>
 
@@ -198,6 +248,13 @@ export const App: React.FC = () => {
                       onChange={e =>
                         handleEditTitleChange(todo.id, e.target.value)
                       }
+                      onBlur={() => handleSaveEdit(todo.id)}
+                      onKeyDown={e => {
+                        if (e.key === 'Escape') {
+                          handleEditCancel(todo.id);
+                        }
+                      }}
+                      autoFocus
                     />
                   </form>
                 ) : (
@@ -215,6 +272,7 @@ export const App: React.FC = () => {
                       className="todo__remove"
                       data-cy="TodoDelete"
                       onClick={() => handleDelete(todo.id)}
+                      disabled={isLoading}
                     >
                       ×
                     </button>
@@ -236,7 +294,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos?.filter(todo => !todo.completed).length ?? 0} items left
+              {activeTodosCount} items left
             </span>
 
             <nav className="filter" data-cy="Filter">
@@ -244,7 +302,10 @@ export const App: React.FC = () => {
                 href="#/"
                 className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
-                onClick={() => setFilter('all')}
+                onClick={e => {
+                  e.preventDefault();
+                  setFilter('all');
+                }}
               >
                 All
               </a>
@@ -252,7 +313,10 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
                 data-cy="FilterLinkActive"
-                onClick={() => setFilter('active')}
+                onClick={e => {
+                  e.preventDefault();
+                  setFilter('active');
+                }}
               >
                 Active
               </a>
@@ -260,7 +324,10 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setFilter('completed')}
+                onClick={e => {
+                  e.preventDefault();
+                  setFilter('completed');
+                }}
               >
                 Completed
               </a>
@@ -270,7 +337,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={!todos?.some(todo => todo.completed)}
+              disabled={completedTodosCount === 0}
               onClick={handleClearCompleted}
             >
               Clear completed
@@ -281,19 +348,17 @@ export const App: React.FC = () => {
 
       <div
         data-cy="ErrorNotification"
-        className="notification is-danger 
-        is-light has-text-weight-normal hidden"
+        className={`notification is-danger is-light has-text-weight-normal${
+          errorMessage ? '' : ' hidden'
+        }`}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={hideError}
+        />
+        {errorMessage}
       </div>
     </div>
   );
