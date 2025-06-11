@@ -29,16 +29,12 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     setErrorMessage('');
 
     getTodos()
       .then(setTodos)
       .catch(() => {
         showError('Unable to load todos');
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, []);
 
