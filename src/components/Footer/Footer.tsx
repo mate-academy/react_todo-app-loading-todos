@@ -6,12 +6,14 @@ type FooterProps = {
   filterStatus: FilterStatusType;
   setFilterStatus: (filterStatus: FilterStatusType) => void;
   isCompletedTodosExist: boolean;
+  numberOfNotCompletedTodos: number;
 };
 
 export const Footer: React.FC<FooterProps> = ({
   filterStatus,
   setFilterStatus,
   isCompletedTodosExist,
+  numberOfNotCompletedTodos,
 }) => {
   const handleChangeFilterStatus = (filterStatusType: FilterStatusType) => {
     setFilterStatus(filterStatusType);
@@ -20,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        3 items left
+        {`${numberOfNotCompletedTodos} items left`}
       </span>
 
       <nav className="filter" data-cy="Filter">

@@ -15,6 +15,15 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [filterStatus, setFilterStatus] = useState(FilterStatusType.All);
   const [isCompletedTodosExist, setIsCompletedTodosExist] = useState(true);
+  const [numberOfNotCompletedTodos, setNumberOfNotCompletedTodos] = useState(0);
+
+  useEffect(() => {
+    if (showError) {
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+    }
+  }, [showError]);
 
   useEffect(() => {
     if (todos.some(todo => todo.completed)) {
@@ -22,6 +31,16 @@ export const App: React.FC = () => {
     } else {
       setIsCompletedTodosExist(false);
     }
+
+    let counter = 0;
+
+    for (const todo of todos) {
+      if (!todo.completed) {
+        counter++;
+      }
+    }
+
+    setNumberOfNotCompletedTodos(counter);
   }, [todos]);
 
   useEffect(() => {
@@ -32,7 +51,7 @@ export const App: React.FC = () => {
         setErrorMessage('');
       })
       .catch(() => {
-        setErrorMessage('Unable to load Todos');
+        setErrorMessage('Unable to load todos');
         setShowError(true);
       });
   }, [filterStatus]);
@@ -66,11 +85,14 @@ export const App: React.FC = () => {
         </header>
 
         <TodoList todos={todos} />
-        <Footer
-          setFilterStatus={setFilterStatus}
-          filterStatus={filterStatus}
-          isCompletedTodosExist={isCompletedTodosExist}
-        />
+        {todos.length > 0 && (
+          <Footer
+            setFilterStatus={setFilterStatus}
+            filterStatus={filterStatus}
+            isCompletedTodosExist={isCompletedTodosExist}
+            numberOfNotCompletedTodos={numberOfNotCompletedTodos}
+          />
+        )}
       </div>
 
       <ErrorComponent errorMessage={errorMessage} showError={showError} />
