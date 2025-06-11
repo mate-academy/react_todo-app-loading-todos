@@ -16,6 +16,7 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState(FilterStatusType.All);
   const [isCompletedTodosExist, setIsCompletedTodosExist] = useState(true);
   const [numberOfNotCompletedTodos, setNumberOfNotCompletedTodos] = useState(0);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     if (showError) {
@@ -44,7 +45,17 @@ export const App: React.FC = () => {
   }, [todos]);
 
   useEffect(() => {
-    getTodos(filterStatus)
+    if (filterStatus === FilterStatusType.All) {
+      setVisibleTodos(todos);
+    } else if (filterStatus === FilterStatusType.Active) {
+      setVisibleTodos(todos.filter(todo => !todo.completed));
+    } else {
+      setVisibleTodos(todos.filter(todo => todo.completed));
+    }
+  }, [filterStatus, todos]);
+
+  useEffect(() => {
+    getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
         setShowError(false);
@@ -54,7 +65,7 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to load todos');
         setShowError(true);
       });
-  }, [filterStatus]);
+  }, []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -84,7 +95,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={todos} />
+        <TodoList todos={visibleTodos} />
         {todos.length > 0 && (
           <Footer
             setFilterStatus={setFilterStatus}
