@@ -5,62 +5,62 @@ import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import cn from 'classnames';
-import { Filters } from './types/Filtres';
+import { TodoFilters } from './types/TodoFilters';
+import { ErrorMessage } from './types/ErrorMessage';
+
+const getVisibleTodos = (todos: Todo[], todoFilter: TodoFilters) => {
+  let visibleTodos = [...todos];
+
+  if (todoFilter !== TodoFilters.All) {
+    switch (todoFilter) {
+      case TodoFilters.Completed:
+        visibleTodos = visibleTodos.filter(todo => todo.completed);
+        break;
+      case TodoFilters.Active:
+        visibleTodos = visibleTodos.filter(todo => !todo.completed);
+        break;
+      default:
+        break;
+    }
+  }
+
+  return visibleTodos;
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isErrorHidden, setIsErrorHidden] = useState(true);
-  const [filter, setFilter] = useState<Filters>(Filters.All);
-  const [selectedTodos, setSelectedTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
+    ErrorMessage.WithoutError,
+  );
+  const [todoFilter, setTodoFilter] = useState<TodoFilters>(TodoFilters.All);
 
   useEffect(() => {
-    setIsErrorHidden(true);
-
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setSelectedTodos(todosFromServer);
       })
-      .catch(() => setErrorMessage('Unable to load todos'))
+      .catch(() => setErrorMessage(ErrorMessage.UnableLoadTodos))
       .finally(() => {
         setLoading(false);
       });
   }, []);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
     if (errorMessage) {
-      setIsErrorHidden(false);
-
-      const timer = setTimeout(() => {
-        setIsErrorHidden(true);
+      timer = setTimeout(() => {
+        setErrorMessage(ErrorMessage.WithoutError);
       }, 3000);
-
-      return () => clearTimeout(timer);
     }
+
+    return () => clearTimeout(timer);
   }, [errorMessage]);
 
+  const visibleTodos: Todo[] = getVisibleTodos(todos, todoFilter);
+
   const activeTodos = todos.filter(todo => !todo.completed);
-
-  const getSelectedTodos = (selected: Filters) => {
-    setFilter(selected);
-
-    switch (selected) {
-      case Filters.Completed:
-        setSelectedTodos(todos.filter(todo => todo.completed));
-        break;
-
-      case Filters.Active:
-        setSelectedTodos(todos.filter(todo => !todo.completed));
-        break;
-
-      case Filters.All:
-      default:
-        setSelectedTodos(todos);
-        break;
-    }
-  };
 
   const visibleFooter = todos.length !== 0;
 
@@ -91,7 +91,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {selectedTodos.map(todo => {
+        {visibleTodos.map(todo => {
           return (
             <section key={todo.id} className="todoapp__main" data-cy="TodoList">
               <div
@@ -136,38 +136,19 @@ export const App: React.FC = () => {
             </span>
 
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  'filter__link selected': filter === Filters.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => getSelectedTodos(Filters.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  'filter__link selected': filter === Filters.Active,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => getSelectedTodos(Filters.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  'filter__link selected': filter === Filters.Completed,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => getSelectedTodos(Filters.Completed)}
-              >
-                Completed
-              </a>
+              {Object.entries(TodoFilters).map(([text, value]) => (
+                <a
+                  key={value}
+                  href={`#/${value !== 'all' ? value : ''} `}
+                  className={cn('filter__link', {
+                    'filter__link selected': todoFilter === value,
+                  })}
+                  data-cy={`FilterLink${text}`}
+                  onClick={() => setTodoFilter(value)}
+                >
+                  {text}
+                </a>
+              ))}
             </nav>
 
             <button
@@ -184,14 +165,14 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={cn(
           'notification is-danger is-light has-text-weight-normal',
-          { hidden: isErrorHidden || loading || !errorMessage },
+          { hidden: loading || !errorMessage },
         )}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setIsErrorHidden(true)}
+          onClick={() => setErrorMessage(ErrorMessage.WithoutError)}
         />
         {errorMessage}
       </div>
