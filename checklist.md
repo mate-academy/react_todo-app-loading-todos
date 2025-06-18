@@ -1,6 +1,7 @@
 # TodoApp Checklist
 
 ## Basic React Checklist.
+
 1. PropTypes should describe objects and arrays, which are passed in the component.
 1. Use destructuring wherever possible. It makes code more readable.
 1. Functions should do one thing. Don't make monsters!)
@@ -12,6 +13,7 @@
 1. Use key attribute correctly (read [here](https://medium.com/blackrock-engineering/5-common-mistakes-with-keys-in-react-b86e82020052) for more details)
 
 ## Task checklist.
+
 1. `App.js` code should be split into several components.
 1. Callbacks that work with the main state should take prepared data instead of the whole child's state.
 1. Code should be split into small, reusable components if it possible (`Filter`, `TodoList`, `Todo`, `NewTodo`)
@@ -22,11 +24,11 @@
 1. `NewTodo` form shouldn’t create empty todos.
 1. `NewTodo` form should trim redundant spaces.
 1. Do not rely on the unknown string, make constants for this.
-    ```
-    const FILTERS = {
-      all: ‘all’,
-      completed: ‘completed’,
-      active: ‘active’,
-    };
-    ```
+   ```
+   const FILTERS = {
+     all: ‘all’,
+     completed: ‘completed’,
+     active: ‘active’,
+   };
+   ```
 1. Show only `NewTodo` form if todos array is empty.
