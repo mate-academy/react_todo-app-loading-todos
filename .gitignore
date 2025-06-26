@@ -4,6 +4,7 @@ build
 dist
 node_modules
 .DS_Store
+__src_backup
 
 npm-debug.log*
 yarn-debug.log*
