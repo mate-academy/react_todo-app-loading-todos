@@ -74,8 +74,18 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
-        <TodoList todos={visibleTodos} />
+        <Header
+          todos={todos}
+          setTodos={setTodos}
+          setErrorMessage={setErrorMessage}
+          loading={false} // sau adaugă o stare loading dacă ai
+        />
+        <TodoList
+          todos={visibleTodos}
+          setTodos={setTodos}
+          setErrorMessage={setErrorMessage}
+          loading={false} // sau înlocuiește cu starea reală de încărcare
+        />
         {todos.length > 0 && (
           <Footer
             filter={filter}
