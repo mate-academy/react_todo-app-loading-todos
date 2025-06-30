@@ -5,37 +5,49 @@ type Props = {
   todos: Todo[] | null;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-  loading: boolean;
+  loadingTodoId: number | null;
+  setLoadingTodoId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   setTodos,
   setErrorMessage,
-  loading,
+  loadingTodoId,
+  setLoadingTodoId,
 }) => {
-  const handleToggle = (todoId: number) => {
+  const handleToggle = async (todoId: number) => {
     if (!todos) {
       setErrorMessage('Failed to toggle todo');
 
       return;
     }
 
+    setLoadingTodoId(todoId);
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const updatedTodos = todos.map(todo =>
       todo.id === todoId ? { ...todo, completed: !todo.completed } : todo,
     );
 
     setTodos(updatedTodos);
+    setLoadingTodoId(null);
   };
 
-  const handleDelete = (todoId: number) => {
+  const handleDelete = async (todoId: number) => {
     if (!todos) {
       return;
     }
 
+    setLoadingTodoId(todoId);
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const updatedTodos = todos.filter(todo => todo.id !== todoId);
 
     setTodos(updatedTodos);
+    setLoadingTodoId(null);
   };
 
   return (
@@ -52,7 +64,7 @@ export const TodoList: React.FC<Props> = ({
             className="todo__status"
             checked={todo.completed}
             onChange={() => handleToggle(todo.id)}
-            disabled={loading}
+            disabled={loadingTodoId === todo.id}
           />
 
           <span data-cy="TodoTitle" className="todo__title">
@@ -64,19 +76,17 @@ export const TodoList: React.FC<Props> = ({
             className="todo__remove"
             data-cy="TodoDelete"
             onClick={() => handleDelete(todo.id)}
-            disabled={loading}
+            disabled={loadingTodoId === todo.id}
           >
             ×
           </button>
 
-          {/* Optional loader shown when deleting/updating */}
-          <div
-            data-cy="TodoLoader"
-            className={`modal overlay${loading ? '' : ' hidden'}`}
-          >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
+          {loadingTodoId === todo.id && (
+            <div data-cy="TodoLoader" className="modal overlay">
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
+          )}
         </div>
       ))}
     </section>

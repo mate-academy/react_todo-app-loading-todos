@@ -38,6 +38,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState(FilterType.All);
+  const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
 
   useEffect(() => {
     setErrorMessage('');
@@ -78,13 +79,14 @@ export const App: React.FC = () => {
           todos={todos}
           setTodos={setTodos}
           setErrorMessage={setErrorMessage}
-          loading={false} // sau adaugă o stare loading dacă ai
+          loading={loadingTodoId !== null}
         />
         <TodoList
           todos={visibleTodos}
           setTodos={setTodos}
           setErrorMessage={setErrorMessage}
-          loading={false} // sau înlocuiește cu starea reală de încărcare
+          loadingTodoId={loadingTodoId}
+          setLoadingTodoId={setLoadingTodoId}
         />
         {todos.length > 0 && (
           <Footer
