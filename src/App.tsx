@@ -41,6 +41,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
