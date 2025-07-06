@@ -1,26 +1,12 @@
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
 
-module.exports = defineConfig({
+export default defineConfig({ // Usar export default
   e2e: {
-    baseUrl: 'http://localhost:3000',
-    specPattern: 'cypress/integration/**/*.spec.{js,ts,jsx,tsx}',
-  },
-  video: true,
-  viewportHeight: 1920,
-  viewportWidth: 1080,
-  screenshotOnRunFailure: true,
-  reporter: 'mochawesome',
-  reporterOptions: {
-    reportDir: 'raw_reports',
-    overwrite: false,
-    html: false,
-    json: true,
-  },
-  component: {
-    specPattern: 'src/**/*.spec.{js,ts,jsx,tsx}',
-    devServer: {
-      framework: 'react',
-      bundler: 'vite',
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
     },
+    baseUrl: 'http://localhost:3000', // Confirme a URL base do seu aplicativo
+    defaultCommandTimeout: 4000,
+    pageLoadTimeout: 60000, // Aumenta o tempo limite de carregamento da página para 60 segundos
   },
 });

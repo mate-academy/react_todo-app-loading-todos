@@ -1,108 +1,72 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2024: true,
-  },
-  extends: [
-    'plugin:react/recommended',
-    "plugin:react-hooks/recommended",
-    'airbnb-typescript',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-    'plugin:cypress/recommended',
-  ],
-  overrides: [
-    {
-      'files': ['**/*.spec.jsx'],
-      'rules': {
-        'react/jsx-filename-extension': ['off'],
-      }
-    }
-  ],
+  root: true, // Garante que esta é a configuração raiz
   parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint',
+    'react',
+    'react-hooks'
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    // Adicione 'plugin:prettier/recommended' se você usa Prettier
+  ],
   parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
-    project: './tsconfig.json',
-    sourceType: 'module',
+    // REMOVIDO: project: './tsconfig.json', // Esta linha foi removida do nível superior
+    tsconfigRootDir: __dirname,
   },
-  plugins: [
-    'jsx-a11y',
-    'import',
-    'react-hooks',
-    '@typescript-eslint',
-    'prettier'
-  ],
-  rules: {
-    // JS
-    'semi': 'off',
-    '@typescript-eslint/semi': ['error', 'always'],
-    'prefer-const': 2,
-    curly: [2, 'all'],
-    'max-len': ['error', {
-      ignoreTemplateLiterals: true,
-      ignoreComments: true,
-    }],
-    'no-redeclare': [2, { builtinGlobals: true }],
-    'no-console': 2,
-    'operator-linebreak': 0,
-    'brace-style': [2, '1tbs'],
-    'arrow-body-style': 0,
-    'arrow-parens': 0,
-    'no-param-reassign': [2, { props: true }],
-    'padding-line-between-statements': [
-      2,
-      { blankLine: 'always', prev: '*', next: 'return' },
-      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
-      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
-      { blankLine: 'always', prev: 'directive', next: '*' },
-      { blankLine: 'always', prev: 'block-like', next: '*' },
-    ],
-    'implicit-arrow-linebreak:': 0,
-
-    // React
-    'react/prop-types': 0,
-    'react/require-default-props': 0,
-    'import/prefer-default-export': 0,
-    'standard/no-callback-literal': 0,
-    'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
-    'react/destructuring-assignment': 0,
-    'react/jsx-props-no-spreading': 0,
-    'react/state-in-constructor': [2, 'never'],
-    'react-hooks/rules-of-hooks': 2,
-    'jsx-a11y/label-has-associated-control': ["error", {
-      assert: "either",
-    }],
-    'jsx-a11y/label-has-for': [2, {
-      components: ['Label'],
-      required: {
-        some: ['id', 'nesting'],
-      },
-      allowChildren: true,
-    }],
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
-
-    // Typescript
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-unused-vars': ['error'],
-    '@typescript-eslint/indent': ['error', 2],
-    '@typescript-eslint/ban-types': ['error', {
-        extendDefaults: true,
-        types: {
-          '{}': false,
-        },
-      },
-    ],
-  },
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts', 'src/vite-env.d.ts', 'cypress'],
   settings: {
     react: {
-      version: 'detect',
+      version: 'detect', // Detecta automaticamente a versão do React
     },
   },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  rules: {
+    // Adicione suas regras ESLint específicas aqui
+    "react/prop-types": "off", // Desativa a validação de propTypes, pois TypeScript já lida com isso
+    "react/react-in-jsx-scope": "off" // Desativa a necessidade de importar React explicitamente para JSX (para React 17+)
+  },
+  overrides: [
+    {
+      // Aplica estas regras e configurações a arquivos dentro da pasta cypress e ao cypress.config.ts
+      files: ['cypress/**/*.ts', 'cypress.config.ts'],
+      parserOptions: {
+        // Usa o tsconfig.cypress.json para esses arquivos
+        project: './tsconfig.cypress.json', // Aponta para o tsconfig.cypress.json
+        tsconfigRootDir: __dirname,
+      },
+      extends: [
+        'plugin:cypress/recommended', // Adiciona regras específicas do Cypress
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
+        '@typescript-eslint/no-unused-expressions': 'off',
+        'cypress/no-unnecessary-waiting': 'warn',
+      },
+      env: {
+        'cypress/globals': true, // Expõe as variáveis globais do Cypress (cy, expect, etc.)
+        node: true, // O arquivo de configuração do Cypress é executado em ambiente Node.js
+        browser: false // Não há globais de navegador para o arquivo de configuração
+      },
+    },
+    // Adicione uma nova entrada para arquivos de código-fonte da aplicação se precisar de linting com tipagem
+    {
+      files: ['src/**/*.{ts,tsx}'], // Aplica a arquivos TypeScript/TSX em src/
+      parserOptions: {
+        project: './tsconfig.json', // Aponta para o tsconfig.json principal para o código da aplicação
+        tsconfigRootDir: __dirname,
+      },
+    }
+  ],
 };

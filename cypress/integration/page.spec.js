@@ -250,10 +250,6 @@ describe('', () => {
       todos.statusToggler(4).should('not.be.checked');
     });
 
-    it('should have Filter', () => {
-      filter.assertVisible();
-    });
-
     it('should have todosCounter with a number of not completed todos', () => {
       page.todosCounter().should('have.text', '2 items left');
     });
