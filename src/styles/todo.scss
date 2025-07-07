@@ -1,23 +1,22 @@
 .todo {
   position: relative;
-
+  padding-right: 320px;
   display: grid;
   grid-template-columns: 45px 1fr;
-  justify-items: stretch;
-
-  font-size: 24px;
-  line-height: 1.4em;
-  border-bottom: 1px solid #ededed;
+  align-items: center; // ← це ключ!
 
   &:last-child {
     border-bottom: 0;
   }
 
   &__status-label {
+    display: block;
+    width: 45px;
+    height: 58px;
     cursor: pointer;
     background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: center left;
+    background-position: center center;
   }
 
   &.completed &__status-label {
@@ -39,36 +38,37 @@
     color: #d9d9d9;
     text-decoration: line-through;
   }
-
+  
   &__remove {
-    position: absolute;
-    right: 12px;
-    top: 0;
-    bottom: 0;
+  position: absolute;
+  right: 12px;          // 👈 відступ від правого краю
+  top: 50%;             // 👈 центрування по вертикалі
+  bottom: auto;         // 👈 видаляємо bottom
+  transform: translateY(-50%); // 👈 точне центрування
 
-    font-size: 120%;
-    line-height: 1;
-    font-family: inherit;
-    font-weight: inherit;
-    color: #cc9a9a;
+  font-size: 120%;
+  line-height: 1;
+  font-family: inherit;
+  font-weight: inherit;
+  color: #cc9a9a;
 
-    float: right;
-    border: 0;
-    background: none;
-    cursor: pointer;
+  float: left;
+  border: 0;
+  background: none;
+  cursor: pointer;
 
-    transform: translateY(-2px);
-    opacity: 0;
-    transition: color 0.2s ease-out;
+  opacity: 0;
+  transition: color 0.2s ease-out;
 
-    &:hover {
-      color: #af5b5e;
-    }
+  &:hover {
+    color: #af5b5e;
   }
+}
 
-  &:hover &__remove {
-    opacity: 1;
-  }
+&:hover &__remove {
+  opacity: 1;
+}
+
 
   &__title-field {
     width: 100%;
