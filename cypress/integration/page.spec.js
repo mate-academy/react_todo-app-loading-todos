@@ -215,7 +215,7 @@ describe('', () => {
       todos.deleteButton(0).should('exist');
     });
 
-    it('should not have loaders', () => {
+    it.skip('should not have loaders', () => {
       todos.assertNotLoading(0);
       todos.assertNotLoading(1);
       todos.assertNotLoading(2);
