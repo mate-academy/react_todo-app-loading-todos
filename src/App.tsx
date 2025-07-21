@@ -148,7 +148,7 @@ export const App: React.FC = () => {
                 data-cy="FilterLinkAll"
                 onClick={e => {
                   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  e.preventDefault;
+                  e.preventDefault();
                   handleFilterBy('');
                 }}
               >
@@ -161,7 +161,7 @@ export const App: React.FC = () => {
                 data-cy="FilterLinkActive"
                 onClick={e => {
                   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  e.preventDefault;
+                  e.preventDefault();
                   handleFilterBy('active');
                 }}
               >
@@ -174,7 +174,7 @@ export const App: React.FC = () => {
                 data-cy="FilterLinkCompleted"
                 onClick={e => {
                   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  e.preventDefault;
+                  e.preventDefault();
                   handleFilterBy('completed');
                 }}
               >
