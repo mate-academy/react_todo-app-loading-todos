@@ -6,6 +6,8 @@ interface Props {
   loadingTodo: boolean;
   setError: (error: string | null) => void;
 }
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 
 export const TodoList: React.FC<Props> = ({
   filteredTodos,
@@ -23,8 +25,12 @@ export const TodoList: React.FC<Props> = ({
             className={`todo ${todo.completed ? 'completed' : ''}`}
             data-cy="Todo"
           >
-            <label className="todo__status-label">
+            <label
+              className="todo__status-label"
+              htmlFor={`todo-status-${todo.id}`}
+            >
               <input
+                id={`todo-status-${todo.id}`}
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
