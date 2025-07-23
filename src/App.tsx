@@ -11,17 +11,22 @@ import {
 } from './api/todos';
 import { Todo } from './types/Todo';
 import { Header } from './components/Header';
-import { Todolist } from './components/TodoList';
 import { Footer } from './components/Footer';
+import cn from 'classnames';
+import { Todos } from './components/Todos';
 
-type Type = 'all' | 'active' | 'completed';
+export enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
-  const [filter, setFilter] = useState<Type>('all');
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
   const [loadingTodoCheck, setLoadingTodoCheck] = useState<number | null>(null);
   const newTodoRef = useRef<HTMLInputElement>(null);
 
@@ -40,13 +45,15 @@ export const App: React.FC = () => {
   }, []);
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'active') {
-      return !todo.completed;
-    } else if (filter === 'completed') {
-      return todo.completed;
+    switch (filter) {
+      case FilterType.Active:
+        return !todo.completed;
+      case FilterType.Completed:
+        return todo.completed;
+      case FilterType.All:
+      default:
+        return true;
     }
-
-    return true;
   });
 
   const handleToggle = (todo: Todo) => {
@@ -127,7 +134,7 @@ export const App: React.FC = () => {
           newTodoRef={newTodoRef}
           isLoading={isLoading}
         />
-        <Todolist
+        <Todos
           visibleTodos={visibleTodos}
           handleDelete={handleDelete}
           handleToggle={handleToggle}
@@ -149,9 +156,7 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${
-          error ? '' : 'hidden'
-        }`}
+        className={cn ('notification is-danger is-light has-text-weight-normal', { hidden: !error })}
       >
         <button
           data-cy="HideErrorButton"

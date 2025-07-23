@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React from 'react';
 
 type Props = {
@@ -22,7 +23,7 @@ export const Header: React.FC<Props> = ({
       {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
-        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''} `}
+        className={cn('todoapp__toggle-all', { active: allCompleted } )}
         data-cy="ToggleAllButton"
       />
 
