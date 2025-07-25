@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Todo } from './types/Todo';
 import * as todoService from './api/todos';
-import Loader from './components/Loader/Loader';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Error from './components/Error/Error';
@@ -219,28 +218,30 @@ export const App = () => {
           onToggleAll={handleToggleAll}
         />
 
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <TodoList
-              todos={filteredTodos}
-              loadingTodoIds={loadingTodoIds}
-              onToggle={handleToggle}
-              onDelete={handleDelete}
-              onUpdate={handleUpdate}
-            />
+        <div
+          data-cy="TodoLoader"
+          className={`modal overlay ${loading ? 'is-active' : ''}`}
+        >
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
 
-            {todos.length > 0 && (
-              <Footer
-                todos={todos}
-                activeTodos={activeTodos}
-                filter={filter}
-                setFilterBy={setFilter}
-                onClearCompleted={handleClearCompleted}
-              />
-            )}
-          </>
+        <TodoList
+          todos={filteredTodos}
+          loadingTodoIds={loadingTodoIds}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+
+        {todos.length > 0 && (
+          <Footer
+            todos={todos}
+            activeTodos={activeTodos}
+            filter={filter}
+            setFilterBy={setFilter}
+            onClearCompleted={handleClearCompleted}
+          />
         )}
       </div>
 
