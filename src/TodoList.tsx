@@ -1,62 +1,54 @@
 import React from 'react';
 import { Todo } from './types/Todo';
-import classNames from 'classnames';
+import { TodoItem } from './TodoItem';
 
 interface Props {
   filteredTodos: Todo[];
-  loadingTodo: boolean;
   setError: (error: string | null) => void;
+  tempTodo?: Todo | null;
+  loadingTodo: number | null;
+  onDelete: (id: number) => void;
+  onToggle: (id: number, newStatus: boolean) => void;
+  onRename: (id: number, newTitle: string) => void;
 }
+
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 export const TodoList: React.FC<Props> = ({
   filteredTodos,
-  loadingTodo,
   setError,
+  tempTodo,
+  loadingTodo,
+  onDelete,
+  onToggle,
+  onRename,
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {filteredTodos.map(todo => (
-        <div
+        <TodoItem
           key={todo.id}
-          className={`todo ${todo.completed ? 'completed' : ''}`}
-          data-cy="Todo"
-        >
-          <label
-            className="todo__status-label"
-            htmlFor={`todo-status-${todo.id}`}
-          >
-            <input
-              id={`todo-status-${todo.id}`}
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              checked={todo.completed}
-            />
-          </label>
-          <span data-cy="TodoTitle" className="todo__title">
-            {todo.title}
-          </span>
-          <button
-            type="button"
-            className="todo__remove"
-            data-cy="TodoDelete"
-            onClick={() => setError(null)}
-          >
-            ×
-          </button>
-          <div
-            data-cy="TodoLoader"
-            className={classNames('modal overlay ', {
-              'is-active': loadingTodo,
-            })}
-          >
-            <div className="modal-background has-background-white-ter" />
-            <div className="loader" />
-          </div>
-        </div>
+          todo={todo}
+          setError={setError}
+          loadingTodo={loadingTodo}
+          onDelete={onDelete}
+          onToggle={onToggle}
+          onRename={onRename}
+        />
       ))}
+
+      {tempTodo && (
+        <TodoItem
+          todo={tempTodo}
+          isLoading
+          setError={setError}
+          loadingTodo={loadingTodo}
+          onDelete={onDelete}
+          onToggle={onToggle}
+          onRename={onRename}
+        />
+      )}
     </section>
   );
 };
