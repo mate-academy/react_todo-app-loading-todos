@@ -18,7 +18,7 @@ interface Props {
 export const TodoItem: React.FC<Props> = ({
   todo,
   isLoading,
-  setError,
+  // setError,
   loadingTodo,
   onDelete,
   onToggle,
@@ -42,7 +42,7 @@ export const TodoItem: React.FC<Props> = ({
     setIsEditing(false);
   };
 
-  const finishEditing = async () => {
+  const finishEditing = () => {
     const trimmedTitle = editedTitle.trim();
 
     if (trimmedTitle === '') {
@@ -50,24 +50,19 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (trimmedTitle !== todo.title) {
-      try {
-        await onRename(todo.id, trimmedTitle);
-        setIsEditing(false);
-      } catch {
-        setError('Unable to update a todo');
-      }
-
-      return;
+      onRename(todo.id, trimmedTitle);
     }
 
     setIsEditing(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      finishEditing();
+    }
+
     if (e.key === 'Escape') {
       cancelEditing();
-    } else if (e.key === 'Enter') {
-      finishEditing();
     }
   };
 
