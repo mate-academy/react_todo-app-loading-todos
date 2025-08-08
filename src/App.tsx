@@ -1,10 +1,40 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { getTodos, USER_ID } from './api/todos';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    setErrorMessage('');
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => setErrorMessage('Unable to load todos'));
+  }, []);
+
+  const filterByStatus = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setTodos(filteredTodos =>
+      filteredTodos.filter((filteredTodo: Todo) => {
+        if (event.currentTarget.textContent === 'All') {
+          return true;
+        } else if (event.currentTarget.textContent === 'Active') {
+          return !filteredTodo.completed;
+        } else if (event.currentTarget.textContent === 'Completed') {
+          return filteredTodo.completed;
+        }
+      }),
+    );
+  };
+
+  const completedTodos = () => {
+    return todos.find(todo => todo.completed);
+  };
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -138,47 +168,53 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+        {todos.length !== 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {todos.length} items left
+            </span>
 
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
+            {/* Active link should have the 'selected' class */}
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className="filter__link selected"
+                data-cy="FilterLinkAll"
+                onClick={filterByStatus}
+              >
+                All
+              </a>
+
+              <a
+                href="#/active"
+                className="filter__link"
+                data-cy="FilterLinkActive"
+                onClick={filterByStatus}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className="filter__link"
+                data-cy="FilterLinkCompleted"
+                onClick={filterByStatus}
+              >
+                Completed
+              </a>
+            </nav>
+
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
+              disabled={completedTodos === undefined}
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
@@ -189,6 +225,7 @@ export const App: React.FC = () => {
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {/* show only one message at a time */}
+        {errorMessage}
         Unable to load todos
         <br />
         Title should not be empty
