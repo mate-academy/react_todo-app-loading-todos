@@ -4,35 +4,59 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [currentSelect, setCurrentSelect] = useState('All');
 
   useEffect(() => {
     setErrorMessage('');
 
     getTodos()
-      .then(setTodos)
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
+      })
       .catch(() => setErrorMessage('Unable to load todos'));
   }, []);
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(''), 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
   const filterByStatus = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    setTodos(filteredTodos =>
-      filteredTodos.filter((filteredTodo: Todo) => {
-        if (event.currentTarget.textContent === 'All') {
-          return true;
-        } else if (event.currentTarget.textContent === 'Active') {
-          return !filteredTodo.completed;
-        } else if (event.currentTarget.textContent === 'Completed') {
-          return filteredTodo.completed;
+    const filter = event.currentTarget.textContent;
+
+    setFilteredTodos(
+      todos.filter((todo: Todo) => {
+        if (filter === 'Active') {
+          return !todo.completed;
+        } else if (filter === 'Completed') {
+          return todo.completed;
         }
+
+        return true;
       }),
     );
+
+    if (filter !== null) {
+      setCurrentSelect(filter);
+    }
   };
 
   const completedTodos = () => {
-    return todos.find(todo => todo.completed);
+    return todos.some(todo => todo.completed);
+  };
+
+  const completedAllTodos = () => {
+    return todos.every(todo => todo.completed);
   };
 
   if (!USER_ID) {
@@ -48,7 +72,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={classNames('todoapp__toggle-all', {
+              active: completedAllTodos(),
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -65,106 +91,40 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+          {filteredTodos.map(todo => (
+            <div
+              key={todo.id}
+              data-cy="Todo"
+              className={classNames('todo', { completed: todo.completed })}
+            >
+              <label className="todo__status-label">
+                <input
+                  data-cy="TodoStatus"
+                  type="checkbox"
+                  className="todo__status"
+                />
+              </label>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
-            </span>
+              <span data-cy="TodoTitle" className="todo__title">
+                {todo.title}
+              </span>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+              {/* Remove button appears only on hover */}
+              <button
+                type="button"
+                className="todo__remove"
+                data-cy="TodoDelete"
+              >
+                ×
+              </button>
 
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
+              {/* overlay will cover the todo while it is being deleted or updated */}
+              <div data-cy="TodoLoader" className="modal overlay">
+                <div className="modal-background has-background-white-ter" />
+                <div className="loader" />
+              </div>
             </div>
-          </div>
-
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
+          ))}
         </section>
 
         {/* Hide the footer if there are no todos */}
@@ -178,7 +138,9 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={classNames('filter__link', {
+                  selected: currentSelect === 'All',
+                })}
                 data-cy="FilterLinkAll"
                 onClick={filterByStatus}
               >
@@ -187,7 +149,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: currentSelect === 'Active',
+                })}
                 data-cy="FilterLinkActive"
                 onClick={filterByStatus}
               >
@@ -196,7 +160,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={classNames('filter__link', {
+                  selected: currentSelect === 'Completed',
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={filterByStatus}
               >
@@ -209,7 +175,7 @@ export const App: React.FC = () => {
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={completedTodos === undefined}
+              disabled={!completedTodos()}
             >
               Clear completed
             </button>
@@ -221,20 +187,14 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: errorMessage === '' },
+        )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {/* show only one message at a time */}
         {errorMessage}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
       </div>
     </div>
   );
