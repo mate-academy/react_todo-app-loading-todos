@@ -12,7 +12,7 @@ import { ErrorNotification } from './components/ErrorNotification';
 function getFilteredTodos(
   currentTodos: Todo[],
   setCurrentFilter: 'all' | 'active' | 'completed',
-) {
+): Todo[] {
   const filteredTodos = [...currentTodos];
 
   switch (setCurrentFilter) {
@@ -23,7 +23,7 @@ function getFilteredTodos(
     case 'all':
       return filteredTodos;
     default:
-      return;
+      return [];
   }
 }
 
@@ -173,7 +173,7 @@ export const App: React.FC = () => {
           inputRef={inputRef}
         />
         <TodoList
-          todos={visibleTodos ?? []}
+          todos={visibleTodos}
           toggleTodo={handleToggleTodo}
           isLoading={isLoading}
           updatingTodoIds={updatingTodoIds}
