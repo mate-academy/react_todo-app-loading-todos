@@ -31,6 +31,8 @@ export const App: React.FC = () => {
     }
   }, [errorMessage]);
 
+  const todosCounter = () => todos.filter(todo => !todo.completed).length;
+
   const filterByStatus = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const filter = event.currentTarget.textContent;
 
@@ -102,6 +104,7 @@ export const App: React.FC = () => {
                   data-cy="TodoStatus"
                   type="checkbox"
                   className="todo__status"
+                  checked={todo.completed}
                 />
               </label>
 
@@ -131,7 +134,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.length} items left
+              {todosCounter()} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
