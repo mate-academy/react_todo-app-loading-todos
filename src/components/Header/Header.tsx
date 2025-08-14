@@ -21,6 +21,7 @@ export const Header: React.FC<Props> = ({ todos, inputRef }) => {
         data-cy="ToggleAllButton"
       />
 
+      {/* Add a todo on form submit */}
       <form>
         <input
           ref={inputRef}

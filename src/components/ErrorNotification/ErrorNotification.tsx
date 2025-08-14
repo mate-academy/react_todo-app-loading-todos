@@ -3,7 +3,7 @@ import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   errorMessage: ErrorMessage | '';
-  setErrorMessage: (ErrorMessage: ErrorMessage | '') => void;
+  setErrorMessage: (errorMessage: ErrorMessage | '') => void;
 };
 
 export const ErrorNotification: React.FC<Props> = ({
