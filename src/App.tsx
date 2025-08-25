@@ -1,34 +1,39 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import * as todoService from './api/todos';
 import { Todo } from './types/Todo';
 
-const filterTodos = (initialTodos: Todo[], filter: string): Todo[] => {
-  const filteredTodos = [...initialTodos];
+export enum Filter {
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
+}
+export type FilterValue = `${Filter}`;
 
+// Use the enum in helpers
+const filterTodos = (initialTodos: Todo[], filter: FilterValue): Todo[] => {
   switch (filter) {
-    case 'completed':
-      return filteredTodos.filter(todo => todo.completed === true);
-    case 'active':
-      return filteredTodos.filter(todo => todo.completed === false);
+    case Filter.Completed:
+      return initialTodos.filter(todo => todo.completed === true);
+    case Filter.Active:
+      return initialTodos.filter(todo => todo.completed === false);
+    case Filter.All:
     default:
       return initialTodos;
   }
 };
 
-const countActive = (todos: Todo[]) => {
-  return todos.filter(todo => todo.completed === false).length;
-};
+const countActive = (todos: Todo[]) =>
+  todos.filter(todo => todo.completed === false).length;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
-  const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
+  const [filter, setFilter] = useState<FilterValue>(Filter.All);
   const [updatingTodoIds, setUpdatingTodoIds] = useState<number[]>([]);
   const [activeCount, setActiveCount] = useState<number>();
   const USER_ID = 3205;
@@ -49,31 +54,17 @@ export const App: React.FC = () => {
   const filteredTodos = filterTodos(todos, filter);
 
   useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError('');
-      }, 3000); // 3 секунды
+    if (!error) return;
 
-      return () => clearTimeout(timer); // очистка при размонтировании/смене ошибки
-    }
+    const timer = setTimeout(() => setError(''), 3000);
+    return () => clearTimeout(timer);
   }, [error]);
 
-  // useEffect(() => {
-  //   if (updatingTodoIds.some(id => id > Math.max(...todos.map(t => t.id)))) {
-  //     return;
-  //   }
-
-  //   setActiveCount(countActive(todos));
-  // }, [todos, updatingTodoIds]);
-
   const addTodo = (newTodo: Omit<Todo, 'id'>) => {
-    const maxId =
-      todos && todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) : 0;
-
+    const maxId = todos.length > 0 ? Math.max(...todos.map(t => t.id)) : 0;
     const tempId = maxId + 1;
 
     setTodos(prev => [...prev, { ...newTodo, id: tempId }]);
-
     setUpdatingTodoIds([tempId]);
 
     return todoService
@@ -83,9 +74,7 @@ export const App: React.FC = () => {
           const updated = prev.map(todo =>
             todo.id === tempId ? addedTodo : todo,
           );
-
           setActiveCount(countActive(updated));
-
           return updated;
         });
         setQuery('');
@@ -93,11 +82,8 @@ export const App: React.FC = () => {
       .catch(() => {
         setTodos(todos);
         setError('Unable to add a todo');
-        new Error('Unable to add a todo');
       })
-      .finally(() => {
-        setUpdatingTodoIds([]);
-      });
+      .finally(() => setUpdatingTodoIds([]));
   };
 
   const deleteTodo = (todoId: number) => {
@@ -108,19 +94,12 @@ export const App: React.FC = () => {
       .then(() => {
         setTodos(currentTodos => {
           const updated = currentTodos.filter(todo => todo.id !== todoId);
-
           setActiveCount(countActive(updated));
-
           return updated;
         });
       })
-      .catch(() => {
-        setError('Unable to delete a todo');
-        new Error('Unable to delete a todo');
-      })
-      .finally(() => {
-        setUpdatingTodoIds([]);
-      });
+      .catch(() => setError('Unable to delete a todo'))
+      .finally(() => setUpdatingTodoIds([]));
   };
 
   const updateTodo = (updatedTodo: Todo) => {
@@ -131,11 +110,9 @@ export const App: React.FC = () => {
       .then(newTodo => {
         setTodos(currentTodos => {
           const newTodos = [...currentTodos];
-          const index = newTodos.findIndex(todo => todo.id === updatedTodo.id);
-
-          newTodos.splice(index, 1, newTodo);
+          const index = newTodos.findIndex(t => t.id === updatedTodo.id);
+          if (index !== -1) newTodos.splice(index, 1, newTodo);
           setActiveCount(countActive(newTodos));
-
           return newTodos;
         });
       })
@@ -143,9 +120,9 @@ export const App: React.FC = () => {
         setError('Unable to update a todo');
         throw new Error('Unable to update a todo');
       })
-      .finally(() => {
-        setUpdatingTodoIds(prev => prev.filter(id => id !== updatedTodo.id));
-      });
+      .finally(() =>
+        setUpdatingTodoIds(prev => prev.filter(id => id !== updatedTodo.id)),
+      );
   };
 
   const handleSubmit = (formEvent: React.FormEvent<HTMLFormElement>) => {
@@ -153,7 +130,6 @@ export const App: React.FC = () => {
 
     if (query.trim().length === 0) {
       setError('Title should not be empty');
-
       return;
     }
 
@@ -167,7 +143,9 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompleted = () => {
-    todos?.map(todo => todo.completed && deleteTodo(todo.id));
+    todos.forEach(todo => {
+      if (todo.completed) deleteTodo(todo.id);
+    });
   };
 
   return (
@@ -183,6 +161,7 @@ export const App: React.FC = () => {
           handleSubmit={handleSubmit}
           updateTodo={updateTodo}
         />
+
         {todos && (
           <TodoList
             todos={filteredTodos}
@@ -203,14 +182,17 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}
+        className={classNames(
+          'notification',
+          'is-danger',
+          'is-light',
+          'has-text-weight-normal',
+          { hidden: !error },
+        )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
         {error}
       </div>
     </div>
