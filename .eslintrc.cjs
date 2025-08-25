@@ -42,6 +42,18 @@ module.exports = {
     '@typescript-eslint/semi': ['error', 'always'],
     'prefer-const': 2,
     curly: [2, 'all'],
+      // IMPORTS
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
+    'import/no-unresolved': 'off',
     'max-len': ['error', {
       ignoreTemplateLiterals: true,
       ignoreComments: true,
