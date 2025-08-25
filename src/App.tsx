@@ -13,13 +13,13 @@ import cn from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<TodoErrors | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.ALL);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      setIsLoading(true);
+      // setIsLoading(true);
       setErrorMessage(null);
 
       try {
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
       } catch {
         setErrorMessage(TodoErrors.UNABLE_TO_LOAD);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
 
@@ -74,10 +74,7 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
-          <TodoForm
-            onError={setErrorMessage}
-            onAddTodo={(title: string) => console.log(title)}
-          />
+          <TodoForm onError={setErrorMessage} onAddTodo={() => {}} />
         </header>
 
         {todos.length > 0 && <TodoList todos={filteredTodos} />}
