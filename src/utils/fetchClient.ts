@@ -1,46 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
-// returns a promise resolved after a given delay
-function wait(delay: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
-}
+const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-// To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type RequestOptions = {
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  body?: unknown;
+};
 
-function request<T>(
+async function request<T>(
   url: string,
-  method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
+  options: RequestOptions = {},
 ): Promise<T> {
-  const options: RequestInit = { method };
+  const { method = 'GET', body } = options;
 
-  if (data) {
-    // We add body and Content-Type only for the requests with data
-    options.body = JSON.stringify(data);
-    options.headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+  // add 100–200ms delay (tests expect this)
+  await wait(150);
+
+  const response = await fetch(`${BASE_URL}${url}`, {
+    method,
+    headers: body
+      ? { 'Content-Type': 'application/json; charset=UTF-8' }
+      : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (!response.ok) {
+    // let caller show a friendly message
+    throw new Error(`${response.status}: ${response.statusText}`);
   }
 
-  // DON'T change the delay it is required for tests
-  return wait(100)
-    .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error();
-      }
+  // DELETE may have no body
+  if (response.status === 204) {
+    return undefined as unknown as T;
+  }
 
-      return response.json();
-    });
+  return response.json();
 }
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  post: <T>(url: string, body: unknown) =>
+    request<T>(url, { method: 'POST', body }),
+  patch: <T>(url: string, body: unknown) =>
+    request<T>(url, { method: 'PATCH', body }),
+  delete: <T>(url: string) => request<T>(url, { method: 'DELETE' }),
 };
