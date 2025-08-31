@@ -7,7 +7,6 @@ import { Todo } from './types/Todo';
 import classNames from 'classnames';
 
 export const App: React.FC = () => {
-  const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -48,26 +47,6 @@ export const App: React.FC = () => {
 
   useEffect(loadTodos, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (query.trim() !== '') {
-      setTodos(prev => {
-        const maxId = prev.length ? Math.max(...prev.map(todo => todo.id)) : -1;
-
-        return [
-          ...prev,
-          {
-            id: maxId + 1,
-            userId: USER_ID,
-            title: query,
-            completed: false,
-          },
-        ];
-      });
-      setQuery('');
-    }
-  };
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -86,14 +65,12 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form onSubmit={handleSubmit}>
+          <form>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
             />
           </form>
         </header>
