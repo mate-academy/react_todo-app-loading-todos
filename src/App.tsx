@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!TodoTitle) {
-      setErrorMessage('Title should not be empty')
+      setErrorMessage('Title should not be empty');
     }
   }
 
@@ -55,6 +55,8 @@ export const App: React.FC = () => {
     // Пока просто очищаем поле
     setTodoTitle('');
     inputRef.current?.focus();
+
+    return undefined;
   }, []);
 
   useEffect(() => {
@@ -65,6 +67,8 @@ export const App: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
+
+    return;
   }, [errorMessage]);
 
   if (!USER_ID) {
