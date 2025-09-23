@@ -6,11 +6,26 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { client } from './utils/fetchClient';
 
+enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
+enum ErrorMessage {
+  LoadTodos = 'Unable to load todos',
+  UpdateTodo = 'Unable to update todo',
+  DeleteTodo = 'Unable to delete todo',
+  AddTodo = 'Unable to add a todo',
+  ClearCompleted = 'Unable to clear completed todos',
+  EmptyTitle = 'Title should not be empty',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     async function loadTodos() {
@@ -20,7 +35,7 @@ export const App: React.FC = () => {
 
         setTodos(loadedTodos.map(todo => ({ ...todo, isSaving: false })));
       } catch {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.LoadTodos);
       } finally {
         setIsLoading(false);
       }
@@ -44,11 +59,11 @@ export const App: React.FC = () => {
   }, [errorMessage]);
 
   function getVisibleTodos() {
-    if (filter === 'active') {
+    if (filter === Filter.Active) {
       return todos.filter(todo => !todo.completed);
     }
 
-    if (filter === 'completed') {
+    if (filter === Filter.Completed) {
       return todos.filter(todo => todo.completed);
     }
 
@@ -66,8 +81,6 @@ export const App: React.FC = () => {
       prev.map(t => (t.id === id ? { ...t, isSaving: true } : t)),
     );
 
-    await new Promise(res => setTimeout(res, 150));
-
     try {
       await client.patch(`/todos/${id}`, { completed: !todo.completed });
 
@@ -79,7 +92,7 @@ export const App: React.FC = () => {
         ),
       );
     } catch {
-      setErrorMessage('Unable to update todo');
+      setErrorMessage(ErrorMessage.UpdateTodo);
 
       setTodos(prev =>
         prev.map(t => (t.id === id ? { ...t, isSaving: false } : t)),
@@ -92,14 +105,12 @@ export const App: React.FC = () => {
       prev.map(t => (t.id === id ? { ...t, isSaving: true } : t)),
     );
 
-    await new Promise(res => setTimeout(res, 150));
-
     try {
       await client.delete(`/todos/${id}`);
 
       setTodos(prev => prev.filter(t => t.id !== id));
     } catch {
-      setErrorMessage('Unable to delete todo');
+      setErrorMessage(ErrorMessage.DeleteTodo);
 
       setTodos(prev =>
         prev.map(t => (t.id === id ? { ...t, isSaving: false } : t)),
@@ -109,7 +120,7 @@ export const App: React.FC = () => {
 
   async function addTodo(title: string) {
     if (!title.trim()) {
-      setErrorMessage('Title should not be empty');
+      setErrorMessage(ErrorMessage.EmptyTitle);
 
       return;
     }
@@ -123,7 +134,7 @@ export const App: React.FC = () => {
 
       setTodos(prev => [...prev, newTodo]);
     } catch {
-      setErrorMessage('Unable to add a todo');
+      setErrorMessage(ErrorMessage.AddTodo);
     }
   }
 
@@ -134,7 +145,7 @@ export const App: React.FC = () => {
       await Promise.all(completedIds.map(id => client.delete(`/todos/${id}`)));
       setTodos(prev => prev.filter(t => !t.completed));
     } catch {
-      setErrorMessage('Unable to clear completed todos');
+      setErrorMessage(ErrorMessage.ClearCompleted);
     }
   }
 
@@ -175,7 +186,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           {isLoading ? (
             <p>Loading...</p>
-          ) : getVisibleTodos().length > 0 ? (
+          ) : !!getVisibleTodos().length ? (
             getVisibleTodos().map(todo => (
               <div
                 key={todo.id}
@@ -185,6 +196,7 @@ export const App: React.FC = () => {
                 <label className="todo__status-label">
                   <input
                     type="checkbox"
+                    data-cy="TodoStatus"
                     className="todo__status"
                     checked={todo.completed}
                     onChange={() => toggleTodo(todo.id)}
@@ -206,15 +218,16 @@ export const App: React.FC = () => {
                   ×
                 </button>
 
-                {todo.isSaving && (
-                  <div data-cy="TodoLoader" className="modal overlay is-active">
-                    <div
-                      className="modal-background
+                <div
+                  data-cy="TodoLoader"
+                  className={`modal overlay ${todo.isSaving ? 'is-active' : ''}`}
+                >
+                  <div
+                    className="modal-background
                     has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                )}
+                  />
+                  <div className="loader" />
+                </div>
               </div>
             ))
           ) : null}
@@ -229,24 +242,24 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-                onClick={() => setFilter('all')}
+                className={`filter__link ${filter === Filter.All ? 'selected' : ''}`}
+                onClick={() => setFilter(Filter.All)}
                 data-cy="FilterLinkAll"
               >
                 All
               </a>
               <a
                 href="#/active"
-                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-                onClick={() => setFilter('active')}
+                className={`filter__link ${filter === Filter.Active ? 'selected' : ''}`}
+                onClick={() => setFilter(Filter.Active)}
                 data-cy="FilterLinkActive"
               >
                 Active
               </a>
               <a
                 href="#/completed"
-                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-                onClick={() => setFilter('completed')}
+                className={`filter__link ${filter === Filter.Completed ? 'selected' : ''}`}
+                onClick={() => setFilter(Filter.Completed)}
                 data-cy="FilterLinkCompleted"
               >
                 Completed
