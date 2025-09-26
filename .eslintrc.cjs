@@ -105,4 +105,7 @@ module.exports = {
       version: 'detect',
     },
   },
+  "rules": {
+  "@typescript-eslint/indent": "off"
+}
 };
