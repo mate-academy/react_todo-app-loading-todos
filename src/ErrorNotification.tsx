@@ -6,9 +6,9 @@ type Props = {
 };
 
 export const ErrorNotification: React.FC<Props> = ({ error, clearError }) => {
-  if (!error) {
-    return null;
-  }
+  //if (!error) {
+  //  return null;
+  //}
 
   return (
     <div

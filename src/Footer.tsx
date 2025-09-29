@@ -18,7 +18,6 @@ export const Footer: React.FC<Props> = ({
   const filters: Filter[] = ['All', 'Active', 'Completed'];
 
   const handleClearCompleted = () => {
-    console.log('Clear completed clicked - functionality disabled.');
     // onClearCompleted();
   };
 
