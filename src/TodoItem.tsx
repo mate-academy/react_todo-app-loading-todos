@@ -1,5 +1,7 @@
 import React from 'react';
 import { Todo } from './types/Todo';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 
 type Props = {
   todo: Todo;
@@ -8,9 +10,7 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const handleDelete = () => {
-    console.log(`Delete clicked for todo ID: ${todo.id}`);
-  };
+  const handleDelete = () => {};
 
   return (
     <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>

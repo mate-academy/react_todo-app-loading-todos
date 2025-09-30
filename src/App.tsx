@@ -76,9 +76,7 @@ export const App: React.FC = () => {
   );
   const shouldShowList = todos.length > 0;
 
-  const handleToggleAll = () => {
-    console.log('Toggle All clicked - functionality disabled in this part.');
-  };
+  const handleToggleAll = () => {};
 
   const handleFilterChange = useCallback((newFilter: Filter) => {
     setFilter(newFilter);
