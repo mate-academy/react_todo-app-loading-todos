@@ -16,7 +16,7 @@ export const getTodosByStatus = (status: Filter): Promise<Todo[]> => {
   } else if (status === 'active') {
     return client.get<Todo[]>(`/todos?userId=${USER_ID}&completed=false`);
   }
-  
+
   // Default fallback to return all todos
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
-}
+};
