@@ -9,22 +9,14 @@ import { USER_ID } from './api/todos';
 type StatusFilter = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
-  // ---------------- Проверка USER_ID ----------------
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   // ---------------- State ----------------
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // ---------------- Load Todos ----------------
-  useEffect(() => {
-    loadTodos();
-  }, []);
-
   const loadTodos = async () => {
     setLoading(true);
     setError(null);
@@ -40,6 +32,10 @@ export const App: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
   // ---------------- Filtered Todos ----------------
   const filteredTodos = todos.filter(todo => {
@@ -59,7 +55,12 @@ export const App: React.FC = () => {
   });
 
   // ---------------- Remaining Count ----------------
-  const remainingCount = todos.filter(todo => !todo.completed).length;
+  // const remainingCount = todos.filter(todo => !todo.completed).length;
+
+  // ---------------- Проверка USER_ID ----------------
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   // ---------------- JSX ----------------
   return (
