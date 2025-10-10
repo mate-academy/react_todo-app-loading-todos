@@ -23,7 +23,9 @@ export const TodoHeader: React.FC<TodoHeaderProps> = ({ onAdd, todos }) => {
       <button
         type="button"
         // eslint-disable-next-line max-len
-        className={cn('todoapp__toggle-all', { active: todos.every(todo => todo.completed) })}
+        className={cn('todoapp__toggle-all', {
+          active: todos.every(todo => todo.completed),
+        })}
         data-cy="ToggleAllButton"
       />
 
