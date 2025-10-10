@@ -1,10 +1,15 @@
-import { Todo } from '../types/Todo';
-import { client } from '../utils/fetchClient';
+// eslint-disable-next-line max-len
+const BASE_URL =
+  'https://mate-academy.github.io/react_todo-app-loading-todos/api';
 
-export const USER_ID = 0;
+export const USER_ID = 3170;
 
-export const getTodos = () => {
-  return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+export const getTodos = async () => {
+  const response = await fetch(`${BASE_URL}/todos?userId=${USER_ID}`);
+
+  if (!response.ok) {
+    throw new Error('Unable to load todos');
+  }
+
+  return response.json();
 };
-
-// Add more methods here
