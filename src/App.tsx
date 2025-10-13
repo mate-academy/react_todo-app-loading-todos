@@ -1,10 +1,98 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { getTodos, USER_ID } from './api/todos';
+import { Todo, TodoFilterMethod } from './types/Todo';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+
+import TodoForm from './components/NewTodo';
+import TodoList from './components/TodoList';
+import ErrorNotification from './components/ErrorNotification';
+import { Spinner } from './components/Spinner';
+import Filter from './components/Filter';
+
+const ERROR_HIDE_TIMEOUT = 3000;
+let errorTimeoutId: null | NodeJS.Timeout = null;
+
+function getFilteredTodos(todos: Todo[], method: TodoFilterMethod): Todo[] {
+  let preparedTodos = [...todos];
+
+  switch (method) {
+    case TodoFilterMethod.All:
+      break;
+    case TodoFilterMethod.Active:
+      preparedTodos = preparedTodos.filter(todo => !todo.completed);
+      break;
+    case TodoFilterMethod.Completed:
+      preparedTodos = preparedTodos.filter(todo => todo.completed);
+      break;
+
+    // Exhaustive checking - Kyrylo Haiduk said that's a good practice
+    default:
+      throw new Error('Todo status not recognized in sorting logic');
+  }
+
+  return preparedTodos;
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [todoFilterMethod, setTodoFilterMethod] = useState(
+    TodoFilterMethod.Default,
+  );
+
+  /* It might seem weird that I use `isErrorMessageVisible` instead of
+   just checking if `errMsg` is not empty. The reason I decided to create
+   a dedicated state is because if I simply reset `errMsg`,
+   the message disappears faster than the opacity transition duration,
+   which looks strange. */
+  const [errMsg, setErrMsg] = useState('');
+  const [isErrorMessageVisible, setIsErrorMessageVisible] = useState(false);
+
+  const preparedTodos: Todo[] = useMemo(() => {
+    return getFilteredTodos(todos, todoFilterMethod);
+  }, [todos, todoFilterMethod]);
+  const todosLeft = todos.filter(td => !td.completed).length;
+
+  const onTodoFilterChange = useCallback(
+    (method: TodoFilterMethod) => {
+      if (method !== todoFilterMethod) {
+        setTodoFilterMethod(method);
+      }
+    },
+    [todoFilterMethod],
+  );
+
+  const hideErrMsg = useCallback(() => {
+    setIsErrorMessageVisible(false);
+
+    if (errorTimeoutId) {
+      clearTimeout(errorTimeoutId);
+    }
+  }, []);
+
+  const showErrMsg = (msg: string) => {
+    if (errorTimeoutId) {
+      clearTimeout(errorTimeoutId);
+    }
+
+    setErrMsg(msg);
+    setIsErrorMessageVisible(true);
+
+    errorTimeoutId = setTimeout(() => hideErrMsg(), ERROR_HIDE_TIMEOUT);
+  };
+
+  useEffect(() => {
+    setErrMsg('');
+    setIsFetching(true);
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => showErrMsg('Unable to load todos'))
+      .finally(() => setIsFetching(false));
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -23,182 +111,39 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <TodoForm />
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-                checked
-              />
-            </label>
+        {isFetching ? <Spinner /> : <TodoList todos={preparedTodos} />}
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
+        {!!todos.length && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {todosLeft} items left
             </span>
 
-            {/* Remove button appears only on hover */}
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
+            <Filter
+              currentMethod={todoFilterMethod}
+              onSelect={onTodoFilterChange}
+            />
 
-            {/* overlay will cover the todo while it is being deleted or updated */}
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is an active todo */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is being edited */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            {/* This form is shown instead of the title and remove button */}
-            <form>
-              <input
-                data-cy="TodoTitleField"
-                type="text"
-                className="todo__title-field"
-                placeholder="Empty todo will be deleted"
-                value="Todo is being edited now"
-              />
-            </form>
-
-            <div data-cy="TodoLoader" className="modal overlay">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-
-          {/* This todo is in loadind state */}
-          <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
-
-            <span data-cy="TodoTitle" className="todo__title">
-              Todo is being saved now
-            </span>
-
-            <button type="button" className="todo__remove" data-cy="TodoDelete">
-              ×
-            </button>
-
-            {/* 'is-active' class puts this modal on top of the todo */}
-            <div data-cy="TodoLoader" className="modal overlay is-active">
-              <div className="modal-background has-background-white-ter" />
-              <div className="loader" />
-            </div>
-          </div>
-        </section>
-
-        {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
-
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className="filter__link selected"
-              data-cy="FilterLinkAll"
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className="filter__link"
-              data-cy="FilterLinkActive"
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className="filter__link"
-              data-cy="FilterLinkCompleted"
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      <ErrorNotification
+        isVisible={isErrorMessageVisible}
+        msg={errMsg}
+        onErrMsgHide={hideErrMsg}
+      />
     </div>
   );
 };
