@@ -53,7 +53,7 @@ export const App: React.FC = () => {
   const preparedTodos: Todo[] = useMemo(() => {
     return getFilteredTodos(todos, todoFilterMethod);
   }, [todos, todoFilterMethod]);
-  const todosLeft: number = todos.filter(td => !td.completed).length;
+  const todosLeft = todos.filter(td => !td.completed).length;
 
   const onTodoFilterChange = useCallback(
     (method: TodoFilterMethod) => {
