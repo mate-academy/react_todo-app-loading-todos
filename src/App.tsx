@@ -88,7 +88,7 @@ export const App: React.FC = () => {
     setIsFetching(true);
 
     getTodos()
-      .then(data => setTodos(data))
+      .then(setTodos)
       .catch(() => showErrMsg('Unable to load todos'))
       .finally(() => setIsFetching(false));
   }, []);
