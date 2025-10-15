@@ -28,8 +28,6 @@ export const TodoItem: React.FC<Props> = ({
     setSelected(idSelected);
   };
 
-  // const checet = event => {};
-
   return (
     <div
       data-cy="Todo"
@@ -69,7 +67,6 @@ export const TodoItem: React.FC<Props> = ({
         </span>
       )}
 
-      {/* Remove button appears only on hover */}
       <button
         type="button"
         className="todo__remove"
