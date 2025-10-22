@@ -7,4 +7,5 @@
     "sourceMap": false,
     "types": ["node", "cypress"]
   }
+
 }
