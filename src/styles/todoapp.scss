@@ -62,9 +62,9 @@
     padding: 16px 16px 16px 60px;
     border: none;
 
+    font-family: inherit;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: inherit;
     font-size: 24px;
     font-weight: inherit;
     line-height: 1.4em;
@@ -117,11 +117,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: inherit;
-
     text-decoration: none;
 
     -webkit-appearance: none;
-
     appearance: none;
     background: none;
 

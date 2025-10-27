@@ -63,7 +63,7 @@ export const App: React.FC = () => {
 
   const activeTodos = todos.filter(todo => !todo.completed).length;
 
-  const complitedTodos = todos.filter(todo => todo.completed).length;
+  const completedTodos = todos.filter(todo => todo.completed).length;
 
   return (
     <div className="todoapp">
@@ -74,7 +74,7 @@ export const App: React.FC = () => {
           <button
             type="button"
             className={cn('todoapp__toggle-all', {
-              active: complitedTodos === preparedTodos.length,
+              active: completedTodos === preparedTodos.length,
             })}
             data-cy="ToggleAllButton"
           />
