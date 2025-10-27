@@ -21,7 +21,7 @@ export const App: React.FC = () => {
 
   const AllFilters: Record<FiltersEnum, (td: Todo) => boolean> = useMemo(() => {
     return {
-      [FiltersEnum.All]: td => true,
+      [FiltersEnum.All]: () => true,
       [FiltersEnum.Active]: td => !td.completed,
       [FiltersEnum.Completed]: td => td.completed,
     };

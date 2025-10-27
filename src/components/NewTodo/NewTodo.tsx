@@ -2,12 +2,8 @@ import React from 'react';
 
 interface NewTodoProps {
   focusedInput: React.Ref<HTMLInputElement>;
-  onSubmit?: () => void;
 }
-export const NewTodo: React.FC<NewTodoProps> = ({
-  focusedInput,
-  onSubmit = () => {},
-}) => {
+export const NewTodo: React.FC<NewTodoProps> = ({ focusedInput }) => {
   return (
     <form>
       <input
