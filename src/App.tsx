@@ -12,9 +12,23 @@ export const App: React.FC = () => {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
+  const showError = (
+    type: 'load' | 'add' | 'delete' | 'update' | 'missing',
+  ) => {
+    const messages = {
+      load: 'Unable to load todos',
+      add: 'Unable to add a todo',
+      delete: 'Unable to delete a todo',
+      update: 'Unable to update a todo',
+      missing: 'User ID is missing',
+    };
+
+    setError(messages[type]);
+  };
+
   useEffect(() => {
     if (!USER_ID) {
-      setError('User ID is missing');
+      showError('missing');
 
       return;
     }
@@ -22,7 +36,7 @@ export const App: React.FC = () => {
     client
       .get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(setTodos)
-      .catch(() => setError('Unable to load todos'));
+      .catch(() => showError('load'));
   }, []);
 
   if (!USER_ID) {
