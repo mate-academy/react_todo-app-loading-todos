@@ -18,6 +18,8 @@ export const App: React.FC = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [query, setQuery] = useState<QueryType>(QueryType.All);
 
+  const notCompletedItemsCount = todos.filter(todo => !todo.completed).length;
+
   const addTodo = () => {
     if (!title) {
       return;
@@ -55,6 +57,9 @@ export const App: React.FC = () => {
 
     if (!title) {
       setErrorMessage('Title should not be empty');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
     }
 
     addTodo();
@@ -81,6 +86,9 @@ export const App: React.FC = () => {
         setTodos(todosFromServer);
       } catch {
         setErrorMessage('Unable to load todos');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
       } finally {
         setLoading(false);
       }
@@ -123,6 +131,14 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
+          {loading && (
+            <div data-cy="TodoLoader" className="modal overlay is-active">
+              {/* eslint-disable-next-line max-len */}
+              <div className="modal-background has-background-white-ter" />
+              <div className="loader" />
+            </div>
+          )}
+
           {visibleTodos.map(todo => {
             return (
               <div
@@ -131,11 +147,19 @@ export const App: React.FC = () => {
                 key={todo.id}
                 onDoubleClick={() => handleDoubleClick(todo)}
               >
+                {loading && (
+                  <div data-cy="TodoLoader" className="modal overlay is-active">
+                    {/* eslint-disable-next-line max-len */}
+                    <div className="modal-background has-background-white-ter" />
+                    <div className="loader" />
+                  </div>
+                )}
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
+                    checked={todo.completed}
                   />
                 </label>
                 {todo.id === selected ? (
@@ -165,15 +189,11 @@ export const App: React.FC = () => {
                     </button>
                   </>
                 )}
-
-                {/* overlay will cover the todo while it is being deleted or updated */}
-                {loading && (
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    {/* eslint-disable-next-line max-len */}
-                    <div className="modal-background has-background-white-ter" />
-                    <div className="loader" />
-                  </div>
-                )}
+                <div data-cy="TodoLoader" className="modal overlay">
+                  {/* eslint-disable-next-line max-len */}
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
               </div>
             );
           })}
@@ -238,7 +258,7 @@ export const App: React.FC = () => {
         {todos.length ? (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {todos.length} items left
+              {notCompletedItemsCount} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
@@ -295,9 +315,11 @@ export const App: React.FC = () => {
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
-        hidden={!errorMessage}
         data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+        className={cn(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
         <button
           onClick={() => setErrorMessage('')}
