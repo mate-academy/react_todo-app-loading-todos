@@ -29,14 +29,6 @@ export const TodoItem = ({
       key={todo.id}
       onDoubleClick={() => handleDoubleClick(todo)}
     >
-      {loading && (
-        <div data-cy="TodoLoader" className="modal overlay is-active">
-          {/* eslint-disable-next-line max-len */}
-          <div className="modal-background has-background-white-ter" />
-          <div className="loader" />
-        </div>
-      )}
-
       <label
         htmlFor={statusInputId}
         className="todo__status-label"
@@ -77,7 +69,11 @@ export const TodoItem = ({
           </button>
         </>
       )}
-      <div data-cy="TodoLoader" className="modal overlay">
+
+      <div
+        data-cy="TodoLoader"
+        className={cn('modal overlay', { 'is-active': loading })}
+      >
         {/* eslint-disable-next-line max-len */}
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

@@ -21,7 +21,7 @@ export const ErrorNotification = ({ errorMessage, setErrorMessage }: Props) => {
         className="delete"
         disabled={!errorMessage}
       />
-      {/* show only one message at a time */}
+
       {errorMessage}
     </div>
   );

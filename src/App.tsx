@@ -111,7 +111,7 @@ export const App: React.FC = () => {
           handleTitleChange={setTitle}
           notCompletedTodosCount={notCompletedTodosCount}
           isSubmitting={isSubmitting}
-        ></Header>
+        />
         <TodoList
           todos={visibleTodos}
           loading={loading}
@@ -122,20 +122,16 @@ export const App: React.FC = () => {
           setSelectedTitle={setSelectedTitle}
         ></TodoList>
 
-        {/* Hide the footer if there are no todos */}
-        {todos.length ? (
+        {todos.length && (
           <Footer
             isSubmitting={isSubmitting}
             notCompletedTodosCount={notCompletedTodosCount}
             query={query}
             setQuery={setQuery}
           ></Footer>
-        ) : (
-          ''
         )}
       </div>
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
+
       <ErrorNotification
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}
