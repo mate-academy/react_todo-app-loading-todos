@@ -11,8 +11,8 @@ type TodoStatusFilterOptions = {
 };
 
 export const TODO_STATUS_FILTER_OPTIONS: Record<
-  TodoStatusFilter,
-  TodoStatusFilterOptions
+TodoStatusFilter,
+TodoStatusFilterOptions
 > = {
   [TodoStatusFilter.All]: {
     href: '#/',

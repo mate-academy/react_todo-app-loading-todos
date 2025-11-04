@@ -17,8 +17,9 @@ export const TodoItems = ({ todo, isLoading = false }: TodoProps) => {
         completed: todo.completed,
       })}
     >
-      <label className="todo__status-label">
+      <label htmlFor="todo__status-label">
         <input
+          aria-label={`Mark todo "${todo.title}" as completed`}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
