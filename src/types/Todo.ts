@@ -13,7 +13,6 @@ export const getFilteredTodos = (
 ) => {
   let filteredTodos = [...todos];
 
-  //Filter by status
   if (status !== TodoStatusFilter.All) {
     filteredTodos = filteredTodos.filter(todo => {
       switch (status) {

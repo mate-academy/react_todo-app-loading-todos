@@ -10,9 +10,11 @@ type TodoStatusFilterOptions = {
   text: string;
 };
 
-export const TODO_STATUS_FILTER_OPTIONS: Record<
-TodoStatusFilter,
-TodoStatusFilterOptions
+export const TODO_STATUS_FILTER_OPTIONS: /* eslint-disable @typescript-eslint/indent */
+Record<
+  TodoStatusFilter,
+  TodoStatusFilterOptions
+  /* eslint-enable @typescript-eslint/indent */
 > = {
   [TodoStatusFilter.All]: {
     href: '#/',

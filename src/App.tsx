@@ -74,7 +74,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+            className={cn('todoapp__toggle-all', {
+              active: allCompleted,
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -123,12 +125,10 @@ export const App: React.FC = () => {
               )}
             </nav>
 
-            {/* this button should be disabled if there are no completed todos */}
             <button
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              // Додано: атрибут disabled
               disabled={completedCount === 0}
             >
               Clear completed
