@@ -7,7 +7,7 @@ You goal is to implement a simple Todo App that will save all changes to [the AP
 The task consists of 3 part:
 - (This repo) [Load todos](https://github.com/mate-academy/react_todo-app-loading-todos)
 - [Add and Delete](https://github.com/mate-academy/react_todo-app-add-and-delete)
-- [Toggle and Rename](https://github.com/mate-academy/react_todo-app-with-api)
+- [Toggle and Rename](https://github.com/mate-academy/reac  t_todo-app-with-api)
 
 In this 1st part you will:
 
