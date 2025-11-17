@@ -52,7 +52,7 @@ export const App: React.FC = () => {
       })
       .catch(error => {
         if (isMountedRef.current) {
-          showError(error.message || 'Erro ao carregar todos');
+          showError(error.message || 'Unable to load todos');
         }
       })
       .finally(() => {
