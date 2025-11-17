@@ -1,0 +1,90 @@
+.todo {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+
+  .todoTitle {
+    flex-grow: 1;
+    font-size: 16px;
+  }
+
+  &.completed .todoTitle {
+    text-decoration: line-through;
+    color: #aaa;
+  }
+
+  &.editing {
+    background-color: #f9f9f9;
+  }
+
+  .todo__status-label {
+    margin-right: 12px;
+    cursor: pointer;
+  }
+
+  .todo__status {
+    width: 18px;
+    height: 18px;
+  }
+
+  .todo__remove {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .todo__title-field {
+    width: 100%;
+    font-size: 16px;
+    padding: 4px;
+  }
+
+  .modal.overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+
+    &.is-active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .loader {
+      z-index: 1;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ccc;
+      border-top-color: #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
