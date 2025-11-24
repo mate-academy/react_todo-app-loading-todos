@@ -1,64 +1,96 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState, useMemo } from 'react';
-import classNames from 'classnames';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { Todo } from './types/Todo';
-import { FilterStatus } from './types/Todo';
+import type { Todo } from './types/Todo';
+import { Filter, FilterStatus } from './components/Filter';
+import { Notification } from './components/Notification';
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { ErrorNotification } from './components/Error';
 
 export const App: React.FC = () => {
+  const shouldShowUserWarning = !USER_ID;
+
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(
     FilterStatus.All,
   );
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    getTodos()
-      .then(setTodos)
-      .catch(() => {
-        setError('Unable to load todos');
-      });
+  const newTodoInputRef = useRef<HTMLInputElement>(null);
+  const hideErrorTimeoutIdRef = useRef<number | null>(null);
+
+  const clearErrorTimer = useCallback(() => {
+    if (hideErrorTimeoutIdRef.current) {
+      window.clearTimeout(hideErrorTimeoutIdRef.current);
+      hideErrorTimeoutIdRef.current = null;
+    }
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      switch (filterStatus) {
-        case FilterStatus.Active:
-          return !todo.completed;
-        case FilterStatus.Completed:
-          return todo.completed;
-        case FilterStatus.All:
-        default:
-          return true;
+  const hideError = useCallback(() => {
+    clearErrorTimer();
+    setErrorMessage(null);
+  }, [clearErrorTimer]);
+
+  const showError = useCallback(
+    (message: string) => {
+      setErrorMessage(message);
+      clearErrorTimer();
+      hideErrorTimeoutIdRef.current = window.setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    },
+    [clearErrorTimer],
+  );
+
+  useEffect(() => {
+    newTodoInputRef.current?.focus();
+
+    (async () => {
+      try {
+        hideError();
+        setIsLoading(true);
+        const data = await getTodos();
+
+        setTodos(data);
+      } catch {
+        showError('Unable to load todos');
+      } finally {
+        setIsLoading(false);
       }
-    });
-  }, [todos, filterStatus]);
+    })();
 
-  const activeTodosCount = useMemo(() => {
-    return todos.filter(todo => !todo.completed).length;
-  }, [todos]);
+    return () => clearErrorTimer();
+  }, [hideError, showError, clearErrorTimer]);
 
-  const completedTodosCount = useMemo(() => {
-    return todos.filter(todo => todo.completed).length;
-  }, [todos]);
+  const filteredTodos =
+    filterStatus === FilterStatus.Active
+      ? todos.filter(todo => !todo.completed)
+      : filterStatus === FilterStatus.Completed
+        ? todos.filter(todo => todo.completed)
+        : todos;
 
-  const areAllTodosCompleted = todos.length > 0 && activeTodosCount === 0;
+  const hasTodos = todos.length > 0;
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
-  const handleFilterChange = (status: FilterStatus) => {
-    setFilterStatus(status);
+  const handleToggleAllClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
 
-  const handleCloseError = () => {
-    setError('');
+  const handleFilterChange = (nextStatus: FilterStatus) => {
+    setFilterStatus(nextStatus);
   };
 
-  if (!USER_ID) {
+  const handleErrorClose = () => {
+    hideError();
+    newTodoInputRef.current?.focus();
+  };
+
+  const handleNewTodoFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  if (shouldShowUserWarning) {
     return <UserWarning />;
   }
 
@@ -68,56 +100,52 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {todos.length > 0 && (
-            <button
-              type="button"
-              className={classNames('todoapp__toggle-all', {
-                active: areAllTodosCompleted,
-              })}
-              data-cy="ToggleAllButton"
-              aria-label="Toggle all todos"
-            />
-          )}
+          <button
+            type="button"
+            data-cy="ToggleAllButton"
+            className={cn('todoapp__toggle-all', {
+              active: activeTodosCount === 0 && hasTodos,
+            })}
+            onClick={handleToggleAllClick}
+            disabled
+            aria-label="toggle all"
+          />
 
-          <form>
+          <form onSubmit={handleNewTodoFormSubmit}>
             <input
+              ref={newTodoInputRef}
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              disabled={isLoading}
             />
           </form>
         </header>
 
-        {todos.length > 0 && (
-          <>
-            <TodoList todos={filteredTodos} />
+        {hasTodos && <TodoList todos={filteredTodos} isLoading={isLoading} />}
 
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'}{' '}
-                left
-              </span>
+        {hasTodos && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              {activeTodosCount} items left
+            </span>
 
-              <TodoFilter
-                filterStatus={filterStatus}
-                onFilterChange={handleFilterChange}
-              />
+            <Filter value={filterStatus} onChange={handleFilterChange} />
 
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-                disabled={completedTodosCount === 0}
-              >
-                Clear completed
-              </button>
-            </footer>
-          </>
+            <button
+              data-cy="ClearCompletedButton"
+              className="todoapp__clear-completed"
+              disabled
+              type="button"
+            >
+              Clear completed
+            </button>
+          </footer>
         )}
       </div>
 
-      <ErrorNotification error={error} onClose={handleCloseError} />
+      <Notification message={errorMessage} onClose={handleErrorClose} />
     </div>
   );
 };

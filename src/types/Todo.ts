@@ -5,8 +5,10 @@ export interface Todo {
   completed: boolean;
 }
 
-export enum FilterStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+export const FILTERS = {
+  all: 'all',
+  completed: 'completed',
+  active: 'active',
+} as const;
+
+export type FilterType = (typeof FILTERS)[keyof typeof FILTERS];
