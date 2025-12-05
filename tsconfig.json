@@ -5,6 +5,8 @@
   ],
   "compilerOptions": {
     "sourceMap": false,
-    "types": ["node", "cypress"]
+    "types": ["node", "cypress", "react", "react-dom"],
+    "jsx":"react-jsx",
+    "moduleResolution": "node"
   }
 }
