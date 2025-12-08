@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@cypress/react18": "^2.0.1",
-    "@mate-academy/scripts": "^1.8.5",
+    "@mate-academy/scripts": "^2.1.2",
     "@mate-academy/students-ts-config": "*",
     "@mate-academy/stylelint-config": "*",
     "@types/node": "^20.14.10",
@@ -77,6 +77,21 @@
     "tests": {
       "_comment": "Add `cypressComponents: true` to enable component tests",
       "cypress": true
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:jsx-a11y/recommended"
+    ],
+    "rules": {
+      "jsx-a11y/label-has-associated-control": [
+        2,
+        {
+          "assert": "either"
+        }
+      ]
     }
   }
 }
