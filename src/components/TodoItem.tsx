@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
 interface TodoItemProps {
@@ -19,7 +20,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   onToggle,
   onDelete,
 }) => (
-  <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+  <div
+    data-cy="Todo"
+    className={classNames('todo', { completed: todo.completed })}
+  >
     <label htmlFor={`todo-status-${todo.id}`} className="todo__status-label">
       <input
         id={`todo-status-${todo.id}`}

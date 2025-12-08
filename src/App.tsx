@@ -8,6 +8,7 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Footer } from './components/Footer';
+import { Filter } from './types/Filter';
 
 interface Todo {
   id: number;
@@ -21,26 +22,26 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const timeoutRef = useRef<number | null>(null);
 
   const filteredTodos = useMemo<Todo[]>(() => {
-    if (filter === 'all') {
+    if (filter === Filter.All) {
       return todos;
     }
 
-    if (filter === 'active') {
+    if (filter === Filter.Active) {
       return todos.filter(t => !t.completed);
     }
 
-    if (filter === 'completed') {
+    if (filter === Filter.Completed) {
       return todos.filter(t => t.completed);
     }
 
     return todos;
   }, [todos, filter]);
 
-  function showError(message: string) {
+  const showError = (message: string) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -53,7 +54,7 @@ export const App: React.FC = () => {
       setError(null);
       timeoutRef.current = null;
     }, 3000);
-  }
+  };
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -136,6 +137,14 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleHideError = () => {
+    setError(null);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
   const activeCount = todos.filter(t => !t.completed).length;
   const completedCount = todos.length - activeCount;
   const allCompleted = todos.length > 0 && todos.every(t => t.completed);
@@ -174,16 +183,7 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <ErrorNotification
-        error={error}
-        onHideError={() => {
-          setError(null);
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-          }
-        }}
-      />
+      <ErrorNotification error={error} onHideError={handleHideError} />
     </div>
   );
 };

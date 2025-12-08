@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 interface ErrorNotificationProps {
   error: string | null;
@@ -11,7 +12,13 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
 }) => (
   <div
     data-cy="ErrorNotification"
-    className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}
+    className={classNames(
+      'notification',
+      'is-danger',
+      'is-light',
+      'has-text-weight-normal',
+      { hidden: !error },
+    )}
   >
     {error ?? ''}
     <button

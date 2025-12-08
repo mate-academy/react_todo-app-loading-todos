@@ -1,10 +1,12 @@
 import React from 'react';
+import classNames from 'classnames';
+import { Filter } from '../types/Filter';
 
 interface FooterProps {
   activeCount: number;
   completedCount: number;
-  filter: 'all' | 'active' | 'completed';
-  setFilter: (f: 'all' | 'active' | 'completed') => void;
+  filter: Filter;
+  setFilter: (f: Filter) => void;
   onClearCompleted: () => void;
 }
 
@@ -24,11 +26,13 @@ export const Footer: React.FC<FooterProps> = ({
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
-        className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
+        className={classNames('filter__link', {
+          selected: filter === Filter.All,
+        })}
         data-cy="FilterLinkAll"
         onClick={e => {
           e.preventDefault();
-          setFilter('all');
+          setFilter(Filter.All);
         }}
       >
         All
@@ -36,11 +40,13 @@ export const Footer: React.FC<FooterProps> = ({
 
       <a
         href="#/active"
-        className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
+        className={classNames('filter__link', {
+          selected: filter === Filter.Active,
+        })}
         data-cy="FilterLinkActive"
         onClick={e => {
           e.preventDefault();
-          setFilter('active');
+          setFilter(Filter.Active);
         }}
       >
         Active
@@ -48,11 +54,13 @@ export const Footer: React.FC<FooterProps> = ({
 
       <a
         href="#/completed"
-        className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
+        className={classNames('filter__link', {
+          selected: filter === Filter.Completed,
+        })}
         data-cy="FilterLinkCompleted"
         onClick={e => {
           e.preventDefault();
-          setFilter('completed');
+          setFilter(Filter.Completed);
         }}
       >
         Completed
