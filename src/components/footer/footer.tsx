@@ -5,21 +5,23 @@ import { FilterType } from '../../types/FilterType';
 
 interface Props {
   todos: Todo[];
-  handleDelete: (todo: Todo) => void;
   setFilterBy: React.Dispatch<React.SetStateAction<FilterType>>;
+  clearCompleted: () => void;
   filterBy: FilterType;
+  notCompletedTodo: number;
 }
 
 export const TodoFooter: React.FC<Props> = ({
   todos,
-  handleDelete,
+  clearCompleted,
   setFilterBy,
   filterBy,
+  notCompletedTodo,
 }) => {
   return (
-    <footer className="todoapp__footer" data-cy="Footer">
+    <footer className={classNames('todoapp__footer')} data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {`${todos.filter(todo => todo.completed === false).length}`} items left
+        {`${notCompletedTodo}`} items left
       </span>
 
       <nav className="filter" data-cy="Filter">
@@ -34,7 +36,10 @@ export const TodoFooter: React.FC<Props> = ({
                 selected: filterBy === type,
               })}
               data-cy={`FilterLink${firstUpperType}`}
-              onClick={() => setFilterBy(type)}
+              onClick={event => {
+                event.preventDefault();
+                setFilterBy(type);
+              }}
             >
               {firstUpperType}
             </a>
@@ -46,13 +51,7 @@ export const TodoFooter: React.FC<Props> = ({
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => {
-          todos.map(todo => {
-            if (todo.completed === true) {
-              handleDelete(todo);
-            }
-          });
-        }}
+        onClick={clearCompleted}
         disabled={!todos.some(todo => todo.completed)}
       >
         Clear completed

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import {
   addTodos,
@@ -24,8 +24,17 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [edittingTitle, setEdittingTitle] = useState('');
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [isDisabledInput, setIsDisabledInput] = useState(false);
 
   const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+  const notCompletedTodo = todos.filter(
+    todo => !todo.completed && todo.id !== 0,
+  ).length;
+  const todoInputRef = useRef<HTMLInputElement>(null);
+
+  const focusInput = () => {
+    todoInputRef.current?.focus();
+  };
 
   const visibleTodos = React.useMemo(() => {
     return todos.filter(todo => {
@@ -41,17 +50,12 @@ export const App: React.FC = () => {
     });
   }, [todos, filterBy]);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-    setErrorMessage('');
-  };
-
   const handleComplete = (todoToUpdate: Todo) => {
     setLoadingIds(prev => [...prev, todoToUpdate.id]);
 
     updateTodos({
       userId: USER_ID,
-      title: todoToUpdate.title,
+      title: todoToUpdate.title.trim(),
       id: todoToUpdate.id,
       completed: !todoToUpdate.completed,
     })
@@ -64,6 +68,9 @@ export const App: React.FC = () => {
           ),
         ),
       )
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
+      })
       .finally(() =>
         setLoadingIds(prev => prev.filter(id => id !== todoToUpdate.id)),
       );
@@ -72,38 +79,53 @@ export const App: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const todoId = Math.max(...todos.map(todo => todo.id), 0) + 1;
+    const trimmedTitle = title.trim();
 
-    if (!title) {
+    if (!trimmedTitle) {
       setErrorMessage('Title should not be empty');
 
       return;
     }
 
+    const tempoTodo: Todo = {
+      id: 0,
+      title: trimmedTitle,
+      completed: false,
+      userId: USER_ID,
+    };
+
     setErrorMessage('');
+    setTodos(prev => [...prev, tempoTodo]);
+    setLoadingIds(prev => [...prev, tempoTodo.id]);
+    setIsDisabledInput(true);
 
     addTodos({
-      id: todoId,
-      title: title.trim(),
+      title: trimmedTitle,
       userId: USER_ID,
       completed: false,
     })
-      .then(created => {
-        setTodos(prev => [...prev, created]);
+      .then(createdTodo => {
+        setTodos(prev =>
+          prev.map(todo => (todo.id === 0 ? createdTodo : todo)),
+        );
         setTitle('');
       })
-      .catch(error => {
-        setErrorMessage('Unable to add todos');
-        throw error;
+      .catch(() => {
+        setErrorMessage('Unable to add a todo');
+        setTodos(prev => prev.filter(todo => todo.id !== 0));
+        setTitle(trimmedTitle);
+      })
+      .finally(() => {
+        setIsDisabledInput(false);
+        setLoadingIds(prev => prev.filter(id => id !== 0));
       });
   };
 
   function loadTodos() {
     getTodos()
       .then(setTodos)
-      .catch(error => {
+      .catch(() => {
         setErrorMessage('Unable to load todos');
-        throw error;
       });
   }
 
@@ -119,6 +141,21 @@ export const App: React.FC = () => {
     setTimeout(() => setErrorMessage(''), 3000);
   }, [errorMessage]);
 
+  useEffect(() => {
+    if (!isDisabledInput) {
+      focusInput();
+    }
+  }, [isDisabledInput]);
+
+  useEffect(() => {
+    if (editingId !== null && !loadingIds.includes(editingId)) {
+      const editIput =
+        document.querySelector<HTMLInputElement>('.todo__title-field');
+
+      editIput?.focus();
+    }
+  }, [editingId, loadingIds]);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -132,16 +169,15 @@ export const App: React.FC = () => {
       .then(() =>
         setTodos(prev => prev.filter(prevTodo => prevTodo.id !== todoToDelete)),
       )
-      .catch(error => {
+      .catch(() => {
         setErrorMessage('Unable to delete a todo');
 
         setLoadingIds(prev => prev.filter(id => id !== todoToDelete));
-
-        throw error;
       })
-      .finally(() =>
-        setLoadingIds(prev => prev.filter(id => id !== todoToDelete)),
-      );
+      .finally(() => {
+        setLoadingIds(prev => prev.filter(id => id !== todoToDelete));
+        focusInput();
+      });
   };
 
   const handleToggleAll = () => {
@@ -156,12 +192,11 @@ export const App: React.FC = () => {
     const idsToUpdate = todosToUpdate.map(todo => todo.id);
 
     setLoadingIds(prev => [...prev, ...idsToUpdate]);
+    setErrorMessage('');
 
     const promises = todosToUpdate.map(todo =>
       updateTodos({
-        userId: USER_ID,
-        title: todo.title,
-        id: todo.id,
+        ...todo,
         completed: statusToSet,
       }),
     );
@@ -178,14 +213,32 @@ export const App: React.FC = () => {
           }),
         );
       })
-      .catch(error => {
-        setErrorMessage('Unable to update todos');
-
-        throw error;
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
       })
       .finally(() => {
         setLoadingIds(prev => prev.filter(id => !idsToUpdate.includes(id)));
       });
+  };
+
+  const clearCompleted = () => {
+    const completedTodos = todos.filter(todo => todo.completed);
+
+    completedTodos.forEach(todo => {
+      setLoadingIds(prev => [...prev, todo.id]);
+
+      deleteTodos(todo.id)
+        .then(() => {
+          setTodos(prev => prev.filter(t => t.id !== todo.id));
+        })
+        .catch(() => {
+          setErrorMessage('Unable to delete a todo');
+        })
+        .finally(() => {
+          setLoadingIds(prev => prev.filter(id => id !== todo.id));
+          focusInput();
+        });
+    });
   };
 
   const saveTodo = (
@@ -200,8 +253,20 @@ export const App: React.FC = () => {
     }
 
     if (!normalizedTitle) {
-      handleDelete({ id } as Todo);
-      setEditingId(null);
+      setLoadingIds(prev => [...prev, id]);
+
+      deleteTodos(id)
+        .then(() => {
+          setTodos(prev => prev.filter(t => t.id !== id));
+          setEditingId(null);
+        })
+        .catch(() => {
+          setErrorMessage('Unable to delete a todo');
+          focusInput();
+        })
+        .finally(() => {
+          setLoadingIds(prev => prev.filter(loadingId => loadingId !== id));
+        });
 
       return;
     }
@@ -228,7 +293,9 @@ export const App: React.FC = () => {
         );
         setEditingId(null);
       })
-      .catch(() => setErrorMessage('Unable to update a todo'))
+      .catch(() => {
+        setErrorMessage('Unable to update a todo');
+      })
       .finally(() => {
         setLoadingIds(prev => prev.filter(loadingId => loadingId !== id));
       });
@@ -249,9 +316,12 @@ export const App: React.FC = () => {
         <TodoHeader
           handleToggleAll={handleToggleAll}
           handleSubmit={handleSubmit}
-          handleTitleChange={handleTitleChange}
+          setTitle={setTitle}
+          todos={todos}
+          todoInputRef={todoInputRef}
           allCompleted={allCompleted}
           title={title}
+          isDisabledInput={isDisabledInput}
         />
 
         <TodoMain
@@ -270,9 +340,10 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <TodoFooter
             todos={todos}
-            handleDelete={handleDelete}
+            clearCompleted={clearCompleted}
             setFilterBy={setFilterBy}
             filterBy={filterBy}
+            notCompletedTodo={notCompletedTodo}
           />
         )}
       </div>
@@ -280,7 +351,7 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
-          { hidden: errorMessage === '' },
+          { hidden: !errorMessage },
         )}
       >
         <button
