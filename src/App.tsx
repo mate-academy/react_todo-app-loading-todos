@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
@@ -9,12 +9,16 @@ import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
 import { Filter } from './components/Filter';
 import { StatusFilter } from './types/StatusFilter';
+import { ErrorNotification } from './components/ErrorNotification';
+import { ErrorMessage } from './types/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [error, setError] = useState<ErrorMessage | null>(null);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(
+    StatusFilter.ALL,
+  );
   const inputField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,25 +30,15 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(todosList => setTodos(todosList))
-      .catch(() => setError('Unable to load todos'))
+      .catch(() => setError(ErrorMessage.NO_TODOS))
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    let timerId: ReturnType<typeof setTimeout>;
-
-    if (error) {
-      timerId = setTimeout(() => setError(null), 3000);
-    }
-
-    return () => clearTimeout(timerId);
-  }, [error]);
-
   const handleFilter = () => {
     switch (statusFilter) {
-      case 'active':
+      case StatusFilter.ACTIVE:
         return todos.filter(todo => !todo.completed);
-      case 'completed':
+      case StatusFilter.COMPLETED:
         return todos.filter(todo => todo.completed);
       default:
         return todos;
@@ -54,6 +48,8 @@ export const App: React.FC = () => {
   const handleNewTodo = (todo: Todo) => {
     return setTodos(currentTodos => [...currentTodos, todo]);
   };
+
+  const onErrorClose = useCallback(() => setError(null), []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -85,7 +81,7 @@ export const App: React.FC = () => {
 
         {todos.length > 0 && !loading && (
           <>
-            <TodoList todosList={handleFilter} />
+            <TodoList todosList={handleFilter()} />
 
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="TodosCounter">
@@ -96,40 +92,6 @@ export const App: React.FC = () => {
                 statusFilter={statusFilter}
                 setStatusFilter={setStatusFilter}
               />
-              {/* <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={classNames('filter__link', {
-                    selected: statusFilter === 'all',
-                  })}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setStatusFilter('all')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={classNames('filter__link', {
-                    selected: statusFilter === 'active',
-                  })}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setStatusFilter('active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={classNames('filter__link', {
-                    selected: statusFilter === 'completed',
-                  })}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setStatusFilter('completed')}
-                >
-                  Completed
-                </a>
-              </nav> */}
 
               <button
                 type="button"
@@ -144,29 +106,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !error },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setError(null)}
-        />
-        {error === 'Unable to load todos' && 'Unable to load todos'}
-        <br />
-        {error === 'Title should not be empty' && 'Title should not be empty'}
-        <br />
-        {error === 'Unable to add a todo' && 'Unable to add a todo'}
-        <br />
-        {error === 'Unable to delete a todo' && 'Unable to delete a todo'}
-        <br />
-        {error === 'Unable to update a todo' && 'Unable to update a todo'}
-      </div>
+      <ErrorNotification error={error} handleErrorClose={onErrorClose} />
     </div>
   );
 };

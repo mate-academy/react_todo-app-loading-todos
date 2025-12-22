@@ -2,13 +2,13 @@ import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
 type Props = {
-  todosList: () => Todo[];
+  todosList: Todo[];
 };
 
 export const TodoList: React.FC<Props> = ({ todosList }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {todosList().map(todo => {
+      {todosList.map(todo => {
         return <TodoItem todo={todo} key={todo.id} />;
       })}
       {/* This is a completed todo

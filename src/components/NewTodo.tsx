@@ -1,8 +1,9 @@
-import { FormEvent, RefObject, useState } from 'react';
+import { RefObject, useState } from 'react';
 import { Todo } from '../types/Todo';
+import { ErrorMessage } from '../types/ErrorMessage';
 
 type Props = {
-  setFormError: (error: string) => void;
+  setFormError: (error: ErrorMessage) => void;
   inputField: RefObject<HTMLInputElement>;
   onFormSubmit: (todo: Todo) => void;
   todos: Todo[];
@@ -16,30 +17,29 @@ export const NewTodo: React.FC<Props> = ({
 }) => {
   const [title, setTitle] = useState('');
 
-  const handleSubmit = (event: React.KeyboardEvent) => {
-    if (!title && event.key === 'Enter') {
-      setFormError('Title should not be empty');
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!title || title.trim() === '') {
+      setFormError(ErrorMessage.NO_TITLE);
+      setTitle('');
+      inputField.current?.focus();
 
       return;
     }
 
-    if (event.key === 'Enter') {
-      const maxId = Math.max(...todos.map(todo => todo.id));
+    const maxId = todos.length ? Math.max(...todos.map(todo => todo.id)) : 0;
 
-      onFormSubmit({
-        id: maxId + 1,
-        userId: 3779,
-        title,
-        completed: false,
-      });
-    }
+    onFormSubmit({
+      id: maxId + 1,
+      userId: 3779,
+      title,
+      completed: false,
+    });
+    inputField.current?.focus();
   };
 
   return (
-    <form
-      onSubmit={(event: FormEvent) => event.preventDefault()}
-      onKeyDown={handleSubmit}
-    >
+    <form onSubmit={handleSubmit}>
       <input
         data-cy="NewTodoField"
         type="text"
