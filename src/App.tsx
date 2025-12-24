@@ -8,7 +8,9 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [title, setTitle] = React.useState('');
-  const [filter, setFilter] = React.useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = React.useState<'all' | 'active' | 'completed'>(
+    'all',
+  );
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
@@ -38,6 +40,7 @@ export const App: React.FC = () => {
 
     if (!title.trim()) {
       setError('Title should not be empty');
+
       return;
     }
 
@@ -65,7 +68,6 @@ export const App: React.FC = () => {
   });
 
   const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
-
 
   const activeCount = todos.filter(todo => !todo.completed).length;
 
