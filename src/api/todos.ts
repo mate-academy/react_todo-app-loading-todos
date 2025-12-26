@@ -14,3 +14,11 @@ export const postTodos = (todo: { title: string }) => {
     completed: false,
   });
 };
+
+export const deleteTodo = (todoId: number) => {
+  return client.delete<Todo>(`/todos/${todoId}`);
+};
+
+export const updateTodo = ({ id, completed }) => {
+  return client.patch<Todo>(`/todos/${id}`, { completed });
+};
