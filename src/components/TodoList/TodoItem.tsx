@@ -10,7 +10,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
   const { id, title, completed } = todo;
 
   return (
-    <div data-cy="Todo" className={`todo ${completed ? 'completed' : ''}`}>
+    <div data-cy="Todo" className={classNames('todo', { completed })}>
       <label className="todo__status-label" htmlFor={`todo-status-${id}`}>
         <input
           id={`todo-status-${id}`}
