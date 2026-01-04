@@ -23,7 +23,7 @@ export const TodoFooter: React.FC<TodoFooterProps> = ({
     <nav className="filter" data-cy="Filter">
       <a
         href="#/"
-        className={`filter__link ${filter === FILTERS.ALL ? 'selected' : ''}`}
+        className={classNames('filter__link', { selected: filter === FILTERS.ALL })}
         onClick={() => setFilter(FILTERS.ALL)}
         data-cy="FilterLinkAll"
       >
