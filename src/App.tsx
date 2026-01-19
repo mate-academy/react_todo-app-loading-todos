@@ -5,10 +5,6 @@ import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -34,14 +30,20 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!errorMessage) return;
+    if (!errorMessage) {
+      return;
+    }
 
     const timerId = setTimeout(() => {
-      setErrorMessage('')
+      setErrorMessage('');
     }, 3000);
 
     return () => clearTimeout(timerId);
   }, [errorMessage]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const isAllCompleted = todos.length > 0 && activeTodosCount === 0;
@@ -56,7 +58,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={classNames('todoapp__toggle-all', { active: isAllCompleted })}
+            className={classNames('todoapp__toggle-all', {
+              active: isAllCompleted,
+            })}
             data-cy="ToggleAllButton"
             aria-label="Toggle all todos"
           />
@@ -75,7 +79,11 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <section className="todoapp__main" data-cy="TodoList">
             {filteredTodos.map(todo => (
-              <div data-cy="Todo" className={classNames('todo', { 'completed': todo.completed })} key={todo.id}>
+              <div
+                data-cy="Todo"
+                className={classNames('todo', { completed: todo.completed })}
+                key={todo.id}
+              >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
@@ -117,7 +125,9 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={classNames("filter__link", { 'selected': filterStatus === 'all' })}
+                className={classNames('filter__link', {
+                  selected: filterStatus === 'all',
+                })}
                 data-cy="FilterLinkAll"
                 onClick={() => setFilterStatus('all')}
               >
@@ -126,7 +136,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className={classNames("filter__link", { 'selected': filterStatus === 'active' })}
+                className={classNames('filter__link', {
+                  selected: filterStatus === 'active',
+                })}
                 data-cy="FilterLinkActive"
                 onClick={() => setFilterStatus('active')}
               >
@@ -135,7 +147,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className={classNames("filter__link", { 'selected': filterStatus === 'completed' })}
+                className={classNames('filter__link', {
+                  selected: filterStatus === 'completed',
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setFilterStatus('completed')}
               >
@@ -158,7 +172,10 @@ export const App: React.FC = () => {
 
       <div
         data-cy="ErrorNotification"
-        className={classNames("notification is-danger is-light has-text-weight-normal", { 'hidden': !errorMessage })}
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
         <button
           data-cy="HideErrorButton"
