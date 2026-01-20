@@ -74,7 +74,7 @@ module.exports = {
     'react/state-in-constructor': [2, 'never'],
     'react-hooks/rules-of-hooks': 2,
     'jsx-a11y/label-has-associated-control': ["error", {
-      assert: "either",
+      assert: "htmlFor",
     }],
     'jsx-a11y/label-has-for': [2, {
       components: ['Label'],
