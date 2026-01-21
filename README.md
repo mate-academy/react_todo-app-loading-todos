@@ -17,6 +17,7 @@ In this 1st part you will:
 - implement error messages
 - implement filtering by status
 - copy the final code to [the 2nd part](https://github.com/mate-academy/react_todo-app-add-and-delete)
+- 1
 
 ## General principles
 
