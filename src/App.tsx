@@ -45,7 +45,9 @@ export const App: React.FC = () => {
       hideNotification();
       setLoading(true);
       try {
-        setTodos(todos);
+        const data = await todoApi.getTodos();
+
+        setTodos(data);
         if (newTodoRef.current) {
           newTodoRef.current.focus();
         }
@@ -57,7 +59,7 @@ export const App: React.FC = () => {
     };
 
     fetchTodos();
-  }, [todos, showNotification]);
+  }, [showNotification]);
 
   if (!todoApi.USER_ID) {
     return <UserWarning />;
