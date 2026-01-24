@@ -11,6 +11,16 @@ import { Notification } from './component/Notification';
 import { NewTodo } from './component/NewTodo';
 import { TodoList } from './component/TodoList';
 
+// Створюємо Enum для помилок
+export enum ErrorType {
+  NONE = '',
+  LOAD = 'Unable to load todos',
+  ADD = 'Unable to add a todo',
+  DELETE = 'Unable to delete a todo',
+  UPDATE = 'Unable to update a todo',
+  TITLE = 'Title should not be empty',
+}
+
 const FILTER = {
   all: 'all',
   active: 'active',
@@ -20,7 +30,7 @@ const FILTER = {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorType | null>(null);
   const [filter, setFilter] = useState<string>(FILTER.all);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
@@ -30,7 +40,7 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(data => setTodos(data))
-      .catch(() => setError('Unable to load todos'))
+      .catch(() => setError(ErrorType.LOAD))
       .finally(() => setLoading(false));
   }, []);
 
@@ -71,7 +81,11 @@ export const App: React.FC = () => {
             />
           )}
 
-          <NewTodo setTodos={setTodos} onTypingChange={setIsTyping} />
+          <NewTodo
+            setTodos={setTodos}
+            onTypingChange={setIsTyping}
+            setError={setError}
+          />
         </header>
 
         <TodoList todos={visibleTodos} loading={loading} setTodos={setTodos} />

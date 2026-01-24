@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
+import { ErrorType } from '../App';
 
 type Props = {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   onTypingChange?: (isTyping: boolean) => void;
+  setError: (error: ErrorType | null) => void;
 };
 
 export const NewTodo: React.FC<Props> = ({ onTypingChange }) => {
