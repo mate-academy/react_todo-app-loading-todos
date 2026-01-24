@@ -1,16 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import * as todoApi from './api/todos';
 
 export const App: React.FC = () => {
-  if (!todoApi.USER_ID) {
-    return <UserWarning />;
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
@@ -28,13 +24,13 @@ export const App: React.FC = () => {
     setErrorMessage('');
   };
 
-  const showNotification = (message: string) => {
+  const showNotification = useCallback((message: string) => {
     hideNotification();
     setErrorMessage(message);
     timeRef.current = window.setTimeout(() => {
       hideNotification();
     }, 3000);
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -43,6 +39,29 @@ export const App: React.FC = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      hideNotification();
+      setLoading(true);
+      try {
+        setTodos(todos);
+        if (newTodoRef.current) {
+          newTodoRef.current.focus();
+        }
+      } catch (error) {
+        showNotification('Unable to load todos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTodos();
+  }, [todos, showNotification]);
+
+  if (!todoApi.USER_ID) {
+    return <UserWarning />;
+  }
 
   const visibleTodos = todos.filter(todo => {
     if (filter === 'all') {
@@ -55,24 +74,6 @@ export const App: React.FC = () => {
 
     return todo.completed;
   });
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      hideNotification();
-      setLoading(true);
-      try {
-        const todos = await todoApi.getTodos();
-        setTodos(todos);
-        if (newTodoRef.current) newTodoRef.current.focus();
-      } catch (error) {
-        showNotification('Unable to load todos');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTodos();
-  }, []);
 
   return (
     <div className="todoapp">
