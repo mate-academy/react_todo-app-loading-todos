@@ -12,28 +12,15 @@ import { TodoButtons } from './components/TodoButtons';
 type FilterStatus = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [todos, setTodos] = useState<Todo[]>([]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [query, setQuery] = useState('');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [error, setError] = useState('');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [filter, setFilter] = useState<FilterStatus>('all');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [isAdding, setIsAdding] = useState(false);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const visibleTodos = useMemo(() => {
     if (filter === 'active') {
       return todos.filter(todo => !todo.completed);
@@ -189,7 +176,6 @@ export const App: React.FC = () => {
     updateTodo(todo, { title: newTitle });
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setError('');
 
@@ -201,14 +187,12 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (!isAdding) {
       inputRef.current?.focus();
     }
   }, [isAdding]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (!isAdding && loadingTodoIds.length === 0) {
       inputRef.current?.focus();
@@ -228,6 +212,10 @@ export const App: React.FC = () => {
 
     addTodo(trimmedTitle);
   };
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   return (
     <div className="todoapp">

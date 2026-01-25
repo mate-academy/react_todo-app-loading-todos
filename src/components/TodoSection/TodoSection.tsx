@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -38,7 +39,10 @@ export const TodoSection: React.FC<Props> = ({
           className={classNames('todo', { completed: todo.completed })}
           key={todo.id}
         >
-          <label className="todo__status-label">
+          <label
+            htmlFor={`todo-status-${todo.id}`}
+            className="todo__status-label"
+          >
             <input
               id={`todo-status-${todo.id}`}
               data-cy="TodoStatus"
