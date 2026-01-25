@@ -14,12 +14,41 @@ body {
   min-height: 36px;
 }
 
+.notification--error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.notification .delete {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: inherit;
+}
+
 .notification.hidden {
   min-height: 0;
   opacity: 0;
   pointer-events: none;
 }
 
-@import "./todoapp";
-@import "./todo";
-@import "./filter";
+.visually-hidden {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important;
+}
+
+@import './todoapp';
+@import './todo';
+@import './filter';
+@import './notification';
