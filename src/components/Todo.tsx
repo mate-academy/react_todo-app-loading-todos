@@ -28,11 +28,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
         {todo.title}
       </span>
 
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-      >
+      <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
 

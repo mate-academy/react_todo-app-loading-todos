@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+export * from './components/ErrorNotification';
 
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';

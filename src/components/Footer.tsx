@@ -1,6 +1,6 @@
 import React from 'react';
-import classNames from 'classnames';
-import { FILTERS, FilterType } from '../constants/filters';
+import { FilterType } from '../constants/filters';
+import { Filter } from './Filters';
 
 type Props = {
   filter: FilterType;
@@ -20,38 +20,7 @@ export const Footer: React.FC<Props> = ({
       </span>
 
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          data-cy="FilterLinkAll"
-          className={classNames('filter__link', {
-            selected: filter === FILTERS.all,
-          })}
-          onClick={() => onFilterChange(FILTERS.all)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          data-cy="FilterLinkActive"
-          className={classNames('filter__link', {
-            selected: filter === FILTERS.active,
-          })}
-          onClick={() => onFilterChange(FILTERS.active)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          data-cy="FilterLinkCompleted"
-          className={classNames('filter__link', {
-            selected: filter === FILTERS.completed,
-          })}
-          onClick={() => onFilterChange(FILTERS.completed)}
-        >
-          Completed
-        </a>
+        <Filter filter={filter} onFilterChange={onFilterChange} />
       </nav>
 
       <button
