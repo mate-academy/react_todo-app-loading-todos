@@ -8,15 +8,16 @@ import classNames from 'classnames';
 import { TodoHeader } from './components/TodoHeader';
 import { TodoSection } from './components/TodoSection';
 import { TodoButtons } from './components/TodoButtons';
-
-type FilterStatus = 'all' | 'active' | 'completed';
+import { FilterStatus } from './types/FilterStatus';
+import { TodoError } from './types/TodoError';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
+  const [chengeQuery, setChengeQuery] = useState('');
   const [error, setError] = useState('');
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
-  const [filter, setFilter] = useState<FilterStatus>('all');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.ALL);
   const [loadingTodoIds, setLoadingTodoIds] = useState<number[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +60,7 @@ export const App: React.FC = () => {
         setEditingTodoId(null);
       })
       .catch(() => {
-        showError('Unable to update a todo');
+        showError(TodoError.UNABLE_TO_UPDATE);
       })
       .finally(() => {
         setLoadingTodoIds(ids => ids.filter(id => id !== todo.id));
@@ -86,7 +87,7 @@ export const App: React.FC = () => {
       })
       .catch(() => {
         setTodos(prev => prev.filter(todo => todo.id !== 0));
-        showError('Unable to add a todo');
+        showError(TodoError.UNABLE_TO_ADD);
       })
       .finally(() => {
         setIsAdding(false);
@@ -102,7 +103,7 @@ export const App: React.FC = () => {
         setTodos(current => current.filter(todo => todo.id !== todoId));
       })
       .catch(() => {
-        showError('Unable to delete a todo');
+        showError(TodoError.UNABLE_TO_DELETE);
       })
       .finally(() => {
         setLoadingTodoIds(ids => ids.filter(id => id !== todoId));
@@ -122,7 +123,7 @@ export const App: React.FC = () => {
           setTodos(current => current.filter(t => t.id !== todo.id));
         })
         .catch(() => {
-          showError('Unable to delete a todo');
+          showError(TodoError.UNABLE_TO_DELETE);
         })
         .finally(() => {
           setLoadingTodoIds(ids => ids.filter(id => id !== todo.id));
@@ -150,7 +151,7 @@ export const App: React.FC = () => {
 
   function handleEditStart(todo: Todo) {
     setEditingTodoId(todo.id);
-    setQuery(todo.title);
+    setChengeQuery(todo.title);
   }
 
   function handleRenameSubmit(
@@ -159,7 +160,7 @@ export const App: React.FC = () => {
   ) {
     event.preventDefault();
 
-    const newTitle = query.trim();
+    const newTitle = chengeQuery.trim();
 
     if (!newTitle) {
       deletTodo(todo.id);
@@ -182,7 +183,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        showError('Unable to load todos');
+        showError(TodoError.UNABLE_TO_LOAD);
         setTodos([]);
       });
   }, []);
@@ -205,7 +206,7 @@ export const App: React.FC = () => {
     const trimmedTitle = query.trim();
 
     if (!trimmedTitle) {
-      showError('Title should not be empty');
+      showError(TodoError.EMPTY_TITLE);
 
       return;
     }
@@ -240,8 +241,8 @@ export const App: React.FC = () => {
           handleEditStart={handleEditStart}
           deletTodo={deletTodo}
           handleRenameSubmit={handleRenameSubmit}
-          query={query}
-          onQueryChange={setQuery}
+          chengeQuery={chengeQuery}
+          onChengeQuery={setChengeQuery}
           onEditingTodoId={setEditingTodoId}
           loadingTodoIds={loadingTodoIds}
         />
@@ -249,7 +250,7 @@ export const App: React.FC = () => {
         <TodoButtons
           todos={todos}
           filter={filter}
-          onFilterChange={setFilter}
+          onFilterChange={value => setFilter(value)}
           onClearCompleted={clearCompleted}
         />
       </div>
