@@ -76,7 +76,6 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <Footer
-            todos={filteredTodos}
             status={status}
             count={countActiveTodo}
             handleStatusChange={handleStatusChange}

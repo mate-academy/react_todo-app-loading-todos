@@ -1,9 +1,7 @@
 import classNames from 'classnames';
 import { Filter } from '../types/Filter';
-import { Todo } from '../types/Todo';
 
 type Props = {
-  todos: Todo[];
   count: number;
   handleStatusChange: (newStatus: Filter) => void;
   status: Filter;
@@ -11,7 +9,6 @@ type Props = {
 };
 
 export const Footer: React.FC<Props> = ({
-  todos,
   count,
   handleStatusChange,
   status,
