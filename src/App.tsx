@@ -1,25 +1,28 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import Todos from './components/Todos/Todos';
 import cn from 'classnames';
-
-enum FilterStatus {
-  All,
-  Active,
-  Completed,
-}
+import TodoHeader from './components/TodoHeader/TodoHeader';
+import TodoFooter from './components/TodoFooter/TodoFooter';
+import { FilterStatus } from './types/enums';
 
 enum ErrorMessage {
-  None,
-  LoadTodos,
-  EmptyTitle,
-  AddTodo,
-  DeleteTodo,
-  UpdateTodo,
+  None = '',
+  LoadTodos = 'Unable to load todos',
+  EmptyTitle = 'Title should not be empty',
+  AddTodo = 'Unable to add a todo',
+  DeleteTodo = 'Unable to delete a todo',
+  UpdateTodo = 'Unable to update a todo',
 }
 
 export const App: React.FC = () => {
@@ -27,39 +30,16 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(
     FilterStatus.All,
   );
+  const [errorMsg, setErrorMsg] = useState<ErrorMessage>(ErrorMessage.None);
 
-  const [errorMsg, setErrorMsg] = useState<string>('');
+  const errorMsgTimeOutId = useRef<number>(0);
 
   const handleErrorMessage = (msgType: ErrorMessage) => {
-    switch (msgType) {
-      case ErrorMessage.LoadTodos:
-        setErrorMsg('Unable to load todos');
-        break;
+    setErrorMsg(msgType);
 
-      case ErrorMessage.EmptyTitle:
-        setErrorMsg('Title should not be empty');
-        break;
-
-      case ErrorMessage.AddTodo:
-        setErrorMsg('Unable to add a todo');
-        break;
-
-      case ErrorMessage.DeleteTodo:
-        setErrorMsg('Unable to delete a todo');
-        break;
-
-      case ErrorMessage.UpdateTodo:
-        setErrorMsg('Unable to update a todo');
-        break;
-
-      case ErrorMessage.None:
-      default:
-        setErrorMsg('');
-        break;
-    }
-
-    setTimeout(() => {
-      setErrorMsg('');
+    clearTimeout(errorMsgTimeOutId.current);
+    errorMsgTimeOutId.current = window.setTimeout(() => {
+      setErrorMsg(() => ErrorMessage.None);
     }, 3000);
   };
 
@@ -102,16 +82,15 @@ export const App: React.FC = () => {
       default:
         return todos;
     }
-
-    return todos;
   }, [todos, filterStatus]);
 
-  const undoneTodosCount = todos.reduce(
-    (acc, todo) => (todo.completed ? acc : acc + 1),
-    0,
+  const undoneTodosCount = useMemo(
+    () => todos.reduce((acc, todo) => (todo.completed ? acc : acc + 1), 0),
+    [todos],
   );
-  const isAllTodosCompleted = undoneTodosCount === 0 && todos.length > 0;
-  const isAnyTodosCompleted = undoneTodosCount > 0;
+
+  const isAllTodosCompleted = undoneTodosCount === 0;
+  const isAllTodosUncompleted = undoneTodosCount === todos.length;
 
   const handleToggleAll = () => {
     if (isAllTodosCompleted) {
@@ -126,82 +105,21 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {todos.length > 0 && (
-            <button
-              type="button"
-              className={cn('todoapp__toggle-all', {
-                active: isAllTodosCompleted,
-              })}
-              data-cy="ToggleAllButton"
-              onClick={() => handleToggleAll()}
-            />
-          )}
-
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              autoFocus
-            />
-          </form>
-        </header>
+        <TodoHeader
+          todos={todos}
+          isAllTodosCompleted={isAllTodosCompleted}
+          onToggleAll={handleToggleAll}
+        />
 
         <Todos todos={visibleTodos} handleTodoToggle={handleTodoToggle} />
 
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {undoneTodosCount} items left
-            </span>
-
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterStatus === FilterStatus.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => handleFilterChange(FilterStatus.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filterStatus === FilterStatus.Active,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => handleFilterChange(FilterStatus.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filterStatus === FilterStatus.Completed,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => handleFilterChange(FilterStatus.Completed)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            <button
-              disabled={!isAnyTodosCompleted}
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <TodoFooter
+            undoneTodosCount={undoneTodosCount}
+            isAllTodosUncompleted={isAllTodosUncompleted}
+            filterStatus={filterStatus}
+            onFilterChange={handleFilterChange}
+          />
         )}
       </div>
 
