@@ -6,5 +6,3 @@ export enum ErrorType {
   DeleteTodoError = 'Unable to delete todo',
   EmptyTodoTitleError = 'Title should not be empty',
 }
-
-export default ErrorType; 
