@@ -5,25 +5,20 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { getTodos } from './api/todos';
-import { todo } from 'node:test';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
     setErrorMessage('');
 
     getTodos()
       .then(fetchedTodos => {
         setTodos(fetchedTodos);
-        setIsLoading(false);
       })
       .catch(() => {
-        setIsLoading(false);
         setErrorMessage('Unable to load todos');
       });
   }, []);
