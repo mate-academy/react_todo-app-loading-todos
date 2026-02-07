@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
+// const handleResponse = (response: Response) => {
+//   if (!response.ok) {
+//     throw new Error(`${response.status} ${response.statusText}`);
+//   }
+
+//   return response.json();
+// };
+
 // returns a promise resolved after a given delay
 function wait(delay: number) {
   return new Promise(resolve => {
@@ -40,7 +48,22 @@ function request<T>(
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
+
+  // post<T>(url: string, data: any): Promise<void | T> {
+  //   const options = {
+  //     method: 'POST',
+  //     body: JSON.stringify(data),
+  //     headers: {
+  //       'Content-Type': 'application/json; charset=utf-8',
+  //     },
+  //   };
+
+  //   return wait(100)
+  //     .then(() => fetch(BASE_URL + url, options))
+  //     .then(handleResponse);
+  // },
   post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
+
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
 };
