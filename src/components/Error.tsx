@@ -10,11 +10,7 @@ export const Error: React.FC<Props> = ({ message, onClose }) => {
 
   return (
     <div data-cy="ErrorNotification" className="notification is-danger">
-      <button
-        data-cy="HideErrorButton"
-        className="delete"
-        onClick={onClose}
-      />
+      <button data-cy="HideErrorButton" className="delete" onClick={onClose} />
       {message}
     </div>
   );

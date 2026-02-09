@@ -1,12 +1,8 @@
 const BASE_URL = '/';
 
-const wait = (ms: number) =>
-  new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function request<T>(
-  url: string,
-  options: RequestInit = {},
-): Promise<T> {
+async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
   await wait(150);
 
   const response = await fetch(BASE_URL + url, {

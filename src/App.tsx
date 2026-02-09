@@ -56,10 +56,11 @@ export const App = () => {
 
       {loading && <div className="loader" />}
 
+      {loading && (<div data-cy="TodoLoader" className="loader is-active" />)}
+
+
       {!loading && empty && (
-        <p className="notification is-info">
-          You don’t have todos at all!
-        </p>
+        <p className="notification is-info">You don’t have todos at all!</p>
       )}
 
       {!loading && todos.length > 0 && (
@@ -71,11 +72,7 @@ export const App = () => {
       )}
 
       {!loading && todos.length > 0 && (
-        <Footer
-          filter={filter}
-          onChange={setFilter}
-          itemsLeft={itemsLeft}
-        />
+        <Footer filter={filter} onChange={setFilter} itemsLeft={itemsLeft} />
       )}
 
       <Error message={error} onClose={() => setError(null)} />

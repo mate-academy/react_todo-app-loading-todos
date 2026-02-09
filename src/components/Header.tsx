@@ -18,6 +18,7 @@ export const Header: React.FC<Props> = ({ onAddTodo, onError }) => {
 
     if (!value.trim()) {
       onError('Title should not be empty');
+
       return;
     }
 

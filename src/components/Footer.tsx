@@ -6,11 +6,7 @@ interface Props {
   itemsLeft: number;
 }
 
-export const Footer: React.FC<Props> = ({
-  filter,
-  onChange,
-  itemsLeft,
-}) => (
+export const Footer: React.FC<Props> = ({ filter, onChange, itemsLeft }) => (
   <footer className="todoapp__footer">
     <span data-cy="TodosCounter" className="todo-count">
       {itemsLeft} items left
