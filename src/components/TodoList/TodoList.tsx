@@ -10,7 +10,6 @@ interface Props {
 export const TodoList: React.FC<Props> = ({ visibleTodos, loadingTodoIds }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* This is a completed todo */}
       {visibleTodos.map(todo => (
         <TodoItem
           key={todo.id}

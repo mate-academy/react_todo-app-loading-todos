@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
   errorMessage: string | null;
@@ -10,6 +10,16 @@ export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   onClose,
 }) => {
+  useEffect(() => {
+    if (!errorMessage) {
+      return;
+    }
+
+    const timerId = setTimeout(onClose, 3000);
+
+    return () => clearTimeout(timerId);
+  }, [errorMessage, onClose]);
+
   return (
     <div
       data-cy="ErrorNotification"

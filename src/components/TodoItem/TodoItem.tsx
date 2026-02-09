@@ -13,7 +13,7 @@ export const TodoItem: React.FC<Props> = ({ todo, isLoading }) => {
       data-cy="Todo"
       className={classNames('todo', { completed: todo.completed })}
     >
-      <label className="todo__status-label">
+      <label className="todo__status-label" aria-label="Toggle todo status">
         <input
           data-cy="TodoStatus"
           type="checkbox"
@@ -27,12 +27,10 @@ export const TodoItem: React.FC<Props> = ({ todo, isLoading }) => {
         {todo.title}
       </span>
 
-      {/* Remove button appears only on hover */}
       <button type="button" className="todo__remove" data-cy="TodoDelete">
         ×
       </button>
 
-      {/* overlay will cover the todo while it is being deleted or updated */}
       <div
         data-cy="TodoLoader"
         className={classNames('modal overlay', { 'is-active': isLoading })}

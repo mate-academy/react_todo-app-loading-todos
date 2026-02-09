@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
-import { ERRORS, FILTERS, Todo, TodoFilter } from './types/Todo';
+import { ERRORS, Todo, FilterType } from './types/Todo';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
@@ -10,24 +10,12 @@ import { ErrorNotification } from './components/ErrorNotification';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>('');
-  const [filter, setFilter] = useState<TodoFilter>('All');
-  const [loadingTodoIds, setLoadingTodoids] = useState<number[]>([]);
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
+  const [loadingTodoIds] = useState<number[]>([]);
 
   const activeCount = todos.filter(todo => !todo.completed).length;
   const completedCount = todos.length - activeCount;
   const isAllCompleted = todos.length > 0 && activeCount === 0;
-
-  useEffect(() => {
-    if (!errorMessage) {
-      return;
-    }
-
-    const timerId = setTimeout(() => {
-      setErrorMessage(null);
-    }, 3000);
-
-    return () => clearTimeout(timerId);
-  }, [errorMessage]);
 
   useEffect(() => {
     getTodos()
@@ -41,13 +29,13 @@ export const App: React.FC = () => {
 
       switch (hash) {
         case '#/active':
-          setFilter(FILTERS.ACTIVE);
+          setFilter(FilterType.Active);
           break;
         case '#/completed':
-          setFilter(FILTERS.COMPLETED);
+          setFilter(FilterType.Completed);
           break;
         default:
-          setFilter(FILTERS.ALL);
+          setFilter(FilterType.All);
       }
     };
 
@@ -62,9 +50,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filter) {
-      case FILTERS.ACTIVE:
+      case FilterType.Active:
         return todos.filter(todo => !todo.completed);
-      case FILTERS.COMPLETED:
+      case FilterType.Completed:
         return todos.filter(todo => todo.completed);
       default:
         return todos;

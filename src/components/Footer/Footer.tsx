@@ -1,11 +1,11 @@
 import React from 'react';
-import { TodoFilter } from '../../types/Todo';
+import { FilterType } from '../../types/Todo';
 import { Filter } from '../Filter';
 
 interface Props {
   activeCount: number;
   completedCount: number;
-  filter: TodoFilter;
+  filter: FilterType;
 }
 
 export const Footer: React.FC<Props> = ({
@@ -19,10 +19,8 @@ export const Footer: React.FC<Props> = ({
         {activeCount} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <Filter filter={filter} />
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

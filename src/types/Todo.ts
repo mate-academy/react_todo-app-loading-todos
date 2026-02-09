@@ -5,13 +5,11 @@ export interface Todo {
   completed: boolean;
 }
 
-export const FILTERS = {
-  ALL: 'All',
-  ACTIVE: 'Active',
-  COMPLETED: 'Completed',
-} as const;
-
-export type TodoFilter = (typeof FILTERS)[keyof typeof FILTERS];
+export enum FilterType {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
 
 export const ERRORS = {
   LOAD: 'Unable to load todos',
