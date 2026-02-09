@@ -1,19 +1,21 @@
-import classNames from 'classnames';
-
-type ErrorProps = {
-  error: string | null;
+type Props = {
+  message: string | null;
+  onClose: () => void;
 };
-export const Error: React.FC<ErrorProps> = ({ error }) => {
+
+export const Error: React.FC<Props> = ({ message, onClose }) => {
+  if (!message) {
+    return null;
+  }
+
   return (
-    <div
-      data-cy="ErrorNotification"
-      className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        { hidden: error === null },
-      )}
-    >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
-      {error}
+    <div data-cy="ErrorNotification" className="notification is-danger">
+      <button
+        data-cy="HideErrorButton"
+        className="delete"
+        onClick={onClose}
+      />
+      {message}
     </div>
   );
 };

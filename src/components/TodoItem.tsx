@@ -1,44 +1,13 @@
-import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 
-interface Props {
-  todo: Todo;
-}
-
-export const TodoItem: React.FC<Props> = ({ todo }) => {
-  return (
-    <div
-      data-cy="Todo"
-      className={classNames('todo', {
-        completed: todo.completed,
-      })}
-    >
-      <label className="todo__status-label" aria-label="Toggle todo status">
-        <input
-          data-cy="TodoStatus"
-          type="checkbox"
-          className="todo__status"
-          checked={todo.completed}
-        />
-      </label>
-
-      <span data-cy="TodoTitle" className="todo__title">
-        {todo.title}
-      </span>
-
-      <button
-        type="button"
-        className="todo__remove"
-        data-cy="TodoDelete"
-        aria-label="Delete todo"
-      >
-        ×
-      </button>
-
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
-    </div>
-  );
-};
+export const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => (
+  <div
+    data-cy="Todo"
+    className={`todo ${todo.completed ? 'completed' : ''}`}
+  >
+    <label>
+      <input type="checkbox" checked={todo.completed} readOnly />
+      <span data-cy="TodoTitle">{todo.title}</span>
+    </label>
+  </div>
+);

@@ -1,46 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+const BASE_URL = '/';
 
-// returns a promise resolved after a given delay
-function wait(delay: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
-}
+const wait = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));
 
-// To have autocompletion and avoid mistypes
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
-
-function request<T>(
+async function request<T>(
   url: string,
-  method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
+  options: RequestInit = {},
 ): Promise<T> {
-  const options: RequestInit = { method };
+  await wait(150);
 
-  if (data) {
-    // We add body and Content-Type only for the requests with data
-    options.body = JSON.stringify(data);
-    options.headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+  const response = await fetch(BASE_URL + url, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error('Request failed');
   }
 
-  // DON'T change the delay it is required for tests
-  return wait(100)
-    .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error();
-      }
-
-      return response.json();
-    });
+  return response.json();
 }
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  post: <T>(url: string, body: unknown) =>
+    request<T>(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
 };

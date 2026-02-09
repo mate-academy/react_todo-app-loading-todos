@@ -2,46 +2,54 @@ import { USER_ID } from '../api/todos';
 import { client } from '../utils/fetchClient';
 import { Todo } from '../types/Todo';
 import { Form } from './Form';
+import React from 'react';
 
-interface HeaderProps {
-  onError: (message: string) => void;
-  onTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  formValue: string;
-  changeFormValue: (value: string) => void;
+interface Props {
+  onAddTodo: (todo: Todo) => void;
+  onError: (msg: string | null) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  onError,
-  onTodos,
-  formValue,
-  changeFormValue,
-}) => {
-  const addTodo = async (ev: React.FormEvent) => {
-    ev.preventDefault();
+export const Header: React.FC<Props> = ({ onAddTodo, onError }) => {
+  const [value, setValue] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
-    if (!formValue.trim()) {
-      onError('Value is empty');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    if (!value.trim()) {
+      onError('Title should not be empty');
       return;
     }
 
-    const newTodo = {
-      title: formValue,
-      userId: USER_ID,
-      completed: false,
-    };
+    setLoading(true);
+    onError(null);
 
     try {
-      const addedTodo = await client.post<Todo>('todos/', newTodo);
+      const todo = await client.post<Todo>('todos', {
+        title: value.trim(),
+        userId: USER_ID,
+        completed: false,
+      });
 
-      onTodos(current => [...current, addedTodo]);
-      changeFormValue('');
+      onAddTodo(todo);
+      setValue('');
     } catch {
-      onError('Unable to add a new todo. Please try again.');
+      onError('Unable to add a todo');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Form onSubmit={addTodo} fValue={formValue} onChange={changeFormValue} />
+    <header className="todoapp__header">
+      <h1 className="todoapp__title">todos</h1>
+
+      <Form
+        onSubmit={handleSubmit}
+        value={value}
+        onChange={setValue}
+        disabled={loading}
+      />
+    </header>
   );
 };
