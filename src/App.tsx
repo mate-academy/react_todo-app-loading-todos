@@ -73,15 +73,24 @@ export const App: React.FC = () => {
 
     getTodos(USER_ID)
       .then(loadedTodos => {
-        if (cancelled) return;
+        if (cancelled) {
+          return;
+        }
+
         setTodos(loadedTodos);
       })
       .catch(() => {
-        if (cancelled) return;
+        if (cancelled) {
+          return;
+        }
+
         setError(ERROR_MESSAGES.load);
       })
       .finally(() => {
-        if (cancelled) return;
+        if (cancelled) {
+          return;
+        }
+
         setIsLoading(false);
       });
 
@@ -123,7 +132,9 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className={classNames('todoapp__toggle-all', { active: allCompleted })}
+            className={classNames('todoapp__toggle-all', {
+              active: allCompleted,
+            })}
             data-cy="ToggleAllButton"
             // w tej części nie implementujesz toggle-all, więc tylko blokujemy “warning” o kontrolowanym kliknięciu
             onClick={() => {}}
@@ -193,7 +204,9 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={classNames('filter__link', { selected: filter === 'all' })}
+                className={classNames('filter__link', {
+                  selected: filter === 'all',
+                })}
                 data-cy="FilterLinkAll"
               >
                 All
@@ -201,7 +214,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className={classNames('filter__link', { selected: filter === 'active' })}
+                className={classNames('filter__link', {
+                  selected: filter === 'active',
+                })}
                 data-cy="FilterLinkActive"
               >
                 Active
