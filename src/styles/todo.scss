@@ -60,9 +60,11 @@
     transform: translateY(-2px);
     opacity: 0;
     transition: color 0.2s ease-out;
+    transition: 0.3s;
 
     &:hover {
       color: #af5b5e;
+      transition: 0.3s;
     }
   }
 
