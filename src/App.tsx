@@ -2,32 +2,34 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
+import { getTodos, getUserId } from './api/todos';
 import { TodoList } from './components/TodoList';
 import { TodoInput } from './components/TodoInput';
 import { TodoFooter } from './components/TodoFooter';
 import { Todo } from './types/Todo';
 import { TodoErrors } from './components/TodoErrors';
+import { FILTERS, Filter } from './constants/filters';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
-  const [footerFilter, setFooterFilter] = useState<string>('all');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loadingTodos, setLoadingTodos] = useState(false);
+  const [footerFilter, setFooterFilter] = useState<Filter>(FILTERS.ALL);
+
+  const completedCount = useMemo(
+    () => todos.filter(todo => todo.completed).length,
+    [todos],
+  );
 
   const filteredTodos = useMemo(() => {
-    if (footerFilter === 'all') {
-      return todos;
+    switch (footerFilter) {
+      case FILTERS.ACTIVE:
+        return todos.filter(todo => !todo.completed);
+      case FILTERS.COMPLETED:
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
     }
-
-    return todos.filter(todo => {
-      if (footerFilter === 'active') {
-        return !todo.completed;
-      } else {
-        return todo.completed;
-      }
-    });
   }, [footerFilter, todos]);
 
   const handleErrorMessage = (error: string) => {
@@ -35,30 +37,38 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!getUserId()) {
+      return;
+    }
+
+    setErrorMessage('');
+    setLoadingTodos(true);
+
     getTodos()
       .then(setTodos)
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error(error);
+      .catch(() => {
         setErrorMessage('Unable to load todos');
-      });
-
-    setCompletedTodos(todos.filter(todo => todo.completed === true));
+      })
+      .finally(() => setLoadingTodos(false));
   }, []);
 
   useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
+    if (!errorMessage) {
+      return;
     }
+
+    const timer = setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [errorMessage]);
 
   const handleTodoAdded = (todo: Todo) => {
-    setTodos(currentTodos => [...currentTodos, todo]);
+    setTodos(prev => [...prev, todo]);
   };
 
-  if (!USER_ID) {
+  if (!getUserId()) {
     return <UserWarning />;
   }
 
@@ -68,36 +78,37 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoInput
-          completedTodos={completedTodos}
+          totalTodos={todos.length}
+          completedCount={completedCount}
           handleErrorMessage={handleErrorMessage}
           loadingTodos={loadingTodos}
           setLoadingTodos={setLoadingTodos}
           handleTodoAdded={handleTodoAdded}
         />
 
-        <TodoList
-          todos={filteredTodos}
-          setTodos={setTodos}
-          loadingTodos={loadingTodos}
-          setLoadingTodos={setLoadingTodos}
-          handleErrorMessage={handleErrorMessage}
-        />
-
         {todos.length > 0 && (
-          <TodoFooter
-            todosCounter={todos.filter(todo => todo.completed === false)}
-            footerFilter={footerFilter}
-            setFooterFilter={setFooterFilter}
-          />
+          <>
+            <TodoList
+              todos={filteredTodos}
+              setTodos={setTodos}
+              loadingTodos={loadingTodos}
+              setLoadingTodos={setLoadingTodos}
+              handleErrorMessage={handleErrorMessage}
+            />
+
+            <TodoFooter
+              todos={todos}
+              footerFilter={footerFilter}
+              setFooterFilter={setFooterFilter}
+            />
+          </>
         )}
       </div>
 
-      {!loadingTodos && (
-        <TodoErrors
-          errorMessage={errorMessage}
-          handleErrorMessage={handleErrorMessage}
-        />
-      )}
+      <TodoErrors
+        errorMessage={errorMessage}
+        handleErrorMessage={handleErrorMessage}
+      />
     </div>
   );
 };

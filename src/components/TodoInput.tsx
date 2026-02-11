@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { postTodos, USER_ID } from '../api/todos';
+import classNames from 'classnames';
+import { useRef, useState } from 'react';
+import { postTodos } from '../api/todos';
 import { Todo } from '../types/Todo';
 
-type TodoInputProps = {
-  completedTodos: Todo[];
+type Props = {
+  totalTodos: number;
+  completedCount: number;
   handleErrorMessage: (errorMessage: string) => void;
   loadingTodos: boolean;
   setLoadingTodos: (loading: boolean) => void;
@@ -11,74 +13,77 @@ type TodoInputProps = {
 };
 
 export function TodoInput({
-  completedTodos,
+  totalTodos,
+  completedCount,
   handleErrorMessage,
   loadingTodos,
   setLoadingTodos,
   handleTodoAdded,
-}: TodoInputProps) {
-  const [query, setQuery] = useState<string>('');
+}: Props) {
+  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (loadingTodos) {
       return;
     }
 
-    if (!query) {
+    const title = query.trim();
+
+    if (!title) {
       handleErrorMessage('Title should not be empty');
+      inputRef.current?.focus();
 
       return;
     }
 
-    if (query) {
-      setLoadingTodos(true);
+    handleErrorMessage('');
+    setLoadingTodos(true);
 
-      const newTodo = {
-        userId: USER_ID,
-        title: query,
+    try {
+      const todo = await postTodos({
+        title,
         completed: false,
-      };
+      });
 
-      try {
-        const todo = await postTodos(newTodo);
-
-        handleTodoAdded(todo);
-        setQuery('');
-      } catch (error) {
-        handleErrorMessage('Unable to add a todo');
-      } finally {
-        setLoadingTodos(false);
-      }
+      handleTodoAdded(todo);
+      setQuery('');
+    } catch {
+      handleErrorMessage('Unable to add a todo');
+      inputRef.current?.focus();
+    } finally {
+      setLoadingTodos(false);
     }
   };
 
-  const handleFormChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
+  const allCompleted = totalTodos > 0 && completedCount === totalTodos;
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      {completedTodos.length > 0 && (
+      {totalTodos > 0 && (
         <button
           type="button"
-          className="todoapp__toggle-all active"
+          className={classNames('todoapp__toggle-all', {
+            active: allCompleted,
+          })}
           data-cy="ToggleAllButton"
+          disabled={loadingTodos}
         />
       )}
 
-      {/* Add a todo on form submit */}
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           data-cy="NewTodoField"
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={query}
+          disabled={loadingTodos}
           autoFocus
-          onChange={event => handleFormChanges(event)}
+          onChange={e => setQuery(e.target.value)}
         />
       </form>
     </header>
