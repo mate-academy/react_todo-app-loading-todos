@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 type Props = {
   isVisible: boolean;
@@ -19,9 +20,12 @@ export const ErrorNotification: React.FC<Props> = ({ isVisible, onClose }) => {
   return (
     <div
       data-cy="ErrorNotification"
-      className={`notification is-danger is-light has-text-weight-normal ${
-        !isVisible ? 'hidden' : ''
-      }`}
+      className={classNames(
+        'notification is-danger is-light has-text-weight-normal',
+        {
+          hidden: !isVisible,
+        },
+      )}
     >
       <button
         type="button"

@@ -5,11 +5,13 @@ import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { NewTodoField } from './components/NewTodoField';
 import { ErrorNotification } from './components/ErrorNotification';
+import { Filter } from './enums/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [filter, setFilter] = useState(Filter.All);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,6 +26,20 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const activeCount = todos.filter(todo => !todo.completed).length;
+  const visibleTodos = todos.filter(todo => {
+    switch (filter) {
+      case Filter.Active:
+        return !todo.completed;
+
+      case Filter.Completed:
+        return todo.completed;
+
+      default:
+        return true;
+    }
+  });
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -31,9 +47,15 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <NewTodoField />
 
-        {!isLoading && todos.length > 0 && <TodoList todos={todos} />}
+        {!isLoading && todos.length > 0 && <TodoList todos={visibleTodos} />}
 
-        {!isLoading && todos.length > 0 && <Footer todos={todos} />}
+        {!isLoading && todos.length > 0 && (
+          <Footer
+            activeCount={activeCount}
+            filter={filter}
+            onFilterChange={setFilter}
+          />
+        )}
       </div>
 
       <ErrorNotification
