@@ -16,6 +16,9 @@ export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState(false);
   const [footerFilter, setFooterFilter] = useState<Filter>(FILTERS.ALL);
 
+  // derive userId into state so effect can depend on it
+  const [userId] = useState<number | null>(getUserId());
+
   const completedCount = useMemo(
     () => todos.filter(todo => todo.completed).length,
     [todos],
@@ -36,8 +39,9 @@ export const App: React.FC = () => {
     setErrorMessage(error);
   };
 
+  // Load todos whenever userId becomes available
   useEffect(() => {
-    if (!getUserId()) {
+    if (!userId) {
       return;
     }
 
@@ -50,7 +54,7 @@ export const App: React.FC = () => {
         setErrorMessage('Unable to load todos');
       })
       .finally(() => setLoadingTodos(false));
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     if (!errorMessage) {
@@ -64,47 +68,46 @@ export const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, [errorMessage]);
 
-  const handleTodoAdded = (todo: Todo) => {
-    setTodos(prev => [...prev, todo]);
-  };
-
-  if (!getUserId()) {
-    return <UserWarning />;
-  }
-
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">Todos</h1>
 
-      <div className="todoapp__content">
-        <TodoInput
-          totalTodos={todos.length}
-          completedCount={completedCount}
-          handleErrorMessage={handleErrorMessage}
-          loadingTodos={loadingTodos}
-          setLoadingTodos={setLoadingTodos}
-          handleTodoAdded={handleTodoAdded}
-        />
+      {!userId && <UserWarning />}
 
-        {todos.length > 0 && (
-          <>
-            <TodoList
-              todos={filteredTodos}
-              setTodos={setTodos}
-              loadingTodos={loadingTodos}
-              setLoadingTodos={setLoadingTodos}
-              handleErrorMessage={handleErrorMessage}
-            />
+      {userId && (
+        <div className="todoapp__content">
+          <TodoInput
+            totalTodos={todos.length}
+            completedCount={completedCount}
+            handleErrorMessage={handleErrorMessage}
+            loadingTodos={loadingTodos}
+            setLoadingTodos={setLoadingTodos}
+            handleTodoAdded={todo =>
+              setTodos(prev => [...prev, todo])
+            }
+          />
 
-            <TodoFooter
-              todos={todos}
-              footerFilter={footerFilter}
-              setFooterFilter={setFooterFilter}
-            />
-          </>
-        )}
-      </div>
+          {todos.length > 0 && (
+            <>
+              <TodoList
+                todos={filteredTodos}
+                setTodos={setTodos}
+                loadingTodos={loadingTodos}
+                setLoadingTodos={setLoadingTodos}
+                handleErrorMessage={handleErrorMessage}
+              />
 
+              <TodoFooter
+                todos={todos}
+                footerFilter={footerFilter}
+                setFooterFilter={setFooterFilter}
+              />
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Always mounted */}
       <TodoErrors
         errorMessage={errorMessage}
         handleErrorMessage={handleErrorMessage}

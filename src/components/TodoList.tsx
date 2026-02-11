@@ -28,6 +28,7 @@ export function TodoList({
     try {
       await deleteTodos(id);
       const newTodosList = todos.filter(todo => todo.id !== id);
+
       setTodos(newTodosList);
     } catch {
       handleErrorMessage('Unable to delete a todo');
