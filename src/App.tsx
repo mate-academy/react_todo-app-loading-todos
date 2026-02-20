@@ -1,25 +1,48 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import * as todosServices from './api/todos';
 import { Todo } from './types/Todo';
 import { ErrorType } from './types/Error';
 import classNames from 'classnames';
-import { getTodosId } from './services/GetTodosID';
 import { handleError } from './services/ErrorHandling';
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
 
-  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
+  const [activeTodo, setActiveTodo] = useState<Todo[]>([]);
   const [errorType, setErrorType] = useState<ErrorType | null>(null);
-  const [, setIsLoading] = useState(false);
 
   const [all, setAll] = useState(true);
   const [active, setActive] = useState(false);
   const [completed, setCompleted] = useState(false);
+
+  const loadTodos = async () => {
+    try {
+      const todosData = await todosServices.getTodos().then(data => data);
+
+      setTodosList(todosData);
+    } catch (error) {
+      handleError(setErrorType, 'loading');
+      throw error;
+    }
+  };
+
+  const todos = useMemo(() => {
+    return [...todosList].filter((current: Todo) => {
+      if (active) {
+        return !current.completed;
+      }
+
+      if (completed) {
+        return current.completed;
+      }
+
+      return current;
+    });
+  }, [active, completed, todosList]);
 
   const todosCounter: number = useMemo(() => {
     return [...todosList].filter((todo: Todo) => todo.completed === false)
@@ -35,46 +58,8 @@ export const App: React.FC = () => {
     setTitle('');
   };
 
-  const loadTodos = useCallback(() => {
-    if (all) {
-      todosServices
-        .getTodos()
-        .then((todos: Todo[]) => setTodosList(todos))
-        .catch((error: Error) => {
-          handleError(setErrorType, 'loading');
-          throw error;
-        });
-    }
-
-    if (active) {
-      todosServices
-        .getTodos()
-        .then((todos: Todo[]) => {
-          setTodosList(todos.filter(current => !current.completed));
-        })
-        .catch((error: Error) => {
-          handleError(setErrorType, 'loading');
-          throw error;
-        });
-    }
-
-    if (completed) {
-      todosServices
-        .getTodos()
-        .then((todos: Todo[]) => {
-          setTodosList(todos.filter(current => current.completed));
-        })
-        .catch((error: Error) => {
-          handleError(setErrorType, 'loading');
-          throw error;
-        });
-    }
-  }, [all, active, completed]);
-
   const addTodos = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    setIsLoading(true);
 
     if (title.length <= 0) {
       handleError(setErrorType, 'empty');
@@ -82,19 +67,17 @@ export const App: React.FC = () => {
       return;
     }
 
-    const newTodos: Todo = {
-      id: getTodosId(todosList),
+    const newTodos: Omit<Todo, 'id'> = {
       userId: todosServices.USER_ID,
       title: title,
       completed: false,
     };
 
-    setActiveTodo(newTodos);
-
     todosServices
       .addTodos(newTodos)
-      .then(() => {
-        setTodosList(currentTodos => [...currentTodos, newTodos]);
+      .then((createdTodo: Todo) => {
+        setActiveTodo([createdTodo]);
+        setTodosList(currentTodos => [...currentTodos, createdTodo]);
         reset();
       })
       .catch((error: Error) => {
@@ -102,13 +85,11 @@ export const App: React.FC = () => {
         throw error;
       })
       .finally(() => {
-        setIsLoading(false);
-        setActiveTodo(null);
+        setActiveTodo([]);
       });
   };
 
   const deleteTodo = (todoId: number) => {
-    setIsLoading(true);
     todosServices
       .deleteTodos(todoId)
       .then(() => {
@@ -123,19 +104,21 @@ export const App: React.FC = () => {
         throw error;
       })
       .finally(() => {
-        setIsLoading(false);
-        setActiveTodo(null);
+        setActiveTodo([]);
       });
   };
 
-  const completeTodo = (todo: Todo) => {
+  const completeTodo = (
+    todo: Todo,
+    activeTodos: Todo[] = [todo],
+    state?: boolean,
+  ) => {
     const completedTodo: Todo = {
       ...todo,
-      completed: !todo.completed,
+      completed: state ? state : !todo.completed,
     };
 
-    setIsLoading(true);
-    setActiveTodo(todo);
+    setActiveTodo([...activeTodos]);
 
     todosServices
       .updateTodos(completedTodo)
@@ -156,15 +139,61 @@ export const App: React.FC = () => {
         throw error;
       })
       .finally(() => {
-        setIsLoading(false);
-        setActiveTodo(null);
-        loadTodos();
+        setActiveTodo([]);
       });
+  };
+
+  const completeAllTodos = () => {
+    const completedAll: boolean = [...todosList].every((current: Todo) => {
+      return current.completed;
+    });
+
+    const currentTodos: Todo[] = completedAll
+      ? [...todosList]
+      : [...todosList].filter(current => !current.completed);
+
+    for (const todosValue of todosList) {
+      completeTodo(todosValue, currentTodos, !completedAll);
+    }
+  };
+
+  const clearCompleted = () => {
+    const completedTodos = [...todosList].filter(current => current.completed);
+
+    setActiveTodo([...completedTodos]);
+
+    for (const current of todosList) {
+      if (current.completed) {
+        deleteTodo(current.id);
+      }
+    }
+  };
+
+  const filterTodos = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const filterParam: string = event.currentTarget.textContent;
+
+    if (filterParam === 'All') {
+      setAll(true);
+      setActive(false);
+      setCompleted(false);
+    }
+
+    if (filterParam === 'Active') {
+      setAll(false);
+      setActive(true);
+      setCompleted(false);
+    }
+
+    if (filterParam === 'Completed') {
+      setAll(false);
+      setActive(false);
+      setCompleted(true);
+    }
   };
 
   useEffect(() => {
     loadTodos();
-  }, [loadTodos]);
+  }, []);
 
   if (!todosServices.USER_ID) {
     return <UserWarning />;
@@ -180,14 +209,19 @@ export const App: React.FC = () => {
           {todosList.length > 0 && (
             <button
               type="button"
-              className="todoapp__toggle-all active"
+              className={classNames('todoapp__toggle-all', {
+                active: todosCounter === 0,
+              })}
               data-cy="ToggleAllButton"
+              onClick={completeAllTodos}
             />
           )}
 
           {/* Add a todo on form submit */}
           <form onSubmit={addTodos}>
             <input
+              autoFocus
+              disabled={activeTodo.length > 0}
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
@@ -199,7 +233,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          {todosList.map((todo: Todo) => {
+          {todos.map((todo: Todo) => {
             return (
               <div
                 key={todo.id}
@@ -225,7 +259,7 @@ export const App: React.FC = () => {
                   data-cy="TodoDelete"
                   onClick={() => {
                     deleteTodo(todo.id);
-                    setActiveTodo(todo);
+                    setActiveTodo([todo]);
                   }}
                 >
                   ×
@@ -234,7 +268,7 @@ export const App: React.FC = () => {
                 <div
                   data-cy="TodoLoader"
                   className={classNames('modal overlay', {
-                    'is-active': todo.id === activeTodo?.id,
+                    'is-active': activeTodo.includes(todo),
                   })}
                 >
                   <div className="modal-background has-background-white-ter" />
@@ -359,11 +393,7 @@ export const App: React.FC = () => {
                 href="#/"
                 className={classNames('filter__link', { selected: all })}
                 data-cy="FilterLinkAll"
-                onClick={() => {
-                  setAll(true);
-                  setActive(false);
-                  setCompleted(false);
-                }}
+                onClick={filterTodos}
               >
                 All
               </a>
@@ -372,11 +402,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={classNames('filter__link', { selected: active })}
                 data-cy="FilterLinkActive"
-                onClick={() => {
-                  setAll(false);
-                  setActive(true);
-                  setCompleted(false);
-                }}
+                onClick={filterTodos}
               >
                 Active
               </a>
@@ -385,11 +411,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={classNames('filter__link', { selected: completed })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => {
-                  setAll(false);
-                  setActive(false);
-                  setCompleted(true);
-                }}
+                onClick={filterTodos}
               >
                 Completed
               </a>
@@ -397,9 +419,11 @@ export const App: React.FC = () => {
 
             {/* this button should be disabled if there are no completed todos */}
             <button
+              disabled={todosCounter === todosList.length}
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
+              onClick={clearCompleted}
             >
               Clear completed
             </button>
