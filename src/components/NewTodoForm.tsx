@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   onAdd: (title: string) => void;
-  loading: boolean;
+  loading?: boolean;
 };
 
 export const NewTodoForm: React.FC<Props> = ({ onAdd, loading }) => {
