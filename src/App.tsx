@@ -3,34 +3,28 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
+import { ERROR_MESSAGES } from './constants/errorMessages';
+import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
-
-type FilterStatus = 'all' | 'active' | 'completed';
-
-const ERROR_MESSAGES = {
-  load: 'Unable to load todos',
-  add: 'Unable to add a todo',
-  delete: 'Unable to delete a todo',
-  update: 'Unable to update a todo',
-  empty: 'Title should not be empty',
-} as const;
 
 function getFilterFromHash(): FilterStatus {
   const hash = window.location.hash.replace('#/', '');
 
   switch (hash) {
-    case 'active':
-      return 'active';
-    case 'completed':
-      return 'completed';
+    case FilterStatus.Active:
+      return FilterStatus.Active;
+
+    case FilterStatus.Completed:
+      return FilterStatus.Completed;
+
     default:
-      return 'all';
+      return FilterStatus.All;
   }
 }
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<FilterStatus>('all');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
 
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -104,10 +98,12 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     switch (filter) {
-      case 'active':
+      case FilterStatus.Active:
         return todos.filter(t => !t.completed);
-      case 'completed':
+
+      case FilterStatus.Completed:
         return todos.filter(t => t.completed);
+
       default:
         return todos;
     }
@@ -195,7 +191,7 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: filter === 'all',
+                  selected: filter === FilterStatus.All,
                 })}
                 data-cy="FilterLinkAll"
               >
@@ -205,7 +201,7 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: filter === 'active',
+                  selected: filter === FilterStatus.Active,
                 })}
                 data-cy="FilterLinkActive"
               >
@@ -215,7 +211,7 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: filter === 'completed',
+                  selected: filter === FilterStatus.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
               >
