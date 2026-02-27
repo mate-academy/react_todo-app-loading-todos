@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const BASE_URL = 'https://mate.academy/students-api';
+const BASE_URL = 'https://mate.academy/students-api/';
 
 // returns a promise resolved after a given delay
 function wait(delay: number) {
@@ -27,15 +27,21 @@ function request<T>(
   }
 
   // DON'T change the delay it is required for tests
-  return wait(100)
-    .then(() => fetch(BASE_URL + url, options))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error();
-      }
+  return (
+    wait(100)
+      .then(() => fetch(BASE_URL + url, options))
+      // .catch((error: Error) => {
+      //   throw
+      // })
 
-      return response.json();
-    });
+      .then(response => {
+        if (!response.ok) {
+          throw new Error();
+        }
+
+        return response.json();
+      })
+  );
 }
 
 export const client = {
