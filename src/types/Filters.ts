@@ -4,4 +4,4 @@ export const FILTERS = {
   completed: 'completed',
 } as const;
 
-export type Filter = keyof typeof FILTERS;
+export type Filter = (typeof FILTERS)[keyof typeof FILTERS];
