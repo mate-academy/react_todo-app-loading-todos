@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
-// returns a promise resolved after a given delay
+/**
+ * Helper function to create a delay (required for tests and smooth UX)
+ */
 function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
@@ -11,6 +13,9 @@ function wait(delay: number) {
 // To have autocompletion and avoid mistypes
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
+/**
+ * Core request function used to interact with the API
+ */
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
