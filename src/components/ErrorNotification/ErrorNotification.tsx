@@ -1,8 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
-  message: string;
+  message: ErrorMessage | null;
   onClose: () => void;
 };
 
@@ -13,7 +14,7 @@ export const ErrorNotification: React.FC<Props> = ({ message, onClose }) => {
       className={clsx(
         'notification is-danger is-light has-text-weight-normal',
         {
-          hidden: !message.trim(),
+          hidden: !message,
         },
       )}
     >

@@ -5,10 +5,12 @@ import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TODO_STATUS, TodoStatus } from './types/TodoStatus';
+
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/TodoList';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoHeader } from './components/TodoHeader';
+import { ErrorMessage } from './types/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,7 +19,7 @@ export const App: React.FC = () => {
   const [todosStatusFilter, setTodoStatusFilter] = useState<TodoStatus>(
     TODO_STATUS.ALL,
   );
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
 
   useEffect(() => {
     getTodos()
@@ -25,7 +27,7 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.LoadTodos);
       });
   }, []);
 
@@ -35,7 +37,7 @@ export const App: React.FC = () => {
     }
 
     const timerId = setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(null);
     }, 3000);
 
     return () => {
@@ -66,6 +68,9 @@ export const App: React.FC = () => {
     { active: 0, completed: 0, filtered: [] as Todo[] },
   );
 
+  const isAllCompleted =
+    todos.length > 0 && todos.length === todosCompletedCount;
+
   const handleSelectTodoStatus = (todoStatus: TodoStatus) => {
     setTodoStatusFilter(todoStatus);
   };
@@ -83,9 +88,7 @@ export const App: React.FC = () => {
           <TodoHeader
             newTodoQuery={todoQuery}
             onNewTodoQueryChange={setTodoQuery}
-            isAllCompleted={
-              todos.length > 0 && todos.length === todosCompletedCount
-            }
+            isAllCompleted={isAllCompleted}
           />
 
           {filteredTodos.length > 0 && <TodoList todos={filteredTodos} />}
@@ -101,7 +104,7 @@ export const App: React.FC = () => {
 
         <ErrorNotification
           message={errorMessage}
-          onClose={() => setErrorMessage('')}
+          onClose={() => setErrorMessage(null)}
         />
       </div>
     </>
