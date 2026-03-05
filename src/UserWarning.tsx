@@ -7,8 +7,9 @@ export const UserWarning: React.FC = () => (
       <a href="https://mate-academy.github.io/react_student-registration">
         here
       </a>{' '}
-      and save it in the app <pre>const USER_ID = ...</pre>
-      All requests to the API must be sent with this
+      and save it in the app <pre>const USER_ID = ...</pre> (alternatively set a
+      user object in localStorage so tests can inject it automatically). All
+      requests to the API must be sent with this
       <b> userId.</b>
     </p>
   </section>
