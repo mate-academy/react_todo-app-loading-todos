@@ -5,6 +5,7 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
+import classNames from 'classnames';
 
 enum FilterStatus {
   All = 'all',
@@ -78,7 +79,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+            className={classNames('todoapp__toggle-all', {
+              active: allCompleted,
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -113,7 +116,9 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link ${filterStatus === FilterStatus.All ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: filterStatus === FilterStatus.All,
+                })}
                 data-cy="FilterLinkAll"
                 onClick={() => setFilterStatus(FilterStatus.All)}
               >
@@ -122,7 +127,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/active"
-                className={`filter__link ${filterStatus === FilterStatus.Active ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: filterStatus === FilterStatus.Active,
+                })}
                 data-cy="FilterLinkActive"
                 onClick={() => setFilterStatus(FilterStatus.Active)}
               >
@@ -131,7 +138,9 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className={`filter__link ${filterStatus === FilterStatus.Completed ? 'selected' : ''}`}
+                className={classNames('filter__link', {
+                  selected: filterStatus === FilterStatus.Completed,
+                })}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setFilterStatus(FilterStatus.Completed)}
               >
@@ -156,7 +165,10 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${error ? '' : 'hidden'}`}
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !error },
+        )}
       >
         <button
           data-cy="HideErrorButton"
