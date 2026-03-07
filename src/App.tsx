@@ -7,7 +7,16 @@ import { TodoHeader } from './components/TodoHeader';
 import { TodoFooter } from './components/TodoFooter';
 import { TodoList } from './components/TodoList/TodoList';
 
-type Errors = 'upload' | 'title' | 'add' | 'delete' | 'update' | '';
+// type Errors = 'upload' | 'title' | 'add' | 'delete' | 'update' | '';
+enum Errors {
+  Upload = 'upload',
+  Title = 'title',
+  Add = 'add',
+  Delete = 'delete',
+  Update = 'update',
+  None = '',
+}
+
 enum FiltersParam {
   All = 'All',
   Completed = 'Completed',
@@ -17,14 +26,14 @@ enum FiltersParam {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadTodos, setLoadTodos] = useState<boolean>(false);
-  const [hasError, setHasError] = useState<Errors>('');
+  const [hasError, setHasError] = useState<Errors>(Errors.None);
   const [filter, setFilter] = useState<FiltersParam>(FiltersParam.All);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [allTodosCount, setAllTodosCount] = useState<number>(0);
 
   useEffect(() => {
     setLoadTodos(true);
-    setHasError('');
+    setHasError(Errors.None);
     setCompletedTodos([]);
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -52,13 +61,13 @@ export const App: React.FC = () => {
         setTodos(filteredData);
       })
       .catch(error => {
-        setHasError('upload');
+        setHasError(Errors.Upload);
         throw error;
       })
       .finally(() => {
         setLoadTodos(false);
         timeoutId = setTimeout(() => {
-          setHasError('');
+          setHasError(Errors.None);
         }, 3000);
       });
 

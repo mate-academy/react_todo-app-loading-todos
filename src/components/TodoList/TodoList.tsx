@@ -12,13 +12,13 @@ export const TodoList: React.FC<Props> = ({ todos, loadTodos }) => {
   return (
     <>
       <section
-        className={cn('todoapp__main', todos?.length === 0 ? 'hidden' : '')}
+        className={cn('todoapp__main', { hidden: todos?.length === 0 })}
         data-cy="TodoList"
       >
         {todos?.map(todo => (
           <div
             data-cy="Todo"
-            className={cn('todo', todo.completed ? 'completed' : '')}
+            className={cn('todo', { completed: todo.completed })}
             key={todo.id}
           >
             <label className="todo__status-label">
@@ -47,7 +47,7 @@ export const TodoList: React.FC<Props> = ({ todos, loadTodos }) => {
             {/* overlay will cover the todo while it is being deleted or updated */}
             <div
               data-cy="TodoLoader"
-              className={cn('modal overlay', loadTodos ? '' : 'hidden')}
+              className={cn('modal overlay', { hidden: !loadTodos })}
             >
               <div className="modal-background has-background-white-ter" />
               <div className="loader" />

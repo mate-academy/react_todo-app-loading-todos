@@ -16,10 +16,9 @@ export const TodoHeader: React.FC<Props> = ({
       {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
-        className={cn(
-          'todoapp__toggle-all',
-          allTodosCount === completedCount ? 'active' : '',
-        )}
+        className={cn('todoapp__toggle-all', {
+          active: allTodosCount === completedCount,
+        })}
         data-cy="ToggleAllButton"
         disabled={loadTodos}
       />

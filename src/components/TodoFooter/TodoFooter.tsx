@@ -47,7 +47,7 @@ export const TodoFooter: React.FC<Props> = ({
       {/* Hide the footer if there are no todos */}
       {allTodosCount !== 0 && (
         <footer
-          className={cn('todoapp__footer', allTodosCount === 0 ? 'hidden' : '')}
+          className={cn('todoapp__footer', { hidden: allTodosCount === 0 })}
           data-cy="Footer"
         >
           <span className="todo-count" data-cy="TodosCounter">
@@ -60,10 +60,9 @@ export const TodoFooter: React.FC<Props> = ({
               <a
                 key={item.value}
                 href={item.href}
-                className={cn(
-                  'filter__link',
-                  filter === item.value ? 'selected' : '',
-                )}
+                className={cn('filter__link', {
+                  selected: filter === item.value,
+                })}
                 data-cy={item.dataCy}
                 onClick={() => setFilter(item.value)}
               >

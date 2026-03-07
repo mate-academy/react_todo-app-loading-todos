@@ -1,6 +1,14 @@
 import cn from 'classnames';
 
-type Errors = 'upload' | 'title' | 'add' | 'delete' | 'update' | '';
+// type Errors = 'upload' | 'title' | 'add' | 'delete' | 'update' | '';
+enum Errors {
+  Upload = 'upload',
+  Title = 'title',
+  Add = 'add',
+  Delete = 'delete',
+  Update = 'update',
+  None = '',
+}
 
 type Props = {
   hasError: Errors;
@@ -13,6 +21,15 @@ export const ErrorNotification: React.FC<Props> = ({
   loadTodos,
   setHasError,
 }) => {
+  const ERROR_MESSAGES: Record<Errors, string> = {
+    [Errors.Upload]: 'Unable to load todos',
+    [Errors.Add]: 'Unable to add a todo',
+    [Errors.Delete]: 'Unable to delete a todo',
+    [Errors.Update]: 'Unable to update a todo',
+    [Errors.Title]: 'Title should not be empty',
+    [Errors.None]: '',
+  };
+
   return (
     <>
       {/* DON'T use conditional rendering to hide the notification */}
@@ -21,30 +38,17 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="ErrorNotification"
         className={cn(
           'notification is-danger is-light has-text-weight-normal',
-          hasError ? '' : 'hidden',
+          { hidden: hasError === Errors.None },
         )}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setHasError('')}
+          onClick={() => setHasError(Errors.None)}
           disabled={loadTodos}
         />
-        {/* show only one message at a time */}
-        <div className={cn('notification', { hidden: !hasError })}>
-          {hasError === 'upload'
-            ? 'Unable to load todos'
-            : hasError === 'add'
-              ? 'Unable to add a todo'
-              : hasError === 'title'
-                ? 'Title should not be empty'
-                : hasError === 'delete'
-                  ? 'Unable to delete a todo'
-                  : hasError === 'update'
-                    ? 'Unable to update a todo'
-                    : ''}
-        </div>
+        {ERROR_MESSAGES[hasError]}
       </div>
     </>
   );
