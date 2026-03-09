@@ -6,6 +6,10 @@ import { TodoList } from './components/TodoList';
 import { Todo } from './types/Todo';
 import { CreateForm } from './components/CreateForm';
 import classNames from 'classnames';
+import { FilterStatus } from './types/FilterStatus';
+import { ErrorMessage } from './types/ErrorMessage';
+import { ErrorNotification } from './components/ErrorNotification';
+import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   const [todosForView, setTodosForView] = useState<Todo[]>([]);
@@ -13,9 +17,9 @@ export const App: React.FC = () => {
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
 
   //const [loading, setLoading] = useState(false);
-  const [filterBy, setFilterBy] = useState('All');
+  const [filterBy, setFilterBy] = useState(FilterStatus.all);
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(ErrorMessage.notError);
 
   const setFilterValue = useCallback(setFilterBy, [filterBy]);
   const [hidenError, setHidenError] = useState(true);
@@ -34,7 +38,7 @@ export const App: React.FC = () => {
       .then(response => {
         setTodosFromServer(response);
       })
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(ErrorMessage.unableLoad));
     //.finally(() => setLoading(false));
   }, []);
 
@@ -44,23 +48,23 @@ export const App: React.FC = () => {
   }, [todosFromServer]);
 
   useEffect(() => {
-    if (filterBy === 'Completed') {
+    if (filterBy === FilterStatus.completed) {
       setTodosForView(completedTodos);
 
       return;
     }
 
-    if (filterBy === 'Active') {
+    if (filterBy === FilterStatus.active) {
       setTodosForView(todosFromServer.filter(item => !item.completed));
 
       return;
     }
 
     setTodosForView(todosFromServer);
-  }, [todosForView, filterBy]);
+  }, [filterBy]);
 
   const onClearCompleted = () => {
-    completedTodos.forEach(item => deleteTodo(item.id));
+    Promise.all([completedTodos.map(item => deleteTodo(item.id))]);
     setTodosFromServer(currentList =>
       currentList.filter(item => !item.completed),
     );
@@ -109,85 +113,23 @@ export const App: React.FC = () => {
 
         {/* Hide the footer if there are no todos */}
         {todosFromServer.length !== 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {todosFromServer.length - completedTodos.length} items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav
-              className="filter"
-              data-cy="Filter"
-              onClick={event =>
-                setFilterValue((event.target as HTMLAnchorElement).innerText)
-              }
-            >
-              <a
-                href="#/"
-                className={classNames('filter__link', {
-                  selected: filterBy === 'All',
-                })}
-                data-cy="FilterLinkAll"
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={classNames('filter__link', {
-                  selected: filterBy === 'Active',
-                })}
-                data-cy="FilterLinkActive"
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={classNames('filter__link', {
-                  selected: filterBy === 'Completed',
-                })}
-                data-cy="FilterLinkCompleted"
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-              onClick={onClearCompleted}
-              disabled={completedTodos.length === 0}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            countActiveTodos={todosFromServer.length - completedTodos.length}
+            countCompletedTodos={completedTodos.length}
+            setFilterValue={setFilterValue}
+            onClearCompleted={onClearCompleted}
+            filterBy={filterBy}
+          />
         )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification',
-          'is-danger',
-          'is-light',
-          'has-text-weight-normal',
-          { hidden: hidenError },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {/* show only one message at a time */}
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        isHidenError={hidenError}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

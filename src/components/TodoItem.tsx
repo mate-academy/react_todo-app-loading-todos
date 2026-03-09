@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Todo } from '../types/Todo';
 import classNames from 'classnames';
 import { deleteTodo, patchTodo } from '../api/todos';
+import { ErrorMessage } from '../types/ErrorMessage';
 
 type Props = {
   todo: Todo;
   updateTodos: (todos: Todo[]) => void;
-  setError: (message: string) => void;
+  setError: (message: ErrorMessage) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, updateTodos, setError }) => {
@@ -18,7 +19,7 @@ export const TodoItem: React.FC<Props> = ({ todo, updateTodos, setError }) => {
     setIsLoading(true);
     deleteTodo(todo.id)
       .then(() => updateTodos(prev => prev.filter(item => item.id !== todo.id)))
-      .catch(() => setError('Unable to delete a todo'))
+      .catch(() => setError(ErrorMessage.unableDelete))
       .finally(() => setIsLoading(false));
   };
 
@@ -32,7 +33,7 @@ export const TodoItem: React.FC<Props> = ({ todo, updateTodos, setError }) => {
           ),
         ),
       )
-      .catch(() => setError('Unable to update a todo'))
+      .catch(() => setError(ErrorMessage.unableUpdate))
       .finally(() => setIsLoading(false));
   };
 

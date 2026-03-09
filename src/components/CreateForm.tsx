@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { USER_ID } from '../api/todos';
 import { Todo } from '../types/Todo';
+import { ErrorMessage } from '../types/ErrorMessage';
 
 type Props = {
   onAdd: (newTodo: Todo) => Promise<Todo>;
-  setError: (message: string) => void;
+  setError: (message: ErrorMessage) => void;
   updateTodos: (todos: Todo[]) => void;
 };
 
@@ -20,7 +21,7 @@ export const CreateForm: React.FC<Props> = ({
     event.preventDefault();
 
     if (!title.trim()) {
-      setError('Title should not be empty');
+      setError(ErrorMessage.notEmptyTitle);
 
       return;
     }
@@ -43,7 +44,7 @@ export const CreateForm: React.FC<Props> = ({
           { ...newTodo, isLoading: false },
         ]),
       )
-      .catch(() => setError('Unable to add a todo'))
+      .catch(() => setError(ErrorMessage.unableAdd))
       .then(() => {
         setTitle('');
         setIsSaving(false);
@@ -52,7 +53,7 @@ export const CreateForm: React.FC<Props> = ({
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    setTimeout(() => setError(''), 3000);
+    setTimeout(() => setError(ErrorMessage.notError), 3000);
   };
 
   return (

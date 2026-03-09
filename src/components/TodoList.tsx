@@ -1,10 +1,11 @@
+import { ErrorMessage } from '../types/ErrorMessage';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[];
   updateTodos: (todos: Todo[]) => void;
-  setError: (message: string) => void;
+  setError: (message: ErrorMessage) => void;
 };
 
 export const TodoList: React.FC<Props> = ({ todos, updateTodos, setError }) => {
