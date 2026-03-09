@@ -5,9 +5,15 @@ import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 
+enum FilterStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<`all` | `active` | `completed`>('all');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,18 +53,34 @@ export const App: React.FC = () => {
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === `all`) {
+    if (filter === FilterStatus.All) {
       return true;
     }
 
-    if (filter === `active`) {
+    if (filter === FilterStatus.Active) {
       return todo.completed === false;
     }
 
-    if (filter === `completed`) {
+    if (filter === FilterStatus.Completed) {
       return todo.completed === true;
     }
   });
+
+  const filters = [
+    { value: FilterStatus.All, label: 'All', href: '#/', cy: 'FilterLinkAll' },
+    {
+      value: FilterStatus.Active,
+      label: 'Active',
+      href: '#/active',
+      cy: 'FilterLinkActive',
+    },
+    {
+      value: FilterStatus.Completed,
+      label: 'Completed',
+      href: '#/completed',
+      cy: 'FilterLinkCompleted',
+    },
+  ];
 
   return (
     <div className="todoapp">
@@ -139,34 +161,18 @@ export const App: React.FC = () => {
               {`${activeTodosCount} ${activeTodosCount === 1 ? 'item' : 'items'} left`}
             </span>
 
-            {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilter('all')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilter('active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilter('completed')}
-              >
-                Completed
-              </a>
+              {filters.map(({ value, label, href, cy }) => (
+                <a
+                  key={value}
+                  href={href}
+                  data-cy={cy}
+                  className={`filtered__link ${filter === value ? 'selected' : ''}`}
+                  onClick={() => setFilter(value)}
+                >
+                  {label}
+                </a>
+              ))}
             </nav>
 
             <button
