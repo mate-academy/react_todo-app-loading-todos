@@ -30,15 +30,15 @@ export const App: React.FC = () => {
 
   // Auto-hide error notification after 3 seconds
   useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError('');
-      }, 3000);
-
-      return () => clearTimeout(timer);
+    if (!error) {
+      return;
     }
 
-    return undefined;
+    const timer = setTimeout(() => {
+      setError('');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [error]);
 
   const filteredTodos = useMemo(() => {
@@ -52,15 +52,20 @@ export const App: React.FC = () => {
     }
   }, [todos, filterStatus]);
 
-  const activeTodosCount = useMemo(
-    () => todos.filter(todo => !todo.completed).length,
-    [todos],
-  );
+  const { activeTodosCount, completedTodosCount } = useMemo(() => {
+    let active = 0;
+    let completed = 0;
 
-  const completedTodosCount = useMemo(
-    () => todos.filter(todo => todo.completed).length,
-    [todos],
-  );
+    for (const todo of todos) {
+      if (todo.completed) {
+        completed++;
+      } else {
+        active++;
+      }
+    }
+
+    return { activeTodosCount: active, completedTodosCount: completed };
+  }, [todos]);
 
   const allCompleted = todos.length > 0 && activeTodosCount === 0;
 
