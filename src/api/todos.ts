@@ -1,9 +1,9 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
-export const USER_ID = 0;
+export const USER_ID = 4063;
 
-export const getTodos = () => {
+export const getTodos = async () => {
   return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
 };
 
