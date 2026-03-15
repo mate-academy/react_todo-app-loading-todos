@@ -12,18 +12,18 @@ import { ErrorNotification } from './components/errorNotification/ErrorNotificat
 import { Header } from './components/header/Header';
 
 const testArr: Todo[] = [
-  // {
-  //   id: 74,
-  //   userId: 4,
-  //   title: 'expedita tempore nobis eveniet laborum maiores',
-  //   completed: false,
-  // },
-  // {
-  //   id: 74,
-  //   userId: 4,
-  //   title: '123',
-  //   completed: true,
-  // },
+  {
+    id: 74,
+    userId: 4,
+    title: 'expedita tempore nobis eveniet laborum maiores',
+    completed: false,
+  },
+  {
+    id: 74,
+    userId: 4,
+    title: '123',
+    completed: true,
+  },
 ];
 
 export const App: React.FC = () => {
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
             filter={filter}
             activeCount={toDos.filter(todo => !todo.completed).length}
             hasCompleted={toDos.some(todo => todo.completed)}
-            onFilterChange={setFilter} // Просто передаем функцию setFilter
+            onFilterChange={setFilter}
             onClear={() => setTodos(toDos.filter(todo => !todo.completed))}
           />
         )}
