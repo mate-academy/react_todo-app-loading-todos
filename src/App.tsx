@@ -12,18 +12,18 @@ import { ErrorNotification } from './components/errorNotification/ErrorNotificat
 import { Header } from './components/header/Header';
 
 const testArr: Todo[] = [
-  {
-    id: 74,
-    userId: 4,
-    title: 'expedita tempore nobis eveniet laborum maiores',
-    completed: false,
-  },
-  {
-    id: 74,
-    userId: 4,
-    title: '123',
-    completed: true,
-  },
+  // {
+  //   id: 74,
+  //   userId: 4,
+  //   title: 'expedita tempore nobis eveniet laborum maiores',
+  //   completed: false,
+  // },
+  // {
+  //   id: 74,
+  //   userId: 4,
+  //   title: '123',
+  //   completed: true,
+  // },
 ];
 
 export const App: React.FC = () => {
@@ -54,11 +54,12 @@ export const App: React.FC = () => {
     setError(null);
     getTodos()
       .then(data => {
-        if (data.length === 0) {
-          setTodos(testArr);
-        } else {
-          setTodos(data);
-        }
+        setTodos(data)
+        // if (data.length === 0) {
+        //   setTodos(testArr);
+        // } else {
+        //   setTodos(data);
+        // }
       })
       .catch(() => showError('Unable to load todos'));
   }, []);
