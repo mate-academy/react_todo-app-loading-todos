@@ -11,20 +11,20 @@ import { Main } from './components/main/Main';
 import { ErrorNotification } from './components/errorNotification/ErrorNotification';
 import { Header } from './components/header/Header';
 
-const testArr: Todo[] = [
-  // {
-  //   id: 74,
-  //   userId: 4,
-  //   title: 'expedita tempore nobis eveniet laborum maiores',
-  //   completed: false,
-  // },
-  // {
-  //   id: 74,
-  //   userId: 4,
-  //   title: '123',
-  //   completed: true,
-  // },
-];
+// const testArr: Todo[] = [
+// {
+//   id: 74,
+//   userId: 4,
+//   title: 'expedita tempore nobis eveniet laborum maiores',
+//   completed: false,
+// },
+// {
+//   id: 74,
+//   userId: 4,
+//   title: '123',
+//   completed: true,
+// },
+// ];
 
 export const App: React.FC = () => {
   const [toDos, setTodos] = useState<Todo[]>([]);
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
     setError(null);
     getTodos()
       .then(data => {
-        setTodos(data)
+        setTodos(data);
         // if (data.length === 0) {
         //   setTodos(testArr);
         // } else {
