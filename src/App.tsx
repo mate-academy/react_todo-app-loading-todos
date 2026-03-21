@@ -5,13 +5,13 @@ import { Header } from './component/Header';
 import { Footer } from './component/Footer';
 import { TodoList } from './component/TodoList';
 import { ErrorNotification } from './component/ErrorNotification';
+import { ErrorMessages } from './types/ErrorMessages';
+import { FilterParams } from './types/FilterParams';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
-  const [filter, setFilter] = React.useState<`all` | 'active' | 'completed'>(
-    'all',
-  );
-  const [error, setError] = React.useState<string>('');
+  const [filter, setFilter] = React.useState<FilterParams>(FilterParams.ALL);
+  const [error, setError] = React.useState<ErrorMessages | null>(null);
 
   const isAllCompleted = todos.every(todo => todo.completed);
   const isAnyCompleted = todos.some(todo => todo.completed);
@@ -25,18 +25,18 @@ export const App: React.FC = () => {
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .catch(() => setError('Unable to load todos'));
+      .catch(() => setError(ErrorMessages.UNABLE_TO_LOAD_TODOS));
   }, []);
 
-  const handleErrorClose = () => setError('');
+  const handleErrorClose = () => setError(null);
 
   const visibleTodos = useMemo(() => {
-    if (filter === 'all') {
+    if (filter === FilterParams.ALL) {
       return todos;
     }
 
     return todos.filter(todo =>
-      filter === 'active' ? !todo.completed : todo.completed,
+      filter === FilterParams.ACTIVE ? !todo.completed : todo.completed,
     );
   }, [todos, filter]);
 
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
     }
 
     const timer = setTimeout(() => {
-      setError('');
+      setError(null);
     }, 3000);
 
     return () => clearTimeout(timer);

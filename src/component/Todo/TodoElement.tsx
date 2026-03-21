@@ -7,7 +7,7 @@ type Props = {
 
 export const TodoElement = ({ todo }: Props) => (
   <div
-    data-cy="TodoElement"
+    data-cy="Todo"
     className={classNames('todo temp-item-enter-active', {
       completed: todo.completed,
     })}

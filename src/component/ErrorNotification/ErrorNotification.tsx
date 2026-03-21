@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import { ErrorMessages } from '../../types/ErrorMessages';
 
 type Props = {
-  error: string;
+  error: ErrorMessages | null;
   onErrorClose: () => void;
 };
 
