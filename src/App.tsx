@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { useState } from 'react';
@@ -12,20 +12,18 @@ import { Footer } from './components/Footer/Footer';
 import { Filter } from './types/Filters';
 
 import classNames from 'classnames';
-
-type Error = {
-  isError: boolean;
-  errorMessage: string;
-};
+import { ErrorContext } from './store/ErrorContext';
+import { TodoContext } from './store/TodoContext';
+import { TodoItem } from './components/TodoItem/TodoItem';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { isError, errorMessage, showError, closeError } =
+    useContext(ErrorContext);
+  const { todos, setTodos } = useContext(TodoContext);
+  const [tempTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<Filter>('All');
-  const [error, setError] = useState<Error>({
-    isError: false,
-    errorMessage: '',
-  });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const loadTodos = async () => {
       try {
@@ -37,39 +35,23 @@ export const App: React.FC = () => {
 
         setTodos(response);
       } catch (err) {
-        setError({
-          isError: true,
-          errorMessage: 'Unable to load todos',
-        });
-      } finally {
-        setTimeout(() => {
-          setError({
-            isError: false,
-            errorMessage: '',
-          });
-        }, 3000);
+        showError('Unable to load todos');
       }
     };
 
     loadTodos();
   }, []);
 
-  const filteredTodos = () => {
-    let copyTodos = [...todos];
-
+  const filteredTodos = useMemo(() => {
     switch (filter) {
       case 'Active':
-        copyTodos = copyTodos.filter(item => !item.completed);
-        break;
+        return todos.filter(item => !item.completed);
       case 'Completed':
-        copyTodos = copyTodos.filter(item => item.completed);
-        break;
+        return todos.filter(item => item.completed);
       default:
-        break;
+        return todos;
     }
-
-    return copyTodos;
-  };
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -81,8 +63,9 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <Header />
-        <TodoList todos={filteredTodos()} />
-        {todos.length > 0 && <Footer todos={todos} filter={filter} setFilter={setFilter} />}
+        <TodoList todos={filteredTodos} />
+        {tempTodo !== null && <TodoItem todo={tempTodo} />}
+        {todos.length > 0 && <Footer filter={filter} setFilter={setFilter} />}
       </div>
 
       <div
@@ -90,12 +73,17 @@ export const App: React.FC = () => {
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
           {
-            hidden: !error.isError,
+            hidden: !isError,
           },
         )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {error.errorMessage}
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={closeError}
+        />
+        {errorMessage}
       </div>
     </div>
   );

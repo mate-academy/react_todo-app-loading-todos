@@ -1,18 +1,19 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useContext } from 'react';
+import { TodoContext } from '../../store/TodoContext';
 import { Filter } from '../../types/Filters';
-import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo[],
   filter: Filter;
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
 };
 
-export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
+export const Footer: React.FC<Props> = ({ filter, setFilter }) => {
+  const { todos } = useContext(TodoContext);
+
   const filters: Filter[] = ['All', 'Active', 'Completed'];
-  const activeCount = todos.filter(todo => !todo.completed).length;
-  const completedCount = todos.filter(todo => todo.completed).length;
+  const activeCount = todos.filter(t => !t.completed).length;
+  const completedCount = todos.length - activeCount;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -45,6 +46,7 @@ export const Footer: React.FC<Props> = ({ todos, filter, setFilter }) => {
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={completedCount === 0}
+        onClick={() => {}}
       >
         Clear completed
       </button>
