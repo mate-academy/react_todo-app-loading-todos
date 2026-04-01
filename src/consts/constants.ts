@@ -1,7 +1,7 @@
 export const FILTER_TYPE = {
-  ALL: 'all',
-  ACTIVE: 'active',
-  COMPLETED: 'completed',
+  ALL: 'All',
+  ACTIVE: 'Active',
+  COMPLETED: 'Completed',
 } as const;
 
 export const ERROR_TYPE = {

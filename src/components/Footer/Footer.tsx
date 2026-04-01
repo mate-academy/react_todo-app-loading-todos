@@ -1,6 +1,6 @@
 import React from 'react';
-import { TodoContext } from '../context/TodoContext';
-import { FILTER_TYPE } from '../consts/constants';
+import { TodoContext } from '../../context/TodoContext';
+import { FILTER_TYPE } from '../../consts/constants';
 
 export const Footer: React.FC = () => {
   const {

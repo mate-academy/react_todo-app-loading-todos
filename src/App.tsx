@@ -5,9 +5,9 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { TodoContext } from './context/TodoContext';
 import { ERROR_TYPE } from './consts/constants';
-import { Header } from './Header/Header';
-import { TodoList } from './TodoList/TodoList';
-import { Footer } from './Footer/Footer';
+import { Header } from './components/Header/Header';
+import { TodoList } from './components/TodoList/TodoList';
+import { Footer } from './components/Footer/Footer';
 
 export const App: React.FC = () => {
   const { error, handleCloseError } = React.useContext(TodoContext);
