@@ -108,7 +108,6 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       .catch(() => handleError(ERROR_TYPE.LOAD));
   }, [handleError]);
 
-
   const filteredTodos = React.useMemo(() => {
     switch (filterBy) {
       case FILTER_TYPE.ACTIVE:
