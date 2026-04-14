@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {
-
-};
+type Props = {};
 
 const HeaderBase: React.FC<Props> = () => {
   return (
