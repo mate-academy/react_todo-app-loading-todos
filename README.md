@@ -79,3 +79,6 @@ Filter todos by status `All` / `Active` / `Completed`:
 - [ ] Check convention for naming the types that have the same name as component. (Todo component)
 - [ ] Try to send POST request with a body with additional fields, and then fetch it, in the outside script.
 - [ ] Add memoization after the last task
+
+#
+Cloud tests retry number 1
