@@ -8,18 +8,12 @@ import { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import cn from 'classnames';
+import { FilterField } from './types/enums/FilterField';
+import { Selected } from './types/enums/Selected';
 
 export const App: React.FC = () => {
-  enum FilterField {
-    'all',
-    'completed',
-    'active',
-  }
-
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selected, setSelected] = useState<'all' | 'active' | 'completed'>(
-    'all',
-  );
+  const [selected, setSelected] = useState<Selected>(Selected.all);
 
   const [filter, setFilter] = useState<FilterField>(FilterField.all);
 
@@ -54,17 +48,17 @@ export const App: React.FC = () => {
   }, [errorMessage]);
 
   const handleActiveTodosButton = () => {
-    setSelected('active');
+    setSelected(Selected.active);
     setFilter(FilterField.active);
   };
 
   const handleCompletedTodosButton = () => {
-    setSelected('completed');
+    setSelected(Selected.completed);
     setFilter(FilterField.completed);
   };
 
   const handleAllTodosButton = () => {
-    setSelected('all');
+    setSelected(Selected.all);
     setFilter(FilterField.all);
   };
 

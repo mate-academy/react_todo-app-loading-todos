@@ -1,13 +1,14 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import cn from 'classnames';
+import { Selected } from '../types/enums/Selected';
 
 type Props = {
   todos: Todo[];
   handleActiveTodosButton: () => void;
   handleCompletedTodosButton: () => void;
   handleAllTodosButton: () => void;
-  selected: string;
+  selected: Selected;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -31,7 +32,7 @@ export const Footer: React.FC<Props> = ({
           onClick={handleAllTodosButton}
           href="#/"
           className={cn('filter__link', {
-            selected: selected === 'all',
+            selected: selected === Selected.all,
           })}
           data-cy="FilterLinkAll"
         >
@@ -43,7 +44,7 @@ export const Footer: React.FC<Props> = ({
           id="active_link"
           href="#/active"
           className={cn('filter__link', {
-            selected: selected === 'active',
+            selected: selected === Selected.active,
           })}
           data-cy="FilterLinkActive"
         >
@@ -55,7 +56,7 @@ export const Footer: React.FC<Props> = ({
           id="completed_link"
           href="#/completed"
           className={cn('filter__link', {
-            selected: selected === 'completed',
+            selected: selected === Selected.completed,
           })}
           data-cy="FilterLinkCompleted"
         >
