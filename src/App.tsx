@@ -10,19 +10,25 @@ import { Footer } from './components/Footer';
 import cn from 'classnames';
 
 export const App: React.FC = () => {
+  enum FilterField {
+    'all',
+    'completed',
+    'active',
+  }
+
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selected, setSelected] = useState<'all' | 'active' | 'completed'>(
     'all',
   );
 
-  const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
+  const [filter, setFilter] = useState<FilterField>(FilterField.all);
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'completed') {
+    if (filter === FilterField.completed) {
       return todo.completed;
     }
 
-    if (filter === 'active') {
+    if (filter === FilterField.active) {
       return !todo.completed;
     }
 
@@ -49,17 +55,17 @@ export const App: React.FC = () => {
 
   const handleActiveTodosButton = () => {
     setSelected('active');
-    setFilter('active');
+    setFilter(FilterField.active);
   };
 
   const handleCompletedTodosButton = () => {
     setSelected('completed');
-    setFilter('completed');
+    setFilter(FilterField.completed);
   };
 
   const handleAllTodosButton = () => {
     setSelected('all');
-    setFilter('all');
+    setFilter(FilterField.all);
   };
 
   if (!USER_ID) {
