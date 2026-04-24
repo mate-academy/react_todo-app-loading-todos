@@ -1,10 +1,16 @@
+import { NewTodoRequest } from '../types/NewTodoRequest';
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
-export const USER_ID = 0;
+export const USER_ID = 4075;
+const URL: string = `/todos?userId=${USER_ID}`;
 
 export const getTodos = () => {
-  return client.get<Todo[]>(`/todos?userId=${USER_ID}`);
+  return client.get<Todo[]>(URL);
 };
 
 // Add more methods here
+
+export const saveTodo = (todo: NewTodoRequest): Promise<Todo> => {
+  return client.post<Todo>(URL, todo);
+};
