@@ -1,0 +1,13 @@
+import React from 'react';
+type Props = {
+  isLoading?: boolean;
+};
+
+export const Loader: React.FC<Props> = ({ isLoading = true }) => {
+  return (
+    <div data-cy="TodoLoader" className="modal overlay">
+      <div className="modal-background has-background-white-ter" />
+      <div className={`modal overlay ${isLoading ? 'is-active' : ''}`} />
+    </div>
+  );
+};
