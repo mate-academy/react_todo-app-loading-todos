@@ -1,38 +1,78 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+
 import { UserWarning } from './UserWarning';
 import { addTodo, getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 
-type Status = 'all' | 'active' | 'completed';
+enum Status {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 
-type ErrorType = '' | 'load' | 'title' | 'add' | 'delete' | 'update';
+enum ErrorType {
+  None = '',
+  Load = 'load',
+  Title = 'title',
+  Add = 'add',
+  Delete = 'delete',
+  Update = 'update',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [status, setStatus] = useState<Status>('all');
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState<Status>(Status.All);
   const [isAdding, setIsAdding] = useState(false);
-
   const [title, setTitle] = useState('');
-
-  const [error, setError] = useState<ErrorType>('');
+  const [error, setError] = useState<ErrorType>(ErrorType.None);
 
   const activeTodos = todos.filter(todo => !todo.completed);
   const hasCompleted = todos.some(todo => todo.completed);
 
   const filteredTodos = todos.filter(todo => {
-    if (status === 'active') {
+    if (status === Status.Active) {
       return !todo.completed;
     }
 
-    if (status === 'completed') {
+    if (status === Status.Completed) {
       return todo.completed;
     }
 
     return true;
   });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      setError(ErrorType.Title);
+
+      return;
+    }
+
+    const newTodo = {
+      title: title.trim(),
+      completed: false,
+      userId: USER_ID,
+    };
+
+    setIsAdding(true);
+
+    addTodo(newTodo)
+      .then(todoFromServer => {
+        setTodos(prevTodos => [...prevTodos, todoFromServer]);
+        setTitle('');
+      })
+      .catch(() => {
+        setError(ErrorType.Add);
+      })
+      .finally(() => {
+        setIsAdding(false);
+      });
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,7 +82,7 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(() => {
-        setError('load');
+        setError(ErrorType.Load);
       })
       .finally(() => {
         setIsLoading(false);
@@ -55,7 +95,7 @@ export const App: React.FC = () => {
     }
 
     const timer = setTimeout(() => {
-      setError('');
+      setError(ErrorType.None);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -77,38 +117,7 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
-          {/* Add a todo on form submit */}
-          <form
-            onSubmit={event => {
-              event.preventDefault();
-
-              if (!title.trim()) {
-                setError('title');
-
-                return;
-              }
-
-              const newTodo = {
-                title,
-                completed: false,
-                userId: USER_ID,
-              };
-
-              setIsAdding(true);
-
-              addTodo(newTodo)
-                .then(todoFromServer => {
-                  setTodos(prev => [...prev, todoFromServer]);
-                  setTitle('');
-                })
-                .catch(() => {
-                  setError('add');
-                })
-                .finally(() => {
-                  setIsAdding(false);
-                });
-            }}
-          >
+          <form onSubmit={handleSubmit}>
             <input
               autoFocus
               data-cy="NewTodoField"
@@ -117,12 +126,11 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               disabled={isAdding}
               value={title}
-              onChange={event => {
-                setTitle(event.target.value);
-              }}
+              onChange={event => setTitle(event.target.value)}
             />
           </form>
         </header>
+
         {!isLoading && <TodoList todos={filteredTodos} />}
 
         {todos.length > 0 && (
@@ -135,10 +143,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: status === 'all',
+                  selected: status === Status.All,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={() => setStatus('all')}
+                onClick={() => setStatus(Status.All)}
               >
                 All
               </a>
@@ -146,10 +154,10 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: status === 'active',
+                  selected: status === Status.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={() => setStatus('active')}
+                onClick={() => setStatus(Status.Active)}
               >
                 Active
               </a>
@@ -157,16 +165,15 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: status === 'completed',
+                  selected: status === Status.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={() => setStatus('completed')}
+                onClick={() => setStatus(Status.Completed)}
               >
                 Completed
               </a>
             </nav>
 
-            {/* this button should be disabled if there are no completed todos */}
             <button
               type="button"
               className="todoapp__clear-completed"
@@ -191,18 +198,17 @@ export const App: React.FC = () => {
           },
         )}
       >
-        {error === 'load' && 'Unable to load todos'}
-        {error === 'title' && 'Title should not be empty'}
-        {error === 'add' && 'Unable to add a todo'}
-        {error === 'delete' && 'Unable to delete a todo'}
-        {error === 'update' && 'Unable to update a todo'}
+        {error === ErrorType.Load && 'Unable to load todos'}
+        {error === ErrorType.Title && 'Title should not be empty'}
+        {error === ErrorType.Add && 'Unable to add a todo'}
+        {error === ErrorType.Delete && 'Unable to delete a todo'}
+        {error === ErrorType.Update && 'Unable to update a todo'}
+
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => {
-            setError('');
-          }}
+          onClick={() => setError(ErrorType.None)}
         />
       </div>
     </div>
