@@ -8,3 +8,11 @@ export const getTodos = () => {
 };
 
 // Add more methods here
+
+export const addTodo = (todo: Omit<Todo, 'id'>) =>
+  client.post<Todo>('/todos', todo);
+
+export const deleteTodo = (id: number) => client.delete(`/todos/${id}`);
+
+export const updateTodo = (todo: Todo) =>
+  client.patch<Todo>(`/todos/${todo.id}`, todo);
