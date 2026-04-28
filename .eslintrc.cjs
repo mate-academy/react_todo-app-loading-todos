@@ -43,6 +43,7 @@ module.exports = {
     'prefer-const': 2,
     curly: [2, 'all'],
     'max-len': ['error', {
+      code: 100,
       ignoreTemplateLiterals: true,
       ignoreComments: true,
     }],
@@ -61,7 +62,7 @@ module.exports = {
       { blankLine: 'always', prev: 'directive', next: '*' },
       { blankLine: 'always', prev: 'block-like', next: '*' },
     ],
-    'implicit-arrow-linebreak:': 0,
+    'implicit-arrow-linebreak': 0,
 
     // React
     'react/prop-types': 0,
@@ -90,7 +91,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
-    '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/ban-types': ['error', {
         extendDefaults: true,
         types: {
