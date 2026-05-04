@@ -17,15 +17,22 @@ const ERROR_MESSAGES = {
   emptyTitle: 'Title should not be empty',
 };
 
-export type Filter = 'All' | 'Active' | 'Completed';
+export enum FilterType {
+  ALL = 'All',
+  ACTIVE = 'Active',
+  COMPLETED = 'Completed',
+}
+
+export type Filter = `${FilterType}`;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isHiddenError, setIsHiddenError] = React.useState(true);
 
-  const [appliedFilter, setAppliedFilter] = useState<Filter>('All');
+  const [appliedFilter, setAppliedFilter] = useState<Filter>(FilterType.ALL);
 
   const setFilter = useCallback((filter: Filter) => {
     setAppliedFilter(filter);
@@ -38,25 +45,20 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(() => {
         setErrorMessage(ERROR_MESSAGES.failedLoadingTodos);
+        setIsHiddenError(false);
       })
       .finally(() => setIsLoading(false));
   }, []);
 
   const visibleTodos = useMemo(() => {
-    let filteredTodos: Todo[];
-
     switch (appliedFilter) {
-      case 'Active':
-        filteredTodos = todos.filter(todo => !todo.completed);
-        break;
-      case 'Completed':
-        filteredTodos = todos.filter(todo => todo.completed);
-        break;
+      case FilterType.ACTIVE:
+        return todos.filter(todo => !todo.completed);
+      case FilterType.COMPLETED:
+        return todos.filter(todo => todo.completed);
       default:
-        filteredTodos = todos;
+        return todos;
     }
-
-    return filteredTodos;
   }, [todos, appliedFilter]);
 
   const notCompletedTodosLength = useMemo(() => {
@@ -87,7 +89,11 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification message={errorMessage} hidden={!errorMessage} />
+      <ErrorNotification
+        message={errorMessage}
+        hidden={isHiddenError}
+        hideMessage={() => setIsHiddenError(true)}
+      />
     </div>
   );
 };
