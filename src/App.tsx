@@ -1,5 +1,27 @@
 import React from 'react';
 
+const bikeModels = [
+  {
+    name: 'Urban Glide X1',
+    price: '$2,490',
+    description:
+      'Clean geometry and smooth electric assistance for everyday city rides.',
+  },
+  {
+    name: 'Gravel Pulse Pro',
+    price: '$2,990',
+    description:
+      'All-road setup with reinforced frame and adaptive suspension comfort.',
+  },
+  {
+    name: 'Night Shift S',
+    price: '$2,650',
+    description:
+      'Integrated lights, anti-theft lock and ergonomic cockpit'
+      + ' for late commuting.',
+  },
+];
+
 export const App: React.FC = () => {
   return (
     <div className="bike-page">
@@ -35,6 +57,24 @@ export const App: React.FC = () => {
             <a className="hero__secondary-link" href="#catalog">
               View specifications
             </a>
+          </div>
+        </section>
+
+        <section className="catalog" id="catalog">
+          <div className="catalog__head">
+            <p className="catalog__eyebrow">Popular models</p>
+            <h2 className="catalog__title">Find your perfect bike</h2>
+          </div>
+
+          <div className="catalog__grid">
+            {bikeModels.map(model => (
+              <article className="bike-card" key={model.name}>
+                <div className="bike-card__image" aria-hidden="true" />
+                <h3 className="bike-card__name">{model.name}</h3>
+                <p className="bike-card__description">{model.description}</p>
+                <p className="bike-card__price">{model.price}</p>
+              </article>
+            ))}
           </div>
         </section>
       </main>

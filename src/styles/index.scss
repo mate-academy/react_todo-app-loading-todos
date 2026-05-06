@@ -21,7 +21,7 @@ a {
 
 .bike-page {
   min-height: 100vh;
-  padding: 24px 20px 56px;
+  padding: 24px 20px 72px;
 }
 
 .bike-header {
@@ -59,7 +59,8 @@ a {
   padding-top: 72px;
 }
 
-.hero__eyebrow {
+.hero__eyebrow,
+.catalog__eyebrow {
   margin: 0;
   color: #8fa2ff;
   text-transform: uppercase;
@@ -104,9 +105,54 @@ a {
   padding-bottom: 2px;
 }
 
+.catalog {
+  padding-top: 88px;
+}
+
+.catalog__title {
+  margin: 14px 0 0;
+  font-size: clamp(28px, 5vw, 48px);
+}
+
+.catalog__grid {
+  margin-top: 28px;
+  display: grid;
+  gap: 20px;
+}
+
+.bike-card {
+  border: 1px solid #2b3558;
+  border-radius: 20px;
+  padding: 18px;
+  background: linear-gradient(180deg, #19203b 0%, #131a2f 100%);
+}
+
+.bike-card__image {
+  height: 160px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #2e3963 0%, #6c7eff 100%);
+}
+
+.bike-card__name {
+  margin: 16px 0 8px;
+  font-size: 20px;
+}
+
+.bike-card__description {
+  margin: 0;
+  color: #c9d0e6;
+  line-height: 1.55;
+}
+
+.bike-card__price {
+  margin: 18px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
 @media (min-width: 768px) {
   .bike-page {
-    padding: 32px 48px 80px;
+    padding: 32px 48px 84px;
   }
 
   .bike-header__nav {
@@ -116,10 +162,18 @@ a {
   .hero {
     padding-top: 96px;
   }
+
+  .catalog__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1200px) {
   .bike-page {
     padding-inline: 96px;
+  }
+
+  .catalog__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
