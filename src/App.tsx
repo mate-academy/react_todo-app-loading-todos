@@ -1,174 +1,119 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useMemo, useState } from 'react';
-import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
-import { Todo } from './types/Todo';
+import React from 'react';
 
-type FilterStatus = 'all' | 'active' | 'completed';
+type BikeModel = {
+  name: string;
+  price: string;
+  description: string;
+  image: string;
+};
+
+const bikeModels: BikeModel[] = [
+  {
+    name: 'Sporty 4',
+    price: '$ 2 590',
+    description: 'The iconic frame engineered for urban performance rides.',
+    image: '/images/bike-sport.svg',
+  },
+  {
+    name: 'Ride in town ST',
+    price: '$ 2 290',
+    description:
+      'Comfort geometry with practical setup for everyday city trips.',
+    image: '/images/bike-road.svg',
+  },
+  {
+    name: 'Aggressor 3',
+    price: '$ 2 490',
+    description: 'Balanced speed and control with premium all-round handling.',
+    image: '/images/bike-city.svg',
+  },
+];
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const showError = (message: string) => {
-    setErrorMessage(message);
-
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 3000);
-  };
-
-  useEffect(() => {
-    setErrorMessage('');
-
-    getTodos()
-      .then(setTodos)
-      .catch(() => {
-        showError('Unable to load todos');
-      });
-  }, []);
-
-  const visibleTodos = useMemo(() => {
-    switch (filterStatus) {
-      case 'active':
-        return todos.filter(todo => !todo.completed);
-
-      case 'completed':
-        return todos.filter(todo => todo.completed);
-
-      default:
-        return todos;
-    }
-  }, [filterStatus, todos]);
-
-  const activeTodosCount = todos.filter(todo => !todo.completed).length;
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+    <div className="page">
+      <header className="topbar">
+        <a className="logo" href="#home" aria-label="BIKE homepage">
+          MyBike
+        </a>
 
-      <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            type="button"
-            className="todoapp__toggle-all"
-            data-cy="ToggleAllButton"
-          />
+        <nav className="nav" aria-label="Main navigation">
+          <a href="#about">About us</a>
+          <a href="#compare">Compare bikes</a>
+          <a href="#details">Details</a>
+          <a href="#contacts">Contacts</a>
+        </nav>
+      </header>
 
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-
-        <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <div
-              data-cy="Todo"
-              className={`todo ${todo.completed ? 'completed' : ''}`}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                  readOnly
-                />
-              </label>
-
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
-
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
+      <main>
+        <section className="hero" id="home">
+          <h1>Take the Streets</h1>
+          <p>
+            Electrifying performance and clean design for riders who want
+            comfort, style, and speed in one bike.
+          </p>
+          <a href="#compare" className="button button--primary">
+            Book a test ride
+          </a>
         </section>
 
-        {!!todos.length && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {`${activeTodosCount} items left`}
-            </span>
+        <section className="section" id="about">
+          <h2 className="section__title">
+            The move to electric has never felt so right.
+          </h2>
+          <p className="section__text">
+            Our bikes combine advanced engineering, lightweight materials, and
+            premium finishing for everyday city riding.
+          </p>
+        </section>
 
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={`filter__link ${filterStatus === 'all' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilterStatus('all')}
-              >
-                All
-              </a>
+        <section className="section" id="compare">
+          <h2 className="section__title">Compare bikes</h2>
+          <div className="cards">
+            {bikeModels.map(model => (
+              <article className="card" key={model.name}>
+                <img
+                  src={model.image}
+                  alt={model.name}
+                  className="card__image"
+                />
+                <h3 className="card__name">{model.name}</h3>
+                <p className="card__description">{model.description}</p>
+                <p className="card__price">{model.price}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
-              <a
-                href="#/active"
-                className={`filter__link ${filterStatus === 'active' ? 'selected' : ''}`}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilterStatus('active')}
-              >
-                Active
-              </a>
+        <section className="section details" id="details">
+          <div>
+            <h2 className="section__title">The details</h2>
+            <p className="section__text">
+              Every element is crafted for real-life comfort: from frame
+              geometry to precision motor response and ergonomic controls.
+            </p>
+          </div>
+          <div className="details__image-wrap">
+            <img
+              src="/images/bike-road.svg"
+              alt="Detailed view of BIKE frame"
+              className="details__image"
+            />
+          </div>
+        </section>
 
-              <a
-                href="#/completed"
-                className={`filter__link ${filterStatus === 'completed' ? 'selected' : ''}`}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilterStatus('completed')}
-              >
-                Completed
-              </a>
-            </nav>
-
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
+        <section className="section contacts" id="contacts">
+          <h2 className="section__title">Contact us</h2>
+          <form className="form">
+            <input type="text" placeholder="Name" />
+            <input type="email" placeholder="Email" />
+            <textarea rows={4} placeholder="Message" />
+            <button type="button" className="button button--primary">
+              Send
             </button>
-          </footer>
-        )}
-      </div>
-
-      <div
-        data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${
-          errorMessage ? '' : 'hidden'
-        }`}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-
-        {errorMessage}
-      </div>
+          </form>
+        </section>
+      </main>
     </div>
   );
 };
