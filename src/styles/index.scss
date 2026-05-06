@@ -1,25 +1,125 @@
-iframe {
-  display: none;
+:root {
+  font-family: Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #f5f7ff;
+  background-color: #101320;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  min-width: 230px;
-  max-width: 550px;
-  margin: 0 auto;
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #1d2440 0%, #0c0f1a 60%);
 }
 
-.notification {
-  transition-property: opacity, min-height;
-  transition-duration: 1s;
-  min-height: 36px;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.notification.hidden {
-  min-height: 0;
-  opacity: 0;
-  pointer-events: none;
+.bike-page {
+  min-height: 100vh;
+  padding: 24px 20px 56px;
 }
 
-@import "./todoapp";
-@import "./todo";
-@import "./filter";
+.bike-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.bike-header__logo {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.bike-header__nav {
+  display: none;
+  gap: 28px;
+  font-size: 15px;
+  color: #b8bfd6;
+}
+
+.bike-header__cta {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: #e7ebff;
+  color: #11162a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hero {
+  max-width: 640px;
+  padding-top: 72px;
+}
+
+.hero__eyebrow {
+  margin: 0;
+  color: #8fa2ff;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+}
+
+.hero__title {
+  margin: 16px 0 20px;
+  font-size: clamp(40px, 9vw, 84px);
+  line-height: 1;
+}
+
+.hero__description {
+  margin: 0;
+  max-width: 540px;
+  color: #c9d0e6;
+  line-height: 1.6;
+}
+
+.hero__actions {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero__primary-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 600;
+  background: #6c7eff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hero__secondary-link {
+  align-self: center;
+  color: #d6dcf3;
+  border-bottom: 1px solid #d6dcf3;
+  padding-bottom: 2px;
+}
+
+@media (min-width: 768px) {
+  .bike-page {
+    padding: 32px 48px 80px;
+  }
+
+  .bike-header__nav {
+    display: flex;
+  }
+
+  .hero {
+    padding-top: 96px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .bike-page {
+    padding-inline: 96px;
+  }
+}
