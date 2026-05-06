@@ -39,28 +39,34 @@ a {
 
 .bike-header__nav {
   display: none;
-  gap: 28px;
+  gap: 24px;
   font-size: 15px;
   color: #b8bfd6;
 }
 
-.bike-header__cta {
+.bike-header__cta,
+.hero__primary-btn,
+.contact__form button {
   border: 0;
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 12px 20px;
   background: #e7ebff;
   color: #11162a;
   font-weight: 600;
   cursor: pointer;
 }
 
-.hero {
-  max-width: 640px;
+.hero,
+.catalog,
+.details,
+.contact {
   padding-top: 72px;
 }
 
 .hero__eyebrow,
-.catalog__eyebrow {
+.catalog__eyebrow,
+.details__eyebrow,
+.contact__eyebrow {
   margin: 0;
   color: #8fa2ff;
   text-transform: uppercase;
@@ -74,9 +80,11 @@ a {
   line-height: 1;
 }
 
-.hero__description {
+.hero__description,
+.details__text,
+.contact__text,
+.bike-card__description {
   margin: 0;
-  max-width: 540px;
   color: #c9d0e6;
   line-height: 1.6;
 }
@@ -89,13 +97,8 @@ a {
 }
 
 .hero__primary-btn {
-  border: 0;
-  border-radius: 12px;
-  padding: 14px 22px;
-  font-weight: 600;
   background: #6c7eff;
   color: #fff;
-  cursor: pointer;
 }
 
 .hero__secondary-link {
@@ -105,11 +108,9 @@ a {
   padding-bottom: 2px;
 }
 
-.catalog {
-  padding-top: 88px;
-}
-
-.catalog__title {
+.catalog__title,
+.details__title,
+.contact__title {
   margin: 14px 0 0;
   font-size: clamp(28px, 5vw, 48px);
 }
@@ -127,10 +128,14 @@ a {
   background: linear-gradient(180deg, #19203b 0%, #131a2f 100%);
 }
 
-.bike-card__image {
-  height: 160px;
+.bike-card__image,
+.details__image {
   border-radius: 14px;
   background: linear-gradient(120deg, #2e3963 0%, #6c7eff 100%);
+}
+
+.bike-card__image {
+  height: 160px;
 }
 
 .bike-card__name {
@@ -138,16 +143,58 @@ a {
   font-size: 20px;
 }
 
-.bike-card__description {
-  margin: 0;
-  color: #c9d0e6;
-  line-height: 1.55;
-}
-
 .bike-card__price {
   margin: 18px 0 0;
   font-size: 20px;
   font-weight: 700;
+}
+
+.details {
+  display: grid;
+  gap: 24px;
+}
+
+.details__list {
+  margin: 24px 0 0;
+  padding: 0 0 0 20px;
+  line-height: 1.8;
+  color: #dfe4f7;
+}
+
+.details__image {
+  min-height: 240px;
+}
+
+.contact {
+  display: grid;
+  gap: 24px;
+}
+
+.contact__form {
+  display: grid;
+  gap: 12px;
+}
+
+.contact__form input,
+.contact__form textarea {
+  border: 1px solid #3b4568;
+  background: #141b31;
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.contact__form button {
+  justify-self: start;
+  margin-top: 6px;
+}
+
+.footer {
+  margin-top: 72px;
+  border-top: 1px solid #273153;
+  padding-top: 20px;
+  color: #aab5d4;
 }
 
 @media (min-width: 768px) {
@@ -159,12 +206,18 @@ a {
     display: flex;
   }
 
-  .hero {
-    padding-top: 96px;
-  }
-
   .catalog__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .details,
+  .contact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .details__image {
+    min-height: 320px;
   }
 }
 

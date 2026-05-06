@@ -22,6 +22,13 @@ const bikeModels = [
   },
 ];
 
+const benefits = [
+  'Up to 120 km range on one charge',
+  'Carbon belt drive for low maintenance',
+  'Fast USB-C charging in 3.5 hours',
+  'Mobile app with GPS and security alerts',
+];
+
 export const App: React.FC = () => {
   return (
     <div className="bike-page">
@@ -33,6 +40,7 @@ export const App: React.FC = () => {
         <nav className="bike-header__nav" aria-label="Primary navigation">
           <a href="#about">About</a>
           <a href="#catalog">Catalog</a>
+          <a href="#details">Details</a>
           <a href="#contacts">Contacts</a>
         </nav>
 
@@ -77,7 +85,48 @@ export const App: React.FC = () => {
             ))}
           </div>
         </section>
+
+        <section className="details" id="details">
+          <div className="details__content">
+            <p className="details__eyebrow">Technology</p>
+            <h2 className="details__title">
+              Designed for speed, built for comfort
+            </h2>
+            <p className="details__text">
+              Every BIKE model combines aerodynamic lines with smart control.
+              Enjoy silent acceleration, reliable grip, and intuitive riding
+              experience built for modern cities.
+            </p>
+            <ul className="details__list">
+              {benefits.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="details__image" aria-hidden="true" />
+        </section>
+
+        <section className="contact" id="contacts">
+          <div>
+            <p className="contact__eyebrow">Contact us</p>
+            <h2 className="contact__title">Ready for your first ride?</h2>
+            <p className="contact__text">
+              Leave your details and our team will help choose the ideal model.
+            </p>
+          </div>
+
+          <form className="contact__form">
+            <input type="text" name="name" placeholder="Your name" />
+            <input type="tel" name="phone" placeholder="Phone number" />
+            <input type="email" name="email" placeholder="Email" />
+            <textarea name="message" placeholder="Message" rows={4} />
+            <button type="button">Send request</button>
+          </form>
+        </section>
       </main>
+
+      <footer className="footer">© 2026 BIKE. All rights reserved.</footer>
     </div>
   );
 };
