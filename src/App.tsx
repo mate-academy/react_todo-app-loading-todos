@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { ErrorNotification } from './components/ErrorNotification';
@@ -84,15 +82,13 @@ export const App: React.FC = () => {
     return <UserWarning />;
   }
 
-  const handleTitleChange: React.ChangeEventHandler<
-    HTMLInputElement
-  > = event => {
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const handleEditTitleChange: React.ChangeEventHandler<
-  HTMLInputElement
-  > = event => {
+  const handleEditTitleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setEditTitle(event.target.value);
   };
 

@@ -27,6 +27,8 @@ export const TodoItem: React.FC<Props> = ({
   onSaveEdit,
   onCancelEdit,
 }) => {
+  const todoStatusId = `todo-status-${todo.id}`;
+
   return (
     <div
       data-cy="Todo"
@@ -34,11 +36,13 @@ export const TodoItem: React.FC<Props> = ({
         completed: todo.completed,
       })}
     >
-      <label className="todo__status-label">
+      <label htmlFor={todoStatusId} className="todo__status-label">
         <input
+          id={todoStatusId}
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
+          aria-label={`Mark "${todo.title}" as ${todo.completed ? 'active' : 'completed'}`}
           checked={todo.completed}
           onChange={() => onToggle(todo)}
         />
@@ -58,6 +62,7 @@ export const TodoItem: React.FC<Props> = ({
             type="button"
             className="todo__remove"
             data-cy="TodoDelete"
+            aria-label={`Delete "${todo.title}"`}
             onClick={() => onDelete(todo.id)}
           >
             x
@@ -69,6 +74,7 @@ export const TodoItem: React.FC<Props> = ({
             autoFocus
             data-cy="TodoTitleField"
             type="text"
+            aria-label="Edit todo title"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             value={editTitle}

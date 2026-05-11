@@ -24,6 +24,7 @@ export const ErrorNotification: React.FC<Props> = ({
         data-cy="HideErrorButton"
         type="button"
         className="delete"
+        aria-label="Hide error notification"
         onClick={onHide}
       />
       {errorMessage}

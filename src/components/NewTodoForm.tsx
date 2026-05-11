@@ -26,6 +26,7 @@ export const NewTodoForm: React.FC<Props> = ({
       {hasTodos && (
         <button
           type="button"
+          aria-label="Toggle all todos"
           className={classNames('todoapp__toggle-all', {
             active: isAllCompleted,
           })}
@@ -38,6 +39,7 @@ export const NewTodoForm: React.FC<Props> = ({
         <input
           data-cy="NewTodoField"
           type="text"
+          aria-label="New todo title"
           value={title}
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
