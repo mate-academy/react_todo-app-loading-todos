@@ -1,0 +1,13 @@
+export enum Filter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
+export enum ErrorMessage {
+  TitleEmpty = 'Title should not be empty',
+  Load = 'Unable to load todos',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
+}
