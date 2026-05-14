@@ -1,7 +1,7 @@
 // .. footer.tsx
 
 import { Todo } from '../types/Todo';
-import type { FilterBy } from '../App';
+import type { FilterBy } from '../types/ErrorMessages';
 
 interface FooterBottomProps {
   todos: Todo[];
@@ -9,6 +9,38 @@ interface FooterBottomProps {
   setFilterBy: (value: FilterBy) => void;
   filterBy: FilterBy;
 }
+
+type FilterLink = {
+  id: number;
+  href: string;
+  dataCy: string;
+  filterBy: FilterBy;
+  title: string;
+};
+
+const filterLinks: FilterLink[] = [
+  {
+    id: 1,
+    href: '#/',
+    dataCy: 'FilterLinkAll',
+    filterBy: 'all',
+    title: 'All',
+  },
+  {
+    id: 2,
+    href: '#/active',
+    dataCy: 'FilterLinkActive',
+    filterBy: 'active',
+    title: 'Active',
+  },
+  {
+    id: 3,
+    href: '#/completed',
+    dataCy: 'FilterLinkCompleted',
+    filterBy: 'completed',
+    title: 'Completed',
+  },
+];
 
 export const FooterBottom = ({
   todos,
@@ -26,38 +58,23 @@ export const FooterBottom = ({
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={
-            filterBy === 'all' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkAll"
-          onClick={() => setFilterBy('all')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={
-            filterBy === 'active' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkActive"
-          onClick={() => setFilterBy('active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={
-            filterBy === 'completed' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFilterBy('completed')}
-        >
-          Completed
-        </a>
+        {filterLinks.map(link => {
+          return (
+            <a
+              key={link.id}
+              href={link.href}
+              className={
+                filterBy === link.filterBy
+                  ? 'filter__link selected'
+                  : 'filter__link'
+              }
+              data-cy={link.dataCy}
+              onClick={() => setFilterBy(link.filterBy)}
+            >
+              {link.title}
+            </a>
+          );
+        })}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}

@@ -13,16 +13,8 @@ import { TodoList } from './components/TodoList';
 import { ErrorNotification } from './components/ErrorNotification';
 import { FormAdd } from './components/FormAdd';
 import { FooterBottom } from './components/FooterBottom';
-
-const ErrorMessages = {
-  Load: 'Unable to load todos', //..  не вдалося завантажити завдання
-  Title: 'Title should not be empty', // ..Заголовок не може бути порожнім
-  Add: 'Unable to add a todo', //..  Не вдалося додати завдання
-  Delete: 'Unable to delete a todo', //.. Не вдалося видалити завдання
-  Update: 'Unable to update a todo', //..  Не вдалося оновити завдання
-};
-
-export type FilterBy = 'all' | 'active' | 'completed';
+import { ErrorMessages } from './types/ErrorMessages';
+import { FilterBy } from './types/ErrorMessages';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]); // рендер тудушок

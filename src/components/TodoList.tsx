@@ -34,6 +34,11 @@ export const TodoList = ({
     setEditingTodoId(null);
   };
 
+  const editTodo = (id: number, title: string) => {
+    setEditingTodoId(id);
+    setEditedTitle(title);
+  };
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => {
@@ -72,8 +77,7 @@ export const TodoList = ({
             className={!todo.completed ? 'todo' : 'todo completed'}
             key={todo.id}
             onDoubleClick={() => {
-              setEditingTodoId(todo.id);
-              setEditedTitle(todo.title || '');
+              editTodo(todo.id, todo.title);
             }}
           >
             <label
