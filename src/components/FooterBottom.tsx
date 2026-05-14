@@ -2,6 +2,7 @@
 
 import { Todo } from '../types/Todo';
 import type { FilterBy } from '../types/ErrorMessages';
+import type { FilterLink } from '../types/FilterLink';
 
 interface FooterBottomProps {
   todos: Todo[];
@@ -9,14 +10,6 @@ interface FooterBottomProps {
   setFilterBy: (value: FilterBy) => void;
   filterBy: FilterBy;
 }
-
-type FilterLink = {
-  id: number;
-  href: string;
-  dataCy: string;
-  filterBy: FilterBy;
-  title: string;
-};
 
 const filterLinks: FilterLink[] = [
   {
