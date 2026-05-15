@@ -21,7 +21,7 @@ export const Footer: React.FC<{
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeTodosCount} items left
-      </span>пше
+      </span>
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
         {filterLinks.map(({ id, label, status: linkStatus, href }) => (
@@ -36,7 +36,6 @@ export const Footer: React.FC<{
           </a>
         ))}
       </nav>
-
       {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
