@@ -1,7 +1,7 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
-const DEFAULT_USER_ID = 0;
+const DEMO_USER_ID = 4;
 
 const getUserId = () => {
   const savedUser = localStorage.getItem('user');
@@ -10,13 +10,13 @@ const getUserId = () => {
     try {
       const parsedUser = JSON.parse(savedUser);
 
-      return Number(parsedUser.id) || DEFAULT_USER_ID;
+      return Number(parsedUser.id) || DEMO_USER_ID;
     } catch {
-      return DEFAULT_USER_ID;
+      return DEMO_USER_ID;
     }
   }
 
-  return DEFAULT_USER_ID;
+  return DEMO_USER_ID;
 };
 
 export const USER_ID = getUserId();

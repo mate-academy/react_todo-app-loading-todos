@@ -8,8 +8,7 @@ import React, {
   useState,
 } from 'react';
 import cn from 'classnames';
-import { UserWarning } from './UserWarning';
-import { USER_ID, getTodos } from './api/todos';
+import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
 enum ErrorMessage {
@@ -61,10 +60,6 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!USER_ID) {
-      return undefined;
-    }
-
     hideError();
 
     getTodos()
@@ -102,10 +97,6 @@ export const App: React.FC = () => {
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const completedTodosCount = todos.length - activeTodosCount;
   const hasTodos = todos.length > 0;
-
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
 
   return (
     <div className="todoapp">
