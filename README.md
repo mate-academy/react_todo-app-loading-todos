@@ -49,6 +49,10 @@ Tests help you to check if your implementation is correct.
 1. Load your todos when the `App` is loaded
 1. hide the list and the footer if there are no todos yet;
 
+The deployed version falls back to demo `userId=4` when there is no saved
+`localStorage.user`, so the app can be reviewed without entering a user ID
+first.
+
 ## Show Error Messages
 
 In case of any error show the notification with an appropriate message at the bottom
@@ -70,4 +74,4 @@ Filter todos by status `All` / `Active` / `Completed`:
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_todo-app-loading-todos/) and add it to the PR description.
+- [DEMO LINK](https://fmoreira85.github.io/react_todo-app-loading-todos/)
