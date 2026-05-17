@@ -17,7 +17,11 @@ export const App: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<Status>(StatusMap.All);
 
   useEffect(() => {
-    getTodos().then(todos => setTodoList(todos));
+    getTodos()
+      .then(todos => setTodoList(todos))
+      .catch(() => {
+        setErrorMessage('Unable to load todos');
+      });
   }, []);
 
   useEffect(() => {
