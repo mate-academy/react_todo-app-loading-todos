@@ -5,12 +5,9 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { getTodos } from './api/todos';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
-
   const [filter, setFilter] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -38,6 +35,10 @@ export const App: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, [errorMessage]);
+
+  if (!USER_ID) {
+    return <UserWarning />;
+  }
 
   const filteredTodos = todos.filter(todo => {
     if (filter === 'active') {
