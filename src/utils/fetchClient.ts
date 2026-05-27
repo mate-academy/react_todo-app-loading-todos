@@ -2,6 +2,7 @@
 const BASE_URL = 'https://mate.academy/students-api';
 
 // returns a promise resolved after a given delay
+// повертає обіцянку, вирішену після заданої затримки
 function wait(delay: number) {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
@@ -9,17 +10,19 @@ function wait(delay: number) {
 }
 
 // To have autocompletion and avoid mistypes
+// Щоб мати автозаповнення та уникнути помилок
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
+  data: any = null, // we can send any data to the server ми можемо надсилати будь-які дані на сервер
 ): Promise<T> {
   const options: RequestInit = { method };
 
   if (data) {
     // We add body and Content-Type only for the requests with data
+    // Ми додаємо body та Content-Type лише для запитів з даними
     options.body = JSON.stringify(data);
     options.headers = {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -27,6 +30,7 @@ function request<T>(
   }
 
   // DON'T change the delay it is required for tests
+  // НЕ змінюйте затримку, необхідну для тестів
   return wait(100)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => {
