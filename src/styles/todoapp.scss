@@ -136,3 +136,13 @@
     }
   }
 }
+.todoapp__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 15px;
+
+  color: #777;
+  font-size: 14px;
+}
