@@ -16,11 +16,13 @@ function request<T>(
   method: RequestMethod = 'GET',
   data: any = null, // we can send any data to the server
 ): Promise<T> {
+  // debugger;
   const options: RequestInit = { method };
 
   if (data) {
     // We add body and Content-Type only for the requests with data
     options.body = JSON.stringify(data);
+
     options.headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
