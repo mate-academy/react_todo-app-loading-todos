@@ -10,6 +10,8 @@ interface Props {
   setQuery: (query: Query) => void;
 }
 
+const FILTER_VALUES: Query[] = ['All', 'Active', 'Completed'];
+
 export const Footer: React.FC<Props> = ({
   activeCount,
   completedCount,
@@ -25,38 +27,23 @@ export const Footer: React.FC<Props> = ({
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', {
-            selected: query === 'All',
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => setQuery('All')}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: query === 'Active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => setQuery('Active')}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: query === 'Completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => setQuery('Completed')}
-        >
-          Completed
-        </a>
+        {FILTER_VALUES.map(filterValue => (
+          <a
+            key={filterValue}
+            href={
+              filterValue !== 'All'
+                ? `#/${filterValue.toLocaleLowerCase()}`
+                : ''
+            }
+            className={classNames('filter__link', {
+              selected: query === filterValue,
+            })}
+            data-cy={`FilterLink${filterValue}`}
+            onClick={() => setQuery(filterValue)}
+          >
+            {filterValue}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}
