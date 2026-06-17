@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
+import { Errors } from './types/Errors';
+import { Footer } from './components/Footer';
+import { ErrorNotification } from './components/ErrorNotification';
+import { TodoList } from './components/TodoList';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState([]);
@@ -17,7 +21,7 @@ export const App: React.FC = () => {
         setTodos(data);
       })
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(Errors.Load);
         setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
@@ -26,9 +30,11 @@ export const App: React.FC = () => {
     if (filter === 'Active') {
       return todo.completed === false;
     }
+
     if (filter === 'Completed') {
       return todo.completed === true;
     }
+
     return true;
   });
 
@@ -60,102 +66,20 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-
-        {todos.length > 0 && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {visibleTodos.map((todo: Todo) => (
-              <div key={todo.id} data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
-                <label className="todo__status-label">
-                  <input
-                    data-cy="TodoStatus"
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                    readOnly
-                  />
-                </label>
-
-                <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
-                </span>
-
-                <button type="button" className="todo__remove" data-cy="TodoDelete">
-                  ×
-                </button>
-
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
+        {todos.length > 0 && <TodoList visibleTodos={visibleTodos} />}
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {todos.filter(todo => !todo.completed).length} items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={`filter__link ${filter === 'All' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilter('All')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={`filter__link ${filter === 'Active' ? 'selected' : ''}`}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilter('Active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={`filter__link ${filter === 'Completed' ? 'selected' : ''}`}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilter('Completed')}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer todos={todos} filter={filter} setFilter={setFilter} />
         )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {/* show only one message at a time */}
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };
