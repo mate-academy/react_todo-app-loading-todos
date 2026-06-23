@@ -86,6 +86,7 @@ export const App: React.FC = () => {
                   <label
                     className="todo__status-label"
                     htmlFor={`todo-status-${todo.id}`}
+                    onClick={() => { }}
                   >
                     <input
                       id={`todo-status-${todo.id}`}
@@ -93,7 +94,7 @@ export const App: React.FC = () => {
                       type="checkbox"
                       className="todo__status"
                       checked={todo.completed}
-                      onChange={() => {}}
+                      onChange={() => { }}
                     />
                   </label>
                   <span data-cy="TodoTitle" className="todo__title">
@@ -109,7 +110,7 @@ export const App: React.FC = () => {
                   <div data-cy="TodoLoader" className="modal overlay">
                     <div
                       className="modal-background
-                    has-background-white-ter"
+  has-background-white-ter"
                     />
                     <div className="loader" />
                   </div>
