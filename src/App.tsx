@@ -4,12 +4,12 @@ import { getTodos, USER_ID } from './api/todos';
 import classNames from 'classnames';
 import { Todo } from './types/Todo';
 
+type FilterStatus = 'all' | 'active' | 'completed';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filterStatus, setFilterStatus] = useState<
-    'all' | 'active' | 'completed'
-  >('all');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -85,11 +85,9 @@ export const App: React.FC = () => {
                 >
                   <label
                     className="todo__status-label"
-                    htmlFor={`todo-status-${todo.id}`}
-                    onClick={() => { }}
+                    aria-label="Toggle todo status"
                   >
                     <input
-                      id={`todo-status-${todo.id}`}
                       data-cy="TodoStatus"
                       type="checkbox"
                       className="todo__status"
