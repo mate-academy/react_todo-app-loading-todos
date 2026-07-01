@@ -10,18 +10,19 @@ import { TodoList } from './components/TodoList';
 
 import { Todo } from './types/Todo';
 import { FilterStatus } from './types/FilterStatus';
+import { ErrorMessage } from './types/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.ALL);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setErrorMessage('');
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.LOAD);
       });
   }, []);
 
