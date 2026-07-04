@@ -44,16 +44,16 @@ export const App: React.FC = () => {
   const editTodoField = useRef<HTMLInputElement>(null);
   const errorTimerId = useRef<number | null>(null);
 
-  const hideError = () => {
+  const hideError = React.useCallback(() => {
     setErrorMessage('');
 
     if (errorTimerId.current) {
       window.clearTimeout(errorTimerId.current);
       errorTimerId.current = null;
     }
-  };
+  }, []);
 
-  const showError = (message: string) => {
+  const showError = React.useCallback((message: string) => {
     hideError();
     setErrorMessage(message);
 
@@ -61,7 +61,7 @@ export const App: React.FC = () => {
       setErrorMessage('');
       errorTimerId.current = null;
     }, 3000);
-  };
+  }, [hideError]);
 
   const markTodoAsLoading = (todoId: number) => {
     setLoadingTodoIds(currentIds => [...currentIds, todoId]);
@@ -130,6 +130,7 @@ export const App: React.FC = () => {
 
     if (!trimmedTitle) {
       showError('Title should not be empty');
+
       return;
     }
 
@@ -156,9 +157,9 @@ export const App: React.FC = () => {
 
     deleteTodo(todoId)
       .then(() => {
-        setTodos(currentTodos => (
-          currentTodos.filter(todo => todo.id !== todoId)
-        ));
+        setTodos(currentTodos =>
+          currentTodos.filter(todo => todo.id !== todoId),
+        );
       })
       .catch(() => showError('Unable to delete a todo'))
       .finally(() => unmarkTodoAsLoading(todoId));
@@ -170,11 +171,11 @@ export const App: React.FC = () => {
 
     return updateTodo(todoToUpdate.id, data)
       .then(updatedTodo => {
-        setTodos(currentTodos => (
-          currentTodos.map(todo => (
-            todo.id === todoToUpdate.id ? updatedTodo : todo
-          ))
-        ));
+        setTodos(currentTodos =>
+          currentTodos.map(todo =>
+            todo.id === todoToUpdate.id ? updatedTodo : todo,
+          ),
+        );
       })
       .catch(() => {
         showError('Unable to update a todo');
@@ -188,7 +189,9 @@ export const App: React.FC = () => {
 
   const handleToggleAll = () => {
     const nextCompleted = !allTodosCompleted;
-    const todosToUpdate = todos.filter(todo => todo.completed !== nextCompleted);
+    const todosToUpdate = todos.filter(
+      todo => todo.completed !== nextCompleted,
+    );
 
     todosToUpdate.forEach(todo => {
       void handleUpdateTodo(todo, { completed: nextCompleted });
@@ -211,11 +214,13 @@ export const App: React.FC = () => {
     if (!trimmedTitle) {
       handleDeleteTodo(todo.id);
       stopEditing();
+
       return;
     }
 
     if (trimmedTitle === todo.title) {
       stopEditing();
+
       return;
     }
 
@@ -225,9 +230,11 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompleted = () => {
-    todos.filter(todo => todo.completed).forEach(todo => {
-      handleDeleteTodo(todo.id);
-    });
+    todos
+      .filter(todo => todo.completed)
+      .forEach(todo => {
+        handleDeleteTodo(todo.id);
+      });
   };
 
   const renderTodo = (todo: Todo | TempTodo) => {
@@ -361,9 +368,7 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className={`filter__link ${
-                  filter === 'all' ? 'selected' : ''
-                }`}
+                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
               >
                 All
