@@ -53,15 +53,18 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const showError = React.useCallback((message: string) => {
-    hideError();
-    setErrorMessage(message);
+  const showError = React.useCallback(
+    (message: string) => {
+      hideError();
+      setErrorMessage(message);
 
-    errorTimerId.current = window.setTimeout(() => {
-      setErrorMessage('');
-      errorTimerId.current = null;
-    }, 3000);
-  }, [hideError]);
+      errorTimerId.current = window.setTimeout(() => {
+        setErrorMessage('');
+        errorTimerId.current = null;
+      }, 3000);
+    },
+    [hideError],
+  );
 
   const markTodoAsLoading = (todoId: number) => {
     setLoadingTodoIds(currentIds => [...currentIds, todoId]);
@@ -93,7 +96,7 @@ export const App: React.FC = () => {
         window.clearTimeout(errorTimerId.current);
       }
     };
-  }, []);
+  }, [hideError, showError]);
 
   useEffect(() => {
     newTodoField.current?.focus();
