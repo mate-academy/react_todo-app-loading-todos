@@ -6,6 +6,7 @@ import { Todo } from './types/Todo';
 import { FilterType } from './types/FilterType';
 import { TodoList } from './components/TodoList';
 import { Filter } from './components/Filter';
+import { ErrorMessage } from './types/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
     setErrorMessage('');
     getTodos()
       .then(setTodos)
-      .catch(() => showError('Unable to load todos'));
+      .catch(() => showError(ErrorMessage.LoadTodos));
   }, []);
 
   if (!USER_ID) {

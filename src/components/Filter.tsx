@@ -8,38 +8,27 @@ type Props = {
 };
 
 export const Filter: React.FC<Props> = ({ filter, onFilterChange }) => {
+  const filterLinks = [
+    { type: FilterType.All, label: 'All', href: '#/' },
+    { type: FilterType.Active, label: 'Active', href: '#/active' },
+    { type: FilterType.Completed, label: 'Completed', href: '#/completed' },
+  ];
+
   return (
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: filter === FilterType.All,
-        })}
-        data-cy="FilterLinkAll"
-        onClick={() => onFilterChange(FilterType.All)}
-      >
-        All
-      </a>
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: filter === FilterType.Active,
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => onFilterChange(FilterType.Active)}
-      >
-        Active
-      </a>
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: filter === FilterType.Completed,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => onFilterChange(FilterType.Completed)}
-      >
-        Completed
-      </a>
+      {filterLinks.map(({ type, label, href }) => (
+        <a
+          key={type}
+          href={href}
+          className={classNames('filter__link', {
+            selected: filter === type,
+          })}
+          data-cy={`FilterLink${label}`}
+          onClick={() => onFilterChange(type)}
+        >
+          {label}
+        </a>
+      ))}
     </nav>
   );
 };
