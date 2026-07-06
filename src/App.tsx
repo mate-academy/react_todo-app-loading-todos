@@ -4,25 +4,33 @@ import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import { ErrorNotification } from './components/ErrorNotification';
+import { TodoList } from './components/TodoList';
+import { FilterStatus } from './types/FilterStatus';
+import { TodoFilter } from './components/TodoFilter';
+
+enum ErrorMessage {
+  Load = 'Unable to load todos',
+}
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.Load);
         setTimeout(() => setErrorMessage(''), 3000);
       });
   }, []);
 
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'active') {
+    if (filter === FilterStatus.Active) {
       return !todo.completed;
-    } else if (filter === 'completed') {
+    } else if (filter === FilterStatus.Completed) {
       return todo.completed;
     }
 
@@ -58,42 +66,8 @@ export const App: React.FC = () => {
             />
           </form>
         </header>
+        {todos.length > 0 && <TodoList todos={visibleTodos} />}
 
-        {todos.length > 0 && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {visibleTodos.map(todo => (
-              <div
-                data-cy="Todo"
-                className={todo.completed ? 'todo completed' : 'todo'}
-                key={todo.id}
-              >
-                <label className="todo__status-label">
-                  <input
-                    data-cy="TodoStatus"
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                  />
-                </label>
-                <span data-cy="TodoTitle" className="todo__title">
-                  {todo.title}
-                </span>
-                <button
-                  type="button"
-                  className="todo__remove"
-                  data-cy="TodoDelete"
-                >
-                  ×
-                </button>
-
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
@@ -102,42 +76,7 @@ export const App: React.FC = () => {
             </span>
 
             {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                onClick={() => setFilter('all')}
-                href="#/"
-                className={
-                  filter === 'all' ? 'filter__link selected' : 'filter__link'
-                }
-                data-cy="FilterLinkAll"
-              >
-                All
-              </a>
-
-              <a
-                onClick={() => setFilter('active')}
-                href="#/active"
-                className={
-                  filter === 'active' ? 'filter__link selected' : 'filter__link'
-                }
-                data-cy="FilterLinkActive"
-              >
-                Active
-              </a>
-
-              <a
-                onClick={() => setFilter('completed')}
-                href="#/completed"
-                className={
-                  filter === 'completed'
-                    ? 'filter__link selected'
-                    : 'filter__link'
-                }
-                data-cy="FilterLinkCompleted"
-              >
-                Completed
-              </a>
-            </nav>
+            <TodoFilter filter={filter} onFilterChange={setFilter} />
 
             {/* this button should be disabled if there are no completed todos */}
             <button
@@ -152,24 +91,11 @@ export const App: React.FC = () => {
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
+      <ErrorNotification
+        message={errorMessage}
+        onClose={() => setErrorMessage('')}
+      />
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={
-          errorMessage
-            ? 'notification is-danger is-light has-text-weight-normal'
-            : 'notification is-danger is-light has-text-weight-normal hidden'
-        }
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {/* show only one message at a time */}
-        {errorMessage}
-      </div>
     </div>
   );
 };
