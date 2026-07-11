@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
+import { addTodos, getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './Components/TodoList/TodoList';
 import { Footer } from './Components/Footer/Footer';
@@ -48,6 +48,20 @@ export const App: React.FC = () => {
     }
   });
 
+  function addData(post: Omit<Todo, 'id' | 'userId'>) {
+    const { title, completed } = post;
+
+    const newTodoData = {
+      title,
+      completed,
+      userId: USER_ID,
+    };
+
+    addTodos(newTodoData).then(newTodo => {
+      setTodos(currentTodo => [...currentTodo, newTodo]);
+    });
+  }
+
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
 
   const hasCompletedTodos = todos.length > activeTodoCount;
@@ -61,11 +75,11 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header active={activeTodoCount} />
+        <Header active={activeTodoCount} onChange={addData} />
 
         {todos.length > 0 && (
           <>
-            <TodoList filteredTodos={filteredTodos} onChange={addData} />
+            <TodoList filteredTodos={filteredTodos} />
 
             <Footer
               activeTodosCount={activeTodoCount}
