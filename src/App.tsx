@@ -4,104 +4,101 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { createTodo, getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
+import { FilterStatus } from './types/filterStatus';
+import { ErrorMessage } from './types/errorMessage';
+import { TodoHeader } from './components/todoHeader/todoHeader';
+import { TodoFooter } from './components/todoFooter/todoFooter';
+import { TodoMain } from './components/todoMain/todoMain';
 
 export const App: React.FC = () => {
-  // Створюємо стан todos. Використовуємо генерик <Todo[]>,
-  // щоб вказати, що це буде саме масив об'єктів Todo.
-  // Початкове значення — порожній масив [].
+  // Стан для збереження списку справ, завантажених з сервера
   const [todos, setTodos] = useState<Todo[]>([]);
+  // Стан для збереження тексту помилки (LOAD, EMPTY_TITLE тощо)
   const [errorMessage, setErrorMessage] = useState('');
-  // Створюємо стан для збереження поточного фільтра.
-  // Початкове значення — 'all', щоб користувач одразу бачив усі справи.
-  const [filterStatus, setFilterStatus] = useState('all');
-  // Стейт для зберігання тексту в інпуті нової справи
+  // Стан для контролю значення в інпуті додавання нової справи
   const [newTodoTitle, setNewTodoTitle] = useState('');
+  // Стан для блокування інпуту під час запиту до API
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Стан для поточного фільтра (all, active, completed)
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>(
+    FilterStatus.ALL,
+  );
 
-  // 1. Цей ефект завантажує дані з сервера ТІЛЬКИ ОДИН РАЗ при монтуванні компонента
+  // Ефект для первинного завантаження справ при мовтуванні компонента
   useEffect(() => {
     getTodos()
       .then(response => {
-        // Успішно оновлюємо масив справ
+        // Записуємо отримані з сервера справи у стан
         setTodos(response);
       })
       .catch(() => {
-        // Якщо виникла помилка, записуємо текст
-        setErrorMessage('Unable to load todos');
+        // У разі помилки завантаження показуємо відповідне повідомлення
+        setErrorMessage(ErrorMessage.LOAD);
       });
-  }, []); // Порожній масив залежностей гарантує одноразовий запуск
+  }, []);
 
-  // 2. Цей ефект стежить за помилкою і автоматично приховує її через 3 секунди
+  // Ефект автоматичного приховання повідомлення про помилку через 3 секунди
   useEffect(() => {
-    // Якщо помилки немає (рядок порожній), нічого не робимо
     if (!errorMessage) {
       return;
     }
 
-    // Якщо помилка з'явилася, запускаємо таймер
+    // Запускаємо таймер очищення помилки
     const timerId = setTimeout(() => {
       setErrorMessage('');
     }, 3000);
 
-    // Очищаємо таймер, якщо ефект перезапуститься або компонент зникне
+    // Очищаємо таймер при зміні помилки або розмонтуванні ефекту
     return () => clearTimeout(timerId);
-  }, [errorMessage]); // Спрацьовує щоразу, коли змінюється errorMessage
+  }, [errorMessage]);
 
-  // Фільтруємо масив todos «на льоту» перед тим, як рендерити його в JSX
+  // Фільтрація справ на основі поточного filterStatus
   const visibleTodos = todos.filter(todo => {
-    if (filterStatus === 'active') {
-      return !todo.completed; // Активні — це ті, у яких completed === false
+    if (filterStatus === FilterStatus.ACTIVE) {
+      return !todo.completed; // Повертаємо тільки неліквидовані справи
     }
 
-    if (filterStatus === 'completed') {
-      return todo.completed; // Завершені — це ті, у яких completed === true
+    if (filterStatus === FilterStatus.COMPLETED) {
+      return todo.completed; // Повертаємо тільки виконані справи
     }
 
-    return true; // Якщо 'all', повертаємо всі справи без змін
+    return true; // Для фільтра ALL повертаємо весь список
   });
-  // Обробник відправки форми для додавання нової справи
+
+  // Обробник створення нової справи
   const handleSubmit = (event: React.FormEvent) => {
-    // Зупиняємо стандартне перезавантаження сторінки браузером
     event.preventDefault();
 
-    // Очищаємо назву від пробілів по краях
     const trimmedTitle = newTodoTitle.trim();
 
-    // Перевіряємо, чи заголовок не порожній
+    // Якщо заголовок порожній, показуємо помилку валідації
     if (!trimmedTitle) {
-      // Встановлюємо текст помилки згідно з вимогами тестів
-      setErrorMessage('Title should not be empty');
+      setErrorMessage(ErrorMessage.EMPTY_TITLE);
 
-      // Автоматично ховаємо помилку через 3 секунди
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
-
-      // Зупиняємо виконання, щоб не надсилати запит на сервер
       return;
     }
 
-    // Блокуємо інпут
-
+    // Вмикаємо лоадер/блокування інпуту
     setIsSubmitting(true);
 
     createTodo(trimmedTitle)
       .then(newTodo => {
-        // Додаємо нову справу в масив todos
+        // Додаємо нову справу в кінець поточного списку
         setTodos(prevTodos => [...prevTodos, newTodo]);
-        // Очищаємо інпут після успішного додавання
+        // Очищаємо інпут після успішного виконання
         setNewTodoTitle('');
       })
       .catch(() => {
-        // Якщо виникла помилка, показуємо повідомлення
-        setErrorMessage('Unable to add a todo');
+        // Показуємо помилку додавання, якщо сервер повернув помилку
+        setErrorMessage(ErrorMessage.ADD);
       })
       .finally(() => {
-        // Розблоковуємо інпут незалежно від результату запиту
+        // Знімаємо блокування інпуту в будь-якому випадку
         setIsSubmitting(false);
       });
   };
 
+  // Перевірка наявності ідентифікатора користувача
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -111,147 +108,39 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+        <TodoHeader
+          handleSubmit={handleSubmit}
+          newTodoTitle={newTodoTitle}
+          setNewTodoTitle={setNewTodoTitle}
+          isSubmitting={isSubmitting}
+        />
 
-          {/* Add a todo on form submit */}
-          <form onSubmit={handleSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={newTodoTitle}
-              onChange={event => setNewTodoTitle(event.target.value)}
-              // Блокуємо інпут, коли йде запит до сервера (isSubmitting === true)
-              disabled={isSubmitting}
-            />
-          </form>
-        </header>
-
-        {/* Загальна перевірка: ховаємо список і футер, якщо справ немає взагалі */}
+        {/* Рендеримо список та футер тільки якщо в масиві є хоча б один todo */}
         {todos.length > 0 && (
           <>
-            <section className="todoapp__main" data-cy="TodoList">
-              {/* Запускаємо цикл по масиву visibleTodos */}
-              {visibleTodos.map(todo => (
-                <div
-                  key={todo.id}
-                  data-cy="Todo"
-                  className={`todo ${todo.completed ? 'completed' : ''}`}
-                >
-                  <label className="todo__status-label">
-                    <input
-                      data-cy="TodoStatus"
-                      type="checkbox"
-                      className="todo__status"
-                      checked={todo.completed}
-                      readOnly // Додаємо тимчасово, щоб React не сварився на відсутність onChange
-                    />
-                  </label>
+            <TodoMain visibleTodos={visibleTodos} />
 
-                  <span data-cy="TodoTitle" className="todo__title">
-                    {todo.title}
-                  </span>
-
-                  {/* Remove button appears only on hover */}
-                  <button
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                  >
-                    ×
-                  </button>
-
-                  {/* overlay will cover the todo while it is being deleted or updated */}
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    <div
-                      className="
-                      modal-background
-                      has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              ))}
-            </section>
-
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {/* Рахуємо кількість активних (незавершених) справ динамічно */}
-                {todos.filter(t => !t.completed).length} items left
-              </span>
-
-              {/* Active link should have the 'selected' class */}
-              <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={`filter__link ${filterStatus === 'all' ? 'selected' : ''}`}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setFilterStatus('all')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={`filter__link ${filterStatus === 'active' ? 'selected' : ''}`}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setFilterStatus('active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={`filter__link ${filterStatus === 'completed' ? 'selected' : ''}`}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setFilterStatus('completed')}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              {/* this button should be disabled if there are no completed todos */}
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-              >
-                Clear completed
-              </button>
-            </footer>
+            <TodoFooter
+              todos={todos}
+              filterStatus={filterStatus}
+              setFilterStatus={setFilterStatus}
+            />
           </>
         )}
       </div>
 
-      {/* Додаємо клас hidden, якщо errorMessage порожній */}
+      {/* Контейнер помилки, який приховується за допомогою класу hidden */}
       <div
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
       >
-        {/* При кліці на кнопку скидаємо стан помилки в порожній рядок */}
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
           onClick={() => setErrorMessage('')}
         />
-
-        {/* Відображаємо актуальний текст помилки зі стану */}
         {errorMessage}
-        {/* Закоментований блок для довідки:
-        Unable to load todos
-        Title should not be empty
-        Unable to add a todo
-        Unable to delete a todo
-        Unable to update a todo
-        */}
       </div>
     </div>
   );
