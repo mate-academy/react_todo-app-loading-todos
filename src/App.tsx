@@ -48,18 +48,42 @@ export const App: React.FC = () => {
     }
   });
 
-  function addData(post: Omit<Todo, 'id' | 'userId'>) {
-    const { title, completed } = post;
+  function addData(listValue: string) {
+    const normalValue = listValue.trim();
+
+    if (!normalValue) {
+      setErrorMessage('Title should not be empty');
+
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+
+      return;
+    }
 
     const newTodoData = {
-      title,
-      completed,
+      title: listValue,
+      completed: false,
       userId: USER_ID,
     };
 
-    addTodos(newTodoData).then(newTodo => {
-      setTodos(currentTodo => [...currentTodo, newTodo]);
-    });
+    addTodos(newTodoData)
+      .then(newTodo => {
+        setTodos(currentTodo => [...currentTodo, newTodo]);
+      })
+      .catch(() => {
+        if (!normalValue) {
+          setErrorMessage('Unable to add a todo');
+
+          return;
+        }
+
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+
+        throw new Error();
+      });
   }
 
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
@@ -96,10 +120,6 @@ export const App: React.FC = () => {
         setError={catchError => setErrorMessage(catchError)}
       />
       {/* <br />
-          Title should not be empty
-          <br />
-          Unable to add a todo
-          <br />
           Unable to delete a todo
           <br />
           Unable to update a todo */}

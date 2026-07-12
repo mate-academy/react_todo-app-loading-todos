@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import { useState } from 'react';
-import { Todo } from '../../types/Todo';
 
 interface HeaderProps {
   active: number;
-  onChange: (post: Omit<Todo, 'id' | 'userId'>) => void;
+  onChange: (value: string) => void;
 }
 
 export const Header = ({ active, onChange }: HeaderProps) => {
@@ -13,18 +12,7 @@ export const Header = ({ active, onChange }: HeaderProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const normalValue = listValue.trim();
-
-    if (!normalValue) {
-      return;
-    }
-
-    const post = {
-      title: listValue,
-      completed: false,
-    };
-
-    onChange(post);
+    onChange(listValue);
 
     setListValue('');
   };
