@@ -723,7 +723,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Individual Todo Deletion', () => {
+  describe('Individual Todo Deletion', () => {
     describe('Default behavior', () => {
       beforeEach(() => {
         page.mockLoad().as('loadRequest');
@@ -849,7 +849,7 @@ describe('', () => {
     });
   });
 
-  describe.skip('Group Todo Deletion', () => {
+  describe('Group Todo Deletion', () => {
     describe('with no completed todos', () => {
       beforeEach(() => {
         page.mockLoad({ fixture: 'active-todos' }).as('loadRequest');

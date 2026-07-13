@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { addTodos, getTodos, USER_ID } from './api/todos';
+import { addTodos, deleteTodos, getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
 import { TodoList } from './Components/TodoList/TodoList';
 import { Footer } from './Components/Footer/Footer';
@@ -14,6 +14,9 @@ import { Header } from './Components/Header/Header';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [sortType, setSortType] = useState<SortType>(SortType.all);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [deletePostsId, setDeletePostsId] = useState<number[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -48,7 +51,8 @@ export const App: React.FC = () => {
     }
   });
 
-  function addData(listValue: string) {
+  function addDataToServer(listValue: string) {
+    setErrorMessage('');
     const normalValue = listValue.trim();
 
     if (!normalValue) {
@@ -58,7 +62,7 @@ export const App: React.FC = () => {
         setErrorMessage('');
       }, 3000);
 
-      return;
+      return Promise.resolve(false);
     }
 
     const newTodoData = {
@@ -67,23 +71,72 @@ export const App: React.FC = () => {
       userId: USER_ID,
     };
 
-    addTodos(newTodoData)
+    setTempTodo({
+      id: 0,
+      ...newTodoData,
+    });
+
+    return addTodos(newTodoData)
       .then(newTodo => {
         setTodos(currentTodo => [...currentTodo, newTodo]);
+
+        return true;
       })
       .catch(() => {
-        if (!normalValue) {
-          setErrorMessage('Unable to add a todo');
-
-          return;
-        }
+        setErrorMessage('Unable to add a todo');
 
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
 
-        throw new Error();
+        return false;
+      })
+      .finally(() => {
+        setTempTodo(null);
       });
+  }
+
+  function deleteDataFromServer(postId: number) {
+    setErrorMessage('');
+    setDeletePostsId(currentIds => [...currentIds, postId]);
+
+    if (!postId) {
+      setErrorMessage('Title should not be empty to delete');
+
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000);
+
+      return;
+    }
+
+    deleteTodos(postId)
+      .then(() => {
+        setTodos(currentTodos =>
+          currentTodos.filter(todo => todo.id !== postId),
+        );
+      })
+      .catch(() => {
+        setErrorMessage('Unable to delete a todo');
+
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      })
+      .finally(() => {
+        setDeletePostsId(idOfPosts => idOfPosts.filter(id => id !== postId));
+        inputRef.current?.focus();
+      });
+  }
+
+  function deleteAllCompletedFromServer() {
+    const completedId = todos
+      .filter(todoFromArray => todoFromArray.completed)
+      .map(todo => todo.id);
+
+    for (const id of completedId) {
+      deleteDataFromServer(id);
+    }
   }
 
   const activeTodoCount = todos.filter(todo => !todo.completed).length;
@@ -99,17 +152,27 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header active={activeTodoCount} onChange={addData} />
+        <Header
+          active={activeTodoCount}
+          onChange={addDataToServer}
+          inputRef={inputRef}
+        />
 
         {todos.length > 0 && (
           <>
-            <TodoList filteredTodos={filteredTodos} />
+            <TodoList
+              filteredTodos={filteredTodos}
+              tempTodo={tempTodo}
+              deleteData={deleteDataFromServer}
+              deleteId={deletePostsId}
+            />
 
             <Footer
               activeTodosCount={activeTodoCount}
               currentSortType={sortType}
               onSortChange={setSortType}
               hasCompletedTodos={hasCompletedTodos}
+              deletedAllCompleted={deleteAllCompletedFromServer}
             />
           </>
         )}
@@ -119,9 +182,7 @@ export const App: React.FC = () => {
         error={errorMessage}
         setError={catchError => setErrorMessage(catchError)}
       />
-      {/* <br />
-          Unable to delete a todo
-          <br />
+      {/*
           Unable to update a todo */}
     </div>
   );

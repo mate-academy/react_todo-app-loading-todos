@@ -4,15 +4,17 @@ import { SortType } from '../../types/SortType';
 interface FooterProps {
   activeTodosCount: number;
   currentSortType: SortType;
-  onSortChange: (value: SortType) => void;
   hasCompletedTodos: boolean;
+  onSortChange: (value: SortType) => void;
+  deletedAllCompleted: () => void;
 }
 
 export const Footer = ({
   activeTodosCount,
   currentSortType,
-  onSortChange,
   hasCompletedTodos,
+  onSortChange,
+  deletedAllCompleted,
 }: FooterProps) => {
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -60,6 +62,7 @@ export const Footer = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!hasCompletedTodos}
+        onClick={deletedAllCompleted}
       >
         Clear completed
       </button>

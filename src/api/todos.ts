@@ -11,8 +11,8 @@ export const addTodos = (data: Omit<Todo, 'id'>) => {
   return client.post<Todo>(`/todos`, data);
 };
 
-export const deleteTodos = () => {
-  return client.delete(`/todos/${USER_ID}`);
+export const deleteTodos = (postId: number) => {
+  return client.delete(`/todos/${postId}`);
 };
 
 export const changeTodos = (data: Omit<Todo, 'id'>) => {
