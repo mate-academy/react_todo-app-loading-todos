@@ -1,9 +1,11 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useEffect } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos, addTodo, deleteTodo } from './api/todos';
 import { Todo } from './types/Todo';
+import { Header } from './Components/Header';
+import { TodoList } from './Components/TodoList';
+import { Footer } from './Components/Footer';
+import { ErrorNotification } from './Components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -13,30 +15,39 @@ export const App: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [processingIds, setProcessingIds] = useState<number[]>([]);
 
-  let visibleTodos = todos;
+  const visibleTodos = todos.filter(todo => {
+    if (filterStatus === 'Active') {
+      return !todo.completed;
+    }
 
-  if (filterStatus === 'Active') {
-    visibleTodos = todos.filter(todo => !todo.completed);
-  } else if (filterStatus === 'Completed') {
-    visibleTodos = todos.filter(todo => todo.completed);
-  }
+    if (filterStatus === 'Completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
+
+  const triggerError = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 3000);
+  };
 
   useEffect(() => {
     if (!USER_ID) {
       return;
     }
 
+    setErrorMessage('');
     getTodos()
       .then(data => {
         setTodos(data);
       })
       .catch(() => {
-        setErrorMessage('Unable to load todos');
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 3000);
+        triggerError('Unable to load todos');
       });
   }, []);
 
@@ -44,12 +55,12 @@ export const App: React.FC = () => {
     event.preventDefault();
 
     if (!title.trim()) {
-      setErrorMessage('Title should not be empty');
-      setTimeout(() => setErrorMessage(''), 3000);
+      triggerError('Title should not be empty');
 
       return;
     }
 
+    setErrorMessage('');
     setIsSubmitting(true);
 
     addTodo({
@@ -62,8 +73,7 @@ export const App: React.FC = () => {
         setTitle('');
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
-        setTimeout(() => setErrorMessage(''), 3000);
+        triggerError('Unable to add a todo');
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -71,6 +81,7 @@ export const App: React.FC = () => {
   };
 
   const handleDelete = (todoId: number) => {
+    setErrorMessage('');
     setProcessingIds(current => [...current, todoId]);
 
     deleteTodo(todoId)
@@ -80,8 +91,7 @@ export const App: React.FC = () => {
         );
       })
       .catch(() => {
-        setErrorMessage('Unable to delete a todo');
-        setTimeout(() => setErrorMessage(''), 3000);
+        triggerError('Unable to delete a todo');
       })
       .finally(() => {
         setProcessingIds(current => current.filter(id => id !== todoId));
@@ -97,129 +107,34 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
-
-          <form onSubmit={handleSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              disabled={isSubmitting}
-            />
-          </form>
-        </header>
+        <Header
+          title={title}
+          setTitle={setTitle}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
 
         {todos.length > 0 && (
           <>
-            <section className="todoapp__main" data-cy="TodoList">
-              {visibleTodos.map(todo => (
-                <div
-                  data-cy="Todo"
-                  className={`todo ${todo.completed ? 'completed' : ''}`}
-                  key={todo.id}
-                >
-                  <label className="todo__status-label">
-                    <input
-                      data-cy="TodoStatus"
-                      type="checkbox"
-                      className="todo__status"
-                      checked={todo.completed}
-                      readOnly
-                    />
-                  </label>
+            <TodoList
+              todos={visibleTodos}
+              processingIds={processingIds}
+              onDelete={handleDelete}
+            />
 
-                  <span data-cy="TodoTitle" className="todo__title">
-                    {todo.title}
-                  </span>
-
-                  <button
-                    type="button"
-                    className="todo__remove"
-                    data-cy="TodoDelete"
-                    onClick={() => handleDelete(todo.id)}
-                  >
-                    ×
-                  </button>
-
-                  {/* Якщо ID цього завдання є в масиві processingIds, додаємо клас is-active */}
-                  <div
-                    data-cy="TodoLoader"
-                    className={`modal overlay ${processingIds.includes(todo.id) ? 'is-active' : ''}`}
-                  >
-                    {/* eslint-disable-next-line max-len */}
-                    <div className="modal-background has-background-white-ter" />
-                    <div className="loader" />
-                  </div>
-                </div>
-              ))}
-            </section>
-
-            <footer className="todoapp__footer" data-cy="Footer">
-              <span className="todo-count" data-cy="TodosCounter">
-                {`${activeTodosCount} ${activeTodosCount === 1 ? 'item' : 'items'} left`}
-              </span>
-
-              <nav className="filter" data-cy="Filter">
-                <a
-                  href="#/"
-                  className={`filter__link ${filterStatus === 'All' ? 'selected' : ''}`}
-                  data-cy="FilterLinkAll"
-                  onClick={() => setFilterStatus('All')}
-                >
-                  All
-                </a>
-
-                <a
-                  href="#/active"
-                  className={`filter__link ${filterStatus === 'Active' ? 'selected' : ''}`}
-                  data-cy="FilterLinkActive"
-                  onClick={() => setFilterStatus('Active')}
-                >
-                  Active
-                </a>
-
-                <a
-                  href="#/completed"
-                  className={`filter__link ${filterStatus === 'Completed' ? 'selected' : ''}`}
-                  data-cy="FilterLinkCompleted"
-                  onClick={() => setFilterStatus('Completed')}
-                >
-                  Completed
-                </a>
-              </nav>
-
-              <button
-                type="button"
-                className="todoapp__clear-completed"
-                data-cy="ClearCompletedButton"
-              >
-                Clear completed
-              </button>
-            </footer>
+            <Footer
+              activeTodosCount={activeTodosCount}
+              filterStatus={filterStatus}
+              onFilterChange={setFilterStatus}
+            />
           </>
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        message={errorMessage}
+        onClose={() => setErrorMessage('')}
+      />
     </div>
   );
 };
