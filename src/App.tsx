@@ -1,13 +1,73 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { addTodo, getTodos, USER_ID } from './api/todos';
+import { AddForm } from './components/AddForm/AddForm';
+import { ErrComponent } from './components/ErrComponent/ErrComponent';
+import { TodoList } from './components/TodoList/TodoList';
+import { NewTodo, Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      if (!USER_ID) {
+        return;
+      }
+
+      setIsLoading(true);
+      setErrorMessage('');
+
+      try {
+        const fetchedTodos = await getTodos();
+
+        setTodos(fetchedTodos);
+      } catch (error) {
+        setErrorMessage('Unable to load todos');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTodos();
+  }, []);
+
   if (!USER_ID) {
     return <UserWarning />;
   }
+
+  const onSubmit = async (title: string): Promise<boolean> => {
+    if (isLoading) {
+      return false;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const newTodo: NewTodo = {
+        title,
+        completed: false,
+        userId: USER_ID,
+      };
+
+      const createdTodo = await addTodo(newTodo);
+
+      setTodos(currentTodos => [createdTodo, ...currentTodos]);
+
+      return true;
+    } catch (error) {
+      setErrorMessage('Unable to add a todo');
+
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="todoapp">
@@ -23,17 +83,15 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
+          <AddForm
+            onSubmit={onSubmit}
+            onError={setErrorMessage}
+            disabled={isLoading}
+          />
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
+          <TodoList todos={todos} />
           {/* This is a completed todo */}
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
@@ -180,16 +238,7 @@ export const App: React.FC = () => {
           </button>
         </footer>
       </div>
-
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
+      {/* {Unable to load todos
         <br />
         Title should not be empty
         <br />
@@ -197,8 +246,12 @@ export const App: React.FC = () => {
         <br />
         Unable to delete a todo
         <br />
-        Unable to update a todo
-      </div>
+        Unable to update a todo} */}
+      <ErrComponent
+        errMessage={errorMessage}
+        onClose={setErrorMessage}
+        duration={1000}
+      />
     </div>
   );
 };
