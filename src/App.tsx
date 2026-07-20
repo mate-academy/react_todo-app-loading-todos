@@ -56,6 +56,7 @@ export const App: React.FC = () => {
   }, [todos, filter]);
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
+  const itemWord = activeTodosCount === 1 ? 'item' : 'items';
 
   const completedTodosCount = todos.filter(todo => todo.completed).length;
 
@@ -124,7 +125,9 @@ export const App: React.FC = () => {
                   </button>
 
                   <div data-cy="TodoLoader" className="modal overlay">
-                    <div className="modal-background has-background-white-ter" />
+                    <div
+                      className={'modal-background has-background-white-ter'}
+                    />
 
                     <div className="loader" />
                   </div>
@@ -134,8 +137,7 @@ export const App: React.FC = () => {
 
             <footer className="todoapp__footer" data-cy="Footer">
               <span className="todo-count" data-cy="TodosCounter">
-                {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'}{' '}
-                left
+                {activeTodosCount} {itemWord} left
               </span>
 
               <nav className="filter" data-cy="Filter">
