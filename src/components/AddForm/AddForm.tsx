@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   onSubmit: (title: string) => Promise<boolean>;
@@ -12,6 +12,13 @@ export const AddForm: React.FC<Props> = ({
   disabled = false,
 }) => {
   const [title, setTitle] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!disabled && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [disabled]);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,6 +49,7 @@ export const AddForm: React.FC<Props> = ({
   return (
     <form onSubmit={submitHandler}>
       <input
+        ref={inputRef}
         data-cy="NewTodoField"
         type="text"
         className="todoapp__new-todo"
@@ -50,7 +58,6 @@ export const AddForm: React.FC<Props> = ({
         onChange={changeHandler}
         disabled={disabled}
         aria-disabled={disabled}
-        autoFocus
       />
     </form>
   );
