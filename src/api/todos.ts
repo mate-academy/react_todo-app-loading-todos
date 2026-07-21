@@ -1,4 +1,4 @@
-import { NewTodo, Todo } from '../types/Todo';
+import { TodoId, NewTodo, Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
 export const USER_ID = 4369;
@@ -11,4 +11,8 @@ export const getTodos = () => {
 
 export const addTodo = (newTodo: NewTodo) => {
   return client.post<Todo>(`/todos?userId=${USER_ID}`, newTodo);
+};
+
+export const deleteTodo = (todoId: TodoId) => {
+  return client.delete(`/todos/${todoId}?userId=${USER_ID}`);
 };

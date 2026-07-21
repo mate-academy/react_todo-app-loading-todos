@@ -2,16 +2,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { addTodo, getTodos, USER_ID } from './api/todos';
+import { addTodo, deleteTodo, getTodos, USER_ID } from './api/todos';
 import { AddForm } from './components/AddForm/AddForm';
 import { ErrComponent } from './components/ErrComponent/ErrComponent';
 import { TodoList } from './components/TodoList/TodoList';
-import { NewTodo, Todo } from './types/Todo';
+import { NewTodo, Todo, TodoId } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [deletingId, setDeletingId] = useState<TodoId | null>(null);
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -69,6 +70,27 @@ export const App: React.FC = () => {
     }
   };
 
+  const onDelete = async (todoId: TodoId): Promise<void> => {
+    if (deletingId === todoId) {
+      return;
+    }
+
+    setDeletingId(todoId);
+    setErrorMessage('');
+
+    const previousTodos = [...todos];
+
+    try {
+      await deleteTodo(todoId);
+      setTodos(current => current.filter(t => t.id !== todoId));
+    } catch (error) {
+      setErrorMessage('Unable to delete a todo');
+      setTodos(previousTodos);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
@@ -91,7 +113,7 @@ export const App: React.FC = () => {
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onDelete={onDelete} deletingId={deletingId} />
           {/* This is a completed todo */}
           <div data-cy="Todo" className="todo completed">
             <label className="todo__status-label">
