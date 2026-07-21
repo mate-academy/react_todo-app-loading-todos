@@ -63,8 +63,16 @@ export const App: React.FC = () => {
     }
   }, [filter, todos]);
 
+  const handleFilterChange = (nextFilter: FilterType) => {
+    return (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      setFilter(nextFilter);
+    };
+  };
+
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
-  const areAllCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+  const areAllCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -116,7 +124,11 @@ export const App: React.FC = () => {
                   {todo.title}
                 </span>
 
-                <button type="button" className="todo__remove" data-cy="TodoDelete">
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                >
                   ×
                 </button>
 
@@ -142,10 +154,7 @@ export const App: React.FC = () => {
                   selected: filter === FILTERS.all,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={event => {
-                  event.preventDefault();
-                  setFilter(FILTERS.all);
-                }}
+                onClick={handleFilterChange(FILTERS.all)}
               >
                 All
               </a>
@@ -156,10 +165,7 @@ export const App: React.FC = () => {
                   selected: filter === FILTERS.active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={event => {
-                  event.preventDefault();
-                  setFilter(FILTERS.active);
-                }}
+                onClick={handleFilterChange(FILTERS.active)}
               >
                 Active
               </a>
@@ -170,10 +176,7 @@ export const App: React.FC = () => {
                   selected: filter === FILTERS.completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={event => {
-                  event.preventDefault();
-                  setFilter(FILTERS.completed);
-                }}
+                onClick={handleFilterChange(FILTERS.completed)}
               >
                 Completed
               </a>

@@ -1,6 +1,10 @@
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
+type StoredUser = {
+  id?: number;
+};
+
 const getUserId = () => {
   if (typeof window === 'undefined') {
     return 0;
@@ -13,7 +17,7 @@ const getUserId = () => {
       return 0;
     }
 
-    const parsedUser = JSON.parse(savedUser) as { id?: number };
+    const parsedUser = JSON.parse(savedUser) as StoredUser;
 
     return parsedUser.id ?? 0;
   } catch {
