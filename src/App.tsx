@@ -31,7 +31,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     inputRef.current?.focus();
     getTodos()
-      .then((data) => {
+      .then(data => {
         setTodos(data);
       })
       .catch(() => {
@@ -52,6 +52,7 @@ export const App: React.FC = () => {
 
     if (!trimmedTitle) {
       showError(ErrorMessage.TITLE_EMPTY);
+
       return;
     }
 
@@ -71,8 +72,8 @@ export const App: React.FC = () => {
       title: trimmedTitle,
       completed: false,
     })
-      .then((createdTodo) => {
-        setTodos((prevTodos) => [...prevTodos, createdTodo]);
+      .then(createdTodo => {
+        setTodos(prevTodos => [...prevTodos, createdTodo]);
         setTitle('');
       })
       .catch(() => {
@@ -85,36 +86,42 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteTodo = (todoId: number) => {
-    setLoadingTodoIds((prev) => [...prev, todoId]);
+    setLoadingTodoIds(prev => [...prev, todoId]);
 
     deleteTodo(todoId)
       .then(() => {
-        setTodos((prev) => prev.filter((todo) => todo.id !== todoId));
+        setTodos(prev => prev.filter(todo => todo.id !== todoId));
       })
       .catch(() => {
         showError(ErrorMessage.DELETE);
       })
       .finally(() => {
-        setLoadingTodoIds((prev) => prev.filter((id) => id !== todoId));
+        setLoadingTodoIds(prev => prev.filter(id => id !== todoId));
       });
   };
 
   const handleClearCompleted = () => {
-    const completedTodos = todos.filter((todo) => todo.completed);
+    const completedTodos = todos.filter(todo => todo.completed);
 
-    completedTodos.forEach((todo) => {
+    completedTodos.forEach(todo => {
       handleDeleteTodo(todo.id);
     });
   };
 
-  const visibleTodos = todos.filter((todo) => {
-    if (filter === Filter.ACTIVE) return !todo.completed;
-    if (filter === Filter.COMPLETED) return todo.completed;
+  const visibleTodos = todos.filter(todo => {
+    if (filter === Filter.ACTIVE) {
+      return !todo.completed;
+    }
+
+    if (filter === Filter.COMPLETED) {
+      return todo.completed;
+    }
+
     return true;
   });
 
-  const activeCount = todos.filter((todo) => !todo.completed).length;
-  const hasCompleted = todos.some((todo) => todo.completed);
+  const activeCount = todos.filter(todo => !todo.completed).length;
+  const hasCompleted = todos.some(todo => todo.completed);
   const showContent = todos.length > 0 || tempTodo;
 
   return (

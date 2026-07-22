@@ -24,9 +24,7 @@ export const Header: React.FC<Props> = ({
       {todosCount > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${
-            activeCount === 0 ? 'active' : ''
-          }`}
+          className={`todoapp__toggle-all ${activeCount === 0 ? 'active' : ''}`}
           data-cy="ToggleAllButton"
         />
       )}
@@ -39,7 +37,7 @@ export const Header: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           disabled={isSubmitting}
         />
       </form>
