@@ -15,6 +15,13 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   hasCompletedTodos,
 }) => {
+  const handleFilterChange = (selectedFilter: Filter) => {
+    return (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      setFilter(selectedFilter);
+    };
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -30,10 +37,7 @@ export const Footer: React.FC<Props> = ({
               selected: filter === filterValue,
             })}
             data-cy={`FilterLink${filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}`}
-            onClick={e => {
-              e.preventDefault();
-              setFilter(filterValue);
-            }}
+            onClick={handleFilterChange(filterValue)}
           >
             {filterValue.charAt(0).toUpperCase() + filterValue.slice(1)}
           </a>
