@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import {
   addTodo,
@@ -11,7 +10,9 @@ import {
 } from './api/todos';
 import { AddForm } from './components/AddForm/AddForm';
 import { ErrComponent } from './components/ErrComponent/ErrComponent';
+import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
+import { FilterStatus } from './types/Filter';
 import { NewTodo, Todo, TodoId } from './types/Todo';
 
 export const App: React.FC = () => {
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loadingTodoId, setLoadingTodoId] = useState<TodoId | null>(null);
   const [editingId, setEditingId] = useState<TodoId | null>(null);
+  const [filter, setFilter] = useState<FilterStatus>('all');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -43,6 +45,17 @@ export const App: React.FC = () => {
 
     loadTodos();
   }, []);
+
+  const visibleTodos = useMemo(() => {
+    switch (filter) {
+      case 'active':
+        return todos.filter(todo => !todo.completed);
+      case 'completed':
+        return todos.filter(todo => todo.completed);
+      default:
+        return todos;
+    }
+  }, [todos, filter]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -125,20 +138,72 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleClearCompleted = async () => {
+    const completedTodos = todos.filter(todo => todo.completed);
+
+    if (!completedTodos.length) {
+      return;
+    }
+
+    const previousTodos = [...todos];
+
+    setTodos(current => current.filter(todo => !todo.completed));
+    setErrorMessage('');
+
+    try {
+      await Promise.all(completedTodos.map(todo => deleteTodo(todo.id)));
+    } catch (error) {
+      setTodos(previousTodos);
+      setErrorMessage('Unable to delete a some todo');
+    }
+  };
+
+  const activeTodosCount = todos.filter(t => !t.completed).length;
+  const isAllCompleted = todos.length > 0 && activeTodosCount === 0;
+
+  const handleToggleAll = async () => {
+    const targetStatus = !isAllCompleted;
+
+    const todosToUpdate = todos.filter(todo => todo.completed !== targetStatus);
+
+    if (todosToUpdate.length === 0) {
+      return;
+    }
+
+    const previousTodos = [...todos];
+
+    setTodos(current =>
+      current.map(todo => ({ ...todo, completed: targetStatus })),
+    );
+    setErrorMessage('');
+
+    try {
+      await Promise.all(
+        todosToUpdate.map(todo =>
+          changeTodo({ ...todo, completed: targetStatus }),
+        ),
+      );
+    } catch (error) {
+      setTodos(previousTodos);
+      setErrorMessage('Unable to toggle all todos');
+    }
+  };
+
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={classNames('todoapp__toggle-all', {
+              active: isAllCompleted,
+            })}
             data-cy="ToggleAllButton"
+            onClick={handleToggleAll}
           />
 
-          {/* Add a todo on form submit */}
           <AddForm
             onSubmit={onSubmitTodo}
             onError={setErrorMessage}
@@ -148,7 +213,7 @@ export const App: React.FC = () => {
 
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
-            todos={todos}
+            todos={visibleTodos}
             onDelete={onDeleteTodo}
             onChange={onChangeTodo}
             loadingTodoId={loadingTodoId}
@@ -157,60 +222,15 @@ export const App: React.FC = () => {
           />
         </section>
 
-        {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              3 items left
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className="filter__link selected"
-                data-cy="FilterLinkAll"
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className="filter__link"
-                data-cy="FilterLinkActive"
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className="filter__link"
-                data-cy="FilterLinkCompleted"
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            todos={todos}
+            filter={filter}
+            onFilterChange={setFilter}
+            onClearCompleted={handleClearCompleted}
+          />
         )}
       </div>
-      {/* {Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo} */}
       <ErrComponent
         errMessage={errorMessage}
         onClose={setErrorMessage}

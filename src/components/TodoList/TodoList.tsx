@@ -11,29 +11,26 @@ interface Props {
   setEditingId: (id: TodoId | null) => void;
 }
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  onDelete,
-  onChange,
-  loadingTodoId,
-  editingId,
-  setEditingId,
-}) => {
-  return (
-    <ul>
-      {todos.map(todo => {
-        return (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onDelete={onDelete}
-            onChange={onChange}
-            isLoading={loadingTodoId === todo.id}
-            isEditing={editingId === todo.id}
-            setEditingId={setEditingId}
-          />
-        );
-      })}
-    </ul>
-  );
-};
+export const TodoList: React.FC<Props> = React.memo(
+  ({ todos, onDelete, onChange, loadingTodoId, editingId, setEditingId }) => {
+    return (
+      <ul>
+        {todos.map(todo => {
+          return (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onDelete={onDelete}
+              onChange={onChange}
+              isLoading={loadingTodoId === todo.id}
+              isEditing={editingId === todo.id}
+              setEditingId={setEditingId}
+            />
+          );
+        })}
+      </ul>
+    );
+  },
+);
+
+TodoList.displayName = 'TodoList';
