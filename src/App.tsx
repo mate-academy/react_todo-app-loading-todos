@@ -12,6 +12,7 @@ import { AddForm } from './components/AddForm/AddForm';
 import { ErrComponent } from './components/ErrComponent/ErrComponent';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
+import { ErrorMessage } from './types/Errors';
 import { FilterStatus } from './types/Filter';
 import { NewTodo, Todo, TodoId } from './types/Todo';
 
@@ -19,7 +20,9 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [skeletonTodo, setSkeletonTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
+    ErrorMessage.None,
+  );
   const [loadingTodoId, setLoadingTodoId] = useState<TodoId | null>(null);
   const [editingId, setEditingId] = useState<TodoId | null>(null);
   const [filter, setFilter] = useState<FilterStatus>('all');
@@ -31,14 +34,14 @@ export const App: React.FC = () => {
       }
 
       setIsLoading(true);
-      setErrorMessage('');
+      setErrorMessage(ErrorMessage.None);
 
       try {
         const fetchedTodos = await getTodos();
 
         setTodos(fetchedTodos);
       } catch (error) {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.Load);
       } finally {
         setIsLoading(false);
       }
@@ -68,7 +71,7 @@ export const App: React.FC = () => {
     }
 
     setIsLoading(true);
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.None);
 
     const newTodo: NewTodo = {
       title,
@@ -85,7 +88,7 @@ export const App: React.FC = () => {
 
       return true;
     } catch (error) {
-      setErrorMessage('Unable to add a todo');
+      setErrorMessage(ErrorMessage.Add);
 
       return false;
     } finally {
@@ -100,7 +103,7 @@ export const App: React.FC = () => {
     }
 
     setLoadingTodoId(todoId);
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.None);
 
     try {
       await deleteTodo(todoId);
@@ -109,7 +112,7 @@ export const App: React.FC = () => {
 
       return true;
     } catch (error) {
-      setErrorMessage('Unable to delete a todo');
+      setErrorMessage(ErrorMessage.Delete);
 
       return false;
     } finally {
@@ -119,7 +122,7 @@ export const App: React.FC = () => {
 
   const onChangeTodo = async (newTodo: Todo): Promise<boolean> => {
     setLoadingTodoId(newTodo.id);
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.None);
 
     try {
       await changeTodo(newTodo);
@@ -130,7 +133,7 @@ export const App: React.FC = () => {
 
       return true;
     } catch (err) {
-      setErrorMessage('Unable to update a todo');
+      setErrorMessage(ErrorMessage.Update);
 
       return false;
     } finally {
@@ -148,13 +151,13 @@ export const App: React.FC = () => {
     const previousTodos = [...todos];
 
     setTodos(current => current.filter(todo => !todo.completed));
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.None);
 
     try {
       await Promise.all(completedTodos.map(todo => deleteTodo(todo.id)));
     } catch (error) {
       setTodos(previousTodos);
-      setErrorMessage('Unable to clear completed todos');
+      setErrorMessage(ErrorMessage.Clear);
     }
   };
 
@@ -175,7 +178,7 @@ export const App: React.FC = () => {
     setTodos(current =>
       current.map(todo => ({ ...todo, completed: targetStatus })),
     );
-    setErrorMessage('');
+    setErrorMessage(ErrorMessage.None);
 
     try {
       await Promise.all(
@@ -185,7 +188,7 @@ export const App: React.FC = () => {
       );
     } catch (error) {
       setTodos(previousTodos);
-      setErrorMessage('Unable to toggle all todos');
+      setErrorMessage(ErrorMessage.Toggle);
     }
   };
 

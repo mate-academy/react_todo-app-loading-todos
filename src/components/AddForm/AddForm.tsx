@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ErrorMessage } from '../../types/Errors';
 
 interface Props {
   onSubmit: (title: string) => Promise<boolean>;
-  onError: (value: string) => void;
+  onError: (value: ErrorMessage) => void;
   disabled?: boolean;
 }
 
@@ -29,7 +30,7 @@ export const AddForm: React.FC<Props> = ({
     const normalizedTitle = title.trim();
 
     if (!normalizedTitle) {
-      onError('Title should not be empty');
+      onError(ErrorMessage.Title);
 
       return;
     }
@@ -43,7 +44,7 @@ export const AddForm: React.FC<Props> = ({
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    onError('');
+    onError(ErrorMessage.None);
   };
 
   return (

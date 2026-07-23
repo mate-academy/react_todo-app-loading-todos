@@ -1,9 +1,10 @@
 import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { ErrorMessage } from '../../types/Errors';
 
 interface Props {
-  onClose: (err: string) => void;
-  errMessage: string;
+  onClose: (err: ErrorMessage) => void;
+  errMessage: ErrorMessage;
   duration?: number;
 }
 
@@ -22,7 +23,7 @@ export const ErrComponent: React.FC<Props> = ({
     setLocalErr(errMessage);
 
     const timerId = setTimeout(() => {
-      onClose('');
+      onClose(ErrorMessage.None);
     }, duration);
 
     return () => clearTimeout(timerId);
@@ -40,7 +41,7 @@ export const ErrComponent: React.FC<Props> = ({
         type="button"
         className="delete"
         onClick={() => {
-          onClose('');
+          onClose(ErrorMessage.None);
         }}
       />
       {localErr}
