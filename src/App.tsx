@@ -121,18 +121,16 @@ export const App: React.FC = () => {
     setLoadingTodoId(newTodo.id);
     setErrorMessage('');
 
-    const previousTodos = [...todos];
-
     try {
+      await changeTodo(newTodo);
+
       setTodos(currentTodos =>
         currentTodos.map(todo => (todo.id === newTodo.id ? newTodo : todo)),
       );
-      await changeTodo(newTodo);
 
       return true;
     } catch (err) {
       setErrorMessage('Unable to update a todo');
-      setTodos(previousTodos);
 
       return false;
     } finally {
