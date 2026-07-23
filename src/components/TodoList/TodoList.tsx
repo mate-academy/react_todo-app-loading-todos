@@ -4,6 +4,7 @@ import { TodoItem } from '../Todo/TodoItem';
 
 interface Props {
   todos: Todo[];
+  skeletonTodo?: Todo | null;
   onDelete: (todoId: TodoId) => Promise<boolean>;
   loadingTodoId: TodoId | null;
   onChange: (newTodo: Todo) => Promise<boolean>;
@@ -12,9 +13,28 @@ interface Props {
 }
 
 export const TodoList: React.FC<Props> = React.memo(
-  ({ todos, onDelete, onChange, loadingTodoId, editingId, setEditingId }) => {
+  ({
+    todos,
+    skeletonTodo,
+    onDelete,
+    onChange,
+    loadingTodoId,
+    editingId,
+    setEditingId,
+  }) => {
     return (
       <ul>
+        {skeletonTodo && (
+          <TodoItem
+            key={skeletonTodo.id}
+            todo={skeletonTodo}
+            isLoading={true}
+            isEditing={false}
+            onDelete={async () => false}
+            onChange={async () => false}
+            setEditingId={() => {}}
+          />
+        )}
         {todos.map(todo => {
           return (
             <TodoItem

@@ -17,6 +17,7 @@ import { NewTodo, Todo, TodoId } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [skeletonTodo, setSkeletonTodo] = useState<Todo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loadingTodoId, setLoadingTodoId] = useState<TodoId | null>(null);
@@ -69,13 +70,15 @@ export const App: React.FC = () => {
     setIsLoading(true);
     setErrorMessage('');
 
-    try {
-      const newTodo: NewTodo = {
-        title,
-        completed: false,
-        userId: USER_ID,
-      };
+    const newTodo: NewTodo = {
+      title,
+      completed: false,
+      userId: USER_ID,
+    };
 
+    setSkeletonTodo({ ...newTodo, id: 0 });
+
+    try {
       const createdTodo = await addTodo(newTodo);
 
       setTodos(currentTodos => [createdTodo, ...currentTodos]);
@@ -86,6 +89,7 @@ export const App: React.FC = () => {
 
       return false;
     } finally {
+      setSkeletonTodo(null);
       setIsLoading(false);
     }
   };
@@ -98,16 +102,14 @@ export const App: React.FC = () => {
     setLoadingTodoId(todoId);
     setErrorMessage('');
 
-    const previousTodos = [...todos];
-
     try {
-      setTodos(current => current.filter(t => t.id !== todoId));
       await deleteTodo(todoId);
+
+      setTodos(current => current.filter(t => t.id !== todoId));
 
       return true;
     } catch (error) {
       setErrorMessage('Unable to delete a todo');
-      setTodos(previousTodos);
 
       return false;
     } finally {
@@ -154,7 +156,7 @@ export const App: React.FC = () => {
       await Promise.all(completedTodos.map(todo => deleteTodo(todo.id)));
     } catch (error) {
       setTodos(previousTodos);
-      setErrorMessage('Unable to delete a some todo');
+      setErrorMessage('Unable to clear completed todos');
     }
   };
 
@@ -195,14 +197,16 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            type="button"
-            className={classNames('todoapp__toggle-all', {
-              active: isAllCompleted,
-            })}
-            data-cy="ToggleAllButton"
-            onClick={handleToggleAll}
-          />
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className={classNames('todoapp__toggle-all', {
+                active: isAllCompleted,
+              })}
+              data-cy="ToggleAllButton"
+              onClick={handleToggleAll}
+            />
+          )}
 
           <AddForm
             onSubmit={onSubmitTodo}
@@ -214,6 +218,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
             todos={visibleTodos}
+            skeletonTodo={skeletonTodo}
             onDelete={onDeleteTodo}
             onChange={onChangeTodo}
             loadingTodoId={loadingTodoId}
