@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [startusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [startusFilter, setStatusFilter] = useState('all');
 
   if (!USER_ID) {
     return <UserWarning />;
