@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[] | null;
-  statusFilter: 'all' | 'active' | 'completed';
+  statusFilter: string;
   setStatusFilter: (filter: string) => void;
 };
 
