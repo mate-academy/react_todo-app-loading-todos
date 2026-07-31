@@ -18,6 +18,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [startusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -31,9 +32,9 @@ export const App: React.FC = () => {
       .get(`/todos?userId=${USER_ID}`)
       .then(setTodos)
       .catch(() => setIsError(true))
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsLoading(false))
+      .catch(() => setIsError(true));
   }, []);
-
   //eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (isError) {
@@ -56,7 +57,13 @@ export const App: React.FC = () => {
           <TodoApp todos={todos} isLoading={isLoading} />
         )}
         {/* Hide the footer if there are no todos */}
-        {todos && todos.length > 0 && <Footer />}
+        {todos && todos.length > 0 && (
+          <Footer
+            todos={todos}
+            statusFilter={startusFilter}
+            setStatusFilter={setStatusFilter}
+          />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}

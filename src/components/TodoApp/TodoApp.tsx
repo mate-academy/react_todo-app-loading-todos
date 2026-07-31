@@ -2,15 +2,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader';
 
 type Props = {
   todos: Todo[] | null;
+  isLoading: boolean;
 };
 
-export const TodoApp: React.FC<Props> = ({ todos }) => {
+export const TodoApp: React.FC<Props> = ({ todos, isLoading }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {/* <Loader isLoading={isLoading} /> */}
+      <Loader isLoading={isLoading} />
       {/* This is a completed todo */}
       {todos &&
         todos.map(el => {
@@ -43,6 +45,7 @@ export const TodoApp: React.FC<Props> = ({ todos }) => {
               </button>
 
               {/* overlay will cover the todo while it is being deleted or updated */}
+              <Loader />
             </div>
           );
         })}
