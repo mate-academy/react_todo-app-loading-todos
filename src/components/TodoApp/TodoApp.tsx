@@ -12,7 +12,7 @@ type Props = {
 export const TodoApp: React.FC<Props> = ({ todos, isLoading }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
       {/* This is a completed todo */}
       {todos &&
         todos.map(el => {
@@ -45,7 +45,7 @@ export const TodoApp: React.FC<Props> = ({ todos, isLoading }) => {
               </button>
 
               {/* overlay will cover the todo while it is being deleted or updated */}
-              <Loader />
+              <Loader isLoading={isLoading} />
             </div>
           );
         })}

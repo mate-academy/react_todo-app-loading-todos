@@ -12,7 +12,6 @@ import { Footer } from './components/footer';
 import { ErrorNotification } from './components/ErrorNotification';
 import { Header } from './components/Header';
 import { TodoApp } from './components/TodoApp/TodoApp';
-import { Loader } from './components/Loader/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
@@ -32,8 +31,7 @@ export const App: React.FC = () => {
       .get(`/todos?userId=${USER_ID}`)
       .then(setTodos)
       .catch(() => setIsError(true))
-      .finally(() => setIsLoading(false))
-      .catch(() => setIsError(true));
+      .finally(() => setIsLoading(false));
   }, []);
   //eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -47,7 +45,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="todoapp">
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
