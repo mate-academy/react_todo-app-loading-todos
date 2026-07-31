@@ -2,17 +2,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import { Todo } from '../../types/Todo';
-import { Loader } from '../Loader';
 
 type Props = {
   todos: Todo[] | null;
-  isLoading: boolean;
 };
 
-export const TodoApp: React.FC<Props> = ({ todos, isLoading }) => {
+export const TodoApp: React.FC<Props> = ({ todos }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
       {/* This is a completed todo */}
       {todos &&
         todos.map(el => {

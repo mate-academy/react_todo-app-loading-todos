@@ -2,9 +2,10 @@ import React from 'react';
 
 type Props = {
   isError: boolean;
+  setIsError: (err: boolean) => void;
 };
 
-export const ErrorNotification: React.FC<Props> = ({ isError }) => {
+export const ErrorNotification: React.FC<Props> = ({ isError, setIsError }) => {
   const toHide = isError === false ? 'hidden' : '';
 
   return (
@@ -12,7 +13,12 @@ export const ErrorNotification: React.FC<Props> = ({ isError }) => {
       data-cy="ErrorNotification"
       className={`notification is-danger is-light has-text-weight-normal ${toHide}`}
     >
-      <button data-cy="HideErrorButton" type="button" className="delete" />
+      <button
+        data-cy="HideErrorButton"
+        type="button"
+        className="delete"
+        onClick={() => setIsError(false)}
+      />
       {/* show only one message at a time */}
       Unable to load todos
       <br />

@@ -9,9 +9,7 @@ export const Loader: React.FC<Props> = ({ isLoading }) => {
       className={`modal overlay ${isLoading ? '' : 'hidden'}`}
     >
       <div className="modal-background has-background-white-ter" />
-      <div className="loader">
-        {isLoading && <div data-cy="TodoLoader">Loading</div>}
-      </div>
+      <div className="loader">{isLoading && <div>Loading</div>}</div>
     </div>
   );
 };

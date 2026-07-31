@@ -61,7 +61,7 @@ export const App: React.FC = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <ErrorNotification isError={isError} />
+      <ErrorNotification isError={isError} setIsError={setIsError} />
     </div>
   );
 };
