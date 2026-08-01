@@ -12,6 +12,14 @@ export const Footer: React.FC<Props> = ({
   statusFilter,
   setStatusFilter,
 }) => {
+  const setStatus = (
+    val: string,
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+    setStatusFilter(val);
+  };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -25,8 +33,7 @@ export const Footer: React.FC<Props> = ({
           className={`filter__link ${statusFilter === 'all' ? 'selected' : ''}`}
           data-cy="FilterLinkAll"
           onClick={event => {
-            event.preventDefault();
-            setStatusFilter('all');
+            setStatus('all', event);
           }}
         >
           All
@@ -37,8 +44,7 @@ export const Footer: React.FC<Props> = ({
           className={`filter__link ${statusFilter === 'active' ? 'selected' : ''}`}
           data-cy="FilterLinkActive"
           onClick={event => {
-            event.preventDefault();
-            setStatusFilter('active');
+            setStatus('active', event);
           }}
         >
           Active
@@ -49,8 +55,7 @@ export const Footer: React.FC<Props> = ({
           className={`filter__link ${statusFilter === 'completed' ? 'selected' : ''}`}
           data-cy="FilterLinkCompleted"
           onClick={event => {
-            event.preventDefault();
-            setStatusFilter('completed');
+            setStatus('completed', event);
           }}
         >
           Completed
