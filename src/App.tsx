@@ -53,7 +53,11 @@ export const App: React.FC = () => {
         <Header />
 
         {todos && todos.length > 0 && (
-          <TodoApp todos={todos} isLoading={isLoading} />
+          <TodoApp
+            todos={todos}
+            isLoading={isLoading}
+            statusFilter={statusFilter}
+          />
         )}
         {/* Hide the footer if there are no todos */}
         {todos && todos.length > 0 && (

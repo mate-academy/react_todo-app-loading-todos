@@ -7,15 +7,32 @@ import { Loader } from '../Loader';
 type Props = {
   todos: Todo[] | null;
   isLoading: boolean;
+  statusFilter: string;
 };
 
-export const TodoApp: React.FC<Props> = ({ todos, isLoading }) => {
+export const TodoApp: React.FC<Props> = ({
+  todos,
+  isLoading,
+  statusFilter,
+}) => {
+  const filteredTodos = todos?.filter(todo => {
+    if (statusFilter === 'completed') {
+      return todo.completed;
+    }
+
+    if (statusFilter === 'active') {
+      return !todo.completed;
+    }
+
+    return true;
+  });
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {/* <Loader isLoading={isLoading} /> */}
       {/* This is a completed todo */}
-      {todos &&
-        todos.map(el => {
+      {filteredTodos &&
+        filteredTodos.map(el => {
           return (
             <div
               data-cy="Todo"
