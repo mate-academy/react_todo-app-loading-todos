@@ -10,7 +10,7 @@ export const Loader: React.FC<Props> = ({ isLoading = false }) => {
     >
       <div className="modal-background has-background-white-ter" />
       <div className="loader">
-        {isLoading && <div data-cy="TodoLoader">Loading</div>}
+        {/* {isLoading && <div data-cy="TodoLoader">Loading</div>} */}
       </div>
       <div className="loader" />
     </div>

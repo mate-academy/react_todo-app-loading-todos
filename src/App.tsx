@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [startusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
         {todos && todos.length > 0 && (
           <Footer
             todos={todos}
-            statusFilter={startusFilter}
+            statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
           />
         )}
