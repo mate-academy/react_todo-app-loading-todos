@@ -13,23 +13,36 @@ import {
 import { Todolist } from './forArray/Todolist';
 import { Todofilter } from './filter/Todofilter';
 
+export enum Filter {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
+export enum ErrorMessage {
+  Load = 'Unable to load todos',
+  Title = 'Title should not be empty',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
+  None = '',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState('');
 
-  const [deleteError, setdeleteError] = useState(false);
-  const [Error, setError] = useState(false);
-  const [Rror, setRror] = useState(false);
-  const [hidden, sethidden] = useState(false);
-  const [notTitle, setNotTitle] = useState(false);
-  const [Update, setUpdate] = useState(false);
-  const [firstFilter, setFirstFilter] = useState('All');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
+    ErrorMessage.None,
+  );
+
+  const [firstFilter, setFirstFilter] = useState<Filter>(Filter.All);
 
   const FilteredArray = todos.filter(obj => {
     const fExam =
-      firstFilter === 'All' ||
-      (firstFilter === 'Active' && !obj.completed) ||
-      (firstFilter === 'Completed' && obj.completed);
+      firstFilter === Filter.All ||
+      (firstFilter === Filter.Active && !obj.completed) ||
+      (firstFilter === Filter.Completed && obj.completed);
 
     return fExam;
   });
@@ -38,29 +51,23 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setRror(true);
-        sethidden(true);
+        setErrorMessage(ErrorMessage.Load);
       });
   }, []);
 
   useEffect(() => {
-    if (!hidden) {
+    if (!errorMessage) {
       return;
     }
 
     const timerId = setTimeout(() => {
-      sethidden(false);
-      setdeleteError(false);
-      setError(false);
-      setRror(false);
-      setNotTitle(false);
-      setUpdate(false);
+      setErrorMessage(ErrorMessage.None);
     }, 3000);
 
     return () => {
       clearTimeout(timerId);
     };
-  }, [hidden]);
+  }, [errorMessage]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -70,6 +77,8 @@ export const App: React.FC = () => {
     event.preventDefault();
 
     if (!title.trim()) {
+      setErrorMessage(ErrorMessage.Title);
+
       return;
     }
 
@@ -81,12 +90,9 @@ export const App: React.FC = () => {
       .then(createdTodo => {
         setTodos(currentarray => [...currentarray, createdTodo]);
         setTitle('');
-        /* eslint-disable */
-        console.log(createdTodo);
       })
       .catch(() => {
-        setError(true);
-        sethidden(true);
+        setErrorMessage(ErrorMessage.Add);
       });
   }
 
@@ -98,8 +104,7 @@ export const App: React.FC = () => {
         ]);
       })
       .catch(() => {
-        setdeleteError(true);
-        sethidden(true);
+        setErrorMessage(ErrorMessage.Delete);
       });
   }
 
@@ -107,12 +112,11 @@ export const App: React.FC = () => {
     updateTodos(todo)
       .then(thisarray => {
         setTodos(array =>
-          array.map(cobj => (cobj.id === thisarray.id ? (cobj = todo) : cobj)),
+          array.map(cobj => (cobj.id === thisarray.id ? thisarray : cobj)),
         );
       })
       .catch(() => {
-        setUpdate(true);
-        sethidden(true);
+        setErrorMessage(ErrorMessage.Update);
       });
   }
 
@@ -144,9 +148,6 @@ export const App: React.FC = () => {
               placeholder="What needs to be done?"
               value={title}
               onChange={e => setTitle(e.target.value)}
-              onMouseLeave={() => {
-                !title.trim() ? setNotTitle(true) : setNotTitle(false);
-              }}
             />
           </form>
         </header>
@@ -171,44 +172,16 @@ export const App: React.FC = () => {
 
       <div
         data-cy="ErrorNotification"
-        className={`notification is-danger is-light has-text-weight-normal ${!hidden ? 'hidden' : ''}`}
+        className={`notification is-danger is-light has-text-weight-normal ${!errorMessage ? 'hidden' : ''}`}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => sethidden(false)}
+          onClick={() => setErrorMessage(ErrorMessage.None)}
         />
         {/* show only one message at a time */}
-
-        {Rror && <>Unable to load todos</>}
-        {notTitle && (
-          <>
-            <br />
-            Title should not be empty
-          </>
-        )}
-
-        {Error && (
-          <>
-            <br />
-            Unable to add a todo
-          </>
-        )}
-
-        {deleteError && (
-          <>
-            <br />
-            Unable to delete a todo
-          </>
-        )}
-
-        {Update && (
-          <>
-            <br />
-            Unable to update a todo
-          </>
-        )}
+        {errorMessage}
       </div>
     </div>
   );

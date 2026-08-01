@@ -1,9 +1,15 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 
+export enum Filter {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 type Props = {
-  setFirstFilter: (matching: string) => void;
-  firstFilter: string;
+  setFirstFilter: (filter: Filter) => void;
+  firstFilter: Filter;
   todos: Todo[];
   cleared: () => void;
 };
@@ -22,50 +28,32 @@ export const Todofilter: React.FC<Props> = ({
         {activeTodosCount} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href={firstFilter === 'All' ? '#/active' : '#/'}
-          className={
-            firstFilter === 'All' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkAll"
-          onClick={() => setFirstFilter('All')}
-        >
-          All
-        </a>
+        {Object.values(Filter).map(filterType => {
+          const isSelected = firstFilter === filterType;
 
-        <a
-          href={firstFilter === 'Active' ? '#/active' : '#/'}
-          className={
-            firstFilter === 'Active' ? 'filter__link selected' : 'filter__link'
-          }
-          data-cy="FilterLinkActive"
-          onClick={() => setFirstFilter('Active')}
-        >
-          Active
-        </a>
+          const href =
+            filterType === Filter.All ? '#/' : `#/${filterType.toLowerCase()}`;
 
-        <a
-          href={firstFilter === 'Completed' ? '#/Completed' : '#/'}
-          className={
-            firstFilter === 'Completed'
-              ? 'filter__link selected'
-              : 'filter__link'
-          }
-          data-cy="FilterLinkCompleted"
-          onClick={() => setFirstFilter('Completed')}
-        >
-          Completed
-        </a>
+          return (
+            <a
+              key={filterType}
+              href={href}
+              className={`filter__link ${isSelected ? 'selected' : ''}`}
+              data-cy={`FilterLink${filterType}`}
+              onClick={() => setFirstFilter(filterType)}
+            >
+              {filterType}
+            </a>
+          );
+        })}
       </nav>
 
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
-        onClick={() => cleared()}
+        onClick={cleared}
       >
         Clear completed
       </button>
