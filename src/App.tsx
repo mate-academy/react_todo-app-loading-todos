@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { FC, FormEvent } from 'react';
+import type { FC } from 'react';
 import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
@@ -7,6 +7,7 @@ import type { Todo } from './types/Todo';
 import { TodoList } from './components/TodoList';
 import { FilterStatus, TodoFilter } from './components/TodoFilter';
 import { ErrorNotification } from './components/ErrorNotification';
+import { NewTodo } from './components/NewTodo';
 
 const LOAD_ERROR_MESSAGE = 'Unable to load todos';
 const ERROR_HIDE_DELAY = 3000;
@@ -77,10 +78,6 @@ export const App: FC = () => {
   const allTodosCompleted = todos.length > 0 && activeTodosCount === 0;
   const counterLabel = activeTodosCount === 1 ? 'item' : 'items';
 
-  const handleNewTodoSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -90,8 +87,8 @@ export const App: FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <header className="todoapp__header">
-          {todos.length > 0 && (
+        {todos.length > 0 ? (
+          <header className="todoapp__header">
             <button
               type="button"
               className={classNames('todoapp__toggle-all', {
@@ -100,17 +97,12 @@ export const App: FC = () => {
               data-cy="ToggleAllButton"
               aria-label="Toggle all todos"
             />
-          )}
 
-          <form onSubmit={handleNewTodoSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
+            <NewTodo />
+          </header>
+        ) : (
+          <NewTodo />
+        )}
 
         {todos.length > 0 && <TodoList todos={visibleTodos} />}
 

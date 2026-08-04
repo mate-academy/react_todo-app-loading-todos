@@ -10,7 +10,7 @@ type Props = {
 export const TodoList: FC<Props> = ({ todos }) => (
   <section className="todoapp__main" data-cy="TodoList">
     {todos.map(todo => (
-      <TodoItem key={todo.id} todo={todo} />
+      <TodoItem key={todo.id} todo={todo} isLoading={false} />
     ))}
   </section>
 );

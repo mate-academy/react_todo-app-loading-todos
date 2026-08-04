@@ -41,10 +41,7 @@ const filterOptions: FilterOption[] = [
   },
 ];
 
-export const TodoFilter: FC<Props> = ({
-  selectedStatus,
-  onStatusChange,
-}) => (
+export const TodoFilter: FC<Props> = ({ selectedStatus, onStatusChange }) => (
   <nav className="filter" data-cy="Filter">
     {filterOptions.map(({ status, label, href, dataCy }) => (
       <a
