@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import type { FC } from 'react';
 
 type Props = {
@@ -27,3 +28,8 @@ export const ErrorNotification: FC<Props> = ({ message, onClose }) => (
     {message}
   </div>
 );
+
+ErrorNotification.propTypes = {
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

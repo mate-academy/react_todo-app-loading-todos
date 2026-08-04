@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import type { FC, MouseEvent } from 'react';
 
 export enum FilterStatus {
@@ -40,10 +41,7 @@ const filterOptions: FilterOption[] = [
   },
 ];
 
-export const TodoFilter: FC<Props> = ({
-  selectedStatus,
-  onStatusChange,
-}) => (
+export const TodoFilter: FC<Props> = ({ selectedStatus, onStatusChange }) => (
   <nav className="filter" data-cy="Filter">
     {filterOptions.map(({ status, label, href, dataCy }) => (
       <a
@@ -63,3 +61,12 @@ export const TodoFilter: FC<Props> = ({
     ))}
   </nav>
 );
+
+TodoFilter.propTypes = {
+  selectedStatus: PropTypes.oneOf([
+    FilterStatus.All,
+    FilterStatus.Active,
+    FilterStatus.Completed,
+  ]).isRequired,
+  onStatusChange: PropTypes.func.isRequired,
+};

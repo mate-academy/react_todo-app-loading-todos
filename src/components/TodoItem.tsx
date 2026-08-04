@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import type { FC } from 'react';
 import type { Todo } from '../types/Todo';
 
@@ -38,3 +39,12 @@ export const TodoItem: FC<Props> = ({ todo }) => (
     </div>
   </div>
 );
+
+TodoItem.propTypes = {
+  todo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
+};
