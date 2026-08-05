@@ -1,19 +1,21 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import cn from 'classnames';
 
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { Todo } from './types/Todo';
+import type { Todo } from './types/Todo';
+import { FilterTypes } from './types/FilterTypes';
 
-const filterTypes = ['all', 'active', 'completed'] as const;
+import { TodoList } from './components/TodoList';
+import { Footer } from './components/TodosFooter';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [isError, setIsError] = React.useState<boolean>(false);
-  const [filterType, setFilterType] =
-    React.useState<(typeof filterTypes)[number]>('all');
+  const [filterType, setFilterType] = React.useState<FilterTypes>(
+    FilterTypes.ALL,
+  );
 
   React.useEffect(() => {
     setIsError(false);
@@ -36,11 +38,11 @@ export const App: React.FC = () => {
 
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
   const visibleTodos = todos.filter(todo => {
-    if (filterType === 'active') {
+    if (filterType === FilterTypes.ACTIVE) {
       return !todo.completed;
     }
 
-    if (filterType === 'completed') {
+    if (filterType === FilterTypes.COMPLETED) {
       return todo.completed;
     }
 
@@ -80,115 +82,19 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <div
-              data-cy="Todo"
-              className={cn('todo', { completed: todo.completed })}
-              key={todo.id}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  checked={todo.completed}
-                  readOnly
-                />
-              </label>
-
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-              >
-                ×
-              </button>
-
-              <div data-cy="TodoLoader" className="modal overlay">
-                <div className="modal-background has-background-white-ter" />
-                <div className="loader" />
-              </div>
-            </div>
-          ))}
-        </section>
+        <TodoList todos={visibleTodos} />
 
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {activeTodosCount}
-              {` ${activeTodosCount === 1 ? 'item' : 'items'} left`}
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filterType === 'all',
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilterType('all')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filterType === 'active',
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilterType('active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filterType === 'completed',
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilterType('completed')}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-              disabled={!hasCompletedTodos}
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer
+            activeTodosCount={activeTodosCount}
+            filterType={filterType}
+            onFilterChange={setFilterType}
+            hasCompletedTodos={hasCompletedTodos}
+          />
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-          'notification is-danger is-light has-text-weight-normal',
-          {
-            hidden: !isError,
-          },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setIsError(false)}
-        />
-        Unable to load todos
-      </div>
+      <ErrorNotification isError={isError} onClose={() => setIsError(false)} />
     </div>
   );
 };
