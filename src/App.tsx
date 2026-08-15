@@ -5,38 +5,67 @@ import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
 
-type FilterStatus = 'all' | 'active' | 'completed';
+// 1. Creating an enum for errors
+export enum ErrorMessage {
+  Load = 'Unable to load todos',
+  EmptyTitle = 'Title should not be empty',
+  Add = 'Unable to add a todo',
+  Delete = 'Unable to delete a todo',
+  Update = 'Unable to update a todo',
+  None = '',
+}
+
+// 2. Creating an Enum for filtering statuses
+export enum FilterStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
+// 3. Array for dynamic rendering of filtering links
+const filterLinks = [
+  { status: FilterStatus.All, text: 'All', href: '#/' },
+  { status: FilterStatus.Active, text: 'Active', href: '#/active' },
+  { status: FilterStatus.Completed, text: 'Completed', href: '#/completed' },
+];
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<FilterStatus>('all');
+  // We use our Enum to type the error state
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
+    ErrorMessage.None,
+  );
+  // We use an enum to type the filter state
+  const [filter, setFilter] = useState<FilterStatus>(FilterStatus.All);
   const [tempQuery, setTempQuery] = useState('');
 
+  // Loading tasks
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => setErrorMessage(ErrorMessage.Load)); // Replaced the string with an Enum
   }, []);
 
+  // Automatic error hiding
   useEffect(() => {
     if (!errorMessage) {
       return undefined;
     }
 
     const timer = setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(ErrorMessage.None); // Replaced the empty string with an Enum
     }, 3000);
 
     return () => clearTimeout(timer);
   }, [errorMessage]);
 
+  // Calculation of filtered tasks
   const visibleTodos = todos.filter(todo => {
-    if (filter === 'active') {
+    if (filter === FilterStatus.Active) {
       return !todo.completed;
     }
 
-    if (filter === 'completed') {
+    if (filter === FilterStatus.Completed) {
       return todo.completed;
     }
 
@@ -125,32 +154,18 @@ export const App: React.FC = () => {
             </span>
 
             <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilter('all')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilter('active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilter('completed')}
-              >
-                Completed
-              </a>
+              {/* We render the links using the map() method, in accordance with the comment. */}
+              {filterLinks.map(link => (
+                <a
+                  key={link.status}
+                  href={link.href}
+                  className={`filter__link ${filter === link.status ? 'selected' : ''}`}
+                  data-cy={`FilterLink${link.text}`}
+                  onClick={() => setFilter(link.status)}
+                >
+                  {link.text}
+                </a>
+              ))}
             </nav>
 
             <button
@@ -175,7 +190,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setErrorMessage('')}
+          onClick={() => setErrorMessage(ErrorMessage.None)} // use Enum
         />
         {errorMessage}
       </div>
