@@ -10,14 +10,12 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
-  const [setLoading] = useState(true);
 
   useEffect(() => {
     client
       .get<Todo[]>(`/todos?userId=${USER_ID}`)
       .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos'))
-      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
