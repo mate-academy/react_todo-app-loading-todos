@@ -101,6 +101,7 @@ export const App: React.FC = () => {
 
                     {/* overlay will cover the todo while it is being deleted or updated */}
                     <div data-cy="TodoLoader" className="modal overlay">
+                      {/* eslint-disable-next-line max-len */}
                       <div className="modal-background has-background-white-ter" />
                       <div className="loader" />
                     </div>
@@ -111,7 +112,8 @@ export const App: React.FC = () => {
               {/* Hide the footer if there are no todos */}
               <footer className="todoapp__footer" data-cy="Footer">
                 <span className="todo-count" data-cy="TodosCounter">
-                  {todos.filter(todo => todo.completed === false).length} items left
+                  {todos.filter(todo => todo.completed === false).length} items
+                  left
                 </span>
 
                 {/* Active link should have the 'selected' class */}
