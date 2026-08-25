@@ -46,30 +46,35 @@ export const App: React.FC = () => {
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
 
-      <div className="todoapp__content">
-        <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
-          <button
-            type="button"
-            className="todoapp__toggle-all active"
-            data-cy="ToggleAllButton"
-          />
+      {loading ? (
+        <div className="loader" />
+      ) : (
+        <>
+          <header className="todoapp__header">
+            {todos.length > 0 && (
+              <button
+                type="button"
+                className={
+                  todos.every(todo => todo.completed === true)
+                    ? 'todoapp__toggle-all active'
+                    : 'todoapp__toggle-all'
+                }
+                data-cy="ToggleAllButton"
+              />
+            )}
+            {/* Add a todo on form submit */}
+            <form>
+              <input
+                data-cy="NewTodoField"
+                type="text"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+              />
+            </form>
+          </header>
 
-          {/* Add a todo on form submit */}
-          <form>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-            />
-          </form>
-        </header>
-        {loading ? (
-          <div className="loader" />
-        ) : (
-          todos.length > 0 && (
-            <>
+          {todos.length > 0 && (
+            <div className="todoapp__content">
               <section className="todoapp__main" data-cy="TodoList">
                 {filteredTodos.map(todo => (
                   <div
@@ -90,7 +95,6 @@ export const App: React.FC = () => {
                       {todo.title}
                     </span>
 
-                    {/* Remove button appears only on hover */}
                     <button
                       type="button"
                       className="todo__remove"
@@ -109,14 +113,12 @@ export const App: React.FC = () => {
                 ))}
               </section>
 
-              {/* Hide the footer if there are no todos */}
               <footer className="todoapp__footer" data-cy="Footer">
                 <span className="todo-count" data-cy="TodosCounter">
                   {todos.filter(todo => todo.completed === false).length} items
                   left
                 </span>
 
-                {/* Active link should have the 'selected' class */}
                 <nav className="filter" data-cy="Filter">
                   <a
                     href="#/"
@@ -158,38 +160,37 @@ export const App: React.FC = () => {
                   </a>
                 </nav>
 
-                {/* this button should be disabled if there are no completed todos */}
                 <button
                   type="button"
+                  disabled={!todos.some(todo => todo.completed === true)}
                   className="todoapp__clear-completed"
                   data-cy="ClearCompletedButton"
                 >
                   Clear completed
                 </button>
               </footer>
-            </>
-          )
-        )}
-        {/* DON'T use conditional rendering to hide the notification */}
-        {/* Add the 'hidden' class to hide the message smoothly */}
-        <div
-          data-cy="ErrorNotification"
-          className={
-            errorMessage
-              ? 'notification is-danger is-light has-text-weight-normal'
-              : 'notification is-danger is-light has-text-weight-normal hidden'
-          }
-        >
-          <button
-            data-cy="HideErrorButton"
-            type="button"
-            className="delete"
-            onClick={() => setErrorMessage('')}
-          />
-          {/* show only one message at a time */}
-          {errorMessage}
-        </div>
-      </div>
+            </div>
+          )}
+
+          <div
+            data-cy="ErrorNotification"
+            className={
+              errorMessage
+                ? 'notification is-danger is-light has-text-weight-normal'
+                : 'notification is-danger is-light has-text-weight-normal hidden' // eslint-disable-line max-len
+            }
+          >
+            <button
+              data-cy="HideErrorButton"
+              type="button"
+              className="delete"
+              onClick={() => setErrorMessage('')}
+            />
+
+            {errorMessage}
+          </div>
+        </>
+      )}
     </div>
   );
 };
