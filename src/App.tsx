@@ -5,6 +5,10 @@ import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
 import { getTodos } from './api/todos';
 import { Todo } from './types/Todo';
+import './styles/filter.scss';
+import './styles/index.scss';
+import './styles/todo.scss';
+import './styles/todoapp.scss';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -20,8 +24,8 @@ export const App: React.FC = () => {
         setLoading(false);
       })
       .catch(() => {
-        setLoading(false);
         setErrorMessage('Unable to load todos');
+        setLoading(false);
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
@@ -49,7 +53,7 @@ export const App: React.FC = () => {
       {loading ? (
         <div className="loader" />
       ) : (
-        <>
+        <div className="todoapp__content">
           <header className="todoapp__header">
             {todos.length > 0 && (
               <button
@@ -62,6 +66,7 @@ export const App: React.FC = () => {
                 data-cy="ToggleAllButton"
               />
             )}
+
             {/* Add a todo on form submit */}
             <form>
               <input
@@ -74,7 +79,7 @@ export const App: React.FC = () => {
           </header>
 
           {todos.length > 0 && (
-            <div className="todoapp__content">
+            <>
               <section className="todoapp__main" data-cy="TodoList">
                 {filteredTodos.map(todo => (
                   <div
@@ -169,28 +174,28 @@ export const App: React.FC = () => {
                   Clear completed
                 </button>
               </footer>
-            </div>
+            </>
           )}
-
-          <div
-            data-cy="ErrorNotification"
-            className={
-              errorMessage
-                ? 'notification is-danger is-light has-text-weight-normal'
-                : 'notification is-danger is-light has-text-weight-normal hidden' // eslint-disable-line max-len
-            }
-          >
-            <button
-              data-cy="HideErrorButton"
-              type="button"
-              className="delete"
-              onClick={() => setErrorMessage('')}
-            />
-
-            {errorMessage}
-          </div>
-        </>
+        </div>
       )}
+
+      <div
+        data-cy="ErrorNotification"
+        className={
+          errorMessage
+            ? 'notification is-danger is-light has-text-weight-normal'
+            : 'notification is-danger is-light has-text-weight-normal hidden' // eslint-disable-line max-len
+        }
+      >
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
+
+        {errorMessage}
+      </div>
     </div>
   );
 };
