@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import classNames from 'classnames';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
 import { Todo } from './types/Todo';
@@ -37,17 +38,22 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
+    hideError();
+
     getTodos()
       .then(setTodos)
       .catch(() => showError(ErrorMessages.UnableToLoad));
 
     return () => window.clearTimeout(errorTimerRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const visibleTodos = useMemo(
     () => filterTodos(todos, status),
     [todos, status],
   );
+
+  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -63,7 +69,9 @@ export const App: React.FC = () => {
           {todos.length > 0 && (
             <button
               type="button"
-              className="todoapp__toggle-all active"
+              className={classNames('todoapp__toggle-all', {
+                active: allCompleted,
+              })}
               data-cy="ToggleAllButton"
             />
           )}
@@ -79,7 +87,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        <TodoList todos={visibleTodos} />
+        {todos.length > 0 && <TodoList todos={visibleTodos} />}
 
         {todos.length > 0 && (
           <Footer todos={todos} status={status} onStatusChange={setStatus} />
