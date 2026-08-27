@@ -143,71 +143,76 @@ export const App: React.FC = () => {
         </section>
 
         {/* Hide the footer if there are no todos */}
-        <footer className="todoapp__footer" data-cy="Footer">
-          <span className="todo-count" data-cy="TodosCounter">
-            3 items left
-          </span>
+        {todos.length > 0 && (
+          <footer className="todoapp__footer" data-cy="Footer">
+            <span className="todo-count" data-cy="TodosCounter">
+              3 items left
+            </span>
+            {/* Active link should have the 'selected' class */}(
+            <nav className="filter" data-cy="Filter">
+              <a
+                href="#/"
+                className={classNames('filter__link', {
+                  selected: filter === 'all',
+                })}
+                data-cy="FilterLinkAll"
+                onClick={() => setFilter('all')}
+              >
+                All
+              </a>
 
-          {/* Active link should have the 'selected' class */}
-          <nav className="filter" data-cy="Filter">
-            <a
-              href="#/"
-              className={classNames('filter__link', {
-                selected: filter === 'all',
-              })}
-              data-cy="FilterLinkAll"
-              onClick={() => setFilter('all')}
+              <a
+                href="#/active"
+                className={classNames('filter__link', {
+                  selected: filter === 'active',
+                })}
+                data-cy="FilterLinkActive"
+                onClick={() => setFilter('active')}
+              >
+                Active
+              </a>
+
+              <a
+                href="#/completed"
+                className={classNames('filter__link', {
+                  selected: filter === 'completed',
+                })}
+                data-cy="FilterLinkCompleted"
+                onClick={() => setFilter('completed')}
+              >
+                Completed
+              </a>
+            </nav>
+            )
+            {/* this button should be disabled if there are no completed todos */}
+            <button
+              type="button"
+              className="todoapp__clear-completed"
+              data-cy="ClearCompletedButton"
             >
-              All
-            </a>
-
-            <a
-              href="#/active"
-              className={classNames('filter__link', {
-                selected: filter === 'active',
-              })}
-              data-cy="FilterLinkActive"
-              onClick={() => setFilter('active')}
-            >
-              Active
-            </a>
-
-            <a
-              href="#/completed"
-              className={classNames('filter__link', {
-                selected: filter === 'completed',
-              })}
-              data-cy="FilterLinkCompleted"
-              onClick={() => setFilter('completed')}
-            >
-              Completed
-            </a>
-          </nav>
-
-          {/* this button should be disabled if there are no completed todos */}
-          <button
-            type="button"
-            className="todoapp__clear-completed"
-            data-cy="ClearCompletedButton"
-          >
-            Clear completed
-          </button>
-        </footer>
+              Clear completed
+            </button>
+          </footer>
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+        className={classNames(
+          'notification is-danger is-light has-text-weight-normal',
+          { hidden: !errorMessage },
+        )}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
         {/* show only one message at a time */}
         {errorMessage}
-        {title.length === 0 && <p>Title should not be empty</p>}
-        {title.length === 0 && <p> Unable to add a todo</p>}
-        {title.length === 0 && <p>Unable to delete a todo</p>}
-        {title.length === 0 && <p>Unable to update a todo</p>}
       </div>
     </div>
   );
