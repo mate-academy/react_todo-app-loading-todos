@@ -1,12 +1,58 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID } from './api/todos';
+import { Todo } from './types/Todo';
+import * as postService from './api/todos'
+import classNames from 'classnames';
+
 
 export const App: React.FC = () => {
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [title, setTitle] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+
   if (!USER_ID) {
     return <UserWarning />;
+  }
+
+  const visibleTodos = useMemo(() => {
+  switch (filter) {
+    case 'active':
+      return todos.filter(todo => !todo.completed);
+    case 'completed':
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
+  }
+
+}, [todos, filter]);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    postService.createTodos({
+      title: trimmedTitle,
+      userId: USER_ID,
+      completed: false,
+    })
+      .then(newTodo => {setTodos(currentTodos => [...currentTodos, newTodo]);
+    setTitle('');
+      })
+      .finally(() => {
+      setIsSubmitting(false);
+    });
   }
 
   return (
@@ -23,30 +69,39 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form>
+          <form
+            onSubmit={handleSubmit}
+          >
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              value={title}
+               disabled={isSubmitting}
+              onChange={event => setTitle(event.target.value)}
             />
           </form>
         </header>
 
         <section className="todoapp__main" data-cy="TodoList">
           {/* This is a completed todo */}
-          <div data-cy="Todo" className="todo completed">
+          <div
+            data-cy="Todo"
+            className={classNames('todo', 'active', { completed: isSubmitting })}
+          >
             <label className="todo__status-label">
               <input
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
                 checked
+                onChange={() => setIsSubmitting(!isSubmitting)}
               />
             </label>
 
             <span data-cy="TodoTitle" className="todo__title">
-              Completed Todo
+              {title}
             </span>
 
             {/* Remove button appears only on hover */}
@@ -63,17 +118,7 @@ export const App: React.FC = () => {
 
           {/* This todo is an active todo */}
           <div data-cy="Todo" className="todo">
-            <label className="todo__status-label">
-              <input
-                data-cy="TodoStatus"
-                type="checkbox"
-                className="todo__status"
-              />
-            </label>
 
-            <span data-cy="TodoTitle" className="todo__title">
-              Not Completed Todo
-            </span>
             <button type="button" className="todo__remove" data-cy="TodoDelete">
               ×
             </button>
@@ -155,16 +200,18 @@ export const App: React.FC = () => {
 
             <a
               href="#/active"
-              className="filter__link"
+              className={classNames('filter__link', { selected: filter === 'active' })}
               data-cy="FilterLinkActive"
+              onClick={() => setFilter('active')}
             >
               Active
             </a>
 
             <a
               href="#/completed"
-              className="filter__link"
+              className={classNames('filter__link', { selected: filter === 'completed' })}
               data-cy="FilterLinkCompleted"
+              onClick={() => setFilter('completed')}
             >
               Completed
             </a>
@@ -189,15 +236,16 @@ export const App: React.FC = () => {
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />
         {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        {!setTitle &&
+          <p>Unable to load todos</p>}
+        {title.length === 0 &&
+          <p>Title should not be empty</p>}
+        {title.length === 0 &&
+          <p> Unable to add a todo</p>}
+        {title.length === 0 &&
+          <p>Unable to delete a todo</p>}
+        {title.length === 0 &&
+          <p>Unable to update a todo</p>}
       </div>
     </div>
   );
