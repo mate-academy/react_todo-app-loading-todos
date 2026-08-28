@@ -14,6 +14,8 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const activeTodosCount = todos.filter(todo => !todo.completed).length;
+
   const visibleTodos = useMemo(() => {
     switch (filter) {
       case 'active':
@@ -25,11 +27,16 @@ export const App: React.FC = () => {
     }
   }, [todos, filter]);
 
+  const showError = (message: string) => {
+    setErrorMessage(message);
+    window.setTimeout(() => setErrorMessage(''), 3000);
+  };
+
   useEffect(() => {
     postService
       .getTodos()
       .then(setTodos)
-      .catch(() => setErrorMessage('Unable to load todos'));
+      .catch(() => showError('Unable to load todos'));
   }, []);
 
   if (!USER_ID) {
@@ -50,7 +57,7 @@ export const App: React.FC = () => {
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
-      setErrorMessage('Title should not be empty');
+      showError('Title should not be empty');
 
       return;
     }
@@ -69,7 +76,7 @@ export const App: React.FC = () => {
         setTitle('');
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
+        showError('Unable to add a todo');
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -146,7 +153,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {activeTodosCount} items left
             </span>
             {/* Active link should have the 'selected' class */}(
             <nav className="filter" data-cy="Filter">
