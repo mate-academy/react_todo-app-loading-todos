@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useMemo, useEffect, useCallback, useState } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 import { TodoItem } from './components/TodoItem/TodoItem';
 import classNames from 'classnames';
 import * as api from './api/todos';
@@ -27,16 +33,16 @@ export const App: React.FC = () => {
   const [isLoadingIds, setIsLoadingIds] = useState<number[]>([]);
   const [field, setField] = useState<string>('');
 
-  let timerId: ReturnType<typeof setTimeout>;
+  const timerId = useRef<ReturnType<typeof setTimeout>>();
 
   const handleError = useCallback((msg: ErrorType) => {
     setErrorMsg(msg);
 
-    if (timerId) {
-      clearTimeout(timerId);
+    if (timerId.current) {
+      clearTimeout(timerId.current);
     }
 
-    timerId = setTimeout(() => {
+    timerId.current = setTimeout(() => {
       setErrorMsg(null);
     }, 2999);
   }, []);
@@ -50,7 +56,7 @@ export const App: React.FC = () => {
       .catch(() => {
         handleError(ErrorType.ServerError);
       });
-  }, []);
+  }, [handleError]);
 
   const visibleTodos = useMemo(() => {
     if (!todos) {
@@ -268,8 +274,8 @@ export const App: React.FC = () => {
           type="button"
           className="delete"
           onClick={() => {
-            if (timerId) {
-              clearTimeout(timerId);
+            if (timerId.current) {
+              clearTimeout(timerId.current);
             }
 
             setErrorMsg(null);
