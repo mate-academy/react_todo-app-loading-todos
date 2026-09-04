@@ -77,8 +77,12 @@ export const App: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const fieldVal = field.trim();
+    
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+    }
+    setErrorMsg(null);
 
     if (fieldVal.length === 0) {
       handleError(ErrorType.EmptyTitle);
