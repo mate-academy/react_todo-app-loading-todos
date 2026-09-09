@@ -15,16 +15,17 @@ export const App: React.FC<Props> = () => {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<Filter>('all');
   const field = useRef<HTMLInputElement>(null);
+  const activeTodos = todos.filter(todo => !todo.completed).length;
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(error => setErrorMessage(error.message))
-      .finally(() => setLoading(false));
+      .catch(() => setErrorMessage('Unable to load todos'));
+    // .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -79,17 +80,21 @@ export const App: React.FC<Props> = () => {
             />
           </form>
         </header>
-        {filteredTodos.length > 0 && (
+        {todos.length > 0 && (
           <section className="todoapp__main" data-cy="TodoList">
             {/* This is a completed todo */}
             {filteredTodos.map(tod => (
-              <div data-cy="Todo" className="todo" key={tod.id}>
+              <div
+                data-cy="Todo"
+                className={`todo ${tod.completed ? 'completed' : ''}`}
+                key={tod.id}
+              >
                 <label className="todo__status-label">
                   <input
                     data-cy="TodoStatus"
                     type="checkbox"
                     className="todo__status"
-                    checked
+                    checked={tod.completed}
                   />
                 </label>
 
@@ -107,12 +112,10 @@ export const App: React.FC<Props> = () => {
                 </button>
 
                 {/* overlay will cover the todo while it is being deleted or updated */}
-                {loading && (
-                  <div data-cy="TodoLoader" className="modal overlay">
-                    <div className="modal-background has-background-white-ter" />
-                    <div className="loader" />
-                  </div>
-                )}
+                <div data-cy="TodoLoader" className="modal overlay">
+                  <div className="modal-background has-background-white-ter" />
+                  <div className="loader" />
+                </div>
               </div>
             ))}
             {/* This todo is an active todo */}
@@ -189,17 +192,17 @@ export const App: React.FC<Props> = () => {
         )}
 
         {/* Hide the footer if there are no todos */}
-        {filteredTodos.length > 0 && (
+        {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {activeTodos} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
                 onClick={() => setFilter('all')}
               >
@@ -208,7 +211,7 @@ export const App: React.FC<Props> = () => {
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
                 data-cy="FilterLinkActive"
                 onClick={() => setFilter('active')}
               >
@@ -217,7 +220,7 @@ export const App: React.FC<Props> = () => {
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
                 data-cy="FilterLinkCompleted"
                 onClick={() => setFilter('completed')}
               >
@@ -244,17 +247,13 @@ export const App: React.FC<Props> = () => {
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${errorMessage ? '' : 'hidden'}`}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setErrorMessage('')}
+        />
+        {errorMessage}
       </div>
     </div>
   );
