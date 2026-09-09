@@ -31,6 +31,14 @@ export const App: React.FC<Props> = () => {
     field.current?.focus();
   }, []);
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(''), 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+
   const filteredTodos = todos.filter(item => {
     if (filter === 'active') {
       return !item.completed;
@@ -231,24 +239,23 @@ export const App: React.FC<Props> = () => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      {!loading && errorMessage && (
-        <div
-          data-cy="ErrorNotification"
-          className="notification is-danger is-light has-text-weight-normal"
-        >
-          <button data-cy="HideErrorButton" type="button" className="delete" />
-          {/* show only one message at a time */}
-          Unable to load todos
-          <br />
-          Title should not be empty
-          <br />
-          Unable to add a todo
-          <br />
-          Unable to delete a todo
-          <br />
-          Unable to update a todo
-        </div>
-      )}
+
+      <div
+        data-cy="ErrorNotification"
+        className={`notification is-danger is-light has-text-weight-normal ${errorMessage ? '' : 'hidden'}`}
+      >
+        <button data-cy="HideErrorButton" type="button" className="delete" />
+        {/* show only one message at a time */}
+        Unable to load todos
+        <br />
+        Title should not be empty
+        <br />
+        Unable to add a todo
+        <br />
+        Unable to delete a todo
+        <br />
+        Unable to update a todo
+      </div>
     </div>
   );
 };
