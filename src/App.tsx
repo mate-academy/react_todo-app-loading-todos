@@ -12,35 +12,38 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
   const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
-    setHasError(false);
+
+    // Hide any previous error before starting a new request
+    setErrorMessage('');
 
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setHasError(true);
+        setErrorMessage('Unable to load todos');
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
+  // Automatically hide the error after 3 seconds
   useEffect(() => {
-    if (!hasError) {
+    if (!errorMessage) {
       return;
     }
 
     const timer = window.setTimeout(() => {
-      setHasError(false);
+      setErrorMessage('');
     }, 3000);
 
     return () => {
       window.clearTimeout(timer);
     };
-  }, [hasError]);
+  }, [errorMessage]);
 
   const visibleTodos = todos.filter(todo => {
     switch (filter) {
@@ -56,6 +59,7 @@ export const App: React.FC = () => {
   });
 
   const activeTodos = todos.filter(todo => !todo.completed);
+
   const completedTodos = todos.filter(todo => todo.completed);
 
   const areAllTodosCompleted =
@@ -79,6 +83,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
+          {/* Active only when all todos are completed */}
           <button
             type="button"
             className={`todoapp__toggle-all ${
@@ -87,6 +92,7 @@ export const App: React.FC = () => {
             data-cy="ToggleAllButton"
           />
 
+          {/* Add a todo on form submit - implemented in the next part */}
           <form>
             <input
               data-cy="NewTodoField"
@@ -97,6 +103,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
+        {/* Hide list and footer if there are no todos */}
         {todos.length > 0 && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
@@ -121,6 +128,7 @@ export const App: React.FC = () => {
                       {todo.title}
                     </span>
 
+                    {/* Delete functionality is implemented in the next part */}
                     <button
                       type="button"
                       className="todo__remove"
@@ -129,9 +137,7 @@ export const App: React.FC = () => {
                       ×
                     </button>
 
-                    {/* Loader is kept inside every real Todo.
-                        It becomes active when the Todo is processed
-                        in the later parts of the task. */}
+                    {/* Todo loader is used for update/delete operations */}
                     <div data-cy="TodoLoader" className="modal overlay">
                       <div
                         className="
@@ -183,6 +189,7 @@ export const App: React.FC = () => {
                 </a>
               </nav>
 
+              {/* Disabled when there are no completed todos */}
               <button
                 type="button"
                 className="todoapp__clear-completed"
@@ -196,21 +203,22 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* Keep the notification in the DOM and hide it with the
-          `hidden` class instead of conditional rendering. */}
+      {/* Keep notification in the DOM.
+          Use `hidden` instead of conditional rendering. */}
       <div
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${
-          hasError ? '' : 'hidden'
+          errorMessage ? '' : 'hidden'
         }`}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setHasError(false)}
+          onClick={() => setErrorMessage('')}
         />
-        Unable to load todos
+
+        {errorMessage}
       </div>
     </div>
   );
