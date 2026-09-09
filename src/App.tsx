@@ -58,6 +58,9 @@ export const App: React.FC = () => {
   const activeTodos = todos.filter(todo => !todo.completed);
   const completedTodos = todos.filter(todo => todo.completed);
 
+  const areAllTodosCompleted =
+    todos.length > 0 && todos.every(todo => todo.completed);
+
   const handleFilterChange = (
     event: React.MouseEvent<HTMLAnchorElement>,
     newFilter: Filter,
@@ -78,7 +81,9 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className="todoapp__toggle-all"
+            className={`todoapp__toggle-all ${
+              areAllTodosCompleted ? 'active' : ''
+            }`}
             data-cy="ToggleAllButton"
           />
 
@@ -95,18 +100,6 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <>
             <section className="todoapp__main" data-cy="TodoList">
-              {isLoading && (
-                <div className="todo">
-                  <div data-cy="TodoLoader" className="modal overlay is-active">
-                    <div
-                      className="modal-background
-                    has-background-white-ter"
-                    />
-                    <div className="loader" />
-                  </div>
-                </div>
-              )}
-
               {!isLoading &&
                 visibleTodos.map(todo => (
                   <div
@@ -136,11 +129,13 @@ export const App: React.FC = () => {
                       ×
                     </button>
 
-                    {/* Loader must always exist, but is inactive after loading */}
+                    {/* Loader is kept inside every real Todo.
+                        It becomes active when the Todo is processed
+                        in the later parts of the task. */}
                     <div data-cy="TodoLoader" className="modal overlay">
                       <div
                         className="
-                        modal-background has-background-white-ter"
+                      modal-background has-background-white-ter"
                       />
                       <div className="loader" />
                     </div>
@@ -201,6 +196,8 @@ export const App: React.FC = () => {
         )}
       </div>
 
+      {/* Keep the notification in the DOM and hide it with the
+          `hidden` class instead of conditional rendering. */}
       <div
         data-cy="ErrorNotification"
         className={`notification is-danger is-light has-text-weight-normal ${
