@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useRef, useState } from 'react';
@@ -9,7 +10,7 @@ type Props = {
   todo: Todo[];
 };
 
-export const App: React.FC<Props> = ({ todo }) => {
+export const App: React.FC<Props> = () => {
   type Filter = 'all' | 'active' | 'completed';
 
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -98,10 +99,12 @@ export const App: React.FC<Props> = ({ todo }) => {
                 </button>
 
                 {/* overlay will cover the todo while it is being deleted or updated */}
-                <div data-cy="TodoLoader" className="modal overlay">
-                  <div className="modal-background has-background-white-ter" />
-                  <div className="loader" />
-                </div>
+                {loading && (
+                  <div data-cy="TodoLoader" className="modal overlay">
+                    <div className="modal-background has-background-white-ter" />
+                    <div className="loader" />
+                  </div>
+                )}
               </div>
             ))}
             {/* This todo is an active todo */}
@@ -228,22 +231,24 @@ export const App: React.FC<Props> = ({ todo }) => {
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
-      >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
-        {/* show only one message at a time */}
-        Unable to load todos
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo
-      </div>
+      {!loading && errorMessage && (
+        <div
+          data-cy="ErrorNotification"
+          className="notification is-danger is-light has-text-weight-normal"
+        >
+          <button data-cy="HideErrorButton" type="button" className="delete" />
+          {/* show only one message at a time */}
+          Unable to load todos
+          <br />
+          Title should not be empty
+          <br />
+          Unable to add a todo
+          <br />
+          Unable to delete a todo
+          <br />
+          Unable to update a todo
+        </div>
+      )}
     </div>
   );
 };
