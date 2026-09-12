@@ -49,7 +49,9 @@ export const App: React.FC = () => {
           {/* this button should have `active` class only if all todos are completed */}
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={cn('todoapp__toggle-all', {
+              active: todos.length > 0 && todos.every(todo => todo.completed),
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -106,7 +108,6 @@ export const App: React.FC = () => {
                 </div>
               );
             })}
-            ;
           </section>
         )}
         {/* Hide the footer if there are no todos */}
