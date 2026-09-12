@@ -14,6 +14,10 @@ import { Footer } from './components/Footer';
 import { NewTodo } from './components/NewTodo';
 import { ErrorNotification } from './components/ErrorNotification';
 
+enum ErrorMessage {
+  Load = 'Unable to load todos',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState(Filter.All);
@@ -25,7 +29,7 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.Load);
       });
   }, []);
 

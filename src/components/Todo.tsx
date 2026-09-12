@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { Todo as TodoType } from '../types/Todo';
 
 type Props = {
@@ -12,7 +12,7 @@ export const Todo: React.FC<Props> = ({ todo }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', {
+      className={cn('todo', {
         completed: todo.completed,
       })}
     >
