@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Header.scss';
 import classNames from 'classnames';
 
@@ -16,6 +16,11 @@ export const Header: React.FC<Props> = React.memo(function Header({
   toggleComplete,
 }) {
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,6 +66,7 @@ export const Header: React.FC<Props> = React.memo(function Header({
           placeholder="What needs to be done?"
           value={query}
           onChange={event => setQuery(event.target.value)}
+          ref={inputRef}
         />
       </form>
     </header>

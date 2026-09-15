@@ -10,11 +10,13 @@ import { Todo } from './types/Todo';
 /* eslint-disable-next-line max-len */
 import { ErrorNotification } from './components/ErrorNotification/ErrorNotification';
 import { Filter } from './types/Filter';
+import { Loader } from './components/Loader/Loader';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('All');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isRendering, setIsRendering] = useState(true);
 
   useEffect(() => {
     getTodos()
@@ -24,7 +26,8 @@ export const App: React.FC = () => {
       .catch(() => {
         setErrorMessage('Unable to load todos');
         setTimeout(() => setErrorMessage(''), 3000);
-      });
+      })
+      .finally(() => setIsRendering(false));
   }, []);
 
   const filteredTodos: Todo[] = useMemo(() => {
@@ -111,13 +114,17 @@ export const App: React.FC = () => {
           onError={setErrorMessage}
           toggleComplete={toggleAllComplete}
         />
-        <TodoList
-          todos={filteredTodos}
-          toggleComplete={toggleOneComplete}
-          onDelete={deleteTodo}
-        />
+        {isRendering ? (
+          <Loader />
+        ) : (
+          <TodoList
+            todos={filteredTodos}
+            toggleComplete={toggleOneComplete}
+            onDelete={deleteTodo}
+          />
+        )}
 
-        {allTodos.length && (
+        {allTodos.length !== 0 && !isRendering && (
           <Footer
             onFilter={setFilter}
             currentFilter={filter}
