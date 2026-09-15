@@ -23,7 +23,6 @@ export const ErrorNotification: React.FC<Props> = React.memo(
           className="delete"
           onClick={() => onError('')}
         />
-        {/* show only one message at a time */}
         {errorMessage}
       </div>
     );

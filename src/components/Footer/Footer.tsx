@@ -19,44 +19,27 @@ export const Footer: React.FC<Props> = React.memo(function Footer({
   doesCompletedExist,
   setTodos,
 }) {
+  const filters: Filter[] = ['All', 'Active', 'Completed'];
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
         {activeCount} items left
       </span>
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <button
-          className={classNames('filter__link', {
-            selected: currentFilter === 'all',
-          })}
-          data-cy="FilterLinkAll"
-          onClick={() => onFilter('all')}
-        >
-          All
-        </button>
-
-        <button
-          className={classNames('filter__link', {
-            selected: currentFilter === 'active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={() => onFilter('active')}
-        >
-          Active
-        </button>
-
-        <button
-          className={classNames('filter__link', {
-            selected: currentFilter === 'completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={() => onFilter('completed')}
-        >
-          Completed
-        </button>
+        {filters.map(filter => (
+          <button
+            className={classNames('filter__link', {
+              selected: currentFilter === filter,
+            })}
+            data-cy="FilterLinkAll"
+            onClick={() => onFilter(filter)}
+            key={filter}
+          >
+            {filter}
+          </button>
+        ))}
       </nav>
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

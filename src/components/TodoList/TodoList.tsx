@@ -40,7 +40,6 @@ export const TodoList: React.FC<Props> = React.memo(function TodoList({
             {todo.title}
           </span>
 
-          {/* Remove button appears only on hover */}
           <button
             type="button"
             className="todo__remove"
@@ -50,7 +49,6 @@ export const TodoList: React.FC<Props> = React.memo(function TodoList({
             ×
           </button>
 
-          {/* overlay will cover the todo while it is being deleted or updated */}
           <div data-cy="TodoLoader" className="modal overlay">
             <div className="modal-background has-background-white-ter" />
             <div className="loader" />

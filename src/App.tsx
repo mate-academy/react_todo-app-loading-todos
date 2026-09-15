@@ -13,7 +13,7 @@ import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>('All');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -29,11 +29,11 @@ export const App: React.FC = () => {
 
   const filteredTodos: Todo[] = useMemo(() => {
     switch (filter) {
-      case 'all':
+      case 'All':
         return allTodos;
-      case 'completed':
+      case 'Completed':
         return allTodos.filter(todo => todo.completed);
-      case 'active':
+      case 'Active':
         return allTodos.filter(todo => !todo.completed);
     }
   }, [filter, allTodos]);
@@ -90,7 +90,10 @@ export const App: React.FC = () => {
 
   const setError = useCallback((error: string) => {
     setErrorMessage(error);
-    setTimeout(() => setErrorMessage(''), 3000);
+
+    if (error) {
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
   }, []);
 
   if (!USER_ID) {
@@ -106,7 +109,7 @@ export const App: React.FC = () => {
           isAllCompleted={activeCount === 0}
           onAdd={addNewTodo}
           onError={setErrorMessage}
-          onComplete={toggleAllComplete}
+          toggleComplete={toggleAllComplete}
         />
         <TodoList
           todos={filteredTodos}
@@ -114,7 +117,6 @@ export const App: React.FC = () => {
           onDelete={deleteTodo}
         />
 
-        {/* Hide the footer if there are no todos */}
         {allTodos.length && (
           <Footer
             onFilter={setFilter}
@@ -126,8 +128,6 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      {/* DON'T use conditional rendering to hide the notification */}
-      {/* Add the 'hidden' class to hide the message smoothly */}
       <ErrorNotification errorMessage={errorMessage} onError={setError} />
     </div>
   );

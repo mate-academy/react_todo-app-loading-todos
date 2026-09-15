@@ -6,14 +6,14 @@ type Props = {
   isAllCompleted: boolean;
   onAdd: (title: string) => void;
   onError: (errorMessage: string) => void;
-  onComplete: (isAllCompleted: boolean) => void;
+  toggleComplete: (isAllCompleted: boolean) => void;
 };
 
 export const Header: React.FC<Props> = React.memo(function Header({
   isAllCompleted,
   onAdd,
   onError,
-  onComplete,
+  toggleComplete,
 }) {
   const [query, setQuery] = useState('');
 
@@ -43,17 +43,15 @@ export const Header: React.FC<Props> = React.memo(function Header({
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       <button
         type="button"
         className={classNames('todoapp__toggle-all', {
           active: isAllCompleted,
         })}
         data-cy="ToggleAllButton"
-        onClick={() => onComplete(isAllCompleted)}
+        onClick={() => toggleComplete(isAllCompleted)}
       />
 
-      {/* Add a todo on form submit */}
       <form onSubmit={handleSubmit}>
         <input
           data-cy="NewTodoField"
