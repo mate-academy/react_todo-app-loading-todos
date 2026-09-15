@@ -32,7 +32,7 @@ export const Footer: React.FC<Props> = React.memo(function Footer({
             className={classNames('filter__link', {
               selected: currentFilter === filter,
             })}
-            data-cy="FilterLinkAll"
+            data-cy={`FilterLink${filter}`}
             onClick={() => onFilter(filter)}
             key={filter}
           >
