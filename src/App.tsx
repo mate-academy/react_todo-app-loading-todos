@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
@@ -11,8 +11,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
-  const [activeTodosCount, setActiveTodosCount] = useState<number>(0);
 
   function showErrorMessage(errorMessage: string) {
     setErrorMessages(currentErorrMessages => [
@@ -37,8 +35,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const filteredTodos = todos.filter(currentTodo => {
+  const visibleTodos = useMemo(() => {
+    return todos.filter(currentTodo => {
       if (filter === FilterStatus.active) {
         return !currentTodo.completed;
       }
@@ -49,14 +47,10 @@ export const App: React.FC = () => {
 
       return true;
     });
-
-    setVisibleTodos(filteredTodos);
   }, [filter, todos]);
 
-  useEffect(() => {
-    setActiveTodosCount(
-      todos.filter(currentTodo => currentTodo.completed === false).length,
-    );
+  const activeTodosCount = useMemo(() => {
+    return todos.filter(currentTodo => currentTodo.completed === false).length;
   }, [todos]);
 
   if (!USER_ID) {
