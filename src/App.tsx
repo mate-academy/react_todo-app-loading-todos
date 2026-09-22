@@ -11,38 +11,53 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [filter, setFilter] = useState<FilterStatus>(FilterStatus.all);
+  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [activeTodosCount, setActiveTodosCount] = useState<number>(0);
+
+  function showErrorMessage(errorMessage: string) {
+    setErrorMessages(currentErorrMessages => [
+      ...currentErorrMessages,
+      errorMessage,
+    ]);
+
+    setTimeout(() => {
+      setErrorMessages(currentErorrMessages =>
+        currentErorrMessages.filter(
+          currentMessage => currentMessage !== errorMessage,
+        ),
+      );
+    }, 3000);
+  }
 
   useEffect(() => {
-    setErrorMessages([]);
     getTodos()
       .then(setTodos)
       .catch(() => {
-        setErrorMessages(prev => [...prev, 'Unable to load todos']);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setErrorMessages(prev =>
-            prev.filter(msg => msg !== 'Unable to load todos'),
-          );
-        }, 3000);
+        showErrorMessage('Unable to load todos');
       });
   }, []);
 
-  const visibleTodos = todos.filter(currentTodo => {
-    if (filter === FilterStatus.active) {
-      return !currentTodo.completed;
-    }
+  useEffect(() => {
+    const filteredTodos = todos.filter(currentTodo => {
+      if (filter === FilterStatus.active) {
+        return !currentTodo.completed;
+      }
 
-    if (filter === FilterStatus.completed) {
-      return currentTodo.completed;
-    }
+      if (filter === FilterStatus.completed) {
+        return currentTodo.completed;
+      }
 
-    return true;
-  });
+      return true;
+    });
 
-  const activeCount = todos.filter(
-    currentTodo => currentTodo.completed === false,
-  ).length;
+    setVisibleTodos(filteredTodos);
+  }, [filter, todos]);
+
+  useEffect(() => {
+    setActiveTodosCount(
+      todos.filter(currentTodo => currentTodo.completed === false).length,
+    );
+  }, [todos]);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -114,7 +129,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              {activeCount} items left
+              {activeTodosCount} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
