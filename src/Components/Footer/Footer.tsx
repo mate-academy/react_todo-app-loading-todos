@@ -1,11 +1,12 @@
 import React from 'react';
 import { Filter } from '../Filter';
 import { Todo } from '../../types/Todo';
+import { FILTERS } from '../../types/Filters';
 
 type Props = {
   todos: Todo[];
-  selectedStatus: string;
-  onSelectedStatus: (selectedStatus: string) => void;
+  selectedStatus: FILTERS;
+  onSelectedStatus: (selectedStatus: FILTERS) => void;
 };
 
 export const Footer: React.FC<Props> = ({

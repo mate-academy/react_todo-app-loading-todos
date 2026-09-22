@@ -3,15 +3,15 @@ import { FILTERS } from '../../types/Filters';
 import cn from 'classnames';
 
 type Props = {
-  selectedStatus: string;
-  onSelectedStatus: (selectedStatus: string) => void;
+  selectedStatus: FILTERS;
+  onSelectedStatus: (selectedStatus: FILTERS) => void;
 };
 
 export const Filter: React.FC<Props> = ({
   selectedStatus,
   onSelectedStatus,
 }) => {
-  const handleClick = (filter: string) => {
+  const handleClick = (filter: FILTERS) => {
     onSelectedStatus(filter);
   };
 
