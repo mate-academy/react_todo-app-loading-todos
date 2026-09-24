@@ -13,9 +13,12 @@ import {
   getTodos,
   USER_ID,
 } from './api/todos';
-import { Todo } from './types/Todo';
 
-type Filter = 'all' | 'active' | 'completed';
+import { FilterType, Todo } from './types/Todo';
+
+import { NewTodo } from './components/NewTodo/NewTodo';
+import { TodoList } from './components/TodoList/TodoList';
+import { Filter } from './components/Filter/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,10 +26,12 @@ export const App: React.FC = () => {
   const [title, setTitle] = useState('');
   const [edit, setEdit] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
+
   const [loadingTodoId, setLoadingTodoId] = useState<number | null>(null);
   const [loadingAdd, setLoadingAdd] = useState(false);
   const [loadingClear, setLoadingClear] = useState(false);
+  const [loadingToggleAll, setLoadingToggleAll] = useState(false);
 
   const showError = (message: string) => {
     setError(message);
@@ -41,8 +46,6 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    hideError();
-
     getTodos()
       .then(setTodos)
       .catch(() => {
@@ -70,7 +73,12 @@ export const App: React.FC = () => {
   const activeTodosCount = todos.filter(todo => !todo.completed).length;
 
   const toggleTodo = (todo: Todo) => {
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
 
@@ -88,23 +96,61 @@ export const App: React.FC = () => {
       });
   };
 
+  const handleToggleAll = () => {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll ||
+      todos.length === 0
+    ) {
+      return;
+    }
+
+    const shouldCompleteAll = todos.some(todo => !todo.completed);
+
+    const todosToChange = todos.filter(
+      todo => todo.completed !== shouldCompleteAll,
+    );
+
+    hideError();
+    setLoadingToggleAll(true);
+
+    Promise.all(todosToChange.map(todo => changeTodos(todo)))
+      .then(() => getTodos())
+      .then(setTodos)
+      .catch(() => {
+        showError('Unable to update todos');
+      })
+      .finally(() => {
+        setLoadingToggleAll(false);
+      });
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title.trim()) {
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
       showError('Title should not be empty');
 
       return;
     }
 
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
 
     hideError();
     setLoadingAdd(true);
 
-    addTodos(title)
+    addTodos(trimmedTitle)
       .then(() => getTodos())
       .then(setTodos)
       .then(() => {
@@ -119,7 +165,12 @@ export const App: React.FC = () => {
   };
 
   const handleEditClick = (todo: Todo) => {
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
 
@@ -129,14 +180,21 @@ export const App: React.FC = () => {
   };
 
   const handleEdit = (todo: Todo) => {
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
+
+    const trimmedTitle = editTitle.trim();
 
     hideError();
     setLoadingTodoId(todo.id);
 
-    if (!editTitle.trim()) {
+    if (!trimmedTitle) {
       deleteTodos(todo)
         .then(() => getTodos())
         .then(setTodos)
@@ -154,7 +212,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    editTodos(todo, editTitle)
+    editTodos(todo, trimmedTitle)
       .then(() => getTodos())
       .then(setTodos)
       .then(() => {
@@ -170,7 +228,12 @@ export const App: React.FC = () => {
   };
 
   const handleDelete = (todo: Todo) => {
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
 
@@ -189,7 +252,12 @@ export const App: React.FC = () => {
   };
 
   const handleClearCompleted = () => {
-    if (loadingTodoId !== null || loadingAdd || loadingClear) {
+    if (
+      loadingTodoId !== null ||
+      loadingAdd ||
+      loadingClear ||
+      loadingToggleAll
+    ) {
       return;
     }
 
@@ -215,11 +283,13 @@ export const App: React.FC = () => {
 
   const handleFilter = (
     event: React.MouseEvent<HTMLAnchorElement>,
-    newFilter: Filter,
+    newFilter: FilterType,
   ) => {
     event.preventDefault();
     setFilter(newFilter);
   };
+
+  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
 
   return (
     <div className="todoapp">
@@ -230,100 +300,40 @@ export const App: React.FC = () => {
           <button
             type="button"
             className={cn('todoapp__toggle-all', {
-              active: todos.length > 0 && todos.every(todo => todo.completed),
+              active: allCompleted,
             })}
             data-cy="ToggleAllButton"
+            onClick={handleToggleAll}
+            disabled={
+              loadingTodoId !== null ||
+              loadingAdd ||
+              loadingClear ||
+              loadingToggleAll ||
+              todos.length === 0
+            }
           />
 
-          <form onSubmit={handleSubmit}>
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              onChange={event => setTitle(event.target.value)}
-              value={title}
-              disabled={loadingAdd}
-              autoFocus
-            />
-          </form>
+          <NewTodo
+            title={title}
+            setTitle={setTitle}
+            handleSubmit={handleSubmit}
+            loadingAdd={loadingAdd}
+          />
         </header>
 
         {todos.length > 0 && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {visibleTodos.map(todo => (
-              <div
-                data-cy="Todo"
-                key={todo.id}
-                className={cn('todo', {
-                  completed: todo.completed,
-                })}
-              >
-                <label className="todo__status-label">
-                  <input
-                    data-cy="TodoStatus"
-                    type="checkbox"
-                    className="todo__status"
-                    checked={todo.completed}
-                    onChange={() => toggleTodo(todo)}
-                    disabled={loadingTodoId !== null || loadingClear}
-                  />
-                </label>
-
-                {edit === todo.id ? (
-                  <form
-                    onSubmit={event => {
-                      event.preventDefault();
-                      handleEdit(todo);
-                    }}
-                  >
-                    <input
-                      data-cy="TodoTitleField"
-                      type="text"
-                      className="todo__title-field"
-                      placeholder="Empty todo will be deleted"
-                      value={editTitle}
-                      onChange={event => setEditTitle(event.target.value)}
-                      disabled={loadingTodoId === todo.id}
-                      autoFocus
-                    />
-                  </form>
-                ) : (
-                  <>
-                    <span
-                      onClick={() => handleEditClick(todo)}
-                      data-cy="TodoTitle"
-                      className="todo__title"
-                    >
-                      {todo.title}
-                    </span>
-
-                    <button
-                      type="button"
-                      className="todo__remove"
-                      data-cy="TodoDelete"
-                      onClick={() => handleDelete(todo)}
-                      disabled={loadingTodoId !== null || loadingClear}
-                    >
-                      ×
-                    </button>
-                  </>
-                )}
-
-                <div
-                  data-cy="TodoLoader"
-                  className={cn('modal overlay', {
-                    'is-active': loadingTodoId === todo.id,
-                  })}
-                >
-                  <div
-                    className={'modal-background ' + 'has-background-white-ter'}
-                  />
-                  <div className="loader" />
-                </div>
-              </div>
-            ))}
-          </section>
+          <TodoList
+            edit={edit}
+            editTitle={editTitle}
+            visibleTodos={visibleTodos}
+            toggleTodo={toggleTodo}
+            loadingTodoId={loadingTodoId}
+            loadingClear={loadingClear}
+            handleEdit={handleEdit}
+            setEditTitle={setEditTitle}
+            handleEditClick={handleEditClick}
+            handleDelete={handleDelete}
+          />
         )}
 
         {todos.length > 0 && (
@@ -332,46 +342,17 @@ export const App: React.FC = () => {
               {activeTodosCount} items left
             </span>
 
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filter === 'all',
-                })}
-                data-cy="FilterLinkAll"
-                onClick={event => handleFilter(event, 'all')}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filter === 'active',
-                })}
-                data-cy="FilterLinkActive"
-                onClick={event => handleFilter(event, 'active')}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filter === 'completed',
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={event => handleFilter(event, 'completed')}
-              >
-                Completed
-              </a>
-            </nav>
+            <Filter filter={filter} handleFilter={handleFilter} />
 
             <button
               type="button"
               className="todoapp__clear-completed"
               data-cy="ClearCompletedButton"
-              disabled={!todos.some(todo => todo.completed) || loadingClear}
+              disabled={
+                !todos.some(todo => todo.completed) ||
+                loadingClear ||
+                loadingToggleAll
+              }
               onClick={handleClearCompleted}
             >
               Clear completed
@@ -383,7 +364,7 @@ export const App: React.FC = () => {
       <div
         data-cy="ErrorNotification"
         className={cn(
-          'notification is-danger is-light ' + 'has-text-weight-normal',
+          'notification is-danger is-light has-text-weight-normal',
           {
             hidden: !error,
           },
