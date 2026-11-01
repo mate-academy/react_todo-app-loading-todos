@@ -15,29 +15,57 @@ import Task from './Task';
 //   completed: boolean;
 // }
 
+type Filter = 'all' | 'active' | 'completed';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState<string>('');
+  const [filter, setFilter] = useState<Filter>('all');
   // const [todo, setTodo] = useState<Todo>();
   // const [title, setTitle] = useState<string>('');
   // const [isComplited, setComplited] = useState<boolean>(false);
 
+  const visibleTodos = todos.filter(todo => {
+    if (filter === 'active') {
+      return !todo.completed;
+    }
+
+    if (filter === 'completed') {
+      return todo.completed;
+    }
+
+    return true;
+  });
+
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      //  console.log('dane api:', todosFromServer);
-      setTodos(todosFromServer);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        //  console.log('dane api:', todosFromServer);
+        setTodos(todosFromServer);
+      })
+      .catch(() => setError('Unable to load todos'));
   }, []);
 
-  // const formHandler = (event: React.FormEvent) => {
-  //   event.preventDefault();
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
 
-  //   setTodo({
-  //     id: 0,
-  //     userId: USER_ID,
-  //     title: title,
-  //     completed: isComplited,
-  //   });
-  // };
+    const errorTime = setTimeout(() => setError(''), 3000);
+
+    return () => clearTimeout(errorTime);
+  }, [error]);
+
+  const formHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // setTodo({
+    //   id: 0,
+    //   userId: USER_ID,
+    //   title: title,
+    //   completed: isComplited,
+    // });
+  };
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -57,21 +85,21 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          {/* <form onSubmit={formHandler}>
+          <form onSubmit={formHandler}>
             <input
               data-cy="NewTodoField"
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
-              value={title}
-              onChange={event => setTitle(event.currentTarget.value)}
+              // value={title}
+              // onChange={event => setTitle(event.currentTarget.value)}
             />
-          </form> */}
+          </form>
         </header>
 
         {todos.length > 0 && (
-          <section>
-            {todos.map(task => (
+          <section className="todoapp__main" data-cy="TodoList">
+            {visibleTodos.map(task => (
               <Task key={task.id} todo={task} />
             ))}
           </section>
@@ -88,15 +116,16 @@ export const App: React.FC = () => {
             <nav className="filter" data-cy="Filter">
               <a
                 href="#/"
-                className="filter__link selected"
+                className={`filter__link ${filter === 'all' ? 'selected' : ''}`}
                 data-cy="FilterLinkAll"
+                onClick={() => setFilter('all')}
               >
                 All
               </a>
 
               <a
                 href="#/active"
-                className="filter__link"
+                className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
                 data-cy="FilterLinkActive"
               >
                 Active
@@ -104,7 +133,7 @@ export const App: React.FC = () => {
 
               <a
                 href="#/completed"
-                className="filter__link"
+                className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
                 data-cy="FilterLinkCompleted"
               >
                 Completed
@@ -127,19 +156,26 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className="notification is-danger is-light has-text-weight-normal"
+        className={`notification is-danger is-light has-text-weight-normal ${
+          error ? '' : 'hidden'
+        }`}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={() => setError('')}
+        />
         {/* show only one message at a time */}
-        Unable to load todos
-        <br />
+        {error}
+        {/* <br />
         Title should not be empty
         <br />
         Unable to add a todo
         <br />
         Unable to delete a todo
         <br />
-        Unable to update a todo
+        Unable to update a todo */}
       </div>
     </div>
   );
