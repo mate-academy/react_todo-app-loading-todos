@@ -2,6 +2,12 @@
 
 You goal is to implement a simple Todo App that will save all changes to [the API](https://mate-academy.github.io/fe-students-api/).
 
+
+## Demo
+
+**DEMO LINK:** https://sistsayao-hue.github.io/react_todo-app-loading-todos/
+
+
 > Here is [the working example](https://mate-academy.github.io/react_todo-app-with-api/)
 
 The task consists of 3 part:
