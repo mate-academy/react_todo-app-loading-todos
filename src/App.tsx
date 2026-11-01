@@ -25,6 +25,8 @@ export const App: React.FC = () => {
   // const [title, setTitle] = useState<string>('');
   // const [isComplited, setComplited] = useState<boolean>(false);
 
+  const unCompleted = todos.filter(todo => !todo.completed);
+
   const visibleTodos = todos.filter(todo => {
     if (filter === 'active') {
       return !todo.completed;
@@ -109,7 +111,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {`${unCompleted.length} items left`}
             </span>
 
             {/* Active link should have the 'selected' class */}
