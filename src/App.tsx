@@ -129,6 +129,7 @@ export const App: React.FC = () => {
                 href="#/active"
                 className={`filter__link ${filter === 'active' ? 'selected' : ''}`}
                 data-cy="FilterLinkActive"
+                onClick={() => setFilter('active')}
               >
                 Active
               </a>
@@ -137,6 +138,7 @@ export const App: React.FC = () => {
                 href="#/completed"
                 className={`filter__link ${filter === 'completed' ? 'selected' : ''}`}
                 data-cy="FilterLinkCompleted"
+                onClick={() => setFilter('completed')}
               >
                 Completed
               </a>
