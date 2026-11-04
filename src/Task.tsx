@@ -3,6 +3,7 @@
 
 import React from 'react';
 import type { Todo } from './types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -11,7 +12,9 @@ type Props = {
 export default function Task({ todo }: Props) {
   return (
     /* This is a completed todo */
-    <div data-cy="Todo" className={todo.completed ? 'todo completed' : 'todo'}>
+    <div data-cy="Todo" className={cn('todo', {
+        completed: todo.completed,
+      })}>
       <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
         <input
           id={`todo-status-${todo.id}`}
