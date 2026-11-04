@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import React from 'react';
-import type { Todo } from './types/Todo';
+import type { Todo } from '../types/Todo';
 import cn from 'classnames';
 
 type Props = {
@@ -12,9 +12,12 @@ type Props = {
 export default function Task({ todo }: Props) {
   return (
     /* This is a completed todo */
-    <div data-cy="Todo" className={cn('todo', {
+    <div
+      data-cy="Todo"
+      className={cn('todo', {
         completed: todo.completed,
-      })}>
+      })}
+    >
       <label className="todo__status-label" htmlFor={`todo-status-${todo.id}`}>
         <input
           id={`todo-status-${todo.id}`}

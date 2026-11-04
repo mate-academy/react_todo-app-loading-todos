@@ -2,13 +2,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
 import { UserWarning } from './UserWarning';
-import { USER_ID } from './api/todos';
+import { USER_ID, getTodos } from './api/todos';
 import { useState } from 'react';
 import type { Todo } from './types/Todo';
-import { getTodos } from './api/todos';
-import Task from './Task';
-import cn from 'classnames';
-
+import { Filter } from './types/Filter';
+// import Task from './components/Task';
+// import cn from 'classnames';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
+import Errors from './components/Errors';
 // export interface Todo {
 //   id: number;
 //   userId: number;
@@ -16,11 +18,7 @@ import cn from 'classnames';
 //   completed: boolean;
 // }
 
-enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,6 +29,7 @@ export const App: React.FC = () => {
   // const [isComplited, setComplited] = useState<boolean>(false);
 
   const unCompleted = todos.filter(todo => !todo.completed);
+  const hasCompletedTodos = todos.some(todo => todo.completed);
 
   const visibleTodos = todos.filter(todo => {
     if (filter === Filter.Active) {
@@ -45,6 +44,8 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
+    setError('');
+    
     getTodos()
       .then(todosFromServer => {
         //  console.log('dane api:', todosFromServer);
@@ -105,96 +106,20 @@ export const App: React.FC = () => {
         </header>
 
         {todos.length > 0 && (
-          <section className="todoapp__main" data-cy="TodoList">
-            {visibleTodos.map(task => (
-              <Task key={task.id} todo={task} />
-            ))}
-          </section>
+          <TodoList todos={visibleTodos} />
         )}
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
-          <footer className="todoapp__footer" data-cy="Footer">
-            <span className="todo-count" data-cy="TodosCounter">
-              {`${unCompleted.length} items left`}
-            </span>
-
-            {/* Active link should have the 'selected' class */}
-            <nav className="filter" data-cy="Filter">
-              <a
-                href="#/"
-                className={cn('filter__link', {
-                  selected: filter === Filter.All,
-                })}
-                data-cy="FilterLinkAll"
-                onClick={() => setFilter(Filter.All)}
-              >
-                All
-              </a>
-
-              <a
-                href="#/active"
-                className={cn('filter__link', {
-                  selected: filter === Filter.Active,
-                })}
-                data-cy="FilterLinkActive"
-                onClick={() => setFilter(Filter.Active)}
-              >
-                Active
-              </a>
-
-              <a
-                href="#/completed"
-                className={cn('filter__link', {
-                  selected: filter === Filter.Completed,
-                })}
-                data-cy="FilterLinkCompleted"
-                onClick={() => setFilter(Filter.Completed)}
-              >
-                Completed
-              </a>
-            </nav>
-
-            {/* this button should be disabled if there are no completed todos */}
-            <button
-              type="button"
-              className="todoapp__clear-completed"
-              data-cy="ClearCompletedButton"
-            >
-              Clear completed
-            </button>
-          </footer>
+          <Footer unCompletedCount={unCompleted.length} filter={filter} setFilter={setFilter} hasCompletedTodos={hasCompletedTodos}/>
         )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}
       {/* Add the 'hidden' class to hide the message smoothly */}
-      <div
-        data-cy="ErrorNotification"
-        className={cn(
-            'notification is-danger is-light has-text-weight-normal',
-            {
-              hidden: !error,
-            },
-          )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setError('')}
-        />
-        {/* show only one message at a time */}
-        {error}
-        {/* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
-      </div>
+        <Errors error={error} setErrors={setError} />
+      
+      
     </div>
   );
 };
