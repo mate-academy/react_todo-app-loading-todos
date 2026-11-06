@@ -171,7 +171,7 @@ export const App: React.FC = () => {
             <form
               onSubmit={e => {
                 e.preventDefault();
-                submitTodo(e);
+                submitTodo();
                 countActiveTodos();
               }}
             >
