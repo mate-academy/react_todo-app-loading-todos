@@ -12,10 +12,13 @@ import {
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+
+  const FILTERS = { all: 'all', completed: 'completed', active: 'active' };
+
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [filteredTodo, setFilteredTodo] = React.useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = React.useState('');
-  const [filter, setFilter] = React.useState('all');
+  const [filter, setFilter] = React.useState(FILTERS.all);
   const [todoActiveCount, setTodoActiveCount] = React.useState(0);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [isErrorVisible, setIsErrorVisible] = React.useState(false);
@@ -112,15 +115,15 @@ export const App: React.FC = () => {
 
   const filterTodos = () => {
     const t = todos.filter(todo => {
-      if (filter === 'active') {
+      if (filter === FILTERS.active) {
         return !todo.completed;
       }
 
-      if (filter === 'completed') {
+      if (filter === FILTERS.completed) {
         return todo.completed;
       }
 
-      if (filter === 'all') {
+      if (filter === FILTERS.all) {
         return todo;
       }
     });
@@ -147,8 +150,6 @@ export const App: React.FC = () => {
     filterTodos();
   }, [todos, filter]);
 
-
-
   if (!USER_ID) {
     return <UserWarning />;
   }
@@ -167,60 +168,64 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitTodo(e);
-              countActiveTodos();
-            }}
-          >
-            <input
-              data-cy="NewTodoField"
-              type="text"
-              className="todoapp__new-todo"
-              placeholder="What needs to be done?"
-              value={todoTitle}
-              onChange={e => setTodoTitle(e.target.value)}
-            />
-          </form>
+          {todo.length === 0 && (
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                submitTodo(e);
+                countActiveTodos();
+              }}
+            >
+              <input
+                data-cy="NewTodoField"
+                type="text"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={todoTitle}
+                onChange={e => setTodoTitle(e.target.value)}
+              />
+            </form>
+          )}
         </header>
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {filteredTodo.map(todo => (
-            <div
-              key={todo.id}
-              data-cy="Todo"
-              className={`todo ${todo.completed ? 'completed' : ''}`}
-            >
-              <label className="todo__status-label">
-                <input
-                  data-cy="TodoStatus"
-                  type="checkbox"
-                  className="todo__status"
-                  onChange={() => {
-                    editTodo(todo.id, { completed: !todo.completed });
+        {todos.length > 0 && (
+          <section className="todoapp__main" data-cy="TodoList">
+            {filteredTodo.map(todo => (
+              <div
+                key={todo.id}
+                data-cy="Todo"
+                className={`todo ${todo.completed ? 'completed' : ''}`}
+              >
+                <label className="todo__status-label">
+                  <input
+                    data-cy="TodoStatus"
+                    type="checkbox"
+                    className="todo__status"
+                    onChange={() => {
+                      editTodo(todo.id, { completed: !todo.completed });
+                      countActiveTodos();
+                    }}
+                    checked={todo.completed}
+                  />
+                </label>
+                <span data-cy="TodoTitle" className="todo__title">
+                  {todo.title}
+                </span>
+                <button
+                  type="button"
+                  className="todo__remove"
+                  data-cy="TodoDelete"
+                  onClick={() => {
+                    removeTodo(todo.id);
                     countActiveTodos();
                   }}
-                  checked={todo.completed}
-                />
-              </label>
-              <span data-cy="TodoTitle" className="todo__title">
-                {todo.title}
-              </span>
-              <button
-                type="button"
-                className="todo__remove"
-                data-cy="TodoDelete"
-                onClick={() => {
-                  removeTodo(todo.id);
-                  countActiveTodos();
-                }}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </section>
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </section>
+        )}
 
         {/* Hide the footer if there are no todos */}
 
@@ -235,11 +240,11 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={
-                  filter === 'all' ? 'filter__link selected' : 'filter__link'
+                  filter === FILTERS.all ? 'filter__link selected' : 'filter__link'
                 }
                 data-cy="FilterLinkAll"
                 onClick={() => {
-                  setFilter('all');
+                  setFilter(FILTERS.all);
                   filterTodos();
                 }}
               >
@@ -249,11 +254,11 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={
-                  filter === 'active' ? 'filter__link selected' : 'filter__link'
+                  filter === FILTERS.active ? 'filter__link selected' : 'filter__link'
                 }
                 data-cy="FilterLinkActive"
                 onClick={() => {
-                  setFilter('active');
+                  setFilter(FILTERS.active);
                   filterTodos();
                 }}
               >
@@ -263,7 +268,7 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={
-                  filter === 'completed'
+                  filter === FILTERS.completed
                     ? 'filter__link selected'
                     : 'filter__link'
                 }
@@ -294,7 +299,11 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={isErrorVisible ? 'notification is-danger is-light has-text-weight-normal' : 'notification is-danger is-light has-text-weight-normal hidden'}
+        className={
+          isErrorVisible
+            ? 'notification is-danger is-light has-text-weight-normal'
+            : 'notification is-danger is-light has-text-weight-normal hidden'
+        }
       >
         <button
           data-cy="HideErrorButton"
