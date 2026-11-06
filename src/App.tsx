@@ -22,16 +22,16 @@ export const App: React.FC = () => {
 
   const showError = (message: string) => {
     setErrorMessage(message);
-    setIsErrorVisible(false); // remove hidden class
+    setIsErrorVisible(true);
 
     setTimeout(() => {
-      setIsErrorVisible(true); // add hidden class after 3 seconds
+      setIsErrorVisible(false);
     }, 3000);
   };
 
   const clearError = () => {
     setErrorMessage('');
-    setIsErrorVisible(true);
+    setIsErrorVisible(false);
   };
 
   const countActiveTodos = () => {
@@ -146,6 +146,8 @@ export const App: React.FC = () => {
     countActiveTodos();
     filterTodos();
   }, [todos, filter]);
+
+
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -292,8 +294,7 @@ export const App: React.FC = () => {
       {/* Add the 'hidden' class to hide the message smoothly */}
       <div
         data-cy="ErrorNotification"
-        className={'notification is-danger is-light has-text-weight-normal'}
-        style={{ display: isErrorVisible ? 'none' : 'block' }}
+        className={isErrorVisible ? 'notification is-danger is-light has-text-weight-normal' : 'notification is-danger is-light has-text-weight-normal hidden'}
       >
         <button
           data-cy="HideErrorButton"
