@@ -12,7 +12,6 @@ import {
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-
   const FILTERS = { all: 'all', completed: 'completed', active: 'active' };
 
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -168,7 +167,7 @@ export const App: React.FC = () => {
           />
 
           {/* Add a todo on form submit */}
-          {todo.length === 0 && (
+          {todos.length === 0 && (
             <form
               onSubmit={e => {
                 e.preventDefault();
@@ -240,7 +239,9 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={
-                  filter === FILTERS.all ? 'filter__link selected' : 'filter__link'
+                  filter === FILTERS.all
+                    ? 'filter__link selected'
+                    : 'filter__link'
                 }
                 data-cy="FilterLinkAll"
                 onClick={() => {
@@ -254,7 +255,9 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={
-                  filter === FILTERS.active ? 'filter__link selected' : 'filter__link'
+                  filter === FILTERS.active
+                    ? 'filter__link selected'
+                    : 'filter__link'
                 }
                 data-cy="FilterLinkActive"
                 onClick={() => {
