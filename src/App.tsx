@@ -223,10 +223,7 @@ export const App: React.FC = () => {
         {/* Hide the footer if there are no todos */}
 
         {todos.length > 0 && (
-          <footer
-            className="todoapp__footer"
-            data-cy="Footer"
-          >
+          <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {todoActiveCount} items left
             </span>
@@ -298,7 +295,12 @@ export const App: React.FC = () => {
         className={'notification is-danger is-light has-text-weight-normal'}
         style={{ display: isErrorVisible ? 'none' : 'block' }}
       >
-        <button data-cy="HideErrorButton" type="button" className="delete" onClick={clearError} />
+        <button
+          data-cy="HideErrorButton"
+          type="button"
+          className="delete"
+          onClick={clearError}
+        />
         {/* show only one message at a time */}
         {errorMessage}
       </div>
