@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import '../../styles/todoapp.scss';
+import './TodoInfo.scss';
 import { Todo } from '../../types/Todo';
 
 type Props = {

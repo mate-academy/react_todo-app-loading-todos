@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import './Header.scss';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -8,16 +9,16 @@ type Props = {
 export const Header = ({ todos }: Props) => {
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className={cn({
-          'todoapp_toggle-all': true,
-          active: todos?.every(todo => todo.completed),
-        })}
-        data-cy="ToggleAllButton"
-      />
-
+      {todos && todos.length > 0 && (
+        <button
+          type="button"
+          className={cn({
+            'todoapp__toggle-all': true,
+            active: todos?.every(todo => todo.completed),
+          })}
+          data-cy="ToggleAllButton"
+        />
+      )}
       {/* Add a todo on form submit */}
       <form>
         <input
@@ -25,6 +26,7 @@ export const Header = ({ todos }: Props) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
+          autoFocus
         />
       </form>
     </header>

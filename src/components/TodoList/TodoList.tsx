@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import './TodoList.scss'
 import { Todo } from '../../types/Todo';
 import { TodoInfo } from '../TodoInfo/TodoInfo';
 

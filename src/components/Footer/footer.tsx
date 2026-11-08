@@ -1,5 +1,6 @@
 import cn from 'classnames';
-import '../../styles/todoapp.scss';
+import './Footer.scss';
+import '../../styles/filter.scss'
 import { FilterStatus } from '../../types/FilterStatus';
 import { Todo } from '../../types/Todo';
 

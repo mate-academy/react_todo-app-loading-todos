@@ -1,3 +1,5 @@
+import '../../styles/index.scss';
+
 type Props = {
   todoLoadError: boolean;
 };
