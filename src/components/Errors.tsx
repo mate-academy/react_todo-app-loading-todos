@@ -1,12 +1,13 @@
 import React from 'react';
 import cn from 'classnames';
+import type { ErrorMessage } from '../types/ErrorsMessage';
 
 type Props = {
-  error: string;
-  setErrors: (error: string) => void;
+  error: ErrorMessage | null;
+  setError: (error: ErrorMessage | null) => void;
 };
 
-export default function Errors({ error, setErrors }: Props) {
+export default function Errors({ error, setError }: Props) {
   return (
     <div
       data-cy="ErrorNotification"
@@ -18,22 +19,9 @@ export default function Errors({ error, setErrors }: Props) {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setErrors('')}
+        onClick={() => setError(null)}
       />
-      {/* show only one message at a time */}
       {error}
     </div>
   );
-}
-
-/// other errors =
-{
-  /* <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */
 }

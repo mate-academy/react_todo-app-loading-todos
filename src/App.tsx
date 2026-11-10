@@ -1,43 +1,55 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { UserWarning } from './UserWarning';
 import { USER_ID, getTodos } from './api/todos';
-import { useState } from 'react';
 import type { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 import Errors from './components/Errors';
+import { ErrorMessage } from './types/ErrorsMessage';
+
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<ErrorMessage | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
-  const unCompleted = todos.filter(todo => !todo.completed);
-  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const todosStatus = useMemo(() => {
+    let unCompletedNumber = 0;
+    let hasCompletedTodos = false;
+    const visibleTodos: Todo[] = [];
 
-  const visibleTodos = todos.filter(todo => {
-    if (filter === Filter.Active) {
-      return !todo.completed;
-    }
+    const isVisible = filter === Filter.Active
+        ? (todo: Todo) => !todo.completed
+        : filter === Filter.Completed
+          ? (todo: Todo) => todo.completed
+          : () => true;
 
-    if (filter === Filter.Completed) {
-      return todo.completed;
-    }
+    todos.forEach(todo => {
+      if (todo.completed) {
+        hasCompletedTodos = true;
+      } else {
+        unCompletedNumber++;
+      }
 
-    return true;
-  });
+      if (isVisible(todo)) {
+        visibleTodos.push(todo);
+      }
+    });
+
+    return { unCompletedNumber, hasCompletedTodos, visibleTodos, };
+  }, [todos, filter]);
 
   useEffect(() => {
-    setError('');
+    setError(null);
 
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
       })
-      .catch(() => setError('Unable to load todos'));
+      .catch(() => setError(ErrorMessage.Load));
   }, []);
 
   useEffect(() => {
@@ -45,7 +57,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    const errorTime = setTimeout(() => setError(''), 3000);
+    const errorTime = setTimeout(() => setError(null), 3000);
 
     return () => clearTimeout(errorTime);
   }, [error]);
@@ -80,18 +92,18 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && <TodoList todos={visibleTodos} />}
+        {todos.length > 0 && <TodoList todos={todosStatus.visibleTodos} />}
 
         {todos.length > 0 && (
           <Footer
-            unCompletedCount={unCompleted.length}
+            unCompletedCount={todosStatus.unCompletedNumber}
             filter={filter}
             setFilter={setFilter}
-            hasCompletedTodos={hasCompletedTodos}
+            hasCompletedTodos={todosStatus.hasCompletedTodos}
           />
         )}
       </div>
-      <Errors error={error} setErrors={setError} />
+      <Errors error={error} setError={setError} />
     </div>
   );
 };
