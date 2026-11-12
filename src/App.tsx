@@ -17,19 +17,24 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
   const visibleTodos = useMemo(() => {
-    if (filter && Filter.Active) {
-      return  todos.filter(todo => !todo.completed);
-    } else if (filter && Filter.Completed) {
-       return todos.filter(todo => todo.completed);
-    } else {
-      return todos;
+    switch (filter) {
+      case Filter.Active:
+        return todos.filter(todo => !todo.completed);
+
+      case Filter.Completed:
+        return todos.filter(todo => todo.completed);
+
+      case Filter.All:
+        return todos;
+
+      default:
+        return todos;
     }
   }, [todos, filter]);
-  
+
   const unCompletedNumber = todos.filter(todo => !todo.completed).length;
   const hasCompletedTodos = todos.some(todo => todo.completed);
   const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
-
 
   useEffect(() => {
     setError(null);
@@ -65,13 +70,15 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          <button
-            type="button"
-            className={cn('todoapp__toggle-all', {
-              active: allCompleted,
-            })}
-            data-cy="ToggleAllButton"
-          />
+          {todos.length > 0 && (
+            <button
+              type="button"
+              className={cn('todoapp__toggle-all', {
+                active: allCompleted,
+              })}
+              data-cy="ToggleAllButton"
+            />
+          )}
 
           <form onSubmit={formHandler}>
             <input
