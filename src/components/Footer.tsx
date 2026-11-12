@@ -5,14 +5,14 @@ import { Filter } from '../types/Filter';
 type Props = {
   unCompletedCount: number;
   filter: Filter;
-  setFilter: (filter: Filter) => void;
+  onFilterChange: (filter: Filter) => void;
   hasCompletedTodos: boolean;
 };
 
 export default function Footer({
   unCompletedCount,
   filter,
-  setFilter,
+  onFilterChange,
   hasCompletedTodos,
 }: Props) {
   return (
@@ -29,7 +29,7 @@ export default function Footer({
             selected: filter === Filter.All,
           })}
           data-cy="FilterLinkAll"
-          onClick={() => setFilter(Filter.All)}
+          onClick={() => onFilterChange(Filter.All)}
         >
           All
         </a>
@@ -40,7 +40,7 @@ export default function Footer({
             selected: filter === Filter.Active,
           })}
           data-cy="FilterLinkActive"
-          onClick={() => setFilter(Filter.Active)}
+          onClick={() => onFilterChange(Filter.Active)}
         >
           Active
         </a>
@@ -51,7 +51,7 @@ export default function Footer({
             selected: filter === Filter.Completed,
           })}
           data-cy="FilterLinkCompleted"
-          onClick={() => setFilter(Filter.Completed)}
+          onClick={() => onFilterChange(Filter.Completed)}
         >
           Completed
         </a>

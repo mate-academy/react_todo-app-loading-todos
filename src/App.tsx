@@ -9,38 +9,27 @@ import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 import Errors from './components/Errors';
 import { ErrorMessage } from './types/ErrorsMessage';
-
+import cn from 'classnames';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<ErrorMessage | null>(null);
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
-  const todosStatus = useMemo(() => {
-    let unCompletedNumber = 0;
-    let hasCompletedTodos = false;
-    const visibleTodos: Todo[] = [];
-
-    const isVisible = filter === Filter.Active
-        ? (todo: Todo) => !todo.completed
-        : filter === Filter.Completed
-          ? (todo: Todo) => todo.completed
-          : () => true;
-
-    todos.forEach(todo => {
-      if (todo.completed) {
-        hasCompletedTodos = true;
-      } else {
-        unCompletedNumber++;
-      }
-
-      if (isVisible(todo)) {
-        visibleTodos.push(todo);
-      }
-    });
-
-    return { unCompletedNumber, hasCompletedTodos, visibleTodos, };
+  const visibleTodos = useMemo(() => {
+    if (filter && Filter.Active) {
+      return  todos.filter(todo => !todo.completed);
+    } else if (filter && Filter.Completed) {
+       return todos.filter(todo => todo.completed);
+    } else {
+      return todos;
+    }
   }, [todos, filter]);
+  
+  const unCompletedNumber = todos.filter(todo => !todo.completed).length;
+  const hasCompletedTodos = todos.some(todo => todo.completed);
+  const allCompleted = todos.length > 0 && todos.every(todo => todo.completed);
+
 
   useEffect(() => {
     setError(null);
@@ -78,7 +67,9 @@ export const App: React.FC = () => {
         <header className="todoapp__header">
           <button
             type="button"
-            className="todoapp__toggle-all active"
+            className={cn('todoapp__toggle-all', {
+              active: allCompleted,
+            })}
             data-cy="ToggleAllButton"
           />
 
@@ -92,18 +83,18 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && <TodoList todos={todosStatus.visibleTodos} />}
+        {todos.length > 0 && <TodoList todos={visibleTodos} />}
 
         {todos.length > 0 && (
           <Footer
-            unCompletedCount={todosStatus.unCompletedNumber}
+            unCompletedCount={unCompletedNumber}
             filter={filter}
-            setFilter={setFilter}
-            hasCompletedTodos={todosStatus.hasCompletedTodos}
+            onFilterChange={setFilter}
+            hasCompletedTodos={hasCompletedTodos}
           />
         )}
       </div>
-      <Errors error={error} setError={setError} />
+      <Errors error={error} onClose={() => setError(null)} />
     </div>
   );
 };

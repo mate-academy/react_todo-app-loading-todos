@@ -4,10 +4,10 @@ import type { ErrorMessage } from '../types/ErrorsMessage';
 
 type Props = {
   error: ErrorMessage | null;
-  setError: (error: ErrorMessage | null) => void;
+  onClose: () => void;
 };
 
-export default function Errors({ error, setError }: Props) {
+export default function Errors({ error, onClose }: Props) {
   return (
     <div
       data-cy="ErrorNotification"
@@ -19,7 +19,7 @@ export default function Errors({ error, setError }: Props) {
         data-cy="HideErrorButton"
         type="button"
         className="delete"
-        onClick={() => setError(null)}
+        onClick={onClose}
       />
       {error}
     </div>
