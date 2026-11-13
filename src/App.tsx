@@ -21,22 +21,26 @@ enum ErrorMessage {
   Update = 'Unable to update a todo',
 }
 
-const FILTER_LINKS: { status: Status; label: string; href: string; cy: string }[] =
-  [
-    { status: Status.All, label: 'All', href: '#/', cy: 'FilterLinkAll' },
-    {
-      status: Status.Active,
-      label: 'Active',
-      href: '#/active',
-      cy: 'FilterLinkActive',
-    },
-    {
-      status: Status.Completed,
-      label: 'Completed',
-      href: '#/completed',
-      cy: 'FilterLinkCompleted',
-    },
-  ];
+const FILTER_LINKS: {
+  status: Status;
+  label: string;
+  href: string;
+  cy: string;
+}[] = [
+  { status: Status.All, label: 'All', href: '#/', cy: 'FilterLinkAll' },
+  {
+    status: Status.Active,
+    label: 'Active',
+    href: '#/active',
+    cy: 'FilterLinkActive',
+  },
+  {
+    status: Status.Completed,
+    label: 'Completed',
+    href: '#/completed',
+    cy: 'FilterLinkCompleted',
+  },
+];
 
 function filterTodos(todos: Todo[], status: Status): Todo[] {
   switch (status) {
