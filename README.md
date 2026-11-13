@@ -42,7 +42,6 @@ Tests help you to check if your implementation is correct.
 - delays are important for tests, so make sure every request has `100` - `200` ms delay
 
 ## Load Todos by userID
-
 1. Register a user by your email [here](https://mate-academy.github.io/react_student-registration/)
 1. Save the received `userId` in the `api/todos.ts` and use it to load todos
 1. reate some todos using the [Demo Page](https://mate-academy.github.io/react_todo-app-with-api/)
