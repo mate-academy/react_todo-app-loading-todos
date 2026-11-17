@@ -3,44 +3,31 @@ import classNames from 'classnames';
 
 type Props = {
   filter: Filter;
-  setFilter: (filter: Filter) => void;
+  onFilterChange: (filter: Filter) => void;
 };
 
-export default function TodoFilter({ filter, setFilter }: Props) {
+export default function TodoFilter({ filter, onFilterChange }: Props) {
+  const filterNames = {
+    [Filter.ALL]: 'All',
+    [Filter.ACTIVE]: 'Active',
+    [Filter.COMPLETED]: 'Completed',
+  };
+
   return (
     <nav className="filter" data-cy="Filter">
-      <a
-        href="#/"
-        className={classNames('filter__link', {
-          selected: filter === Filter.ALL,
-        })}
-        data-cy="FilterLinkAll"
-        onClick={() => setFilter(Filter.ALL)}
-      >
-        All
-      </a>
-
-      <a
-        href="#/active"
-        className={classNames('filter__link', {
-          selected: filter === Filter.ACTIVE,
-        })}
-        data-cy="FilterLinkActive"
-        onClick={() => setFilter(Filter.ACTIVE)}
-      >
-        Active
-      </a>
-
-      <a
-        href="#/completed"
-        className={classNames('filter__link', {
-          selected: filter === Filter.COMPLETED,
-        })}
-        data-cy="FilterLinkCompleted"
-        onClick={() => setFilter(Filter.COMPLETED)}
-      >
-        Completed
-      </a>
+      {Object.values(Filter).map(filterValue => (
+        <a
+          key={filterValue}
+          href={`#/${filterValue}`}
+          data-cy={`FilterLink${filterNames[filterValue]}`}
+          className={classNames('filter__link', {
+            selected: filter === filterValue,
+          })}
+          onClick={() => onFilterChange(filterValue)}
+        >
+          {filterNames[filterValue]}
+        </a>
+      ))}
     </nav>
   );
 }

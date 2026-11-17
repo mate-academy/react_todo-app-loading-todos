@@ -34,7 +34,10 @@ export const App: React.FC = () => {
     return true;
   });
 
+  const hasTodos = todos.length > 0;
+
   const itemsLeft = todos.filter(todo => !todo.completed).length;
+  const completedCount = todos.filter(todo => todo.completed).length;
 
   useEffect(() => {
     getTodos()
@@ -86,14 +89,17 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos.length > 0 && <TodoList todos={visibleTodos} />}
+        {hasTodos && (
+          <>
+            <TodoList todos={visibleTodos} />
 
-        {todos.length > 0 && (
-          <TodoFooter
-            itemsLeft={itemsLeft}
-            setFilter={setFilter}
-            filter={filter}
-          />
+            <TodoFooter
+              itemsLeft={itemsLeft}
+              setFilter={setFilter}
+              filter={filter}
+              completedCount={completedCount}
+            />
+          </>
         )}
       </div>
 
