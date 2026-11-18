@@ -69,7 +69,6 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <header className="todoapp__header">
-          {/* this button should have `active` class only if all todos are completed */}
           {hasTodos && (
             <button
               type="button"
@@ -79,8 +78,6 @@ export const App: React.FC = () => {
               data-cy="ToggleAllButton"
             />
           )}
-
-          {/* Add a todo on form submit */}
           <form>
             <input
               data-cy="NewTodoField"

@@ -22,7 +22,6 @@ export default function ErrorNotification({ errorMessage, onClose }: Props) {
         className="delete"
         onClick={onClose}
       />
-      {/* show only one message at a time */}
       {errorMessage}
     </div>
   );

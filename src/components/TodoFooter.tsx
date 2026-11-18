@@ -19,11 +19,7 @@ export default function TodoFooter({
       <span className="todo-count" data-cy="TodosCounter">
         {itemsLeft} items left
       </span>
-
-      {/* Active link should have the 'selected' class */}
       <TodoFilter filter={filter} onFilterChange={setFilter} />
-
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

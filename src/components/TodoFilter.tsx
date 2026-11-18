@@ -1,4 +1,4 @@
-import { Filter } from '../types/Filter';
+import { Filter, filterNames } from '../types/Filter';
 import classNames from 'classnames';
 
 type Props = {
@@ -7,12 +7,6 @@ type Props = {
 };
 
 export default function TodoFilter({ filter, onFilterChange }: Props) {
-  const filterNames = {
-    [Filter.ALL]: 'All',
-    [Filter.ACTIVE]: 'Active',
-    [Filter.COMPLETED]: 'Completed',
-  };
-
   return (
     <nav className="filter" data-cy="Filter">
       {Object.values(Filter).map(filterValue => (
