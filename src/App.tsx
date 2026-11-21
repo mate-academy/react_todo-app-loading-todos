@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
+import { Errors } from './types/Errors';
 import { Header } from './components/Header/Header';
 import { TodoList } from './components/TodoList/TodoList';
 import classNames from 'classnames';
@@ -11,13 +12,13 @@ import { useLocation } from 'react-router-dom';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<Errors>(Errors.None);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .catch(e => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(Errors.UnableToLoadTodos);
         throw e;
       });
   }, []);
@@ -28,7 +29,7 @@ export const App: React.FC = () => {
     }
 
     const timeoutId = window.setTimeout(() => {
-      setErrorMessage('');
+      setErrorMessage(Errors.None);
     }, 3000);
 
     return () => window.clearTimeout(timeoutId);
@@ -69,7 +70,7 @@ export const App: React.FC = () => {
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
           {
-            hidden: errorMessage === '',
+            hidden: errorMessage === Errors.None,
           },
         )}
       >
@@ -77,7 +78,7 @@ export const App: React.FC = () => {
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setErrorMessage('')}
+          onClick={() => setErrorMessage(Errors.None)}
         />
         {errorMessage}
       </div>

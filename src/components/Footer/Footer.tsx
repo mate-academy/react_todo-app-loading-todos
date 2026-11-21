@@ -3,6 +3,12 @@ import { Todo } from '../../types/Todo';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { NavLink } from 'react-router-dom';
 
+const filters = [
+  { to: '/', label: 'All', dataCy: 'FilterLinkAll' },
+  { to: '/active', label: 'Active', dataCy: 'FilterLinkActive' },
+  { to: '/completed', label: 'Completed', dataCy: 'FilterLinkCompleted' },
+];
+
 export const Footer = ({ todos }: { todos: Todo[] }) => (
   <footer className="todoapp__footer" data-cy="Footer">
     <span className="todo-count" data-cy="TodosCounter">
@@ -10,35 +16,18 @@ export const Footer = ({ todos }: { todos: Todo[] }) => (
     </span>
 
     <nav className="filter" data-cy="Filter">
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          classNames('filter__link', { selected: isActive })
-        }
-        data-cy="FilterLinkAll"
-      >
-        All
-      </NavLink>
-
-      <NavLink
-        to="/active"
-        className={({ isActive }) =>
-          classNames('filter__link', { selected: isActive })
-        }
-        data-cy="FilterLinkActive"
-      >
-        Active
-      </NavLink>
-
-      <NavLink
-        to="/completed"
-        className={({ isActive }) =>
-          classNames('filter__link', { selected: isActive })
-        }
-        data-cy="FilterLinkCompleted"
-      >
-        Completed
-      </NavLink>
+      {filters.map(({ to, label, dataCy }) => (
+        <NavLink
+          key={to}
+          to={to}
+          className={({ isActive }) =>
+            classNames('filter__link', { selected: isActive })
+          }
+          data-cy={dataCy}
+        >
+          {label}
+        </NavLink>
+      ))}
     </nav>
 
     <button
